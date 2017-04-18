@@ -4,12 +4,9 @@
     var edtApp = angular.module('edtApp');
 
     edtApp.constant('APP_CONFIG', {
-        bsCd    : '1000',
-		    domain  : '/SalesLifecycleMgmt', // 운영
-		    //domain  : '/SalesLifecycleMgmt',    // 기존운영
-		    //domain  : '/SalesLifecycleMgmt_lastSLM',  // 마감
-		    //domain  : 'http://localhost:8080/serviceManager',
-        version : 'V1.3.5'
+        bsCd    : '00000',
+		domain  : '/MarketManagerServer', // 운영
+        version : 'V 0.0.1'
     });
 
     edtApp.constant('APP_CODE', {

@@ -1,0 +1,31 @@
+<div id="app-content" class="col-xs-12 col-sm-10">
+    <div class="row">
+        <div id="app-content-header">
+            <ol class="breadcrumb">
+                <li><a href="#99sy/syDashboard"><i class="fa fa-home fa-2x"></i></a></li>
+                <li><a href="#99sy/syMenu">Menu관리</a></li>
+            </ol>
+        </div>
+    </div>
+    <div class="row">
+        <div class="content-area-container col-xs-12">
+            <div data-content-box-layer data-box-title="syMenuVO.boxTitle" >
+                <div class="box-content-article">
+                    <div class="article-header">
+                        <div class="col-xs-6 article-header-box">
+                            <button type="button" class="ae-btn" data-ng-click="syMenuVO.init()"><i class="fa fa-refresh"></i></button>
+                            <button type="button" class="ae-btn" data-ng-click="syMenuVO.toggleAll(true)" data-ng-disabled="syMenuVO.hasShowData()">Expand All</button>
+                            <button type="button" class="ae-btn" data-ng-click="syMenuVO.toggleAll(false)" data-ng-disabled="syMenuVO.hasShowData()">Collapse All</button>
+                        </div>
+                        <div class="col-xs-6 article-header-box ta-r">
+
+                        </div>
+                    </div>
+                    <div class="article-view">
+                        <div data-edt-tree="syMenuVO.options"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

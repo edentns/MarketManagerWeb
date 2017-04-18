@@ -16,7 +16,7 @@
 				restrict: "AE",
 				transclude: true,
 				scope: true,
-				controller: ["$rootScope", "$scope", "$state", "SY.LoginSvc", function ($rootScope, $scope, $state, SyLoginSvc) {
+				controller: ["$rootScope", "$scope", "$state", "sy.LoginSvc", function ($rootScope, $scope, $state, SyLoginSvc) {
 					var headerIconVO = $scope.headerIconVO = {
 						isShowDropdown : false
 					};

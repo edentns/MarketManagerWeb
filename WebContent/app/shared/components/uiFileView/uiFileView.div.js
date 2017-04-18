@@ -29,9 +29,9 @@
 							self.insertedFiles = [];
 							self.deletedFiles = [];
 							self.kind  = ($stateParams.kind==='insert') ? 'INSERT' : 'UPDATE';
-							self.menuId = MenuSvc.getMenuId($state.current.name);
+							self.NO_M = MenuSvc.getNO_M($state.current.name);
 							self.uploader = new FileUploader({
-								headers  : { menuId: self.menuId },
+								headers  : { NO_M: self.NO_M },
 								url      : APP_CONFIG.domain +'/syFiles'
 							});
 							self.cdAt = files.CD_AT;

@@ -276,8 +276,8 @@
 				 * @param {string=} psKind
 				 */
 				setColumns: function (poJson, psKind) {
-					var fixKey = user.CD_C +''+ user.CD,
-						key = fixKey +''+ MenuSvc.getMenuId($state.current.name) +'Columns';
+					var fixKey = user.NO_C +''+ user.CD,
+						key = fixKey +''+ MenuSvc.getNO_M($state.current.name) +'Columns';
 
 					if (angular.isString(psKind)) {
 						key += psKind;
@@ -292,8 +292,8 @@
 				 * @returns {Object}
 				 */
 				getColumns: function (psKind) {
-					var fixKey = user.CD_C +''+ user.CD,
-						key = fixKey +''+ MenuSvc.getMenuId($state.current.name) +'Columns',
+					var fixKey = user.NO_C +''+ user.CD,
+						key = fixKey +''+ MenuSvc.getNO_M($state.current.name) +'Columns',
 						rtnData;
 
 					if (angular.isString(psKind)) {
@@ -357,13 +357,13 @@
 				 * @param {string=} psUrl
 				 */
 				setInquiryParam: function (poJson, psKind, psUrl) {
-					var fixKey = user.CD_C +''+ user.CD,
+					var fixKey = user.NO_C +''+ user.CD,
 						key;
 
 					if (psUrl) {
-						key = fixKey +''+ MenuSvc.getMenuId(psUrl) +'Inquiry';
+						key = fixKey +''+ MenuSvc.getNO_M(psUrl) +'Inquiry';
 					} else {
-						key = fixKey +''+ MenuSvc.getMenuId($state.current.name) +'Inquiry';
+						key = fixKey +''+ MenuSvc.getNO_M($state.current.name) +'Inquiry';
 					}
 
 					if (angular.isString(psKind)) {
@@ -379,8 +379,8 @@
 				 * @returns {Object}
 				 */
 				getInquiryParam: function (psKind) {
-					var fixKey = user.CD_C +''+ user.CD,
-						key = fixKey +''+ MenuSvc.getMenuId($state.current.name) +'Inquiry',
+					var fixKey = user.NO_C +''+ user.CD,
+						key = fixKey +''+ MenuSvc.getNO_M($state.current.name) +'Inquiry',
 						rtnData;
 
 					if (angular.isString(psKind)) {
@@ -452,15 +452,15 @@
 
 			this.localStorage = {
 				setItem: function(name, data) {
-					var fixKey 	= user.CD_C +''+ user.CD,
-						key 	= fixKey +''+ MenuSvc.getMenuId($state.current.name) +'-'+ name;
+					var fixKey 	= user.NO_C +''+ user.CD,
+						key 	= fixKey +''+ MenuSvc.getNO_M($state.current.name) +'-'+ name;
 
 					$window.localStorage.setItem(key, JSON.stringify(data));
 				},
 				
 				getItem: function(name) {
-					var fixKey 	= user.CD_C +''+ user.CD,
-						key 	= fixKey +''+ MenuSvc.getMenuId($state.current.name) +'-'+ name,
+					var fixKey 	= user.NO_C +''+ user.CD,
+						key 	= fixKey +''+ MenuSvc.getNO_M($state.current.name) +'-'+ name,
 						result;
 
 					result = $window.localStorage.getItem(key);
@@ -473,8 +473,8 @@
 				},
                 
                 removeItem: function(name) {
-                    var fixKey 	= user.CD_C +''+ user.CD,
-                        key 	= fixKey +''+ MenuSvc.getMenuId($state.current.name) +'-'+ name;
+                    var fixKey 	= user.NO_C +''+ user.CD,
+                        key 	= fixKey +''+ MenuSvc.getNO_M($state.current.name) +'-'+ name;
                     
                     $window.localStorage.removeItem(key);
                 }
@@ -495,7 +495,7 @@
 //				var filter_type_split = null;
 //
 //				var sSql = "";
-//				sSql = "CALL "+filters_sp_split[0] + "(^CD_C^,^NO_EMP^";
+//				sSql = "CALL "+filters_sp_split[0] + "(^NO_C^,^NO_EMP^";
 //				
 //				if(filters_val_split != null) {
 //					angular.forEach(filters_val_split, function (filter_array, index) {
@@ -532,7 +532,7 @@
 //				var filter_type_split = null;
 //
 //				var sSql = "";
-//				sSql = "CALL "+filters_sp_split[0] + "(^CD_C^,^NO_EMP^";
+//				sSql = "CALL "+filters_sp_split[0] + "(^NO_C^,^NO_EMP^";
 //				
 //				if(filters_val_split != null) {
 //					angular.forEach(filters_val_split, function (filter_array, index) {

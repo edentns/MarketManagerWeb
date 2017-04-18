@@ -94,7 +94,7 @@
 		};
 	}
 
-	ModalSearchUserSvc.$inject = ['SY.departSvc', 'SY.userListSvc', 'UtilSvc'];
+	ModalSearchUserSvc.$inject = ['sy.departSvc', 'sy.userListSvc', 'UtilSvc'];
 
 
 	/**

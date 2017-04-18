@@ -7,8 +7,8 @@
 	MenuSvc.$inject = ['$rootScope', '$state'];
 	function MenuSvc($rootScope, $state) {
 		var self = this,
-			PK = 'POS',
-			FK = 'PARENT',
+			PK = 'ID_M',
+			FK = 'ID_M_P',
 
 			_data = [],
 			_compositData = [],
@@ -28,7 +28,7 @@
 			self.state = menu.ID_CMP;
 			self.path  = self.state +'({ menu: true })';
 			self.className = menu.NM_ICON;
-			self.seq = menu.SQ_DEF;
+			self.seq = menu.SQ_M;
 		};
 
 		Node.prototype = {
@@ -72,12 +72,12 @@
 			},
 
 			// MENU ID를 가져온다.
-			getMenuId: function(url) {
-				var rtnMenuId = '';
+			getNO_M: function(url) {
+				var rtnNO_M = '';
 				angular.forEach(_data, function (menu) {
-					if (menu.ID_CMP === url) { rtnMenuId = menu.CD_M; }
+					if (menu.ID_CMP === url) { rtnNO_M = menu.NO_M; }
 				});
-				return rtnMenuId;
+				return rtnNO_M;
 			},
 
 			// 로그인시 이동시킬 URL을 가져온다.

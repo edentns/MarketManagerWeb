@@ -1,0 +1,76 @@
+<div id="app-content" class="col-xs-12 col-sm-10">
+    <div class="row">
+        <div id="app-content-header">
+            <div class="col-xs-4 content-header-title">
+                <h2 class="content-title">코드관리</h2>
+            </div>
+            <div class="col-xs-8 content-header-location">
+                <ol class="breadcrumb">
+                    <li><a href="#99sy/syDashboard"><i class="fa fa-home fa-2x"></i></a></li>
+                    <li><a href="#99sy/syCode">코드관리</a></li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <!-- 코드 CONTENT Layer -->
+    <div class="row">
+
+        <!-- 코드분류 Layer -->
+        <div class="content-area-container col-xs-6">
+            <div data-content-box-layer data-box-title="syCodeVO.boxTitle">
+                <form class="box-content-search">
+                    <select class="ae-form-control" title="코드분류 검색 유형선택" data-ng-model="syCodeVO.searchKind">
+                        <option data-ng-repeat="searchInfo in syCodeVO.searchKindList" value="{{searchInfo.value}}">{{searchInfo.name}}</option>
+                    </select>
+                    <div class="group-search-btn">
+                        <div class="group-input-box">
+                            <input data-ae-input-click-focus class="ae-form-control group-input" title="검색어 입력" data-ng-model="syCodeVO.searchNm">
+                        </div>
+                        <button type="submit"  class="group-btn group-inquiry-btn" title="코드분류 조회" data-ng-click="syCodeVO.inquiry()">
+                            <i class="fa fa-search"></i> 조회
+                        </button>
+                    </div>
+                </form>
+                <div class="box-content-article">
+                    <div class="article-header">
+                        <div class="col-xs-6 article-header-box">
+                            <button type="button" class="ae-btn" data-ng-click="syCodeVO.inquiry()"><i class="fa fa-refresh"></i></button>
+                        </div>
+                    </div>
+                    <div id="codeGroupTbl" class="article-view" data-ui-grid="syCodeVO.gridOptions" ui-grid-selection class="grid"></div>
+                </div>
+            </div>
+        </div>
+        <!--/ 코드분류 Layer END -->
+
+        <!-- 사용자코드 & 시스템코드 Layer -->
+        <div class="content-area-container col-xs-6">
+            <div class="content-box-row" data-ng-controller="SY.codeCustomCtrl">
+                <div data-content-box-layer data-box-title="customerVO.boxTitle">
+                    <div class="box-content-article">
+                        <div class="article-header">
+                            <div class="col-xs-6 article-header-box">
+                                <button type="button" class="ae-btn" data-ng-click="customerVO.init()"><i class="fa fa-refresh"></i></button>
+                                <button type="button" data-ng-if="page.isWrite() && syCodeVO.isCustomWrite()" class="ae-btn ae-add-btn" title="사용자코드 추가" data-ng-click="customerVO.add()"><i class="fa fa-plus"></i> 추가</button>
+                                <button type="button" data-ng-if="page.isWrite() && syCodeVO.isCustomWrite()" class="ae-btn ae-delete-btn" title="사용자코드 삭제" data-ng-click="customerVO.delete()"><i class="fa fa-times"></i> 삭제</button>
+                            </div>
+                            <div class="col-xs-6 article-header-box ta-r">
+                                <button type="button" data-ng-if="page.isWrite() && syCodeVO.isCustomWrite()" class="ae-btn" title="저장" style="vertical-align: middle;" data-ng-click="customerVO.save()">저장</button>
+                            </div>
+                        </div>
+                        <div id="codeCustomerTbl" class="article-view" data-ui-grid="customerVO.gridOptions" ui-grid-selection ui-grid-edit ui-grid-cellnav class="grid"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-box-row" data-ng-controller="SY.codeSystemCtrl">
+                <div data-content-box-layer data-box-title="systemVO.boxTitle">
+                    <div id="codeSystemTbl" data-ui-grid="systemVO.gridOptions" class="grid"></div>
+                </div>
+            </div>
+        </div>
+        <!--/ 사용자코드 & 시스템코드 Layer END -->
+    </div>
+    <!--/ 코드 CONTENT Layer END -->
+</div>

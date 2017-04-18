@@ -6,11 +6,11 @@
      */
     var edtApp = angular.module("edtApp");
 
-    edtApp.run(["$rootScope", "$cookieStore", "$window", "$location", "$http", "MenuSvc", "$q", "SY.LoginSvc",
+    edtApp.run(["$rootScope", "$cookieStore", "$window", "$location", "$http", "MenuSvc", "$q", "sy.LoginSvc",
         function($rootScope, $cookieStore, $window, $location, $http, MenuSvc, $q, SyLoginSvc) {
 
             var isLoginPage = function(url) {
-                    return url === "/login";
+                    return url === "/99sy/syLogin";
                 },
                 webApp = $rootScope.webApp = {};
 
@@ -36,7 +36,7 @@
 	            if (!isLoginPage($location.$$path)) {
 		            SyLoginSvc.logout().then(function() {
 			            clearStorage();
-			            $location.url("/login");
+			            $location.url("/99sy/syLogin");
 		            });
 	            } else {
 		            clearStorage();
@@ -44,7 +44,7 @@
 
 	            function clearStorage() {
 		            webApp.user     = null;
-		            $http.defaults.headers.common.menuId = "";
+		            $http.defaults.headers.common.NO_M = "";
 
 		            $window.sessionStorage.clear();
 		            $window.localStorage.removeItem("USER");
@@ -55,14 +55,14 @@
 
             // 회의록 검색조건을 유지한다.
             $rootScope.$on("search:meetingList", function(e, param) {
-                var menuId = MenuSvc.getMenuId(param.name);
-                $window.sessionStorage.setItem(webApp.user.CD +""+ menuId, JSON.stringify(param.data));
+                var NO_M = MenuSvc.getNO_M(param.name);
+                $window.sessionStorage.setItem(webApp.user.CD +""+ NO_M, JSON.stringify(param.data));
             });
 
             // 회의록 검색 리스트 page를 저장한다.
             $rootScope.$on("setParam:meetingListPage", function(e, param) {
-                var menuId = MenuSvc.getMenuId(param.name);
-                $window.sessionStorage.setItem(webApp.user.CD +""+ menuId +"page", param.data);
+                var NO_M = MenuSvc.getNO_M(param.name);
+                $window.sessionStorage.setItem(webApp.user.CD +""+ NO_M +"page", param.data);
             });
 
             // session에 유저정보를 저정한다.
@@ -77,8 +77,8 @@
             });
 
 	        // $http header에 메뉴ID를 저장한다.
-            $rootScope.$on("event:setMenuId", function(event, menuId) {
-                $http.defaults.headers.common.menuId = MenuSvc.getMenuId(menuId);
+            $rootScope.$on("event:setNO_M", function(event, NO_M) {
+                $http.defaults.headers.common.NO_M = MenuSvc.getNO_M(NO_M);
             });
 
 
@@ -87,7 +87,7 @@
 		        var defer = $q.defer();
 		        if (!isLoginPage(toState.url)) {
 			        getUser().then(function() {
-				        $http.defaults.headers.common.menuId = MenuSvc.getMenuId(toState.name);
+				        $http.defaults.headers.common.NO_M = MenuSvc.getNO_M(toState.name);
 				        defer.resolve();
 			        });
 		        }
@@ -99,7 +99,7 @@
 	        $rootScope.$on("$stateChangeError", function(event, toState, toParams, fromState){
 		        if (!isLoginPage(toState.url)) {
 			        getMenu().then(function() {
-				        $http.defaults.headers.common.menuId = MenuSvc.getMenuId(fromState.name);
+				        $http.defaults.headers.common.NO_M = MenuSvc.getNO_M(fromState.name);
 			        });
 		        }
 	        });

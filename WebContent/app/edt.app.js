@@ -25,14 +25,12 @@
         'textAngular',
 
         'edtApp.common',
-        'edtApp.BU',
-        'edtApp.CO',
-        'edtApp.CU',
-        'edtApp.GW',
-        'edtApp.SV',
-        'edtApp.EQ',
-        'edtApp.SY',
-        'edtApp.ui'
+        'edtApp.ma',
+        'edtApp.it',
+        'edtApp.sa',
+        'edtApp.cs',
+        'edtApp.te',
+        'edtApp.sy'
     ]);
 
 // common
@@ -47,8 +45,7 @@
 
     // default page
     edtApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
-        $urlRouterProvider.when('', '/login');
-        //$urlRouterProvider.otherwise('/login');
+        $urlRouterProvider.when('', '/99sy/syLogin');
         
         $stateProvider
             .state('app', {
@@ -57,12 +54,4 @@
                 templateUrl: 'app/app.tpl.html'
             });
     }]);
-
-
-// [GW]
-    angular.module('edtApp.GW', []);
-
-// [SV]
-    angular.module('edtApp.SV', []);
-
 }());

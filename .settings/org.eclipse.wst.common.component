@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
-    <wb-module deploy-name="KendoUI_web">
+    <wb-module deploy-name="MarketManagerWeb">
         <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
-        <property name="java-output-path" value="/KendoUI_web/build/classes"/>
+        <property name="java-output-path" value="/MarketManagerWeb/build/classes"/>
         <property name="context-root" value="/"/>
     </wb-module>
 </project-modules>

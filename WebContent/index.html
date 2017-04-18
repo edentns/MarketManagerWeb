@@ -2,8 +2,8 @@
 <html lang="ko" class="no-js" data-ng-app="edtApp">
 <head>
 	<meta charset="utf-8">
-	<title>SLM</title>
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>MarketManager</title>
+	<meta http-equiv="X-UA-compatible" content="IE=edge">
 	<!-- build:css(.) assets/css/vendor.css -->
 	<link rel="stylesheet" href="/slm_web_bow/bower_components/bootstrap/dist/css/bootstrap.min.css" />
 	<link rel="stylesheet" href="/slm_web_bow/bower_components/font-awesome/css/font-awesome.css" />
@@ -128,188 +128,151 @@
 	<script src="app/models/valid.vo.js"></script>
 	<script src="app/models/field.vo.js"></script>
 
-<!-- CO -->
-	<script src="app/contents/CO/co.app.js"></script>
-	<script src="app/contents/CO/dashboard/co.dashboard.app.js"></script>
-	<script src="app/contents/CO/dashboard/controllers/co.dashboard.ctrl.js"></script>
-	<script src="app/contents/CO/dashboard/controllers/co.busiPrsc.ctrl.js"></script>
-	<script src="app/contents/CO/dashboard/controllers/co.salesPrsc.ctrl.js"></script>
-	<script src="app/contents/CO/dashboard/controllers/co.managedSalesPrsc.ctrl.js"></script>
-	<script src="app/contents/CO/dashboard/controllers/co.detailSalesPrsc.ctrl.js"></script>
-	<script src="app/contents/CO/dashboard/controllers/co.changeAnalysis.ctrl.js"></script>
-	<script src="app/contents/CO/dashboard/controllers/co.bigdeal.ctrl.js"></script>
-	<script src="app/contents/CO/dashboard/services/co.dashboard.svc.js"></script>
-	<script src="app/contents/CO/dashboard/services/co.dashboard.biz.js"></script>
-	<script src="app/contents/CO/dashboard/controllers/co.dashboardSetting.modal.ctrl.js"></script>
-
-	<script src="app/contents/CO/profile/co.profile.app.js"></script>
-	<script src="app/contents/CO/profile/controllers/co.profile.ctrl.js"></script>
-	<script src="app/contents/CO/profile/services/co.profile.svc.js"></script>
-
-<!-- SY -->
-	<script src="app/contents/SY/sy.app.js"></script>
-	<script src="app/contents/SY/login/sy.login.app.js"></script>
-	<script src="app/contents/SY/login/controllers/sy.login.ctrl.js"></script>
-	<script src="app/contents/SY/login/services/sy.login.svc.js"></script>
-
-	<script src="app/contents/SY/user/sy.user.app.js"></script>
-	<script src="app/contents/SY/user/controllers/sy.userList.ctrl.js"></script>
-	<script src="app/contents/SY/user/controllers/sy.userInfo.ctrl.js"></script>
-	<script src="app/contents/SY/user/services/sy.userList.svc.js"></script>
-	<script src="app/contents/SY/user/services/sy.userInfo.svc.js"></script>
-
-	<script src="app/contents/SY/code/sy.code.app.js"></script>
-	<script src="app/contents/SY/code/controllers/sy.code.ctrl.js"></script>
-	<script src="app/contents/SY/code/controllers/sy.codeCustom.ctrl.js"></script>
-	<script src="app/contents/SY/code/controllers/sy.codeSystem.ctrl.js"></script>
-	<script src="app/contents/SY/code/services/sy.code.svc.js"></script>
-
-	<script src="app/contents/SY/depart/sy.depart.app.js"></script>
-	<script src="app/contents/SY/depart/controllers/sy.depart.ctrl.js"></script>
-	<script src="app/contents/SY/depart/services/sy.depart.svc.js"></script>
-
-	<script src="app/contents/SY/departkendo/sy.departkendo.app.js"></script>
-	<script src="app/contents/SY/departkendo/controllers/sy.departkendo.ctrl.js"></script>
-	<script src="app/contents/SY/departkendo/services/sy.departkendo.svc.js"></script>
-
-	<script src="app/contents/SY/otherkendo/sy.otherkendo.app.js"></script>
-	<script src="app/contents/SY/otherkendo/controllers/sy.otherkendo.ctrl.js"></script>
-	<script src="app/contents/SY/otherkendo/services/sy.otherkendo.svc.js"></script>
-
-	<script src="app/contents/SY/spendingresolutionkendo/sy.spendingresolutionkendo.app.js"></script>
-	<script src="app/contents/SY/spendingresolutionkendo/controllers/sy.spendingresolutionkendo.ctrl.js"></script>
-	<script src="app/contents/SY/spendingresolutionkendo/services/sy.spendingresolutionkendo.svc.js"></script>
-
-	<script src="app/contents/SY/auth/sy.auth.app.js"></script>
-	<script src="app/contents/SY/auth/controllers/sy.auth.ctrl.js"></script>
-	<script src="app/contents/SY/auth/controllers/sy.authMenu.ctrl.js"></script>
-	<script src="app/contents/SY/auth/services/sy.auth.svc.js"></script>
-
-	<script src="app/contents/SY/menu/sy.menu.app.js"></script>
-	<script src="app/contents/SY/menu/controllers/sy.menu.ctrl.js"></script>
-	<script src="app/contents/SY/menu/services/sy.menu.svc.js"></script>
-
-<!-- BU -->
-	<script src="app/contents/BU/bu.app.js"></script>
-	<script src="app/contents/BU/business/bu.business.app.js"></script>
-	<script src="app/contents/BU/business/controllers/bu.businessList.ctrl.js"></script>
-	<script src="app/contents/BU/business/controllers/bu.businessInfo.ctrl.js"></script>
-	<script src="app/contents/BU/business/controllers/bu.modalField.ctrl.js"></script>
-	<script src="app/contents/BU/business/services/bu.businessList.svc.js"></script>
-	<script src="app/contents/BU/business/services/bu.businessInfo.svc.js"></script>
-
-	<script src="app/contents/BU/analysis/bu.analysis.app.js"></script>
-	<script src="app/contents/BU/analysis/result/analysis.result.app.js"></script>
-	<script src="app/contents/BU/analysis/result/controllers/analysis.result.ctrl.js"></script>
-	<script src="app/contents/BU/analysis/result/services/analysis.result.svc.js"></script>
-
-	<script src="app/contents/BU/analysis/change/analysis.change.app.js"></script>
-	<script src="app/contents/BU/analysis/change/controllers/analysis.change.ctrl.js"></script>
-	<script src="app/contents/BU/analysis/change/services/analysis.change.svc.js"></script>
-
-	<script src="app/contents/BU/aimSales/controllers/bu.aimSalesMng.ctrl.js"></script>
-	<script src="app/contents/BU/aimSales/services/bu.aimSalesMng.svc.js"></script>
-	<script src="app/contents/BU/aimSales/services/bu.aimSalesMng.biz.js"></script>
-	<script src="app/contents/BU/aimSales/model/bu.aimSalesMng.vo.js"></script>
-
-	<script src="app/contents/BU/aimSaleskendo/bu.aimSaleskendoMng.app.js"></script>
-	<script src="app/contents/BU/aimSaleskendo/controllers/bu.aimSaleskendoMng.ctrl.js"></script>
-	<script src="app/contents/BU/aimSaleskendo/services/bu.aimSaleskendoMng.svc.js"></script>
-	<script src="app/contents/BU/aimSaleskendo/services/bu.aimSaleskendoMng.biz.js"></script>
+<!-- 01ma -->
+	<script src="app/contents/01ma/ma.app.js"></script>
+	<script src="app/contents/01ma/ma01Dashboard/ma.Dashboard.app.js"></script>
+	<script src="app/contents/01ma/ma01Dashboard/controllers/ma.Dashboard.ctrl.js"></script>
+	<script src="app/contents/01ma/ma01Dashboard/services/ma.Dashboard.svc.js"></script>
 	
-	<script src="app/contents/BU/meeting/bu.meeting.app.js"></script>
-	<script src="app/contents/BU/meeting/controllers/bu.meetingList.ctrl.js"></script>
-	<script src="app/contents/BU/meeting/controllers/bu.meetingInfo.ctrl.js"></script>
-	<script src="app/contents/BU/meeting/services/bu.meetingList.svc.js"></script>
-	<script src="app/contents/BU/meeting/services/bu.meetingInfo.svc.js"></script>
+	<script src="app/contents/01ma/ma02MemJoinAppr/ma.MemJoinAppr.app.js"></script>
+	<script src="app/contents/01ma/ma02MemJoinAppr/controllers/ma.MemJoinAppr.ctrl.js"></script>
+	<script src="app/contents/01ma/ma02MemJoinAppr/services/ma.MemJoinAppr.svc.js"></script>
+	
+	<script src="app/contents/01ma/ma03MngMrk/ma.MngMrk.app.js"></script>
+	<script src="app/contents/01ma/ma03MngMrk/controllers/ma.MngMrk.ctrl.js"></script>
+	<script src="app/contents/01ma/ma03MngMrk/services/ma.MngMrk.svc.js"></script>
+	
+	<script src="app/contents/01ma/ma04MrkOpt/ma.MrkOpt.app.js"></script>
+	<script src="app/contents/01ma/ma04MrkOpt/controllers/ma.MrkOpt.ctrl.js"></script>
+	<script src="app/contents/01ma/ma04MrkOpt/services/ma.MrkOpt.svc.js"></script>
+	
+	<script src="app/contents/01ma/ma05Notice/ma.Notice.app.js"></script>
+	<script src="app/contents/01ma/ma05Notice/controllers/ma.Notice.ctrl.js"></script>
+	<script src="app/contents/01ma/ma05Notice/services/ma.Notice.svc.js"></script>
 
-	<script src="app/contents/BU/analysis/vendor/bu.vendor.app.js"></script>
-	<script src="app/contents/BU/analysis/vendor/controllers/analysis.vendorList.ctrl.js"></script>
-	<script src="app/contents/BU/analysis/vendor/services/analysis.vendorList.svc.js"></script>
+<!-- 02it -->
+	<script src="app/contents/02it/it.app.js"></script>
+	<script src="app/contents/02it/it01ItemCfct/it.ItemCfct.app.js"></script>
+	<script src="app/contents/02it/it01ItemCfct/controllers/it.ItemCfct.ctrl.js"></script>
+	<script src="app/contents/02it/it01ItemCfct/services/it.ItemCfct.svc.js"></script>
+	
+	<script src="app/contents/02it/it02BssItem/it.BssItem.app.js"></script>
+	<script src="app/contents/02it/it02BssItem/controllers/it.BssItem.ctrl.js"></script>
+	<script src="app/contents/02it/it02BssItem/services/it.BssItem.svc.js"></script>
+	
+	<script src="app/contents/02it/it03SaleItem/it.SaleItem.app.js"></script>
+	<script src="app/contents/02it/it03SaleItem/controllers/it.SaleItem.ctrl.js"></script>
+	<script src="app/contents/02it/it03SaleItem/services/it.SaleItem.svc.js"></script>
+	
+	<script src="app/contents/02it/it04SaleSiteItem/it.SaleSiteItem.app.js"></script>
+	<script src="app/contents/02it/it04SaleSiteItem/controllers/it.SaleSiteItem.ctrl.js"></script>
+	<script src="app/contents/02it/it04SaleSiteItem/services/it.SaleSiteItem.svc.js"></script>
+	
+<!-- 03sa -->
+	<script src="app/contents/03sa/sa.app.js"></script>
+	<script src="app/contents/03sa/sa01OrdShpAll/sa.OrdShpAll.app.js"></script>
+	<script src="app/contents/03sa/sa01OrdShpAll/controllers/sa.OrdShpAll.ctrl.js"></script>
+	<script src="app/contents/03sa/sa01OrdShpAll/services/sa.OrdShpAll.svc.js"></script>
 
-	<script src="app/contents/BU/changeHist/controllers/bu.changeHist.ctrl.js"></script>
-	<script src="app/contents/BU/changeHist/services/bu.changeHist.svc.js"></script>
-	<script src="app/contents/BU/changeHist/services/bu.changeHist.biz.js"></script>
+	<script src="app/contents/03sa/sa02Ord/sa.Ord.app.js"></script>
+	<script src="app/contents/03sa/sa02Ord/controllers/sa.Ord.ctrl.js"></script>
+	<script src="app/contents/03sa/sa02Ord/services/sa.Ord.svc.js"></script>
+	
+	<script src="app/contents/03sa/sa03ShpStdbyOrd/sa.ShpStdbyOrd.app.js"></script>
+	<script src="app/contents/03sa/sa03ShpStdbyOrd/controllers/sa.ShpStdbyOrd.ctrl.js"></script>
+	<script src="app/contents/03sa/sa03ShpStdbyOrd/services/sa.ShpStdbyOrd.svc.js"></script>
+	
+	<script src="app/contents/03sa/sa04OrdCcl/sa.OrdCcl.app.js"></script>
+	<script src="app/contents/03sa/sa04OrdCcl/controllers/sa.OrdCcl.ctrl.js"></script>
+	<script src="app/contents/03sa/sa04OrdCcl/services/sa.OrdCcl.svc.js"></script>
+	
+	<script src="app/contents/03sa/sa05ShpIng/sa.ShpIng.app.js"></script>
+	<script src="app/contents/03sa/sa05ShpIng/controllers/sa.ShpIng.ctrl.js"></script>
+	<script src="app/contents/03sa/sa05ShpIng/services/sa.ShpIng.svc.js"></script>
+	
+	<script src="app/contents/03sa/sa06TkbkReq/sa.TkbkReq.app.js"></script>
+	<script src="app/contents/03sa/sa06TkbkReq/controllers/sa.TkbkReq.ctrl.js"></script>
+	<script src="app/contents/03sa/sa06TkbkReq/services/sa.TkbkReq.svc.js"></script>
+	
+	<script src="app/contents/03sa/sa07EchgReq/sa.EchgReq.app.js"></script>
+	<script src="app/contents/03sa/sa07EchgReq/controllers/sa.EchgReq.ctrl.js"></script>
+	<script src="app/contents/03sa/sa07EchgReq/services/sa.EchgReq.svc.js"></script>
+	
+<!-- 04cs -->
+	<script src="app/contents/04cs/cs.app.js"></script>
+	<script src="app/contents/04cs/cs01Inq/cs.Inq.app.js"></script>
+	<script src="app/contents/04cs/cs01Inq/controllers/cs.Inq.ctrl.js"></script>
+	<script src="app/contents/04cs/cs01Inq/services/cs.Inq.svc.js"></script>
 
-<!-- CU -->
-	<script src="app/contents/CU/cu.app.js"></script>
-	<script src="app/contents/CU/company/cu.company.app.js"></script>
-	<script src="app/contents/CU/company/controllers/cu.companyList.ctrl.js"></script>
-	<script src="app/contents/CU/company/controllers/cu.companyInfo.ctrl.js"></script>
-	<script src="app/contents/CU/company/services/cu.companyList.svc.js"></script>
-	<script src="app/contents/CU/company/services/cu.companyInfo.svc.js"></script>
+<!-- 98te -->
+	<script src="app/contents/98te/te.app.js"></script>
+	<script src="app/contents/98te/otherkendo/te.OtherKendo.app.js"></script>
+	<script src="app/contents/98te/otherkendo/controllers/te.OtherKendo.ctrl.js"></script>
+	<script src="app/contents/98te/otherkendo/services/te.OtherKendo.svc.js"></script>
 
-	<script src="app/contents/CU/charge/cu.charge.app.js"></script>
-	<script src="app/contents/CU/charge/controllers/cu.chargeList.ctrl.js"></script>
-	<script src="app/contents/CU/charge/controllers/cu.chargeInfo.ctrl.js"></script>
-	<script src="app/contents/CU/charge/services/cu.chargeList.svc.js"></script>
-	<script src="app/contents/CU/charge/services/cu.chargeInfo.svc.js"></script>
-
-<!-- SV -->
-	<script src="app/contents/SV/sv.app.js"></script>
-	<script src="app/contents/SV/common/sv.common.app.js"></script>
-	<script src="app/contents/SV/common/sv.common.svc.js"></script>
-	<script src="app/contents/SV/common/sv.listSearch.vo.js"></script>
-
-	<script src="app/contents/SV/01svServRec/sv.01svServRec.app.js"></script>
-	<script src="app/contents/SV/01svServRec/model/sv.01svServRec.vo.js"></script>
-	<script src="app/contents/SV/01svServRec/controllers/sv.01svServRecList.ctrl.js"></script>
-	<script src="app/contents/SV/01svServRec/controllers/sv.01svServRecInfo.ctrl.js"></script>
-	<script src="app/contents/SV/01svServRec/controllers/svServRecCancel.ctrl.js"></script>
-	<script src="app/contents/SV/01svServRec/services/sv.01svServRec.svc.js"></script>
-	<script src="app/contents/SV/01svServRec/services/sv.01svServRecList.biz.js"></script>
-	<script src="app/contents/SV/01svServRec/services/sv.01svServRecInfo.biz.js"></script>
-
-	<script src="app/contents/SV/02svServPln/sv.02svServPln.app.js"></script>
-	<script src="app/contents/SV/02svServPln/model/sv.02svServPln.vo.js"></script>
-	<script src="app/contents/SV/02svServPln/services/sv.02svServPln.svc.js"></script>
-	<script src="app/contents/SV/02svServPln/services/sv.02svServPlnList.biz.js"></script>
-	<script src="app/contents/SV/02svServPln/services/sv.02svServPlnInfo.biz.js"></script>
-	<script src="app/contents/SV/02svServPln/controllers/sv.02svServPlnList.ctrl.js"></script>
-	<script src="app/contents/SV/02svServPln/controllers/sv.02svServPlnInfo.ctrl.js"></script>
-
-	<script src="app/contents/SV/03svServPfm/sv.03svServPfm.app.js"></script>
-	<script src="app/contents/SV/03svServPfm/model/sv.03svServPfm.vo.js"></script>
-	<script src="app/contents/SV/03svServPfm/services/sv.03svServPfm.svc.js"></script>
-	<script src="app/contents/SV/03svServPfm/services/sv.03svServPfmList.biz.js"></script>
-	<script src="app/contents/SV/03svServPfm/services/sv.03svServPfmInfo.biz.js"></script>
-	<script src="app/contents/SV/03svServPfm/controllers/sv.03svServPfmList.ctrl.js"></script>
-	<script src="app/contents/SV/03svServPfm/controllers/sv.03svServPfmInfo.ctrl.js"></script>
-
-	<script src="app/contents/SV/04svRecResProc/sv.04svRecResProc.app.js"></script>
-	<script src="app/contents/SV/04svRecResProc/model/sv.04svRecResProc.vo.js"></script>
-	<script src="app/contents/SV/04svRecResProc/services/sv.04svRecResProc.svc.js"></script>
-	<script src="app/contents/SV/04svRecResProc/services/sv.04svRecResProcList.biz.js"></script>
-	<script src="app/contents/SV/04svRecResProc/services/sv.04svRecResProcInfo.biz.js"></script>
-	<script src="app/contents/SV/04svRecResProc/controllers/sv.04svRecResProcList.ctrl.js"></script>
-	<script src="app/contents/SV/04svRecResProc/controllers/sv.04svRecResProcInfo.ctrl.js"></script>
-
-	<script src="app/contents/SV/05svEmgObsProc/sv.05svEmgObsProc.app.js"></script>
-	<script src="app/contents/SV/05svEmgObsProc/controllers/sv.05svEmgObsProcList.ctrl.js"></script>
-	<script src="app/contents/SV/05svEmgObsProc/controllers/sv.05svEmgObsProcInfo.ctrl.js"></script>
-	<script src="app/contents/SV/05svEmgObsProc/services/sv.05svEmgObsProcList.biz.js"></script>
-	<script src="app/contents/SV/05svEmgObsProc/services/sv.05svEmgObsProcInfo.biz.js"></script>
-	<script src="app/contents/SV/05svEmgObsProc/services/sv.05svEmgObsProcInfo.svc.js"></script>
-
-	<script src="app/contents/SV/06svWeekBsnSch/sv.06svWeekBsnSch.app.js"></script>
-	<script src="app/contents/SV/06svWeekBsnSch/controllers/sv.06svWeekBsnSchList.ctrl.js"></script>
-	<script src="app/contents/SV/06svWeekBsnSch/controllers/sv.06svWeekBsnSchInfo.ctrl.js"></script>
-	<script src="app/contents/SV/06svWeekBsnSch/services/sv.06svWeekBsnSchList.biz.js"></script>
-
-	<script src="app/contents/SV/07svBsnPrsc/sv.07svBsnPrsc.app.js"></script>
-	<script src="app/contents/SV/07svBsnPrsc/controllers/sv.07svBsnPrscList.ctrl.js"></script>
-	<script src="app/contents/SV/07svBsnPrsc/services/sv.07svBsnPrscList.biz.js"></script>
-
-<!-- EQ -->
-	<script src="app/contents/EQ/eq.app.js"></script>
-	<script src="app/contents/EQ/01eqMaster/eq.01eqMaster.app.js"></script>
-	<script src="app/contents/EQ/01eqMaster/controllers/eq.01eqMasterList.ctrl.js"></script>
-	<script src="app/contents/EQ/01eqMaster/controllers/eq.01eqMasterInfo.ctrl.js"></script>
-	<script src="app/contents/EQ/01eqMaster/services/eq.01eqMaster.svc.js"></script>
-	<script src="app/contents/EQ/01eqMaster/services/eq.01eqMasterList.biz.js"></script>
-	<script src="app/contents/EQ/01eqMaster/services/eq.01eqMasterInfo.biz.js"></script>
-	<script src="app/contents/EQ/01eqMaster/models/eq.01eqMaster.vo.js"></script>
-
+<!-- 99sy -->
+	<script src="app/contents/99sy/sy.app.js"></script>
+	<script src="app/contents/99sy/sy01Dashboard/sy.Dashboard.app.js"></script>
+	<script src="app/contents/99sy/sy01Dashboard/controllers/sy.Dashboard.ctrl.js"></script>
+	<script src="app/contents/99sy/sy01Dashboard/services/sy.Dashboard.svc.js"></script>
+	
+	<script src="app/contents/99sy/sy02Login/sy.Login.app.js"></script>
+	<script src="app/contents/99sy/sy02Login/controllers/sy.Login.ctrl.js"></script>
+	<script src="app/contents/99sy/sy02Login/services/sy.Login.svc.js"></script>
+	
+	<script src="app/contents/99sy/sy03RePwdReg/sy.RePwdReg.app.js"></script>
+	<script src="app/contents/99sy/sy03RePwdReg/controllers/sy.RePwdReg.ctrl.js"></script>
+	<script src="app/contents/99sy/sy03RePwdReg/services/sy.RePwdReg.svc.js"></script>
+	
+	<script src="app/contents/99sy/sy04UserJoin/sy.UserJoin.app.js"></script>
+	<script src="app/contents/99sy/sy04UserJoin/controllers/sy.UserJoin.ctrl.js"></script>
+	<script src="app/contents/99sy/sy04UserJoin/services/sy.UserJoin.svc.js"></script>
+	
+	<script src="app/contents/99sy/sy05MyInfo/sy.MyInfo.app.js"></script>
+	<script src="app/contents/99sy/sy05MyInfo/controllers/sy.MyInfo.ctrl.js"></script>
+	<script src="app/contents/99sy/sy05MyInfo/services/sy.MyInfo.svc.js"></script>
+	
+	<script src="app/contents/99sy/sy06CInfo/sy.CInfo.app.js"></script>
+	<script src="app/contents/99sy/sy06CInfo/controllers/sy.CInfo.ctrl.js"></script>
+	<script src="app/contents/99sy/sy06CInfo/services/sy.CInfo.svc.js"></script>
+	
+	<script src="app/contents/99sy/sy07User/sy.User.app.js"></script>
+	<script src="app/contents/99sy/sy07User/controllers/sy.UserList.ctrl.js"></script>
+	<script src="app/contents/99sy/sy07User/controllers/sy.UserInfo.ctrl.js"></script>
+	<script src="app/contents/99sy/sy07User/services/sy.UserList.svc.js"></script>
+	<script src="app/contents/99sy/sy07User/services/sy.UserInfo.svc.js"></script>
+	
+	<script src="app/contents/99sy/sy08Atrt/sy.Atrt.app.js"></script>
+	<script src="app/contents/99sy/sy08Atrt/controllers/sy.Atrt.ctrl.js"></script>
+	<script src="app/contents/99sy/sy08Atrt/controllers/sy.AtrtMenu.ctrl.js"></script>
+	<script src="app/contents/99sy/sy08Atrt/services/sy.Atrt.svc.js"></script>
+	
+	<script src="app/contents/99sy/sy09Mrk/sy.Mrk.app.js"></script>
+	<script src="app/contents/99sy/sy09Mrk/controllers/sy.Mrk.ctrl.js"></script>
+	<script src="app/contents/99sy/sy09Mrk/services/sy.Mrk.svc.js"></script>
+	
+	<script src="app/contents/99sy/sy10Code/sy.Code.app.js"></script>
+	<script src="app/contents/99sy/sy10Code/controllers/sy.Code.ctrl.js"></script>
+	<script src="app/contents/99sy/sy10Code/controllers/sy.CodeCustom.ctrl.js"></script>
+	<script src="app/contents/99sy/sy10Code/controllers/sy.CodeSystem.ctrl.js"></script>
+	<script src="app/contents/99sy/sy10Code/services/sy.Code.svc.js"></script>
+	
+	<script src="app/contents/99sy/sy11ItlMrk/sy.ItlMrk.app.js"></script>
+	<script src="app/contents/99sy/sy11ItlMrk/controllers/sy.ItlMrk.ctrl.js"></script>
+	<script src="app/contents/99sy/sy11ItlMrk/services/sy.ItlMrk.svc.js"></script>
+	
+	<script src="app/contents/99sy/sy12Dept/sy.Dept.app.js"></script>
+	<script src="app/contents/99sy/sy12Dept/controllers/sy.Dept.ctrl.js"></script>
+	<script src="app/contents/99sy/sy12Dept/services/sy.Dept.svc.js"></script>
+	
+	<script src="app/contents/99sy/sy13Menu/sy.Menu.app.js"></script>
+	<script src="app/contents/99sy/sy13Menu/controllers/sy.Menu.ctrl.js"></script>
+	<script src="app/contents/99sy/sy13Menu/services/sy.Menu.svc.js"></script>
+	
+	<script src="app/contents/99sy/sy14Notice/sy.Notice.app.js"></script>
+	<script src="app/contents/99sy/sy14Notice/controllers/sy.Notice.ctrl.js"></script>
+	<script src="app/contents/99sy/sy14Notice/services/sy.Notice.svc.js"></script>
+	
 <!-- components -->
 	<script src="app/shared/components/dateSearchGroup/dateSearchGroup.div.js"></script>
 	<script src="app/shared/components/inlinePeriodSearch/inlinePeriodSearchDiv.js"></script>
@@ -352,14 +315,6 @@
 	<!-- endbuild -->
 	
 	<script src="/app/shared/modal/address/search.js"></script>
-
-	<script src="https://bs-static.cdn.telerik.com/1.2.6/everlive.all.min.js"></script>
-	<script type="text/javascript">
-	var everlive = new Everlive({
-	    apiKey: "3q4sHgIqESXbpvOp",
-	    scheme: "http"
-	  });
-	</script>
 </body>
 
 </html>

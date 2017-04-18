@@ -7,7 +7,7 @@
    * modal - 고객사 심플 등록
    */
   angular.module("edtApp.common.modal")
-      .controller("modal.insertCompanyCtrl", ["$scope", "$modal", "$modalInstance", "ngTableParams", "$sce", "$filter", "CU.companyInfoSvc", "SY.departSvc", "APP_MSG", "APP_CODE",
+      .controller("modal.insertCompanyCtrl", ["$scope", "$modal", "$modalInstance", "ngTableParams", "$sce", "$filter", "CU.companyInfoSvc", "sy.departSvc", "APP_MSG", "APP_CODE",
           function ($scope, $modal, $modalInstance, ngTableParams, $sce, $filter, CuCompanyInfoSvc, SyDepartSvc, APP_MSG, APP_CODE) {
 
             var codeVO, insertVO;

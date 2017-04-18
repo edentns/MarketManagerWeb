@@ -12,7 +12,7 @@
 				var setLoginInfo = function () {
 						$rootScope.$emit("event:login");
 					},
-					roleUrl = APP_CONFIG.domain +"/rolecheck";
+					roleUrl = APP_CONFIG.domain +"/sy08AtrtCheck";
 
 				return {
 					isAccess : function () {

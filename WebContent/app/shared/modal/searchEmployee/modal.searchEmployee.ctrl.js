@@ -6,7 +6,7 @@
 	 * modal - 사원 검색
 	 */
 	angular.module( "edtApp.common.modal" )
-		.controller("modal.searchEmployeeCtrl", ["$scope", "$modalInstance", "ngTableParams", "$sce", "$filter", "SY.userListSvc", "SY.codeSvc", "APP_CODE", "SY.departSvc",
+		.controller("modal.searchEmployeeCtrl", ["$scope", "$modalInstance", "ngTableParams", "$sce", "$filter", "sy.userListSvc", "sy.codeSvc", "APP_CODE", "sy.departSvc",
 			function ($scope, $modalInstance, ngTableParams, $sce, $filter, SyUserListSvc, SyCodeSvc, APP_CODE, SyDepartSvc) {
 
 				var employeeVO;

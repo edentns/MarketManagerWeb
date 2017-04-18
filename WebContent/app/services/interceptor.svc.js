@@ -57,10 +57,10 @@
 							defer.reject(config);
 							break;
 						case 401:// 로그인 상태가 아닐경우
-							if ($location.$$path !== '/login') {
+							if ($location.$$path !== '/99sy/syLogin') {
 								alert('[' + config.status + '] 로그인 상태가 아닙니다.');
 								init();
-								$location.url('/login');
+								$location.url('/99sy/syLogin');
 								defer.reject(config);
 							}
 							defer.resolve(config);
@@ -72,11 +72,11 @@
 
 							if (search.menu) {
 								replaceUrl = $location.$$path.replace('/list', '');
-								$rootScope.$emit('event:setMenuId', replaceUrl);
+								$rootScope.$emit('event:setNO_M', replaceUrl);
 							} else {
 								if (edt.hasValue($location.$$path, '/detail')) {
 									replaceUrl = $location.$$path.replace('/detail', '');
-									$rootScope.$emit('event:setMenuId', replaceUrl);
+									$rootScope.$emit('event:setNO_M', replaceUrl);
 								}
 							}
 

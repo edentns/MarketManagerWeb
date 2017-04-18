@@ -175,7 +175,7 @@
 			delete $scope.vm;
 		});
 	}
-	EmpModalCtrl.$inject = ['$scope','$q', 'SY.userListSvc','SY.departSvc', '$modalInstance', 'resolveParam','UtilSvc'];
+	EmpModalCtrl.$inject = ['$scope','$q', 'sy.userListSvc','sy.departSvc', '$modalInstance', 'resolveParam','UtilSvc'];
 
 	angular
 		.module('edtApp.common.modal')
