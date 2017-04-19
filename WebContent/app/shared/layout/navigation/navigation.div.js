@@ -71,22 +71,69 @@
 
 		.run(['$templateCache', function ($templateCache) {
 			$templateCache.put('menuNavigation/template', '' +
-				'<ul class="nav main-menu">' +
-					'<li ng-repeat="menu in menuList" ng-class="{\'dropdown\': menu._children.length > 0, opened: menu.active}">' +
-						'<a ng-if="menu._children.length == 0" ui-sref="{{menu.path}}" title="{{menu.name}}" ng-class="{\'active-parent active\': menu.active}" ng-style="{\'padding-left\': menu.depth * 15 +\'px\'}">' +
-							'<i class="fa {{menu.className}}"></i>&nbsp;<span>{{menu.name}}</span>' +
-						'</a>' +
+					'<ul class="nav main-menu">' +
+				    '<div kendo-tab-strip k-content-urls="[null,null]">' +
+				    '<ul><li class="k-state-active">즐겨찾기</li>' +
+				    '<li>메&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp뉴</li>' +
+				    '</ul>' +
+				    '<div style="padding: 1em">' +
+				    '<li ng-repeat="menu in symygrpmenu" ng-class="{\'dropdown\': menu._children.length > 0, opened: menu.active}">' +
+						'<div class="hasMenu"><a ng-if="menu._children.length == 0" ui-sref="{{menu.path}}" title="{{menu.name}}" ng-class="{\'active-parent active\': menu.active}" ng-style="{\'padding-left\': menu.depth * 15 +\'px\'}">' +
+							'<i class="fa {{menu.className}}"></i>&nbsp;<span>{{menu.name}}</span>'+
+						'</a></div>' +
+						'<ul kendo-context-menu ' +
+					    'k-filter="\'.hasMenu\'" ' +
+					    'k-on-open="menuOpen = menuOpen + 1" ' +
+					    'k-on-close="menuOpen = menuOpen - 1" ' +
+					    'k-on-select="onSelect(kendoEvent)"> ' +
+					   '<li>Item 1 ' +
+					      '<ul> ' +
+					         '<li>subitem 1.1</li> ' +
+					         '<li>subitem 1.2</li> ' +
+					         '<li>subitem 1.3</li> ' +
+					      '</ul> ' +
+					   '</li> ' +
+					   '<li>Item 2</li> ' +
+					   '<li>Item 3</li> ' +
+					'</ul>' +
 						'<a ng-if="menu._children.length > 0" class="dropdown-toggle" href="#" title="{{menu.name}}" ng-class="{\'active-parent active\': menu.active}" ng-style="{\'padding-left\': menu.depth * 15 +\'px\'}">' +
 							'<i class="fa {{menu.className}}"></i>&nbsp;<span>{{menu.name}}</span>' +
 						'</a>' +
 						'<ul ng-if="menu._children.length > 0" menu-node="menu._children" class="dropdown-menu"></ul>' +
 					'</li>' +
-				'</ul>'
+					'</div>' +
+					'<div style="padding: 1em">' +
+					'<li ng-repeat="menu in menuList" ng-class="{\'dropdown\': menu._children.length > 0, opened: menu.active}">' +
+						'<div class="hasMenu"><a ng-if="menu._children.length == 0" ui-sref="{{menu.path}}" title="{{menu.name}}" ng-class="{\'active-parent active\': menu.active}" ng-style="{\'padding-left\': menu.depth * 15 +\'px\'}">' +
+							'<i class="fa {{menu.className}}"></i>&nbsp;<span>{{menu.name}}</span>' +
+						'</a></div>' +
+						'<ul kendo-context-menu ' +
+					    'k-filter="\'.hasMenu\'" ' +
+					    'k-on-open="menuOpen = menuOpen + 1" ' +
+					    'k-on-close="menuOpen = menuOpen - 1" ' +
+					    'k-on-select="onSelect(kendoEvent)"> ' +
+					   '<li>Item 1 ' +
+					      '<ul> ' +
+					         '<li>subitem 1.1</li> ' +
+					         '<li>subitem 1.2</li> ' +
+					         '<li>subitem 1.3</li> ' +
+					      '</ul> ' +
+					   '</li> ' +
+					   '<li>Item 2</li> ' +
+					   '<li>Item 3</li> ' +
+					'</ul>' +
+						'<a ng-if="menu._children.length > 0" class="dropdown-toggle" href="#" title="{{menu.name}}" ng-class="{\'active-parent active\': menu.active}" ng-style="{\'padding-left\': menu.depth * 15 +\'px\'}">' +
+							'<i class="fa {{menu.className}}"></i>&nbsp;<span>{{menu.name}}</span>' +
+						'</a>' +
+						'<ul ng-if="menu._children.length > 0" menu-node="menu._children" class="dropdown-menu"></ul>' +
+					'</li>' +
+					'</div>' +
+					'</ul>'
 			);
 
 			$templateCache.put('menuNode/template',
 				'<li ng-repeat="menu in menuNode" ng-class="{\'dropdown\': menu._children.length > 0, opened: menu.active}">' +
-					'<a ng-if="menu._children.length == 0" ui-sref="{{menu.path}}" title="{{menu.name}}" ng-class="{\'active-parent active\': menu.active}" ng-style="{\'padding-left\': menu.depth * 15 +\'px\'}">{{menu.name}}</a>' +
+					'<div class="hasMenu"><a ng-if="menu._children.length == 0" ui-sref="{{menu.path}}" title="{{menu.name}}" ng-class="{\'active-parent active\': menu.active}" ng-style="{\'padding-left\': menu.depth * 15 +\'px\'}">{{menu.name}}</a></div>' +
 					'<a ng-if="menu._children.length > 0" class="dropdown-toggle" href="#" title="{{menu.name}}" ng-class="{\'active-parent\': menu.active}" ng-style="{\'padding-left\': menu.depth * 15 +\'px\'}">{{menu.name}}</a>' +
 					'<ul ng-if="menu._children.length > 0" menu-node="menu._children" class="dropdown-menu"></ul>' +
 				'</li>'
