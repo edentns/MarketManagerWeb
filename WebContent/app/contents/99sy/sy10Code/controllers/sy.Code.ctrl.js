@@ -7,8 +7,8 @@
      * 코드관리
      */
     angular.module("sy.Code.controller")
-        .controller("sy.CodeCtrl", ["$scope", "$http", "$q", "$log", "sy.CodeSvc", "APP_CODE", "$timeout", "resData", "Page",
-            function ($scope, $http, $q, $log, SyCodeSvc, APP_CODE, $timeout, resData, Page) {
+        .controller("sy.CodeCtrl", ["$scope", "$http", "$q", "$log", "sy.CodeSvc", "APP_CODE", "$timeout", "resData", "Page","UtilSvc",
+            function ($scope, $http, $q, $log, SyCodeSvc, APP_CODE, $timeout, resData, Page, UtilSvc) {
 	            var page  = $scope.page = new Page({ auth: resData.access }),
 		            today = edt.getToday();
 
@@ -56,57 +56,40 @@
                     enableRowHeaderSelection: false,
                     onRegisterApi : function( gridApi ) {
                         syCodeVO.gridApi = gridApi;
-                    }
-                };
-
-                /**
-                 * 그룹코드 parameter를 생성한다.
-                 */
-                syCodeVO.makeGetParam = function () {
-                    var self  = this,
-                        param = {
-                            // codeitem(코드헤더), usercode(유저코드), syscode(시스템코드)
-                            ITEM : APP_CODE.header.cd
-                        };
-
-                    if ( self.searchNm !== "" ) {
-                        switch ( self.searchKind ) {
-                            case "defNm" :
-                                param.NM_DEF = self.searchNm;
-                                break;
-
-                            case "clsCd" :
-                                param.CD_CLS = self.searchNm;
-                                break;
-                        }
-                    }
-
-                    return param;
+                    },
+                    procedureParam: "USP_SY_10CODE01_GET&L_SEARCHKIND@s|L_SEARCHNAME@s"
                 };
 
                 /**
                  * 코드분류 데이터를 가져온다.
                  */
                 syCodeVO.inquiry = function () {
-                    var self = this;
+                    var self = this,
+					param = {
+                    	procedureParam: self.gridOptions.procedureParam,
+                    	L_SEARCHKIND: self.searchKind,
+                    	L_SEARCHNAME: self.searchNm
+                    };
 
                     $scope.$emit( "event:autoLoader", false );
-                    SyCodeSvc.getGroupCode(syCodeVO.makeGetParam()).then(function (result) {
-                        self.gridOptions.data = result.data;
+                    
+                    UtilSvc.getList(param).then(function (res) {
+						self.gridOptions.data = res.data.results[0];
 
                         var codeParam = {
-                            ID_ROW : "",
+                        	NO_MNGCDHD : "",
                             CD_CLS : ""
                         };
 
-                        if (result.data.length > 0) {
+                        if (res.data.results[0].length > 0) {
                             $timeout(function () {
                                 self.gridApi.selection.selectRow( self.gridOptions.data[0] );
-                                self.selected = result.data[0];
+                                self.selected = res.data.results[0][0];
 
-                                codeParam.ID_ROW = self.selected.ID_ROW;
+                                codeParam.NO_MNGCDHD = self.selected.NO_MNGCDHD;
                                 codeParam.CD_CLS = self.selected.CD_CLS;
-                                self.inquiryAll( codeParam );
+                                
+                                self.inquiryAll(codeParam);
                             });
 
                         } else {
@@ -114,7 +97,7 @@
                             self.selected = null;
                             syCodeVO.broadcastData(codeParam, []);
                         }
-                    });
+					});
                 };
 
                 /**
@@ -122,43 +105,16 @@
                  * @param {Object} oCodeParam ID_ROW와 분류코드
                  */
                 syCodeVO.inquiryAll = function ( oCodeParam ) {
-                    var self  = this,
-                        cdCls = oCodeParam.CD_CLS,
-                        idRow = oCodeParam.ID_ROW;
+                    var self  = this;
+                    
+                    param.procedureParam = "USP_SY_10CODE02_GET&L_NO_MNGCDHD@s|L_CD_CLS@s";
+                    param.L_NO_MNGCDHD = codeParam.NO_MNGCDHD;
+                    param.L_CD_CLS = codeParam.CD_CLS;
 
-                    $q.all([
-                        SyCodeSvc.getUserCode({
-                            CD_CLS : cdCls,
-                            ID_ROW : idRow,
-                            ITEM   : APP_CODE.user.cd
-                        }),
-                        SyCodeSvc.getSystemCode({
-                            CD_CLS : cdCls,
-                            ID_ROW : idRow,
-                            ITEM   : APP_CODE.system.cd
-                        })
-                    ]).then(function ( result ) {
-                        $scope.$emit( "event:autoLoader", true );
-
-                        self.broadcastData( oCodeParam, result );
+                    UtilSvc.getList(param).then(function (res) {
+						$scope.systemVO.gridOptions.data = res.data.results[0];
+						$scope.customerVO.gridOptions.data = res.data.results[1];
                     });
-                };
-
-                /**
-                 * childrent controller에 data를 set한다.
-                 * @param {Object} oCodeParam 조회조건 parameter
-                 * @param {Array} aResult 조회된 사용자코드와 시스템코드
-                 */
-                syCodeVO.broadcastData = function (oCodeParam, aResult) {
-                    var customerData =  [],
-                        systemData = [];
-
-                    if ( aResult.length > 0 ) {
-                        customerData    = aResult[0].data;
-                        systemData      = aResult[1].data;
-                    }
-                    $scope.$broadcast( "codeMng.customer:inquiry", oCodeParam, customerData );
-                    $scope.$broadcast( "codeMng.system:inquiry", oCodeParam, systemData );
                 };
 
                 /**
