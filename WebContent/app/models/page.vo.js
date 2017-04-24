@@ -22,9 +22,6 @@
 			me.auth = {
 				accessCode  : 1,
 				writeCode   : 1,
-				buAccessCode: 0,    // 사업권한코드 - 추후 삭제
-				retrYn      : 'N',  // 접근권한 - 추후 삭제
-				writeYn     : 'N'   // WRITE권한 - 추후 삭제
 			};
 
 			me.preProcessors    = [];
@@ -49,9 +46,6 @@
 					switch (key) {
 						case 'CD_ACC'       : return 'accessCode';
 						case 'CD_WRITE'     : return 'writeCode';
-						case 'CD_BU_G'      : return 'buAccessCode';
-						case 'YN_RETR'      : return 'retrYn';
-						case 'YN_WRITE'     : return 'writeYn';
 						default             : return null;
 					}
 				} else if (category === "user") {
@@ -224,30 +218,6 @@
 				return this.user.workGroupCode === 2;
 			},
 			/**
-			 * 사업권한코드를 가져온다.
-			 * @deprecated
-			 * @returns {number}
-			 */
-			getBuRoleCd: function () {
-				return this.auth.buAccessCode;
-			},
-			/**
-			 * page 읽기 권한이 있는지 판단한다.
-			 * @deprecated
-			 * @returns {boolean}
-			 */
-			isRead: function () {
-				return this.auth.retrYn === 'Y';
-			},
-			/**
-			 * page 쓰기 권한이 있는지 판단한다.
-			 * @deprecated
-			 * @returns {boolean}
-			 */
-			isWrite: function () {
-				return this.auth.writeYn === 'Y';
-			},
-			/**
 			 * prcoess를 등록한다.
 			 * @param {string} key - process name
 			 * @param {Array} dependencies - 의존된 function name
@@ -267,7 +237,6 @@
 				if (result.pre) {
 					setPreProcessor(key, dependencies, result.pre);
 				}
-
 			},
 			/**
 			 * page를 로드전 실행될 process를 추가한다.
@@ -305,7 +274,7 @@
                             }
                         };
 
-                   deferredAll.push(deferred.promise);
+                    deferredAll.push(deferred.promise);
 
                     processor.defined.call(me, next);
                 });
