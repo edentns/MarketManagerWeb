@@ -12,7 +12,6 @@
         "sy.Atrt",
         "sy.Mrk",
         "sy.Code",
-        "sy.ItlMrk",
         "sy.Dept",
         "sy.Menu",
         "sy.Notice"        

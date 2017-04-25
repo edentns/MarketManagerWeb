@@ -121,10 +121,10 @@ a.show-sidebar:hover {
 }
 .nav.main-menu li.opened > ul { display: block; }
 .nav.main-menu a.active, .nav.msg-menu a.active {
-  background:rgba(0, 0, 0, 0.2);
+  background:rgba(0, 0, 0, 0);
 }
 .nav.main-menu a.active:hover, .nav.msg-menu a.active:hover {
-  background:rgba(0, 0, 0, 0.2);
+  background:rgba(0, 0, 0, 0);
 }
 .nav.main-menu a.activeParent, .nav.msg-menu a.activeParent {
   background: rgba(0, 0, 0, 0.3);
@@ -132,7 +132,7 @@ a.show-sidebar:hover {
 .nav.main-menu a.activeParent:hover, .nav.msg-menu a.activeParent:hover {
   background: rgba(0, 0, 0, 0.3);
 }
-.nav.main-menu > li > a > i, .nav.msg-menu > li > a > i {
+.nav.main-menu > li > a > i, .nav.msg-menu > li > a > i, .nav.main-menu > ul > li {
   font-size: 18px;
   width: auto;
   display: block;
@@ -164,7 +164,7 @@ a.show-sidebar:hover {
 }
 .main-menu .dropdown-menu > li > a {
   padding:9px 15px 9px 30px;
-  color:#f0f0f0;
+  color:#337ab7;
 }
 .main-menu .dropdown-menu > li:first-child > a {
   -webkit-border-radius: 0 4px 0 0;
@@ -2310,7 +2310,7 @@ td.beauty-hover {
     -webkit-border-radius: 0;
     -moz-border-radius: 0;
     border-radius: 0;
-    background:rgba(0, 0, 0, 0.2);
+    background:rgba(0, 0, 0, 0);
     visibility: visible;
   }
   .main-menu .dropdown-menu > li > a {
