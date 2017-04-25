@@ -2,7 +2,7 @@
 	'use strict';
 
 	angular.module('edtApp.common.directive')
-		.directive('menuNavigation', [function () {
+		.directive('menuNavigation', ['$window', function ($window) {
 			return {
 				templateUrl: 'menuNavigation/template',
 				restrict: 'AE',
@@ -18,7 +18,7 @@
 							parents 		= obj.parents('li'),
 							li 				= obj.closest('li.dropdown'),
 							anotherItems 	= $('.main-menu li').not(parents),
-							current, pre;
+							current, pre, strHref = '';
 
 						anotherItems.find('a').removeClass('active');
 						anotherItems.find('a').removeClass('active-parent');
@@ -45,6 +45,10 @@
 
 						if (obj.attr('href') === '#') {
 							e.preventDefault();
+						}
+						else {
+							strHref = obj[0].attributes[1].value.substr(0, obj[0].attributes[1].value.indexOf('('))
+							$window.localStorage.setItem("recentUrl", JSON.stringify({href: strHref}));
 						}
 					});
 				}
