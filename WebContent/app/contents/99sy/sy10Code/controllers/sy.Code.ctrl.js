@@ -94,8 +94,8 @@
 
                         } else {
                             $scope.$emit( "event:autoLoader", true );
-                            self.selected = null;
-                            syCodeVO.broadcastData(codeParam, []);
+                            //self.selected = null;
+                            //syCodeVO.broadcastData(codeParam, []);
                         }
 					});
                 };
@@ -105,15 +105,19 @@
                  * @param {Object} oCodeParam ID_ROW와 분류코드
                  */
                 syCodeVO.inquiryAll = function ( oCodeParam ) {
-                    var self  = this;
-                    
-                    param.procedureParam = "USP_SY_10CODE02_GET&L_NO_MNGCDHD@s|L_CD_CLS@s";
-                    param.L_NO_MNGCDHD = codeParam.NO_MNGCDHD;
-                    param.L_CD_CLS = codeParam.CD_CLS;
+                    var self  = this,
+                        param = {                    	
+    						procedureParam: "USP_SY_10CODE02_GET&L_NO_MNGCDHD@s|L_CD_CLS@s",
+    						L_NO_MNGCDHD: oCodeParam.NO_MNGCDHD,
+    						L_CD_CLS: oCodeParam.CD_CLS
+                        };
 
                     UtilSvc.getList(param).then(function (res) {
-						$scope.systemVO.gridOptions.data = res.data.results[0];
-						$scope.customerVO.gridOptions.data = res.data.results[1];
+//						$scope.systemVO.gridOptions.data = res.data.results[0];
+//						$scope.customerVO.gridOptions.data = res.data.results[1];
+						
+	                    $scope.$broadcast( "codeMng.customer:inquiry", oCodeParam, res.data.results[1] );
+	                    $scope.$broadcast( "codeMng.system:inquiry", oCodeParam, res.data.results[0] );
                     });
                 };
 
@@ -126,7 +130,7 @@
 
                     self.selected = oGridRow.entity;
 
-                    codeParam.ID_ROW = self.selected.ID_ROW;
+                    codeParam.NO_MNGCDHD = self.selected.NO_MNGCDHD;
                     codeParam.CD_CLS = self.selected.CD_CLS;
                     self.inquiryAll( codeParam );
                 };
