@@ -7,19 +7,19 @@
      * 코드관리 - 사용자코드관리
      */
     angular.module("sy.Code.controller")
-        .controller("sy.CodeCustomCtrl", ["$scope", "$http", "$log", "$timeout", "sy.CodeSvc", "APP_CODE",
-            function ($scope, $http, $log, $timeout, SyCodeSvc, APP_CODE) {
+        .controller("sy.CodeCustomCtrl", ["$scope", "$http", "$log", "$timeout", "sy.CodeSvc", "APP_CODE","UtilSvc",
+            function ($scope, $http, $log, $timeout, SyCodeSvc, APP_CODE, UtilSvc) {
 
                 /**
                  * customerVO
                  * @namespace
                  * @extends code.codeMngCtrl
-                 * @type {String} ID_ROW
+                 * @type {String} NO_MNGCDHD
                  * @type {String} CD_CLS 분류코드
                  */
                 var customerVO = $scope.customerVO = {
                     boxTitle : "사용자코드",
-                    ID_ROW   : "",
+                    NO_MNGCDHD   : "",
                     CD_CLS   : "",
                     deleteData : []
                 };
@@ -30,6 +30,7 @@
                 customerVO.gridOptions = {
                     enableCellEditOnFocus : true,
                     columnDefs : [
+                        { field : "CD_DEF", displayName: "구분코드", width: "160", cellClass: "ta-l" },
                         { field : "NM_DEF", displayName: "구분코드명", width: "160", cellClass: "ta-l" },
                         { field : "DC_RMK1", displayName: "비고1", width: "100" },
                         { field : "DC_RMK2", displayName: "비고2", width: "100" },
@@ -44,7 +45,7 @@
                     data : [],
                     onRegisterApi: function( gridApi ) {
                         gridApi.edit.on.afterCellEdit($scope, function ( oRowEntity, a, b ) {
-                            if ( oRowEntity.CD_DEF && oRowEntity.CD_DEF!=="" ) {
+                            if ( oRowEntity.CD_DEF_OLD && oRowEntity.CD_DEF_OLD!=="" ) {
                                 oRowEntity.STATE = "U";
                             }
                         });
@@ -61,7 +62,7 @@
 
                     // 코드분류 row클릭시 정보를 받아 사용자코드를 조회한다.
                     $scope.$on( "codeMng.customer:inquiry", function ( $event, oEntity, aData ) {
-                        self.ID_ROW = oEntity.ID_ROW;
+                        self.NO_MNGCDHD = oEntity.NO_MNGCDHD;
                         self.CD_CLS = oEntity.CD_CLS;
                         self.gridOptions.data = aData;
                     });
@@ -82,7 +83,7 @@
                     var self = this,
                         getParam = {
                             CD_CLS : self.CD_CLS,
-                            ID_ROW : self.ID_ROW,
+                            NO_MNGCDHD : self.NO_MNGCDHD,
                             ITEM   : APP_CODE.user.cd
                         };
 
@@ -97,8 +98,9 @@
                 customerVO.makePostParam = function ( oData ) {
                     var postParam = {
                         STATE   : oData.STATE,
-                        ID_ROW  : oData.ID_ROW,
+                        NO_MNGCDHD  : oData.NO_MNGCDHD,
                         CD_CLS  : oData.CD_CLS,
+                        CD_DEF  : oData.CD_DEF,
                         NM_DEF  : oData.NM_DEF,
                         YN_USE  : oData.YN_USE,
                         ITEM    : APP_CODE.user.cd,
@@ -106,12 +108,9 @@
                         DC_RMK2 : oData.DC_RMK2,
                         DC_RMK3 : oData.DC_RMK3,
                         DC_RMK4 : oData.DC_RMK4,
-                        DC_RMK5 : oData.DC_RMK5
+                        DC_RMK5 : oData.DC_RMK5,
+                        CD_DEF_OLD : oData.CD_DEF_OLD
                     };
-
-                    if ( oData.STATE==="U" || oData.STATE==="D" ) {
-                        postParam.CD_DEF = oData.CD_DEF;
-                    }
 
                     return postParam;
                 };
@@ -120,11 +119,24 @@
                  * 사용자코드를 조회한다.
                  */
                 customerVO.inquiry = function () {
-                    var self = this;
-                    SyCodeSvc.getUserCode(self.makeGetParam())
-                        .success(function (resData) {
-                            self.gridOptions.data = resData;
-                        });
+                    var self = this,
+                    param = {                    	
+    						procedureParam: "USP_SY_10CODE02_GET&L_NO_MNGCDHD@s|L_CD_CLS@s",
+    						L_NO_MNGCDHD: self.NO_MNGCDHD,
+    						L_CD_CLS: self.CD_CLS
+                        },
+                    codeParam = {
+                        	NO_MNGCDHD : "",
+                            CD_CLS : ""
+                        };
+
+                    UtilSvc.getList(param).then(function (res) {
+                    	codeParam.NO_MNGCDHD = param.L_NO_MNGCDHD;
+                    	codeParam.CD_CLS = param.L_CD_CLS;
+						
+	                    $scope.$broadcast( "codeMng.customer:inquiry", codeParam, res.data.results[1] );
+	                    $scope.$broadcast( "codeMng.system:inquiry", codeParam, res.data.results[0] );
+                    });
                 };
 
                 /**
@@ -140,13 +152,18 @@
 
                                 postData = [],
 	                            validResult;
-
-                            angular.forEach( data, function ( oData ) {
-                                if ( oData.STATE==="U" || oData.STATE==="I" ) {
-                                    postData.push( self.makePostParam( oData ) );
+	                        
+	                        for(var i=0;i<data.length;i++){
+	                        	for(var j=0;j<data.length;j++){
+                            		if( i != j && data[i].CD_DEF == data[j].CD_DEF ){
+                            			alert("코드가 중복됩니다. 확인해주십시오.");
+                            			return;
+                            		}
+                            	}
+	                        	if ( data[i].STATE==="U" || data[i].STATE==="I" ) {
+                                    postData.push( self.makePostParam( data[i] ) );
                                 }
-                            });
-
+	                        }
                             postData = postData.concat( deleteData );
 
 	                        validResult = customerVO.isValid(postData);
@@ -173,8 +190,9 @@
 
                         addData = {
                             STATE   : "I",
-                            ID_ROW  : self.ID_ROW,
+                            NO_MNGCDHD  : self.NO_MNGCDHD,
                             CD_CLS  : self.CD_CLS,
+                            CD_DEF  : "",
                             DC_RMK1 : "",
                             DC_RMK2 : "",
                             DC_RMK3 : "",
@@ -206,7 +224,7 @@
                         for ( j=0, leng2=selectedList.length; j<leng2; j+=1 ) {
                             if ( data[i] === selectedList[j] ) {
                                 data.splice( i, 1 );
-                                if ( selectedList[j].CD_DEF && selectedList[j].CD_DEF!=="" ) {
+                                if ( selectedList[j].CD_DEF_OLD && selectedList[j].CD_DEF_OLD!=="" ) {
                                     selectedList[j].STATE = "D";
                                     self.deleteData.push( self.makePostParam( selectedList[j] ) );
                                 }
@@ -228,6 +246,10 @@
 						            if (ynEnum.indexOf(code[key]) === -1) {
 							            return { valid: false, message: "[형식] 유효하지 않은 형식입니다." };
 						            }
+					            } else if (key === "CD_DEF"){
+					            	if (!code[key]) {
+					            		return { valid: false, message: "[필수] 구분코드는 필수 입력입니다."}
+					            	}
 					            } else if (key === "NM_DEF"){
 						            if (!code[key]) {
 							            return { valid: false, message: "[필수] 구분코드명은 필수 입력입니다." };

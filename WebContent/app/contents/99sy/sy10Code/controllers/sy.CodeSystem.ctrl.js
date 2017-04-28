@@ -12,12 +12,12 @@
              * systemVO
              * @namespace
              * @extends code.codeMngCtrl
-             * @type {String} ID_ROW
+             * @type {String} NO_MNGCDHD
              * @type {String} CD_CLS 분류코드
              */
             var systemVO = $scope.systemVO = {
                 boxTitle : "기초코드",
-                ID_ROW   : "",
+                NO_MNGCDHD   : "",
                 CD_CLS   : ""
             };
 
@@ -49,7 +49,7 @@
                 // 코드분류 row클릭시 정보를 받아 사용자코드를 조회한다.
                 $scope.$on( "codeMng.system:inquiry", function ( $event, oEntity, aData ) {
 
-                    self.ID_ROW = oEntity.ID_ROW;
+                    self.NO_MNGCDHD = oEntity.NO_MNGCDHD;
                     self.CD_CLS = oEntity.CD_CLS;
                     self.gridOptions.data = aData;
                 });
