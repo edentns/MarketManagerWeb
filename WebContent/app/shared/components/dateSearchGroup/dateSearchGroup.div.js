@@ -52,7 +52,7 @@
         self.endDayList   = self._getDayList(self.period.end);
 
         self.compositeList = self._createButton(self.buttonList);
-        self.changeButton(self.getBtnData(self.selected));
+        self.select(self.getBtnData(self.selected));
     };
 
     DateGroup.prototype = {
@@ -107,7 +107,7 @@
                 edDate = {y:"", m:"", d:""},
                 weekDate = {};
 
-            self.select(dateBtn);
+            //self.select(dateBtn);
 
             switch(dateBtn.type) {
                 case "prevYear" :
@@ -134,12 +134,16 @@
                     break;
 
                 case "current" :
-                    if (dateType === "week") {
+                	if (dateType === "week") {
                         weekDate = edt.getWeekPeriod({y: today.y, m:today.m, d:today.d, dow:today.dow});
                         stDate = weekDate.st;
                         edDate = weekDate.ed;
+                    } else if (dateType === "market") {
+                    	stDate.y = edDate.y = today.y;
+                        stDate.m = edDate.m = today.m;
+                        stDate.d = edDate.d = today.d;
                     } else {
-                        stDate.y = edDate.y = today.y;
+                    	stDate.y = edDate.y = today.y;
                         stDate.m = edDate.m = today.m;
                         stDate.d = "01";
                         edDate.d = ""+ edt.getLastDate(today.y +""+ today.m +""+ today.d, null);
@@ -228,12 +232,29 @@
                     edDate.d = ""+ edt.getLastDate(stDate.y +""+ edDate.m +""+ stDate.d, null);
                     break;
 
+                case "1Day" :
+                    stDate = edDate = period.end;
+                    break;
+
+                case "1Week" :
+                    edDate = period.end;
+                    stDate = edt.getPrevDate(period.end.y+""+period.end.m+period.end.d, "week", null);
+                    break;
+
+                case "1Month" :
+                    edDate = period.end;
+                    stDate = edt.getPrevDate(period.end.y+""+period.end.m+period.end.d, "month", null);
+                    break;
+                    
                 case "range" :
                     stDate = period.start;
                     edDate = period.end;
                     break;
-
             }
+
+            stDate.label = edt.getDateLabel(stDate);
+            edDate.label = edt.getDateLabel(edDate);
+            
 
             self.startDayList = self._getDayList(stDate);
             self.endDayList   = self._getDayList(edDate);
@@ -241,9 +262,11 @@
             period.start.y = stDate.y;
             period.start.m = stDate.m;
             period.start.d = stDate.d;
+            period.start.label = stDate.label;
             period.end.y   = edDate.y;
             period.end.m   = edDate.m;
             period.end.d   = edDate.d;
+            period.end.label = edDate.label;
         },
 
         /**
@@ -268,12 +291,18 @@
                 if (this.period.end.d > lng) { this.period.end.d = lng; }
             }
 
-	        this.change();
+	        this.change(kind);
         },
 
-	    change: function () {
+	    change: function (kind) {
 		    if (this.event.change) {
 			    this.event.change();
+		    }
+		    
+		    if(kind === "sm") {
+		    	this.period.start.label = edt.getDateLabel(this.period.start);
+		    } else if (kind === "em") {
+		    	this.period.end.label = edt.getDateLabel(this.period.end);
 		    }
 	    },
 
@@ -311,6 +340,8 @@
             this.cache = dateBtn;
             this.selected = dateBtn.type;
             dateBtn.active = true;
+            
+            this.changeButton(dateBtn);
         },
 
         /**
@@ -326,10 +357,14 @@
          * @returns {boolean}
          */
         isPeriodDisabled : function (kind) {
+        	if (this.dateType==="market") {
+        		return false;
+        	}
+        	
             if (this.cache.type !== "range") {
                 return true;
             } else {
-                if (this.dateType==="month" && kind==="d") {
+            	if (this.dateType==="month" && kind==="d") {
                     return true;
                 } else {
                     return false;
@@ -392,6 +427,9 @@
                 "4th"     : "4분기",
                 "1half"   : "전반기",
                 "2half"   : "하반기",
+                "1Day"    : "1일",
+                "1Week"   : "1주일",
+                "1Month"  : "1개월",
                 range     : "범위선택"
             };
 
@@ -429,7 +467,7 @@
 	                        // 모델의 선택된 버튼의 이름이 변경되었을 경우
                             scope.$watch(function () { return scope.dateSearchGroup.selected; }, function (newVal, prevVal) {
                                 if (newVal !== prevVal) {
-	                                dateGroup.changeButton( dateGroup.getBtnData( newVal ) );
+	                                dateGroup.select( dateGroup.getBtnData( newVal ) );
 	                                if (dateGroup.event.change) {
 		                                dateGroup.event.change();
 	                                }
@@ -459,33 +497,32 @@
 	    .run(['$templateCache', function ($templateCache) {
 		    $templateCache.put('dateSearchGroup/template',
 		        '<div class="date-search-group" role="group">' +
-			    '   <ul class="date-search-btn-group">' +
-				'       <li data-ng-repeat="btn in dateGroup.compositeList track by btn.id" data-ng-class="{\'active\':btn.active}">' +
-				'           <button type="button" title="" role="button" data-ng-click="dateGroup.select(btn)">{{btn.name}}</button>' +
-			    '       </li>' +
-			    '   </ul>' +
 			    '   <div class="date-search-select-group">' +
-				'       <span class="date-select-name">&nbsp;&nbsp;<b>기간</b> &nbsp;</span>' +
 				'       <select class="form-control" title="시작년 선택" data-ng-options="year+\'년\' for year in dateGroup.yearLsit track by year" data-ng-model="dateGroup.period.start.y"' +
-				'           data-ng-disabled="dateGroup.isPeriodDisabled(\'y\')" data-ng-change="dateGroup.change()">' +
+				'           data-ng-disabled="dateGroup.isPeriodDisabled(\'y\')" data-ng-change="dateGroup.change(\'sm\')">' +
 				'       </select>' +
 				'       <select class="form-control" title="시작월 선택" data-ng-options="month+\'월\' for month in dateGroup.monthList track by month" data-ng-model="dateGroup.period.start.m"' +
 				'           data-ng-disabled="dateGroup.isPeriodDisabled(\'m\')" data-ng-change="dateGroup.changeMonth(\'sm\')">' +
 		        '       </select>' +
 				'       <select class="form-control" title="시작일 선택" data-ng-options="day+\'일\' for day in dateGroup.startDayList track by day" data-ng-model="dateGroup.period.start.d"' +
-				'           data-ng-disabled="dateGroup.isPeriodDisabled(\'d\')">' +
-				'       </select>' +
-				'~' +
+				'           data-ng-disabled="dateGroup.isPeriodDisabled(\'d\')" data-ng-change="dateGroup.change(\'sm\')">' +
+				'       </select><input type="text"  eden-type="kor" class="form-control" data-ng-model="dateGroup.period.start.label" disabled="disabled" style="width:60px"/>' +
+				' ~ ' +
 				'       <select class="form-control" title="종료년 선택" data-ng-options="year+\'년\' for year in dateGroup.yearLsit track by year" data-ng-model="dateGroup.period.end.y"' +
-				'           data-ng-disabled="dateGroup.isPeriodDisabled(\'y\')" data-ng-change="dateGroup.change()">' +
+				'           data-ng-disabled="dateGroup.isPeriodDisabled(\'y\')" data-ng-change="dateGroup.change(\'em\')">' +
 				'       </select>' +
 				'       <select class="form-control" title="종료월 선택" data-ng-options="month+\'월\' for month in dateGroup.monthList track by month" data-ng-model="dateGroup.period.end.m"' +
 				'           data-ng-disabled="dateGroup.isPeriodDisabled(\'m\')" data-ng-change="dateGroup.changeMonth(\'em\')">' +
 				'       </select>' +
 				'       <select class="form-control" title="종료일 선택" data-ng-options="day+\'일\' for day in dateGroup.endDayList track by day" data-ng-model="dateGroup.period.end.d"' +
-				'           data-ng-disabled="dateGroup.isPeriodDisabled(\'d\')">' +
-				'       </select>' +
+				'           data-ng-disabled="dateGroup.isPeriodDisabled(\'d\')" data-ng-change="dateGroup.change(\'em\')">' +
+				'       </select><input type="text"  eden-type="kor" class="form-control" data-ng-model="dateGroup.period.end.label" disabled="disabled" style="width:60px"/>' +
 				'   </div>' +
+			    '   <ul class="date-search-btn-group">' +
+				'       <li data-ng-repeat="btn in dateGroup.compositeList track by btn.id" data-ng-class="{\'active\':btn.active}">' +
+				'           <button type="button" title="" role="button" data-ng-click="dateGroup.select(btn)">{{btn.name}}</button>' +
+			    '       </li>' +
+			    '   </ul>' +
                 '   <button data-ng-if="dateGroup.enableInqBtn" type="button" class="btn btn-primary btn-search" title="기간검색" data-ng-click="dateGroup.inquiry()">검색</button>' +
 				'</div>'
 		    );

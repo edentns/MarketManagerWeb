@@ -760,7 +760,7 @@
                         lastDate = this.getLastDate(compositeDate, char);
                         if (lastDate < Number(curDate.d)) { curDate.d = lastDate; }
 
-                        changeDate.setFullYear(curDate.y, curDate.m-1, curDate.d);
+                        changeDate.setFullYear(curDate.y, curDate.m-1, Number(curDate.d));
                         break;
 
                     case "year" :
@@ -860,7 +860,7 @@
                 }
             };
         },
-
+        
         /**
          * 현재 날짜를 object타입으로 구한다.
          * @param {string} date
@@ -882,6 +882,19 @@
                 }
             }
             return {y: split[0], m: split[1], d: split[2]};
+        },
+        
+        /**
+         * 날짜의 요일을 구한다.
+         * @param {string} date
+         * @returns {'월요일'}
+         */
+        getDateLabel : function (date) {
+        	var week       = new Array('일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'),
+                inDate = new Date();
+        	inDate.setFullYear(date.y, date.m-1, date.d);
+        	var todayLabel = week[inDate.getDay()]; 
+        	return todayLabel; 
         }
     }, edt);
 

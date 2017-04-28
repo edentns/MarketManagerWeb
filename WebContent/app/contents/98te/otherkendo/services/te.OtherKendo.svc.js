@@ -11,14 +11,9 @@
         .factory("te.OtherKendoSvc", TeOtherKendoSvc)
             
         TeOtherKendoSvc.$inject = [ 'ModalSvc', 'APP_CODE', '$http'];
-    
         	function TeOtherKendoSvc(ModalSvc, APP_CONFIG, $http) {
 				
-			
-        	
         	return {
-            	
-            	
             	/**
             	 * 함기현 - 주소검색창 새로 구현중
             	 */
@@ -26,8 +21,7 @@
     				var modalInstance = ModalSvc.openHSearchCustCmp();
     				return modalInstance.result;
     			},
-    			
-            	
+
 	            /**
 	             * 컨설턴트를 포함하는 상위부서를 가져온다.
 	             * @param {{wk_grp:Number}} param

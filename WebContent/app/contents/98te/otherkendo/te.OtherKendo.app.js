@@ -11,22 +11,23 @@
             url		: "/98te/teOtherKendo?menu",
             views	: {
                 contentView		: {
-                    templateUrl	: "app/contents/sy/otherkendo/templates/te.OtherKendo.tpl.html",
+                    templateUrl	: "app/contents/98te/otherkendo/templates/te.OtherKendo.tpl.html",
                     controller	: "te.OtherKendoCtrl",
                     resolve		: {
                         resData: [ "AuthSvc", "te.OtherKendoSvc", "sy.CodeSvc", "APP_CODE", "$q",
                             function ( AuthSvc, SyOtherkendoSvc, SyCodeSvc, APP_CODE, $q) {
                                 var defer 	= $q.defer(),
                                     resData = {};
+
                                 AuthSvc.isAccess().then(function (result) {
                                     resData.access = result[0];
-
-                                    $q.all([
-                                        SyCodeSvc.getSubcodeList({ cd: APP_CODE.workgroup.cd }),
-                                    ]).then(function (result) {
-                                        resData.workCodeList = result[0].data;
-                                        defer.resolve( resData );
-                                    });
+                                    defer.resolve( resData );
+//                                    $q.all([
+//                                        SyCodeSvc.getSubcodeList({ cd: APP_CODE.workgroup.cd }),
+//                                    ]).then(function (result) {
+//                                        resData.workCodeList = result[0].data;
+//                                        defer.resolve( resData );
+//                                    });
                                 });
 
                                 return defer.promise;

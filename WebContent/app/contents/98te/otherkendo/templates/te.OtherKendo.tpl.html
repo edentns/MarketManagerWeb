@@ -8,325 +8,113 @@
         </div>
     </div>
     
-<script>$(function() { $("#postcodify_search_button").postcodifyPopUp(); });</script>
-    
     <!-- 주소 -->
     <div class="row">
         <div class="content-area-container col-xs-12">
-	        	<div class="demo-section k-content wide">
-	            	<div class="row">
-	            		<button id="postcodify_search_button">검색</button><br />
-	            		<input type="text" name="" class="postcodify_postcode5" value="" />
-	            		<input type="text" name="" class="postcodify_address" value="" /><br />
-						<input type="text" name="" class="postcodify_details" value="" /><br />
-						<input type="text" name="" class="postcodify_extra_info" value="" /><br />
-       				</div>
-	            </div>
-        </div>
-    </div>
-    
-    <!-- 주소 -->
-    <div class="row">
-        <div class="content-area-container col-xs-12">
-        	<div data-content-box-layer>
-	        	<div class="demo-section k-content wide">
-	            	<div class="row">
-	            		<button id="postcodify_search_button" data-ng-click="addrSearch()">검색</button><br /><br />
-	            		<button data-ng-click="ex.hahm.upload()">엑셀업로드</button><br />
-	            		<input name="files" id="files"
-		                   type="file"
-		                   kendo-upload
-		                   k-async="{ saveUrl: 'http://localhost:8080/SalesLifecycleMgmt/excelUpload',  autoUpload: true }"
-		                   k-complete="onComplete"
-		                   k-multiple="false"
-		                   k-validation="{allowedExtensions:['.xls']}"
-		                   k-localization="{ invalidFileExtension: '엑셀파일이 아닙니다.'}"
-		                   />
-       				</div>
-	            </div>
+        	<div data-content-box-layer data-box-title="otherKendoVO1.boxTitle">
+	        	<div id="basicSearch">
+	        		<form class="search-type1">
+	        			<table>
+	        				<colgroup>
+								<col style="width: 10%;">
+								<col style="width: 23%;">
+								<col style="width: 10%;">
+								<col style="width: 23%;">
+								<col style="width: 10%;">
+								<col style="width: 24%;">
+	        				</colgroup>
+	        				<tbody>
+	        					<tr>
+	        						<th>마켓명</th>
+	        						<td>
+		        						<dropdown-multiselect model="otherKendoVO1.selectedMrkIds" 
+		        										      options="otherKendoVO1.mrkDataSource" style="width:100%;">
+		        						</dropdown-multiselect>
+		        					</td>
+		        					<th>상품명</th>
+	        						<td>
+		        						<input type="text" 
+		        						       eden-type="kor" 
+		        						       class="form-control" 
+		        						       title="상품명 입력" 
+		        						       data-ng-model="otherKendoVO1.searchObj.entity.NM_ITEM" 
+		        						       disabled="enabled"/>
+		        					</td>
+		        					<th>주문상태</th>
+	        						<td>
+		        						<dropdown-multiselect model="otherKendoVO1.selectedSaStatIds" 
+		        										      options="otherKendoVO1.saStatDataSource" style="width:100%;">
+		        						</dropdown-multiselect>
+		        					</td>
+	        					</tr>
+	        					<tr>
+	        						<th>주문번호</th>
+	        						<td>
+		        						<input type="text" 
+		        						       eden-type="kor" 
+		        						       class="form-control" 
+		        						       title="주문번호 입력" 
+		        						       data-ng-model="otherKendoVO1.searchObj.entity.NM_ITEM" 
+		        						       disabled="enabled"/>
+		        					</td>
+		        					<th>구매자/수취인</th>
+	        						<td>
+		        						<input type="text" 
+		        						       eden-type="kor" 
+		        						       class="form-control" 
+		        						       title="구매자/수취인 입력" 
+		        						       data-ng-model="otherKendoVO1.searchObj.entity.NM_ITEM" 
+		        						       disabled="enabled"/>
+		        					</td>
+		        					<th></th>
+	        						<td>
+		        					</td>
+	        					</tr>
+	        					<tr>
+	        						<th>기간</th>
+	        						<td colspan="5">
+		        						<div class="frm-inline">
+											<div class="frm-group">
+												<select class="form-control" title="검색기간종류 선택" data-ng-options="code.CD as code.NAME for code in otherKendoVO1.perTpCdList" data-ng-model="otherKendoVO1.TP_PER">
+												</select>
+											</div>
+											<div class="frm-group" data-date-search-group="otherKendoVO1.datesetting"></div>
+										</div>
+		        					</td>
+	        					</tr>
+	        				</tbody>
+	        			</table>
+	        			
+						<div class="btn-group1 mt-20">
+							<button type="submit" class="btn btn-primary" title="기본검색" data-ng-click="otherKendoVO1.inquiry()">검색</button>
+							<button type="button" class="btn btn-danger" title="기본검색 초기화" data-ng-click="otherKendoVO1.initParam()">초기화</button>
+						</div>
+	        		</form>
+	        	</div>
 	    	</div>
         </div>
     </div>
-	<div class="row">
-		<div class="content-area-container col-xs-12">
-			<div data-content-box-layer data-box-title="ex.hahm.boxTitle">
-				<div class="box-content-article">
-					<div data-ui-grid="ex.hahm.grid" class="article-view grid" style="height: 400px;"
-					     data-ui-grid-auto-resize
-					     data-ui-grid-resize-columns>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
     
-    
-    
-    <!-- 라디오 동적생성 -->
-    <div class="row">
-        <div class="content-area-container col-xs-12">
-	        <div data-content-box-layer>
-	        	<div class="demo-section k-content wide">
-	            	<div class="row">
-	            		<button type="submit" class="btn btn-primary" data-ng-click="createDynamicRadioButton()" title="라디오 버튼 생성">라디오 버튼 생성</button>
-	            		<span class="dymanic"></span>
-       				</div>
-	            </div>
-	        </div>
-        </div>
-    </div>
-    
-    <!-- 한 그리드에서 다중선택후 버튼눌러서 다른 한 그리드로 보내기 -->
-    <!-- <div class="row">
-        <div class="content-area-container col-xs-12">
-	       <div class="modal-header">
-				<h3 class="modal-title">장비 검색</h3>
-			</div>
-			<div class="modal-body">
-				<form class="simple-search">
-					<select class="form-control" title="검색기준 선택" ng-options="tp.value as tp.name for tp in vm.code.tpList" data-ng-model="vm.search.tp"></select>
-					<input type="search" eden-type="kor" class="form-control" title="검색어 입력" data-ng-model="vm.search.keyword" autofocus>
-					<button type="submit" class="btn btn-primary" data-ng-click="vm.search.inquiry()" title="장비 검색">검색</button>
-				</form>
-				<div>
-					<div ag-grid="vm.eqm.grid" class="ag-fresh" style="height:250px;"></div>
-					<div class="ta-c mt-5">
-						<button type="button" class="form-control" title="" data-ng-click="vm.eqm.putCart()"><i class="fa fa-shopping-cart fa-2x orange"></i><span class="font-w700 pl-10 font-lg">장바구니로 이동</span></button>
-					</div>
-					<div ag-grid="vm.selectedEqm.grid" class="ag-fresh mt-5" style="height:250px;"></div>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-primary" title="장비 확인" data-ng-click="vm.confirm()">확인</button>
-					<button type="button" class="btn btn-warning" title="취소" data-ng-click="vm.cancel()">취소</button>
-				</div>
-			</div>
-        </div>
-    </div> -->
-    
-    
-    
-    <!-- Bar chart Layer Test-->
-<!--     <div class="row">
-        <div class="content-area-container col-xs-12">
-            <div data-content-box-layer data-box-title="otherMngVO.boxTitle">
-	            <div class="demo-section k-content wide">
-			        <div id="example">
-					    <div class="demo-section k-content wide">
-					        <div>
-					            <h4>Hover some series</h4>
-					            <div kendo-chart
-					                 k-legend="{ position: 'bottom' }"
-					                 k-series-defaults="{ type: 'bar' }"
-					                 k-series="[
-					                                 { field: 'nuclear', name: 'Nuclear electricity' },
-					                                 { field: 'hydro', name: 'Hydro electricity' },
-					                                 { field: 'wind', name: 'Wind electricity' }
-					                             ]"
-					                 k-data-source="electricity"
-					                 style="height: 400px;" ></div>
-					        </div>				
-					    </div>
-					</div>
-			        <div style="padding-top: 1em;">
-			            <h4>Console</h4>
-			            <div class="console"></div>
-			        </div>
-			    </div>
-			</div>
-        </div>
-    </div> -->
-    <!--/ Bar chart Layer Test END-->
-    
-    <!-- test Multiselect -->
-    <div class="row">
-        <div class="content-area-container col-xs-12">
-	        <div data-content-box-layer>
-	        	<div class="demo-section k-content wide">
-	            	<div class="row">
-            			<div class="col-xs-6" >
-                			<dropdown-multiselect model="selectedUserIds" options="users"></dropdown-multiselect>
-                			<button type="button" class="btn btn-primary" title="검색" data-ng-click="vm.eqm.search()">검색</button>
-           				</div>
-	            		<div class="col-xs-6">
-			                <ul>
-			                    <li data-ng-repeat="item in selectedUserIds">
-			                        {{ item }}
-			                    </li>
-			                </ul>
-	           			 </div>
-       				 </div>
-	            </div>
-	        </div>
-        </div>
-    </div>
-    <!-- 멀티셀렉트후 값표현하는 그리드 -->
     <div class="row">
 		<div class="content-area-container col-xs-12">
-			<div data-content-box-layer data-box-title="vm.eqm.boxTitle">
-				<div class="box-content-article">
-					<div data-ui-grid="vm.eqm.grid" class="article-view grid" style="height: 400px;"
-					     data-ui-grid-auto-resize
-					     data-ui-grid-resize-columns>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-    
-    <!-- 그리드 방식 x 테이블 형식 그냥 그려주는 방법 -->
-    <!-- <div class="row">
-        <div class="content-area-container col-xs-12">
-            <div class="box">
-                <div class="box-header">
-                    <div class="box-name">
-                        <i class="fa fa-search"></i>
-                        <span>검색결과</span>
-                    </div>
-                    <div class="box-icons">
-                        <a class="collapse-link">
-                            <i class="fa fa-chevron-up"></i>
-                        </a>
-                    </div>
-                </div>
-                <div class="box-content">
-                    <div class="simple-search">
-                        <div class="col-xs-4 left-group"></div>
-                    </div>
-                    <div class="clear">
-                        <div class="mt-20">
-                            <table data-ng-table="meetingVO" class="table table-striped no-footer">
-                                <colgroup>
-                                    <col style="width: 8%;">
-                                    <col style="width: 36%;">
-                                    <col style="width: 14%;">
-                                    <col style="width: 14%;">
-                                    <col style="width: 14%;">
-                                    <col style="width: 14%;">
-                                </colgroup>
-                                <thead>
-                                <tr>
-                                    <th class="ta-cr sortable"
-                                        data-ng-repeat="column in meetingVO.tbl.columns"
-                                        data-ng-show="column.visible">
-                                        <div>{{column.title}}</div>
-                                    </th>
-                                </tr>
-                                </thead>
-                                <tbody class="hover">
-                                <tr ng-repeat="info in meetingVO.data" >
-                                    <td><span>{{info.CD_CLS}}</span></td>
-                                    <td class="ta-l"><span>{{info.NM_CLS}}</span></td>
-                                    <td><span>{{info.DC_RMK}}</span></td>
-                                    <td><span>{{info.DTS_INSERT}}</span></td>
-                                    <td><span>{{info.DTS_UPDATE}}</span></td>
-                                    <td><span>{{info.NO_INSERT}}</span></td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> -->
-    
-    
-    <!-- 멀티 셀렉트(한개씩 추가가능) -->
-    <!-- <div class="row">
-        <div class="content-area-container col-xs-12">
-	        <div data-content-box-layer>
-	        	<div class="demo-section k-content wide">
-	            	<h4>Select product</h4>
-				        <select kendo-multi-select k-options="selectOptions" k-ng-model="selectedIds"></select>
-				        <p ng-show="selectedIds.length" style="padding-top: 1em;">Selected: {{ selectedIds }}</p>
-	            </div>
-	        </div>
-        </div>
-    </div> -->
-    
-    
-    <!-- 그리드에 에디트형식 발생시 달력과 컬럼이동 -->
-    <!-- <div class="row">
-        <div class="content-area-container col-xs-12">
-	        <div data-content-box-layer>
-	        	<div class="demo-section k-content wide">
-	            	<div data-content-box-layer data-box-title="gridOptions.boxTitle">
-		                <kendo-grid options="gridOptions">
+			<div data-content-box-layer data-box-title="vm.gridObj.boxTitle">
+				<div id="salesContent">
+					<div class="box-content-article">
+						<div class="article-header">
+							<div class="col-xs-6 article-header-box">
+								<div class="info">Total : <span class="total-count">{{vm.gridObj.grid.data.length}}</span> 건</div>
+							</div>
+							<div class="col-xs-6 article-header-box ta-r grid-export">
+								<button data-ng-if="page.isWriteable()" type="button" class="ae-btn ae-add-btn" title="배송지연" data-ng-click="vm.gridObj.moveInsPage()">
+									<i class="fa fa-plus"></i> 배송지연
+								</button>
+							</div>
+						</div>
+		                <kendo-grid options="gridSampleVO">
 		                </kendo-grid>
-		            </div>
-	            </div>
-	        </div>
-        </div>
-    </div> -->
-    
-    
-    <!-- Bar chart Layer -->
-    <!-- <div class="row">
-        <div class="content-area-container col-xs-12">
-	        <div data-content-box-layer>
-	        	<div class="demo-section k-content wide">
-	            	<div ng-grid="gridOptions" style ="border: 1px solid rgb(212,212,212);width: 600px; height: 250px;font: 12px Tahoma;color: #777;">
-	            	</div>
-	            	<button type="button" class="btn btn-primary" title="opal" data-ng-click="opal()">opal</button>
-                    <button type="button" class="btn btn-primary" title="flat" data-ng-click="flat()">flat</button>
-	            </div>
-	        </div>
-        </div>
-    </div> -->
-    <!--/ Bar chart Layer END -->
-
-    <!-- 스케쥴 -->
-    <div class="row">
-        <div class="content-area-container col-xs-12">
-            <div data-content-box-layer data-box-title="schedulerOptions.title">
-	            <div class="demo-section k-content wide">
-			        <div kendo-scheduler k-options="schedulerOptions">
-			            <span k-event-template class='custom-event'>{{dataItem.title}}</span>
-			            <div k-all-day-event-template class='custom-all-day-event'>{{dataItem.title}}</div>
-			        </div>
-			    </div>
+					</div>
+				</div>
 			</div>
-        </div>
-    </div>
+		</div>
+	</div>
 </div>
-
-<style type="text/css">
-    .employee-name {
-        display: inline-block;
-        vertical-align: middle;
-        line-height: 20px;
-        padding-left: 3px;
-        margin-left: 5px;
-    }
-    .k-button
-    {
-    	padding: 5px;
-    }
-    .contact-info-form {
-        list-style-type: none;
-        margin: 30px 0;
-        padding: 0;
-    }
-    .contact-info-form li {
-        margin: 10px 0;
-    }
-    .contact-info-form label {
-        display: inline-block;
-        width: 100px;
-        text-align: right;
-        font-weight: bold;
-    }
-    .demo-section p {
-        margin: 0 0 30px;
-        line-height: 50px;
-    }
-    .demo-section p .k-button {
-        margin: 0 10px 0 0;
-    }
-    .k-primary {
-        min-width: 150px;
-    }    
-    .example {
-        min-height: 400px;
-    }
-</style>
