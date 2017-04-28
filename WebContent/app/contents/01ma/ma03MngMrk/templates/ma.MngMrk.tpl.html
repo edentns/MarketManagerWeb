@@ -3,8 +3,73 @@
         <div id="app-content-header">
             <ol class="breadcrumb">
                 <li><a href="#01ma/maDashboard"><i class="fa fa-home fa-2x"></i></a></li>
-                <li><a href="#01ma/maMngMrk">관리자쇼핑몰관리</a></li>
+                <li><a href="#01ma/maMngMrk">관리자마켓관리</a></li>
             </ol>
+        </div>
+    </div>
+    <div class="row">
+        <!-- 검색 -->
+        <div class="content-area-container col-xs-12">
+        	<div data-content-box-layer data-box-title="mngMrkDateVO.boxTitle">
+                <form class="search-type1" id="myForm">
+                	<table>
+                        <colgroup>
+                            <col style="width: 10%;">
+                            <col style="width: 22%;">
+                            <col style="width: 10%;">
+                            <col style="width: 23%;">
+                            <col style="width: 10%;">
+                            <col style="width: 23%;">
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th>마켓별</th>
+                            <td>
+                            	<input class="k-textbox" title="마켓별" ng-model="mngMrkDateVO.searchText" type="text" style="width:100%;"/>
+                            </td>
+                            <th>연동방법</th>
+                            <td>
+                            	<select kendo-drop-down-list title="연동방법" 
+                            		ng-model="mngMrkDateVO.methodDataCode" 
+						            k-options="methodDataSource(true)" style="width:100%;">
+                            	</select>
+                            </td>
+                            <th>연동상태</th>
+                            <td>
+                            	<select kendo-drop-down-list title="연동상태" 
+                            		ng-model="mngMrkDateVO.statusDataCode"
+                            		k-options="statusDataSource(true)" style="width:100%;">                         		
+                            	</select>      	
+                            </td>           
+                        </tr>
+                        <tr>
+                            <th>연동기간 </th>
+                            <td colspan="5">                            	
+                            	<input kendo-date-picker title="연동시작기간" ng-model="mngMrkDateVO.dateString1" k-ng-model="mngMrkDateVO.dateObject1" k-options="dateOptions" />
+                            	<span> ~ </span>
+                            	<input kendo-date-picker title="연동종료기간" ng-model="mngMrkDateVO.dateString2" k-ng-model="mngMrkDateVO.dateObject2" k-options="dateOptions" />
+                          
+                            	<kendo-button type="button" title="1일" data-ng-click="mngMrkDateVO.addDays(1)">1일</kendo-button>
+                            	<kendo-button type="button" title="1주일" data-ng-click="mngMrkDateVO.addDays(7)">1주일</kendo-button>
+                            	<kendo-button type="button" title="1개월" data-ng-click="mngMrkDateVO.addDays(30)">1개월</kendo-button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>                    
+                    <div class="btn-group1 mt-20">
+                        <kendo-button type="submit" class="k-primary" title="검색" data-ng-click="doInquiry()">검색</kendo-button>
+                        <kendo-button type="botton" class="" title="초기화" data-ng-click="mngMrkDateVO.init()">초기화</kendo-button>                       
+                    </div>
+                    <br/>
+                    <p class="text-center">총  <strong>{{mngMrkDateVO.dataTotal}}</strong>건이 검색되었습니다.</p>
+                </form>
+            </div>
+        </div>
+                
+        <!-- 조회 리스트 -->
+		<div class="content-area-container col-xs-12" style="padding:50px 0px 0px 0px;">				
+	        <kendo-grid options="gridMngMrkUserVO">
+	        </kendo-grid>	            
         </div>
     </div>
 </div>
