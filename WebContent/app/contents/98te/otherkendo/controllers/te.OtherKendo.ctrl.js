@@ -106,7 +106,15 @@
 	        	};
 	        	
 	        	otherKendoVO1.inquiry = function() {
-	        		$scope.gridSampleVO.dataSource.read();
+	        		//$scope.gridSampleVO.dataSource.read({aaa:"111",bbb:"222"});
+	        		var param = {
+						procedureParam:"USP_TE_OTHERKENDO01_GET&sFromDt@s",
+						sFromDt:"20161215"
+					};
+					UtilSvc.getList(param).then(function (res) {
+						gridSampleVO.dataSource.data(res.data.results[0]);
+						//e.success(res.data.results[0]);
+					})
 	        	};
 	        	
 	        	otherKendoVO1.initParam = function() {
@@ -121,15 +129,10 @@
         			},
         			boxTitle: "Sample grid",
         			dataSource: new kendo.data.DataSource({
+        				autoBind: false,
         				transport: {
         					read: function(e) {
-        						var param = {
-        							procedureParam:"USP_TE_OTHERKENDO01_GET&sFromDt@s",
-        							sFromDt:"20161215"
-        						};
-        						UtilSvc.getList(param).then(function (res) {
-        							e.success(res.data.results[0]);
-        						})
+        						e.success();
         					}
         				},
         				pageSize: 14,
