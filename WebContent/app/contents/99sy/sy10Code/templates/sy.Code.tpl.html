@@ -38,7 +38,8 @@
                             <button type="button" class="ae-btn" data-ng-click="syCodeVO.inquiry()"><i class="fa fa-refresh"></i></button>
                         </div>
                     </div>
-                    <div id="codeGroupTbl" class="article-view" data-ui-grid="syCodeVO.gridOptions" ui-grid-selection class="grid"></div>
+                    <kendo-grid options="syCodeVO" id="grid" name="grid">
+                	</kendo-grid>
                 </div>
             </div>
         </div>
@@ -47,7 +48,11 @@
         <!-- 사용자코드 & 시스템코드 Layer -->
         <div class="content-area-container col-xs-6">
             <div class="content-box-row" data-ng-controller="sy.CodeCustomCtrl">
-                <div data-content-box-layer data-box-title="customerVO.boxTitle">
+            	<div data-content-box-layer data-box-title="gridCusCodeVO.boxTitle">
+                <kendo-grid options="gridCusCodeVO">
+                </kendo-grid>
+            </div>
+                <!-- <div data-content-box-layer data-box-title="customerVO.boxTitle">
                     <div class="box-content-article">
                         <div class="article-header">
                             <div class="col-xs-6 article-header-box">
@@ -61,12 +66,13 @@
                         </div>
                         <div id="codeCustomerTbl" class="article-view" data-ui-grid="customerVO.gridOptions" ui-grid-selection ui-grid-edit ui-grid-cellnav class="grid"></div>
                     </div>
-                </div>
+                </div> -->
             </div>
 
             <div class="content-box-row" data-ng-controller="sy.CodeSystemCtrl">
-                <div data-content-box-layer data-box-title="systemVO.boxTitle">
-                    <div id="codeSystemTbl" data-ui-grid="systemVO.gridOptions" class="grid"></div>
+                <div data-content-box-layer data-box-title="gridSysCodeVO.boxTitle">
+                    <kendo-grid options="gridSysCodeVO">
+                	</kendo-grid>
                 </div>
             </div>
         </div>
