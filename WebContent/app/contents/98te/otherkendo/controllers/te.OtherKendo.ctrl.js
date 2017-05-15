@@ -106,14 +106,13 @@
 	        	};
 	        	
 	        	otherKendoVO1.inquiry = function() {
-	        		//$scope.gridSampleVO.dataSource.read({aaa:"111",bbb:"222"});
 	        		var param = {
 						procedureParam:"USP_TE_OTHERKENDO01_GET&sFromDt@s",
 						sFromDt:"20161215"
 					};
 					UtilSvc.getList(param).then(function (res) {
 						gridSampleVO.dataSource.data(res.data.results[0]);
-						//e.success(res.data.results[0]);
+						gridSampleVO_test.dataSource.data(res.data.results[0]);
 					})
 	        	};
 	        	
@@ -132,10 +131,9 @@
         				autoBind: false,
         				transport: {
         					read: function(e) {
-        						e.success();
         					}
         				},
-        				pageSize: 14,
+        				pageSize: 6,
         				schema: {
         					model: {
         						NO_C: {},
@@ -146,11 +144,11 @@
         				}
         			}),
         			columns: [
-        			    {field: "NO_C"  , width: 100, title: "가입자번호"},
-        			    {field: "CD_CLS", width: 100, title: "코드해더"},
-        			    {field: "CD_DEF", width: 100, title: "코드디테일"},
-        			    {field: "NM_DEF", width: 100, title: "코드명", editor: testDropDownEditor}
-        			],
+              			    {field: "NO_C"  , width: 100, title: "가입자번호"},
+            			    {field: "CD_CLS", width: 100, title: "코드해더"},
+            			    {field: "CD_DEF", width: 100, title: "코드디테일"},
+            			    {field: "NM_DEF", width: 100, title: "코드명"}
+            		],
         			pageable: {
         				buttonCount: 10
         			},
@@ -162,6 +160,64 @@
         			columnMenu: true,
         			height: 450
 	        	};
+	        	var gridSampleVO_test = $scope.gridSampleVO_test = {
+	        			messages: {
+	        				noRows: "정보가 존재하지 않습니다.",
+	        				loading: "정보를 가져오는 중...",
+	        				requestFailed: "정보를 가져오는 중 오류가 발생하였습니다.",
+	        				retry: "갱신",
+	        			},
+	        			boxTitle: "Sample grid",
+	        			dataSource: new kendo.data.DataSource({
+	        				autoBind: false,
+	        				transport: {
+	        					read: function(e) {
+	        						var param = {
+        								procedureParam:"USP_TE_OTHERKENDO01_GET&sFromDt@s",
+        								sFromDt:"20161215"
+        							};
+        							UtilSvc.getList(param).then(function (res) {
+        								e.success()
+        								gridSampleVO.dataSource.data(res.data.results[0]);
+        								gridSampleVO_test.dataSource.data(res.data.results[0]);
+        							})
+	        					},
+	                			parameterMap: function(e, operation) {
+	                				if(operation !== "read" && e.models) {
+	                					return {models:kendo.stringify(e.models)};
+	                				}
+	                			}
+	        				},
+	        				pageSize: 6,
+	        				schema: {
+	        					model: {
+	        						DC_CHECK: {},
+	        						NO_C: {},
+	        						CD_CLS: {},
+	        						CD_DEF: {},
+	        						NM_DEF: {}
+	        					}
+	        				}
+	        			}),
+	                	dataBound:function(e) {
+	                		var grid = e.sender;
+	                		grid.select("tr:eq(1)");
+	                	},
+	        			columns: [
+	        			    {field: "DC_CHECK" , width: 20, title: "선택"},
+	        			    {field: "NO_C"  , width: 100, title: "가입자번호",
+	        			     columns: [{field: "CD_DEF", width: 100, title: "코드디테일"}]},
+	        			    {field: "CD_CLS", width: 100, title: "코드해더",
+	        			     columns: [{field: "NM_DEF", width: 100, title: "코드명"}]}
+	        			],
+	        			pageable: {
+	        				buttonCount: 10
+	        			},
+	        			rowTemplate: '<tr><td rowspan="2"><input type="checkbox" name="#=DC_CHECK#" value="0" id="#=DC_CHECK#"></td><td title="1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890"><div style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap">1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890</div></td><td>#=CD_CLS#</td></tr><tr><td>#=CD_DEF#</td><td>#=NM_DEF#</td></tr>',
+	        			altRowTemplate: '<tr class="k-alt"><td rowspan="2"><input type="checkbox" name="#=DC_CHECK#" value="0" id="#=DC_CHECK#"></td><td>#=NO_C#</td><td>#=CD_CLS#</td></tr><tr class="k-alt"><td>#=CD_DEF#</td><td>#=NM_DEF#</td></tr>',
+	        			height: 450
+		        	};
+
 	        	function testDropDownEditor(container, options) {
 	        		$('<input required name="' + options.field + '"/>')
                     .appendTo(container)
@@ -189,6 +245,8 @@
                         }
                     });
 	        	}
+	        	
+	        	otherKendoVO1.inquiry();
         	}
         ]);
 }());

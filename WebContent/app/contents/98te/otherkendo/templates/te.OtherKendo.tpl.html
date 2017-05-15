@@ -95,8 +95,9 @@
         </div>
     </div>
     
+    
     <div class="row">
-		<div class="content-area-container col-xs-12">
+		<div class="content-area-container col-xs-6">
 			<div data-content-box-layer data-box-title="vm.gridObj.boxTitle">
 				<div id="salesContent">
 					<div class="box-content-article">
@@ -111,6 +112,26 @@
 							</div>
 						</div>
 		                <kendo-grid options="gridSampleVO">
+		                </kendo-grid>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="content-area-container col-xs-6">
+			<div data-content-box-layer data-box-title="vm.gridObj.boxTitle">
+				<div id="salesContent">
+					<div class="box-content-article">
+						<div class="article-header">
+							<div class="col-xs-6 article-header-box">
+								<div class="info">Total : <span class="total-count">{{vm.gridObj.grid.data.length}}</span> 건</div>
+							</div>
+							<div class="col-xs-6 article-header-box ta-r grid-export">
+								<button data-ng-if="page.isWriteable()" type="button" class="ae-btn ae-add-btn" title="배송지연" data-ng-click="vm.gridObj.moveInsPage()">
+									<i class="fa fa-plus"></i> 배송지연
+								</button>
+							</div>
+						</div>
+		                <kendo-grid options="gridSampleVO_test">
 		                </kendo-grid>
 					</div>
 				</div>
