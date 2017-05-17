@@ -12,8 +12,6 @@
             	
 				/**
 				 * 새 마켓정보 등록 Parameter 생성한다.
-				 * @param {{bsCd:string, user:string, password:string}} userDataSet
-				 * @returns {{NO_C:string, user:string, password:string}}
 				 */
             	mngmrkInsert : function (param) {					
 					return $http({
@@ -32,8 +30,6 @@
             
 	            /**
 				 * 기존 마켓정보를 수정 Parameter 생성한다.
-				 * @param {{bsCd:string, user:string, password:string}} userDataSet
-				 * @returns {{NO_C:string, user:string, password:string}}
 				 */
             	,mngmrkUpdate : function (param) {					
 					return $http({
@@ -52,8 +48,6 @@
             	
             	/**
 				 * 기존 마켓정보를 삭제 Parameter 생성한다.
-				 * @param {{bsCd:string, user:string, password:string}} userDataSet
-				 * @returns {{NO_C:string, user:string, password:string}}
 				 */
             	,mngmrkDelete: function (param) {					
 					return $http({
@@ -69,6 +63,11 @@
 						console.log("error",data,status,headers,config);
 					});
 				}
+            	
+            	//배열에 찾는 값이 있나 
+            	,arrayIndexCheck: function(arr, target){
+            		return arr.indexOf(target) >= 0 ? true : false;
+            	}
             
             };
         }]);
