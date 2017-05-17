@@ -1,7 +1,7 @@
 (function () {
 	'use strict';
 
-	function PageVO($rootScope, $q, APP_AUTH) {
+	function PageVO($rootScope, $q, APP_AUTH, UtilSvc) {
 		function Page(config) {
 			var user = $rootScope.webApp.user,
 				me = this;
@@ -28,7 +28,7 @@
 			me.postProcessors   = [];
 
 			me.setConfig(config);
-		}
+		};
 
 		Page.prototype = {
 			/**
@@ -256,6 +256,14 @@
                 me.preProcessors.push({ name: key, dependencies: dependencies, defined: definedFnc });
 			},
 			/**
+			 * 페이지에 코드를 조회하는 함수
+			 * @param {boolean} bAll
+			 * @param {string} strCdCls
+			 */
+			codeDataSource: function(bAll, strCdCls) {
+            	return UtilSvc.getCDList(bAll, strCdCls);
+			},
+			/**
 			 * 페이지를 로드한다.
 			 * @param {function} callback
 			 */
@@ -288,9 +296,9 @@
 		};
 
 		return Page;
-	}
+	};
 
-	PageVO.$inject = ['$rootScope', '$q', 'APP_AUTH'];
+	PageVO.$inject = ['$rootScope', '$q', 'APP_AUTH', 'UtilSvc'];
 
 
 	angular.module('edtApp.common.model')

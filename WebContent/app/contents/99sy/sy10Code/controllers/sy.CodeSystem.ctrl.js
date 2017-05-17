@@ -8,60 +8,66 @@
      */
     angular.module("sy.Code.controller")
         .controller("sy.CodeSystemCtrl", [ "$scope", function ($scope) {
-            /**
-             * systemVO
-             * @namespace
-             * @extends code.codeMngCtrl
-             * @type {String} NO_MNGCDHD
-             * @type {String} CD_CLS 분류코드
-             */
-            var systemVO = $scope.systemVO = {
-                boxTitle : "기초코드",
-                NO_MNGCDHD   : "",
-                CD_CLS   : ""
+        	
+        	
+        	var gridSysCodeVO = $scope.gridSysCodeVO = {
+    			NO_MNGCDHD   : "",
+                CD_CLS   : "",
+                messages: {
+        			noRows: "사용자코드가 존재하지 않습니다.",
+        			loading: "ERP 사용자정보를 가져오는 중...",
+                    requestFailed: "요청 ERP 사용자정보를 가져오는 중 오류가 발생하였습니다."
+        		},
+        		boxTitle : "기초코드",
+        		dataSource: new kendo.data.DataSource({
+            		batch: true,
+            		schema: {
+            			model: {
+            				fields: {
+            					NM_DEF:     { },
+            					DC_RMK1:    { },
+            					DC_RMK2:    { },
+            					DC_RMK3:    { },
+            					DC_RMK4:    { },
+            					DC_RMK5:    { },
+            					YN_USE:     { },
+            					DTS_UPDATE: { }
+            				}
+            			}
+            		}
+            	}),
+            	navigatable: true,
+            	columns: [
+    		           { field : "NM_DEF", title: "구분코드명", width: "160" },
+    		           { field : "DC_RMK1", title: "비고1", width: "100" },
+                       { field : "DC_RMK2", title: "비고2", width: "100" },
+                       { field : "DC_RMK3", title: "비고3", width: "100" },
+                       { field : "DC_RMK4", title: "비고4", width: "100" },
+                       { field : "DC_RMK5", title: "비고5", width: "100" },
+                       { field : "YN_USE", title: "사용여부", width: "120", cellClass: "ta-c", cellFilter: "ynUse", editableCellTemplate: "ui-grid/dropdownEditor", editDropdownValueLabel: "YN_USE",
+                           editDropdownOptionsArray : [  { id: "Y", YN_USE: "사용" }, { id: "N", YN_USE: "사용안함" } ]
+                       },
+                       { field : "DTS_UPDATE", title: "수정일시", width: "150", cellClass: "ta-c", enableCellEdit: false }
+            	],
+                collapse: function(e) {
+                    // console.log(e.sender);
+                    this.cancelRow();
+                },
+            	editable: false,
+            	height: 260,
+            	
+            	initLoad: function() {
+            		var self = this;
+            		
+            	    // 코드분류 row클릭시 정보를 받아 사용자코드를 조회한다.
+                    $scope.$on( "codeMng.system:inquiry", function ( $event, oEntity, aData ) {
+                        self.NO_MNGCDHD = oEntity.NO_MNGCDHD;
+                        self.CD_CLS     = oEntity.CD_CLS;
+                        self.dataSource.data(aData);
+                    });
+            	}
             };
-
-            /**
-             * 사용자코드 테이블 Option을 세팅한다.
-             */
-            systemVO.gridOptions = {
-                columnDefs : [
-                    { field : "NM_DEF", displayName: "구분코드명", width: "100", pinnedLeft: true },
-                    { field : "DC_RMK1", displayName: "비고1", width: "100" },
-                    { field : "DC_RMK2", displayName: "비고2", width: "100" },
-                    { field : "DC_RMK3", displayName: "비고3", width: "100" },
-                    { field : "DC_RMK4", displayName: "비고4", width: "100" },
-                    { field : "DC_RMK5", displayName: "비고5", width: "100" },
-                    { field : "DTS_UPDATE", displayName: "수정일시", width: "120", cellClass: "ta-c" }
-                ],
-                data : [],
-                onRegisterApi: function( gridApi ) {
-                    systemVO.gridApi = gridApi;
-                }
-            };
-
-            /**
-             * 시스템코드 초기로드시 실행된다.
-             */
-            systemVO.initLoad = function () {
-                var self = this;
-
-                // 코드분류 row클릭시 정보를 받아 사용자코드를 조회한다.
-                $scope.$on( "codeMng.system:inquiry", function ( $event, oEntity, aData ) {
-
-                    self.NO_MNGCDHD = oEntity.NO_MNGCDHD;
-                    self.CD_CLS = oEntity.CD_CLS;
-                    self.gridOptions.data = aData;
-                });
-            };
-
-            /**
-             * 시스템코드를 조회한다.
-             */
-            systemVO.inquiry = function () {
-
-            };
-
-            systemVO.initLoad();
+        	
+        	gridSysCodeVO.initLoad();
         }]);
 }());

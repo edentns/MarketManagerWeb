@@ -30,7 +30,8 @@
         'edtApp.sa',
         'edtApp.cs',
         'edtApp.te',
-        'edtApp.sy'
+        'edtApp.sy',
+        'edtApp.ui'
     ]);
 
 // common

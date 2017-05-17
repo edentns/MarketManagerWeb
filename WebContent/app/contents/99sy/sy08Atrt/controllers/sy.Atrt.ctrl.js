@@ -6,8 +6,8 @@
      * @name sy.Atrt.controller : sy.AtrtMngCtrl
      */
     angular.module("sy.Atrt.controller")
-        .controller("sy.AtrtMngCtrl", ["$scope", "$q", "$timeout", "sy.AtrtSvc", "resData", "$interval", "Page",
-            function ($scope, $q, $timeout, SyAuthSvc, resData, $interval, Page) {
+        .controller("sy.AtrtMngCtrl", ["$scope", "$q", "$timeout", "sy.AtrtSvc", "resData", "$interval", "Page", "UtilSvc",
+            function ($scope, $q, $timeout, SyAuthSvc, resData, $interval, Page, UtilSvc) {
 	            var page  = $scope.page = new Page({ auth: resData.access }),
 		            today = edt.getToday();
 
@@ -42,8 +42,8 @@
                     searchNm	: "",
                     deleteData 	: [],
                     select      : {
-                        CD_G : "",
-                        NM_G : ""
+                        NO_ATRT : "",
+                        NM_ATRT : ""
                     }
                 };
 
@@ -58,9 +58,10 @@
                     data    : [],
                     height  : 400,
                     rowTemplate : rowTemplate,
+                    procedureParam: "USP_SY_08ATRT01_GET",
                     columnDefs  : [
-                        { displayName : "권한코드", field : "CD_G", width : 100, enableCellEdit: false },
-                        { displayName : "권한이름", field : "NM_G", width : 150, enableCellEdit: true },
+                        { displayName : "권한코드", field : "NO_ATRT", width : 100, enableCellEdit: false },
+                        { displayName : "권한이름", field : "NM_ATRT", width : 150, enableCellEdit: true },
                         { displayName : "사용여부", field : "YN_USE", width : 100, enableCellEdit: true, cellClass: "ta-c", cellFilter: "ynUse", editableCellTemplate: "ui-grid/dropdownEditor", editDropdownValueLabel: "YN_USE",
                             editDropdownOptionsArray : [  { id: "Y", YN_USE: "사용" }, { id: "N", YN_USE: "사용안함" }] },
                         { displayName : "수정일시", field : "DTS_UPDATE", width : 120, enableCellEdit: false }
@@ -70,7 +71,7 @@
                         syAtrtVO.gridApi = gridApi;
 
                         gridApi.edit.on.afterCellEdit($scope, function (oRowEntity) {
-                            if (oRowEntity.CD_G && oRowEntity.CD_G!=="") {
+                            if (oRowEntity.NO_ATRT && oRowEntity.NO_ATRT!=="") {
                                 oRowEntity.STATE = "U";
                             }
                         });
@@ -101,23 +102,25 @@
                  * 권한코드정보를 가져온다.
                  */
                 syAtrtVO.inquiry = function () {
-                    var self = this;
-                    SyAuthSvc.getAuthList(this.makeGetParam())
-                        .then(function (result) {
-                            self.options.data = result.data;
+                    var self = this,
+                    param = {
+                        procedureParam: self.options.procedureParam
+                    };
+                    UtilSvc.getList(param).then(function (result) {
+                        self.options.data = result.data.results[0];
 
-                            var selectCdg = self.select.CD_G;
-                            if (selectCdg !== "") {
-                                var oSelect = null;
-                                angular.forEach(self.options.data, function (oData) {
-                                    if (oData.CD_G === selectCdg) { oSelect = oData; }
-                                });
+                        var selectCdg = self.select.NO_ATRT;
+                        if (selectCdg !== "") {
+                            var oSelect = null;
+                            angular.forEach(self.options.data, function (oData) {
+                                if (oData.NO_ATRT === selectCdg) { oSelect = oData; }
+                            });
 
-                                //$timeout(function () {
-                                    self.gridApi.selection.selectRow(oSelect);
-                                //}, 50);
-                            }
-                        });
+                            //$timeout(function () {
+                                self.gridApi.selection.selectRow(oSelect);
+                            //}, 50);
+                        }
+                    });
                 };
 
                 /**
@@ -125,10 +128,10 @@
                  */
                 syAtrtVO.makeGridEntity = function () {
                     return {
-                        STATE  : "I",
-                        CD_G   : "",
-                        NM_G   : "",
-                        YN_USE : "Y",
+                        STATE    : "I",
+                        NO_ATRT  : "",
+                        NM_ATRT  : "",
+                        YN_USE   : "Y",
                         DTS_UPDATE : ""
                     };
                 };
@@ -136,17 +139,17 @@
                 /**
                  * 등록, 수정, 삭제를 위한 parameter를 생성한다.
                  */
-                syAtrtVO.makeGetParam = function () {
+                /*syAtrtVO.makeGetParam = function () {
                     var searchNm = this.searchNm,
                         getParam = null;
 
                     if (searchNm !== "") {
                         getParam = {
-                            NM_G : searchNm
+                            NM_ATRT : searchNm
                         };
                     }
                     return getParam;
-                };
+                };*/
 
                 /**
                  * 등록, 수정, 삭제를 위한 parameter를 생성한다.
@@ -154,12 +157,12 @@
                 syAtrtVO.makePostParam = function ( data ) {
                     var postParam = {
                         STATE	: data.STATE,
-                        NM_G	: data.NM_G,
+                        NM_ATRT	: data.NM_ATRT,
                         YN_USE	: data.YN_USE
                     };
 
                     if ( data.STATE==="U" || data.STATE==="D" ) {
-                        postParam.CD_G = data.CD_G;
+                        postParam.NO_ATRT = data.NO_ATRT;
                     }
 
                     return postParam;
@@ -180,17 +183,17 @@
 
                     SyAuthSvc
                         .saveAuth([
-                            { NM_G: " ", YN_USE: "Y", STATE: "I" }
+                            { NM_ATRT: " ", YN_USE: "Y", STATE: "I" }
                         ])
                         .then(function (result) {
-                            self.select.CD_G = result.data.CD_G;
+                            self.select.NO_ATRT = result.data.NO_ATRT;
                     
                             data.STATE  = "U";
-                            data.CD_G   = result.data.CD_G;
+                            data.NO_ATRT   = result.data.NO_ATRT;
 
                             self.gridApi.cellNav.scrollToFocus(data, self.options.columnDefs[1]);
-                            self.select.CD_G = data.CD_G;
-                            self.select.NM_G = data.NM_G;
+                            self.select.NO_ATRT = data.NO_ATRT;
+                            self.select.NM_ATRT = data.NM_ATRT;
                             self.gridApi.selection.selectRow(data);
                             
                             $scope.$broadcast("authMng.menu:inquiry", self.select);
@@ -216,7 +219,7 @@
                         for ( j=0, leng2=selectedList.length; j<leng2; j+=1 ) {
                             if ( data[i] === selectedList[j] ) {
                                 data.splice( i, 1 );
-                                if ( selectedList[j].CD_G && selectedList[j].CD_G!=="" ) {
+                                if ( selectedList[j].NO_ATRT && selectedList[j].NO_ATRT!=="" ) {
                                     selectedList[j].STATE = "D";
                                     self.deleteData.push( self.makePostParam( selectedList[j] ) );
                                 }
@@ -255,9 +258,9 @@
                                 SyAuthSvc.saveAuth(postData)
                                     .then(function (result) {
                                         self.deleteData = [];
-                                        //self.select.CD_G = result.data.CD_G;
-                                        self.select.CD_G = "";
-                                        self.select.NM_G = "";
+                                        //self.select.NO_ATRT = result.data.NO_ATRT;
+                                        self.select.NO_ATRT = "";
+                                        self.select.NM_ATRT = "";
 
 
                                         $scope.$broadcast("authMng.menu:save", postData);
@@ -277,8 +280,8 @@
                  * @param row
                  */
                 syAtrtVO.rowClick = function (row) {
-                    this.select.CD_G = row.entity.CD_G;
-                    this.select.NM_G = row.entity.NM_G;
+                    this.select.NO_ATRT = row.entity.NO_ATRT;
+                    this.select.NM_ATRT = row.entity.NM_ATRT;
                     
                     if (row.isSelected) {
                         $scope.$broadcast("authMng.menu:inquiry", this.select);
@@ -289,7 +292,7 @@
                     var valid = true;
                     
                     angular.forEach(datas, function(d) {
-                        if (d.STATE !== "D" && !d.NM_G.trim()) {
+                        if (d.STATE !== "D" && !d.NM_ATRT.trim()) {
                             valid = false;
                         }
                     });

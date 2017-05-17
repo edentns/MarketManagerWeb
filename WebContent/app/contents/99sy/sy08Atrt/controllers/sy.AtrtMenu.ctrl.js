@@ -2,18 +2,18 @@
     "use strict";
 
     angular.module("sy.Atrt.controller")
-        .controller("sy.AtrtMenuCtrl", ["$scope", "sy.AtrtSvc", "sy.codeSvc", "APP_CODE",
+        .controller("sy.AtrtMenuCtrl", ["$scope", "sy.AtrtSvc", "sy.CodeSvc", "APP_CODE",
             function ($scope, SyAuthSvc, SyCodeSvc, APP_CODE) {
 
                 // template
                 var readColTemplate  = "<div class='edt-tree-view-col-content'>" +
 		                "<select title='선택' data-ng-model='row.entity[col.field]'"+
-		                    "data-ng-options='auth.CD as auth.NAME for auth in tree.appScope.menuVO.roleCodeList'"+
+		                    "data-ng-options='auth.CD_DEF as auth.NM_DEF for auth in tree.appScope.menuVO.roleCodeList'"+
 		                    "data-ng-change=\"tree.appScope.menuVO.changeBuAuth(row, col.field)\">"+
 		                "</select></div>",
                     writeColTemplate = "<div class='edt-tree-view-col-content'>" +
                         "<select title='선택' data-ng-model='row.entity[col.field]'"+
-                            "data-ng-options='auth.CD as auth.NAME for auth in tree.appScope.menuVO.roleCodeList'"+
+                            "data-ng-options='auth.CD_DEF as auth.NM_DEF for auth in tree.appScope.menuVO.roleCodeList'"+
                             "data-ng-change=\"tree.appScope.menuVO.changeBuAuth(row, col.field)\">"+
                         "</select></div>";
 
@@ -21,13 +21,13 @@
 
                 /**
                  * menuVO
-                 * @type {{select: {CD_G: string}}}
+                 * @type {{select: {NO_ATRT: string}}}
                  */
                 var menuVO = $scope.menuVO = {
                     boxTitle : "메뉴정보",
                     select   : {
-                        CD_G  : "",
-                        NM_G  : ""
+                        NO_ATRT  : "",
+                        NM_ATRT  : ""
                     },
                     roleCodeList : []
                 };
@@ -60,19 +60,19 @@
                     var self = this;
 
                     $scope.$on("authMng.menu:inquiry", function ($event, oSelect) {
-                        if (!oSelect || !oSelect.CD_G) {
+                        if (!oSelect || !oSelect.NO_ATRT) {
                             return;    
                         }
                         
                         if (self.treeApi.showData && self.treeApi.showData.length > 0) {
-                            _datas[self.select.CD_G] = self.treeApi.showData.map(function(menuRow) {
+                            _datas[self.select.NO_ATRT] = self.treeApi.showData.map(function(menuRow) {
                                 return angular.copy(menuRow.entity);
                             });
                         }
                         
-                        self.select.CD_G = oSelect.CD_G;
-                        self.select.NM_G = oSelect.NM_G;
-                        self.boxTitle = "메뉴정보 - "+ self.select.NM_G +" 선택 중";
+                        self.select.NO_ATRT = oSelect.NO_ATRT;
+                        self.select.NM_ATRT = oSelect.NM_ATRT;
+                        self.boxTitle = "메뉴정보 - "+ self.select.NM_ATRT +" 선택 중";
                         
                         self.inquiry();
                     });
@@ -82,7 +82,7 @@
                     });
 
 
-                    SyCodeSvc.getSubcodeList({cd: APP_CODE.role.cd, search: 'all'}).then(function (result) {
+                    SyCodeSvc.getSubcodeList({cd: "SY_000026", search: 'all'}).then(function (result) {
                         self.roleCodeList = result.data;
                     });
                 };
@@ -138,13 +138,15 @@
                 };
 
                 /**
-                 * 사업권한 변경시 propagation한다.
+                 * 사업권한 변경시 propagation한다.                                   여기<----------------
                  */
                 menuVO.changeBuAuth = function (oRow, sField) {
                     var value = oRow.entity[sField];
-                    edt.each(oRow._children, "_children", function(child) {
-                        child.entity[sField] = value;
-                    });
+                    if(oRow.id != 1 || value == "001"){
+                    	edt.each(oRow._children, "_children", function(child) {
+                            child.entity[sField] = value;
+                        });
+                    }
 
 	                edt.each(oRow._parent, "_parent", function(parent) {
 		                var i, lng, dChild;
@@ -165,15 +167,14 @@
 
                 /**
                  * 메뉴권한 검색을 위한 parameter를 생성한다.
-                 * @returns {{CD_G: string}}
+                 * @returns {{NO_ATRT: string}}
                  */
                 menuVO.makeReqParam = function () {
-                    if (this.select.CD_G !== "") {
+                    if (this.select.NO_ATRT !== "") {
                         return {
-                            CD_G : this.select.CD_G
+                            NO_ATRT : this.select.NO_ATRT
                         };
                     }
-
                     return null;
                 };
 
@@ -196,11 +197,11 @@
                             }
 
                             angular.forEach(menus, function (menu) {
-                                if (menu.CD_G) {
+                                if (menu.NO_ATRT) {
                                     menu.STATE = "U";
                                 } 
                                 else {
-                                    menu.CD_G  = key;
+                                    menu.NO_ATRT  = key;
                                     menu.STATE = "I";
                                 }
                                 
@@ -212,7 +213,7 @@
                     function isDelete(datas, key) {
                         datas = datas || [];
                         var filterList = datas.filter(function(data) {
-                            return (data.CD_G === key) && (data.STATE === "D"); 
+                            return (data.NO_ATRT === key) && (data.STATE === "D"); 
                         });
                         return filterList.length > 0;
                     }
@@ -227,7 +228,7 @@
                     var self = this;
                     
                     SyAuthSvc.getMenuAuthList(self.makeReqParam()).then(function (result) {
-                        _datas[self.select.CD_G] = self.options.data = result.data;
+                        _datas[self.select.NO_ATRT] = self.options.data = result.data;
                     });
                 };
 
@@ -257,8 +258,8 @@
                     }
                     
                     function saveInit() {
-                        self.select.CD_G = "";
-                        self.select.NM_G = "";
+                        self.select.NO_ATRT = "";
+                        self.select.NM_ATRT = "";
                         self.boxTitle = "메뉴정보";
                         self.options.data = [];
                     }

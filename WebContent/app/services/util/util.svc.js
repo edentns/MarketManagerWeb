@@ -521,102 +521,44 @@
 					console.log("error",data,status,headers,config);
 				});
 			};
-			
-			
-			
-			this.getHList = function ( param ) {
-//				
-//				var self = this;
-//				var filters_sp_split = param.procedureParam.split("&");
-//				var filters_val_split = (filters_sp_split.length > 1)?filters_sp_split[1].split("|"):null;
-//				var filter_type_split = null;
-//
-//				var sSql = "";
-//				sSql = "CALL "+filters_sp_split[0] + "(^NO_C^,^NO_EMP^";
-//				
-//				if(filters_val_split != null) {
-//					angular.forEach(filters_val_split, function (filter_array, index) {
-//						filter_type_split = filter_array.split("@");
-//						sSql = sSql + ", "+self.getSpParamStr(param, filter_type_split[0], filter_type_split[1]);
-//					});
-//				}
-//				sSql = sSql + ");";
-//				
-//				param.sSql = sSql;
-//				param.procedureParam = "";
 
-				return $http({
-					method	: "POST",
-					url		: APP_CONFIG.domain +"/ut02DbH/",
-					data	: param
-				}).success(function (data, status, headers, config) {
-					if(data.success !== 1 && data.errors.length > 0) {
-						alert("조회 실패하였습니다.!! 연구소에 문의 부탁드립니다.\n("+data.errors[0].LMSG+")");
-						return;
-					}
-				}).error(function (data, status, headers, config) {
-					console.log("error",data,status,headers,config);
-				});
-			};
-			
-			this.getHList_code = function ( param ) {
-				return $http({
-					method	: "POST",
-					url		: APP_CONFIG.domain +"/ut02DbHCode/",
-					data	: param
-				}).success(function (data, status, headers, config) {
-					if(data.success !== 1 && data.errors.length > 0) {
-						alert("조회 실패하였습니다.!! 연구소에 문의 부탁드립니다.\n("+data.errors[0].LMSG+")");
-						return;
-					}
-				}).error(function (data, status, headers, config) {
-					console.log("error",data,status,headers,config);
-				});
-			};
-			
-			this.getHGWExec = function ( param ) {
-				return $http({
-					method	: "POST",
-					url		: APP_CONFIG.domain +"/ut02DbHGwExec/",
-					data	: param
-				}).success(function (data, status, headers, config) {
-					if(data.success !== 1 && data.errors.length > 0) {
-						alert("조회 실패하였습니다.!! 연구소에 문의 부탁드립니다.\n("+data.errors[0].LMSG+")");
-						return;
-					}
-				}).error(function (data, status, headers, config) {
-					console.log("error",data,status,headers,config);
-				});
-			};
-			
-			this.initCode = function() {
-				return $http({
-					method	: "POST",
-					url		: APP_CONFIG.domain +"/codeInit/"
-				}).success(function (data, status, headers, config) {
-					if(data.success !== 1 && data.errors.length > 0) {
-						alert("조회 실패하였습니다.!! 연구소에 문의 부탁드립니다.\n("+data.errors[0].LMSG+")");
-						return;
-					}
-				}).error(function (data, status, headers, config) {
-					console.log("error",data,status,headers,config);
-				});
-			};
-			
-			
 			/**
 			 * 조회처리
 			 * POST 값 중 반드시 있어야 하는 값
 			 * procedureParam : {string} 호출하는 StoreProcedure. 예) "USP_SV_~~_GET&변수명@타입|변수명@타입" -> 프로시져 앞에 회사코드, 사원번호는 DEFAULT로 추가 됨.
 			 * @param {JSON}
 			 * @returns {JSON} : result.data.results[0] -> 첫번째 select 값
-			 *             Hahm
 			 */
-			this.getGWList = function ( param ) {
+
+            this.getCDList = function (bAll, strCdCls) {
+            	var self = this;
+            	
+				return {	
+            		dataTextField: "NM_DEF",
+                    dataValueField: "CD_DEF",
+                    dataSource: new kendo.data.DataSource({
+                    	transport: {
+                			read: function(e) {
+                				var param = {
+                					procedureParam: "MarketManager.USP_SY_10CODE99_GET&L_CD_CLS@s",
+                					L_CD_CLS: strCdCls
+                	            }, pAll = {'CD_DEF':'','NM_DEF':'전체'};
+                				
+                				self.getList(param).then(function (res) {
+                					if(bAll){res.data.results[0].unshift(pAll)}; //코드 초기값 설정
+            						e.success(res.data.results[0]);
+            					});
+                			}
+                    	}
+                    }),
+	            	index: 0
+				};
+			};
+			
+			this.initCode = function() {
 				return $http({
 					method	: "POST",
-					url		: APP_CONFIG.domain +"/ut02DbGwSelect/",
-					data	: param
+					url		: APP_CONFIG.domain +"/codeInit/"
 				}).success(function (data, status, headers, config) {
 					if(data.success !== 1 && data.errors.length > 0) {
 						alert("조회 실패하였습니다.!! 연구소에 문의 부탁드립니다.\n("+data.errors[0].LMSG+")");
@@ -646,9 +588,6 @@
 				});
 			};
 			
-			
-			
-
 			/**
 			 * 조회 후 엑셀로 download
 			 * POST 값 중 반드시 있어야 하는 값
@@ -671,30 +610,6 @@
 					//upload failed
 				});
 			};
-
-			/**
-			 * 조회처리
-			 * POST 값 중 반드시 있어야 하는 값
-			 * procedureParam : {string} 호출하는 StoreProcedure. 예) "USP_SV_~~_GET&변수명@타입|변수명@타입" -> 프로시져 앞에 회사코드, 사원번호는 DEFAULT로 추가 됨.
-			 * @param {JSON}
-			 * @returns {JSON} : result.data.results[0] -> 첫번째 select 값
-			 */
-			this.getGWExec = function ( param ) {
-				return $http({
-					method	: "POST",
-					url		: APP_CONFIG.domain +"/ut02DbGwExec/",
-					data	: param
-				}).success(function (data, status, headers, config) {
-					if(data.success !== 1 && data.errors.length > 0) {
-						alert("조회 실패하였습니다.!! 연구소에 문의 부탁드립니다.\n("+data.errors[0].LMSG+")");
-						return;
-					}
-				}).error(function (data, status, headers, config) {
-					console.log("error",data,status,headers,config);
-				});
-			};
-
-			
 
 			/**
 			 * 데이터에서 key에 대한 type으로 sp param을 생성

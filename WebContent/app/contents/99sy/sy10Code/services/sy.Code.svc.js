@@ -35,10 +35,10 @@
                  * @param {Array} aParam 저장데이터
                  * @returns {*}
                  */
-                saveUserCode : function ( aParam ) {
+                saveUserCode : function ( aParam, CUD ) {
                     return $http({
                         method   : "POST",
-                        url		: APP_CONFIG.domain +"/code",
+                        url		: APP_CONFIG.domain +"/code/"+CUD,
                         data     : aParam
                     });
                 },
