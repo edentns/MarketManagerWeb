@@ -12,9 +12,9 @@
                 },
                 template:
                 		"<div class='btn-group' data-ng-class='{open: open}' style='width:100%;'>" +
-                            "<button class='btn btn-small dropdown-toggle' style='overflow:hidden; text-overflow:ellipsis; width:93%; text-align:left; font-family: initial; font-size: 11px; background: #ffffff;border-color: #e5e6e7;' " +
+                            "<button class='btn btn-small dropdown-toggle' style='overflow:hidden; text-overflow:ellipsis; width:90%; text-align:left; font-family: initial; font-size: 11px; background: #ffffff;border-color: #e5e6e7;' " +
                 		    "data-ng-click='openDropdown()'> {{co01McboxVO.selectNames}}</button>" +
-                            "<button class='btn btn-small dropdown-toggle' style='width:7%; text-align:left; font-family: initial; font-size: 11px; background: #ffffff;border-color: #e5e6e7;' " +
+                            "<button class='btn btn-small dropdown-toggle' style='width:10%; text-align:left; font-family: initial; font-size: 11px; background: #ffffff;border-color: #e5e6e7;' " +
                             "data-ng-click='openDropdown()'>"+
                             	"<span class='caret'></span>" +
                             "</button>" +
@@ -22,7 +22,7 @@
                                 "<li><a data-ng-click='selectAll();'><span class='glyphicon glyphicon-ok green' aria-hidden='true'></span><font style='text-align:left; font-family: initial; font-size: 11px; color:#606060'> 전체선택</font></a></li>" +
                                 "<li><a data-ng-click='deselectAll();'><span class='glyphicon glyphicon-remove red' aria-hidden='true'></span><font style='text-align:left; font-family: initial; font-size: 11px; color:#606060'> 전체해제</font></a></li>" +
                                 "<li class='divider' style='margin:3px 0;'></li>" +
-                                "<li data-ng-repeat='option in co01McboxVO.options'>"+
+                                "<li data-ng-repeat='option in options'>"+
                                 	"<a data-ng-click='toggleSelectItem(option)'>"+
                                 		"<span data-ng-class='getClassName(option)' aria-hidden='true'></span><font style='text-align:left; font-family: initial; font-size: 11px; color:#606060'> {{option[co01McboxVO.name]}}</font>" +
                                 	"</a>" +
@@ -36,8 +36,7 @@
     	        		maxNames: 3,
     	        		id: 'id',
     	    	        name: 'name',
-    	    	        allCheckYn: "y",
-    	    	        options: $scope.options
+    	    	        allCheckYn: "y"
     	        	};
                 	$scope.initLoad = function () {
                 		var self = this;
@@ -46,15 +45,17 @@
                     		if($scope.setting.maxNames) co01McboxVO.maxNames = $scope.setting.maxNames;
                     		if($scope.setting.id      ) co01McboxVO.id       = $scope.setting.id;
                     		if($scope.setting.name    ) co01McboxVO.name     = $scope.setting.name;
-
-                    		self.selectAll();
-                    		if($scope.setting.allCheckYn) {
-                    			if($scope.setting.allCheckYn == "n" || $scope.setting.allCheckYn == "N") {
-                    				self.deselectAll();
-                    			}
-                    		}
                     	}
                 	};
+                	
+                	$scope.$watch('options', function (newValue, oldValue) {
+                		$scope.selectAll();
+                		if($scope.setting.allCheckYn) {
+                			if($scope.setting.allCheckYn == "n" || $scope.setting.allCheckYn == "N") {
+                				$scope.deselectAll();
+                			}
+                		}
+				    });
                 	
                     $scope.openDropdown = function () {
                         $scope.open = !$scope.open;
@@ -106,7 +107,7 @@
                             $scope.model.push(loItem);
                         }
                         
-                        if(self.co01McboxVO.options.length === self.model.length) {
+                        if(self.options.length === self.model.length) {
                             self.co01McboxVO.selectNames = "전체";
                         }
                         else {

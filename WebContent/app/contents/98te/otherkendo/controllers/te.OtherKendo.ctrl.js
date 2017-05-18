@@ -20,9 +20,9 @@
 	        		             {code:"cd04",cname:"코드4"}],
 	        		mcb01Model : [],
 	        		setting : {
-	        			id: "code",
-	        			name: "cname",
-	        			maxNames: 2,
+	        			id: "CD_DEF",
+	        			name: "NM_DEF",
+	        			maxNames: 2
 	        		},
 	        		mcb02Data : [{code:"cd01",cname:"코드111111111111111111111111111111111"},
 	        		             {code:"cd02",cname:"코드222222222222222222222222222222222"},
@@ -51,7 +51,16 @@
 					UtilSvc.getList(param).then(function (res) {
 						gridSampleVO.dataSource.data(res.data.results[0]);
 						gridSampleVO_test.dataSource.data(res.data.results[0]);
-					})
+					});
+					
+					var param = {
+						procedureParam:"USP_SY_10CODE02_GET&L_NO_MNGCDHD@s|L_CD_CLS@s",
+						L_NO_MNGCDHD:"SYCH00001",
+						L_CD_CLS:"SY_000001"
+					};
+					UtilSvc.getList(param).then(function (res) {
+						otherKendoVO1.mcb01Data = res.data.results[0];
+					});
 	        	};
 	        	
 	        	otherKendoVO1.initParam = function() {
