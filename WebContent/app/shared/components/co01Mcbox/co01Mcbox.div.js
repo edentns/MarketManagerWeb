@@ -14,7 +14,7 @@
                 		"<div class='btn-group' data-ng-class='{open: open}' style='width:100%;'>" +
                             "<button class='btn btn-small dropdown-toggle' style='overflow:hidden; text-overflow:ellipsis; width:90%; text-align:left; font-family: initial; font-size: 11px; background: #ffffff;border-color: #e5e6e7;' " +
                 		    "data-ng-click='openDropdown()'> {{co01McboxVO.selectNames}}</button>" +
-                            "<button class='btn btn-small dropdown-toggle' style='width:10%; text-align:left; font-family: initial; font-size: 11px; background: #ffffff;border-color: #e5e6e7;' " +
+                            "<button class='btn btn-small dropdown-toggle' style='width:10%; text-align:center; font-family: initial; font-size: 11px; background: #ffffff;border-color: #e5e6e7;' " +
                             "data-ng-click='openDropdown()'>"+
                             	"<span class='caret'></span>" +
                             "</button>" +
@@ -36,7 +36,8 @@
     	        		maxNames: 3,
     	        		id: 'id',
     	    	        name: 'name',
-    	    	        allCheckYn: "y"
+    	    	        allCheckYn: "y",
+    	    	        arrayModel: []
     	        	};
                 	$scope.initLoad = function () {
                 		var self = this;
@@ -68,22 +69,26 @@
                     $scope.selectAll = function () {
                     	var self = this;
                     	    
-                        $scope.model = [];
+                        $scope.model = "";
+                        self.co01McboxVO.arrayModel = [];
+                        
                         angular.forEach($scope.options, function (item, index) {
                         	var loItem = {};
                         	loItem[self.co01McboxVO.id]   = item[self.co01McboxVO.id];
                         	loItem[self.co01McboxVO.name] = item[self.co01McboxVO.name];
                         	
-                            $scope.model.push(loItem);
+                        	self.co01McboxVO.arrayModel.push(loItem);
                         });
-                        
+
+                        $scope.model                 = "*";
                         self.co01McboxVO.selectNames = "전체";
                     };
 
                     $scope.deselectAll = function () {
                     	var self = this;
-                        $scope.model = [];
-
+                    	
+                    	self.co01McboxVO.arrayModel = [];
+                        $scope.model = "";
                         self.co01McboxVO.selectNames = "";
                     };
 
@@ -92,34 +97,41 @@
                     		loItem = {},
                         	intIndex = -1;
                     	
-                        angular.forEach($scope.model, function (item, index) {
+                        angular.forEach(self.co01McboxVO.arrayModel, function (item, index) {
                             if (item[self.co01McboxVO.id] == option[self.co01McboxVO.id]) {
                                 intIndex = index;
                             }
                         });
 
                         if (intIndex >= 0) {
-                            $scope.model.splice(intIndex, 1);
+                        	self.co01McboxVO.arrayModel.splice(intIndex, 1);
                         }
                         else {
                         	loItem[self.co01McboxVO.id]   = option[self.co01McboxVO.id];
                         	loItem[self.co01McboxVO.name] = option[self.co01McboxVO.name];
-                            $scope.model.push(loItem);
+                        	self.co01McboxVO.arrayModel.push(loItem);
                         }
                         
-                        if(self.options.length === self.model.length) {
+                        if(self.options.length === self.co01McboxVO.arrayModel.length) {
                             self.co01McboxVO.selectNames = "전체";
+	                        $scope.model                 = "*";
                         }
                         else {
 	                        self.co01McboxVO.selectNames = "";
-	                        angular.forEach($scope.model, function (item, index) {
-	                        	if(index >= self.co01McboxVO.maxNames) {
-	                        		self.co01McboxVO.selectNames = self.co01McboxVO.selectNames + "...";
-	                        		return;
+	                        $scope.model       = "";
+	                        angular.forEach(self.co01McboxVO.arrayModel, function (item, index) {
+	                        	if(index === 0) {
+	                        		$scope.model                 = item[self.co01McboxVO.id];
+	                        		self.co01McboxVO.selectNames = item[self.co01McboxVO.name];
 	                        	}
-	                        	
-	                        	if(index === 0) self.co01McboxVO.selectNames = item[self.co01McboxVO.name];
-	                        	else            self.co01McboxVO.selectNames = self.co01McboxVO.selectNames + ", " +  item[self.co01McboxVO.name];
+	                        	else if(index >= self.co01McboxVO.maxNames) {
+	                        		if(index == self.co01McboxVO.maxNames) self.co01McboxVO.selectNames = self.co01McboxVO.selectNames + "...";
+	                        		$scope.model = $scope.model + "^" +  item[self.co01McboxVO.id];
+		                        }
+	                        	else {
+	                        		self.co01McboxVO.selectNames = self.co01McboxVO.selectNames + ", " +  item[self.co01McboxVO.name];
+	                        		$scope.model = $scope.model + "^" +  item[self.co01McboxVO.id];
+	                        	}
 	                        });
                         }
                     };
@@ -128,7 +140,7 @@
                     	var self = this,
                         	varClassName = 'glyphicon glyphicon-remove red';
                     	
-                        angular.forEach($scope.model, function (item, index) {
+                        angular.forEach(self.co01McboxVO.arrayModel, function (item, index) {
                             if (item[self.co01McboxVO.id] == option[self.co01McboxVO.id]) {
                                 varClassName = 'glyphicon glyphicon-ok green';
                             }

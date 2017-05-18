@@ -14,21 +14,15 @@
 	        	
 	        	var otherKendoVO1 = $scope.otherKendoVO1 = {
 	        		boxTitle : "검색",
-	        		mcb01Data : [{code:"cd01",cname:"코드111111111111111111111111111111111"},
-	        		             {code:"cd02",cname:"코드222222222222222222222222222222222"},
-	        		             {code:"cd03",cname:"코드333333333333333333333333333333333"},
-	        		             {code:"cd04",cname:"코드4"}],
-	        		mcb01Model : [],
+	        		mcb01Data : [],
+	        		mcb01Model : "",
 	        		setting : {
 	        			id: "CD_DEF",
 	        			name: "NM_DEF",
 	        			maxNames: 2
 	        		},
-	        		mcb02Data : [{code:"cd01",cname:"코드111111111111111111111111111111111"},
-	        		             {code:"cd02",cname:"코드222222222222222222222222222222222"},
-	        		             {code:"cd03",cname:"코드333333333333333333333333333333333"},
-	        		             {code:"cd04",cname:"코드4"}],
-	        		mcb02Model : [],
+	        		mcb02Data : [],
+	        		mcb02Model : "",
 	        		selectedSaStatIds : [],
 	        		saStatDataSource : [],
 	        		datesetting : {
@@ -43,16 +37,10 @@
 	        		perTpCdList : [{CD:'1',NAME:'주문일자'},{CD:'2',NAME:'결제일자'}]
 	        	};
 	        	
-	        	otherKendoVO1.inquiry = function() {
-	        		var param = {
-						procedureParam:"USP_TE_OTHERKENDO01_GET&sFromDt@s",
-						sFromDt:"20161215"
-					};
-					UtilSvc.getList(param).then(function (res) {
-						gridSampleVO.dataSource.data(res.data.results[0]);
-						gridSampleVO_test.dataSource.data(res.data.results[0]);
-					});
-					
+	        	otherKendoVO1.initLoad = function() {
+	        		var self = this;
+	        		self.inquiry();
+	        		
 					var param = {
 						procedureParam:"USP_SY_10CODE02_GET&L_NO_MNGCDHD@s|L_CD_CLS@s",
 						L_NO_MNGCDHD:"SYCH00001",
@@ -60,6 +48,21 @@
 					};
 					UtilSvc.getList(param).then(function (res) {
 						otherKendoVO1.mcb01Data = res.data.results[0];
+						otherKendoVO1.mcb02Data = res.data.results[0];
+					});
+	        	};
+	        	
+	        	otherKendoVO1.inquiry = function() {
+	        		var self = this;
+	        		var param = {
+						procedureParam:"USP_TE_OTHERKENDO01_GET&sFromDt@s|L_LIST01@s|L_LIST02@s",
+						sFromDt:"20161215",
+						L_LIST01:self.mcb01Model,
+						L_LIST02:self.mcb02Model
+					};
+					UtilSvc.getList(param).then(function (res) {
+						gridSampleVO.dataSource.data(res.data.results[0]);
+						gridSampleVO_test.dataSource.data(res.data.results[0]);
 					});
 	        	};
 	        	
@@ -193,7 +196,7 @@
                     });
 	        	}
 	        	
-	        	otherKendoVO1.inquiry();
+	        	otherKendoVO1.initLoad();
         	}
         ]);
 }());
