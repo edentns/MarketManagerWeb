@@ -475,7 +475,7 @@ form[name="businessForm"]:after {content: ''; display: block; clear: both;}
 
 .form-group .form-info {margin-top: 4px;}
 .form-control {
-	display    : inline;
+	display    : inline-block;
 	padding  : 2px 4px;
 	font-size : 11px;
 	border    : 1px solid #e5e6e7;

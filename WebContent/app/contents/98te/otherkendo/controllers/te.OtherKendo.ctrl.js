@@ -7,81 +7,6 @@
      * 부서관리
      */
     angular.module("te.OtherKendo.controller", [ 'kendo.directives', 'ngGrid' ])
-    	.directive("dropdownMultiselect",function() {
-    		//콤보박스 속 다중체크박스 커스텀마이징한 디렉티브
-    		return {
-                restrict: 'E',
-                scope: {
-                    model: '=',
-                    options: '=',
-                },
-                template:
-                		"<div class='btn-group' data-ng-class='{open: open}' style='width:100%;'>" +
-                            "<button class='btn btn-small' style='width:93%'>Select...</button>" +
-                            "<button class='btn btn-small dropdown-toggle'"+ 
-                            "data-ng-click='openDropdown()'>"+
-                            "<span class='caret'></span></button>" +
-                            "<ul class='dropdown-menu' aria-labelledby='dropdownMenu'>" +
-                                "<li><a data-ng-click='selectAll()'>"+
-                                "<span class='glyphicon glyphicon-ok green' "+
-                                "aria-hidden='true'></span> Check All</a></li>" +
-                                "<li><a data-ng-click='deselectAll();'>"+
-                                "<span class='glyphicon glyphicon-remove red' "+
-                                "aria-hidden='true'></span> Uncheck All</a></li>" +
-                                "<li class='divider'></li>" +
-                                "<li data-ng-repeat='option in options'>"+
-                                "<a data-ng-click='toggleSelectItem(option)'>"+
-                                "<span data-ng-class='getClassName(option)'" +
-                                "aria-hidden='true'></span> {{option.name}}</a></li>" +
-                            "</ul>" +
-                        "</div>",
-
-                controller:['$scope', function ($scope) {
-                    $scope.openDropdown = function () {
-                        $scope.open = !$scope.open;
-                    };
-
-                    $scope.selectAll = function () {
-                        $scope.model = [];
-                        angular.forEach($scope.options, function (item, index) {
-                            $scope.model.push(item.id);
-                        });
-                    };
-
-                    $scope.deselectAll = function () {
-                        $scope.model = [];
-                    };
-
-                    $scope.toggleSelectItem = function (option) {
-                        var intIndex = -1;
-                        angular.forEach($scope.model, function (item, index) {
-                            if (item == option.id) {
-                                intIndex = index;
-                            }
-                        });
-
-                        if (intIndex >= 0) {
-                            $scope.model.splice(intIndex, 1);
-                        }
-                        else {
-                            $scope.model.push(option.id);
-                        }
-                    };
-
-                    $scope.getClassName = function (option) {
-                        var varClassName = 'glyphicon glyphicon-remove red';
-                        angular.forEach($scope.model, function (item, index) {
-                            if (item == option.id) {
-                                varClassName = 'glyphicon glyphicon-ok green';
-                            }
-                        });
-                        return (varClassName);
-                    };
-                }]
-            }
-    		
-    	})
-    
         .controller("te.OtherKendoCtrl", ["$scope", "$q", "sy.CodeSvc", "te.OtherKendoSvc", "APP_CODE", "resData", "Page", "$state", 'MenuSvc', "$location", "$window", "UtilSvc",
             function ($scope, $q, SyCodeSvc, TeOtherKendoSvc, APP_CODE, resData, Page, $state, MenuSvc, $location, window, UtilSvc) {
 	        	var page  = $scope.page = new Page({ auth: resData.access }),
@@ -89,8 +14,21 @@
 	        	
 	        	var otherKendoVO1 = $scope.otherKendoVO1 = {
 	        		boxTitle : "검색",
-	        		selectedMrkIds : [],
-	        		mrkDataSource : [],
+	        		mcb01Data : [{code:"cd01",cname:"코드111111111111111111111111111111111"},
+	        		             {code:"cd02",cname:"코드222222222222222222222222222222222"},
+	        		             {code:"cd03",cname:"코드333333333333333333333333333333333"},
+	        		             {code:"cd04",cname:"코드4"}],
+	        		mcb01Model : [],
+	        		setting : {
+	        			id: "code",
+	        			name: "cname",
+	        			maxNames: 2,
+	        		},
+	        		mcb02Data : [{code:"cd01",cname:"코드111111111111111111111111111111111"},
+	        		             {code:"cd02",cname:"코드222222222222222222222222222222222"},
+	        		             {code:"cd03",cname:"코드333333333333333333333333333333333"},
+	        		             {code:"cd04",cname:"코드4"}],
+	        		mcb02Model : [],
 	        		selectedSaStatIds : [],
 	        		saStatDataSource : [],
 	        		datesetting : {
