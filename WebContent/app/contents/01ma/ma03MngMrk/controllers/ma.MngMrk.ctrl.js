@@ -7,136 +7,112 @@
      * 코드관리
      */
     angular.module("ma.MngMrk.controller", [ 'kendo.directives' ])
-        .controller("ma.MngMrkCtrl", ['APP_CONFIG', 'UtilSvc',"$scope", "$http", "$q", "$log", "ma.MngMrkSvc", "APP_CODE", "$timeout", "resData", "Page",
-            function (APP_CONFIG, UtilSvc, $scope, $http, $q, $log, MaMngMrkSvc, APP_CODE, $timeout, resData, Page) {
+        .controller("ma.MngMrkCtrl", ['APP_CONFIG', 'UtilSvc',"$scope", "$state", "$http", "$q", "$log", "ma.MngMrkSvc", "APP_CODE", "$timeout", "resData", "Page", "MenuSvc",
+            function (APP_CONFIG, UtilSvc, $scope, $state, $http, $q, $log, MaMngMrkSvc, APP_CODE, $timeout, resData, Page, MenuSvc) {
         	
 	            var page  = $scope.page = new Page({ auth: resData.access }),
 		            today = edt.getToday();
 	            
-	            //var menuId = MenuSvc.getMenuId($state.current.name);
-	            
-	            var now = new Date(),
-	            	dayFromMonth = new Date(now.getFullYear(), now.getMonth(), now.getDate()),
-	            	dayToMonth = new Date(now.getFullYear(), now.getMonth()+1, now.getDate());
+	            var menuId = MenuSvc.getNO_M($state.current.name);
 	            	           	            
 	            var mngMrkDateVO = $scope.mngMrkDateVO = {
 	            	boxTitle : "검색",
-	            	dateObject1 : dayFromMonth,
-	            	dateObject2 : dayToMonth,
-                    dateString1 : dayFromMonth.dateFormat("Y/m/d"),
-                    dateString2 : dayToMonth.dateFormat("Y/m/d"),
-                    docstsString : "30",
-                    searchText: "",				//검색어
-             	    methodDataCode : "",			//연동방법
-             	    statusDataCode : "",			//연동상태 	
+	            	datesetting : {
+	        			dateType   : 'market',
+						buttonList : ['current', '1Day', '1Week', '1Month'],
+						selected   : 'current',
+						period : {
+							start : angular.copy(today),
+							end   : angular.copy(today)
+						}
+	        		},
+                    searchText: "",				    //검색어
+             	    methodDataCode : [""],			//연동방법
+             	    statusDataCode : [""],			//연동상태 	
              	    dataTotal : 0
 	            };
-	            
+	            	            
 	            kendo.culture("ko-KR");
-	            
-	            //날짜 버튼 셋팅
-	            mngMrkDateVO.addDays = function(nextDay){
-	            	var one = new Date(mngMrkDateVO.dateObject1);
-	            	var setDay = {
-	            		year : one.getFullYear(),
-	            		month : function (days){
-	            			return (days > 7) ? one.getMonth() + 1 : one.getMonth();
-	            		},
-	            		date : function (days){
-	            			return (days < 8) ? one.getDate() + days : one.getDate();
-	            		}
-	            	};         
-	            	mngMrkDateVO.dateObject2 = new Date(setDay.year, setDay.month(nextDay), setDay.date(nextDay));
-	            };
 	                            
-                $scope.dateOptions = {
-    				format: "yyyy/MM/dd"
-                };
-                
-                var subCodeSetting = {
-	            	procParam: "MarketManager.USP_SY_10CODE02_GET&lnoc@s|lnoemp@s|lnomngcdhd@s|lcdcls@s",
-            		indexCode: {'CD_DEF':'','NM_DEF':'전체'}
-	            };
-    	            
-	            //연동 방법 셋팅
-	            var methodDataSource = $scope.methodDataSource = function(sel){
-	            	return {	
-	            		dataTextField: "NM_DEF",
-	                    dataValueField: "CD_DEF",
-	                    dataSource: new kendo.data.DataSource({
-	                    	transport: {
-	                			read: function(e) {
-	                				var param = {
-	                					procedureParam: subCodeSetting.procParam,
-	                					lnoc: "00000",
-	                					lnoemp: "",
-	                					lnomngcdhd: "SYCH00016",
-	                					lcdcls: "SY_000016"
-	                				};
-	                				UtilSvc.getGWList(param).then(function (res) {
-	            						if(sel){res.data.results[0].unshift(subCodeSetting.indexCode)}; //코드 초기값 설정
-	            						//e.success(res.data.results[0].sort(function(a, b){return parseInt(b.SQ_DEF) - parseInt(a.SQ_DEF)}));
-	            						e.success(res.data.results[0]);
-	            					});
-	                			}
-	                    	}
-	                    }),
-		            	index: 0
-	            	}
+	            var subCodeSetting = function (subcode1, subcode2){
+            		let result = "";
+            		if(!subCodeSetting.cache[subcode1]){
+            			result = {
+            				dataTextField: "NM_DEF",
+    	                    dataValueField: "CD_DEF",
+    	                    dataSource: new kendo.data.DataSource({
+    	                    	transport: {
+    	                			read: function(e) {
+    	                				var param = {
+    	                					procedureParam: "MarketManager.USP_SY_10CODE02_GET&lnomngcdhd@s|lcdcls@s",
+    	                					lnomngcdhd: subcode1,
+    	                					lcdcls: subcode2
+    	                				};
+    	                				UtilSvc.getList(param).then(function (res) {
+    	            						res.data.results[0].unshift({'CD_DEF':'','NM_DEF':'전체'}); //코드 초기값 설정
+    	            						//e.success(res.data.results[0].sort(function(a, b){return parseInt(b.SQ_DEF) - parseInt(a.SQ_DEF)}));
+    	            						e.success(res.data.results[0]);
+    	            					});
+    	                			}
+    	                    	}
+    	                    }),
+    		            	index: 0
+            			}
+            			subCodeSetting.cache[subcode1] = result;
+            		}
+            		return subCodeSetting.cache[subcode1];                	             	
 	            };
 	            
-	            //연동 상태 셋팅
-	            var statusDataSource = $scope.statusDataSource = function(sel){
-	            	return {
-	            		dataTextField: "NM_DEF",
-	                    dataValueField: "CD_DEF",
-	                    dataSource: new kendo.data.DataSource({
-	                    	transport: {
-	                			read: function(e) {
-	                				var param = {
-	                					procedureParam: subCodeSetting.procParam,
-	                					lnoc: "00000",
-	                					lnoemp: "",
-	                					lnomngcdhd: "SYCH00017",
-	                					lcdcls: "SY_000017"
-	                				};
-	                				UtilSvc.getGWList(param).then(function (res) {
-	            						if(sel){res.data.results[0].unshift(subCodeSetting.indexCode)}; //코드 초기값 설정
-	            						//e.success(res.data.results[0].sort(function(a, b){return parseInt(a.SQ_DEF) - parseInt(b.SQ_DEF)}));
-	            						e.success(res.data.results[0]);
-	            					});
-	                			}
-	                    	}
-	                    }),
-		            	index: 0
-	            	};
-		        };
+	            subCodeSetting.cache = {};
 	            
+		        var connSetting = $scope.connSetting = {
+		        	//연동 방법 셋팅
+		        	methodDataSource : function(){return subCodeSetting("SYCH00016", "SY_000016")},
+		            //연동 상태 셋팅
+		            statusDataSource : function(){return subCodeSetting("SYCH00017", "SY_000017")},
+		            //연동 방법 그리드 
+		            grdMDataSource : function(){
+		            	var result = function(){
+		            		return subCodeSetting("SYCH00016", "SY_000016");
+		            	};
+		            	return result;
+		            }		            
+		        }
+	            		        	   
 	            //검색
 	            var doInquiry = $scope.doInquiry = function () {
 	            	gridMngMrkUserVO.dataSource.read();
                 };
                 
+                //새로 저장시 유효성 검사 (수정 할 땐 비밀번호를 따로 입력할 필요할 없어서 required 하지 않아서 저장시 따로 함수를 만듦 kendo로는  editable true 일때만 됨)
+                var isValid = function(inputs){
+                	let checkReturn = true;
+                	angular.forEach(inputs.data, function (obj) {
+                		if (!checkReturn) return;
+                        if (obj.NM_MRK === null || obj.NM_MRK === "") {alert("마켓명을 설정해 주세요"); checkReturn = false;}
+                        else if(obj.CD_ITLWAY === null || obj.CD_ITLWAY === ""){alert("연동방법을 설정해 주세요"); checkReturn = false;}
+                        else if(obj.DC_MRKID === null || obj.DC_MRKID === ""){alert("관리자ID를 설정해 주세요"); checkReturn = false;}
+                        else if((obj.NEW_DC_PWD === null || obj.NEW_DC_PWD === "") && (obj.DC_PWD === null || obj.DC_PWD === "")){alert("비밀번호를 설정해 주세요"); checkReturn = false;};
+                    });
+                	return checkReturn;
+                };
+                                
                 //초기화 
 	            mngMrkDateVO.init = function(){
                 	var me  = this;
-                	me.methodDataCode = "";
-                	me.statusDataCode = "";
+                	me.methodDataCode = [""];
+                	me.statusDataCode = [""];
                 	me.searchText = "";
-                	me.dateString1 = dayFromMonth; 
-                	me.dateString2 = dayToMonth;
-                	me.dateObject1 = dayFromMonth; 
-                	me.dateObject2 = dayToMonth;
+                	me.datesetting.selected = "current";
                 	
                 	$timeout(function () {
                         doInquiry();
                     }, 0);
-                };      
-                                            
-                // 마켓 검색 그리드
+                };  
+                                                            
+                //마켓 검색 그리드
                 var gridMngMrkUserVO = $scope.gridMngMrkUserVO = {
-                        messages: {
-                            //noRows: "마켓정보가 존재하지 않습니다.",
+                        messages: {                        	
                             //loading: "마켓정보를 가져오는 중...",
                             requestFailed: "마켓정보를 가져오는 중 오류가 발생하였습니다.",
                             //retry: "갱신",
@@ -149,23 +125,28 @@
                             ,noRecords: "검색된 데이터가 없습니다."
                         },
                     	boxTitle : "마켓 리스트",
-                    	sortable: true,
-                        pageable: true,
+                    	sortable: true,                    	
+                        pageable: {
+                        	messages: {
+                        		empty: "표시할 데이터가 없습니다."
+                        	}
+                        },
                         noRecords: true,
                         //scrollable: false,
                     	dataSource: new kendo.data.DataSource({
                     		transport: {
-                    			read: function(e) {
+                    			read: function(e) {                    				
                     				var param = {
-                                    	procedureParam: "MarketManager.USP_MA_03SEARCH01_GET&MA_NM_MRK@s|MA_CD_ITLWY@s|MA_ITLSTAT@s|MA_DT_START@s|MA_DT_END@s",                    					
+                                    	procedureParam: "MarketManager.USP_MA_03SEARCH01_GET&NO_M@s|MA_NM_MRK@s|MA_CD_ITLWY@s|MA_ITLSTAT@s|MA_DT_START@s|MA_DT_END@s",
+                                    	NO_M: menuId,
                                     	MA_NM_MRK: mngMrkDateVO.searchText,
-                                    	MA_CD_ITLWY: mngMrkDateVO.methodDataCode,
-                                    	MA_ITLSTAT: mngMrkDateVO.statusDataCode,
-                                    	MA_DT_START: mngMrkDateVO.dateObject1.dateFormat("Ymd"),
-                                    	MA_DT_END: mngMrkDateVO.dateObject2.dateFormat("Ymd")
-                                    };
-                					UtilSvc.getGWList(param).then(function (res) {
-                						mngMrkDateVO.dataTotal = res.data.results[0].length;
+                                    	MA_CD_ITLWY: (MaMngMrkSvc.arrayIndexCheck(mngMrkDateVO.methodDataCode,"") === true) ? [""] : mngMrkDateVO.methodDataCode,
+                                    	MA_ITLSTAT: (MaMngMrkSvc.arrayIndexCheck(mngMrkDateVO.statusDataCode,"") === true) ? [""] : mngMrkDateVO.statusDataCode,
+                                    	MA_DT_START: new Date(mngMrkDateVO.datesetting.period.start.y, mngMrkDateVO.datesetting.period.start.m-1, mngMrkDateVO.datesetting.period.start.d).dateFormat("Ymd"),
+                                    	MA_DT_END: new Date(mngMrkDateVO.datesetting.period.end.y, mngMrkDateVO.datesetting.period.end.m-1, mngMrkDateVO.datesetting.period.end.d).dateFormat("Ymd")
+                                    };                    				                    				
+                					UtilSvc.getList(param).then(function (res) {
+                						mngMrkDateVO.dataTotal = res.data.results[0].length;                						
                 						e.success(res.data.results[0]);
                 					});
                     			},
@@ -174,6 +155,7 @@
     	                			var param = {
                                     	data: e.data.models
                                     };
+    	                			if(!isValid(param)) { return };
     	                			MaMngMrkSvc.mngmrkInsert(param).then(function(res) {
     	                				defer.resolve();
     	                				mngMrkDateVO.init();
@@ -186,6 +168,7 @@
     	                			var param = {
                                     	data: e.data.models
                                     };
+    	                			if(!isValid(param)) { return };
     	                			MaMngMrkSvc.mngmrkUpdate(param).then(function(res) {
     	                				defer.resolve();
     	                				mngMrkDateVO.init();
@@ -207,7 +190,6 @@
                     			},
                     			parameterMap: function(e, operation) {
                     				if(operation !== "read" && e.models) {
-                    					//console.log("파라미터 맵",{models:kendo.stringify(e.models)});
                     					return {models:kendo.stringify(e.models)};
                     				}
                     			}
@@ -220,62 +202,57 @@
                     			model: {
                         			id: "NM_MRK",
                     				fields: {
-                    					//ROW_NUM: {type: "number", editable: false, nullable: false, validation: {required: true, min : mngMrkDateVO.dataRows}},
                     					ROW_NUM: {type: "number", editable: false},
                     					NO_MNGMRK: {type: "string", editable: false},                    					
                     					NM_MRK: {
-                    								validation: {
-                    											nm_mrkvalidation: function (input) {
-                                                                    if (input.is("[name='NM_MRK']") && input.val() != "") {
-                                                                    	input.attr("data-nm_mrkvalidation-msg", "5~50자 사이의 영문, 한글, 숫자, '-','_' 조합으로 이루어진 아이디를 생성해야 합니다.");                                                                    	
-                                                                    	var regex = /^(?=.*[a-zA-Z])(?=.*[-])(?=.*[0-9])(?=.*[가-힁ㄱ-ㅎ]).{5,50}$/g;       
-                                                                        return regex.test(input.val());
-                                                                    }
-                                                                    if (input.is("[name='NM_MRK']") && input.val() === "") {
-                                                                    	input.attr("data-nm_mrkvalidation-msg", "마켓명을 입력해 주세요.");
-                                                                        return false;
-                                                                    }
-                                                                    return true;
+	                    								validation: {
+                											nm_mrkvalidation: function (input) {
+                                                                if (input.is("[name='NM_MRK']") && input.val() != "") {
+                                                                	input.attr("data-nm_mrkvalidation-msg", "50자 이하의 영문, 한글, 숫자, 특수기호('-','_') 내에서만  마켓명을 생성해야 합니다.");                                                                    	
+                                                                	//var regex = /^(?=.*[a-zA-Z])(?=.*[-])(?=.*[0-9])(?=.*[가-힁ㄱ-ㅎ]).{5,50}$/g;                                                                    	
+                                                                	var regex = /([^\wㄱ-ㅎ가-힁0-9_-])/g; 
+                                                                	return (regex.test(input.val()) === true || input.val().length > 50) ? false : true;
                                                                 }
-                    										  }
-                    							 	,editable: true
-                    							 	,nullable: false
+                                                                if (input.is("[name='NM_MRK']") && input.val() === "") {
+                                                                	input.attr("data-nm_mrkvalidation-msg", "마켓명을 입력해 주세요.");
+                                                                    return false;
+                                                                }
+                                                                return true;
+                                                            }
+                										 }
+	                    							 	,editable: true
+	                    							 	,nullable: false
                     							 },
                     					CD_ITLWAY : {
-                    									defaultValue: { CD_DEF: '', NM_DEF: "선택"}
-				                    				   ,validation: {
-				                    					   		cd_itlwayvalidation: function (input) {
-					                                                if (input.is("[name='CD_ITLWAY']") && input.val() === "") {
-					                                                	input.attr("data-cd_itlwayvalidation-msg", "연동방법을 입력해 주세요.");
-					                                                    return false;
-					                                                }
-					                                               return true;
-					        								   	}
-				        							   }
-				        							   ,editable: true
-				        							   ,nullable: false
-				        						 },
-                    					DT_ITLSTART: {type: "date", validation: {required: true}, editable: true, nullable: false},
-                    					CD_ITLSTAT: {
-                    									defaultValue: { CD_DEF: '', NM_DEF: "선택"}
-				                    				   ,validation: {
-				        								   cd_itlstatvalidation: function (input) {
-				                                                if (input.is("[name='CD_ITLSTAT']") && input.val() === "") {
-				                                                	input.attr("data-cd_itlstatvalidation-msg", "연동상태를 입력해 주세요.");
+                    								   defaultValue: { CD_DEF: '', NM_DEF: "선택"}
+				                    				  ,validation: {
+			                    					   		cd_itlwayvalidation: function (input) {
+			                    					   			//경고문에 잘 안보여서 삭제
+				                                                /*if (input.is("[name='CD_ITLWAY']") && input.val() === "" || input.val() === "선택") {
+				                                                	input.attr("data-cd_itlwayvalidation-msg", "연동방법을 입력해 주세요.");
 				                                                    return false;
-				                                                }
+				                                                }*/
 				                                               return true;
 				        								   	}
-				        							   }
+				        							    }
 				        							   ,editable: true
-				        							   ,nullable: false
+				        						 },
+                    					DT_ITLSTART:{
+                    								   //type: "string", 
+                    								   //validation: {required: true}, 
+                    								   editable: false//, 
+                    								   //nullable: false
+                    						     },
+                    					CD_ITLSTAT: {
+                    								   //defaultValue: "미연동",
+				        							  editable: false
                     							},                    					
                     					DC_MRKID: {
-                    								type: "string"
-                    							   ,validation: {
-                    								   dc_mrkidvalidation: function (input) {
+                    								   type: "string"
+                    							      ,validation: {
+                    							    	  dc_mrkidvalidation: function (input) {
                                                             if (input.is("[name='DC_MRKID']") && input.val() != "") {
-                                                            	input.attr("data-dc_mrkidvalidation-msg", "관리자 아이디를 50자 이하로 설정하세요.")
+                                                            	input.attr("data-dc_mrkidvalidation-msg", "관리자 아이디를 50자 이하로 설정하세요.");
                                                                 return input.val().length <= 50;
                                                             }
                                                             if (input.is("[name='DC_MRKID']") && input.val() === "") {
@@ -283,55 +260,66 @@
                                                                 return false;
                                                             }
                                                            return true;
-                    								   	}
-                    							   }
-                    							   ,editable: true
-                    							   ,nullable: false
-                    							  },
+                    								   	 }
+                    							      }
+                    							      ,editable: true
+                    							      ,nullable: false
+                    							 },
                     					DC_PWD: {
-                    								type: "string"
-                    							   ,validation: {
-                    								   dc_pwdvalidation: function (input) {
-                                                            if (input.is("[name='DC_PWD']") && input.val() != "") {
-                                                            	input.attr("data-dc_pwdvalidation-msg", "비밀번호를 50자 이하로 설정하세요.")
-                                                                return input.val().length <= 50;
-                                                            }
-                                                            if (input.is("[name='DC_PWD']") && input.val() === "") {
-                                                            	input.attr("data-dc_pwdvalidation-msg", "비밀번호를 입력해 주세요.");
-                                                                return false;
-                                                            }
-                                                           return true;
-                    								   	}
-                    							    }
-                    							   ,editable: true
-                    							   ,nullable: false
+                    								   type: "string"                    							    
+                    							      ,editable: false
+                    							      ,nullable: true
                     							  },
+                    					NEW_DC_PWD: {
+                    								   type: "string"
+            									      ,validation: {
+            									    	  new_dc_pwdvalidation: function (input) {
+                                                            if (input.is("[name='NEW_DC_PWD']") && input.val() != "") {
+                                                            	var regex = /\s/g;
+                                                            	input.attr("data-new_dc_pwdvalidation-msg", "비밀번호를 50자 이하로 설정하거나, 공백을 제거하고 설정해 주세요.");
+                                                                return regex.test(input.val()) === true || input.val().length > 50 ? false : true;
+                                                            }
+                                                            return true;
+            									    	  }
+            									       }
+                    							  	  ,editable: true
+                    							  	  ,nullable: true
+                    							  },		  
                     					API_KEY: {
-                    							  type: "string" 
-            								     ,validation: {
-            								    	 api_keyvalidation: function (input) {
-	                                                     if (input.is("[name='API_KEY']") && input.val() != "") {
-	                                                    	 input.attr("data-api_keyvalidation-msg", "API키를 50자 이하로 설정하세요.");
-	                                                          return (input.val().length <= 50);
-	                                                     }
-	                                                     return true;
-              								   		}
-            								      }	  
-                    						     ,editable: true
+                    							       type: "string" 
+                    							  	  ,editable: false
+                    						          ,nullable: true
                     						     },
+                    				    NEW_API_KEY: {
+                    				    			   type: "string"
+                    				    			  ,defaultValue: ""
+			                    				      ,validation: {
+			  									    	  new_api_keydvalidation: function (input) {
+			                                                  if (input.is("[name='NEW_API_KEY']") && input.val() != "") {
+			                                                	  var regex = /\s/g;
+			                                                	  input.attr("data-new_api_keydvalidation-msg", "API KEY를 50자 이하로 설정하거나, 공백을 제거하고 설정해 주세요.");			                                                	  
+	                                                              return regex.test(input.val()) === true || input.val().length > 50 ? false : true;
+			                                                  }			                                                  
+			                                                 return true;
+			  									    	  }
+			  									       }
+			          							  	  ,editable: true
+			          							  	  ,nullable: true
+                    				    		},
                     					DC_SALEMNGURL: {
-                    							type: "string"
-                							   ,validation: {
-                								   	required: true
-                								   ,dc_salemngurlvalidation: function (input) {
-                                                        if (input.is("[name='DC_SALEMNGURL']") && input.val() != "") {
-                                                        	input.attr("data-dc_salemngurlvalidation-msg", "URL을 50자 이하로 설정하세요.");
-                                                            return (input.val().length <= 100);
-                                                        }
-                                                       return true;
-                								   	}
-                							    }	
-                    							,editable: true} 
+                    							       type: "string"
+                							          ,validation: {                								   
+                							        	  dc_salemngurlvalidation: function (input) {
+		                                                        if (input.is("[name='DC_SALEMNGURL']") && input.val() != "") {
+		                                                        	input.attr("data-dc_salemngurlvalidation-msg", "URL을 50자 이하로 설정하세요.");
+		                                                            return (input.val().length <= 100);
+		                                                        }
+		                                                       return true;
+		                								  }
+		                							   }	
+                    							      ,editable: true
+                    							      ,nullable: true
+                    						     } 
                     				}
                     			}
                     		},
@@ -361,57 +349,57 @@
                		        	  ,title: "<code>*</code>연동방법"
                		        	  ,width: 100
                		        	  ,headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 10px"}
-	            		          /*,editor: function(container, options){
-          		        	    	$('<select kendo-drop-down-list title="연동방법" k-options="methodDataSource(false)" required name="' + options.field + '"/>')
-          	                        .appendTo(container);
-	          		        	  }*/
-	          		        	/*  ,template: function(e){
-           		        	    	 return e.CD_ITLWAY.NM_DEF;
-           		        	     }*/
+	            		       	  ,editor: 
+	            		       		  function (container, options) {
+		            		       		$('<input required name='+ options.field +' data-bind="value:' + options.field + '" />')
+		            		    		.appendTo(container)
+		            		    		.kendoDropDownList({
+		            		    			autoBind: false,
+		            		    			dataTextField: "NM_DEF",
+		                                    dataValueField: "CD_DEF",
+		            		    			dataSource: connSetting.grdMDataSource(),
+		            		    			valuePrimitive: true
+		            		    		});
+	            		       	   	  }	            		       		   
+	            		       	  ,template: 
+	            		       		 function(e){		
+	            		       		    var nmd = e.CD_ITLWAY.NM_DEF;
+	            		       		    var grdData = connSetting.grdMDataSource().dataSource;	            		       		    
+	            		       		    grdData.fetch(function() {		  
+	            		       		      var dbbox = grdData.data().shift();
+		            		       		  for(var i = 0, leng=dbbox.length; i<leng; i++){
+		            		       			  if(dbbox[i].CD_DEF === e.CD_ITLWAY){
+		            		       				nmd = dbbox[i].NM_DEF;	
+		            		       			  }
+		            		       		  }
+		            		       		});		
+		            		       		return nmd;
+	            		       	  	}
                		           },
 	            		       {
            		        	      field: "DT_ITLSTART"
-           		        	     ,title: "<code>*</code>연동시작일자"
+           		        	     ,title: "연동시작일자"
            		        	     ,width: 100
            		        	     ,headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 10px"}
-           		        	     ,format: "{0:yyyy-MM-dd}"
            		        	   },
             		           {
             		        	  field: "CD_ITLSTAT"
-            		             ,title: "<code>*</code>연동상태코드"
+            		             ,title: "연동상태코드"
             		             ,width: 100
-            		             ,headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 10px"}
-	           		        	/* ,editor:  function categoryDropDownEditor(container, options) {
-		           	                    $('<input required name="' + options.field + '"/>')
-		                                .appendTo(container)
-		                                .kendoDropDownList({
-		                                	dataTextField: "NM_DEF",
-		            	                    dataValueField: "CD_DEF",
-		            	                    dataSource: new kendo.data.DataSource({
-		            	                    	transport: {
-		            	                			read: function(e) {
-		            	                				var param = {
-		            	                					procedureParam: subCodeSetting.procParam,
-		            	                					lnoc: "00000",
-		            	                					lnoemp: "",
-		            	                					lnomngcdhd: "SYCH00017",
-		            	                					lcdcls: "SY_000017"
-		            	                				};
-		            	                				UtilSvc.getGWList(param).then(function (res) {
-		            	            						//if(sel){res.data.results[0].unshift(subCodeSetting.indexCode)}; //코드 초기값 설정
-		            	            						//e.success(res.data.results[0].sort(function(a, b){return parseInt(a.SQ_DEF) - parseInt(b.SQ_DEF)}));
-		            	            						e.success(res.data.results[0]);
-		            	            						console.log(res.data.results[0]);
-		            	            					});
-		            	                			}
-		            	                    	}
-		            	                    })
-		                                });
-		                        }*/
-	           		        	/*,template: function(e){
-		                        	//e.fields.CD_ITLWAY = e.fields.CD_ITLWAY.CD_DEF;
-		                        	return e.CD_ITLSTAT.NM_DEF;
-		                        }*/
+            		             ,headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 10px"}	
+	           		        	 ,template: function(e){	       
+	           		        		var nmd = "";//e.CD_ITLSTAT; 
+	           		        		var grdData = connSetting.statusDataSource().dataSource;
+	           		        		grdData.fetch(function() {
+	            		       		  var dbbox = grdData.data();
+	            		       		  for(var i = 0, leng = dbbox.length; i<leng; i++){
+	            		       			  if(dbbox[i].CD_DEF === e.CD_ITLSTAT && e.CD_ITLSTAT != ""){	            		       				 
+	            		       				  nmd = dbbox[i].NM_DEF;	            		       				  
+	            		       			  }
+	            		       		  }
+	           		        		});
+	           		        		return nmd;
+		                         }
             		           },
             		           {
             		        	  field: "DC_MRKID"
@@ -420,27 +408,39 @@
             		             ,headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 10px"}
             		           },
             		           {
-            		        	  field: "DC_PWD"
+            		        	  field: "NEW_DC_PWD"
             		             ,title: "<code>*</code>비밀번호"
             		             ,width: 100
             		             ,headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 10px"}
             		           	 ,editor: function (container, options) {
-            		                 $('<input class="k-textbox" type="password" required name="' + options.field + '"/>').appendTo(container);
+            		                 $('<input type="password" class="k-textbox" name="' + options.field + '"/>').appendTo(container);
             	                 }
-            		           	 ,template: function(e){      		           		
-            		           		return e.DC_PWD == null ? '':'*'.repeat(e.DC_PWD.length);            		           		
+            		           	 ,template: function(e){
+            		           		 var returnPWDMsg = "";
+            		           		 if(e.NEW_DC_PWD === "" || e.NEW_DC_PWD === null && e.DC_PWD != ""){
+            		           			 returnPWDMsg = "*".repeat(e.DC_PWD_LEN);
+	          		           		 }else if(e.NEW_DC_PWD != "" && e.NEW_DC_PWD  != null){
+	          		           			 returnPWDMsg = "*".repeat(e.NEW_DC_PWD.length);
+	          		           		 }
+	          		           		 return returnPWDMsg;
             		           	 }
             		           },
             		           {
-            		        	  field: "API_KEY"
+            		        	  field: "NEW_API_KEY"
             		             ,title: "API_KEY"
             		             ,width: 150
             		             ,headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 10px"}
 	            		         ,editor: function (container, options) {
-	          		                 $('<input class="k-textbox" type="password" required name="' + options.field + '"/>').appendTo(container);
+	          		                 $('<input type="password" class="k-textbox" name="' + options.field + '"/>').appendTo(container);
 	          	                 }
-	          		           	 ,template: function(e){      		           		
-	          		           		return e.API_KEY == null ? '':'*'.repeat(e.API_KEY.length);            		           		
+	          		           	 ,template: function(e){  
+	          		           		 var returnAPIMsg = "";
+	          		           		 if(e.NEW_API_KEY === "" || e.NEW_API_KEY === null && e.API_KEY != ""){
+	          		           			 returnAPIMsg = "*".repeat(e.API_KEY_LEN);
+	          		           		 }else if(e.NEW_API_KEY != "" && e.NEW_API_KEY != null){
+	          		           			 returnAPIMsg = "*".repeat(e.NEW_API_KEY.length);
+	          		           		 }
+	          		           		 return returnAPIMsg;
 	          		           	 }
             		           },
             		           {
@@ -453,15 +453,17 @@
            		        	      command: [ "destroy" ]
            		        	   }
                     	],
+                    	dataBound: function() {
+                            this.expandRow(this.tbody.find("tr.k-master-row").first());
+                        },
                         collapse: function(e) {
                             // console.log(e.sender);
                             this.cancelRow();
                         },         	
                     	editable: {
-                    	    confirmation: "삭제 하시겠습니까?"
+                    	    confirmation: "삭제 하시겠습니까?",
                     	},
-                    	height: 450                    	                     
-        		};         
-                
+                    	height: 450
+        		};        
             }]);
 }());
