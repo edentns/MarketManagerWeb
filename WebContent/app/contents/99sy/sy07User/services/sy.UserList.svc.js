@@ -50,6 +50,19 @@
                     }
 
                     return rtnGetParam;
+                },
+                
+                getDepart : function (param) {
+                    var url = APP_CONFIG.domain +"/sy07UserDept";
+
+                    if (angular.isObject(param)) {
+                        url += "?"+ $.param(param);
+                    }
+
+                    return $http({
+                        method : "GET",
+                        url    : url
+                    });
                 }
             };
         }]);

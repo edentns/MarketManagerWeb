@@ -13,9 +13,8 @@
                  * @param {object} oParam
                  * @returns {*}
                  */
-                getAuthList: function (/*oParam*/) {
+                getAuthList: function () {
                     var url = APP_CONFIG.domain +"/sy08Atrt";
-                    /*if (angular.isObject(oParam)) url += "?"+ $.param(oParam);*/
 
                     return $http({
                         method  : "GET",

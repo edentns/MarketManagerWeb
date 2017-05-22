@@ -22,32 +22,32 @@
                         </colgroup>
                         <tbody>
                         <tr>
-                            <th><span class="form-required">* </span>ID</th>
+                            <th><span class="form-required">* </span>사원ID</th>
                             <td colspan="3">
-                                <span data-ng-if="page.isWriteableAll() && syUserVO.kind=='insert'">
-                                    <input type="text" class="form-control wid-x4" id="userCD" name="userCD" title="사원번호 입력"
-                                           maxlength="15" data-ng-model="syUserVO.param.CD">
+                                <span data-ng-if="page.isWriteable() && syUserVO.kind=='insert'">
+                                    <input type="text" class="form-control wid-x4" id="userDC_ID" name="userDC_ID" title="사원번호 입력"
+                                           maxlength="15" data-ng-model="syUserVO.param.DC_ID">
                                 </span>
-                                <span data-ng-if="!page.isWriteableAll() || syUserVO.kind=='detail'">
-                                    {{syUserVO.param.CD}}
+                                <span data-ng-if="!page.isWriteable() || syUserVO.kind=='detail'">
+                                    {{syUserVO.param.DC_ID}}
                                 </span>
                             </td>
                         </tr>
-                        <tr data-ng-if="page.isWriteableAll()">
+                        <tr data-ng-if="page.isWriteable()">
                             <th><span data-ng-if="syUserVO.kind=='insert'" class="form-required">* </span>비밀번호</th>
                             <td colspan="3">
                                 <input type="password" class="form-control wid-x4" id="userPw" name="userPw" title="비밀번호 입력"
                                        maxlength="14"
-                                       data-ng-model="syUserVO.param.PASSWORD"
+                                       data-ng-model="syUserVO.param.DC_PWD"
                                        data-ng-change="syUserVO.isCheckPassword()">
                             </td>
                         </tr>
-                        <tr data-ng-if="page.isWriteableAll()">
+                        <tr data-ng-if="page.isWriteable()">
                             <th><span data-ng-if="syUserVO.kind=='insert'" class="form-required">* </span>비밀번호 확인</th>
                             <td colspan="3">
                                 <input type="password" class="form-control wid-x4" id="userChkPw" title="비밀번호확인 입력"
                                        maxlength="14"
-                                       data-ng-model="syUserVO.confirmPassword"
+                                       data-ng-model="syUserVO.confirmDC_PWD"
                                        data-ng-change="syUserVO.isCheckPassword()">
                                 <span class="checkMsg">{{syUserVO.checkMsg}}</span>
                             </td>
@@ -55,173 +55,93 @@
                         <tr>
                             <th><span class="form-required">* </span>이름</th>
                             <td>
-                                <span data-ng-if="page.isWriteableAll() && syUserVO.kind=='insert'">
-                                    <input type="text" class="form-control wid-x6" id="userName" title="이름 입력"
+                                <span data-ng-if="page.isWriteable() && syUserVO.kind=='insert'">
+                                    <input type="text" class="form-control wid-x6" id="userNM_EMP" title="이름 입력"
                                            maxlength="20"
-                                           data-ng-model="syUserVO.param.NAME" data-eden-type="kor">
+                                           data-ng-model="syUserVO.param.NM_EMP" data-eden-type="kor">
                                 </span>
-                                <span data-ng-if="!page.isWriteableAll() || syUserVO.kind=='detail'">
-                                    {{syUserVO.param.NAME}}
-                                </span>
-                            </td>
-                            <th>생년월일</th>
-                            <td>
-                                <span data-ng-if="page.isWriteableAll()">
-                                    <input type="text" class="form-control wid-x5" data-jquery-date placeholder="'1988-01-21' 포멧으로 입력해주세요." id="userBirth" title="생년월일 입력"
-                                           maxlength="10"
-                                           data-ng-model="syUserVO.param.BIRTH_D">
-                                </span>
-                                <span data-ng-if="!page.isWriteableAll()">
-                                    {{syUserVO.param.BIRTH_D}}
+                                <span data-ng-if="!page.isWriteable() || syUserVO.kind=='detail'">
+                                    {{syUserVO.param.NM_EMP}}
                                 </span>
                             </td>
                         </tr>
                         <tr>
                             <th><span class="form-required">* </span>부서/직급</th>
                             <td>
-                                <span data-ng-if="page.isWriteableAll()">
+                                <span data-ng-if="page.isWriteable()">
                                     <select class="form-control wid-x5" id="userDepart" title="부서선택"
                                             data-ng-model="syUserVO.selectedDepart"
-                                            data-ng-options="codeInfo.NAME for codeInfo in syUserVO.departCodeList track by codeInfo.CD">
+                                            data-ng-options="codeInfo.NM_DEPT for codeInfo in syUserVO.departCodeList track by codeInfo.NO_DEPT">
                                         <option value="">부서선택</option>
                                     </select>
-                                    <select class="form-control wid-x5" id="userPosition" title="직급선택"
-                                            data-ng-model="syUserVO.selectedPosition"
-                                            data-ng-options="codeInfo.NAME for codeInfo in syUserVO.positionCodeList track by codeInfo.CD">
+                                    <select class="form-control wid-x5" id="userRank" title="직급선택"
+                                            data-ng-model="syUserVO.selectedRank"
+                                            data-ng-options="codeInfo.NM_DEF for codeInfo in syUserVO.rankCodeList track by codeInfo.CD_DEF">
                                         <option value="">직급선택</option>
                                     </select>
                                 </span>
-                                <span data-ng-if="!page.isWriteableAll()">
-                                    {{syUserVO.param.DEPT_NAME}} / {{syUserVO.param.POS_NAME}}
+                                <span data-ng-if="!page.isWriteable()">
+                                    {{syUserVO.param.NM_DEPT}} / {{syUserVO.param.NM_RANK}}
                                 </span>
-                            </td>
-                            <th>상급자</th>
-                            <td>
-	                            <div data-ng-if="page.isWriteableAll()" class="frm-input-group">
-									<span class="frm-input-group-value">
-										<input type="text" class="form-control" title="상급자 입력" data-ng-model="syUserVO.param.MGR_NAME" disabled="disabled" maxlength="15" />
-									</span>
-									<span class="frm-input-group-btn">
-										<button type="button" class="btn btn-default" id="mgrBtn" title="상급자 검색 팝업" data-ng-click="syUserVO.modalSearchSuperior()">검색</button>
-									</span>
-	                            </div>
-	                            <div data-ng-if="!page.isWriteableAll()" class="frm-input-group">
-		                            <span> {{syUserVO.param.MGR_NAME}}</span>
-	                            </div>
                             </td>
                         </tr>
                         <tr>
                             <th><span class="form-required">* </span>직군/권한</th>
                             <td>
-                                <span data-ng-if="page.isWriteableAll()">
+                                <span data-ng-if="page.isWriteable()">
                                     <select class="form-control wid-x5" id="userWork" title="직군선택"
                                             data-ng-model="syUserVO.selectedWorkgroup"
-                                            data-ng-options="codeInfo.NAME for codeInfo in syUserVO.workgroupCodeList track by codeInfo.CD">
+                                            data-ng-options="codeInfo.NM_DEF for codeInfo in syUserVO.workgroupCodeList track by codeInfo.CD_DEF">
                                         <option value="">직군선택</option>
                                     </select>
-                                    <select id="userAuth" class="form-control wid-x5" title="권한 선택" data-ng-options="role.CD_G as role.NM_G for role in syUserVO.roleCodeList" data-ng-model="syUserVO.param.CD_G">
+                                    <select id="userAuth" class="form-control wid-x5" title="권한 선택" 
+                                    data-ng-options="role.NO_ATRT as role.NM_ATRT for role in syUserVO.roleCodeList" 
+                                    data-ng-model="syUserVO.param.NO_ATRT">
                                         <option value="">권한선택</option>
                                     </select>
                                 </span>
-                                <span data-ng-if="!page.isWriteableAll()">
-                                    {{syUserVO.param.WORK_GROUP_NAME}} / {{syUserVO.param.NM_G}}
+                                <span data-ng-if="!page.isWriteable()">
+                                    {{syUserVO.param.NM_OCC}} / {{syUserVO.param.NM_ATRT}}
                                 </span>
                             </td>
-                            <th><span class="form-required">* </span>입사일자</th>
+                            <th>핸드폰번호</th>
                             <td>
-                                <span data-ng-if="page.isWriteableAll()">
-                                    <input type="text" class="form-control wid-x5" data-jquery-date id="userHired" placeholder="'1988-01-21' 포멧으로 입력해주세요." title="입사일자 입력"
-                                           maxlength="10"
-                                           data-ng-model="syUserVO.param.HIRE_D">
+                                <span data-ng-if="page.isWriteable()">
+                                    <input type="text" class="form-control wid-x6" id="userPhone" title="핸드폰번호 입력" data-ng-model="syUserVO.param.NO_CEPH" maxlength="13">
                                 </span>
-                                <span data-ng-if="!page.isWriteableAll()">
-                                    {{syUserVO.param.HIRE_D}}
+                                <span data-ng-if="!page.isWriteable()">
+                                    {{syUserVO.param.NO_CEPH}}
                                 </span>
                             </td>
                         </tr>
                         <tr data-ng-show="syUserVO.kind == 'detail'">
                             <th>재직상태</th>
                             <td>
-                                <span data-ng-if="page.isWriteableAll()">
-                                    <select class="form-control wid-x2" id="userStatus" title="재직상태선택" data-ng-model="syUserVO.param.STATUS">
-                                        <option value="JOINED">재직중</option>
-                                        <option value="EXITED">퇴사</option>
+                                <span data-ng-if="page.isWriteable()">
+                                    <select class="form-control wid-x2" id="userStatus" title="재직상태선택" data-ng-model="syUserVO.param.CD_EMPSTAT">
+                                        <option value="001">재직중</option>
+                                        <option value="002">퇴사</option>
                                     </select>
                                 </span>
-                                <span data-ng-if="!page.isWriteableAll() && syUserVO.param.STATUS=='JOINED'">재직중</span>
-                                <span data-ng-if="!page.isWriteableAll() && syUserVO.param.STATUS=='EXITED'">퇴사</span>
+                                <span data-ng-if="!page.isWriteable() && syUserVO.param.CD_EMPSTAT=='001'">재직중</span>
+                                <span data-ng-if="!page.isWriteable() && syUserVO.param.CD_EMPSTAT=='002'">퇴사</span>
                             </td>
                             <th>퇴사일자</th>
                             <td>
-                                 <span data-ng-if="page.isWriteableAll()">
+                                 <span data-ng-if="page.isWriteable()">
                                      <input type="text" class="form-control wid-x5" data-jquery-date id="userRetired" placeholder="'1988-01-21' 포멧으로 입력해주세요." title="퇴사일자 입력"
                                             maxlength="10"
-                                            data-ng-model="syUserVO.param.RETIRE_D">
+                                            data-ng-model="syUserVO.param.DT_RESI">
                                  </span>
-                                 <span data-ng-if="!page.isWriteableAll()">
-                                     {{syUserVO.param.RETIRE_D}}
+                                 <span data-ng-if="!page.isWriteable()">
+                                     {{syUserVO.param.DT_RESI}}
                                  </span>
-
                             </td>
                         </tr>
                         <tr>
-                            <th>우편번호</th>
+                            <th>E-mail</th>
                             <td colspan="3">
-                                <span data-ng-if="page.isWriteableAll()">
-	                                <input type="text" class="form-control wid-x2" id="zipcode" name="zipcode" title="우편번호 입력" maxlength="7" data-ng-model="syUserVO.param.ZIPCODE">
-                                </span>
-                                <span data-ng-if="!page.isWriteableAll()">
-                                    {{syUserVO.param.ZIPCODE}}
-                                </span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>주소</th>
-                            <td colspan="3">
-                                <span data-ng-if="page.isWriteableAll()">
-                                    <input type="text" class="form-control wid-x6" id="userAddr1" title="주소 입력" data-ng-model="syUserVO.param.ADDRESS1" maxlength="100" data-eden-type="kor">
-                                    <input type="text" class="form-control wid-x3" id="userAddr2" title="상세주소 입력" data-ng-model="syUserVO.param.ADDRESS2" maxlength="50" data-eden-type="kor">
-                                </span>
-                                <span data-ng-if="!page.isWriteableAll()">
-                                    {{syUserVO.param.ADDRESS1}} {{syUserVO.param.ADDRESS2}}
-                                </span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Phone</th>
-                            <td colspan="3">
-                                <span data-ng-if="page.isWriteableAll()">
-                                    <input type="text" class="form-control wid-x6" id="userPhone" title="핸드폰번호 입력" data-ng-model="syUserVO.param.PHONE_MOBILE" maxlength="13">
-                                </span>
-                                <span data-ng-if="!page.isWriteableAll()">
-                                    {{syUserVO.param.PHONE_MOBILE}}
-                                </span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>내선번호</th>
-                            <td>
-                                <span data-ng-if="page.isWriteableAll()">
-                                    <input type="text" class="form-control wid-x6" id="userPhoneInner" placeholder="" title="내선번호 입력" data-ng-model="syUserVO.param.PHONE_INNER" maxlength="4" >
-                                </span>
-                                <span data-ng-if="!page.isWriteableAll()">
-                                    {{syUserVO.param.PHONE_INNER}}
-                                </span>
-                            </td>
-                            <th>직통번호</th>
-                            <td>
-                                <span data-ng-if="page.isWriteableAll()">
-                                    <input type="text" class="form-control wid-x6" id="userPhoneOuter" placeholder="" title="내선번호 입력" data-ng-model="syUserVO.param.PHONE_OUTER" maxlength="13" >
-                                </span>
-                                <span data-ng-if="!page.isWriteableAll()">
-                                    {{syUserVO.param.PHONE_OUTER}}
-                                </span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>e-mail</th>
-                            <td colspan="3">
-                                <span data-ng-if="page.isWriteableAll()">
+                                <span data-ng-if="page.isWriteable()">
                                     <input type="text" class="form-control wid-x3" id="userEmail" title="emailId 입력" maxlength='20' data-ng-model="syUserVO.param.email.email1" /> @
                                     <input type="text" class="form-control wid-x2" id="userDomain" title="email도메인 입력" maxlength='20'
                                            data-ng-model="syUserVO.param.email.email2"
@@ -233,20 +153,54 @@
                                         <option value="google.com">google.com</option>
                                     </select>
                                 </span>
-                                <span data-ng-if="!page.isWriteableAll() && syUserVO.param.email.email1">
+                                <span data-ng-if="!page.isWriteable() && syUserVO.param.email.email1">
                                     {{syUserVO.param.email.email1}}@{{syUserVO.param.email.email2}}
                                 </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>SMS수신동의</th>
+                            <td>
+                                <span data-ng-if="page.isWriteable()">
+                                    <input type="checkbox"
+									       ng-model="syUserVO.param.YN_SMS"
+									       ng-true-value="Y"
+									       ng-false-value="N">
+                                </span>
+                            </td>
+                            <th data-ng-show="syUserVO.kind == 'detail'">SMS동의일시</th>
+                            <td data-ng-show="syUserVO.kind == 'detail'">
+                                 <span data-ng-if="!page.isWriteable()">
+                                     {{syUserVO.param.DTS_SMS}}
+                                 </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>이메일수신동의</th>
+                            <td>
+                                <span data-ng-if="page.isWriteable()">
+                                    <input type="checkbox"
+									       ng-model="syUserVO.param.YN_EMI"
+									       ng-true-value="Y"
+									       ng-false-value="N">
+                                </span>
+                            </td>
+                            <th data-ng-show="syUserVO.kind == 'detail'">이메일동의일시</th>
+                            <td data-ng-show="syUserVO.kind == 'detail'">
+                                 <span data-ng-if="!page.isWriteable()">
+                                     {{syUserVO.param.DTS_EMI}}
+                                 </span>
                             </td>
                         </tr>
                         </tbody>
                     </table>
 
-                    <div class="btn-group1 mt-20" data-ng-if="page.isWriteableAll()">
+                    <div class="btn-group1 mt-20" data-ng-if="page.isWriteable()">
                         <button data-ng-if="syUserVO.kind==='insert'" type="submit" class="btn btn-primary" title="유저등록" data-ng-click="syUserVO.doInsert()">등록</button>
                         <button data-ng-if="syUserVO.kind==='detail'" type="button" class="btn btn-primary" title="유저수정" data-ng-click="syUserVO.doUpdate()">수정</button>
                         <button type="button" class="btn btn-danger" title="취소" data-ng-click="syUserVO.doCancel()">취소</button>
                     </div>
-                    <div class="btn-group1 mt-20" data-ng-if="!page.isWriteableAll()">
+                    <div class="btn-group1 mt-20" data-ng-if="!page.isWriteable()">
                         <button type="button" class="btn btn-primary" title="확인" data-ng-click="syUserVO.doCancel()">확인</button>
                     </div>
                 </form>
