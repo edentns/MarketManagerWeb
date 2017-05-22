@@ -64,7 +64,10 @@
 					});
 				}
             	
-            	//배열에 찾는 값이 있나 
+            	
+            	/**
+				 * 배열에 있는 값을 찾을때
+				 */
             	,arrayIndexCheck: function(arr, target){
             		return arr.indexOf(target) >= 0 ? true : false;
             	}

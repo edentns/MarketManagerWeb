@@ -14,48 +14,31 @@
 		            today = edt.getToday();
 	            
 	            var menuId = MenuSvc.getNO_M($state.current.name);
-	            
-	            var now = new Date(),
-	            	dayFromMonth = new Date(now.getFullYear(), now.getMonth()-1, now.getDate()),
-	            	dayToMonth = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 	            	           	            
 	            var mngMrkDateVO = $scope.mngMrkDateVO = {
 	            	boxTitle : "검색",
-	            	dateObject1 : dayFromMonth,
-	            	dateObject2 : dayToMonth,
-                    //dateString1 : dayFromMonth.dateFormat("Y/m/d"),
-                    //dateString2 : dayToMonth.dateFormat("Y/m/d"),
-                    docstsString : "30",
+	            	datesetting : {
+	        			dateType   : 'market',
+						buttonList : ['current', '1Day', '1Week', '1Month'],
+						selected   : 'current',
+						period : {
+							start : angular.copy(today),
+							end   : angular.copy(today)
+						}
+	        		},
                     searchText: "",				    //검색어
              	    methodDataCode : [""],			//연동방법
              	    statusDataCode : [""],			//연동상태 	
              	    dataTotal : 0
 	            };
-	            
+	            	            
 	            kendo.culture("ko-KR");
-	            
-	            //날짜 버튼 셋팅
-	            mngMrkDateVO.addDays = function(nextDay){
-	            	var one = new Date(mngMrkDateVO.dateObject2);
-	            	var setDay = {
-	            		year : one.getFullYear(),
-	            		month : function (days){
-	            			return (days > 7) ? one.getMonth() - 1 : one.getMonth();
-	            		},
-	            		date : function (days){
-	            			return (days < 8) ? one.getDate() - days : one.getDate();
-	            		}
-	            	};         
-	            	mngMrkDateVO.dateObject1 = new Date(setDay.year, setDay.month(nextDay), setDay.date(nextDay));
-	            };
 	                            
-                $scope.dateOptions = {
-    				format: "yyyy/MM/dd"
-                };
-                
-                var subCodeSetting = function (subcode1, subcode2){
-                		return {	
-    	            		dataTextField: "NM_DEF",
+	            var subCodeSetting = function (subcode1, subcode2){
+            		let result = "";
+            		if(!subCodeSetting.cache[subcode1]){
+            			result = {
+            				dataTextField: "NM_DEF",
     	                    dataValueField: "CD_DEF",
     	                    dataSource: new kendo.data.DataSource({
     	                    	transport: {
@@ -74,54 +57,28 @@
     	                    	}
     	                    }),
     		            	index: 0
-    	            	};               	
+            			}
+            			subCodeSetting.cache[subcode1] = result;
+            		}
+            		return subCodeSetting.cache[subcode1];                	             	
 	            };
 	            
-    	        var connSetting = $scope.connSetting = {
-    	        	//연동 방법 셋팅
-    	        	methodDataSource : function(){
-    	            	return subCodeSetting("SYCH00016", "SY_000016");
-    	            },
-    	            //연동 상태 셋팅
-    	            statusDataSource : function(){
-    	            	return subCodeSetting("SYCH00017", "SY_000017");
-    	            }	
-    	        }
-	            		        	            
-	            //grid 연동 상태 셋팅		        
-		        var gridSds = $scope.gridSds = new kendo.data.DataSource({
-                	transport: {
-            			read: function(e) {
-            				var param = {
-               					procedureParam: "MarketManager.USP_SY_10CODE02_GET&lnomngcdhd@s|lcdcls@s",
-               					lnomngcdhd: "SYCH00017",
-               					lcdcls: "SY_000017"
-               				};
-               				UtilSvc.getList(param).then(function (res) {
-           						e.success(res.data.results[0]);
-           					});
-            			}
-                	}
-                });
-		        
-		        var gridMds = $scope.gridMds = new kendo.data.DataSource({
-                	transport: {
-            			read: function(e) {
-            				var param = {
-               					procedureParam: "MarketManager.USP_SY_10CODE02_GET&lnomngcdhd@s|lcdcls@s",
-               					lnomngcdhd: "SYCH00016",
-               					lcdcls: "SY_000016"
-               				};
-               				UtilSvc.getList(param).then(function (res) {
-           						e.success(res.data.results[0]);
-           					});
-            			}
-                	}
-                });
-		        
-	            gridMds.read();
-				gridSds.read();  
-		              
+	            subCodeSetting.cache = {};
+	            
+		        var connSetting = $scope.connSetting = {
+		        	//연동 방법 셋팅
+		        	methodDataSource : function(){return subCodeSetting("SYCH00016", "SY_000016")},
+		            //연동 상태 셋팅
+		            statusDataSource : function(){return subCodeSetting("SYCH00017", "SY_000017")},
+		            //연동 방법 그리드 
+		            grdMDataSource : function(){
+		            	var result = function(){
+		            		return subCodeSetting("SYCH00016", "SY_000016");
+		            	};
+		            	return result;
+		            }		            
+		        }
+	            		        	   
 	            //검색
 	            var doInquiry = $scope.doInquiry = function () {
 	            	gridMngMrkUserVO.dataSource.read();
@@ -146,10 +103,7 @@
                 	me.methodDataCode = [""];
                 	me.statusDataCode = [""];
                 	me.searchText = "";
-                	me.dateString1 = dayFromMonth; 
-                	me.dateString2 = dayToMonth;
-                	//me.dateObject1 = dayFromMonth; 
-                	//me.dateObject2 = dayToMonth;
+                	me.datesetting.selected = "current";
                 	
                 	$timeout(function () {
                         doInquiry();
@@ -188,8 +142,8 @@
                                     	MA_NM_MRK: mngMrkDateVO.searchText,
                                     	MA_CD_ITLWY: (MaMngMrkSvc.arrayIndexCheck(mngMrkDateVO.methodDataCode,"") === true) ? [""] : mngMrkDateVO.methodDataCode,
                                     	MA_ITLSTAT: (MaMngMrkSvc.arrayIndexCheck(mngMrkDateVO.statusDataCode,"") === true) ? [""] : mngMrkDateVO.statusDataCode,
-                                    	MA_DT_START: mngMrkDateVO.dateObject1.dateFormat("Ymd"),
-                                    	MA_DT_END: mngMrkDateVO.dateObject2.dateFormat("Ymd")
+                                    	MA_DT_START: new Date(mngMrkDateVO.datesetting.period.start.y, mngMrkDateVO.datesetting.period.start.m-1, mngMrkDateVO.datesetting.period.start.d).dateFormat("Ymd"),
+                                    	MA_DT_END: new Date(mngMrkDateVO.datesetting.period.end.y, mngMrkDateVO.datesetting.period.end.m-1, mngMrkDateVO.datesetting.period.end.d).dateFormat("Ymd")
                                     };                    				                    				
                 					UtilSvc.getList(param).then(function (res) {
                 						mngMrkDateVO.dataTotal = res.data.results[0].length;                						
@@ -403,18 +357,19 @@
 		            		    			autoBind: false,
 		            		    			dataTextField: "NM_DEF",
 		                                    dataValueField: "CD_DEF",
-		            		    			dataSource: gridMds,
+		            		    			dataSource: connSetting.grdMDataSource(),
 		            		    			valuePrimitive: true
 		            		    		});
 	            		       	   	  }	            		       		   
 	            		       	  ,template: 
 	            		       		 function(e){		
-	            		       		    var nmd = e.CD_ITLWAY.NM_DEF;	
-		            		       		gridMds.fetch(function() {
-		            		       		  var dbbox = gridMds.data();
+	            		       		    var nmd = e.CD_ITLWAY.NM_DEF;
+	            		       		    var grdData = connSetting.grdMDataSource().dataSource;	            		       		    
+	            		       		    grdData.fetch(function() {		  
+	            		       		      var dbbox = grdData.data().shift();
 		            		       		  for(var i = 0, leng=dbbox.length; i<leng; i++){
-		            		       			  if(dbbox[i].CD_DEF === e.CD_ITLWAY){		            		       				
-		            		       				nmd = dbbox[i].NM_DEF;		            		       				
+		            		       			  if(dbbox[i].CD_DEF === e.CD_ITLWAY){
+		            		       				nmd = dbbox[i].NM_DEF;	
 		            		       			  }
 		            		       		  }
 		            		       		});		
@@ -434,10 +389,11 @@
             		             ,headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 10px"}	
 	           		        	 ,template: function(e){	       
 	           		        		var nmd = "";//e.CD_ITLSTAT; 
-	           		        		gridSds.fetch(function() {
-	            		       		  var dbbox = gridSds.data();
+	           		        		var grdData = connSetting.statusDataSource().dataSource;
+	           		        		grdData.fetch(function() {
+	            		       		  var dbbox = grdData.data();
 	            		       		  for(var i = 0, leng = dbbox.length; i<leng; i++){
-	            		       			  if(dbbox[i].CD_DEF === e.CD_ITLSTAT){	            		       				 
+	            		       			  if(dbbox[i].CD_DEF === e.CD_ITLSTAT && e.CD_ITLSTAT != ""){	            		       				 
 	            		       				  nmd = dbbox[i].NM_DEF;	            		       				  
 	            		       			  }
 	            		       		  }
