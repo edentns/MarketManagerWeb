@@ -6,32 +6,48 @@
      * @name sy.User.controller : sy.UserListCtrl
      */
     angular.module("sy.User.controller")
-        .controller("sy.UserListCtrl", ["$state", "$scope", "ngTableParams", "$sce", "$filter", "sy.UserListSvc", "sy.CodeSvc", "APP_CODE", "sy.deptSvc", "resData", "Page",
-            function ($state, $scope, ngTableParams, $sce, $filter, UserListSvc, SyCodeSvc, APP_CODE, SyDepartSvc, resData, Page) {
+        .controller("sy.UserListCtrl", ["$state", "$scope", "ngTableParams", "$sce", "$filter", "sy.UserListSvc", "sy.CodeSvc", "APP_CODE", "sy.DeptSvc", "resData", "Page", "UtilSvc",
+            function ($state, $scope, ngTableParams, $sce, $filter, UserListSvc, SyCodeSvc, APP_CODE, SyDepartSvc, resData, Page, UtilSvc) {
 	            var page  = $scope.page = new Page({ auth: resData.access }),
 		            today = edt.getToday();
+	            
+	            $scope.selectedDeptIds = '*';
+	            $scope.selectedRankIds = '*';
+	            $scope.selectedStatIds = '*';
+	            $scope.selectedAtrtIds = '*';
 
                 // [syUserVO]
                 var vo = $scope.syUserVO = {
                     boxTitle : "검색",
                     total: 0,
                     data: [],
+	        		settingDept : {
+	        			id: "NO_DEPT",
+	        			name: "NM_DEPT",
+	        			maxNames: 2,
+	        		},
+	        		settingCode : {
+	        			id: "CD_DEF",
+	        			name: "NM_DEF",
+	        			maxNames: 3,
+	        		},
                     departCodeList: [],
-                    positionCodeList: [],
-                    search: {depart: "", position: "", name: "", state: "JOINED"}
+                    rankCodeList  : [],
+                    empStatList   : [],
+                    atrtCodeList  : [],
+                    searchName    : ""
                 };
                 vo.tbl = {
                     columns: [
-                        {field: "CD"          , visible: true, title: "사원번호" },
-                        {field: "NAME"        , visible: true, title: "성명"    },
-                        {field: "DEPT_NAME"   , visible: true, title: "부서"    },
-                        {field: "POS_NAME"    , visible: true, title: "직급"    },
-                        {field: "BIRTH_D"     , visible: true, title: "생년월일"  },
-                        {field: "EMAIL"       , visible: true, title: "E-mail"},
-                        {field: "PHONE_INNER" , visible: true, title: "내선번호"  },
-                        {field: "PHONE_MOBILE", visible: true, title: "휴대폰번호" },
-                        {field: "ROLE_NAME"   , visible: true, title: "권한"    },
-                        {field: "STATUS"      , visible: true, title: "상태"    }
+                        {field: "DC_ID"       , visible: true, title: "사원아이디"  },
+                        {field: "NM_EMP"      , visible: true, title: "성명"      },
+                        {field: "NM_DEPT"     , visible: true, title: "부서"      },
+                        {field: "CD_RANK"     , visible: true, title: "직급"      },
+                        {field: "NO_CEPH"     , visible: true, title: "휴대폰번호"  },
+                        {field: "DC_EMIADDR"  , visible: true, title: "E-mail"   },
+                        {field: "CD_EMPSTAT"  , visible: true, title: "상태"      },
+                        {field: "NO_ATRT"     , visible: true, title: "권한"      },
+                        {field: "DT_EMP"      , visible: true, title: "입사일자"   }
                     ],
                     tableParams: new ngTableParams({
                         page: 1,
@@ -50,33 +66,45 @@
                 };
                 vo.init = function () {// 초기로드시 실행된다.
                     vo.getDepart({search: "all"});
-                    vo.getSubcodeList({cd: APP_CODE.position.cd, search: "all"});
-                    vo.doInquiry();
-                };
-                vo.initSearch = function () {// 검색조건을 초기화한다.
-                    vo.search.depart = "";
-                    vo.search.position = "";
-                    vo.search.name = "";
-                    vo.search.state = "JOINED";
-                    vo.doInquiry();
+                    vo.getSubcodeList( {cd: "SY_000020", search: "all"} );
+                    vo.getSubcodeList( {cd: "SY_000025", search: "all"} );
+                    vo.getSubcodeList( {cd: "SY_000026", search: "all"} );
+                    vo.doInquiry(1);
                 };
                 vo.doReload = function (data) {// 테이블 데이터를 갱신하다.
                     vo.tbl.tableParams.settings({data: data});
                     vo.tbl.tableParams.page(1);
                     vo.tbl.tableParams.reload();
                 };
-                vo.doInquiry = function () {// 검새조건에 해당하는 유저 정보를 가져온다.
-                    var param = {
-                        dept    : !vo.search.depart     ? "all" : vo.search.depart,
-                        pos     : !vo.search.position   ? "all" : vo.search.position,
-                        name    : !vo.search.name       ? "all" : vo.search.name,
-                        status  :  vo.search.state
-                    };
-                    UserListSvc.getUserList(UserListSvc.makeGetUserParam(param)).then(function ( result ) {
-                        vo.total = result.data.length;
-                        vo.data = result.data;
-                        vo.doReload(result.data);
-                    });
+                vo.doInquiry = function (flag) {// 검새조건에 해당하는 유저 정보를 가져온다.
+                	if(flag != 1){
+	                	if($scope.selectedDeptIds == ""){
+	                		alert("부서를 선택해주세요.");
+	                		return false;
+	                	}else if($scope.selectedRankIds == ""){
+	                		alert("직급을 선택해주세요.");
+	                		return false;
+	                	}else if($scope.selectedStatIds == ""){
+	                		alert("재직상태 선택해주세요.");
+	                		return false;
+	                	}else if($scope.selectedAtrtIds == ""){
+	                		alert("권한을 선택해주세요.");
+	                		return false;
+	                	}
+                	}
+                	var param = {
+    						procedureParam:"USP_SY_07USER01_GET&L_LIST01@s|L_LIST02@s|L_LIST03@s|L_LIST04@s|L_SEARCH_NAME@s",
+    						L_LIST01  :  $scope.selectedDeptIds,
+    						L_LIST02  :  $scope.selectedRankIds,
+    						L_LIST03  :  $scope.selectedStatIds,
+    						L_LIST04  :  $scope.selectedAtrtIds,
+    						L_SEARCH_NAME  : vo.searchName
+    					};
+    					UtilSvc.getList(param).then(function (res) {
+    						vo.total = res.data.results[0].length;
+                            vo.data = res.data.results[0];
+                            vo.doReload(res.data.results[0]);
+    					});
                 };
                 
                 /**
@@ -86,8 +114,13 @@
                 vo.getSubcodeList = function (param) {
                     var self = this;
                     SyCodeSvc.getSubcodeList(param).then(function (result) {
-                        self.positionCodeList = result.data;
-
+                    	if(param.cd == "SY_000020"){
+                    		self.rankCodeList = result.data;
+                    	}else if(param.cd == "SY_000025"){
+                    		self.empStatList = result.data;
+                    	}else if(param.cd == "SY_000026"){
+                    		self.atrtCodeList = result.data;
+                    	}
                     });
                 };
 
@@ -96,8 +129,7 @@
                  */
                 vo.getDepart = function (param) {
                     var self = this;
-                    SyDepartSvc.getDepart(param)
-                        .then(function (result) {
+                    UserListSvc.getDepart(param).then(function (result) {
                             self.departCodeList = result.data;
                         });
                 };
@@ -106,7 +138,7 @@
                     $state.go('app.syUser', { kind: 'insert', menu: null, ids: null });
                 };
                 vo.moveDetailPage = function (info) {// 사원 수정,상세페이지로 이동한다.
-                    $state.go('app.syUser', { kind: 'detail', menu: null, ids: info.CD });
+                    $state.go('app.syUser', { kind: 'detail', menu: null, ids: info.NO_EMP });
                 };
 
                 vo.init();
