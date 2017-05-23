@@ -11,13 +11,17 @@
 	            var page  = $scope.page = new Page({ auth: resData.access }),
 		            today = edt.getToday();
 	            
-	            $scope.selectedDeptIds = '*';
-	            $scope.selectedRankIds = '*';
-	            $scope.selectedStatIds = '*';
-	            $scope.selectedAtrtIds = '*';
+	            /*$scope.selectedDeptIds = '';
+	            $scope.selectedRankIds = '';
+	            $scope.selectedStatIds = '';
+	            $scope.selectedAtrtIds = '';*/
 
                 // [syUserVO]
                 var vo = $scope.syUserVO = {
+                	selectedDeptIds : '*',
+                	selectedRankIds : '*',
+                	selectedStatIds : '*',
+                	selectedAtrtIds : '*',
                     boxTitle : "검색",
                     total: 0,
                     data: [],
@@ -29,6 +33,11 @@
 	        		settingCode : {
 	        			id: "CD_DEF",
 	        			name: "NM_DEF",
+	        			maxNames: 3,
+	        		},
+	        		settingAtrt : {
+	        			id: "NO_ATRT",
+	        			name: "NM_ATRT",
 	        			maxNames: 3,
 	        		},
                     departCodeList: [],
@@ -65,10 +74,13 @@
                     })
                 };
                 vo.init = function () {// 초기로드시 실행된다.
+                	var param = {
+                            procedureParam: "USP_SY_08ATRT01_GET"
+                        };
                     vo.getDepart({search: "all"});
                     vo.getSubcodeList( {cd: "SY_000020", search: "all"} );
                     vo.getSubcodeList( {cd: "SY_000025", search: "all"} );
-                    vo.getSubcodeList( {cd: "SY_000026", search: "all"} );
+                    vo.getSubcodeList( param );
                     vo.doInquiry(1);
                 };
                 vo.doReload = function (data) {// 테이블 데이터를 갱신하다.
@@ -78,26 +90,26 @@
                 };
                 vo.doInquiry = function (flag) {// 검새조건에 해당하는 유저 정보를 가져온다.
                 	if(flag != 1){
-	                	if($scope.selectedDeptIds == ""){
+	                	if(vo.selectedDeptIds == ""){
 	                		alert("부서를 선택해주세요.");
 	                		return false;
-	                	}else if($scope.selectedRankIds == ""){
+	                	}else if(vo.selectedRankIds == ""){
 	                		alert("직급을 선택해주세요.");
 	                		return false;
-	                	}else if($scope.selectedStatIds == ""){
+	                	}else if(vo.selectedStatIds == ""){
 	                		alert("재직상태 선택해주세요.");
 	                		return false;
-	                	}else if($scope.selectedAtrtIds == ""){
+	                	}else if(vo.selectedAtrtIds == ""){
 	                		alert("권한을 선택해주세요.");
 	                		return false;
 	                	}
                 	}
                 	var param = {
     						procedureParam:"USP_SY_07USER01_GET&L_LIST01@s|L_LIST02@s|L_LIST03@s|L_LIST04@s|L_SEARCH_NAME@s",
-    						L_LIST01  :  $scope.selectedDeptIds,
-    						L_LIST02  :  $scope.selectedRankIds,
-    						L_LIST03  :  $scope.selectedStatIds,
-    						L_LIST04  :  $scope.selectedAtrtIds,
+    						L_LIST01  :  vo.selectedDeptIds,
+    						L_LIST02  :  vo.selectedRankIds,
+    						L_LIST03  :  vo.selectedStatIds,
+    						L_LIST04  :  vo.selectedAtrtIds,
     						L_SEARCH_NAME  : vo.searchName
     					};
     					UtilSvc.getList(param).then(function (res) {
@@ -118,8 +130,10 @@
                     		self.rankCodeList = result.data;
                     	}else if(param.cd == "SY_000025"){
                     		self.empStatList = result.data;
-                    	}else if(param.cd == "SY_000026"){
-                    		self.atrtCodeList = result.data;
+                    	}else if(param.procedureParam == "USP_SY_08ATRT01_GET"){
+                    		UtilSvc.getList(param).then(function (result) {
+                                self.atrtCodeList = result.data.results[0];
+                            });
                     	}
                     });
                 };

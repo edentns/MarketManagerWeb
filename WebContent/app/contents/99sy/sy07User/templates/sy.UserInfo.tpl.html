@@ -169,8 +169,8 @@
                                 </span>
                             </td>
                             <th data-ng-show="syUserVO.kind == 'detail'">SMS동의일시</th>
-                            <td data-ng-show="syUserVO.kind == 'detail'">
-                                 <span data-ng-if="!page.isWriteable()">
+                            <td data-ng-show="syUserVO.kind == 'detail' && page.isWriteable()">
+                                 <span>
                                      {{syUserVO.param.DTS_SMS}}
                                  </span>
                             </td>
@@ -186,8 +186,8 @@
                                 </span>
                             </td>
                             <th data-ng-show="syUserVO.kind == 'detail'">이메일동의일시</th>
-                            <td data-ng-show="syUserVO.kind == 'detail'">
-                                 <span data-ng-if="!page.isWriteable()">
+                            <td data-ng-show="syUserVO.kind == 'detail' && page.isWriteable()">
+                                 <span>
                                      {{syUserVO.param.DTS_EMI}}
                                  </span>
                             </td>

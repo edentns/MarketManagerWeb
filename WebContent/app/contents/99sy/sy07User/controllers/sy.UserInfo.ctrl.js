@@ -15,6 +15,7 @@
                 var vo = $scope.syUserVO = {
                     boxTitle : "유저등록",
                     param: {
+                    	NO_EMP      : "",       // 사원번호
                         DC_ID		: "",		// 사원아이디
                         DC_PWD   	: "",		// 패스워드
                         NM_EMP		: "",		// 이름
@@ -30,8 +31,10 @@
                         DC_EMIADDR	: "",		// 이메일
                         CD_EMPSTAT	: "",		// 재직상태
                         DT_RESI 	: "",		// 퇴사일
-                        YN_SMS      : "N",       // SMS
-                        YN_EMI      : "N",       // EMAIL
+                        YN_SMS      : "N",      // SMS
+                        DTS_SMS     : "",       // SMS동의일시
+                        YN_EMI      : "N",      // EMAIL
+                        DTS_EMI     : "",       // EMAIL동의일시
                         email		: { disabled: false, email1: "", email2: "", selectedDomain: ""}
                     },
                     selectedDepart		: "",		// 선택된 부서객체
@@ -64,6 +67,7 @@
                 // insert, update에 사용되는 param을 생성하여 리턴한다.
                 vo.makeGetParam = function () {
                     var param = {
+                    	NO_EMP      : "",
                     	DC_ID		: vo.param.DC_ID ? vo.param.DC_ID.toLowerCase() : vo.param.DC_ID,
                     	DC_PWD	    : ( vo.param.DC_PWD==="" ) ? null : vo.param.DC_PWD,
                         NM_EMP		: vo.param.NM_EMP,
@@ -74,11 +78,17 @@
                         NO_CEPH     : ( vo.param.NO_CEPH==="" ) ? null : vo.param.NO_CEPH,
                         DC_EMIADDR	: ( vo.param.email.email1.length>0 || vo.param.email.email2.length>0 ) ? vo.param.email.email1 +"@"+ vo.param.email.email2 : null,
                         YN_SMS      : vo.param.YN_SMS,
-                        YN_EMI      : vo.param.YN_EMI
+                        DTS_SMS     : "",
+                        YN_EMI      : vo.param.YN_EMI,
+                        DTS_EMI     : "",
+                        DT_RESI     : "",
                     };
                     if (vo.kind==="detail") {
+                    	param.NO_EMP      =  vo.ids;
                         param.CD_EMPSTAT  =  vo.param.CD_EMPSTAT;
                         param.DT_RESI 	  =  edt.isValid( vo.param.DT_RESI ) ? vo.param.DT_RESI : null;
+                        param.DTS_SMS     =  vo.param.YN_SMS == "Y" ? vo.param.DTS_SMS : null;
+                        param.DTS_EMI     =  vo.param.YN_EMI == "Y" ? vo.param.DTS_EMI : null;
                     }
 
                     return param;
@@ -115,8 +125,9 @@
                             procedureParam: "USP_SY_08ATRT01_GET"
                         },
                         empParam = {
-	                		procedureParam: "USP_SY_07USER02_GET"
-	                	}
+	                		procedureParam: "USP_SY_07USER02_GET&L_NO_CHECK_EMP@s",
+	                		L_NO_CHECK_EMP : vo.ids
+	                	};
                     $q.all([
                         UserListSvc.getDepart({ search: "all" }).then(function (result) {
                             return result.data;
@@ -131,7 +142,7 @@
                             return result.data.results[0];
                         }),
                         UtilSvc.getList(empParam).then(function (result) {
-                            return result.data.results[0];
+                            return result.data.results[0][0];
                         })
                     ]).then(function (result) {
                     	vo.departCodeList 		= result[0];
@@ -140,10 +151,10 @@
                         vo.roleCodeList 		= result[3];
 
                         vo.param 				= result[4];
-                        vo.param.DC_PWD		= "";
+                        vo.param.DC_PWD		    = "";
 
                         if (vo.param.DC_EMIADDR) {
-	                        split = vo.param.EMAIL.split("@");
+	                        split = vo.param.DC_EMIADDR.split("@");
                             vo.param.email = {
                                 email1: split[0],
                                 email2: split[1]
@@ -162,14 +173,14 @@
                         }
                     });
 
-                    angular.forEach(vo.positionCodeList, function (data) {
-                        if (data.CD === vo.param.CD_RANK) {
+                    angular.forEach(vo.rankCodeList, function (data) {
+                        if (data.CD_DEF === vo.param.CD_RANK) {
                             vo.selectedRank = data;
                         }
                     });
 
                     angular.forEach(vo.workgroupCodeList, function (data) {
-                        if (data.CD === vo.param.CD_OCC) {
+                        if (data.CD_DEF === vo.param.CD_OCC) {
                             vo.selectedWorkgroup = data;
                         }
                     });
