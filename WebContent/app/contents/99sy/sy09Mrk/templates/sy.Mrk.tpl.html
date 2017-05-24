@@ -7,4 +7,68 @@
             </ol>
         </div>
     </div>
+    
+    <div class="row">
+		<div class="content-area-container col-xs-12">
+			<div data-content-box-layer data-box-title="dateVO.boxTitle">
+                <form class="search-type1">
+                	<table>
+                        <colgroup>
+                            <col style="width: 10%;">
+                            <col style="width: 15%;">
+                            <col style="width: 10%;">
+                            <col style="width: 15%;">
+                            <col style="width: 10%;">
+                            <col style="width: 15%;">
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th>마켓명</th>
+                            <td>
+                            	<co01-mcbox model="dateVO.selectedMrkIds" options="dateVO.MrkCodeList" setting="dateVO.settingMrk" ></co01-mcbox>
+                            </td>
+                            <th>연동상태</th>
+                            <td>
+                            	<co01-mcbox model="dateVO.selectedItlStatIds" options="dateVO.ItlStatCodeList" setting="dateVO.settingItlStat" ></co01-mcbox>
+                            </td>
+                            <th></th>
+                            <td></td>
+                        </tr>
+                        <tr>
+                        	<th>연동기간</th>
+                        	<td colspan="5">
+                        		<!-- <input kendo-date-picker ng-model="dateVO.dateString1" k-ng-model="dateVO.dateObject1" k-options="dateOptions" style="width:27%;"/>
+                        		&nbsp;&nbsp;&nbsp;~&nbsp;&nbsp;&nbsp;
+                        		<input kendo-date-picker ng-model="dateVO.dateString2" k-ng-model="dateVO.dateObject2" k-options="dateOptions" style="width:27%;"/>
+                        		<kendo-button type="button" title="1일" data-ng-click="">1일</kendo-button>
+                            	<kendo-button type="button" title="1주일" data-ng-click="">1주일</kendo-button>
+                            	<kendo-button type="button" title="1개월" data-ng-click="">1개월</kendo-button> -->
+                            	<div class="frm-group" data-date-search-group="dateVO.datesetting"></div>
+                        	<td>
+                        </tr>
+                        </tbody>
+                    </table>                    
+                    <div class="btn-group1 mt-20">
+                        <button type="submit" class="btn btn-primary" data-ng-click="dateVO.doInquiry()">검색</button>
+                        <button type="submit" class="btn btn-danger" data-ng-click="dateVO.doInit()">초기화</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--/ 지출결의서 처리 CONTENT Layer END -->
+    
+    <!-- 지출결의서 처리 CONTENT Layer -->
+    <div class="row">
+		<div class="content-area-container col-xs-12">
+			<div data-content-box-layer data-box-title="gridMrkVO.boxTitle">
+                <kendo-grid options="gridMrkVO">
+                </kendo-grid>
+            </div>
+        </div>
+    </div>
+    
+    		
+
+    
 </div>
