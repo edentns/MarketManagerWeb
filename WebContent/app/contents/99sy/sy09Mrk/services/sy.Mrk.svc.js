@@ -10,7 +10,7 @@
         .factory("sy.MrkSvc", ["APP_CONFIG", "$http", function (APP_CONFIG, $http) {
             return {
             	
-            	saveUserCode : function ( aParam, CUD ) {
+            	saveUserMrk : function ( aParam, CUD ) {
                     return $http({
                         method   : "POST",
                         url		 : APP_CONFIG.domain +"/sy09Mrk/"+CUD,

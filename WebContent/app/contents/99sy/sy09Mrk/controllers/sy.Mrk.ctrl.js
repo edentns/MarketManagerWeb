@@ -118,10 +118,10 @@
                     },
                     edit: function (e) {
                         if (e.model.isNew()) {
-                        	if(e.model.YN_DEL == ""){
+                        	if(e.model.YN_USE == ""){
                         		e.model.set("CD_MRKDFT", "001");
                         		e.model.set("CD_NT", "001");
-                        		e.model.set("YN_DEL", "N");
+                        		e.model.set("YN_USE", "Y");
                         	}
                         }
             		},
@@ -142,19 +142,19 @@
                 			},
 	                		create: function(e) {
 	                			syMrkSvc.saveUserMrk(e.data.models, "I").success(function () {
-	                				$scope.gridCusCodeVO.init();
+	                				gridMrkVO.dataSource.read();
 	                            });
 	            			},
                 			update: function(e) {
                 				syMrkSvc.saveUserMrk(e.data.models, "U").success(function () {
-                    				$scope.gridCusCodeVO.init();
+                					gridMrkVO.dataSource.read();
                                 });
                 			},
                 			destroy: function(e) {
                 				var defer = $q.defer();
-                				syMrkSvc.saveUserMrk(e.data.models, "DS").success(function () {
+                				syMrkSvc.saveUserMrk(e.data.models, "D").success(function () {
             						defer.resolve();
-                    				$scope.gridCusCodeVO.init();
+            						gridMrkVO.dataSource.read();
                                 });
                     			return defer.promise;
                 			},
@@ -171,7 +171,7 @@
                 				fields: {
                 					ROW_NUM: { editable: false },
                 					NO_MNGMRK:   { validation: { required: true } },
-                					NM_RMK:      { validation: { required: true } },
+                					NM_MRK:      { validation: { required: true } },
                 					CD_MRKDFT:   {},
                 					DT_ITLSTART: { editable: false },
                 					CD_ITLSTAT:  { editable: false },
@@ -210,7 +210,7 @@
        							  	  ,nullable: true
                 					},
                 					DC_SALEMNGURL: {},
-                					YN_DEL:      {},
+                					YN_USE:      {},
                 					CD_NT:       {},
                 					NO_CEPH:     {},
                 				}
@@ -244,7 +244,7 @@
             		       		  }	
 	            		        return nmd;
           		       	  	}},
-        		           {field: "NM_RMK",      title: "마켓명",    width: 100},
+        		           {field: "NM_MRK",      title: "마켓명",    width: 100},
         		           {field: "CD_MRKDFT",   title: "마켓구분",   width: 100, template: 
         		        		    '#if (CD_MRKDFT == "001") {# #="오픈마켓"# #}' +
         		        	   	    'else if (CD_MRKDFT == "002") {# #="홈쇼핑"# #}'+
@@ -285,8 +285,8 @@
 	          		           		 return returnAPIMsg;
 	          		           	 }},
         		           {field: "DC_SALEMNGURL", title: "판매관리URL", width: 100},
-        		           {field: "YN_DEL",      title: "사용여부",    width: 100, template: 
-	        		        	    '#if (YN_DEL == "N") {# #="사용"# #} else {# #="사용안함"# #} #', 
+        		           {field: "YN_USE",      title: "사용여부",    width: 100, template: 
+	        		        	    '#if (YN_USE == "Y") {# #="사용"# #} else {# #="사용안함"# #} #', 
 	        		        	    editor: DropDownEditorYN},
         		           {field: "CD_NT",       title: "국가",       width: 100, template: 
             		        		'#if (CD_NT == "001") {# #="한국"# #}' +
@@ -350,13 +350,13 @@
                         .appendTo(container)
                         .kendoDropDownList({
                         	dataTextField: 'text',
-                            dataValueField: 'YN_DEL',
+                            dataValueField: 'YN_USE',
                             dataSource: [{
-                	                	   "text": '사용안함',
-                	                       "YN_DEL": 'Y'
-                	                      }, {
                 	                       "text": '사용',
-                	                       "YN_DEL": 'N'
+                	                       "YN_USE": 'Y'
+                	                      },{
+                	                	   "text": '사용안함',
+                	                       "YN_USE": 'N'
                 	                      }]
                         });
                 }
