@@ -6,7 +6,7 @@
 			function ($rootScope, $scope, $modal, $state, LoginSvc, APP_CONFIG, $window, $http, MenuSvc, $timeout) {
 				var loginVO;
 				
-				/**
+				/** test
 				 * loginVO 초기값 설정
 				 */
 				loginVO = $scope.loginVO = {
