@@ -2,8 +2,8 @@
 	"use strict";
 
 	angular.module("sy.Login.controller")
-		.controller("sy.LoginCtrl", ["$rootScope", "$scope", "$state", "sy.LoginSvc", "APP_CONFIG", "$window", "$http", "MenuSvc",
-			function ($rootScope, $scope, $state, LoginSvc, APP_CONFIG, $window, $http, MenuSvc) {
+		.controller("sy.LoginCtrl", ["$rootScope", "$scope", "$modal", "$state", "sy.LoginSvc", "APP_CONFIG", "$window", "$http", "MenuSvc", 
+			function ($rootScope, $scope, $modal, $state, LoginSvc, APP_CONFIG, $window, $http, MenuSvc) {
 				var loginVO;
 
 				loginVO = $scope.loginVO = {
@@ -18,8 +18,8 @@
 				 */
 				loginVO.initLoad = function () {
 					var self = this,
-						recentLoginInfo = $window.localStorage.getItem("recentLoginInfo"),
-						recentUrl = $window.localStorage.getItem("recentUrl");
+						recentLoginInfo = $window.localStorage.getItem("recentLoginInfo"), // 기억한 로그인 정보
+						recentUrl       = $window.localStorage.getItem("recentUrl");
 					
 					if (recentLoginInfo) {
 						recentLoginInfo    = JSON.parse(recentLoginInfo);
@@ -58,6 +58,22 @@
 					});
 				};
 
+				loginVO.modalRePassword = function () {
+					var self = this,
+						modalInstance = $modal.open({
+						options: {
+							modal: true,
+							resizable: true,
+							widht: 450,
+							visible: false
+						},
+						templateUrl : "app/shared/modal/setupRePassword/modal.setupRePassword.tpl.html",
+                        controller  : "modal.setupRePasswordCtrl",
+                        size        : "sm"
+					});
+					modalInstance.result.then(function ( result ) {
+                    });
+				}
 
 				loginVO.initLoad();
 			}

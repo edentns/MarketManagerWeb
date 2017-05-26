@@ -61,8 +61,21 @@
 						user : userDataSet.user,
 						password : userDataSet.password
 					};
-				}
-
+				},
+				
+				/**
+				 * 로그인을 한다.
+				 * @param {{bsCd:string, user:string, password:string}} userDataSet
+				 * @returns {*}
+				 */
+				setupRePwd : function (email) {
+					return $http({
+						method	: "POST",
+						url		: APP_CONFIG.domain +"/setupRePwd",
+						headers	: { "Content-Type": "application/x-www-form-urlencoded; text/plain; */*; charset=utf-8" },
+						data	: $.param({DC_EMIADDR:email})
+					});
+				},
 			};
 		}]);
 }());
