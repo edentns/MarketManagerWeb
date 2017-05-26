@@ -2,10 +2,13 @@
 	"use strict";
 
 	angular.module("sy.Login.controller")
-		.controller("sy.LoginCtrl", ["$rootScope", "$scope", "$modal", "$state", "sy.LoginSvc", "APP_CONFIG", "$window", "$http", "MenuSvc", 
-			function ($rootScope, $scope, $modal, $state, LoginSvc, APP_CONFIG, $window, $http, MenuSvc) {
+		.controller("sy.LoginCtrl", ["$rootScope", "$scope", "$modal", "$state", "sy.LoginSvc", "APP_CONFIG", "$window", "$http", "MenuSvc", "$timeout",  
+			function ($rootScope, $scope, $modal, $state, LoginSvc, APP_CONFIG, $window, $http, MenuSvc, $timeout) {
 				var loginVO;
-
+				
+				/**
+				 * loginVO 초기값 설정
+				 */
 				loginVO = $scope.loginVO = {
 					isRegisterId: false,
 					info		: { bsCd    : APP_CONFIG.bsCd, user	: "", password: "" },
@@ -14,7 +17,7 @@
 				};
 
 				/**
-				 * 초기 로드시 실행된다.
+				 * 초기 로드시 실행
 				 */
 				loginVO.initLoad = function () {
 					var self = this,
@@ -27,15 +30,20 @@
 						self.info.user 	   = recentLoginInfo.user;
 						self.info.password = recentLoginInfo.password;
 						self.isRegisterId  = true;
+
+						if (recentUrl) {
+							recentUrl          = JSON.parse(recentUrl);
+							self.url           = recentUrl.href;
+						}
 					}
-					if (recentUrl) {
-						recentUrl          = JSON.parse(recentUrl);
-						self.url           = recentUrl.href;
-					}
+
+					$timeout(function () {
+                        edt.id("bsCdId").focus();
+                    }, 500);
 				};
 
 				/**
-				 * 로그인을 한다.
+				 * 로그인 버튼 클릭
 				 */
 				loginVO.doLogin = function () {
 					var self = this,
@@ -46,6 +54,9 @@
 						if (self.isRegisterId) {
 							$window.localStorage.setItem("recentLoginInfo", JSON.stringify({bsCd: info.bsCd, user: info.user, password: info.password}));
 						}
+						else {
+				            $window.localStorage.removeItem("recentLoginInfo");
+						}
 						
 						res.data.NO_C = info.bsCd;
 
@@ -53,11 +64,18 @@
 						$rootScope.$emit("event:setMenu", MenuSvc.setMenu(res.data.MENU_LIST).getMenu());
 						$rootScope.$emit("event:autoLoader", true);
 						
-						if(self.url) $state.go(self.url);
-						else 		 $state.go(MenuSvc.getDefaultUrl(), { menu: true, ids: null });
+						if (self.isRegisterId && self.url) {
+							$state.go(self.url);
+						}
+						else {
+							$state.go(MenuSvc.getDefaultUrl(), { menu: true, ids: null });
+						}
 					});
 				};
 
+				/**
+				 * 비밀번호재설정 팝업창 띄우기
+				 */
 				loginVO.modalRePassword = function () {
 					var self = this,
 						modalInstance = $modal.open({
