@@ -23,9 +23,9 @@
                         </colgroup>
                         <tbody>
                         <tr>
-                            <th>마켓별</th>
+                            <th>마켓명</th>
                             <td>
-                            	<input class="k-textbox" title="마켓별" ng-model="mngMrkDateVO.searchText" type="text" style="width:100%;"/>
+                            	<input class="k-textbox" title="마켓명" ng-model="mngMrkDateVO.searchText.value" focus="mngMrkDateVO.searchText.focus" ng-required="true" data-eden-type="kor" type="text" style="width:100%;"/>
                             </td>
                             <th>연동방법</th>
                             <td>
@@ -60,7 +60,7 @@
                         </tbody>
                     </table>                    
                     <div class="btn-group1 mt-20">
-                        <kendo-button type="submit" class="k-primary" title="검색" data-ng-click="doInquiry()">검색</kendo-button>
+                        <kendo-button type="submit" class="k-primary" title="검색" data-ng-click="mngMrkDateVO.doInquiry()">검색</kendo-button>
                         <kendo-button type="botton" class="" title="초기화" data-ng-click="mngMrkDateVO.init()">초기화</kendo-button>                       
                     </div>
                     <br/>

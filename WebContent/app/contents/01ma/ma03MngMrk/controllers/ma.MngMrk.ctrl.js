@@ -26,10 +26,11 @@
 							end   : angular.copy(today)
 						}
 	        		},
-                    searchText: "",				    //검색어
+                    searchText: {value: "", focus: false},				    //검색어
              	    methodDataCode : [""],			//연동방법
              	    statusDataCode : [""],			//연동상태 	
-             	    dataTotal : 0
+             	    dataTotal : 0,
+             	    resetAtGrd : ""
 	            };
 	            	            
 	            kendo.culture("ko-KR");
@@ -67,23 +68,26 @@
 	            
 		        var connSetting = $scope.connSetting = {
 		        	//연동 방법 셋팅
-		        	methodDataSource : function(){return subCodeSetting("SYCH00016", "SY_000016")},
+		        	methodDataSource : function(){return subCodeSetting("SYCH00016", "SY_000016");},
 		            //연동 상태 셋팅
-		            statusDataSource : function(){return subCodeSetting("SYCH00017", "SY_000017")},
+		            statusDataSource : function(){return subCodeSetting("SYCH00017", "SY_000017");},
 		            //연동 방법 그리드 
 		            grdMDataSource : function(){
 		            	var result = function(){
 		            		return subCodeSetting("SYCH00016", "SY_000016");
 		            	};
 		            	return result;
-		            }		            
-		        }
-	            		        	   
+		            }
+		        };    	   
 	            //검색
-	            var doInquiry = $scope.doInquiry = function () {
+	            mngMrkDateVO.doInquiry = function () {
+		        	var me  = this;
+	            	if(me.searchText.value === ""){me.searchText.focus = !me.searchText.focus; alert("마켓명을  입력해 주세요."); return false;};
+	            	if(me.methodDataCode === ""){alert("연동방법을 입력해 주세요."); return false;};
+                	if(me.statusDataCode === ""){alert("연동상태를 입력해 주세요."); return false;};
+                	
 	            	gridMngMrkUserVO.dataSource.read();
                 };
-                
                 //새로 저장시 유효성 검사 (수정 할 땐 비밀번호를 따로 입력할 필요할 없어서 required 하지 않아서 저장시 따로 함수를 만듦 kendo로는  editable true 일때만 됨)
                 var isValid = function(inputs){
                 	let checkReturn = true;
@@ -95,23 +99,21 @@
                         else if((obj.NEW_DC_PWD === null || obj.NEW_DC_PWD === "") && (obj.DC_PWD === null || obj.DC_PWD === "")){alert("비밀번호를 설정해 주세요"); checkReturn = false;};
                     });
                 	return checkReturn;
-                };
-                                
+                };           
                 //초기화 
 	            mngMrkDateVO.init = function(){
                 	var me  = this;
                 	me.methodDataCode = [""];
                 	me.statusDataCode = [""];
-                	me.searchText = "";
+                	me.searchText.value = "";
                 	me.datesetting.selected = "current";
-                	
-                	$timeout(function () {
-                        doInquiry();
-                    }, 0);
-                };  
+                	me.resetAtGrd = $scope.gridMngMrkUserVO;
+                	me.resetAtGrd.dataSource.data([]);
+                };
                                                             
                 //마켓 검색 그리드
                 var gridMngMrkUserVO = $scope.gridMngMrkUserVO = {
+                		autoBind: false,
                         messages: {                        	
                             //loading: "마켓정보를 가져오는 중...",
                             requestFailed: "마켓정보를 가져오는 중 오류가 발생하였습니다.",
@@ -139,7 +141,7 @@
                     				var param = {
                                     	procedureParam: "MarketManager.USP_MA_03SEARCH01_GET&NO_M@s|MA_NM_MRK@s|MA_CD_ITLWY@s|MA_ITLSTAT@s|MA_DT_START@s|MA_DT_END@s",
                                     	NO_M: menuId,
-                                    	MA_NM_MRK: mngMrkDateVO.searchText,
+                                    	MA_NM_MRK: mngMrkDateVO.searchText.value,
                                     	MA_CD_ITLWY: (MaMngMrkSvc.arrayIndexCheck(mngMrkDateVO.methodDataCode,"") === true) ? [""] : mngMrkDateVO.methodDataCode,
                                     	MA_ITLSTAT: (MaMngMrkSvc.arrayIndexCheck(mngMrkDateVO.statusDataCode,"") === true) ? [""] : mngMrkDateVO.statusDataCode,
                                     	MA_DT_START: new Date(mngMrkDateVO.datesetting.period.start.y, mngMrkDateVO.datesetting.period.start.m-1, mngMrkDateVO.datesetting.period.start.d).dateFormat("Ymd"),
@@ -331,7 +333,7 @@
                     		'<a class="k-button" onclick="cancel" style = "float:right;">취소</a>'}],
                     		*/
                     		["create", "save", "cancel"]
-                    	,columns: [
+                       ,columns: [
                		           {
 								   field: "ROW_NUM"
 								  ,title: "순서"
@@ -354,7 +356,7 @@
 		            		       		$('<input required name='+ options.field +' data-bind="value:' + options.field + '" />')
 		            		    		.appendTo(container)
 		            		    		.kendoDropDownList({
-		            		    			autoBind: false,
+		            		    			autoBind: true,
 		            		    			dataTextField: "NM_DEF",
 		                                    dataValueField: "CD_DEF",
 		            		    			dataSource: connSetting.grdMDataSource(),

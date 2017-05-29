@@ -14,47 +14,57 @@
         	<div data-content-box-layer data-box-title="joinerDataVO.boxTitle">
                 <form class="search-type1" id="myForm">
                 	<table>
+                        <colgroup>
+                            <col style="width: 10%;">
+                            <col style="width: 22%;">
+                            <col style="width: 10%;">
+                            <col style="width: 23%;">
+                            <col style="width: 10%;">
+                            <col style="width: 23%;">
+                        </colgroup>
                         <tbody>
-	                        <tr>
-	                            <th style="width: 10%;">사업자명</th>
-	                            <td style="width: 22%;">
-	                            	<input class="k-textbox" title="사업자명" k-ng-model="joinerDataVO.searchText" type="text" style="width:100%;"/>
-	                            </td>
-	                            <th style="width: 22%;">가입자상태</th>
-	                            <td style="width: 23%;">
-	                            	<select kendo-multi-select title="가입자상태" 
-	                            		k-ng-model="joinerDataVO.joinerStatusData" 
-							            k-options="" 
-							            k-value-primitive="true" style="width:100%;">
-	                            	</select>
-	                            </td>
-	                            <th style="width: 10%;">상품명</th>
-	                            <td style="width: 23%;">
-	                            	<select kendo-multi-select title="상품명" 
-	                            		k-ng-model="joinerDataVO.joinerNameData"
-	                            		k-options=""
-	                            		k-value-primitive="true" style="width:100%;">                         		
-	                            	</select>      	
-	                            </td>           
-	                        </tr>
-	                        <tr>
-	                            <th style="width: 10%;">기간 </th>
-	                            <td style="width: 10%;">                  
-	                            	<select kendo-multi-select title="가입일" 
-	                            		k-ng-model="joinerDataVO.statusDataCode"
-	                            		k-options=""
-	                            		k-value-primitive="true" style="width:100%;">                         		
-	                            	</select>
-	                            </td>
-	                            <td colspan="4">       	
-	                            	<div class="frm-group" data-date-search-group="joinerDataVO.datesetting"></div>
-	                            </td>
-	                        </tr>
+                        <tr>
+                            <th>사업자명</th>
+                            <td>
+                            	<input data-ng-model="joinerDataVO.searchText.value"
+                            			ng-required="true" 
+                            			focus="joinerDataVO.searchText.focus"
+                            			title="사업자명"
+                            			data-eden-type="kor" 
+                            			type="text" 
+                            			class="form-control" style="width:100%;"/>
+                            </td>
+                            <th>가입자상태</th>
+                            <td>
+                            	<co01-mcbox title="가입자상태" model="joinerDataVO.joinerStatusDt" options="joinerDataVO.StatusDtOptionVO" setting="joinerDataVO.setting"  style="width:100%;">
+        						</co01-mcbox>
+                            </td>
+                            <th>상품명</th>
+                            <td>     
+                            	<co01-mcbox title="상품명" model="joinerDataVO.joinerProcNameDt" options="joinerDataVO.ProcNameDtOptionVO" setting="joinerDataVO.setting"  style="width:100%;">
+        						</co01-mcbox>  
+                            </td>           
+                        </tr>
+                        <tr>
+                            <th>기간 </th>
+                            <td colspan="5">
+                            	<div class="betweenDiv">	         
+        							<select ng-model="joinerDataVO.joinerBetweenDate" 
+        								ng-options="option.CD_DEF as option.NM_DEF for option in joinerDataVO.BetweenDateOptionVO"
+        								class="form-control" 
+        								style="width: 100%">
+							            <option value="">선택</option>
+        							</select>						 
+                            	</div>               	
+                            	<div class="frm-group" data-date-search-group="joinerDataVO.datesetting" style="display:inline-block;"></div>
+                            </td>
+                        </tr>
                         </tbody>
-                    </table>                    
+                    </table>         
+                    					     
                     <div class="btn-group1 mt-20">
-                        <kendo-button type="submit" class="k-primary" title="검색" data-ng-click="" style="width:10%;">검색</kendo-button>
-                        <kendo-button type="botton" class="" title="초기화" data-ng-click="joinerDataVO.init()">초기화</kendo-button>
+                        <kendo-button type="submit" class="k-primary" title="검색" data-ng-click="joinerDataVO.inQuiry()" >검색</kendo-button>
+                        <kendo-button type="botton" title="초기화" data-ng-click="joinerDataVO.inIt()">초기화</kendo-button>
                     </div>
                     <br/>
                     <p class="text-center">총  <strong>{{joinerDataVO.dataTotal}}</strong>건이 검색되었습니다.</p>
@@ -64,8 +74,75 @@
                 
         <!-- 승인 리스트 -->          
 		<div class="content-area-container col-xs-12" style="padding:50px 0px 0px 0px;">				
-	        <kendo-grid options="">
-	        </kendo-grid>	            
+	        <div kendo-grid="kg" options="gridJoinerMemVO">
+	        </div>	            
         </div>
     </div>
 </div>
+
+<script id="template" type="text/x-kendo-template">
+     <tr data-uid="#= uid #">
+         <td class="ta-c">
+            <span class="ells"># if(CD_JOINYN === '003'){#
+									</span>
+							   # }else{#
+									<input type="checkbox" class="checkbox" ng-click="onClick($event)"></input></span>
+							   # }#
+        </td>
+		<td class="ta-r">
+            <span class="seq ells">#= ROW_NUM #</span>
+        </td>
+		<td class="ta-c">
+            <span class="ells">#= NO_C # - #= NM_C #</span>
+        </td>
+		<td class="ta-c">
+            <span class="ells">#= NM_RPSTT #</span>
+        </td>
+		<td class="ta-c">
+            <span class="ells">#= NO_BSNSRGTT #</span>
+        </td>
+		<td class="ta-c">
+            <span class="ells">#= NO_COMMSALEREG #</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells">#= DC_ID #</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells">#= NM_EMP #</span>
+        </td>
+		<td class="ta-c">
+            <span class="ells">#= NO_PHNE #</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells">#= DC_NEWADDR_DC_OLDADDR #</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells">#= DC_REPREMI #</span>
+        </td> 
+		<td class="ta-l">
+            <span class="status-cell ells">#= CD_JOINYN #</span>
+        </td> 
+		<td class="ta-l">
+            <span class="joiner-cell ells">#= CD_JOINITEM #</span>
+        </td> 
+		<td class="ta-c">
+            <span class="ells">#= DTS_JOIN #</span>
+        </td> 
+		<td class="ta-c">
+            <span class="ells">#= DTS_JOINREQ #</span>
+        </td> 
+    </tr>
+</script>
+
+<style>
+.betweenDiv{
+	width:13%;
+	display:inline-block; 
+	margin-right:5px;
+}
+.ells{
+	text-overflow: ellipsis; 
+	white-space: nowrap; 
+	overflow:hidden;
+}
+</style>   
