@@ -3,36 +3,34 @@
 		<div class="box-content">
 			<form name="loginForm" style="padding: 10px;">
 				<div class="ta-c">
-					<h3 class="page-header">MarketManager Login</h3>
+					<h3 class="page-header" style="font-size:21px;">MarketManager | 로그인</h3>
 				</div>
 				<div class="form-group" style="height: auto; line-height: normal;">
-					<label class="control-label" style="padding:5px;">가입자번호</label>
-					<div>
-						<input type="text" class="form-control" title="가입자번호입력" placeholder="가입자번호를 입력해주세요." data-ng-model="loginVO.info.bsCd" required>
-					</div>
+					<label class="control-label" style="padding:5px;"><code>*</code>가입자번호</label>
+					<input class="form-control" id="bsCdId" type="text" title="가입자번호입력" placeholder="가입자번호를 입력해주세요." data-ng-model="loginVO.info.bsCd" required>
 				</div>
 				<div class="form-group" style="height: auto; line-height: normal;">
-					<label class="control-label" style="padding:5px;">User Id</label>
-					<div>
-						<input type="text" class="form-control" title="ID입력" placeholder="ID를 입력해주세요." data-ng-model="loginVO.info.user" required>
-					</div>
+					<label class="control-label" style="padding:5px; width:90px;"><code>*</code>아이디</label>
+					<input class="form-control" type="text" title="ID입력" placeholder="ID를 입력해주세요." data-ng-model="loginVO.info.user" required>
 				</div>
 				<div class="form-group" style="height: auto; line-height: normal;">
-					<label class="control-label" style="padding:5px;">Password</label>
-					<div>
-						<input type="password" class="form-control" title="PW입력" placeholder="PASSWORD를 입력해주세요." data-ng-model="loginVO.info.password" required>
-					</div>
-				</div>
-				<div class="form-group register-id">
-					<input type="checkbox" id="registerId" title="로그인ID 저장" data-ng-model="loginVO.isRegisterId"><label for="registerId">ID를 기억하시겠습니까?</label>
+					<label class="control-label" style="padding:5px; width:90px;"><code>*</code>비밀번호</label>
+					<input class="form-control" type="password" title="PW입력" placeholder="PASSWORD를 입력해주세요." data-ng-model="loginVO.info.password" required>
 				</div>
 				<div class="ta-c">
-					<button type="submit" class="btn btn-primary" title="Sign in" data-ng-click="loginVO.doLogin()" data-ng-disabled="loginForm.$invalid">Sign in</button>
+					<button type="submit" class="btn btn-primary" style="width:100px;"title="Sign in" data-ng-click="loginVO.doLogin()" data-ng-disabled="loginForm.$invalid">로그인</button>
+				</div>
+				<div class="form-group">
+					<div class="ta-c">
+						<input type="checkbox" id="registerId" title="로그인ID 저장" data-ng-model="loginVO.isRegisterId"> 아이디저장 | 
+						<a>회원가입</a> | 
+						<a data-ng-click="loginVO.modalRePassword()">비밀번호재설정</a>
+					</div>
 				</div>
 			</form>
 		</div>
 	</div>
 	<address id="login-address">
-		<p>Copyright 2017. Tamina, Inc. All rights reserved. <span>{{loginVO.version}}</span></p>
+		<p>www.marketmanager/login/ebizone <span>{{loginVO.version}}</span></p>
 	</address>
 </div>

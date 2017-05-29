@@ -28,11 +28,11 @@
                         <tr>
                             <th>부서</th>
                             <td>
-                            	<co01-mcbox model="selectedDeptIds" options="syUserVO.departCodeList" setting="syUserVO.settingDept" ></co01-mcbox>
+                            	<co01-mcbox model="syUserVO.selectedDeptIds" options="syUserVO.departCodeList" setting="syUserVO.settingDept" ></co01-mcbox>
                             </td>
                             <th>직급</th>
                             <td>
-                            	<co01-mcbox model="selectedRankIds" options="syUserVO.rankCodeList" setting="syUserVO.settingCode" ></co01-mcbox>
+                            	<co01-mcbox model="syUserVO.selectedRankIds" options="syUserVO.rankCodeList" setting="syUserVO.settingCode" ></co01-mcbox>
                             </td>
                             <th>성명</th>
                             <td>
@@ -40,13 +40,13 @@
                             </td>
                             <th>재직상태</th>
                             <td>
-                            	<co01-mcbox model="selectedStatIds" options="syUserVO.empStatList" setting="syUserVO.settingCode" ></co01-mcbox>
+                            	<co01-mcbox model="syUserVO.selectedStatIds" options="syUserVO.empStatList" setting="syUserVO.settingCode" ></co01-mcbox>
                             </td>
                         </tr>
                         <tr>
                         	<th>권한</th>
                             <td>
-                            	<co01-mcbox model="selectedAtrtIds" options="syUserVO.atrtCodeList" setting="syUserVO.settingCode" ></co01-mcbox>
+                            	<co01-mcbox model="syUserVO.selectedAtrtIds" options="syUserVO.atrtCodeList" setting="syUserVO.settingAtrt" ></co01-mcbox>
                             </td>
                         </tr>
                         </tbody>
@@ -124,13 +124,7 @@
                                     <td><span>{{info.DC_EMIADDR}}</span></td>
                                     <td><span>{{info.CD_EMPSTAT}}</span></td>
                                     <td><span>{{info.NO_ATRT}}</span></td>
-                                    <td><span>{{info.DT_EMP}}</span></td><!-- 
-                                    <td class="last">
-                                        <div data-ng-switch on="info.STATUS">
-                                            <span data-ng-switch-when="EXITED">퇴사</span>
-                                            <span data-ng-switch-default>재직중</span>
-                                        </div>
-                                    </td> -->
+                                    <td><span>{{info.DT_EMP}}</span></td>
                                 </tr>
                                 </tbody>
                             </table>

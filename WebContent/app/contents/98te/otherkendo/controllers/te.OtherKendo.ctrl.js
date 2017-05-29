@@ -123,11 +123,13 @@
 	        				transport: {
 	        					read: function(e) {
 	        						var param = {
-        								procedureParam:"USP_TE_OTHERKENDO01_GET&sFromDt@s",
-        								sFromDt:"20161215"
+        								procedureParam:"USP_TE_OTHERKENDO01_GET&sFromDt@s|L_LIST01@s|L_LIST02@s",
+        								sFromDt:"20161215",
+        								L_LIST01:self.mcb01Model,
+        								L_LIST02:self.mcb02Model
         							};
         							UtilSvc.getList(param).then(function (res) {
-        								e.success()
+        								//e.success()
         								gridSampleVO.dataSource.data(res.data.results[0]);
         								gridSampleVO_test.dataSource.data(res.data.results[0]);
         							})
@@ -150,8 +152,8 @@
 	        				}
 	        			}),
 	                	dataBound:function(e) {
-	                		var grid = e.sender;
-	                		grid.select("tr:eq(1)");
+	                		//var grid = e.sender;
+	                		//grid.select("tr:eq(1)");
 	                	},
 	        			columns: [
 	        			    {field: "DC_CHECK" , width: 20, title: "선택"},

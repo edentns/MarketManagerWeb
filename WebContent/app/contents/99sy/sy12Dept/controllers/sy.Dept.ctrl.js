@@ -190,9 +190,7 @@
                             edit: '수정',
                             update: '수정',
                             canceledit: '취소',
-                            destroy: '삭제',
-                            excel: '엑셀 내보내기',
-                            pdf: 'PDF 내보내기'
+                            destroy: '삭제'
                         }
                     },
                     columns: [

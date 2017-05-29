@@ -1,10 +1,29 @@
-<div id="app-content" class="col-xs-12 col-sm-10">
-    <div class="row">
-        <div id="app-content-header">
-            <ol class="breadcrumb">
-                <li><a href="#99sy/syDashboard"><i class="fa fa-home fa-2x"></i></a></li>
-                <li><a href="#99sy/syRePwdReg">비밀번호 재설정 관리</a></li>
-            </ol>
-        </div>
-    </div>
+<div class="col-xs-4 col-xs-offset-4" style="margin-top: 15%;">
+	<div class="box">
+		<div class="box-content">
+			<form name="loginForm" style="padding: 10px;">
+				<div class="ta-c">
+					<h3 class="page-header" style="font-size:21px;">비밀번호 재설정 등록</h3>
+				</div>
+				<div class="form-group" style="height: auto; line-height: normal;">
+					<input class="form-control" type="password" id="userPw" name="userPw" title="비밀번호" placeholder="비밀번호를 입력해주세요." data-ng-model="rePwdRegVo.password" required>
+				</div>
+				<div class="form-group" style="height: auto; line-height: normal;">
+					<input class="form-control" type="password" id="userChkPw" name="userChkPw" title="비밀번호 확인" placeholder="비밀번호 확인을 입력해주세요." data-ng-model="rePwdRegVo.repassword" required>
+				</div>
+				<div class="form-group" style="height: auto; line-height: normal;">
+					<img id="captchaImg" alt="catcha img" data-ng-src="{{rePwdRegVo.imagePath}}">
+					<input name="captcha" id="captchaId" name="captchaId" type="text" placeholder="보안문자를 입력하세요" data-ng-model="rePwdRegVo.captcha" required>
+					<a data-ng-click="rePwdRegVo.doRefresh()">새로고침</a>
+				</div>
+				<div class="ta-c">
+					<button type="submit" class="btn btn-primary" style="width:100px;" title="Confirm" data-ng-click="rePwdRegVo.doRePwd()" data-ng-disabled="loginForm.$invalid">확인</button>
+					<button type="submit" class="btn btn-primary" style="width:100px;" title="Login"   data-ng-click="rePwdRegVo.doLogin()">로그인</button>
+				</div>
+			</form>
+		</div>
+	</div>
+	<address id="login-address">
+		<p>www.marketmanager/login/ebizone <span>{{rePwdRegVo.version}}</span></p>
+	</address>
 </div>

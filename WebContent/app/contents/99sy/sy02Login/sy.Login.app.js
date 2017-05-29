@@ -22,9 +22,7 @@
 	                        defer.resolve();
                             $rootScope.$emit('event:logout');
                         }
-
                     });
-
                     return defer.promise;
                 }]
             }

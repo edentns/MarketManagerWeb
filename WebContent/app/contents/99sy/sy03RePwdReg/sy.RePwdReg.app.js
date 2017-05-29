@@ -7,26 +7,26 @@
     angular.module("sy.RePwdReg.service", [] );
 
     rePwdApp.config(["$stateProvider", function ($stateProvider) {
-        $stateProvider.state("app.syRePwdReg", {
-            url		: "/99sy/syRePwdReg?menu",
-            views	: {
-                contentView	: {
-                    templateUrl	: "app/contents/99sy/sy03RePwdReg/templates/sy.RePwdReg.tpl.html",
-                    controller  : "sy.RePwdRegCtrl",
-                    resolve		: {
-                        resData: ["AuthSvc", "$q", function (AuthSvc, $q) {
-                            var defer 	= $q.defer(),
-                                resData = {};
-
-                            AuthSvc.isAccess().then(function (result) {
-                                resData.access = result[0];
-                                defer.resolve(resData);
-                            });
-
-                            return defer.promise;
-                        }]
-                    }
-                }
+        $stateProvider.state("syRePwdReg", {
+            url		: "/99sy/syRePwdReg/:DC_URLCRYTO",
+            templateUrl	: "app/contents/99sy/sy03RePwdReg/templates/sy.RePwdReg.tpl.html",
+            controller  : "sy.RePwdRegCtrl",
+            resolve		: {
+                resData: ['sy.RePwdRegSvc', '$stateParams', '$state', '$location', '$rootScope', '$q', "UtilSvc",
+                          function (RePwdRegSvc, $stateParams, $state, $location, $rootScope, $q, UtilSvc) {
+                	var defer 	= $q.defer(),
+                        resData = {};
+                	
+                	RePwdRegSvc.rePwdGet01($stateParams.DC_URLCRYTO).success(function (result) {
+                		resData.DC_URLCRYTO = $stateParams.DC_URLCRYTO;
+                        defer.resolve(resData);
+                	}).error(function(msg, code) {
+                		defer.resolve();
+			            $location.url("/99sy/syLogin");
+                    });
+                	
+                    return defer.promise;
+                }]
             }
         });
     }]);
