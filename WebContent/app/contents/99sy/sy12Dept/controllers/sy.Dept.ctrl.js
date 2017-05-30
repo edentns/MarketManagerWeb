@@ -14,12 +14,13 @@
 		            today = edt.getToday();
 
                 var NO_M = MenuSvc.getNO_M($state.current.name);
-
+                
                 /**
                  * 부서관리
                  * @type {{}}
                  */
-                var syDeptVO = $scope.syDeptVO = { 
+                var syDeptVO = $scope.syDeptVO = {
+                	parentNum: '',
                     boxTitle: '조직도',
                     /**
                      * 유효성을 체크한다.
@@ -29,19 +30,14 @@
                     isValid : function (deptInfo) {
                         var i, lng, o,
                             deptNmReg = /^[가-힣\w\s_(),&@'#\-:;/*{}[\]<>]{1,32}$/,
-                            numCdReg = /^[\d]+$/,
-                            topDeptEnum = ["YES", "NO"];
+                            numCdReg = /^[\d]+$/;
 
                         for (i=0, lng=deptInfo.length; i<lng; i+=1) {
                         	o = deptInfo[i];
-                            if     (!o.NAME)                                     return { state: false, msg: "[필수] 부서명은 필수 입력값입니다." };
-                            else if(!deptNmReg.test(o.NAME))                     return { state: false, msg: "[형식] 부서명은 유효하지 않은 형식입니다." };
-                            else if(o.STATE !== "D" && !o.MGR_CD)                return { state: false, msg: "[필수] 상위부서는 필수 입력값입니다." };
-                            else if(o.STATE !== "D" && !numCdReg.test(o.MGR_CD)) return { state: false, msg: "[형식] 상위부서는 유효하지 않은 형식입니다." };
-                            else if(!o.WORK_GROUP)                               return { state: false, msg: "[필수] 직군은 필수 입력값입니다." };
-                            else if(!numCdReg.test(o.WORK_GROUP))                return { state: false, msg: "[형식] 직군은 유효하지 않은 형식입니다." };
-                            else if(topDeptEnum.indexOf(o.YN_TOPDEPT) === -1 && 
-                            		!numCdReg.test(o.WORK_GROUP))                return { state: false, msg: "[형식] 상위부서는 여부는  [YES, NO]만 가능합니다." };
+                            if     (!o.NM_DEPT)                                       return { state: false, msg: "[필수] 부서명은 필수 입력값입니다." };
+                            else if(!deptNmReg.test(o.NM_DEPT))                       return { state: false, msg: "[형식] 부서명은 유효하지 않은 형식입니다." };
+                            else if(!o.CD_OCC)                                        return { state: false, msg: "[필수] 직군은 필수 입력값입니다." };
+                            else if(!numCdReg.test(o.CD_OCC))                         return { state: false, msg: "[형식] 직군은 유효하지 않은 형식입니다." };
                         }
 
                         return { state: true, msg: "체크완료" };
@@ -49,19 +45,18 @@
                     /**
                      * 추가, 수정, 삭제를 위한 parameter를 생성한다.
                      * @param oParam
-                     * @returns {{STATE: *, CD: (*|$scope.employeeVO.param.CD|param.CD|resInfo.deptCodeList.CD|.deptCodeList.CD|null), NAME: (*|$scope.employeeVO.param.NAME|param.NAME|resInfo.deptCodeList.NAME|.deptCodeList.NAME|$scope.orderVO.ownerInfo.NAME), MGR_CD: (*|$scope.employeeVO.param.MGR_CD|param.MGR_CD), WORK_GROUP: (*|$scope.employeeVO.param.WORK_GROUP|param.WORK_GROUP), YN_TOPDEPT: (*|string|createdItem.YN_TOPDEPT)}}
+                     * @returns {{STATE: *, CD: (*|$scope.employeeVO.param.CD|param.CD|resInfo.deptCodeList.CD|.deptCodeList.CD|null), NM_DEPT: (*|$scope.employeeVO.param.NM_DEPT|param.NM_DEPT|resInfo.deptCodeList.NM_DEPT|.deptCodeList.NM_DEPT|$scope.orderVO.ownerInfo.NM_DEPT), NO_HRNKDEPT: (*|$scope.employeeVO.param.NO_HRNKDEPT|param.NO_HRNKDEPT), CD_OCC: (*|$scope.employeeVO.param.CD_OCC|param.CD_OCC), YN_TOPDEPT: (*|string|createdItem.YN_TOPDEPT)}}
                      */
                     makeParam : function (deptInfo) {
                         var rtnParam = {
-                            STATE      : deptInfo._state,
-                            NAME       : deptInfo.NAME,
-                            MGR_CD     : Number(deptInfo.MGR_CD),
-                            WORK_GROUP : Number(deptInfo.WORK_GROUP),
-                            YN_TOPDEPT : deptInfo.YN_TOPDEPT
+                            STATE        : deptInfo._state,
+                            NM_DEPT      : deptInfo.NM_DEPT,
+                            NO_HRNKDEPT  : deptInfo.NO_HRNKDEPT,
+                            CD_OCC       : deptInfo.CD_OCC
                         };
 
-                        if (!angular.isUndefined(deptInfo.CD)) {
-                            rtnParam.CD = deptInfo.CD;
+                        if (!angular.isUndefined(deptInfo.NO_DEPT)) {
+                            rtnParam.NO_DEPT = deptInfo.NO_DEPT;
                         }
 
                         return [rtnParam];
@@ -106,36 +101,27 @@
                     save : function (models, state, e) {
                         var self = this;
                         for(var i = 0; i < models.length; i++) {
+                        	var hd = "SYDE";
+                        	hd += fillZero(models[i].HCD,8);
                             var deptInfo = { 
                                 _state: state, 
-                                CD: models[i].CD,
-                                NAME: models[i].NAME, 
-                                MGR_CD: models[i].MGR_CD, 
-                                WORK_GROUP: models[i].WORK_GROUP, 
-                                YN_TOPDEPT: models[i].YN_TOPDEPT || 'NO'
+                                NO_DEPT: models[i].NO_DEPT,
+                                NM_DEPT: models[i].NM_DEPT, 
+                                NO_HRNKDEPT: hd, 
+                                CD_OCC: models[i].CD_OCC
                             };
-                            if ( !deptInfo['CD'] || deptInfo['CD'] === "" ) {
-                                delete deptInfo['CD'];
+                            if ( !deptInfo['NO_DEPT'] || deptInfo['NO_DEPT'] === "" ) {
+                                delete deptInfo['NO_DEPT'];
                             }
                             self.saveProcess(deptInfo, e);
                         }
-                    },
-                    topDeptCheckboxEditor : function (container, options) {
-                        var checkbox = $('<input type="checkbox" data-bind="value:' + options.field + '" value="NO" />');
-                        if(options.model[options.field] === 'YES') checkbox.attr('checked', 'checked');
-                        else                                       checkbox.removeAttr('checked');
-                        checkbox.appendTo(container);
-                        checkbox.click(function(e) {
-                            if(checkbox.is(':checked')) checkbox.val('YES');
-                            else                        checkbox.val('NO');
-                        });
                     },
                     workGroupDropDownEditor : function (container, options) {
                         $('<input data-bind="value:' + options.field + '"/>')
                             .appendTo(container)
                             .kendoDropDownList({
-                                dataTextField: 'NAME',
-                                dataValueField: 'CD',
+                                dataTextField: 'NM_DEF',
+                                dataValueField: 'CD_DEF',
                                 dataSource: resData.workCodeList
                         });
                     }
@@ -163,15 +149,16 @@
                     schema: {
                         model: {
                             id: 'CD',
-                            parentId: 'MGR_CD',
+                            parentId: 'HCD',
                             fields: {
-                                CD: { type: 'number', editable: false, nullable: false },
-                                MGR_CD: { type: 'number', editable: false, nullable: true },
-                                NAME: { validation: { required: true } },
-                                YN_TOPDEPT: { type: 'string', validation: { required: true } },
-                                WORK_GROUP: { type: 'number', validation: { required: true, min: 0 } },
-                                WORK_GROUP_NAME: { type: 'string', validation: { required: true} },
-                                CNT_EMP: { type: 'number', editable: false, nullable: true }
+                            	CD     :     { type: 'number' },
+                            	HCD    :     { type: 'number' },
+                                NO_DEPT:     { type: 'string', editable: false, nullable: false },
+                                NO_HRNKDEPT: { type: 'string', editable: false, nullable: true },
+                                NM_DEPT:     { validation: { required: true } },
+                                CD_OCC:      { type: 'string', validation: { required: true} },
+                                NM_CD_OCC:   { type: 'string', validation: { required: true} },
+                                CNT_EMP:     { type: 'number', editable: false, nullable: true }
                             },
                             expanded: true
                         }
@@ -195,7 +182,7 @@
                     },
                     columns: [
                         { 
-                            field: 'NAME',
+                            field: 'NM_DEPT',
                             title: '부서명',
                             width: '280px',
                             editable: true,
@@ -204,19 +191,11 @@
                             attributes: { style: "text-align: left" }
                         },
                         { 
-                            field: 'WORK_GROUP',
+                            field: 'CD_OCC',
                             title: '직군',
                             width: '150px',
                             template: $('#workGroupNameTemplate').html(),
                             editor: syDeptVO.workGroupDropDownEditor,
-                            attributes: { style: "text-align: center" }
-                        },
-                        { 
-                            field: 'YN_TOPDEPT',
-                            title: '상위부서여부',
-                            width: '120px',
-                            template: $('#topDeptTemplate').html(),
-                            editor: syDeptVO.topDeptCheckboxEditor,
                             attributes: { style: "text-align: center" }
                         },
                         { 
@@ -225,6 +204,7 @@
                             width: '120px',
                             template: $('#cntEmpTemplate').html(),
                             editable: false,
+                            defaultValue: '0',
                             attributes: { style: "text-align: right" }
                         },
                         {
@@ -252,6 +232,11 @@
                         }
                     }
                 };
+                
+                function fillZero(n, width) {
+                	  n = n + '';
+                	  return n.length >= width ? n : new Array(width - n.length + 1).join('0') + n;
+                }
             }
         ]);
 }());
