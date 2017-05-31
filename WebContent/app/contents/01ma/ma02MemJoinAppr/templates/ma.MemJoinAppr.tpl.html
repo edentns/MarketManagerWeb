@@ -10,7 +10,7 @@
     
     <div class="row">
         <!-- 검색 -->
-        <div class="content-area-container col-xs-12">
+        <div class="content-area-container col-xs-12" style="margin:0px 0px -5px 0px;">
         	<div data-content-box-layer data-box-title="joinerDataVO.boxTitle">
                 <form class="search-type1" id="myForm">
                 	<table>
@@ -27,7 +27,6 @@
                             <th>사업자명</th>
                             <td>
                             	<input data-ng-model="joinerDataVO.searchText.value"
-                            			ng-required="true" 
                             			focus="joinerDataVO.searchText.focus"
                             			title="사업자명"
                             			data-eden-type="kor" 
@@ -53,7 +52,6 @@
         								ng-options="option.CD_DEF as option.NM_DEF for option in joinerDataVO.BetweenDateOptionVO"
         								class="form-control" 
         								style="width: 100%">
-							            <option value="">선택</option>
         							</select>						 
                             	</div>               	
                             	<div class="frm-group" data-date-search-group="joinerDataVO.datesetting" style="display:inline-block;"></div>
@@ -63,8 +61,8 @@
                     </table>         
                     					     
                     <div class="btn-group1 mt-20">
-                        <kendo-button type="submit" class="k-primary" title="검색" data-ng-click="joinerDataVO.inQuiry()" >검색</kendo-button>
-                        <kendo-button type="botton" title="초기화" data-ng-click="joinerDataVO.inIt()">초기화</kendo-button>
+                        <kendo-button type="submit" style="width:70px;" class="k-primary" title="검색" data-ng-click="joinerDataVO.inQuiry()" >검색</kendo-button>
+                        <kendo-button type="botton" style="width:70px;" title="초기화" data-ng-click="joinerDataVO.inIt()">초기화</kendo-button>
                     </div>
                     <br/>
                     <p class="text-center">총  <strong>{{joinerDataVO.dataTotal}}</strong>건이 검색되었습니다.</p>
@@ -73,7 +71,7 @@
         </div>
                 
         <!-- 승인 리스트 -->          
-		<div class="content-area-container col-xs-12" style="padding:50px 0px 0px 0px;">				
+		<div class="content-area-container col-xs-12" style="padding:0px 0px 0px 0px;">				
 	        <div kendo-grid="kg" options="gridJoinerMemVO">
 	        </div>	            
         </div>
