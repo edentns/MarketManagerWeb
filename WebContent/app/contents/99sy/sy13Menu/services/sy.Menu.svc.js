@@ -15,7 +15,7 @@
                 getMenuList: function () {
                     return $http({
                         method  : "GET",
-                        url		: APP_CONFIG.domain +"/symenu"
+                        url		: APP_CONFIG.domain +"/sy13Menu"
                     });
                 }
             };

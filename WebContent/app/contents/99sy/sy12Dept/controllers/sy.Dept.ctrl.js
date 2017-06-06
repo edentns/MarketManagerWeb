@@ -204,7 +204,6 @@
                             width: '120px',
                             template: $('#cntEmpTemplate').html(),
                             editable: false,
-                            defaultValue: '0',
                             attributes: { style: "text-align: right" }
                         },
                         {
