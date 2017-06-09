@@ -7,11 +7,11 @@
      * 부서관리
      */
     angular.module("te.OtherKendo.controller", [ 'kendo.directives', 'ngGrid' ])
-        .controller("te.OtherKendoCtrl", ["$scope", "$q", "sy.CodeSvc", "te.OtherKendoSvc", "APP_CODE", "resData", "Page", "$state", 'MenuSvc', "$location", "$window", "UtilSvc",
-            function ($scope, $q, SyCodeSvc, TeOtherKendoSvc, APP_CODE, resData, Page, $state, MenuSvc, $location, window, UtilSvc) {
+        .controller("te.OtherKendoCtrl", ["$scope", "$q", "sy.CodeSvc", "te.OtherKendoSvc", "resData", "Page", "$state", 'MenuSvc', "$location", "$window", "UtilSvc", "APP_CODE", 
+            function ($scope, $q, SyCodeSvc, TeOtherKendoSvc, resData, Page, $state, MenuSvc, $location, window, UtilSvc, APP_CODE) {
 	        	var page  = $scope.page = new Page({ auth: resData.access }),
 	            today = edt.getToday();
-	        	
+
 	        	var otherKendoVO1 = $scope.otherKendoVO1 = {
 	        		boxTitle : "검색",
 	        		mcb01Data : [],
@@ -34,7 +34,73 @@
 							end   : angular.copy(today)
 						}
 	        		},
-	        		perTpCdList : [{CD:'1',NAME:'주문일자'},{CD:'2',NAME:'결제일자'}]
+	        		perTpCdList : [{CD:'1',NAME:'주문일자'},{CD:'2',NAME:'결제일자'}],
+	        		file999VO: {
+	        			CD_AT:'999',
+	        			limitCnt: 1,
+	        			currentData:{
+	        				CD_AT: "999",
+	        				CD_REF1: "SYEM00000001",
+	        				CD_REF2: "",
+	        				CD_REF3: null,
+	        				CD_REF4: null,
+	        				CD_REF5: "",
+	        				DTS_INSERT: null,
+	        				DTS_UPDATE: null,
+	        				NM_FILE: "aa.txt",
+	        				NO_AT: 1,
+	        				NO_C: "10000",
+	        				NO_INSERT: "SYEM00000001",
+	        				NO_UPDATE: null,
+	        				SZ_FILE: "1",
+	        				YN_DEL: null
+	        			}
+	        		},
+	        		file998VO: {
+	        			CD_AT:'998',
+	        			limitCnt: 1
+//	        			currentData:{
+//	        				CD_AT: "999",
+//	        				CD_REF1: "SYEM00000001",
+//	        				CD_REF2: "",
+//	        				CD_REF3: null,
+//	        				CD_REF4: null,
+//	        				CD_REF5: "",
+//	        				DTS_INSERT: null,
+//	        				DTS_UPDATE: null,
+//	        				NM_FILE: "BreezeWay-master-4386c9670a30e7e940713918b16274bf3f7ea068.zip",
+//	        				NO_AT: 2,
+//	        				NO_C: "10000",
+//	        				NO_INSERT: "SYEM00000001",
+//	        				NO_UPDATE: null,
+//	        				SZ_FILE: "6342204",
+//	        				YN_DEL: null
+//	        			}
+	        		}
+	        	};
+	        	
+	        	otherKendoVO1.fileSave = function() {
+	        		if(otherKendoVO1.file999VO.dirty) {
+		        		otherKendoVO1.file999VO.CD_REF1 = 'SYEM00000001';
+		        		otherKendoVO1.file999VO.doUpload(function(){
+			        		if(otherKendoVO1.file998VO.dirty) {
+				        		otherKendoVO1.file998VO.CD_REF1 = 'SYEM00000001';
+				        		otherKendoVO1.file998VO.doUpload(function(){
+				        			alert('성공하였습니다.');
+				        		}, function() {
+				        			alert('998 첨부파일업로드 실패하였습니다.');
+				        		});
+			        		}
+			        		else {
+			        			alert('성공하였습니다.');
+			        		}
+		        		}, function() {
+		        			alert('999 첨부파일업로드 실패하였습니다.');
+		        		});
+	        		}
+	        		else {
+	        			alert('성공하였습니다.');
+	        		}
 	        	};
 	        	
 	        	otherKendoVO1.initLoad = function() {
