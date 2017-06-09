@@ -11,26 +11,22 @@
     <!-- 부서 CONTENT Layer -->
     <div class="row">
         <script id="departTemplate" type="text/x-kendo-template">
-            <div class='employee-name'>#:NAME#</div>
+            <div class='employee-name'>#:NM_DEPT#</div>
         </script>
 
         <script id="workGroupTemplate" type="text/x-kendo-template">
-            #:WORK_GROUP#
+            #:CD_OCC#
         </script>
 
         <script id="workGroupNameTemplate" type="text/x-kendo-template">
-            #:WORK_GROUP_NAME#
+            #:NM_CD_OCC#
         </script>
         
         <script id="cntEmpTemplate" type="text/x-kendo-template">
-            #:CNT_EMP#
-        </script>
-        
-        <script id="topDeptTemplate" type="text/x-kendo-template">
-             # if(YN_TOPDEPT === "YES") { #
-                <span>상위부서</span>
+			# if(CNT_EMP === null) { #
+                <span>0</span>
             # } else { #
-                <span>-</span>
+                <span>#:CNT_EMP#</span>
             # } #
         </script>
 
@@ -46,8 +42,8 @@
                     k-editable="{ mode: 'inline', move: true }",
                     k-selectable="false"
                     k-height="550"
-                    k-on-data-bound="onDataBound(kendoEvent)"
-                    k-on-change="onChange(kendoEvent)"
+                    k-on-data-bound="onDataBound(this)"
+                    k-on-change="onChange(this)"
                     k-data-source="dataSource"
                     k-options="treelistOptions">
                 </div>
