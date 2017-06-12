@@ -7,10 +7,11 @@
      * 회사정보관리
      */
     angular.module("sy.CInfo.controller")
-        .controller("sy.CInfoCtrl", ["$scope", "$http", "$q", "$log", "sy.CInfoSvc", "APP_CODE", "$timeout", "resData", "Page", "sy.CodeSvc", "UtilSvc",
-            function ($scope, $http, $q, $log, syCInfoSvc, APP_CODE, $timeout, resData, Page, SyCodeSvc, UtilSvc) {
+        .controller("sy.CInfoCtrl", ["$scope", "$window", "$http", "$q", "$log", "sy.CInfoSvc", "APP_CODE", "$timeout", "resData", "Page", "sy.CodeSvc", "UtilSvc",
+            function ($scope, $window, $http, $q, $log, syCInfoSvc, APP_CODE, $timeout, resData, Page, SyCodeSvc, UtilSvc) {
 	            var page  = $scope.page = new Page({ auth: resData.access }),
 		            today = edt.getToday();
+	            
 	            
 	            
 	            var vo = $scope.syCinfoVO = {
@@ -19,10 +20,11 @@
 	            		boxTitleWaho: "창고정보",
 	                    param: {
 	                    	NM_C            : "",       // 회사명
-	                        NM_RPSTT		: "",		// 사원아이디
+	                        NM_RPSTT		: "",		// 대표명
 	                        CD_BSNSCLFT   	: "999",	// 사업자구분
 	                        NO_BSNSRGTT		: "",		// 사업자등록번호 
-	                        YN_COMMSALEREG	: "N",		// 통신판매신고번호
+	                        YN_COMMSALEREG	: "N",		// 통신판매신고여부
+	                        NO_COMMSALEREG  : "",       // 통신판매신고번호
 	                        NO_CORPRGTT     : "",       // 법인등록번호
 	                        NM_BSCDT		: "",		// 업태
 	                        NM_TYBU 		: "",		// 업종
@@ -58,12 +60,56 @@
 	                    today				: new Date(),
 	                    superiorNm			: "",
 	                    confirmDC_PWD		: "",
-	                    checkMsg			: "비밀번호를 입력해주세요.(6자리이상 ~ 15자리이하)"
+	                    checkMsg			: "비밀번호를 입력해주세요.(6자리이상 ~ 15자리이하)",
+	                    fileBsnsVO: {
+		        			CD_AT:"002",
+		        			limitCnt: 1,
+		        			currentData:{
+		        				CD_AT: "",
+		        				CD_REF1: "",
+		        				CD_REF2: "",
+		        				CD_REF3: null,
+		        				CD_REF4: null,
+		        				CD_REF5: "",
+		        				DTS_INSERT: null,
+		        				DTS_UPDATE: null,
+		        				NM_FILE: "",
+		        				NO_AT: 1,
+		        				NO_C: "",
+		        				NO_INSERT: "",
+		        				NO_UPDATE: null,
+		        				SZ_FILE: "",
+		        				YN_DEL: null
+		        			}
+		        		},
+		        		fileCommVO: {
+		        			CD_AT:"003",
+		        			limitCnt: 1,
+		        			currentData:{
+		        				CD_AT: "",
+		        				CD_REF1: "",
+		        				CD_REF2: "",
+		        				CD_REF3: null,
+		        				CD_REF4: null,
+		        				CD_REF5: "",
+		        				DTS_INSERT: null,
+		        				DTS_UPDATE: null,
+		        				NM_FILE: "",
+		        				NO_AT: 0,
+		        				NO_C: "",
+		        				NO_INSERT: "",
+		        				NO_UPDATE: null,
+		        				SZ_FILE: "",
+		        				YN_DEL: null
+		        			}
+		        		}
 	                };
 	                vo.init = function () {// 초기 로드된다.
 	                	var param = {
 	                		procedureParam: "USP_SY_06CInfo01_GET"
 	                	};
+	                	vo.fileBsnsVO.currentData = resData.fileBsnsVOcurrentData;
+                        vo.fileCommVO.currentData = resData.fileCommVOcurrentData;
 	                	// 라디오 버튼 동적생성
 	                	$q.all([
 		                        SyCodeSvc.getSubcodeList({cd: "SY_000004", search: "all"}).then(function (result) { //사업자구분
@@ -96,249 +142,131 @@
 		                        vo.parsCodeList		= result[5];
 		                        vo.param 			= result[6];
 		                        
-		                        
-		                        
-		                        /*var div ="<div>";
-		                		for( var i=0 ; i < vo.bsnCodeList.length ; i++ ){
-		                			div += "<input type='radio' name='bsnRaBtn' ng-model='$scope.param.CD_BSNSCLFT' ng-value='"+vo.bsnCodeList[i].CD_DEF+"'/><label>"+vo.bsnCodeList[i].NM_DEF+"</label>";
-		                		}
-		                		div += "</div>";
-		                        $('.bsnRaBtn').append(div);
-		                        $('input[name="bsnRaBtn"]').eq(4).prop('checked', true);
-		                        
-		                        div = "";
-		                        for( var i=0 ; i < vo.dmstCodeList.length ; i++ ){
-		                			div += "<input type='radio' name='dmstRaBtn' ng-model='syCinfoVO.param.CD_DMSTFECTSHP' ng-value='"+vo.dmstCodeList[i].CD_DEF+"'/><label>"+vo.dmstCodeList[i].NM_DEF+"</label>";
-		                		}
-		                		div += "</div>";
-		                        $('.dmstRaBtn').append(div);
-		                        $('input[name="dmstRaBtn"]').eq(0).prop('checked', true);*/
+		                        if (vo.param.DC_REPREMI) {
+			                        var split = vo.param.DC_REPREMI.split("@");
+		                            vo.param.DC_REPREMI = {
+		                                email1: split[0],
+		                                email2: split[1]
+		                            };
+		                        } else {
+		                            vo.param.email = {email1: "", email2: ""};
+		                        }
+		                        vo.CommsaleChange();
 		                    });
-	                	
-	                	
 	                	
 	                };
 	                // insert, update에 사용되는 param을 생성하여 리턴한다.
 	                vo.makeGetParam = function () {
 	                    var param = {
-	                    	NO_EMP      : "",
-	                    	DC_ID		: vo.param.DC_ID ? vo.param.DC_ID.toLowerCase() : vo.param.DC_ID,
-	                    	DC_PWD	    : ( vo.param.DC_PWD==="" ) ? null : vo.param.DC_PWD,
-	                        NM_EMP		: vo.param.NM_EMP,
-	                        NO_DEPT		: vo.selectedDepart.NO_DEPT,
-	                        CD_RANK		: vo.selectedRank.CD_DEF,
-	                        CD_OCC  	: vo.selectedWorkgroup.CD_DEF,
-	                        NO_ATRT		: vo.param.NO_ATRT,
-	                        NO_CEPH     : ( vo.param.NO_CEPH==="" ) ? null : vo.param.NO_CEPH,
-	                        DC_EMIADDR	: ( vo.param.email.email1.length>0 || vo.param.email.email2.length>0 ) ? vo.param.email.email1 +"@"+ vo.param.email.email2 : null,
-	                        YN_SMS      : vo.param.YN_SMS,
-	                        DTS_SMS     : "",
-	                        YN_EMI      : vo.param.YN_EMI,
-	                        DTS_EMI     : "",
-	                        DT_RESI     : "",
-	                    };
-	                    if (vo.kind==="detail") {
-	                    	param.NO_EMP      =  vo.ids;
-	                        param.CD_EMPSTAT  =  vo.param.CD_EMPSTAT;
-	                        param.DT_RESI 	  =  edt.isValid( vo.param.DT_RESI ) ? vo.param.DT_RESI : null;
-	                        param.DTS_SMS     =  vo.param.YN_SMS == "Y" ? vo.param.DTS_SMS : null;
-	                        param.DTS_EMI     =  vo.param.YN_EMI == "Y" ? vo.param.DTS_EMI : null;
-	                    }
+	                    	NM_C      		: vo.param.NM_C,
+	                    	NM_RPSTT		: vo.param.NM_RPSTT,
+	                    	CD_BSNSCLFT		: vo.param.CD_BSNSCLFT,
+	                    	NO_BSNSRGTT		: vo.param.NO_BSNSRGTT,
+	                    	YN_COMMSALEREG	: vo.param.YN_COMMSALEREG,
+	                    	NO_COMMSALEREG  : vo.param.NO_COMMSALEREG,
+	                    	NO_CORPRGTT		: vo.param.NO_CORPRGTT,
+	                    	NM_BSCDT  		: vo.param.NM_BSCDT,
+	                    	NM_TYBU			: vo.param.NM_TYBU,
+	                    	NO_POST			: vo.param.NO_POST,
+	                    	DC_NEWADDR		: vo.param.DC_NEWADDR,
+	                    	DC_OLDADDR		: vo.param.DC_OLDADDR,
+	                    	DC_DETADDR		: vo.param.DC_DETADDR,
+	                    	CD_DMSTFECTSHP	: vo.param.CD_DMSTFECTSHP,
+	                    	NO_PHNE			: vo.param.NO_PHNE,
+	                    	NO_FAX			: vo.param.NO_FAX,
+	                    	DC_HOPAURL		: vo.param.DC_HOPAURL,
+	                    	NO_ASPHNE		: vo.param.NO_ASPHNE,
+	                    	CD_AS			: vo.param.CD_AS,
+	                    	DC_REPREMI		: ( !vo.param.DC_REPREMI.email1=="" || !vo.param.DC_REPREMI.email2=="" ) ? vo.param.DC_REPREMI.email1 +"@"+ vo.param.DC_REPREMI.email2 : null,
 
+	                    };
 	                    return param;
 	                };
-	                // insert 처음로드시 실행된다.
-	                vo.initInsert = function () {
-	                	var param = {
-	                            procedureParam: "USP_SY_08ATRT01_GET"
-	                        };
-	                    
-	                };
-	                // update, detail 처음 로드시 실행된다.
-	                vo.initUpdate = function () {
-		                var split,
-		                    param = {
-	                            procedureParam: "USP_SY_08ATRT01_GET"
-	                        },
-	                        empParam = {
-		                		procedureParam: "USP_SY_07USER02_GET&L_NO_CHECK_EMP@s",
-		                		L_NO_CHECK_EMP : vo.ids
-		                	};
-	                    $q.all([
-	                        UserListSvc.getDepart({ search: "all" }).then(function (result) {
-	                            return result.data;
-	                        }),
-	                        SyCodeSvc.getSubcodeList({cd: "SY_000020", search: "all"}).then(function (result) {
-	                            return result.data;
-	                        }),
-	                        SyCodeSvc.getSubcodeList({cd: "SY_000023", search: "all"}).then(function (result) {
-	                            return result.data;
-	                        }),
-	                        UtilSvc.getList(param).then(function (result) {
-	                            return result.data.results[0];
-	                        }),
-	                        UtilSvc.getList(empParam).then(function (result) {
-	                            return result.data.results[0][0];
-	                        })
-	                    ]).then(function (result) {
-	                    	vo.departCodeList 		= result[0];
-	                        vo.rankCodeList 	    = result[1];
-	                        vo.workgroupCodeList 	= result[2];
-	                        vo.roleCodeList 		= result[3];
-
-	                        vo.param 				= result[4];
-	                        vo.param.DC_PWD		    = "";
-
-	                        if (vo.param.DC_EMIADDR) {
-		                        split = vo.param.DC_EMIADDR.split("@");
-	                            vo.param.email = {
-	                                email1: split[0],
-	                                email2: split[1]
-	                            };
-	                        } else {
-	                            vo.param.email = {email1: "", email2: ""};
+	                //저장버튼 눌럿을시 실행
+	                vo.doSave = function() {
+	                	if (confirm("저장하시겠습니까?")) {
+	                        var param = vo.makeGetParam();
+	                        if (vo.isValid(param)) {
+	                        	syCInfoSvc.saveCInfo(param).success(function () {
+	                        		var a = $("#grid").data("kendoGrid");
+	        	                	a.dataSource.sync();
+	        	                	vo.fileSave();
+	                        		vo.reload();
+	                            });
 	                        }
-	                        vo.setSubCode();
-	                    });
-
-	                };
-	                
-	                vo.setSubCode = function () {// 유저 정보를 가져왔을 경우 셀렉트 세팅을 위해 실행한다.
-	                    angular.forEach(vo.departCodeList, function (data) {
-	                        if (data.NO_DEPT === vo.param.NO_DEPT) {
-	                            vo.selectedDepart = data;
-	                        }
-	                    });
-
-	                    angular.forEach(vo.rankCodeList, function (data) {
-	                        if (data.CD_DEF === vo.param.CD_RANK) {
-	                            vo.selectedRank = data;
-	                        }
-	                    });
-
-	                    angular.forEach(vo.workgroupCodeList, function (data) {
-	                        if (data.CD_DEF === vo.param.CD_OCC) {
-	                            vo.selectedWorkgroup = data;
-	                        }
-	                    });
-	                };
+	                    }
+					};
+					
+					vo.reload = function() {
+						$window.location.reload();
+					};
+					
+					vo.fileSave = function() {
+		        		if(vo.fileBsnsVO.dirty) {
+		        			vo.fileBsnsVO.CD_REF1 = 'SYEM00000001';
+		        			vo.fileBsnsVO.doUpload(function(){
+				        		if(vo.fileCommVO.dirty) {
+				        			vo.fileCommVO.CD_REF1 = 'SYEM00000001';
+				        			vo.fileCommVO.doUpload(function(){
+					        		}, function() {
+					        			alert('통신판매업신고증 파일업로드 실패하였습니다.');
+					        		});
+				        		}
+				        		else {
+				        		}
+			        		}, function() {
+			        			alert('사업자등록증 파일업로드 실패하였습니다.');
+			        		});
+		        		}
+		        		else {
+		        		}
+		        	};
 
 	                // 등록전 유효성을 체크한다.
 	                vo.isValid = function (param) {
-		                // FieldVO
-		                var data = vo.param,
-			                addressReg = /[가-힣a-zA-Z0-9 -().[\]&,@]{0,99}$/;
+		                var data = vo.param;
 
-	                    if (vo.kind === "insert") {
-		                    // ID
-		                    if (!data.DC_ID) {
-			                    return edt.invalidFocus("userCD", "[필수] ID를 입력해주세요.");
-		                    } else {
-			                    if (!/^[a-zA-Z0-9]{3,15}$/.test(data.DC_ID)) {
-				                    return edt.invalidFocus("userCD", "[형식] ID는 유효하지 않은 형식입니다. 영문(대소문자 구분 안함), 숫자만 가능합니다.");
-			                    }
-		                    }
-
-		                    // PASSWORD
-							if (!data.DC_PWD) {
-								return edt.invalidFocus("userPw", "[필수] 패스워드를 입력해주세요.");
-							} else {
-								if (!/^[a-zA-Z0-9~`|!@#$%^&*()[\]\-=+_|{};':\\\"<>?,./]{5,14}$/.test(data.DC_PWD)) {
-									return edt.invalidFocus("userPw", "[형식] 패스워드는 유효하지 않은 형식입니다. 5~14자리 이하입니다.");
-								} else {
-									if (vo.confirmDC_PWD !== data.DC_PWD) {
-										return edt.invalidFocus( "userChkPw", "[MATCH] 비밀번호가 일치하지 않습니다." );
-									}
-								}
-							}
-	                    } else {
-		                    // PASSWORD
-		                    if (data.DC_PWD || vo.confirmDC_PWD.length>0) {
-			                    if (!/^[a-zA-Z0-9~`|!@#$%^&*()[\]\-=+_|{};':\\\"<>?,./]{5,14}$/.test(data.DC_PWD)) {
-				                    return edt.invalidFocus("userPw", "[형식] 패스워드는 유효하지 않은 형식입니다. 5~14자리 이하입니다.");
-			                    } else {
-				                    if (vo.confirmDC_PWD !== data.DC_PWD) {
-					                    return edt.invalidFocus( "userChkPw", "[MATCH] 비밀번호가 일치하지 않습니다." );
-				                    }
-			                    }
-		                    }
+	                    // 회사명
+	                    if (!(data.NM_C).trim()) {
+		                    return edt.invalidFocus("userNM_C", "[필수] 회사명을 입력해주세요.");
+	                    }
+	                    
+	                    // 대표자명
+	                    if (!(data.NM_RPSTT).trim()) {
+		                    return edt.invalidFocus("userNM_RPSTT", "[필수] 대표자명을 입력해주세요.");
+	                    }
+	                    
+	                    // 사업자등록번호
+	                    if (data.NO_BSNSRGTT && !/^\d{3}-\d{2}-\d{5}$/.test(data.NO_BSNSRGTT)) {
+			                return edt.invalidFocus("userNO_BSNSTGTT", "[형식] 사업자등록번호는 유효하지 않은 형식입니다.(ex-\"012-34-56789\")");
+		                }
+	                    
+	                    // 통신판매신고번호
+	                    if (data.YN_COMMSALEREG == "Y" && !/^[a-z0-9_]{3}-[a-z0-9_]{2}-[a-z0-9_]{5}$/.test(data.NO_COMMSALEREG)){
+	                    	return edt.invalidFocus("userNO_COMMSALEREG", "[형식] 통신판매신고번호는 유효하지 않은 형식입니다.(ex-\"000-00-00000\")");
 	                    }
 
-	                    // 이름
-		                if (!data.NM_EMP) {
-			                return edt.invalidFocus("userName", "[필수] 이름을 입력해주세요.");
-		                } else {
-			                if (!/^[가-힣a-zA-Z][가-힣a-zA-Z ]{1,19}$/.test(data.NM_EMP)) {
-				                return edt.invalidFocus("userName", "[형식] 이름은 유효하지 않은 형식입니다. 영문, 한글, 공백만 사용 가능합니다.");
-			                }
+	                    // 전화번호
+		                if (data.NO_PHNE && !/^\d{2,3}-\d{3,4}-\d{4}$/.test(data.NO_PHNE)) {
+			                return edt.invalidFocus("userNO_PHNE", "[형식] 전화번호은 유효하지 않은 형식입니다.");
 		                }
 
-	                    // 부서
-		                if (!vo.selectedDepart.NO_DEPT) {
-			                return edt.invalidFocus("userDepart", "[필수] 부서를 선택해주세요");
-		                } else {
-			                if (!/\d+$/.test(vo.selectedDepart.NO_DEPT)) {
-				                return edt.invalidFocus("userDepart", "[형식] 부서는 유효하지 않은 형식입니다.");
-			                }
+	                    // 홈페이지 url
+		                if (data.DC_HOPAURL && !new RegExp("(http|https|ftp|telnet|news|irc)://([-/.a-zA-Z0-9_~#%$?&=:200-377()]+)","gi").test(data.DC_HOPAURL)) {
+			                return edt.invalidFocus("userDC_HOPAURL", "[형식] 홈페이지URL은 유효하지 않은 형식입니다.");
 		                }
 
-		                // 직급
-		                if (!vo.selectedRank.CD_DEF) {
-			                return edt.invalidFocus("userPosition", "[필수] 직급을 선택해주세요");
-		                } else {
-			                if (!/\d+$/.test(vo.selectedRank.CD_DEF)) {
-				                return edt.invalidFocus("userPosition", "[형식] 직급은 유효하지 않은 형식입니다.");
-			                }
-		                }
-
-		                // 직군
-		                if (!vo.selectedWorkgroup.CD_DEF) {
-			                return edt.invalidFocus("userWork", "[필수] 직군을 선택해주세요");
-		                } else {
-			                if (!/\d+$/.test(vo.selectedWorkgroup.CD_DEF)) {
-				                return edt.invalidFocus("userWork", "[형식] 직군은 유효하지 않은 형식입니다.");
-			                }
-		                }
-
-		                // 권한
-		                if (!data.NO_ATRT) {
-			                return edt.invalidFocus("userAuth", "[필수] 권한을 선택해주세요");
-		                } else {
-			                if (!/\d+$/.test(data.NO_ATRT)) {
-				                return edt.invalidFocus("userAuth", "[형식] 권한은 유효하지 않은 형식입니다.");
-			                }
-		                }
-
-		                // PHONE
-		                if (data.NO_CEPH && !/(^0\d{1,2}-[1-9]\d{2,3}-\d{4}$|^\d{3,4}-\d{4}$)/.test(data.NO_CEPH)) {
-			                return edt.invalidFocus("userPhone", "[형식] PHONE은 유효하지 않은 형식입니다.(ex-\"010-4233-2211\")");
+		                // A/S 정보
+		                if (data.NO_ASPHNE && !/^\d{2,3}-\d{3,4}-\d{4}$/.test(data.NO_ASPHNE)) {
+			                return edt.invalidFocus("userNO_ASPHNE", "[형식] A/S전화번호는 유효하지 않은 형식입니다.");
 		                }
 
 		                // EMAIL
-		                if (data.email.email1 || data.email.email2) {
-							if (!/^[-A-Za-z0-9_]+[-A-Za-z0-9_.]*[@]{1}[-A-Za-z0-9_]+[-A-Za-z0-9_.]*[.]{1}[A-Za-z]{2,5}$/.test(data.email.email1 +"@"+ data.email.email2)) {
+		                if (data.DC_REPREMI.email1 || data.DC_REPREMI.email2) {
+							if (!/^[-A-Za-z0-9_]+[-A-Za-z0-9_.]*[@]{1}[-A-Za-z0-9_]+[-A-Za-z0-9_.]*[.]{1}[A-Za-z]{2,5}$/.test(data.DC_REPREMI.email1 +"@"+ data.DC_REPREMI.email2)) {
 								return edt.invalidFocus("userEmail", "[형식] 이메일은 유효하지 않은 형식입니다.");
 							}
 		                }
-
-	                    // 퇴사일자
-	                    if (vo.kind === "detail") {
-		                    if (data.CD_EMPSTAT === "002") {
-			                    if (!data.DT_RESI) {
-				                    return edt.invalidFocus("userRetired", "[필수] 퇴사일자를 입력해주세요.");
-			                    }
-		                    }
-
-		                    if (data.DT_RESI) {
-			                    if (!moment(data.DT_RESI, "YYYY-MM-DD", true).isValid()) {
-				                    return edt.invalidFocus("userRetired", "[형식] 퇴사일자는 유효하지 않은 형식입니다.(ex-\"2014-11-18\")");
-			                    } else {
-				                    if (data.CD_EMPSTAT !== "002") {
-					                    return edt.invalidFocus("userStatus", "[필수] 재직상태를 퇴사로 변경해주세요.");
-				                    }
-			                    }
-		                    }
-	                    }
 
 	                    return true;
 	                };
@@ -346,19 +274,7 @@
 	                    if (confirm(APP_MSG.insert.confirm)) {
 	                        var param = vo.makeGetParam("insert");
 	                        if (vo.isValid(param)) {
-	                            SyUserInfoSvc.insert(param).then(function () {
-	                                alert(APP_MSG.insert.success);
-	                                $state.go('app.syUser', { kind: 'list', menu: true, ids: null });
-	                            });
-	                        }
-	                    }
-	                };
-	                vo.doUpdate = function () {// 유저정보를 수정한다.
-	                    if (confirm(APP_MSG.update.confirm)) {
-	                        var param = vo.makeGetParam("detail");
-	                        if (vo.isValid(param)) {
-	                            SyUserInfoSvc.update(param).then(function () {
-	                                alert(APP_MSG.update.success);
+	                        	syCInfoSvc.saveCInfo(param).success(function () {
 	                            });
 	                        }
 	                    }
@@ -395,12 +311,23 @@
 	                        }
 	                    },
 						edit: function (e) {
-							var self = this;
 							if (e.model.isNew()) {
+								if(e.model.DC_NEWADDR == ""){
 								e.model.set("NM_WAHO", vo.wParam.NM_WAHO);
 								e.model.set("DC_NEWADDR", vo.wParam.DC_NEWADDR);
 								e.model.set("DC_OLDADDR", vo.wParam.DC_OLDADDR);
 								e.model.set("CD_PARS", vo.wParam.CD_PARS);
+								e.model.set("ROW_NUM", "1");
+								e.model.set("CD_WAHODFT", vo.wParam.CD_WAHODFT);
+								vo.wParam.NM_WAHO = "";
+								vo.wParam.DC_NEWADDR = "";
+								vo.wParam.DC_OLDADDR = "";
+								vo.wParam.DC_DETADDR = "";
+								vo.wParam.CD_PARS = "";
+								vo.wParam.NM_WAHO = "";
+								vo.wParam.CD_WAHODFT = "";
+								vo.wParam.NO_POST = "";
+								}
 		                    }
 	            		},
 	            		isValid : function (param) {
@@ -424,8 +351,6 @@
 			                 if(!data.DC_DETADDR){
 			                	 return edt.invalidFocus("userW_DC_DETADDR", "[형식] 상세주소는 유효하지 않은 형식입니다.");
 			                 }
-			                 
-
 		                    return true;
 		                },
 	                	dataSource: new kendo.data.DataSource({
@@ -438,61 +363,48 @@
 	            						e.success(res.data.results[0]);
 	            					});
 	                			},
-		                		create: function(e) {
-		                			var defer = $q.defer();
-		                			var param = {
-	                                	procedureParam:"BX.GW_SPENDING_RESOLUTIONS_01I&USE_EMP_NM@s|CTD_CD@s|CTD_NM@s|PRI_CUST_CD@s|PUB_CUST_CD@s|PUB_CUST_NM@s",
-	                                	data: e.data.models
-	                                };
-	            					UtilSvc.getGWExec(param).then(function (res) {
-	            						defer.resolve();
-	            						$scope.gridErpUserVO.dataSource.read();
-	            					});
-		                			return defer.promise;
-		            			},
+	                			create: function(e) {
+	                				var param = [];
+	                				param.push(e.data);
+	                				syCInfoSvc.saveWaho(param, "I").success(function () {
+		                            });
+	                	        },
 	                			update: function(e) {
-	                				var defer = $q.defer();
-		                			var param = {
-	                                	procedureParam:"BX.GW_SPENDING_RESOLUTIONS_01U&USE_EMP_NM@s|CTD_CD@s|CTD_NM@s|PRI_CUST_CD@s|PUB_CUST_CD@s|PUB_CUST_NM@s",
-	                                	data: e.data.models
-	                                };
-	            					UtilSvc.getGWExec(param).then(function (res) {
-	            						defer.resolve();
-	            						$scope.gridErpUserVO.dataSource.read();
-	            					});
-		                			return defer.promise;
+	                				var param = [];
+	                				param.push(e.data);
+	                				syCInfoSvc.saveWaho(param, "U").success(function () {
+		                            });
 	                			},
 	                			destroy: function(e) {
+	                				var param = [];
+	                				param.push(e.data);
 	                				var defer = $q.defer();
-		                			var param = {
-	                                	procedureParam:"BX.GW_SPENDING_RESOLUTIONS_01D&USE_EMP_NM@s",
-	                                	data: e.data.models
-	                                };
-	            					UtilSvc.getGWExec(param).then(function (res) {
+	                				syCInfoSvc.saveWaho(param, "D").success(function () {
 	            						defer.resolve();
-	            						$scope.gridErpUserVO.dataSource.read();
-	            					});
-		                			return defer.promise;
+	                                });
+	                    			return defer.promise;
 	                			},
 	                			parameterMap: function(e, operation) {
 	                				if(operation !== "read" && e.models) {
 	                					return {models:kendo.stringify(e.models)};
 	                				}
 	                			}
-	                		},
-	                		batch: true,
+	                		},/*
+	                		batch: true,*/
 	                		schema: {
 	                			model: {
 	                    			id: "NO_WAHO",
 	                				fields: {
+	                					ROW_NUM: {editable: false},
 	                					NO_WAHO: {editable: false},
-	                					NM_WAHO: {validation: {required: true}},
-	                					NO_POST: {},
-	                					DC_NEWADDR: {},
+	                					NM_WAHO: {},
+	                					NO_POST: {validation: {required: true}},
+	                					DC_NEWADDR: {validation: {required: true}},
 	                					DC_OLDADDR: {},
 	                					CD_PARS: {},
 	                					ITEM1:  {editable: false},
-	                					ITEM2:  {editable: false}
+	                					ITEM2:  {editable: false},
+	                					CD_WAHODFT : {}
 	                				}
 	                			}
 	                		}
@@ -500,7 +412,8 @@
 	                	navigatable: true,
 	                	toolbar: 
 	                		[
-	                         { template: "<input type='button' class='k-button' value='추가' ng-click='gridWahoVO.add()'/>"},"create", "cancel"],
+	                         { template: "<input type='button' class='k-button' value='추가' ng-click='gridWahoVO.add()'/>"},
+	                         "cancel"],
 	                	columns: [
 	                	       {field: "ROW_NUM",   title: "No",      width: 100, template: "<span class='row-number'></span>"},
 	        		           {field: "NO_WAHO",   title: "번호",     width: 100, hidden:true},
@@ -511,7 +424,7 @@
            		        		'#if (CD_PARS == "001") {# #="우체국택배"# #}' +
    		        	   	        'else if (CD_PARS == "002") {# #="CJ대한통운"# #}'+
         		        	   	'else if (CD_PARS == "003") {# #="롯데택배"# #}'+
-   		        		        'else {# #="기타"# #} #',},
+   		        		        'else {# #="기타"# #} #', editor: DropDownEditor},
 	        		           {field: "ITEM1",     title: "상품1", width: 150},
 	        		           {field: "ITEM2",     title: "상품2", width: 150},
 	        		           {command: [ "destroy" ]}
@@ -530,17 +443,30 @@
 	                            $(rowLabel).html(index);
 	                        });
 	                    },
+	                    requestStart: function(e) {
+	                        var response = e.response;
+	                        var type = e.type;
+	                        console.log(type); // displays "read"
+	                        console.log(response.length); // displays "77"
+	                    },
 	                    add: function() {
 	                    	var grid = $("#grid").data("kendoGrid");
 	                    	if(gridWahoVO.isValid(vo.wParam)){
 	                    		grid.addRow();
-	                    		
 	                    	}
 	                        
 						}
 	                };
 					
-
+					function DropDownEditor(container, options) {
+	            		$('<input data-text-field="NM_DEF" data-bind="value:' + options.field + '"/>')
+	                        .appendTo(container)
+	                        .kendoDropDownList({
+	                        	dataTextField: 'NM_DEF',
+	                            dataValueField: 'CD_DEF',
+	                            dataSource: vo.parsCodeList
+	                        });
+	                }		
                 vo.init();
             }]);
 }());

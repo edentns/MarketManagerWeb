@@ -52,7 +52,7 @@
 		                         <td>
 			                         <span data-ng-if="page.isWriteable()">
 			                                 <input type="text" class="form-control wid-x6" id="userNO_BSNSTGTT" name="userNO_BSNSTGTT" title="사업자등록번호 입력"
-			                                        placeholder="'012-34-56789' 포멧으로 입력해주세요." maxlength="13" data-ng-model="syCinfoVO.param.NO_BSNSTGTT">
+			                                        placeholder="'012-34-56789' 포멧으로 입력해주세요." maxlength="13" data-ng-model="syCinfoVO.param.NO_BSNSRGTT">
 			                         </span>
 		                         </td>
 		                     </tr>
@@ -93,10 +93,11 @@
 		                     <tr>
 		                         <th>회사주소</th>
 		                         <td>
-				            		<input type="text" name="" class="postcodify_postcode5 form-control wid-x4" value="" />
+				            		<input type="text" name="" class="postcodify_postcode5 form-control wid-x4" value="" data-ng-model="syCinfoVO.param.NO_POST"/>
 				            		<button id="postcodify_search_button">검색</button><br />
-				            		<input type="text" name="" class="postcodify_address form-control wid-x6" value="" /><br />
-									<input type="text" name="" class="postcodify_details form-control wid-x6" value="" /><br />
+				            		<input type="hidden" class="" data-ng-model="syCinfoVO.param.DC_OLDADDR">
+				            		<input type="text" name="" class="postcodify_address form-control wid-x6" value="" data-ng-model="syCinfoVO.param.DC_NEWADDR"/><br />
+									<input type="text" name="" class="postcodify_details form-control wid-x6" value="" data-ng-model="syCinfoVO.param.DC_DETADDR"/><br />
 		                         </td>
 		                         <th>국내/해외배송</th>
 		                         <td>
@@ -154,13 +155,13 @@
 		                         <th>사업자등록증</th>
 		                         <td>
 		                             <div class="file-ins-input">
-			                           <!--  <input type="file" nv-file-select uploader="fileVO.uploader"> -->
+			                           <co02-filebox filevo="syCinfoVO.fileBsnsVO"></co02-filebox>
 			                        </div>
 		                         </td>
 		                         <th>통신판매업신고증</th>
 		                         <td>
 		                         	<div class="file-ins-input">
-			                            <!-- <input type="file" nv-file-select uploader="fileVO.uploader"> -->
+			                            <co02-filebox filevo="syCinfoVO.fileCommVO"></co02-filebox>
 			                        </div>
 		                         </td>
 		                     </tr>
@@ -243,7 +244,7 @@
                         	<th>창고명</th>
                             <td>
                             	<input type="text" class="form-control wid-x6" id="userNM_WAHO" title="창고명 입력"
-                                        maxlength="50" data-ng-model="syCinfoVO.wParam.NM_WAHO"> 
+                                        maxlength="50" data-ng-model="syCinfoVO.wParam.NM_WAHO" data-eden-type="kor"> 
                             </td>
                         	<th>택배사</th>
                         	<td>
@@ -276,16 +277,10 @@
     
     
     <div class="btn-group1 mt-20" data-ng-if="page.isWriteable()">
-     	 <button type="button" class="btn btn-primary" title="확인" data-ng-click="syCinfoVO.doCancel()">확인</button>
-         <button type="button" class="btn btn-danger" title="취소" data-ng-click="syCinfoVO.doCancel()">취소</button>
+     	 <button type="button" class="btn btn-primary" title="확인" data-ng-click="syCinfoVO.doSave()">저장</button>
+         <button type="button" class="btn btn-danger" title="초기화" data-ng-click="syCinfoVO.reload()">초기화</button>
      </div>
      
      
     
 </div>
-
-<script type="text/x-kendo-template" id="template">
-    <div class="toolbar">
-        <input type='button' class='k-button-cc' value='Email Users' ng-click='syCinfoVO.add()'/>
-    </div>
-</script>
