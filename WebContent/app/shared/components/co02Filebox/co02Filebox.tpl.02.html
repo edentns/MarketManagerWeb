@@ -1,0 +1,31 @@
+<div>
+	<div class="file-upload">
+		<div>
+			<input type='file' ng-attr-id='{{filevo.fileId}}' style='display: none;' nv-file-select uploader='filevo.uploader'>
+			<input type='text' class='form-control' readonly='readonly' data-ng-click='filevo.fileDownload()' style='min-width:190px; max-width:56%; padding-left:2px; padding-right:2px; margin-right:2px;' data-ng-model='filevo.fileName'>
+			<button type='button' class='btn btn-primary' style='margin-right:2px;' title='파일선택' data-ng-click='filevo.fileClick()'>파일선택</button>
+			<button type='button' class='btn btn-primary' style='margin-right:2px;' title='취소' data-ng-click='filevo.fileInit()' data-ng-disabled='!filevo.dirty'>취소</button>
+		</div>
+		<div>
+			<table class="table mt-5">
+				<colgroup>
+					<col style="width:77%;">
+					<col style="width:23%;">
+				</colgroup>
+				<tbody>
+				<tr data-ng-repeat="fileInfo in filevo.currentDataList">
+					<td style="padding:2px;"><a data-ng-if='!fileInfo.phantom' data-ng-click='filevo.fileMultiDownload($index)'>[다운로드]</a>{{fileInfo.NM_FILE}}</td>
+					<td style="padding:2px;">
+                        <button type="button" class="btn btn-danger btn-xs" data-ng-click="filevo.addDeleteDataList($index)">
+                            <span class="glyphicon glyphicon-trash"></span> 삭제
+                        </button>
+                    </td>
+                </tr>
+                <tr data-ng-if="filevo.currentDataList.length==0">
+                    <td colspan="3"><span class="tbl-message">등록된 파일이 없습니다.</span></td>
+                </tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>

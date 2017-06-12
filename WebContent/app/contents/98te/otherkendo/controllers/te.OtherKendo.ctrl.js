@@ -76,26 +76,75 @@
 //	        				SZ_FILE: "6342204",
 //	        				YN_DEL: null
 //	        			}
-	        		}
+	        		},
+	        		file997VO: {
+	        			CD_AT:'997',
+	        			limitCnt: 10,
+	        			currentDataList:[{
+	        				CD_AT: "997",
+	        				CD_REF1: "SYEM00000001",
+	        				CD_REF2: "",
+	        				CD_REF3: null,
+	        				CD_REF4: null,
+	        				CD_REF5: "",
+	        				DTS_INSERT: null,
+	        				DTS_UPDATE: null,
+	        				NM_FILE: "SmsBackup.csv",
+	        				NO_AT: 6,
+	        				NO_C: "10000",
+	        				NO_INSERT: "SYEM00000001",
+	        				NO_UPDATE: null,
+	        				SZ_FILE: "1733624",
+	        				YN_DEL: null
+	        			},
+	        			{
+	        				CD_AT: "997",
+	        				CD_REF1: "SYEM00000001",
+	        				CD_REF2: "",
+	        				CD_REF3: null,
+	        				CD_REF4: null,
+	        				CD_REF5: "",
+	        				DTS_INSERT: null,
+	        				DTS_UPDATE: null,
+	        				NM_FILE: "my.ini",
+	        				NO_AT: 8,
+	        				NO_C: "10000",
+	        				NO_INSERT: "SYEM00000001",
+	        				NO_UPDATE: null,
+	        				SZ_FILE: "447",
+	        				YN_DEL: null
+	        			}]
+	        		},
 	        	};
 	        	
 	        	otherKendoVO1.fileSave = function() {
-	        		if(otherKendoVO1.file999VO.dirty) {
-		        		otherKendoVO1.file999VO.CD_REF1 = 'SYEM00000001';
-		        		otherKendoVO1.file999VO.doUpload(function(){
-			        		if(otherKendoVO1.file998VO.dirty) {
-				        		otherKendoVO1.file998VO.CD_REF1 = 'SYEM00000001';
-				        		otherKendoVO1.file998VO.doUpload(function(){
-				        			alert('성공하였습니다.');
-				        		}, function() {
-				        			alert('998 첨부파일업로드 실패하였습니다.');
-				        		});
-			        		}
-			        		else {
-			        			alert('성공하였습니다.');
-			        		}
+//	        		if(otherKendoVO1.file999VO.dirty) {
+//		        		otherKendoVO1.file999VO.CD_REF1 = 'SYEM00000001';
+//		        		otherKendoVO1.file999VO.doUpload(function(){
+//			        		if(otherKendoVO1.file998VO.dirty) {
+//				        		otherKendoVO1.file998VO.CD_REF1 = 'SYEM00000001';
+//				        		otherKendoVO1.file998VO.doUpload(function(){
+//				        			alert('성공하였습니다.');
+//				        		}, function() {
+//				        			alert('998 첨부파일업로드 실패하였습니다.');
+//				        		});
+//			        		}
+//			        		else {
+//			        			alert('성공하였습니다.');
+//			        		}
+//		        		}, function() {
+//		        			alert('999 첨부파일업로드 실패하였습니다.');
+//		        		});
+//	        		}
+//	        		else {
+//	        			alert('성공하였습니다.');
+//	        		}
+	        		if(otherKendoVO1.file997VO.dirty) {
+		        		otherKendoVO1.file997VO.CD_REF1 = 'SYEM00000001';
+		        		otherKendoVO1.file997VO.doUpload(function(){
+			        		alert('성공하였습니다.');
 		        		}, function() {
-		        			alert('999 첨부파일업로드 실패하였습니다.');
+		        			alert('997 첨부파일업로드 실패하였습니다.');
 		        		});
 	        		}
 	        		else {
