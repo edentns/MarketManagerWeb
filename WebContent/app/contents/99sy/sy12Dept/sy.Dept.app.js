@@ -22,7 +22,7 @@
                                     resData.access = result[0];
 
                                     $q.all([
-                                        SyCodeSvc.getSubcodeList({ cd: APP_CODE.workgroup.cd }),
+                                        SyCodeSvc.getSubcodeList({ cd: 'SY_000023' }),
                                     ]).then(function (result) {
                                         resData.workCodeList = result[0].data;
                                         defer.resolve( resData );

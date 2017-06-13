@@ -31,7 +31,7 @@
                  * @returns {*}
                  */
                 getDepart : function (param) {
-                    var url = APP_CONFIG.domain +"/dept";
+                    var url = APP_CONFIG.domain +"/sy07UserDept";
 
                     if (angular.isObject(param)) {
                         url += "?"+ $.param(param);
@@ -72,7 +72,7 @@
                 save : function (oParam) {
                     return $http({
                         method : "POST",
-                        url    : APP_CONFIG.domain +"/dept",
+                        url    : APP_CONFIG.domain +"/sy12Dept",
                         data   : oParam
                     });
                 }

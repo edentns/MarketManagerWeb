@@ -2,8 +2,8 @@
     "use strict";
 
     angular.module("sy.Menu.controller")
-        .controller("sy.MenuCtrl", ["$scope", "sy.MenuSvc", "resData", "Page",
-            function ($scope, SyMenuSvc, resData, Page) {
+        .controller("sy.MenuCtrl", ["$scope", "sy.MenuSvc", "resData", "Page", "sy.AtrtSvc",
+            function ($scope, SyMenuSvc, resData, Page, SyAtrtSvc) {
 	            var page  = $scope.page = new Page({ auth: resData.access }),
 		            today = edt.getToday();
 
@@ -66,8 +66,7 @@
                  */
                 syMenuVO.inquiry = function () {
                     var self = this;
-                    SyMenuSvc.getMenuList()
-                        .then(function (result) {
+                    SyMenuSvc.getMenuList().then(function (result) {
                             self.options.data = result.data;
                         });
                 };
