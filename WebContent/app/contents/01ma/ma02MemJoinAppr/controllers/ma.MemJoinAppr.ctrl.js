@@ -10,8 +10,8 @@
         .controller("ma.MemJoinApprCtrl", ['APP_CONFIG', 'UtilSvc',"$scope", "$http", "$q", "$log", "ma.MemJoinApprSvc", "APP_CODE", "$timeout", "resData", "Page",
             function (APP_CONFIG, UtilSvc, $scope, $http, $q, $log, MaMemJoinApprSvc, APP_CODE, $timeout, resData, Page) {
 	            var page  = $scope.page = new Page({ auth: resData.access }),
-		            today = edt.getToday();
-	            	            
+		            today = edt.getToday(),
+		            todayString = today.y +""+ today.m +""+ today.d;
 	            var joinerDataVO = $scope.joinerDataVO = {
 	            	boxTitle : "검색",
 	            	setting : {
@@ -22,9 +22,9 @@
 	            	datesetting : {
 	        			dateType   : 'market',
 						buttonList : ['current', '1Day', '1Week', '1Month'],
-						selected   : 'current',
+						selected   : '1Week',
 						period : {
-							start : angular.copy(today),
+							start : edt.getWeekPeriod(edt.getPrevDate(todayString, "week", null)).st,
 							end   : angular.copy(today)
 						}
 	        		},
@@ -55,17 +55,18 @@
                 	me.searchText.value = "";
                 	me.joinerStatusDt = "*";
                 	me.joinerProcNameDt = "*";
-                	me.joinerBetweenDate = "";
-                	me.datesetting.selected = "current";
+                	
+                	me.datesetting.selected = "1Week";
                 	me.dataTotal = 0;
                 	me.resetAtGrd = $scope.kg;
                 	me.resetAtGrd.dataSource.data([]);
-                	
+                	if(me.BetweenDateOptionVO) me.joinerBetweenDate = me.BetweenDateOptionVO[0].CD_DEF;
+                	else                       me.joinerBetweenDate = ""; 
                 	/*$timeout(function () {
                 		joinerDataVO.inQuiry();
                     }, 0);*/
 	            };
-	            	            
+	            
 	            var connSetting = $scope.connSetting = {
 			        //가입자 상태
 		        	joinerStatusDt : function(){
@@ -98,6 +99,7 @@
 					    				};            			
 					        			UtilSvc.getList(param).then(function (res) {
 					        				joinerDataVO.BetweenDateOptionVO = res.data.results[0];
+					        				joinerDataVO.joinerBetweenDate = res.data.results[0][0].CD_DEF;
 					        			}); 
         							  }
 		        };
@@ -144,7 +146,7 @@
                                     };
     	                			MaMemJoinApprSvc.joinerMem(param).then(function(res) {
     	                				defer.resolve();
-    	                				joinerDataVO.inIt();
+    	                				//joinerDataVO.inIt();
     	                				$scope.kg.dataSource.read();
     	                			});
     	                			return defer.promise;
@@ -162,7 +164,8 @@
                         			id: "CD_D_NM_C",
                     				fields: {
                     					ROW_CHK: 			   {editable: false,  nullable: false},
-                    					ROW_NUM:			   {type: "string", editable: false, nullable: true},                    					
+                    					ROW_NUM:			   {type: "string", editable: false, nullable: true}, 
+                    					NO_C_NM_C:			   {type: "string", editable: false, nullable: true},                       					
                     					NO_C: 			   	   {type: "string", editable: false, nullable: true},
                     					NM_C: 			   	   {type: "string", editable: false, nullable: true},
                     					NM_RPSTT: 			   {type: "string", editable: false, nullable: true},
@@ -188,7 +191,7 @@
 								{
 								   field: "ROW_CHK",
 								   title: "선택",
-								   width: 30,
+								   width: 20,
 								   headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 10px"}
 							    },    
                		            {
@@ -199,7 +202,7 @@
                		            },
             		            {
                		        	   field: "NO_C_NM_C",
-               		        	   title: "회사코드<br/>사업자명",
+               		        	   title: "회사코드-사업자명",
                		        	   width: 100,
                		        	   headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 10px"}
             		            },
@@ -212,13 +215,13 @@
 	            		        {
            		        	       field: "NO_BSNSRGTT",
            		        	       title: "사업자번호",
-           		        	       width: 100,
+           		        	       width: 80,
            		        	       headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 10px"}
            		        	    },
             		            {
             		        	   field: "NO_COMMSALEREG",
             		               title: "통신판매신고번호",
-            		               width: 100,
+            		               width: 80,
             		               headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 10px"}
             		            },
             		            {
@@ -230,13 +233,13 @@
             		            {
             		        	   field: "NM_EMP",
             		               title: "담당자",
-            		               width: 100,
+            		               width: 80,
             		               headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 10px"}
             		            },
             		            {
             		        	   field: "NO_PHNE",
             		               title: "전화번호",
-            		               width: 100,
+            		               width: 80,
             		               headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 10px"}
             		            },
             		            {
@@ -248,7 +251,7 @@
            		        	    {
 	         		        	   field: "DC_REPREMI",
 	         		        	   title: "이메일",
-	         		        	   width: 50,
+	         		        	   width: 140,
 	         		        	   headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 10px"}
 	        		            }, 
 	        		            {
@@ -266,13 +269,13 @@
         		        	    {
              		        	   field: "DTS_JOIN",
              		        	   title: "가입일",
-             		        	   width: 100,
+             		        	   width: 80,
              		        	   headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 10px"}
             		        	}, 
         		        	    {
              		        	   field: "DTS_JOINREQ",
              		        	   title: "가입요청일시",
-             		        	   width: 100,
+             		        	   width: 80,
              		        	   headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 10px"}
             		        	}
                     	],
@@ -321,7 +324,7 @@
                     	},*/
                     	resizable: true,
                     	rowTemplate: kendo.template($.trim($("#template").html())),
-                    	height: 450
+                    	height: 590
         		};    
                 
                 $scope.checkedIds = [];
