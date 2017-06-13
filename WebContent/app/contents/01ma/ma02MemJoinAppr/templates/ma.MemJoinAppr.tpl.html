@@ -3,13 +3,13 @@
         <div id="app-content-header">
             <ol class="breadcrumb">
                 <li><a href="#01ma/maDashboard"><i class="fa fa-home fa-2x"></i></a></li>
-                <li><a href="#01ma/MemJoinAppr">�뚯썝媛�엯�뱀씤</a></li>
+                <li><a href="#01ma/MemJoinAppr">회원가입승인</a></li>
             </ol>
         </div>
     </div>
     
     <div class="row">
-        <!-- 寃�깋 -->
+        <!-- 검색 -->
         <div class="content-area-container col-xs-12" style="margin:0px 0px -5px 0px;">
         	<div data-content-box-layer data-box-title="joinerDataVO.boxTitle">
                 <form class="search-type1" id="myForm">
@@ -24,28 +24,28 @@
                         </colgroup>
                         <tbody>
                         <tr>
-                            <th>�ъ뾽�먮챸</th>
+                            <th>사업자명</th>
                             <td>
                             	<input data-ng-model="joinerDataVO.searchText.value"
                             			focus="joinerDataVO.searchText.focus"
-                            			title="�ъ뾽�먮챸"
+                            			title="사업자명"
                             			data-eden-type="kor" 
                             			type="text" 
-                            			class="form-control" style="width:100%;"/>		
+                            			class="form-control" style="width:100%;"/>
                             </td>
-                            <th>媛�엯�먯긽��/th>
+                            <th>가입자상태</th>
                             <td>
-                            	<co01-mcbox title="媛�엯�먯긽�� model="joinerDataVO.joinerStatusDt" options="joinerDataVO.StatusDtOptionVO" setting="joinerDataVO.setting"  style="width:100%;">
+                            	<co01-mcbox title="가입자상태" model="joinerDataVO.joinerStatusDt" options="joinerDataVO.StatusDtOptionVO" setting="joinerDataVO.setting"  style="width:100%;">
         						</co01-mcbox>
                             </td>
-                            <th>�곹뭹紐�/th>
+                            <th>상품명</th>
                             <td>     
-                            	<co01-mcbox title="�곹뭹紐� model="joinerDataVO.joinerProcNameDt" options="joinerDataVO.ProcNameDtOptionVO" setting="joinerDataVO.setting"  style="width:100%;">
+                            	<co01-mcbox title="상품명" model="joinerDataVO.joinerProcNameDt" options="joinerDataVO.ProcNameDtOptionVO" setting="joinerDataVO.setting"  style="width:100%;">
         						</co01-mcbox>  
                             </td>           
                         </tr>
                         <tr>
-                            <th>湲곌컙 </th>
+                            <th>기간 </th>
                             <td colspan="5">
                             	<div class="betweenDiv">	         
         							<select ng-model="joinerDataVO.joinerBetweenDate" 
@@ -61,16 +61,16 @@
                     </table>         
                     					     
                     <div class="btn-group1 mt-20">
-                        <kendo-button type="submit" style="width:70px;" class="k-primary" title="寃�깋" data-ng-click="joinerDataVO.inQuiry()" >寃�깋</kendo-button>
-                        <kendo-button type="botton" style="width:70px;" title="珥덇린�� data-ng-click="joinerDataVO.inIt()">珥덇린��/kendo-button>
+                        <kendo-button type="submit" style="width:70px;" class="k-primary" title="검색" data-ng-click="joinerDataVO.inQuiry()" >검색</kendo-button>
+                        <kendo-button type="botton" style="width:70px;" title="초기화" data-ng-click="joinerDataVO.inIt()">초기화</kendo-button>
                     </div>
                     <br/>
-                    <p class="text-center">珥� <strong>{{joinerDataVO.dataTotal}}</strong>嫄댁씠 寃�깋�섏뿀�듬땲��</p>
+                    <p class="text-center">총  <strong>{{joinerDataVO.dataTotal}}</strong>건이 검색되었습니다.</p>
                 </form>
             </div>
         </div>
                 
-        <!-- �뱀씤 由ъ뒪��-->          
+        <!-- 승인 리스트 -->          
 		<div class="content-area-container col-xs-12" style="padding:0px 0px 0px 0px;">				
 	        <div kendo-grid="kg" options="gridJoinerMemVO">
 	        </div>	            
@@ -84,7 +84,7 @@
             <span class="ells"># if(CD_JOINYN === '003'){#
 									</span>
 							   # }else{#
-									<input type="checkbox" class="checkbox" ng-click="onClick($event)"/></span>
+									<input type="checkbox" class="checkbox" ng-click="onClick($event)"></input></span>
 							   # }#
         </td>
 		<td class="ta-r">

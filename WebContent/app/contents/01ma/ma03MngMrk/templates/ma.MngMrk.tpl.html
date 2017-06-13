@@ -31,16 +31,16 @@
                             <td>
                             	<select kendo-multi-select title="연동방법" 
                             		k-ng-model="mngMrkDateVO.methodDataCode" 
-						            k-options="mngMrkDateVO.methodDataSource" 
-						            style="width:100%;">
+						            k-options="connSetting.methodDataSource()" 
+						            k-value-primitive="true" style="width:100%;">
                             	</select>
                             </td>
                             <th>연동상태</th>
                             <td>
                             	<select kendo-multi-select title="연동상태" 
                             		k-ng-model="mngMrkDateVO.statusDataCode"
-                            		k-options="mngMrkDateVO.statusDataSoruce"
-                            		style="width:100%;">
+                            		k-options="connSetting.statusDataSource()"
+                            		k-value-primitive="true" style="width:100%;">
                             	</select>      	
                             </td>           
                         </tr>
