@@ -41,7 +41,7 @@
 	            //조회
 	            joinerDataVO.inQuiry = function(){
 	            	var me  = this;
-	            	if(me.searchText.value === ""){me.searchText.focus = !me.searchText.focus; alert("사업자명을  입력해 주세요."); return false;};
+	            	//if(me.searchText.value === ""){me.searchText.focus = !me.searchText.focus; alert("사업자명을  입력해 주세요."); return false;};
 	            	if(me.joinerStatusDt === ""){alert("가입자 상태 값을 입력해 주세요."); return false;};
                 	if(me.joinerProcNameDt === ""){alert("상품명을 입력해 주세요."); return false;};
                 	if(me.joinerBetweenDate === ""){alert("기간을 입력해 주세요."); return false;};

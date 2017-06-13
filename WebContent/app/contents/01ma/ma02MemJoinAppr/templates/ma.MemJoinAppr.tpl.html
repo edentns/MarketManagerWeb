@@ -26,13 +26,18 @@
                         <tr>
                             <th>사업자명</th>
                             <td>
-                            	<input data-ng-model="joinerDataVO.searchText.value"
+                            	<!-- <input data-ng-model="joinerDataVO.searchText.value"
                             			ng-required="true" 
                             			focus="joinerDataVO.searchText.focus"
                             			title="사업자명"
                             			data-eden-type="kor" 
                             			type="text" 
-                            			class="form-control" style="width:100%;"/>
+                            			class="form-control" style="width:100%;"/> -->
+                            	<input data-ng-model="joinerDataVO.searchText.value"
+                            			title="사업자명"
+                            			data-eden-type="kor" 
+                            			type="text" 
+                            			class="form-control" style="width:100%;"/>		
                             </td>
                             <th>가입자상태</th>
                             <td>
@@ -86,7 +91,7 @@
             <span class="ells"># if(CD_JOINYN === '003'){#
 									</span>
 							   # }else{#
-									<input type="checkbox" class="checkbox" ng-click="onClick($event)"></input></span>
+									<input type="checkbox" class="checkbox" ng-click="onClick($event)"/></span>
 							   # }#
         </td>
 		<td class="ta-r">
