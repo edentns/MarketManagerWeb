@@ -7,4 +7,419 @@
             </ol>
         </div>
     </div>
+    
+    <div class="row">
+        <!-- 검색 -->
+        <div class="content-area-container col-xs-12">
+        	<div data-content-box-layer data-box-title="noticeDataVO.boxTitle">
+                <form class="search-type1" id="myForm">
+                	<table>
+                        <colgroup>
+                            <col style="width: 7%;">
+                            <col style="width: 13%;">
+                            <col style="width: 7%;">
+                            <col style="width: 18%;">
+                            <col style="width: 7%;">
+                            <col style="width: 19%;">
+                            <col style="width: 7%;">
+                            <col style="width: 25%;">
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th>작성자</th>
+                            <td>
+                            	<input data-ng-model="noticeDataVO.writeText.value"
+                            			focus="noticeDataVO.writeText.focus"
+                            			title="작성자"
+                            			data-eden-type="kor" 
+                            			type="text" 
+                            			class="form-control" style="width:100%;"/>
+                            </td>
+                            <th>제목/내용</th>
+                            <td>
+                            	<input data-ng-model="noticeDataVOcontentText.value"
+                            			focus="noticeDataVO.contentText.focus"
+                            			title="제목/내용"
+                            			data-eden-type="kor" 
+                            			type="text" 
+                            			class="form-control" style="width:100%;"/>
+                            </td>		
+                            <th>공지구분</th>
+                            <td>            
+       							<co01-mcbox id="notice-cd" title="공지구분" model="noticeDataVO.noticeCdModel" options="noticeDataVO.noticeCdVO " setting="noticeDataVO.setting"  style="width:100%;">
+        						</co01-mcbox>        						
+                            </td>   
+                            <th>공지대상</th>
+                            <td>     
+                            	 <!-- <div id="result" style="display:inline-block; width:70%;">
+					                <span ng-repeat="obj in repeaterItems" class='selectedName'>
+					                    {{obj.FullName}}
+					                </span>
+					            </div> -->
+					            <div style="display:inline-block; width:71%; vertical-align: middle;">
+					            	<select kendo-multi-select
+					            		title="공지대상" 
+					            		id="nkms"
+	                            		k-ng-model="noticeDataVO.noticeTargetModel"
+	                            		k-options="noticeDataVO.noticeTargetVO" >
+                            		</select>
+					            </div>					  
+                            	<button class="k-button" ng-click="dialog.open()" style="width:28%;">가입자검색</button>		
+                            </td>         
+                        </tr>
+                        <tr>
+                            <th>공지일자</th>
+                            <td colspan="7">                            	              	
+                            	<div class="frm-group" data-date-search-group="noticeDataVO.datesetting" style="display:inline-block;"></div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>         
+                    {{noticeDataVO.noticeCdModel}} ,	{{noticeDataVO.noticeTargetModel}}			     
+                    <div class="btn-group1 mt-20">
+                        <kendo-button type="submit" class="k-primary" title="검색" data-ng-click="noticeDataVO.inQuiry()" style="width:70px;" >검색</kendo-button>
+                        <kendo-button type="botton" title="초기화" data-ng-click="noticeDataVO.inIt()" style="width:70px;" >초기화</kendo-button>
+                    </div>
+                    <br/>
+                    <p class="text-center">총  <strong>{{noticeDataVO.dataTotal}}</strong>건이 검색되었습니다.</p>
+                </form>
+            </div>
+        </div>
+                
+        <!-- 승인 리스트 -->          
+		<div class="content-area-container col-xs-12" style="padding:50px 0px 0px 0px;">				
+	        <div id="divGrd" kendo-grid="nkg" options="gridNoticeVO">
+	        </div>	            
+        </div>
+    </div>
 </div>
+
+<!-- 가입자 검색 그리드(조회용) -->
+<div kendo-dialog="dialog" k-options="memSearchGrd">
+    <div class='k-textbox k-space-right search-wrapper'>
+        <input class="memberSearch" type='text' ng-model="memSearchGrd.searchValue" ng-keyup="memSearchGrd.searchKeyUp($event)" ng-keydown="memSearchGrd.searchKeyUp($event)"
+            placeholder='검색할 가입자를 입력하세요'/><span class='k-icon k-i-search'></span>
+    </div>
+    <div class='select-all-wrapper'>
+        <input type='checkbox' class='k-checkbox' ng-change="memSearchGrd.selectAllItems()" ng-model="memSearchGrd.selectAll" id='selectAllInput'/>
+        <label class='k-checkbox-label' for='selectAllInput'>전체 선택</label>
+        <span class='selected-count'>{{memSearchGrd.selectedCount}} 명 선택</span>
+    </div>
+    <div kendo-tree-view="treeView" k-options="memSearchGrd">      
+        <span k-template data-color-matches="memSearchGrd.searchValue" data-value="{{dataItem.NM}}">
+        </span>
+    </div>
+</div>
+
+<!-- 가입자 검색 그리드(업데이트 용) -->
+<div kendo-dialog="dialogPop" k-options="memSearchPopGrd">
+    <div class='k-textbox k-space-right search-wrapper'>
+        <input class="memberSearch" type='text' ng-model="memSearchPopGrd.searchValue" ng-keyup="memSearchPopGrd.searchKeyUp($event)" ng-keydown="memSearchPopGrd.searchKeyUp($event)" 
+            placeholder='검색할 가입자를 입력하세요'/><span class='k-icon k-i-search'></span>
+    </div>
+    <div class='select-all-wrapper'>
+        <input type='checkbox' class='k-checkbox' ng-change="memSearchPopGrd.selectAllItems()" ng-model="memSearchPopGrd.selectAll" id='selectAllInputPop'/>
+        <label class='k-checkbox-label' for='selectAllInputPop'>전체 선택</label>
+        <span class='selected-count'>{{memSearchPopGrd.selectedCount}} 명 선택</span>
+    </div>
+    <div kendo-tree-view="treeViewPop" k-options="memSearchPopGrd">
+        <span k-template data-color-matches="memSearchPopGrd.searchValue" data-value="{{dataItem.NM}}">
+        </span>
+    </div>
+</div>
+
+<!-- 공지사항 조회 그리드 -->
+<script id="ma_notice_template" type="text/x-kendo-template">		
+     <tr data-uid="#= uid #">
+        <td class="ta-c">
+            <span class="ells"><input type="checkbox" class="checkbox" ng-click="onNoticeGrdClick($event)"/></span>
+        </td>
+		<td class="ta-r">
+            <span class="seq ells"># if(ROW_NUM !== ""){ ROW_NUM } #</span>
+        </td>
+		<td class="ta-c">
+            <span class="ells"># if(NO_C !== ""){ # 
+							   #: NO_C # 
+							   # } #
+			</span>
+        </td>
+		<td class="ta-c">
+            <span class="ells"># if(CD_NOTICE !== ""){ #
+                               #: CD_NOTICE # 
+                               # } #
+			</span>
+        </td>
+		<td class="ta-c">
+            <span class="ells"># if(NM_SUBJECT !== ""){ #
+                               #: NM_SUBJECT # 
+                               # } #
+			</span>
+        </td>
+		<td class="ta-c">
+            <span class="ells"># if(DC_CONTENT !== ""){ #
+							   #: DC_CONTENT #
+							   #} #
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells"># if(DTS_INSERT !== ""){ #
+							   #: DTS_INSERT #
+      						   # } #
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells"># if(NO_WRITE !== ""){ #
+					    	   #: NO_WRITE #
+ 							   # } #
+			</span>
+        </td>
+		<td class="ta-c">
+            <span class="ells"># if(SQ_NOTICE !== ""){ #
+							   #: SQ_NOTICE #
+							   # } #
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells"># if(SY_FILES !== ""){ #
+							   #: SY_FILES #
+						       # } #
+			</span>
+        </td> 
+		<td class="ta-l">
+            <span class="ells">
+				<a class="k-button k-button-icontext k-grid-edit" href="\#">
+                	<span class="k-icon k-edit"></span>수정
+            	</a>
+			</span>
+        </td> 
+	</tr>
+</script>
+
+<!-- 공지사항 추가,삭제 팝업 그리드 -->
+<script id="ma_notice_popup_template" type="text/x-kendo-template">
+<div class="not_pop_title"><h3>공지내용</h3></div>
+<table class="signal">
+	<colgroup>
+      <col style="width: 8%;">
+      <col style="width: 20%;">
+      <col style="width: 8%;">
+      <col style="width: 31%;">
+      <col style="width: 8%;">
+      <col style="width: 23%;">
+    </colgroup>
+    <tbody data-uid="#= uid #">	
+	<tr class="border-bottom-line border-top-line">	
+		<td class="border-right-line">
+			공지번호
+		</td>
+		<td class="border-right-line">
+			<input type="text" data-bind="value: NO_NOTICE" class="k-textbox" readonly="readonly" disabled="disabled"> 
+		</td>
+		<td class="border-right-line">
+			공지대상
+		</td>
+		<td class="border-right-line">
+			<div class="class-target-dropdown" >
+				<select kendo-multi-select
+					title="공지대상" 
+					k-options="noticeDataVO.popUpNoticeTargetVO"
+					id="pnkms"			
+					name="ARR_NO_C"
+	                data-bind="value: ARR_NO_C"
+					style="width:100%;">
+            	</select>
+			</div>
+			<div class="class-target-button">
+				<button class="k-button" ng-click="dialogPop.open()" style="width:90%;">가입자검색</button>
+			</div>
+		</td>
+		<td class="border-right-line">
+			공지구분
+		</td>
+		<td>
+			 <select kendo-drop-down-list
+                  	 k-options="noticeDataVO.popUpNoticeCdVO"
+					 id="pop_cd_notice"
+					 name="CD_NOTICE"
+					 data-bind="value: CD_NOTICE"
+                     style="width: 100%"></select>
+		</td> 
+	</tr>
+	<tr class="border-bottom-line">
+		<td class="border-right-line">
+			우선순위
+		</td>
+		<td class="border-right-line">
+			<input data-role="numerictextbox"
+				   data-decimals="0"
+				   data-format="{0:0}"
+   	               data-min="1"
+                   data-max="9999999999"
+                   data-bind="value: SQ_NOTICE"
+                   style="width: 100%;"/>
+		</td>
+		<td class="border-right-line">
+			작성자
+		</td>
+		<td class="border-right-line">
+			<input type="text" class="k-textbox" data-bind="value: NO_WRITE" readonly="readonly" disabled="disabled">
+		</td>
+		<td class="border-right-line">
+			작성일시
+		</td>
+		<td>
+			<input type="text" class="k-textbox" data-bind="value: DTS_INSERT" readonly="readonly" disabled="disabled">
+		</td> 
+	</tr>
+	<tr class="border-bottom-line">
+		<td class="border-right-line">
+			공지제목
+		</td>
+		<td colspan="5">
+			<input type="text" data-bind="value: NM_SUBJECT" class="k-textbox" required>
+		</td> 
+	</tr>
+	<tr class="border-bottom-line">
+		<td class="border-right-line">
+			공지내용
+		</td>
+		<td colspan="5">
+			<textarea kendo-editor data-bind="value: DC_HTMLCONTENT" required></textarea>
+		</td> 
+	</tr>
+	<tr class="border-bottom-line">
+		<td class="border-right-line">
+			첨부파일
+		</td>
+		<td colspan="5">
+			 <input name="files"
+					type="file"
+					kendo-upload
+					k-async="{ saveUrl: 'save', removeUrl: 'remove', autoUpload: true }" />
+		</td>
+	</tr>
+	</tbody>
+</table>
+</script>
+
+<!-- 가입자 검색 멀티 셀렉트 박스 템플릿 -->
+<script id="ma-notice-select-template" type="text/x-kendo-template">
+# if(values.indexOf("*") > -1) { #
+	#return "전체"# 
+# } #
+# if(values.length > 1){ #
+	#:values[0]# 외  #:values.length-1#  명	
+# } #
+	#if(values.length === 1){ #
+	#:values[0]#
+# } #
+</script>
+
+<!-- 그리드 툴바 템플릿 -->
+<script id="ma-notice-toolbar-template" type="text/x-kendo-template">
+	<a class="k-button" ng-click="onCreateeGrdEdit()"><span class="k-icon k-add"></span>추가</a>    
+    <a class="k-button" ng-click="onRemoveGrdEdit()"><span class="k-icon k-update"></span>삭제</a>
+</script>
+
+<style>
+.not_pop_title{
+	padding: 10px;
+}
+/*
+    Increase the width of the edit form.
+    The default one is 400px.
+*/
+.k-edit-form-container{
+    width: 900px;
+}
+/*
+    Decrease the width of the edit form labels. The default one is 30%.
+    The new width should depend on the column titles.
+    Switch the text alignment to the left. By default, it is to the right.
+*/
+.k-popup-edit-form .k-edit-label{
+    width: 20%;
+    text-align: left;
+}
+/*
+    Increase the width of the textbox containers. The default one is 60%.
+    The sum of label and editor percentage widths should be around 90%, to make up for existing paddings.
+*/
+.k-popup-edit-form .k-edit-field{
+    width: 70%;
+}
+/*
+    Expand the edit textboxes and any other Kendo UI widgets.
+    In case of unexpected side effects, use widget-specific classes, instead of .k-widget.
+*/
+.k-popup-edit-form .k-edit-field > .k-textbox,
+.k-popup-edit-form .k-edit-field > .k-widget:not(.k-tooltip){
+    width: 98%;
+}
+.signal{    
+    width: 99%;
+    margin: 5px;
+}
+.border-right-line{    
+	border-right: 1px solid #eee;    
+}
+.border-top-line{	
+	border-top: 1px solid #eee;
+}
+.border-bottom-line{	
+	border-bottom: 1px solid #eee;
+}
+.k-edit-form-container .k-edit-buttons{
+	border-style: none;
+}
+#example{
+    min-height: 200px;
+}
+#example .title {
+    font-weight: bold;
+    margin-bottom: 25px;
+}
+.search-wrapper {
+    width: 100%;
+}
+.query-match {
+	color: red;
+}
+.select-all-wrapper {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.selected-count {
+    float: right;
+    color: #aaa;
+}
+.k-treeview {
+    border-width: 1px!important;
+    padding: 5px;
+}
+.selectedName {
+    padding: 5px 10px;
+    background: #aaa;
+    color: white;
+    float: left;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    border-radius: 10px;
+} 
+.class-target-dropdown{
+	width:65%; 
+	display:inline-block; 
+	vertical-align:middle;
+}
+.class-target-button{
+	width:33%; 
+	display:inline-block; 
+	vertical-align:middle; 
+	text-align:right;
+}
+.ells{
+	text-overflow: ellipsis; 
+	white-space: nowrap; 
+	overflow:hidden;
+}
+</style>

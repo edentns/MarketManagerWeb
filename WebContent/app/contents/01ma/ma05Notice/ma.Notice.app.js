@@ -11,7 +11,7 @@
             url		: "/01ma/maNotice?menu",
             views	: {
                 contentView	: {
-                    templateUrl	: "app/contents/05ma/ma01Notice/templates/ma.Notice.tpl.html",
+                    templateUrl	: "app/contents/01ma/ma05Notice/templates/ma.Notice.tpl.html",
                     controller  : "ma.NoticeCtrl",
                     resolve		: {
                         resData: ["AuthSvc", "$q", function (AuthSvc, $q) {
