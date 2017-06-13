@@ -12,7 +12,23 @@
 	            var page  = $scope.page = new Page({ auth: resData.access }),
 		            today = edt.getToday();
 	            
-	            
+	            $window.jusoCallBack = function(wNm,roadFullAddr,roadAddrPart1,addrDetail,roadAddrPart2,engAddr, jibunAddr, zipNo, admCd, rnMgtSn, bdMgtSn , detBdNmList, bdNm, bdKdcd, siNm, sggNm, emdNm, liNm, rn, udrtYn, buldMnnm, buldSlno, mtYn, lnbrMnnm, lnbrSlno, emdNo) {
+	        		if(wNm == "com"){
+		            	$scope.$apply(function() {
+		        			vo.param.NO_POST = zipNo;
+		        			vo.param.DC_NEWADDR = roadAddrPart1;
+		        			vo.param.DC_OLDADDR = jibunAddr;
+		        			vo.param.DC_DETADDR = addrDetail;
+		        		});
+	        		}else{
+	        			$scope.$apply(function() {
+		        			vo.wParam.NO_POST = zipNo;
+		        			vo.wParam.DC_NEWADDR = roadAddrPart1;
+		        			vo.wParam.DC_OLDADDR = jibunAddr;
+		        			vo.wParam.DC_DETADDR = addrDetail;
+		        		});
+	        		}
+	            };
 	            
 	            var vo = $scope.syCinfoVO = {
 	            		boxTitleCom : "회사정보",
@@ -197,8 +213,30 @@
 	                    }
 					};
 					
+					vo.goPopup = function(wNm) {
+						$window.open("/app/shared/modal/address/jusoPopup.jsp",wNm,"width=570,height=420, scrollbars=yes, resizable=yes");
+					};
+					
 					vo.reload = function() {
-						$window.location.reload();
+						/*$window.location.reload();*/
+						var param = {
+		                		procedureParam: "USP_SY_06CInfo01_GET"
+		                	};
+						UtilSvc.getList(param).then(function (result) {  //해당 회사
+							vo.param = result.data.results[0][0];
+                        }).then(function (result) {
+                        	if (vo.param.DC_REPREMI) {
+		                        var split = vo.param.DC_REPREMI.split("@");
+	                            vo.param.DC_REPREMI = {
+	                                email1: split[0],
+	                                email2: split[1]
+	                            };
+	                        } else {
+	                            vo.param.email = {email1: "", email2: ""};
+	                        }
+                        	vo.CommsaleChange();
+                        	gridWahoVO.dataSource.read();
+                        });
 					};
 					
 					vo.fileSave = function() {
@@ -208,17 +246,20 @@
 				        		if(vo.fileCommVO.dirty) {
 				        			vo.fileCommVO.CD_REF1 = 'SYEM00000001';
 				        			vo.fileCommVO.doUpload(function(){
+					        			alert('성공하였습니다.');
 					        		}, function() {
 					        			alert('통신판매업신고증 파일업로드 실패하였습니다.');
 					        		});
 				        		}
 				        		else {
+				        			alert('성공하였습니다.');
 				        		}
 			        		}, function() {
 			        			alert('사업자등록증 파일업로드 실패하였습니다.');
 			        		});
 		        		}
 		        		else {
+		        			alert('성공하였습니다.');
 		        		}
 		        	};
 
@@ -314,8 +355,10 @@
 							if (e.model.isNew()) {
 								if(e.model.DC_NEWADDR == ""){
 								e.model.set("NM_WAHO", vo.wParam.NM_WAHO);
+								e.model.set("NO_POST", vo.wParam.NO_POST);
 								e.model.set("DC_NEWADDR", vo.wParam.DC_NEWADDR);
 								e.model.set("DC_OLDADDR", vo.wParam.DC_OLDADDR);
+								e.model.set("DC_DETADDR", vo.wParam.DC_DETADDR);
 								e.model.set("CD_PARS", vo.wParam.CD_PARS);
 								e.model.set("ROW_NUM", "1");
 								e.model.set("CD_WAHODFT", vo.wParam.CD_WAHODFT);
@@ -401,6 +444,7 @@
 	                					NO_POST: {validation: {required: true}},
 	                					DC_NEWADDR: {validation: {required: true}},
 	                					DC_OLDADDR: {},
+	                					DC_DETADDR: {validation: {required: true}},
 	                					CD_PARS: {},
 	                					ITEM1:  {editable: false},
 	                					ITEM2:  {editable: false},
@@ -419,7 +463,7 @@
 	        		           {field: "NO_WAHO",   title: "번호",     width: 100, hidden:true},
 	        		           {field: "NM_WAHO",   title: "창고명",    width: 150},
 	        		           {field: "DC_NEWADDR",  title: "주소(도로명)", width: 200},
-	        		           {field: "DC_OLDADDR",  title: "주소(지번)", width: 150},
+	        		           {field: "DC_DETADDR",  title: "주소(상세)", width: 150},
 	        		           {field: "CD_PARS",     title: "택배사", width: 150, template: 
            		        		'#if (CD_PARS == "001") {# #="우체국택배"# #}' +
    		        	   	        'else if (CD_PARS == "002") {# #="CJ대한통운"# #}'+

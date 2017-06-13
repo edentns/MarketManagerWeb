@@ -93,11 +93,11 @@
 		                     <tr>
 		                         <th>회사주소</th>
 		                         <td>
-				            		<input type="text" name="" class="postcodify_postcode5 form-control wid-x4" value="" data-ng-model="syCinfoVO.param.NO_POST"/>
-				            		<button id="postcodify_search_button">검색</button><br />
+				            		<input readonly="readonly" type="text" name="" class="postcodify_postcode5 form-control wid-x4" value="" data-ng-model="syCinfoVO.param.NO_POST"/>
+				            		<button data-ng-click="syCinfoVO.goPopup('com')">검색</button><br />
 				            		<input type="hidden" class="" data-ng-model="syCinfoVO.param.DC_OLDADDR">
-				            		<input type="text" name="" class="postcodify_address form-control wid-x6" value="" data-ng-model="syCinfoVO.param.DC_NEWADDR"/><br />
-									<input type="text" name="" class="postcodify_details form-control wid-x6" value="" data-ng-model="syCinfoVO.param.DC_DETADDR"/><br />
+				            		<input readonly="readonly" type="text" name="" class="postcodify_address form-control wid-x6" value="" data-ng-model="syCinfoVO.param.DC_NEWADDR"/><br />
+									<input readonly="readonly" type="text" name="" class="postcodify_details form-control wid-x6" value="" data-ng-model="syCinfoVO.param.DC_DETADDR"/><br />
 		                         </td>
 		                         <th>국내/해외배송</th>
 		                         <td>
@@ -151,7 +151,7 @@
 		                             </span>
 		                         </td>
 		                     </tr>
-		                     <tr>
+		                     <tr data-ng-if="page.isWriteable()">
 		                         <th>사업자등록증</th>
 		                         <td>
 		                             <div class="file-ins-input">
@@ -258,10 +258,11 @@
                         <tr>
                         	<th>창고주소</th>
                         	<td>
-			            		<input type="text" id="userW_NO_POST" class="W_postcodify_postcode5 form-control wid-x4" value="" data-ng-model="syCinfoVO.wParam.NO_POST" />
-			            		<button id="W_postcodify_search_button">검색</button><br />
-			            		<input type="text" id="" class="W_postcodify_address form-control wid-x6" value="" data-ng-model="syCinfoVO.wParam.DC_NEWADDR" /><br />
-								<input type="text" id="userW_DC_DETADDR" class="W_postcodify_details form-control wid-x6" value="" data-ng-model="syCinfoVO.wParam.DC_DETADDR" /><br />
+			            		<input readonly="readonly" type="text" id="userW_NO_POST" class="W_postcodify_postcode5 form-control wid-x4" value="" data-ng-model="syCinfoVO.wParam.NO_POST" />
+			            		<button data-ng-click="syCinfoVO.goPopup('waho')">검색</button><br />
+			            		<input type="hidden" class="" data-ng-model="syCinfoVO.wParam.DC_OLDADDR">
+			            		<input readonly="readonly" type="text" id="userW_DC_NEWADDR" class="form-control wid-x6" value="" data-ng-model="syCinfoVO.wParam.DC_NEWADDR" /><br />
+								<input readonly="readonly" type="text" id="userW_DC_DETADDR" class="W_postcodify_details form-control wid-x6" value="" data-ng-model="syCinfoVO.wParam.DC_DETADDR" /><br />
 	                         </td>
                         </tr>
                         </tbody>
