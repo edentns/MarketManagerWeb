@@ -47,7 +47,7 @@
     // default page
     edtApp.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
         $urlRouterProvider.when('', '/99sy/syLogin');
-        $urlRouterProvider.when('', '/99sy/syRePwdReg/:DC_URLCRYTO');
+        $urlRouterProvider.when('', '/99sy/syRePwdReg/:DC_URLCRYTO?:noOwnconf');
         
         $stateProvider
             .state('app', {

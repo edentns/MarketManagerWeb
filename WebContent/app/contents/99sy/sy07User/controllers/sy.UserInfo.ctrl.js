@@ -217,8 +217,8 @@
                     } else {
 	                    // PASSWORD
 	                    if (data.DC_PWD || vo.confirmDC_PWD.length>0) {
-		                    if (!/^[a-zA-Z0-9~`|!@#$%^&*()[\]\-=+_|{};':\\\"<>?,./]{5,14}$/.test(data.DC_PWD)) {
-			                    return edt.invalidFocus("userPw", "[형식] 패스워드는 유효하지 않은 형식입니다. 5~14자리 이하입니다.");
+		                    if (!/^[a-zA-Z0-9~`|!@#$%^&*()[\]\-=+_|{};':\\\"<>?,./]{8,15}$/.test(data.DC_PWD)) {
+			                    return edt.invalidFocus("userPw", "[형식] 패스워드는 유효하지 않은 형식입니다. 8~15자리 이하입니다.");
 		                    } else {
 			                    if (vo.confirmDC_PWD !== data.DC_PWD) {
 				                    return edt.invalidFocus( "userChkPw", "[MATCH] 비밀번호가 일치하지 않습니다." );

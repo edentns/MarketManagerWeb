@@ -7,7 +7,7 @@
 	 * modal - 고객사 검색
 	 */
 	angular.module("edtApp.common.modal")
-		.controller("modal.setupRePasswordCtrl", ["$scope", "$modal", "$modalInstance", "ngTableParams", "sy.LoginSvc", "$sce", "$filter", "UtilSvc", "$timeout", 
+		.controller("modal.mo03RePwdCtrl", ["$scope", "$modal", "$modalInstance", "ngTableParams", "sy.LoginSvc", "$sce", "$filter", "UtilSvc", "$timeout", 
 			function ($scope, $modal, $modalInstance, ngTableParams, SyLoginSvc, $sce, $filter, UtilSvc, $timeout) {
 
 				var rePwdVO;

@@ -82,17 +82,39 @@
 						options: {
 							modal: true,
 							resizable: true,
-							widht: 450,
+							width: 450,
 							visible: false
 						},
-						templateUrl : "app/shared/modal/setupRePassword/modal.setupRePassword.tpl.html",
-                        controller  : "modal.setupRePasswordCtrl",
+						templateUrl : "app/shared/modal/mo03RePwd/modal.mo03RePwd.tpl.html",
+                        controller  : "modal.mo03RePwdCtrl",
                         size        : "sm"
 					});
 					modalInstance.result.then(function ( result ) {
                     });
 				}
 
+
+				/**
+				 * 비밀번호재설정 팝업창 띄우기
+				 */
+				loginVO.modalUserJoin = function () {
+					var self = this,
+						modalInstance = $modal.open({
+						options: {
+							modal: true,
+							resizable: true,
+							width: 450,
+							height: 800,
+							visible: false
+						},
+						templateUrl : "app/shared/modal/mo02UserJoin/modal.mo02UserJoin.tpl.html",
+                        controller  : "modal.mo02UserJoinCtrl",
+                        size        : "lg"
+					});
+					modalInstance.result.then(function ( result ) {
+                    });
+				}
+				
 				loginVO.initLoad();
 			}
 		]);

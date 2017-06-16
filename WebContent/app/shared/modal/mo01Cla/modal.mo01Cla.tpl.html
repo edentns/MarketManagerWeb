@@ -1,0 +1,34 @@
+<div class="modal-header">
+	<h3 class="modal-title" style="text-align:center;">약 관</h3>
+</div>
+<div class="modal-body" style="margin-left:20px; margin-right:20px;">
+    <div class="row">
+        <div class="content-area-container col-xs-12">
+            <form class="form-type1" id="userForm" name="userForm" novalidate>
+                <table>
+                    <tr>
+                    	<div kendo-tab-strip k-content-urls="[null,null]">
+                    		<ul style="height: 35px;">
+                    			<li class="k-state-active" style="height: 34px">이용약관</li>
+                    			<li style="height: 34px">개인정보취급방침</li>
+                    			<li style="height: 34px">휴면계정 정책</li>
+                    		</ul>
+                    		<div style="padding: 1em; height:400px;">
+                    			<div ng-bind-html="claVO.DC_CLA001"></div>
+                    		</div>
+                    		<div style="padding: 1em; height:400px;">
+                    			<div ng-bind-html="claVO.DC_CLA002"></div>
+                    		</div>
+                    		<div style="padding: 1em; height:400px;">
+                    			<div ng-bind-html="claVO.DC_CLA003"></div>
+                    		</div>
+                    	</div>
+                    </tr>
+                </table>
+                <div class="btn-group1 mt-20">
+                    <button type="button" class="btn btn-danger" title="닫기" data-ng-click="claVO.doClose()">닫기</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
