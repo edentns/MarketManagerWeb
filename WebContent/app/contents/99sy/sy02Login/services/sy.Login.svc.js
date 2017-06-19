@@ -76,6 +76,73 @@
 						data	: $.param({DC_EMIADDR:email})
 					});
 				},
+
+				/**
+				 * 본인확인
+				 * @param {{bsCd:string, user:string, password:string}} userDataSet
+				 * @returns {*}
+				 */
+				doChkMe : function (email) {
+					return $http({
+						method	: "POST",
+						url		: APP_CONFIG.domain +"/chkMe",
+						headers	: { "Content-Type": "application/x-www-form-urlencoded; text/plain; */*; charset=utf-8" },
+						data	: $.param({DC_EMIADDR:email})
+					});
+				},
+
+				/**
+				 * 본인확인업데이트
+				 * @param {{bsCd:string, user:string, password:string}} userDataSet
+				 * @returns {*}
+				 */
+				updateChkMeConf : function (noOwnconf) {
+					return $http({
+						method	: "GET",
+						url		: APP_CONFIG.domain +"/chkMeConf?NO_OWNCONF="+noOwnconf,
+						headers	: { "Content-Type": "application/x-www-form-urlencoded; text/plain; */*; charset=utf-8" }
+					});
+				},
+				
+				/**
+				 * 사업자명 중복 체크
+				 * @param {{NM_C:string}} userDataSet
+				 * @returns {*}
+				 */
+				dupCheckNmC : function (nmC) {
+					return $http({
+						method	: "POST",
+						url		: APP_CONFIG.domain +"/dupCheckNmC",
+						headers	: { "Content-Type": "application/x-www-form-urlencoded; text/plain; */*; charset=utf-8" },
+						data    : $.param({L_NM_C:nmC})
+					});
+				},
+				
+				/**
+				 * 약관조회
+				 * @param {{NM_C:string}} userDataSet
+				 * @returns {*}
+				 */
+				selectCla : function (cdClaclft) {
+					return $http({
+						method	: "GET",
+						url		: APP_CONFIG.domain +"/selectCla?L_CD_CLA="+cdClaclft,
+						headers	: { "Content-Type": "application/x-www-form-urlencoded; text/plain; */*; charset=utf-8" }
+					});
+				},
+
+				/**
+				 * 회원가입
+				 * @param {{}} data
+				 * @returns {*}
+				 */
+				saveUserJoin : function (userJoinVO) {
+					return $http({
+						method	: "POST",
+						url		: APP_CONFIG.domain +"/saveUserJoin",
+						data    : userJoinVO
+					});
+				}
 			};
 		}]);
 }());

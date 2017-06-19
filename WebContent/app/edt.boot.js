@@ -10,7 +10,7 @@
         function($rootScope, $cookieStore, $window, $location, $http, MenuSvc, $q, SyLoginSvc) {
 
             var isLoginPage = function(url) {
-                    return url === "/99sy/syLogin" || url === "/99sy/syRePwdReg/:DC_URLCRYTO";
+                    return url === "/99sy/syLogin" || url === "/99sy/syRePwdReg/:DC_URLCRYTO?:noOwnconf";
                 },
                 webApp = $rootScope.webApp = {};
 

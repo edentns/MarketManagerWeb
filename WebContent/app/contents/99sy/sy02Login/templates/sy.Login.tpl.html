@@ -23,7 +23,7 @@
 				<div class="form-group">
 					<div class="ta-c">
 						<input type="checkbox" id="registerId" title="로그인ID 저장" data-ng-model="loginVO.isRegisterId"> 아이디저장 | 
-						<a>회원가입</a> | 
+						<a data-ng-click="loginVO.modalUserJoin()">회원가입</a> | 
 						<a data-ng-click="loginVO.modalRePassword()">비밀번호재설정</a>
 					</div>
 				</div>
