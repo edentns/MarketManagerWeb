@@ -75,7 +75,7 @@
                         </tr>
                         </tbody>
                     </table>         
-                    {{noticeDataVO.noticeCdModel}} ,	{{noticeDataVO.noticeTargetModel}}			     
+                    {{noticeDataVO.noticeCdModel}} ,	{{noticeDataVO.noticeTargetModel}}	관리자		     
                     <div class="btn-group1 mt-20">
                         <kendo-button type="submit" class="k-primary" title="검색" data-ng-click="noticeDataVO.inQuiry()" style="width:70px;" >검색</kendo-button>
                         <kendo-button type="botton" title="초기화" data-ng-click="noticeDataVO.inIt()" style="width:70px;" >초기화</kendo-button>
@@ -135,7 +135,10 @@
             <span class="ells"><input type="checkbox" class="checkbox" ng-click="onNoticeGrdClick($event)"/></span>
         </td>
 		<td class="ta-r">
-            <span class="seq ells"># if(ROW_NUM !== ""){ ROW_NUM } #</span>
+            <span class="seq ells"># if(ROW_NUM !== ""){ # 
+								   #: ROW_NUM # 
+								   # } #
+			</span>
         </td>
 		<td class="ta-c">
             <span class="ells"># if(NO_C !== ""){ # 
@@ -144,7 +147,7 @@
 			</span>
         </td>
 		<td class="ta-c">
-            <span class="ells"># if(CD_NOTICE !== ""){ #
+            <span class="ells cd-notice"># if(CD_NOTICE !== ""){ #
                                #: CD_NOTICE # 
                                # } #
 			</span>
@@ -292,10 +295,7 @@
 			첨부파일
 		</td>
 		<td colspan="5">
-			 <input name="files"
-					type="file"
-					kendo-upload
-					k-async="{ saveUrl: 'save', removeUrl: 'remove', autoUpload: true }" />
+			 <co02-filebox filevo="noticeDataVO.fileDataVO"></co02-filebox>
 		</td>
 	</tr>
 	</tbody>
@@ -317,8 +317,8 @@
 
 <!-- 그리드 툴바 템플릿 -->
 <script id="ma-notice-toolbar-template" type="text/x-kendo-template">
-	<a class="k-button" ng-click="onCreateeGrdEdit()"><span class="k-icon k-add"></span>추가</a>    
-    <a class="k-button" ng-click="onRemoveGrdEdit()"><span class="k-icon k-update"></span>삭제</a>
+	<a class="k-button k-button-icontext k-grid-add"><span class="k-icon k-add"></span>추가</a>    
+    <a class="k-button k-button-icontext k-grid-delete" ng-click="onDeleteGrd()"><span class="k-icon k-i-delete"></span>삭제</a>
 </script>
 
 <style>

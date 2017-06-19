@@ -7,8 +7,8 @@
      * 코드관리
      */
     angular.module("ma.MemJoinAppr.controller")
-        .controller("ma.MemJoinApprCtrl", ['APP_CONFIG', 'UtilSvc',"$scope", "$http", "$q", "$log", "ma.MemJoinApprSvc", "APP_CODE", "$timeout", "resData", "Page",
-            function (APP_CONFIG, UtilSvc, $scope, $http, $q, $log, MaMemJoinApprSvc, APP_CODE, $timeout, resData, Page) {
+        .controller("ma.MemJoinApprCtrl", ['APP_CONFIG', 'UtilSvc',"$scope", "$http", "$q", "$log", "ma.MemJoinApprSvc", "APP_CODE", "$timeout", "resData", "Page", "Util01maSvc",
+            function (APP_CONFIG, UtilSvc, $scope, $http, $q, $log, MaMemJoinApprSvc, APP_CODE, $timeout, resData, Page, Util01maSvc) {
 	            var page  = $scope.page = new Page({ auth: resData.access }),
 		            today = edt.getToday(),
 		            todayString = today.y +""+ today.m +""+ today.d;
@@ -297,11 +297,11 @@
                                 dataItem.ROW_NUM = index;
                                 
                                 //상태값 표시
-                                resultStatusLabel = $scope.changeCD_JOINYN(dataItem.CD_JOINYN, $scope.joinerDataVO.StatusDtOptionVO);
+                                resultStatusLabel = Util01maSvc.changeCDToNM(dataItem.CD_JOINYN, $scope.joinerDataVO.StatusDtOptionVO);
                                 $(statusLabel).html(resultStatusLabel);
                                 
                                 //가입 상품 표시
-                                resultJoinerLabel = $scope.changeCD_JOINYN(dataItem.CD_JOINITEM, $scope.joinerDataVO.ProcNameDtOptionVO);
+                                resultJoinerLabel = Util01maSvc.changeCDToNM(dataItem.CD_JOINITEM, $scope.joinerDataVO.ProcNameDtOptionVO);
                                 $(joinLabel).html(resultJoinerLabel);
                             });                            
                         },
@@ -371,20 +371,7 @@
                 	};
                 	return result;
                 }
-                
-                //코드로 나오는 상태를 이름이 나올수 있게 변경
-                $scope.changeCD_JOINYN = function(obj, inGrdDB){
-                	var nmd = obj,
-                	    grd = inGrdDB, 
-                	    result = '';
-                	for(let i=0, leng=grd.length; i<leng; i++){
-                		if(grd[i].CD_DEF === nmd){
-                			result = grd[i].NM_DEF;
-                		};
-                	}
-                	return result;
-                }
-                
+                                
 	            connSetting.joinerStatusDt();
 	            connSetting.joinerProcNameDt();
 	            connSetting.joinerBetweenDate();

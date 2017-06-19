@@ -16,18 +16,13 @@
             	noticeInsert : function (param) {					
 					return $http({
 						method	: "POST",
-						url		: APP_CONFIG.domain +"/notice/noticeInsert",
+						url		: APP_CONFIG.domain +"/notice/noticeI",
 						data	: param
 					}).success(function (data, status, headers, config) {
-						if(data === "") {
-							alert("저장 실패하였습니다.!! 연구소에 문의 부탁드립니다.");
-							return;
-						}else{
-							alert("저장 되었습니다.");
-							return;
-						}
+						//
 					}).error(function (data, status, headers, config) {
-						console.log("error",data,status,headers,config);
+						//console.log("error",data,status,headers,config);
+						alert("새 글을 써주세요.");
 					});
 				}
             
@@ -37,15 +32,16 @@
             	,noticeUpdate : function (param) {					
 					return $http({
 						method	: "PUT",
-						url		: APP_CONFIG.domain +"/notice/noticeUpdate",
+						url		: APP_CONFIG.domain +"/notice/noticeU",
 						data	: param
 					}).success(function (data, status, headers, config) {
-						if(data !== "1") {
+						/*if(data === "") {
 							alert("수정 실패하였습니다.!! 연구소에 문의 부탁드립니다.");
-							return;
-						}
+						}else{
+							alert("수정 되었습니다.");
+						}*/
 					}).error(function (data, status, headers, config) {
-						console.log("error",data,status,headers,config);
+						//console.log("error",data,status,headers,config);
 					});
 				}
             	
@@ -55,15 +51,16 @@
             	,noticeDelete: function (param) {					
 					return $http({
 						method	: "DELETE",
-						url		: APP_CONFIG.domain +"/notice/noticeDelete",
+						url		: APP_CONFIG.domain +"/notice/noticeR",
 						data	: param
 					}).success(function (data, status, headers, config) {
-						if(data !== "1") {
+						if(data === "") {
 							alert("삭제 실패하였습니다.!! 연구소에 문의 부탁드립니다.");
-							return;
+						}else{
+							alert("삭제 되었습니다.");
 						}
-					}).error(function (data, status, headers, config) {
-						console.log("error",data,status,headers,config);
+					}).error(function (data, status, headers, config) {						
+						//console.log("error",data,status,headers,config);						
 					});
 				}
             	

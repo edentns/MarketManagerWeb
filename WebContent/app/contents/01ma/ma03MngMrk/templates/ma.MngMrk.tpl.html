@@ -9,7 +9,7 @@
     </div>
     <div class="row">
         <!-- 검색 -->
-        <div class="content-area-container col-xs-12" style="margin:0px 0px -5px 0px;">
+        <div class="content-area-container col-xs-12">
         	<div data-content-box-layer data-box-title="mngMrkDateVO.boxTitle">
                 <form class="search-type1" id="myForm">
                 	<table>
@@ -31,16 +31,16 @@
                             <td>
                             	<select kendo-multi-select title="연동방법" 
                             		k-ng-model="mngMrkDateVO.methodDataCode" 
-						            k-options="connSetting.methodDataSource()" 
-						            k-value-primitive="true" style="width:100%;">
+						            k-options="mngMrkDateVO.methodDataSource" 
+						            style="width:100%;">
                             	</select>
                             </td>
                             <th>연동상태</th>
                             <td>
                             	<select kendo-multi-select title="연동상태" 
                             		k-ng-model="mngMrkDateVO.statusDataCode"
-                            		k-options="connSetting.statusDataSource()"
-                            		k-value-primitive="true" style="width:100%;">
+                            		k-options="mngMrkDateVO.statusDataSoruce"
+                            		style="width:100%;">
                             	</select>      	
                             </td>           
                         </tr>
@@ -60,7 +60,7 @@
                         </tbody>
                     </table>                    
                     <div class="btn-group1 mt-20">
-                        <kendo-button type="submit" style="width:70px;" class="k-primary" title="검색" data-ng-click="mngMrkDateVO.doInquiry()">검색</kendo-button>
+                        <kendo-button type="submit "style="width:70px;" class="k-primary" title="검색" data-ng-click="mngMrkDateVO.doInquiry()">검색</kendo-button>
                         <kendo-button type="botton" style="width:70px;" class="" title="초기화" data-ng-click="mngMrkDateVO.init()">초기화</kendo-button>                       
                     </div>
                     <br/>
@@ -70,7 +70,7 @@
         </div>
                 
         <!-- 조회 리스트 -->          
-		<div class="content-area-container col-xs-12" style="padding:0px 0px 0px 0px;">				
+		<div class="content-area-container col-xs-12" style="padding:50px 0px 0px 0px;">				
 	        <kendo-grid options="gridMngMrkUserVO">
 	        </kendo-grid>	            
         </div>

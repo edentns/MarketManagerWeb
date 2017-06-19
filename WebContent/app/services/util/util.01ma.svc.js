@@ -13,10 +13,9 @@
 			
 			/**
 			 * 메모제이션 조회처리
-			 * POST 값 중 반드시 있어야 하는 값
-			 * procedureParam : {string} 호출하는 StoreProcedure. 예) "USP_SV_~~_GET&변수명@타입|변수명@타입" -> 프로시져 앞에 회사코드, 사원번호는 DEFAULT로 추가 됨.
+			 * procedureParam : 
 			 * @param {JSON}
-			 * @returns {JSON} : result.data.results[0] -> 첫번째 select 값
+			 * @returns {JSON} : 
 			 */
 			this.getListMset = function ( param, seq ) {
 				var me = this;
@@ -40,6 +39,24 @@
 			};
 			
 			this.getListMset.cache = {};
+			
+			/**
+			 * 코드로 나오는 상태를 이름이 나올수 있게 변경
+			 * procedureParam : 
+			 * @param {JSON}
+			 * @returns {JSON} : string
+			 */
+			this.changeCDToNM = function(obj, inGrdDB){
+            	var nmd = obj,
+            	    grd = inGrdDB, 
+            	    result = '';
+            	for(let i=0, leng=grd.length; i<leng; i++){
+            		if(grd[i].CD_DEF === nmd){
+            			result = grd[i].NM_DEF;
+            		};
+            	}
+            	return result;
+            }
 		}
 	]);
 	
