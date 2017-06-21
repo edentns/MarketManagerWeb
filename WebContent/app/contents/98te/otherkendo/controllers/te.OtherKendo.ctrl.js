@@ -38,6 +38,9 @@
 	        		file999VO: {
 	        			CD_AT:'999',
 	        			limitCnt: 1,
+	        			bImage: true,
+	        			imgWidth: '211px',
+	        			imgHeight: '100px',
 	        			currentData:{
 	        				CD_AT: "999",
 	        				CD_REF1: "SYEM00000001",
@@ -47,12 +50,13 @@
 	        				CD_REF5: "",
 	        				DTS_INSERT: null,
 	        				DTS_UPDATE: null,
-	        				NM_FILE: "aa.txt",
-	        				NO_AT: 1,
+	        				NM_FILE: "logo.png",
+	        				NM_FILEPATH: "http://localhost:8090/img/999/201706/27c862e752414ad197ecc9a9b0b52236.png",
+	        				NO_AT: 13,
 	        				NO_C: "10000",
 	        				NO_INSERT: "SYEM00000001",
 	        				NO_UPDATE: null,
-	        				SZ_FILE: "1",
+	        				SZ_FILE: "15858",
 	        				YN_DEL: null
 	        			}
 	        		},
@@ -118,9 +122,9 @@
 	        	};
 	        	
 	        	otherKendoVO1.fileSave = function() {
-//	        		if(otherKendoVO1.file999VO.dirty) {
-//		        		otherKendoVO1.file999VO.CD_REF1 = 'SYEM00000001';
-//		        		otherKendoVO1.file999VO.doUpload(function(){
+	        		if(otherKendoVO1.file999VO.dirty) {
+		        		otherKendoVO1.file999VO.CD_REF1 = 'SYEM00000001';
+		        		otherKendoVO1.file999VO.doUpload(function(){
 //			        		if(otherKendoVO1.file998VO.dirty) {
 //				        		otherKendoVO1.file998VO.CD_REF1 = 'SYEM00000001';
 //				        		otherKendoVO1.file998VO.doUpload(function(){
@@ -132,24 +136,25 @@
 //			        		else {
 //			        			alert('성공하였습니다.');
 //			        		}
-//		        		}, function() {
-//		        			alert('999 첨부파일업로드 실패하였습니다.');
-//		        		});
-//	        		}
-//	        		else {
-//	        			alert('성공하였습니다.');
-//	        		}
-	        		if(otherKendoVO1.file997VO.dirty) {
-		        		otherKendoVO1.file997VO.CD_REF1 = 'SYEM00000001';
-		        		otherKendoVO1.file997VO.doUpload(function(){
-			        		alert('성공하였습니다.');
+		        			alert('성공하였습니다.');
 		        		}, function() {
-		        			alert('997 첨부파일업로드 실패하였습니다.');
+		        			alert('999 첨부파일업로드 실패하였습니다.');
 		        		});
 	        		}
 	        		else {
 	        			alert('성공하였습니다.');
 	        		}
+//	        		if(otherKendoVO1.file997VO.dirty) {
+//		        		otherKendoVO1.file997VO.CD_REF1 = 'SYEM00000001';
+//		        		otherKendoVO1.file997VO.doUpload(function(){
+//			        		alert('성공하였습니다.');
+//		        		}, function() {
+//		        			alert('997 첨부파일업로드 실패하였습니다.');
+//		        		});
+//	        		}
+//	        		else {
+//	        			alert('성공하였습니다.');
+//	        		}
 	        	};
 	        	
 	        	otherKendoVO1.initLoad = function() {
