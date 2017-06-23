@@ -40,23 +40,6 @@
 			
 			this.getListMset.cache = {};
 			
-			/**
-			 * 코드로 나오는 상태를 이름이 나올수 있게 변경
-			 * procedureParam : 
-			 * @param {JSON}
-			 * @returns {JSON} : string
-			 */
-			this.changeCDToNM = function(obj, inGrdDB){
-            	var nmd = obj,
-            	    grd = inGrdDB, 
-            	    result = '';
-            	for(let i=0, leng=grd.length; i<leng; i++){
-            		if(grd[i].CD_DEF === nmd){
-            			result = grd[i].NM_DEF;
-            		};
-            	}
-            	return result;
-            }
 		}
 	]);
 	

@@ -19,9 +19,8 @@
 						url		: APP_CONFIG.domain +"/notice/noticeI",
 						data	: param
 					}).success(function (data, status, headers, config) {
-						//
+						
 					}).error(function (data, status, headers, config) {
-						//console.log("error",data,status,headers,config);
 						alert("새 글을 써주세요.");
 					});
 				}
@@ -35,13 +34,10 @@
 						url		: APP_CONFIG.domain +"/notice/noticeU",
 						data	: param
 					}).success(function (data, status, headers, config) {
-						/*if(data === "") {
-							alert("수정 실패하였습니다.!! 연구소에 문의 부탁드립니다.");
-						}else{
-							alert("수정 되었습니다.");
-						}*/
+						
 					}).error(function (data, status, headers, config) {
 						//console.log("error",data,status,headers,config);
+						alert("새로 수정해 주세요.");
 					});
 				}
             	
@@ -60,7 +56,8 @@
 							alert("삭제 되었습니다.");
 						}
 					}).error(function (data, status, headers, config) {						
-						//console.log("error",data,status,headers,config);						
+						//console.log("error",data,status,headers,config);
+						alert("다시 삭제 해주세요.");
 					});
 				}
             	

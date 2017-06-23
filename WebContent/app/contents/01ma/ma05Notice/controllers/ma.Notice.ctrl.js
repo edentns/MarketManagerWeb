@@ -223,12 +223,12 @@
     	                					if(noticeDataVO.fileDataVO.dirty) {
 	                							noticeDataVO.fileDataVO.CD_REF1 = res.data;
 	                							noticeDataVO.fileDataVO.doUpload(function(){
-	                			        			alert("저장 되었습니다.");
+	                			        			alert('저장 되었습니다.');
 	                			        		}, function() {
 	                			        			alert('첨부파일업로드 실패하였습니다.');
 	                			        		});
 	                		        		}else{
-	                		        			alert('성공하였습니다.');
+	                		        			alert('저장 되었습니다.');
 	                		        		}
     	                					
     	                					//alert("저장 되었습니다.");
@@ -266,9 +266,7 @@
 	                			        		});
 	                		        		}else{
 	                		        			alert('성공하였습니다.');
-	                		        		}
-    	                					    	                					
-	                						alert("수정 되었습니다.");
+	                		        		}    	                					    	                	
 	                						$scope.nkg.dataSource.read();    	        	                		
     	                				}else{
     	                					alert("수정 실패하였습니다.!! 연구소에 문의 부탁드립니다.");
@@ -450,16 +448,16 @@
                     	dataBound: function(e) {
                             //this.expandRow(this.tbody.find("tr.k-master-row").first());// 마스터 테이블을 확장하므로 세부행을 볼 수 있음
                             
-                			var rows = this.items();
+                			/*var rows = this.items();
                 			rows.each(function(){
                             	var innerLabel = $(this).find(".cd-notice"),
                             		dataItem = $scope.nkg.dataItem($(this)),
     	                			innerHtml = '';
                                                             
 		                        //공지 구분
-		                        innerHtml = Util01maSvc.changeCDToNM(dataItem.CD_NOTICE, $scope.noticeDataVO.noticeCdVO);
+		                        innerHtml = UtilSvc.changeCDToNM(dataItem.CD_NOTICE, $scope.noticeDataVO.noticeCdVO);
 		                        $(innerLabel).html(innerHtml);                            	
-                            });
+                            });*/
                         },
                         collapse: function(e) {
                             this.cancelRow();
