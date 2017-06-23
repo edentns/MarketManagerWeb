@@ -313,7 +313,7 @@
                     	fileName = fileName.replace("C:\\fakepath\\","");
                     	fileLength = fileName.length;
                     	
-                    	if(!(fileItems._file.type.indexOf('image') > -1)){
+                    	if($scope.co02FileVO.bImage && !(fileItems._file.type.indexOf('image') > -1)){
                     		alert("이미지파일이 아닙니다.");
                     		return;
                     	}
