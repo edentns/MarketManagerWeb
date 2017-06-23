@@ -1,4 +1,4 @@
-<div id="app-content" class="col-xs-12 col-sm-10 ng-scope">
+<div id="app-content" class="col-xs-12 col-sm-10">
     <div class="row">
         <div id="app-content-header">
             <ol class="breadcrumb">
@@ -7,83 +7,188 @@
             </ol>
         </div>
     </div>
-
     <div class="row">
-        <div id="dashboard_links" class="col-xs-2 pull-right">
-            <ul class="nav nav-pills nav-stacked">
-                <li class="active"><a href="#" class="tab-link" id="overview">비밀번호변경</a></li>
-            </ul>
-        </div>
-        <div id="dashboard_tabs" class="col-xs-10">
-            <!--Start Dashboard Tab 1-->
-            <div id="dashboard-overview" class="row" style="visibility: visible; position: relative;">
-                <div class="col-xs-12 col-md-12">
-                    <h3 class="sub-title mt-20"><i class="fa fa-tag"></i> 비밀번호변경</h3>
-                    <form>
-                        <div class="form-type1 mt-20">
-                            <table>
-                                <colgroup>
-                                    <col style="width: 10%">
-                                    <col style="width: 90%">
-                                </colgroup>
-                                <tbody>
-                                <tr>
-                                    <th>현재 비밀빈호</th>
-                                    <td>
-                                        <input type="password" class="form-control wid-x6" title="현재 비밀번호입력"
-                                               maxlength="15"
-                                               data-ng-model="myInfoVO.param.currentPw"
-                                               data-ng-change="myInfoVO.changeMessage()">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>새비밀번호</th>
-                                    <td>
-                                        <input type="password" class="form-control wid-x6" title="새비밀번호 입력"
-                                               maxlength="15"
-                                               data-ng-model="myInfoVO.param.newPw"
-                                               data-ng-change="myInfoVO.changeMessage()">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>새비밀번호 확인</th>
-                                    <td>
-                                        <input type="password" class="form-control wid-x6" title="새비밀번호 확인입력"
-                                               maxlength="15"
-                                               data-ng-model="myInfoVO.param.newPwChk"
-                                               data-ng-change="myInfoVO.changeMessage()">
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                            <div class="msg-wrap">
-                                <div class="msg">{{myInfoVO.param.message}}</div>
-                            </div>
-                        </div>
-                        <div class="btn-group1 mt-20">
-                            <button type="submit" class="btn btn-primary" title="비밀번호 변경" data-ng-click="myInfoVO.doUpdatePw()">확인</button>
-                            <button type="button" class="btn btn-danger" title="비밀번호 변경취소" data-ng-click="myInfoVO.doCancle()">취소</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            <!--End Dashboard Tab 1-->
-            <!--Start Dashboard Tab 2-->
-            <div id="dashboard-clients" class="row" style="visibility: hidden; position: absolute;">
-
-            </div>
-            <!--End Dashboard Tab 2-->
-            <!--Start Dashboard Tab 3-->
-            <div id="dashboard-graph" class="row" style="width:100%; visibility: hidden; position: absolute;" >
-
-            </div>
-            <!--End Dashboard Tab 3-->
-            <!--Start Dashboard Tab 4-->
-            <div id="dashboard-servers" class="row" style="visibility: hidden; position: absolute;">
-
-            </div>
-            <!--End Dashboard Tab 4-->
-        </div>
-        <div class="clearfix"></div>
-    </div>
+	    <div class="demo-section k-content">
+	        <div >
+	            <div kendo-tab-strip k-content-urls="[]">
+	              <!-- tab list -->
+	              <ul>
+	                <li class="k-state-active" data-ng-click = "myInfoVO.tab(myInfoVO)">프로필 설정</li>
+	                <li data-ng-click = "myInfoVO.tab(myInfoVO)">비밀번호 설정</li>
+	                <li data-ng-click = "myInfoVO.tab(myInfoVO)">알림 설정</li>
+	              </ul>
+	          
+	              <div style="padding: 1em">
+	                <div>
+			            <div>
+			            	<h3 class="sub-title mt-20"><i class="fa fa-tag"></i> 프로필 변경</h3>
+			                <form class="form-type1">
+			                    <table>
+			                        <colgroup>
+			                            <col style="width: 12%">
+			                            <col style="width: 38%">
+			                            <col style="width: 12%">
+			                            <col style="width: 38%">
+			                        </colgroup>
+			                        <tbody>
+			                        <tr>
+			                            <th>아이디</th>
+			                            <td>
+			                                <span>
+			                                    {{myInfoVO.param.DC_ID}}
+			                                </span>
+			                            </td>
+			                            <th>소속부서</th>
+			                            <td>
+			                                <span>
+			                                    {{myInfoVO.param.NM_DEPT}}
+			                                </span>
+			                            </td>
+			                        </tr>
+			                        <tr>
+			                            <th>이름</th>
+			                            <td>
+			                                <span>
+			                                    {{myInfoVO.param.NM_EMP}}
+			                                </span>
+			                            </td>
+			                            <th>직급</th>
+			                            <td>
+			                                <span>
+			                                    {{myInfoVO.param.NM_RANK}}
+			                                </span>
+			                            </td>
+			                        </tr>
+			                        <tr>
+			                            <th>이메일</th>
+			                            <td>
+			                                <span>
+			                                    {{myInfoVO.param.DC_EMIADDR}}
+			                                </span>
+			                            </td>
+			                            <th>등록일자</th>
+			                            <td>
+			                                <span>
+			                                    {{myInfoVO.param.DT_EMP}}
+			                                </span>
+			                            </td>
+			                        </tr>
+			                        <tr>
+			                            <th>프로필사진</th>
+			                            <td colspan="3">
+			                                <div class="file-ins-input" style="width:30%;">
+					                            <co02-filebox filevo="myInfoVO.fileProfileVO"></co02-filebox>
+					                        </div>
+			                            </td>
+			                        </tr>
+			                        </tbody>
+			                    </table>
+			                    <div class="btn-group1 mt-20" data-ng-if="!page.isWriteable()">
+			                        <button type="button" class="btn btn-primary" title="프로필 변경" data-ng-click="myInfoVO.doFileChange()">변경</button>
+			                    </div>
+			                </form>
+			            </div>
+			         </div>
+	              </div>
+	          
+	              <div style="padding: 1em">
+	                <div>
+	                    <h3 class="sub-title mt-20"><i class="fa fa-tag"></i> 비밀번호변경</h3>
+	                    <form>
+	                        <div class="form-type1 mt-20">
+	                            <table>
+	                                <colgroup>
+	                                    <col style="width: 10%">
+	                                    <col style="width: 90%">
+	                                </colgroup>
+	                                <tbody>
+	                                <tr>
+	                                    <th>현재 비밀빈호</th>
+	                                    <td>
+	                                        <input type="password" class="form-control wid-x6" title="현재 비밀번호입력"
+	                                               maxlength="15"
+	                                               data-ng-model="myInfoVO.param.currentPw"
+	                                               data-ng-change="myInfoVO.changeMessage()">
+	                                    </td>
+	                                </tr>
+	                                <tr>
+	                                    <th>새비밀번호</th>
+	                                    <td>
+	                                        <input type="password" class="form-control wid-x6" title="새비밀번호 입력"
+	                                               maxlength="15"
+	                                               data-ng-model="myInfoVO.param.newPw"
+	                                               data-ng-change="myInfoVO.changeMessage()">
+	                                    </td>
+	                                </tr>
+	                                <tr>
+	                                    <th>새비밀번호 확인</th>
+	                                    <td>
+	                                        <input type="password" class="form-control wid-x6" title="새비밀번호 확인입력"
+	                                               maxlength="15"
+	                                               data-ng-model="myInfoVO.param.newPwChk"
+	                                               data-ng-change="myInfoVO.changeMessage()">
+	                                    </td>
+	                                </tr>
+	                                </tbody>
+	                            </table>
+	                            <div class="msg-wrap">
+	                                <div class="msg">{{myInfoVO.param.message}}</div>
+	                            </div>
+	                        </div>
+	                        <div class="btn-group1 mt-20">
+	                            <button type="button" class="btn btn-danger" title="비밀번호 변경" data-ng-click="myInfoVO.doUpdatePw()">변경</button>
+	                        </div>
+	                    </form>
+	                </div>
+	              </div>
+	              
+	              <div style="padding: 1em">
+	                <div>
+			            <div>
+			            	<h3 class="sub-title mt-20"><i class="fa fa-tag"></i> 알림 변경</h3>
+			                <form class="form-type1">
+			                    <table>
+			                        <colgroup>
+			                            <col style="width: 12%">
+			                            <col style="width: 38%">
+			                            <col style="width: 12%">
+			                            <col style="width: 38%">
+			                        </colgroup>
+			                        <tbody>
+			                        <tr>
+			                            <th>알림 설정</th>
+			                            <td colspan="3">
+			                            	&nbsp;
+			                                <span>
+			                                    <input type="checkbox"
+												       ng-model="myInfoVO.param.YN_SMS"
+												       ng-true-value="Y"
+												       ng-false-value="N"
+												       ng-change="myInfoVO.param.yn_change = true">
+												SMS 수신동의
+			                                </span>
+			                                &nbsp;&nbsp;&nbsp;
+			                                <span>
+			                                    <input type="checkbox"
+												       ng-model="myInfoVO.param.YN_EMI"
+												       ng-true-value="Y"
+												       ng-false-value="N"
+												       ng-change="myInfoVO.param.yn_change = true">
+												이메일 수신동의
+			                                </span>
+			                            </td>
+			                        </tr>
+			                        </tbody>
+			                    </table>
+			                    <div class="btn-group1 mt-20">
+			                        <button type="button" class="btn btn-primary" title="알림 변경" data-ng-click="myInfoVO.doUpdateYn()">변경</button>
+			                    </div>
+			                </form>
+			            </div>
+			        </div>
+	              </div>
+	            </div>
+	        </div>
+	    </div>
+	</div>
 </div>

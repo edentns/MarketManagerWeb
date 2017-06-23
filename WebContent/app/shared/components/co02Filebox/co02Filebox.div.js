@@ -312,6 +312,11 @@
 
                     	fileName = fileName.replace("C:\\fakepath\\","");
                     	fileLength = fileName.length;
+                    	
+                    	if(!(fileItems._file.type.indexOf('image') > -1)){
+                    		alert("이미지파일이 아닙니다.");
+                    		return;
+                    	}
 
                     	if(fileLength > 15) {
                     		fileName = fileName.slice(0,9)+"..."+fileName.slice(fileLength-6,fileLength);
