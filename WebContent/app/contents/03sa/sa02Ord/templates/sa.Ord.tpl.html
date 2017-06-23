@@ -7,4 +7,371 @@
             </ol>
         </div>
     </div>
+    
+    <div class="row">
+        <!-- 검색 -->
+        <div class="content-area-container col-xs-12">
+        	<div data-content-box-layer data-box-title="csDataVO.boxTitle">
+                <form class="search-type1" id="myForm">
+                	<table>
+                        <colgroup>
+                            <col style="width: 7%;">
+                            <col style="width: 18%;">
+                            <col style="width: 7%;">
+                            <col style="width: 23%;">
+                            <col style="width: 7%;">
+                            <col style="width: 18%;">
+                            <col style="width: 7%;">
+                            <col style="width: 18%;">
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th>마켓명</th>
+                            <td>
+                            	<co01-mcbox id="cs-mrk" title="마켓명" model="csDataVO.csMrkNameMo" options="csDataVO.csMrkNameOp " setting="csDataVO.setting"  style="width:100%;">
+        						</co01-mcbox> 
+                            </td>
+                            <th>상품명</th>
+                            <td>
+                            	<input data-ng-model="csDataVO.procName.value"
+                            			focus="csDataVO.procName.focus"
+                            			title="상품명"
+                            			data-eden-type="kor" 
+                            			type="text" 
+                            			class="form-control" style="width:100%;"/>
+                            </td>		
+                            <th>주문상태</th>
+                            <td>            
+       							<co01-mcbox id="cs-status" title="주문상태" model="csDataVO.csStatusMo" options="csDataVO.csStatusOp" setting="csDataVO.setting"  style="width:100%;">
+        						</co01-mcbox>        						
+                            </td>   
+                            <th>주문번호</th>
+                            <td>     
+					            <co01-mcbox id="cs-code" title="주문번호" model="csDataVO.csQuestionCodeMo" options="csDataVO.csQuestionCodeOp" setting="csDataVO.setting"  style="width:100%;">
+        						</co01-mcbox> 
+                            </td>         
+                        </tr>
+                        <tr>
+                            <th>구매자/수취인</th>
+                            <td>                            	              	
+                            	<input data-ng-model="csDataVO.buyerName.value"
+                            			focus="csDataVO.buyerName.focus"
+                            			title="구매자/수취인"
+                            			data-eden-type="kor" 
+                            			type="text" 
+                            			class="form-control" style="width:100%;"/>
+                            </td>
+                            <th>담당자(주문확정)</th>
+                            <td>                            	              	
+                            	<input data-ng-model="csDataVO.orderNo.value"
+                            			focus="csDataVO.orderNo.focus"
+                            			title="담당자(주문확정)"
+                            			data-eden-type="kor" 
+                            			type="text" 
+                            			class="form-control" style="width:100%;"/>
+                            </td>
+                            <th>
+                            </th>
+                            <td>
+                            </td>
+                            <th>
+                            </th>
+                            <td>
+                            </td>                            
+                        </tr>
+                        <tr>
+                            <th>기간</th>
+                            <td colspan="7">                            	              	
+                            	<div class="frm-group" data-date-search-group="csDataVO.datesetting" style="display:inline-block;"></div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>         		     
+                    <div class="btn-group1 mt-20">
+                        <kendo-button type="submit" class="k-primary" title="검색" data-ng-click="csDataVO.inQuiry()" style="width:70px;" >검색</kendo-button>
+                        <kendo-button type="botton" title="초기화" data-ng-click="csDataVO.inIt()" style="width:70px;" >초기화</kendo-button>
+                    </div>
+                    <br/>
+                    <p class="text-center">총  <strong>{{csDataVO.dataTotal}}</strong>건이 검색되었습니다.</p>
+                </form>
+            </div>
+        </div>
+                
+        <!-- 주문 리스트 -->          
+		<div class="content-area-container col-xs-12" style="padding:50px 0px 0px 0px;">				
+	        <div id="divCsGrd" kendo-grid="ordkg" options="gridCsVO">
+	        </div>	            
+        </div>
+    </div>
 </div>
+
+<!-- ord 조회 그리드 -->
+<script id="ord_template" type="text/x-kendo-template">		
+     <tr data-uid="#= uid #">
+        <td class="ta-c">
+            <span class="ells"><input type="checkbox" class="checkbox" ng-click="onCsGrdCkboxClick($event)"/></span>
+        </td>
+		<td class="ta-c">
+            <span class="seq ells"># if(NO_INQ !== ""){ # 
+								   #: NO_INQ # 
+								   # } #
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells"># if(NM_MRK !== ""){ #
+                               #: NM_MRK # 
+                               # } #
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells"># if(DTS_INQREG !== ""){ #
+                               #: DTS_INQREG # 
+                               # } #
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells">
+							   # if(CD_INQSTAT !== ""){ #
+							   <co04-cd-to-nm cd="#:CD_INQSTAT#" nm-box="csDataVO.csStatusOp">
+							   #} #
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells"># if(DC_INQTITLE !== ""){ #
+							   #: DC_INQTITLE #
+      						   # } #
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells"># if(DC_INQCTT !== ""){ #
+					    	   #: DC_INQCTT #
+ 							   # } #
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells"># if(DC_ANSCTT !== ""){ #
+							   #: DC_ANSCTT #
+							   # } #
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells"># if(DTS_ANSREG !== ""){ #
+							   #: DTS_ANSREG #
+						       # } #
+			</span>
+        </td> 
+		<td class="ta-l">
+            <span class="ells"># if(CD_INQCLFT !== ""){ #
+							   <co04-cd-to-nm cd="#:CD_INQCLFT#" nm-box="csDataVO.csQuestionCodeOp">
+      						   # } #
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells"># if(NM_INQ !== ""){ #
+					    	   #: NM_INQ #
+ 							   # } #
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells"># if(NM_MRKITEM !== ""){ #
+							   #: NM_MRKITEM #
+							   # } #
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells"># if(NO_MRKORD !== ""){ #
+							   #: NO_MRKORD #
+						       # } #
+			</span>
+        </td>
+	</tr>
+</script>
+
+<!-- cs 답변등록 팝업 그리드 -->
+<script id="ord_popup_template" type="text/x-kendo-template">
+<div class="not_pop_title"><h3><span class="k-icon k-edit"></span>문의 답변 등록</h3></div>
+<table class="signal">
+	<colgroup>
+      <col style="width: 14%;">
+      <col style="width: 30%;">
+      <col style="width: 14%;">
+      <col style="width: 30%;">
+    </colgroup>
+    <tbody data-uid="#= uid #">	
+	<tr class="border-bottom-line border-top-line">	
+		<td class="border-right-line">
+			마켓
+		</td>
+		<td class="border-right-line">
+			#if(NM_MRK){ #
+			#: NM_MRK #
+			#}#
+		</td>
+		<td class="border-right-line">
+			주문번호
+		</td>
+		<td class="border-right-line">
+			#if(NO_MRKORD){ #
+			#: NO_MRKORD #
+			#}#
+		</td>
+	</tr>
+	<tr class="border-bottom-line">
+		<td class="border-right-line">
+			상품코드
+		</td>
+		<td class="border-right-line" colspan="3">
+			#if(CD_MRKITEM){ #
+			#: CD_MRKITEM #
+			#}#	
+		</td>
+	</tr>
+	<tr class="border-bottom-line">
+		<td class="border-right-line">
+			상품명/옵션
+		</td>
+		<td class="border-right-line" colspan="3">
+			#if(NM_MRKITEM){ #
+			#: NM_MRKITEM #
+			#}#
+		</td>
+	</tr>
+	<tr class="border-bottom-line">
+		<td class="border-right-line">
+			문의자
+		</td>
+		<td class="border-right-line">
+			#if(NM_INQ){ #
+			#: NM_INQ #
+			#}#	
+		</td>
+		<td class="border-right-line">
+			문의일시
+		</td>
+		<td class="border-right-line">
+			#if(DTS_INQREG){ #
+			#: DTS_INQREG #
+			#}#			
+		</td>
+	</tr>
+	<tr class="border-bottom-line">
+		<td class="border-right-line">
+			문의구분
+		</td>
+		<td colspan="3">
+			#if(CD_INQCLFT){ #
+			<co04-cd-to-nm cd="#:CD_INQCLFT#" nm-box="csDataVO.csQuestionCodeOp">
+			#}#
+		</td> 
+	</tr>
+	<tr class="border-bottom-line">
+		<td class="border-right-line">
+			답변내용
+		</td>
+		<td colspan="3">			
+			<textarea class="k-textbox" name="DC_ANSCTT" data-bind="value: DC_ANSCTT" style="width:100%; height:150px;"></textarea>
+		</td> 
+	</tr>
+	</tbody>
+</table>
+</script>
+
+<!-- 그리드 툴바 템플릿 -->
+<script id="ord-toolbar-template" type="text/x-kendo-template">
+	<button class="k-button k-button-icontext k-grid-edit" ng-click="onCsGridEditClick()"><span class="k-icon k-edit"></span>답변등록</button>    
+    <a class="k-button k-button-icontext k-grid-info" ng-click=""><span class="k-icon k-i-info"></span>문의정보 가오기</a>
+	<a class="k-button k-button-icontext k-grid-send" ng-click=""><span class="k-icon k-i-send"></span>답변 전송하기</a>
+</script>
+
+<!-- 검색시 유효성 검사 경고창 -->
+<script id="ord-notificationTemplate" type="text/x-kendo-template">
+	<p style="width: 19em; padding:1em; white-space:nowrap">#:kValue# {{ngValue}}</p>
+</script>
+
+<span kendo-notification="notf1" k-options="notf1Options"></span>
+
+<style>
+.not_pop_title{
+	padding: 10px;
+}
+.k-edit-form-container{
+    width: 900px;
+}
+.k-popup-edit-form .k-edit-label{
+    width: 20%;
+    text-align: left;
+}
+.k-popup-edit-form .k-edit-field{
+    width: 70%;
+}
+.k-popup-edit-form .k-edit-field > .k-textbox,
+.k-popup-edit-form .k-edit-field > .k-widget:not(.k-tooltip){
+    width: 98%;
+}
+.signal{    
+    width: 99%;
+    margin: 5px;
+}
+.border-right-line{    
+	border-right: 1px solid #eee;    
+}
+.border-top-line{	
+	border-top: 1px solid #eee;
+}
+.border-bottom-line{	
+	border-bottom: 1px solid #eee;
+}
+.k-edit-form-container .k-edit-buttons{
+	border-style: none;
+}
+#example{
+    min-height: 200px;
+}
+#example .title {
+    font-weight: bold;
+    margin-bottom: 25px;
+}
+.search-wrapper {
+    width: 100%;
+}
+.query-match {
+	color: red;
+}
+.select-all-wrapper {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.selected-count {
+    float: right;
+    color: #aaa;
+}
+.k-treeview {
+    border-width: 1px!important;
+    padding: 5px;
+}
+.selectedName {
+    padding: 5px 10px;
+    background: #aaa;
+    color: white;
+    float: left;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    border-radius: 10px;
+} 
+.class-target-dropdown{
+	width:65%; 
+	display:inline-block; 
+	vertical-align:middle;
+}
+.class-target-button{
+	width:33%; 
+	display:inline-block; 
+	vertical-align:middle; 
+	text-align:right;
+}
+.ells{
+	text-overflow: ellipsis; 
+	white-space: nowrap; 
+	overflow:hidden;
+}
+</style>
