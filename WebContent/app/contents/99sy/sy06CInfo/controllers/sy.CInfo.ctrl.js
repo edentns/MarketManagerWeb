@@ -35,6 +35,7 @@
 	            		boxTitleAS  : "A/S정보",
 	            		boxTitleWaho: "창고정보",
 	                    param: {
+	                    	NO_C            : "",       // 회사번호
 	                    	NM_C            : "",       // 회사명
 	                        NM_RPSTT		: "",		// 대표명
 	                        CD_BSNSCLFT   	: "999",	// 사업자구분
@@ -218,7 +219,6 @@
 					};
 					
 					vo.reload = function() {
-						/*$window.location.reload();*/
 						var param = {
 		                		procedureParam: "USP_SY_06CInfo01_GET"
 		                	};
@@ -241,10 +241,10 @@
 					
 					vo.fileSave = function() {
 		        		if(vo.fileBsnsVO.dirty) {
-		        			vo.fileBsnsVO.CD_REF1 = 'SYEM00000001';
+		        			vo.fileBsnsVO.CD_REF1 = vo.param.NO_C;
 		        			vo.fileBsnsVO.doUpload(function(){
 				        		if(vo.fileCommVO.dirty) {
-				        			vo.fileCommVO.CD_REF1 = 'SYEM00000001';
+				        			vo.fileCommVO.CD_REF1 = vo.param.NO_C;
 				        			vo.fileCommVO.doUpload(function(){
 					        			alert('성공하였습니다.');
 					        		}, function() {

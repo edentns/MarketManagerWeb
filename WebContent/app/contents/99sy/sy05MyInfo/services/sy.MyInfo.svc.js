@@ -16,7 +16,15 @@
                 updatePassword: function (param) {
                     return $http({
                         method	: "PUT",
-                        url		: APP_CONFIG.domain +"/user/private",
+                        url		: APP_CONFIG.domain +"/sy05MyInfo/pwd",
+                        data	: param
+                    });
+                },
+                
+                updateYn: function (param) {
+                    return $http({
+                        method	: "PUT",
+                        url		: APP_CONFIG.domain +"/sy05MyInfo/yn",
                         data	: param
                     });
                 },
@@ -29,9 +37,16 @@
                 makePwParam: function ( myInfoVO ) {
                     var param = myInfoVO.param;
                     return {
-                        CD					: null,
-                        oldPassword	: param.currentPw,
-                        newPassword	: param.newPw
+                    	OLD_DC_PWD	: param.currentPw,
+                    	DC_PWD		: param.newPw
+                    };
+                },
+                
+                makeYnParam: function ( myInfoVO ) {
+                    var param = myInfoVO.param;
+                    return {
+                    	YN_SMS		: param.YN_SMS,
+                    	YN_EMI		: param.YN_EMI
                     };
                 },
 
@@ -47,7 +62,7 @@
                     if ( param.currentPw === "" ) {
                         param.message = "비밀번호를 입력해주세요.";
                     } else {
-                        if ( param.newPw==="" || param.newPw.length<6 ) {
+                        if ( param.newPw==="" || param.newPw.length<6 || param.newPw === "undefined" ) {
                             param.message = "비밀번호는 6자리이상 15자리 이하입니다.";
                         } else {
                             if ( param.newPw === param.newPwChk ) {

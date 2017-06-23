@@ -44,12 +44,16 @@
 	                	CD_REF4: '',
 	                	CD_REF5: '',
 	                	fileId: '',
-	                	fileName: '',          // 첨부파일 명칭
-	                	delBtnDisabled: true,  // 삭제버튼 활성화 여부
-	                	currentData: null,     // 조회된 첨부파일 데이터
-	                	currentDataList: [], // 조회된 첨부파일 데이터 리스트 (멀티건 사용)	
-	                	deleteDataList: [],  // 삭제된 데이터 리스트 (멀티건 사용)
-	                	dirty: false,          // 변경사항 여부
+	                	fileName: '',         // 첨부파일 명칭
+	                	delBtnDisabled: true, // 삭제버튼 활성화 여부
+	                	currentData: null,    // 조회된 첨부파일 데이터
+	                	currentDataList: [],  // 조회된 첨부파일 데이터 리스트 (멀티건 사용)	
+	                	deleteDataList: [],   // 삭제된 데이터 리스트 (멀티건 사용)
+	                	dirty: false,         // 변경사항 여부
+	                	bImage: false,        // 이미지파일여부
+	                	imgSrc: '',
+	                	imgWidth: '100%',
+	                	imgHeight: '100%'
                 	};
 
                     /**
@@ -57,11 +61,16 @@
                      */
                 	$scope.initLoad = function () {
                 		var self = this;
-                		if($scope.filevo.limitCnt) $scope.co02FileVO.limitCnt = $scope.filevo.limitCnt;
+                		if($scope.filevo.limitCnt)  $scope.co02FileVO.limitCnt  = $scope.filevo.limitCnt;
+                		if($scope.filevo.bImage)    $scope.co02FileVO.bImage    = $scope.filevo.bImage;
+                		if($scope.filevo.imgSrc)    $scope.co02FileVO.imgSrc    = $scope.filevo.imgSrc;
+                		if($scope.filevo.imgWidth)  $scope.co02FileVO.imgWidth  = $scope.filevo.imgWidth;
+                		if($scope.filevo.imgHeight) $scope.co02FileVO.imgHeight = $scope.filevo.imgHeight;
                 		
                 		if($scope.filevo.currentData) {
                 			$scope.co02FileVO.currentData = $scope.filevo.currentData;
                 			$scope.co02FileVO.fileName = $scope.filevo.currentData.NM_FILE;
+                			if($scope.filevo.bImage) $scope.co02FileVO.imgSrc = $scope.filevo.currentData.NM_FILEPATH;
                 			$scope.co02FileVO.delBtnDisabled = false;
                 		}
                 		if($scope.filevo.CD_AT) {
@@ -98,8 +107,13 @@
                 		if(self.fileName !== "" && self.currentData!==null) {
                 			self.YN_DEL = 'Y';
                 		}
+                		
+                		if(self.bImage) {
+                			self.imgSrc = '//:0';
+            			}
+                		
                 		angular.element($document[0].getElementById(self.fileId)).val(null);
-            			$scope.co02FileVO.delBtnDisabled = true;
+            			self.delBtnDisabled = true;
                 		self.uploader.clearQueue();
                 		self.fileName = "";
                 		self.dirty = true;
@@ -112,15 +126,19 @@
                 		var self = this;
 
                 		self.isUploadSuccess = true;
-                		self.YN_DEL = 'N';
-                		self.fileName = '';          // 첨부파일 명칭
-                		self.delBtnDisabled = true;  // 삭제버튼 활성화 여부
-                		self.currentData = null;     // 조회된 첨부파일 데이터
-                		self.dirty = false;          // 변경사항 여부
+                		self.YN_DEL          = 'N';
+                		self.fileName        = '';    // 첨부파일 명칭
+                		self.delBtnDisabled  = true;  // 삭제버튼 활성화 여부
+                		self.currentData     = null;  // 조회된 첨부파일 데이터
+                		self.dirty           = false; // 변경사항 여부
 
+            			if($scope.filevo_back.imgSrc == '') self.imgSrc = '//:0';
+            			else                                self.imgSrc = $scope.filevo_back.imgSrc;
+                		
                 		if($scope.filevo_back.currentData) {
-                			self.currentData = $scope.filevo_back.currentData;
-                			self.fileName = $scope.filevo_back.currentData.NM_FILE;
+                			self.currentData    = $scope.filevo_back.currentData;
+                			self.fileName       = $scope.filevo_back.currentData.NM_FILE;
+                			if(self.bImage) self.imgSrc = $scope.filevo_back.currentData.NM_FILEPATH;
                 			self.delBtnDisabled = false;
                 		}
                 		
@@ -149,7 +167,7 @@
                 		var self = this,
             		    	hiddenA = null;
                 		
-                		if(self.dirty || !self.currentData || !self.currentData.NO_AT) return;
+                		if(self.dirty || !self.currentData || !self.currentData.NO_AT || self.bImage) return;
                 		
 						hiddenA = document.createElement('a');
 						hiddenA.setAttribute('id', 'fileDownload');
@@ -204,7 +222,6 @@
                 			});
                 		}
                 		
-                		//self.uploader.clearQueue();
                 		self.fileName = "";
                 		self.dirty = true;
                 	};
@@ -267,7 +284,8 @@
                                 	"cd_ref2" : self.CD_REF2,
                                 	"cd_ref3" : self.CD_REF3,
                                 	"cd_ref4" : self.CD_REF4,
-                                	"cd_ref5" : self.CD_REF5
+                                	"cd_ref5" : self.CD_REF5,
+                                	"bimage"  : self.bImage
                                 });
                             });
                             self.uploader.uploadAll();
@@ -294,6 +312,11 @@
 
                     	fileName = fileName.replace("C:\\fakepath\\","");
                     	fileLength = fileName.length;
+                    	
+                    	if(!(fileItems._file.type.indexOf('image') > -1)){
+                    		alert("이미지파일이 아닙니다.");
+                    		return;
+                    	}
 
                     	if(fileLength > 15) {
                     		fileName = fileName.slice(0,9)+"..."+fileName.slice(fileLength-6,fileLength);
@@ -317,6 +340,18 @@
                     		$scope.co02FileVO.fileName = fileName;
                     		return;
                     	}
+                    	// image일 경우
+                    	else if($scope.co02FileVO.bImage) {
+                    		var reader = new FileReader();
+                    		
+                    		reader.onload = function(e) {
+                    			$scope.$apply(function() {
+                    				$scope.co02FileVO.imgSrc = e.target.result;
+                    			})
+                    		}
+
+                    		reader.readAsDataURL(fileItems._file);
+                    	}    
                     	
                     	if(self.queue.length !== 1) {
                     		self.clearQueue();
@@ -350,7 +385,6 @@
                         $scope.$emit( "event:loading", false );
                         if ( $scope.filevo.isUploadSuccess ) {
                         	if(loFnSuccessCallBack) loFnSuccessCallBack();
-                        	
                         	
                         	$scope.co02FileVO.fileInit();
                         } else {

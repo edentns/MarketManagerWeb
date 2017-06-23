@@ -5,3 +5,6 @@
 	<button type='button' class='btn btn-primary' style='margin-right:2px;' title='삭제' data-ng-click='filevo.fileDelete()' data-ng-disabled='filevo.delBtnDisabled'>삭제</button>
 	<button type='button' class='btn btn-primary' style='margin-right:2px;' title='취소' data-ng-click='filevo.fileInit()' data-ng-disabled='!filevo.dirty'>취소</button>
 </div>
+<div data-ng-if="filevo.bImage && filevo.imgSrc != '//:0' && filevo.imgSrc != ''" style='margin-top:2px; width:{{filevo.imgWidth}}; height:{{filevo.imgHeight}};'>
+	<img data-ng-src='{{filevo.imgSrc}}' width="{{filevo.imgWidth}}" height="{{filevo.imgHeight}}"/> 
+</div>
