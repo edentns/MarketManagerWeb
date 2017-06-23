@@ -380,7 +380,7 @@
                 };
                 
                 $scope.onCsGridEditClick = function(){            	
-                	let grd = $scope.cskg,
+                	var grd = $scope.cskg,
 	            		chked = grd.element.find("input:checked"),
 	            		chkedLeng = grd.element.find("input:checked").length;
                 	

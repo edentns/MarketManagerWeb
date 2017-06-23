@@ -16,11 +16,11 @@
                 	$scope.returnCDtoNM = ''; 
                 	
                 	$scope.changeCDToNM = (function(){
-                    	let nmd = $scope.cd,
+                    	var nmd = $scope.cd,
                     	    grd = $scope.nmBox, 
                     	    result = '';
                     	
-                    	for(let i=0, leng=grd.length; i<leng; i++){
+                    	for(var i=0, leng=grd.length; i<leng; i++){
                     		if(grd[i].CD_DEF === nmd){
                     			result = grd[i].NM_DEF;
                     		};

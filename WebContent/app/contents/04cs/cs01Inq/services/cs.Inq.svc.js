@@ -31,7 +31,7 @@
 	        	csList : function (param) {					
 					return $http({
 						method	: "GET",
-						url		: APP_CONFIG.domain +"/cs/cslist?"+ param,
+						url		: APP_CONFIG.domain +"/cs/cslist?"+ $.param(param),
 					}).success(function (data, status, headers, config) {
 						
 					}).error(function (data, status, headers, config) {
@@ -48,10 +48,10 @@
 						url		: APP_CONFIG.domain +"/cs/update",
 						data	: param
 					}).success(function (data, status, headers, config) {
-						if(res.data !== "") {	    					
-    						alert("저장 되었습니다.");    							                			
+						if(data !== "") {	    					
+    						alert("답변이 저장 되었습니다.");    							                			
         				}else{
-        					alert("저장 실패하였습니다.!! 연구소에 문의 부탁드립니다.");
+        					alert("답변이 저장 실패하였습니다.!! 연구소에 문의 부탁드립니다.");
         					location.reload();
         				}  
 					}).error(function (data, status, headers, config) {

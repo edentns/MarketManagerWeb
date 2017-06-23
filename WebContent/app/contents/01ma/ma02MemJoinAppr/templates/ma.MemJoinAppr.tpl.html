@@ -118,10 +118,18 @@
             <span class="ells">#= DC_REPREMI #</span>
         </td> 
 		<td class="ta-l">
-            <span class="status-cell ells">#= CD_JOINYN #</span>
+            <span class="ells">
+				#if(CD_JOINYN){ #
+				<co04-cd-to-nm cd="#:CD_JOINYN#" nm-box="joinerDataVO.StatusDtOptionVO">
+				#}#
+			</span>
         </td> 
 		<td class="ta-l">
-            <span class="joiner-cell ells">#= CD_JOINITEM #</span>
+            <span class="ells">
+				#if(CD_JOINITEM){ #
+				<co04-cd-to-nm cd="#:CD_JOINITEM#" nm-box="joinerDataVO.ProcNameDtOptionVO">
+				#}#	
+			</span>
         </td> 
 		<td class="ta-c">
             <span class="ells">#= DTS_JOIN #</span>

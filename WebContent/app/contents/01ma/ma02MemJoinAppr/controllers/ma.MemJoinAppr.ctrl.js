@@ -134,7 +134,7 @@
                                     	RMKFROM:new Date(joinerDataVO.datesetting.period.end.y, joinerDataVO.datesetting.period.end.m-1, joinerDataVO.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis")
                                     };                    				                    				
                 					UtilSvc.getList(param).then(function (res) {
-                						joinerDataVO.dataTotal = res.data.results[0].length;                						
+                						//joinerDataVO.dataTotal = res.data.results[0].length;                						
                 						e.success(res.data.results[0]);
                 					});
                     			},
@@ -157,6 +157,10 @@
                     			}
                     		},
                     		pageSize: 11,
+                    		change: function(e){
+                    			var data = this.data();
+                    			joinerDataVO.dataTotal = data.length;
+                    		},
                     		batch: true,
                     		schema: {
                     			model: {
@@ -279,32 +283,20 @@
             		        	}
                     	],
                     	dataBound: function(e) {
-                            //this.expandRow(this.tbody.find("tr.k-master-row").first()); 마스터 테이블을 확장하므로 세부행을 볼 수 있음
+                            this.expandRow(this.tbody.find("tr.k-master-row").first()); //마스터 테이블을 확장하므로 세부행을 볼 수 있음
                                                         
                             var rows = this.items();
                             $(rows).each(function () {
                                 var index = $(this).index() + 1,
                                     rowLabel = $(this).find(".seq"),
-                                    statusLabel = $(this).find(".status-cell"),
-                                    joinLabel = $(this).find(".joiner-cell"),
-                                    grid = $scope.kg,
-	    	                	    dataItem = grid.dataItem($(this)),
-	    	                	    resultStatusLabel = '',
-	    	                	    resultJoinerLabel = '';
+                                	grid = $scope.kg,                                
+                                	dataItem = grid.dataItem($(this));
                                 
                                 //로우 카운트 표시
                                 $(rowLabel).html(index);
                                 dataItem.ROW_NUM = index;
-                                
-                                //상태값 표시
-                                resultStatusLabel = Util01maSvc.changeCDToNM(dataItem.CD_JOINYN, $scope.joinerDataVO.StatusDtOptionVO);
-                                $(statusLabel).html(resultStatusLabel);
-                                
-                                //가입 상품 표시
-                                resultJoinerLabel = Util01maSvc.changeCDToNM(dataItem.CD_JOINITEM, $scope.joinerDataVO.ProcNameDtOptionVO);
-                                $(joinLabel).html(resultJoinerLabel);
                             });                            
-                        },
+                        },                        
                         collapse: function(e) {
                             this.cancelRow();
                         },         	
