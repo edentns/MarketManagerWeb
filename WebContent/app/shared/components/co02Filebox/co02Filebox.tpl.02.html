@@ -16,6 +16,7 @@
 				<tr data-ng-repeat="fileInfo in filevo.currentDataList">
 					<td style="padding:2px;"><a data-ng-if='!fileInfo.phantom' data-ng-click='filevo.fileMultiDownload($index)'>[다운로드]</a>{{fileInfo.NM_FILE}}</td>
 					<td style="padding:2px;">
+						<!-- button type='button' class='btn btn-primary' style='margin-right:2px;' title='삭제' data-ng-click='filevo.addDeleteDataList($index)'>삭제</button -->
                         <button type="button" class="btn btn-danger btn-xs" data-ng-click="filevo.addDeleteDataList($index)">
                             <span class="glyphicon glyphicon-trash"></span> 삭제
                         </button>
