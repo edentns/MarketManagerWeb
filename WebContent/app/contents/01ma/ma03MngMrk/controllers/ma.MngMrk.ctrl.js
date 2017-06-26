@@ -456,7 +456,7 @@
                     	editable: {
                     	    confirmation: "삭제 하시겠습니까?",
                     	},
-                    	height: 500
+                    	height: 590
         		};        
             }]);
 }());

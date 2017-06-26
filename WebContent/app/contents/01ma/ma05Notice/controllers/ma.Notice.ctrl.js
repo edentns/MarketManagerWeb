@@ -504,7 +504,7 @@
                 		},*/
                     	resizable: true,
                     	rowTemplate: kendo.template($.trim($("#ma_notice_template").html())),
-                    	height: 500                    	
+                    	height: 590                    	
         		};
                 
                 $scope.checkedIds = [];
