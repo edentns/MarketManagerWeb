@@ -675,8 +675,8 @@
         			title: "가입자 검색",
         			show: $scope.dialogShow,
         			searchKeyUp: function(keyEvent){
-        				let scopeTreeView = $scope.treeViewPop;
-        				let grdView = $scope.memSearchPopGrd;
+        				var scopeTreeView = $scope.treeViewPop;
+        				var grdView = $scope.memSearchPopGrd;
         				filter(scopeTreeView.dataSource, keyEvent.target.value.toLowerCase(), grdView.searchTotal);
         				grdView.selectedCount = 0;
         				scopeTreeView.element.find(".k-checkbox").prop("checked", false);
@@ -687,7 +687,7 @@
         	                    {
         	                        text: '확인', action: function () {
         	                            $scope.$apply(function (e) {                            	
-        	                            	let view = $scope.memSearchPopGrd; 
+        	                            	var view = $scope.memSearchPopGrd; 
         	                            	view.repeaterItems = getCheckedItems($scope.treeViewPop, view);
         	                            	
         	                            	//전체 조회 시의 체크시 "전체"로 표시함

@@ -356,7 +356,7 @@
                 //가입 승인시 체크박스에 체크된 데이터만 전송
                 $scope.trueDataResult = function(obj){
                 	var result = [];
-                	for(let i=0, leng=obj.length; i<leng; i++){
+                	for(var i=0, leng=obj.length; i<leng; i++){
                 		if(obj[i].ROW_CHK){
                 			result.push(obj[i]);
                 		};

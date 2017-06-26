@@ -82,7 +82,7 @@
                 
                 //새로 저장시 유효성 검사 (수정 할 땐 비밀번호를 따로 입력할 필요할 없어서 required 하지 않아서 저장시 따로 함수를 만듦 kendo로는  editable true 일때만 됨)
                 var isValid = function(inputs){
-                	let checkReturn = true;
+                	var checkReturn = true;
                 	angular.forEach(inputs.data, function (obj) {
                 		if (!checkReturn) return;
                         if (obj.NM_MRK === null || obj.NM_MRK === "") {alert("마켓명을 설정해 주세요"); checkReturn = false;}
