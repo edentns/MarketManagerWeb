@@ -34,7 +34,7 @@
                             </td>
                         </tr>
                         <tr data-ng-if="page.isWriteable()">
-                            <th><span data-ng-if="syUserVO.kind=='insert'" class="form-required">* </span>비밀번호</th>
+                            <th>비밀번호<span data-ng-if="syUserVO.kind=='insert'" class="form-required">* </span></th>
                             <td colspan="3">
                                 <input type="password" class="form-control wid-x4" id="userPw" name="userPw" title="비밀번호 입력"
                                        maxlength="14"
@@ -43,7 +43,7 @@
                             </td>
                         </tr>
                         <tr data-ng-if="page.isWriteable()">
-                            <th><span data-ng-if="syUserVO.kind=='insert'" class="form-required">* </span>비밀번호 확인</th>
+                            <th>비밀번호 확인<span data-ng-if="syUserVO.kind=='insert'" class="form-required">* </span></th>
                             <td colspan="3">
                                 <input type="password" class="form-control wid-x4" id="userChkPw" title="비밀번호확인 입력"
                                        maxlength="14"
@@ -54,7 +54,7 @@
                         </tr>
                         <tr>
                             <th>이름<span class="form-required">* </span></th>
-                            <td>
+                            <td colspan="3">
                                 <span data-ng-if="page.isWriteable() && syUserVO.kind=='insert'">
                                     <input type="text" class="form-control wid-x6" id="userNM_EMP" title="이름 입력"
                                            maxlength="20"
@@ -67,7 +67,7 @@
                         </tr>
                         <tr>
                             <th>부서/직급<span class="form-required">* </span></th>
-                            <td>
+                            <td colspan="3">
                                 <span data-ng-if="page.isWriteable()">
                                     <select class="form-control wid-x5" id="userDepart" title="부서선택"
                                             data-ng-model="syUserVO.selectedDepart"
@@ -168,9 +168,9 @@
 									       ng-false-value="N">
                                 </span>
                             </td>
-                            <th data-ng-show="syUserVO.kind == 'detail'">SMS동의일시</th>
-                            <td data-ng-show="syUserVO.kind == 'detail' && page.isWriteable()">
-                                 <span>
+                            <th>SMS동의일시</th>
+                            <td>
+                                 <span data-ng-show="syUserVO.kind == 'detail' && page.isWriteable()">
                                      {{syUserVO.param.DTS_SMS}}
                                  </span>
                             </td>
@@ -185,9 +185,9 @@
 									       ng-false-value="N">
                                 </span>
                             </td>
-                            <th data-ng-show="syUserVO.kind == 'detail'">이메일동의일시</th>
-                            <td data-ng-show="syUserVO.kind == 'detail' && page.isWriteable()">
-                                 <span>
+                            <th>이메일동의일시</th>
+                            <td>
+                                 <span data-ng-show="syUserVO.kind == 'detail' && page.isWriteable()">
                                      {{syUserVO.param.DTS_EMI}}
                                  </span>
                             </td>

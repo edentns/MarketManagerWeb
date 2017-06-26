@@ -31,7 +31,7 @@
                     ],
                     primaryName : "POS",
                     parentName  : "PARENT",
-                    height : 352,
+                    height : 693,
 
                     onRegisterApi : function (treeApi) {
                         syMenuVO.treeApi = treeApi;

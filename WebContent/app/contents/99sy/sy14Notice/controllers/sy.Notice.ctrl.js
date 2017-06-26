@@ -241,7 +241,7 @@
 						},
                     	resizable: true,
                     	rowTemplate: kendo.template($.trim($("#ma_notice_template").html())),
-                    	height: 450                    	
+                    	height: 590                    	
         		};
                 
                 

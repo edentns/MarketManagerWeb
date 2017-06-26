@@ -24,27 +24,25 @@
     <div class="row">
         <!-- 권한정보 Layer -->
         <div class="content-area-container col-xs-5">
-            <div data-content-box-layer data-box-title="syAtrtVO.boxTitle">
-                 <div class="box-content-article"> <div class="article-header">
-                <div class="col-xs-6 article-header-box">
-                    <button data-ng-if="page.isWriteable()" type="button" class="ae-btn ae-add-btn" title="사용자코드 추가" data-ng-click="syAtrtVO.add()"><i class="fa fa-plus"></i> 추가</button>
-                    <button data-ng-if="page.isWriteable()" type="button" class="ae-btn ae-delete-btn" title="사용자코드 삭제" data-ng-click="syAtrtVO.delete()"><i class="fa fa-times"></i> 삭제</button>
-                </div>
-                <div class="col-xs-6 article-header-box ta-r">
-
-                </div>
-            </div>
-                <div class="article-view">
-                    <div data-ui-grid="syAtrtVO.options" ui-grid-selection ui-grid-edit ui-grid-cellnav class="grid"></div>
-                </div>
-            </div>
+            <div data-content-box-layer data-box-title="syAtrtVO.boxTitle" data-content-height="height:756px; margin-bottom:-10px;">
+                <div class="box-content-article"> 
+                	<div class="article-header">
+		                <div class="col-xs-6 article-header-box">
+		                    <button data-ng-if="page.isWriteable()" type="button" class="ae-btn ae-add-btn" title="사용자코드 추가" data-ng-click="syAtrtVO.add()"><i class="fa fa-plus"></i> 추가</button>
+		                    <button data-ng-if="page.isWriteable()" type="button" class="ae-btn ae-delete-btn" title="사용자코드 삭제" data-ng-click="syAtrtVO.delete()"><i class="fa fa-times"></i> 삭제</button>
+		                </div>
+		            </div>
+	                <div class="article-view">
+	                    <div data-ui-grid="syAtrtVO.options" ui-grid-selection ui-grid-edit ui-grid-cellnav style="height:690px;"></div>
+	                </div>
+            	</div>
             </div>
         </div>
         <!--/ 권한정보 END -->
 
         <!-- 메뉴정보 Layer -->
         <div class="content-area-container col-xs-7" data-ng-controller="sy.AtrtMenuCtrl">
-            <div data-content-box-layer data-box-title="menuVO.boxTitle" >
+            <div data-content-box-layer data-box-title="menuVO.boxTitle" data-content-height="height:756px; margin-bottom:-10px;">
                 <div class="box-content-article">
                     <div class="article-header">
  

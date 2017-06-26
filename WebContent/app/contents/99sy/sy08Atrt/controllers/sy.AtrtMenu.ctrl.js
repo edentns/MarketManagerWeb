@@ -46,7 +46,7 @@
                     ],
                     primaryName : "POS",
                     parentName  : "PARENT",
-                    height : 352,
+                    height : 680,
 
                     onRegisterApi : function (treeApi) {
                         menuVO.treeApi = treeApi;
