@@ -10,6 +10,22 @@
 			function ($modal) {
 				var self = this;
 				
+				self.openIt01ItemCfct = function (NO_MNGMRK,options) {
+					var self = this,
+					defaults = {
+						templateUrl: "app/shared/modal/it01ItemCfct/modal.ItemCfct.tpl.html",
+						controller : "modal.itemCfct",
+						resolve    : { sendData:function(){
+										return NO_MNGMRK;
+										}},
+						size       : "lg"
+					};
+
+				if (options) { defaults = angular.extend(defaults, options); }
+
+				return $modal.open(defaults);
+			};
+				
 				/**
             	 * 함기현 - 주소검색창 새로 구현중
             	 */
