@@ -36,6 +36,8 @@
 	            $(document).on("click", ".cell", function(e) {
 	            	if($scope.it01ItemCfctVO.chFlag){
 	            		var grid = $("#grid"+e.currentTarget.id).data("kendoGrid");
+	            		var grid0 = $("#grid0").data("kendoGrid");
+	            		alert(grid0.table.focus.name);
 						grid.cancelChanges();
 	            	}else{
 	            		$scope.it01ItemCfctVO.gridNum = e.currentTarget.id;  
