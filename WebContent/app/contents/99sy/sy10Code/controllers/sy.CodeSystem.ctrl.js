@@ -54,7 +54,7 @@
                     this.cancelRow();
                 },
             	editable: false,
-            	height: 260,
+            	height: 346,
             	
             	initLoad: function() {
             		var self = this;

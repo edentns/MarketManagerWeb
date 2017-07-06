@@ -25,35 +25,22 @@
                         <tr>
                             <th>마켓명</th>
                             <td>
-                            	<input class="k-textbox" title="마켓명" ng-model="mngMrkDateVO.searchText.value" focus="mngMrkDateVO.searchText.focus" ng-required="true" data-eden-type="kor" type="text" style="width:100%;"/>
+                            	<input class="k-textbox" title="마켓명" ng-model="mngMrkDateVO.searchText.value" focus="mngMrkDateVO.searchText.focus" data-eden-type="kor" type="text" style="width:100%;"/>
                             </td>
                             <th>연동방법</th>
                             <td>
-                            	<select kendo-multi-select title="연동방법" 
-                            		k-ng-model="mngMrkDateVO.methodDataCode" 
-						            k-options="mngMrkDateVO.methodDataSource" 
-						            style="width:100%;">
-                            	</select>
+                            	<co01-mcbox model="mngMrkDateVO.methodDataCode" options="mngMrkDateVO.methodDataSource" setting="mngMrkDateVO.methodDataSetting" style="width:100%;">
+		        				</co01-mcbox>
                             </td>
                             <th>연동상태</th>
                             <td>
-                            	<select kendo-multi-select title="연동상태" 
-                            		k-ng-model="mngMrkDateVO.statusDataCode"
-                            		k-options="mngMrkDateVO.statusDataSoruce"
-                            		style="width:100%;">
-                            	</select>      	
+                            	<co01-mcbox model="mngMrkDateVO.statusDataCode" options="mngMrkDateVO.statusDataSoruce" setting="mngMrkDateVO.statusDataSetting" style="width:100%;">
+		        				</co01-mcbox> 	
                             </td>           
                         </tr>
                         <tr>
                             <th>연동기간 </th>
-                            <td colspan="5">                            	
-                            	<!-- <input kendo-date-picker title="연동시작기간" k-ng-model="mngMrkDateVO.dateObject1" k-options="dateOptions" />
-                            	<span> ~ </span>
-                            	<input kendo-date-picker title="연동종료기간" k-ng-model="mngMrkDateVO.dateObject2" k-options="dateOptions" />
-                          
-                            	<kendo-button type="button" title="1일" data-ng-click="mngMrkDateVO.addDays(1)">1일</kendo-button>
-                            	<kendo-button type="button" title="1주일" data-ng-click="mngMrkDateVO.addDays(7)">1주일</kendo-button>
-                            	<kendo-button type="button" title="1개월" data-ng-click="mngMrkDateVO.addDays(30)">1개월</kendo-button> -->
+                            <td colspan="5">  
                             	<div class="frm-group" data-date-search-group="mngMrkDateVO.datesetting"></div>
                             </td>
                         </tr>
@@ -70,7 +57,7 @@
         </div>
                 
         <!-- 조회 리스트 -->          
-		<div class="content-area-container col-xs-12" style="padding:50px 0px 0px 0px;">				
+		<div class="content-area-container col-xs-12" style="padding:0px 0px 0px 0px; margin-top:-5px;">				
 	        <kendo-grid options="gridMngMrkUserVO">
 	        </kendo-grid>	            
         </div>

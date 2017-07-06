@@ -66,7 +66,7 @@
 					 */
 					headerIconVO.moveProfile = function ( $event ) {
 						$event.preventDefault();
-						$state.go('app.profile');
+						$state.go('app.syMyInfo');
 					};
 
 					headerIconVO.initLoad();

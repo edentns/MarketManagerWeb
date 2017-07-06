@@ -7,4 +7,29 @@
             </ol>
         </div>
     </div>
+    
+    <div class="row">
+   		<div class="content-area-container col-xs-12" style="margin:0px 0px -5px 0px;">
+    		<kendo-button class="k-primary" style="float:right" data-ng-click = "it01ItemCfctVO.modal()">참고조회</kendo-button>
+    	</div>
+    </div>
+    
+    <div class="row">
+               
+        <!-- 조회 리스트 -->          
+		<div class="content-area-container col-xs-12" style="padding:0px 0px 0px 0px;">
+			<div class="content-area-container col-xs-4">
+                <kendo-grid options="it01ItemCfctGridVO[0]" id="grid0">
+                </kendo-grid>
+			</div>
+			<div class="content-area-container col-xs-4">
+                <kendo-grid options="it01ItemCfctGridVO[1]" id="grid1">
+                </kendo-grid>
+			</div>
+			<div class="content-area-container col-xs-4">
+                <kendo-grid options="it01ItemCfctGridVO[2]" id="grid2">
+                </kendo-grid>
+			</div>
+        </div>
+    </div>
 </div>

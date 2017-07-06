@@ -195,91 +195,91 @@
 								   field: "ROW_CHK",
 								   title: "선택",
 								   width: 20,
-								   headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 10px"}
+								   headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}
 							    },    
                		            {
 								   field: "ROW_NUM",
 								   title: "No",
 								   width: 30,
-								   headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 10px"},
+								   headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"},
                		            },
             		            {
                		        	   field: "NO_C_NM_C",
                		        	   title: "회사코드-사업자명",
                		        	   width: 100,
-               		        	   headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 10px"}
+               		        	   headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}
             		            },
             		            {
                		        	   field: "NM_RPSTT",
                		        	   title: "대표자명",
                		        	   width: 100,
-               		        	   headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 10px"}
+               		        	   headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}
                		            },
 	            		        {
            		        	       field: "NO_BSNSRGTT",
            		        	       title: "사업자번호",
            		        	       width: 80,
-           		        	       headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 10px"}
+           		        	       headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}
            		        	    },
             		            {
             		        	   field: "NO_COMMSALEREG",
             		               title: "통신판매신고번호",
             		               width: 80,
-            		               headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 10px"}
+            		               headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}
             		            },
             		            {
             		        	   field: "DC_ID",
             		               title: "아이디",
             		               width: 70,
-            		               headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 10px"}
+            		               headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}
             		            },
             		            {
             		        	   field: "NM_EMP",
             		               title: "담당자",
             		               width: 80,
-            		               headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 10px"}
+            		               headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
             		            },
             		            {
             		        	   field: "NO_PHNE",
             		               title: "전화번호",
             		               width: 80,
-            		               headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 10px"}
+            		               headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
             		            },
             		            {
             		        	   field: "DC_NEWADDR_DC_OLDADDR",
             		        	   title: "주소1",
             		        	   width: 50,
-            		        	   headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 10px"}
+            		        	   headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
            		        	    },          		           
            		        	    {
 	         		        	   field: "DC_REPREMI",
 	         		        	   title: "이메일",
 	         		        	   width: 140,
-	         		        	   headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 10px"}
+	         		        	   headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
 	        		            }, 
 	        		            {
 		     		        	   field: "CD_JOINYN",
 		     		        	   title: "상태",
 		     		        	   width: 50,
-		     		        	   headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 10px"}
+		     		        	   headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
 		    		        	}, 
 		    		        	{
 	         		        	   field: "CD_JOINITEM",
 	         		        	   title: "가입상품",
 	         		        	   width: 50,
-	         		        	   headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 10px"}
+	         		        	   headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
 	        		        	}, 
         		        	    {
              		        	   field: "DTS_JOIN",
              		        	   title: "가입일",
              		        	   width: 80,
-             		        	   headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 10px"}
+             		        	   headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
             		        	}, 
         		        	    {
              		        	   field: "DTS_JOINREQ",
              		        	   title: "가입요청일시",
              		        	   width: 80,
-             		        	   headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 10px"}
+             		        	   headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
             		        	}
                     	],
                     	dataBound: function(e) {
@@ -356,7 +356,7 @@
                 //가입 승인시 체크박스에 체크된 데이터만 전송
                 $scope.trueDataResult = function(obj){
                 	var result = [];
-                	for(let i=0, leng=obj.length; i<leng; i++){
+                	for(var i=0, leng=obj.length; i<leng; i++){
                 		if(obj[i].ROW_CHK){
                 			result.push(obj[i]);
                 		};

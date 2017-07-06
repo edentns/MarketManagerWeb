@@ -74,7 +74,7 @@
 		        		writeText: { value: "" , focus: false},				//작성자
 	                    contentText: { value: "" , focus: false},			//제목/내용
 	                    noticeCdModel : "*",								//공지구분	                    
-	                    noticeTargetModel : [],			   					//공지대상
+	                    noticeTargetModel : ["*"],			   					//공지대상
 	                    allSelectTargetModel : [],							//전체 선택시 공지대상자들 아이디를 담아 놓는 모델 
 	                    noticeCdVO : [],		 							//조회시 필요한 공지구분 드랍다운
 	                    noticeTargetVO : {									//조회시 필요한 공지대상 드랍다운
@@ -129,7 +129,7 @@
 	            	me.writeText.value = "";
                 	me.contentText.value = "";
                 	me.noticeCdModel = "*";
-                	me.noticeTargetModel = [];
+                	me.noticeTargetModel = ["*"];
                 	me.allSelectTargetModel = [];
                 	me.fileDataVO.currentDataList = [];
                 	
@@ -140,12 +140,11 @@
                 	
                 	$scope.memSearchGrd.selectAll = false;
                 	$scope.memSearchGrd.selectAllItems();              	
-                	$scope.memSearchGrd.searchValue = ""; 	//공지대상 검색 팝업창 초기화 
+                	$scope.memSearchGrd.searchValue = "전체"; 	//공지대상 검색 팝업창 초기화 
                 	                	 
                 	$scope.memSearchPopGrd.selectAll = false;
                 	$scope.memSearchPopGrd.selectAllItems();
                 	$scope.memSearchPopGrd.searchValue = ""; 	//공지대상 검색 팝업창 초기화
-                	
 	            };	   
 	            //popup insert & update Validation
 	            $scope.insertValidation = function(org){
@@ -386,63 +385,63 @@
 								   field: "ROW_CHK",
 								   title: "선택",
 								   width: 30,
-								   headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 10px"}
+								   headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}
 							    },    
                		            {
 								   field: "ROW_NUM",
 								   title: "번호",
 								   width: 30,
-								   headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 10px"},
+								   headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"},
                		            },
             		            {
                		        	   field: "NO_C",
                		        	   title: "공지대상",
                		        	   width: 100,
-               		        	   headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 10px"}
+               		        	   headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}
             		            },
             		            {
                		        	   field: "CD_NOTICE",
                		        	   title: "공지구분",
                		        	   width: 100,
-               		        	   headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 10px"}            		            
+               		        	   headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}            		            
                		            },
 	            		        {
            		        	       field: "NM_SUBJECT",
            		        	       title: "제목",
            		        	       width: 150,
-           		        	       headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 10px"}
+           		        	       headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}
            		        	    },
             		            {
             		        	   field: "DC_HTMLCONTENT",
             		               title: "공지내용",
             		               width: 120,
-            		               headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 10px"}
+            		               headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}
             		            },
             		            {
             		        	   field: "DTS_INSERT",
             		               title: "공지일시",
             		               width: 70,
-            		               headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 10px"}
+            		               headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}
             		               //format: "{0: yyyy-MM-dd HH:mm:ss}"
             		            },
             		            {
             		        	   field: "NO_WRITE",
             		               title: "작성자",
             		               width: 80,
-            		               headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 10px"}
+            		               headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
             		            },
             		            {
             		        	   field: "SQ_NOTICE",
             		               title: "우선순위",
             		               width: 50,
-            		               headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 10px"},
+            		               headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
             		               format: "{0:0}"
             		            },
             		            {
             		        	   field: "SY_FILES",
             		        	   title: "첨부파일여부",
             		        	   width: 50,
-            		        	   headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 10px"}
+            		        	   headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
            		        	    },
            		        	    { command: ["edit", "destroy"], width: 70 }
                     	],
@@ -504,7 +503,7 @@
                 		},*/
                     	resizable: true,
                     	rowTemplate: kendo.template($.trim($("#ma_notice_template").html())),
-                    	height: 500                    	
+                    	height: 590                    	
         		};
                 
                 $scope.checkedIds = [];
@@ -675,8 +674,8 @@
         			title: "가입자 검색",
         			show: $scope.dialogShow,
         			searchKeyUp: function(keyEvent){
-        				let scopeTreeView = $scope.treeViewPop;
-        				let grdView = $scope.memSearchPopGrd;
+        				var scopeTreeView = $scope.treeViewPop;
+        				var grdView = $scope.memSearchPopGrd;
         				filter(scopeTreeView.dataSource, keyEvent.target.value.toLowerCase(), grdView.searchTotal);
         				grdView.selectedCount = 0;
         				scopeTreeView.element.find(".k-checkbox").prop("checked", false);
@@ -687,7 +686,7 @@
         	                    {
         	                        text: '확인', action: function () {
         	                            $scope.$apply(function (e) {                            	
-        	                            	let view = $scope.memSearchPopGrd; 
+        	                            	var view = $scope.memSearchPopGrd; 
         	                            	view.repeaterItems = getCheckedItems($scope.treeViewPop, view);
         	                            	
         	                            	//전체 조회 시의 체크시 "전체"로 표시함
@@ -836,6 +835,5 @@
                        multiSelect.trigger("change");
                    };
                };
-            
             }]);
 }());

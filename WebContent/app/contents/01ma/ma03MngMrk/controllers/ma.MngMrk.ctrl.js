@@ -40,32 +40,22 @@
 						}
 	        		},
                     searchText: {value: "", focus: false},				    //검색어
-             	    methodDataCode : [""],			//연동방법
-             	    statusDataCode : [""],			//연동상태 	
-             	    methodDataSource : {
-             	    	autoBind: true,
-		    			dataTextField: "NM_DEF",
-                        dataValueField: "CD_DEF",
-		    			dataSource: new kendo.data.DataSource({
-		    				transport: {
-		    					read: function(e){ subCodeSetting("SYCH00016", "SY_000016", e) }
-		    				}
-		    			}),
-		    			valuePrimitive: true
-             	    },
-             	    statusDataSoruce : {
-             	    	autoBind: true,
-		    			dataTextField: "NM_DEF",
-                        dataValueField: "CD_DEF",
-                        dataSource: new kendo.data.DataSource({
-		    				transport: {
-		    					read: function(e){ subCodeSetting("SYCH00017", "SY_000017", e) }
-		    				}
-		    			}),
-		    			valuePrimitive: true
-             	    },
+             	    methodDataCode : "",			//연동방법
+             	    statusDataCode : "",			//연동상태 	
+             	    methodDataSource : resData.methodDataSource,
+             	    statusDataSoruce : resData.statusDataSoruce,
              	    dataTotal : 0,
-             	    resetAtGrd : ""
+             	    resetAtGrd : "",
+             	    methodDataSetting: {
+             		   id: "CD_DEF",
+	        		   name: "NM_DEF",
+	        		   maxNames: 2
+             	    },
+             	   statusDataSetting: {
+              		   id: "CD_DEF",
+ 	        		   name: "NM_DEF",
+ 	        		   maxNames: 2
+              	    }
 	            };
 	            	            
 	            kendo.culture("ko-KR");    
@@ -73,7 +63,6 @@
 	            //검색
 	            mngMrkDateVO.doInquiry = function () {
 		        	var me  = this;
-	            	if(me.searchText.value === ""){me.searchText.focus = !me.searchText.focus; alert("마켓명을  입력해 주세요."); return false;};
 	            	if(me.methodDataCode === ""){alert("연동방법을 입력해 주세요."); return false;};
                 	if(me.statusDataCode === ""){alert("연동상태를 입력해 주세요."); return false;};
                 	
@@ -82,7 +71,7 @@
                 
                 //새로 저장시 유효성 검사 (수정 할 땐 비밀번호를 따로 입력할 필요할 없어서 required 하지 않아서 저장시 따로 함수를 만듦 kendo로는  editable true 일때만 됨)
                 var isValid = function(inputs){
-                	let checkReturn = true;
+                	var checkReturn = true;
                 	angular.forEach(inputs.data, function (obj) {
                 		if (!checkReturn) return;
                         if (obj.NM_MRK === null || obj.NM_MRK === "") {alert("마켓명을 설정해 주세요"); checkReturn = false;}
@@ -96,8 +85,8 @@
                 //초기화 
 	            mngMrkDateVO.init = function(){
                 	var me  = this;
-                	me.methodDataCode = [""];
-                	me.statusDataCode = [""];
+                	me.methodDataCode = "";
+                	me.statusDataCode = "";
                 	me.searchText.value = "";
                 	me.datesetting.selected = "current";
                 	me.resetAtGrd = $scope.gridMngMrkUserVO;
@@ -135,8 +124,8 @@
                                     	procedureParam: "MarketManager.USP_MA_03SEARCH01_GET&NO_M@s|MA_NM_MRK@s|MA_CD_ITLWY@s|MA_ITLSTAT@s|MA_DT_START@s|MA_DT_END@s",
                                     	NO_M: menuId,
                                     	MA_NM_MRK: mngMrkDateVO.searchText.value,
-                                    	MA_CD_ITLWY: (MaMngMrkSvc.arrayIndexCheck(mngMrkDateVO.methodDataCode,"") === true) ? [""] : mngMrkDateVO.methodDataCode,
-                                    	MA_ITLSTAT: (MaMngMrkSvc.arrayIndexCheck(mngMrkDateVO.statusDataCode,"") === true) ? [""] : mngMrkDateVO.statusDataCode,
+                                    	MA_CD_ITLWY: mngMrkDateVO.methodDataCode,
+                                    	MA_ITLSTAT: mngMrkDateVO.statusDataCode,
                                     	MA_DT_START: new Date(mngMrkDateVO.datesetting.period.start.y, mngMrkDateVO.datesetting.period.start.m-1, mngMrkDateVO.datesetting.period.start.d).dateFormat("Ymd"),
                                     	MA_DT_END: new Date(mngMrkDateVO.datesetting.period.end.y, mngMrkDateVO.datesetting.period.end.m-1, mngMrkDateVO.datesetting.period.end.d).dateFormat("Ymd")
                                     };                    				                    				
@@ -331,19 +320,19 @@
 								   field: "ROW_NUM"
 								  ,title: "순서"
 								  ,width: 50
-								  ,headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 10px"}
+								  ,headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}
                		           },
             		           {
                		        	   field: "NM_MRK"
                		        	  ,title: "<code>*</code>마켓명"
                		        	  ,width: 200
-               		        	  ,headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 10px"}
+               		        	  ,headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}
             		           },
             		           {
                		        	   field: "CD_ITLWAY"
                		        	  ,title: "<code>*</code>연동방법"
                		        	  ,width: 100
-               		        	  ,headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 10px"}
+               		        	  ,headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}
 	            		       	  ,editor: 
 	            		       		  function (container, options) {
 		            		       		$('<input name='+ options.field +' data-bind="value:' + options.field + '" />')
@@ -352,14 +341,14 @@
 		            		    			autoBind: true,
 		            		    			dataTextField: "NM_DEF",
 		                                    dataValueField: "CD_DEF",
-		            		    			dataSource: mngMrkDateVO.methodDataSource.dataSource.data(),
+		            		    			dataSource: mngMrkDateVO.methodDataSource,
 		            		    			valuePrimitive: true
 		            		    		});
 	            		       	   	  }	            		       		   
 	            		       	  ,template: 
 	            		       		 function(e){		
 	            		       		    var nmd = (!e.CD_ITLWAY.hasOwnProperty("CD_DEF")) ?  e.CD_ITLWAY : "";
-	            		       		    var grdData = mngMrkDateVO.methodDataSource.dataSource.data();
+	            		       		    var grdData = mngMrkDateVO.methodDataSource;
 	            		       		    if(nmd === ""){
 	            		       		    	return "";
 	            		       		    }else{
@@ -376,16 +365,16 @@
            		        	      field: "DT_ITLSTART"
            		        	     ,title: "연동시작일자"
            		        	     ,width: 100
-           		        	     ,headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 10px"}
+           		        	     ,headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}
            		        	   },
             		           {
             		        	  field: "CD_ITLSTAT"
             		             ,title: "연동상태코드"
             		             ,width: 100
-            		             ,headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 10px"}	
+            		             ,headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}	
 	           		        	 ,template: function(e){	       
 	           		        		 var nmd = "";//e.CD_ITLSTAT; 
-	           		        		 var grdData = mngMrkDateVO.statusDataSoruce.dataSource.data();
+	           		        		 var grdData = mngMrkDateVO.statusDataSoruce;
 	            		       		 	for(var i = 0, leng = grdData.length; i<leng; i++){
 	            		       			  if(grdData[i].CD_DEF === e.CD_ITLSTAT && e.CD_ITLSTAT != ""){	            		       				 
 	            		       				  nmd = grdData[i].NM_DEF;	            		       				  
@@ -398,13 +387,13 @@
             		        	  field: "DC_MRKID"
             		             ,title: "<code>*</code>관리자ID"
             		             ,width: 100
-            		             ,headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 10px"}
+            		             ,headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}
             		           },
             		           {
             		        	  field: "NEW_DC_PWD"
             		             ,title: "<code>*</code>비밀번호"
             		             ,width: 100
-            		             ,headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 10px"}
+            		             ,headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
             		           	 ,editor: function (container, options) {
             		                 $('<input type="password" class="k-textbox" name="' + options.field + '"/>').appendTo(container);
             	                 }
@@ -422,7 +411,7 @@
             		        	  field: "NEW_API_KEY"
             		             ,title: "API_KEY"
             		             ,width: 150
-            		             ,headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 10px"}
+            		             ,headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
 	            		         ,editor: function (container, options) {
 	          		                 $('<input type="password" class="k-textbox" name="' + options.field + '"/>').appendTo(container);
 	          	                 }
@@ -440,7 +429,7 @@
             		        	  field: "DC_SALEMNGURL"
             		        	 ,title: "판매관리URL"
             		        	 ,width: 200
-            		        	 ,headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 10px"}
+            		        	 ,headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
            		        	   },          		           
             		           {
            		        	      command: [ "destroy" ]
@@ -456,7 +445,7 @@
                     	editable: {
                     	    confirmation: "삭제 하시겠습니까?",
                     	},
-                    	height: 500
+                    	height: 590
         		};        
             }]);
 }());

@@ -80,7 +80,7 @@
                         this.cancelRow();
                     },
                 	editable: false,
-                	height: 508,
+                	height: 680,
                 	
                 	initLoad: function() {
                 		var self = this;

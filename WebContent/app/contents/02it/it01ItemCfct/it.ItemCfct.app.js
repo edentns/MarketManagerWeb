@@ -14,13 +14,19 @@
                     templateUrl	: "app/contents/02it/it01ItemCfct/templates/it.ItemCfct.tpl.html",
                     controller  : "it.ItemCfctCtrl",
                     resolve		: {
-                        resData: ["AuthSvc", "$q", function (AuthSvc, $q) {
+                        resData: ["AuthSvc", "$q", "UtilSvc",function (AuthSvc, $q, UtilSvc) {
                             var defer 	= $q.defer(),
                                 resData = {};
 
                             AuthSvc.isAccess().then(function (result) {
                                 resData.access = result[0];
-                                defer.resolve(resData);
+                                var param = {
+        		    					procedureParam: "MarketManager.USP_IT_01ITEMCFCT01_GET",
+        		    				};
+        		    				UtilSvc.getList(param).then(function (res) {
+        		    					resData.cfctData = res.data.results[0];
+        		    					defer.resolve(resData);
+        							});
                             });
 
                             return defer.promise;

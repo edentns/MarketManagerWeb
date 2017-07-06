@@ -56,7 +56,7 @@
                     enableCellEditOnFocus   : true,
 
                     data    : [],
-                    height  : 400,
+                    height  : 690,
                     rowTemplate : rowTemplate,
                     procedureParam: "USP_SY_08ATRT01_GET",
                     columnDefs  : [

@@ -16,7 +16,8 @@
 					transclude  : true,
 					scope       : {
 						boxTitle : "=",
-						open : "="
+						open : "=",
+						contentHeight : "@"
 					},
 					replace     : true,
 					link        : function (scope, element) {
@@ -43,6 +44,8 @@
 
 
 						var height = window.innerHeight - 49;
+						//scope._styleHeight = (scope.contentHeight) ? "height:"+scope.contentHeight+"px;" : "";
+						scope._styleHeight = (scope.contentHeight) ? scope.contentHeight : "";
 						expandLink.on("click", function ($e) {
 							$e.preventDefault();
 
@@ -81,7 +84,7 @@
 					"\t \t \t </a>\n" +
 					"\t \t </div>" +
 					"\t </div>" +
-					"\t <div data-ng-transclude class=\"box-content\" data-ng-show=\"_open\">\n" +
+					"\t <div data-ng-transclude class=\"box-content\" data-ng-show=\"_open\" style=\"{{_styleHeight}}\">\n" +
 					"\t </div>\n" +
 					"</div>"
 				};

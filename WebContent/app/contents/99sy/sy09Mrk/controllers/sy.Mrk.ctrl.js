@@ -169,7 +169,7 @@
                 			model: {
                     			id: "NO_MNGMRK",
                 				fields: {
-                					ROW_NUM: { editable: false },
+                					ROW_NUM:     { editable: false },
                 					NO_MNGMRK:   { validation: { required: true } },
                 					NM_MRK:      { validation: { required: true } },
                 					CD_MRKDFT:   {},
@@ -221,8 +221,10 @@
                 	toolbar: 
                 		["create", "save", "cancel"],
                 	columns: [
-           		           {field: "ROW_NUM",     title: "No",      width: 100, template: "<span class='row-number'></span>"},
+           		           {field: "ROW_NUM",     title: "No",      width: 50, template: "<span class='row-number'></span>",
+   							headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}},
         		           {field: "NO_MNGMRK",   title: "관리마켓",  width: 100,
+   	   						headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"},
            		        	editor: 
           		       		  function (container, options) {
 	            		       		$('<input required name='+ options.field +' data-bind="value:' + options.field + '" />')
@@ -244,19 +246,23 @@
             		       		  }	
 	            		        return nmd;
           		       	  	}},
-        		           {field: "NM_MRK",      title: "마켓명",    width: 100},
+        		           {field: "NM_MRK",      title: "마켓명",    width: 100,
+       	   					headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}},
         		           {field: "CD_MRKDFT",   title: "마켓구분",   width: 100, template: 
         		        		    '#if (CD_MRKDFT == "001") {# #="오픈마켓"# #}' +
         		        	   	    'else if (CD_MRKDFT == "002") {# #="홈쇼핑"# #}'+
 	        		        	   	'else if (CD_MRKDFT == "003") {# #="종합몰"# #}'+
 	        		        	   	'else if (CD_MRKDFT == "004") {# #="전문몰"# #}'+
 	        		        	   	'else if (CD_MRKDFT == "005") {# #="그룹몰"# #}'+
-        		        		    'else {# #="기타"# #} #', editor: DropDownEditorMrk},
-        		           {field: "DT_ITLSTART", title: "연동시작일자", width: 100},
+        		        		    'else {# #="기타"# #} #', editor: DropDownEditorMrk,
+           	   				headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}},
+        		           {field: "DT_ITLSTART", title: "연동시작일자", width: 100,
+       	   					headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}},
         		           {field: "CD_ITLSTAT",  title: "연동상태",    width: 100,  template: 
         		        		    '#if (CD_ITLSTAT == "001") {# #="미연동"# #}' +
 		   		        	   	    'else if (CD_ITLSTAT == "002") {# #="연동성공"# #}'+
-		   		        		    'else {# #="연동실패"# #} #', editor: DropDownEditorItl},
+		   		        		    'else {# #="연동실패"# #} #', editor: DropDownEditorItl,
+		   	   				headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}},
         		           {field: "DC_MRKID",    title: "마켓ID",    width: 100},
         		           {field: "NEW_DC_PWD",  title: "비밀번호",   width: 100,
         		        	   editor: function (container, options) {
@@ -270,7 +276,8 @@
           		           			 returnPWDMsg = "*".repeat(e.NEW_DC_PWD.length);
           		           		 }
           		           		 return returnPWDMsg;
-        		           	 }},
+        		           	 },
+    	   					headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}},
         		           {field: "NEW_API_KEY",     title: "API_KEY",  width: 100
         		           		,editor: function (container, options) {
 	          		                 $('<input type="password" class="k-textbox" name="' + options.field + '"/>').appendTo(container);
@@ -283,17 +290,22 @@
 	          		           			 returnAPIMsg = "*".repeat(e.NEW_API_KEY.length);
 	          		           		 }
 	          		           		 return returnAPIMsg;
-	          		           	 }},
-        		           {field: "DC_SALEMNGURL", title: "판매관리URL", width: 100},
+	          		           	 },
+	    	   				headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}},
+        		           {field: "DC_SALEMNGURL", title: "판매관리URL", width: 100,
+	   	   					headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}},
         		           {field: "YN_USE",      title: "사용여부",    width: 100, template: 
 	        		        	    '#if (YN_USE == "Y") {# #="사용"# #} else {# #="사용안함"# #} #', 
-	        		        	    editor: DropDownEditorYN},
+	        		        	    editor: DropDownEditorYN,
+	       	   				headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}},
         		           {field: "CD_NT",       title: "국가",       width: 100, template: 
             		        		'#if (CD_NT == "001") {# #="한국"# #}' +
        		        	   	        'else if (CD_NT == "002") {# #="중국"# #}'+
 	        		        	   	'else if (CD_NT == "003") {# #="미국"# #}'+
-       		        		        'else {# #="기타"# #} #', editor: DropDownEditorNt},
-        		           {field: "NO_CEPH",     title: "핸드폰번호",   width: 100},
+       		        		        'else {# #="기타"# #} #', editor: DropDownEditorNt,
+       	   	   				headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}},
+        		           {field: "NO_CEPH",     title: "핸드폰번호",   width: 100,
+       	   					headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}},
         		           {command: [ "destroy" ]}
                 	],
                     collapse: function(e) {
@@ -309,7 +321,7 @@
                         });
                     },
                 	editable: true,
-                	height: 300
+                	height: 550
                 };
                 
                 
