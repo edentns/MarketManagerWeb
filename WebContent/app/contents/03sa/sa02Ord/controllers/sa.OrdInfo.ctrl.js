@@ -11,7 +11,7 @@
             function ($stateParams, $scope, $state, $http, $q, $log, saOrdSvc, APP_CODE, $timeout, resData, Page, UtilSvc, MenuSvc) {
 	            //var page  = $scope.page = new Page({ auth: resData.access }),
 		        //    today = edt.getToday();
-	            
+        	        		
 	            //주문상태 드랍 박스 실행	
 	            var orderStatus = (function(){
 					var param = {
@@ -64,12 +64,13 @@
 	            	            	            
 	            ordInfoDataVO.getInitializeOrdInfoProc = function(){
 	            	var param = {
-    					procedureParam: "MarketManager.USP_SA_02ORDINFO_GET&IN_NO_ORD@s",
-    					IN_NO_ORD: this.noOrd
-    				};	            	
-        			UtilSvc.getList(param).then(function (res) {
-        				if(res.data.results[0].length >= 1){
-        					ordInfoDataVO.ds = res.data.results[0][0];
+    					NO_ORD: this.noOrd
+    				};
+	            	saOrdSvc.orderInfo(param).then(function (res) {
+        				if(res.data.NO_ORD){
+        					ordInfoDataVO.ds = res.data;
+        				}else{
+        					alert("조회된 데이터가 없습니다.");
         				}
         			});	
 	            };
@@ -119,7 +120,7 @@
 		        	this.inputs.cancel_reason_text = "";
 		        	$("span.k-tooltip-validation").hide();
 	            };
-	            
+	            //주문취소
 	            ordInfoDataVO.doOrdCancel = function(){
 	            	if(this.inputs.CD_CCLRSN === ""){
 	            		return;

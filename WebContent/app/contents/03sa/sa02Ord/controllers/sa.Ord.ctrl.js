@@ -94,7 +94,8 @@
                     	valuePrimitive: true,
     				},
 	        		cancelCodeMo : "",
-	        		dataTotal : 0
+	        		dataTotal : 0,
+	        		resetAtGrd :""
 		        };	            
 	            //조회
             	ordDataVO.inQuiry = function(){
@@ -159,21 +160,20 @@
                 	dataSource: new kendo.data.DataSource({
                 		transport: {
                 			read: function(e) {
-                				var param = {
-                					procedureParam: "MarketManager.USP_SA_02ORDLIST_GET&IN_NM_MRKITEM@s|IN_NM_MRK@s|IN_CD_ORDSTAT@s|IN_NO_MRKORD@s|IN_NM_PCHR@s|IN_NO_ORDDTRM@s|IN_DTS_CHK@s|IN_DTS_FROM@s|IN_DTS_TO@s",	  
-                				    IN_NM_MRKITEM : ordDataVO.procName.value,
-            					    IN_NM_MRK : ordDataVO.ordMrkNameMo, 
-            					    IN_CD_ORDSTAT : ordDataVO.ordStatusMo,
-            					    IN_NO_MRKORD : ordDataVO.orderNo.value,      
-            					    IN_NM_PCHR : ordDataVO.buyerName.value,
-            					    IN_NO_ORDDTRM : ordDataVO.admin.value,  
-            					    IN_DTS_CHK : ordDataVO.betweenDateOptionMo,  
-            					    IN_DTS_FROM : new Date(ordDataVO.datesetting.period.start.y, ordDataVO.datesetting.period.start.m-1, ordDataVO.datesetting.period.start.d, "00", "00", "00").dateFormat("YmdHis"),           
-            					    IN_DTS_TO : new Date(ordDataVO.datesetting.period.end.y, ordDataVO.datesetting.period.end.m-1, ordDataVO.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis")
+                				var param = {	  
+                				    NM_MRKITEM : ordDataVO.procName.value,
+            					    NM_MRK : ordDataVO.ordMrkNameMo, 
+            					    CD_ORDSTAT : ordDataVO.ordStatusMo,
+            					    NO_MRKORD : ordDataVO.orderNo.value,      
+            					    NM_PCHR : ordDataVO.buyerName.value,
+            					    NO_ORDDTRM : ordDataVO.admin.value,  
+            					    DTS_CHK : ordDataVO.betweenDateOptionMo,  
+            					    DTS_FROM : new Date(ordDataVO.datesetting.period.start.y, ordDataVO.datesetting.period.start.m-1, ordDataVO.datesetting.period.start.d, "00", "00", "00").dateFormat("YmdHis"),           
+            					    DTS_TO : new Date(ordDataVO.datesetting.period.end.y, ordDataVO.datesetting.period.end.m-1, ordDataVO.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis")
                                 };   
                 				if($scope.readValidation(param)){
-                					UtilSvc.getList(param).then(function (res) {
-                    					e.success(res.data.results[0]);
+                					saOrdSvc.orderList(param).then(function (res) {
+                    					e.success(res.data);
                         			});
                 				}else{
                 					e.error();
@@ -208,7 +208,7 @@
                 			var data = this.data();
                 			ordDataVO.dataTotal = data.length;
                 		},
-                		pageSize: 11,
+                		pageSize: 6,
                 		batch: true,
                 		schema: {
                 			model: {
@@ -627,9 +627,9 @@
 		                    if(chkedLeng === 1){
 		                		grd.editRow(chked.closest('tr'));
 		                	}else if(chkedLeng > 1){
-		                		$scope.showPopup("취소할 주문을 1개만 선택해 주세요!");
+		                		alert("취소할 주문을 1개만 선택해 주세요!");
 		                	}else if(chkedLeng < 1){
-		                		$scope.showPopup("취소할 주문을 선택해 주세요!");
+		                		alert("취소할 주문을 선택해 주세요!");
 		                	}
 	                	});
 	                	//Switches the table row which is in edit mode and saves any changes made by the user.
@@ -644,7 +644,7 @@
 		                		};           			
 	                		
 	                		if(chkedLeng < 1){
-		                		$scope.showPopup("확정할 주문을 선택해 주세요!");
+	                			alert("확정할 주문을 선택해 주세요!");
 		                	}else{
 		                		
 		                		angular.forEach(grd.dataSource.data(), function(val, idx){		                			
@@ -655,7 +655,7 @@
 		                		
 		                		if(confirm("총 "+chkedLeng+"건의 주문을 확정 하시겠습니까?")){
 		                			if(param.data.length !== chkedLeng){
-		                				$scope.showPopup("신규주문만 주문 확정 처리 할 수 있습니다.");	
+		                				alert("신규주문만 주문 확정 처리 할 수 있습니다.");	
 		                			}else{
 		                				saOrdSvc.orderConfirm(param).then(function (res) {
 		                					$timeout(function(){

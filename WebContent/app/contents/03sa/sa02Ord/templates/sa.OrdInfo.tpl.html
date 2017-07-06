@@ -169,7 +169,7 @@
                        		<th>수량</th>
                        		<td>{{ordInfoDataVO.ds.QT_ORD}}</td>
                        		<th>금액</th>
-                       		<td>{{ordInfoDataVO.ds.AM_ORDSALEPRC}}</td>
+                       		<td>{{ordInfoDataVO.ds.AM_ORDSALEPRC | number:0}}</td>
                        	</tr>
                        	<tr>
                        		<th>결제번호</th>
@@ -207,7 +207,7 @@
                        		<th>배송비 결제 내용</th>
                        		<td>{{ordInfoDataVO.ds.DC_SHPCOSTAPVL}}</td>
                        		<th>배송비</th>
-                       		<td>{{ordInfoDataVO.ds.AM_SHPCOST}}</td>
+                       		<td>{{ordInfoDataVO.ds.AM_SHPCOST | number:0}}</td>
                        	</tr>
                        	<tr>
                        		<th>배송지연일</th>

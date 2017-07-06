@@ -74,7 +74,8 @@
 	        		csStatusMo : "*",
 	        		csQuestionCodeOp : [],
 	        		csQuestionCodeMo : "*",
-	        		dataTotal : 0
+	        		dataTotal : 0,
+	        		resetAtGrd:""
 	            };	            
 	            //조회
 	            csDataVO.inQuiry = function(){	

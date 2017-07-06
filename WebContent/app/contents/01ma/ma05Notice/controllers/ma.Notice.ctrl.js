@@ -74,7 +74,7 @@
 		        		writeText: { value: "" , focus: false},				//작성자
 	                    contentText: { value: "" , focus: false},			//제목/내용
 	                    noticeCdModel : "*",								//공지구분	                    
-	                    noticeTargetModel : ["*"],			   					//공지대상
+	                    noticeTargetModel : ["*"],			   				//공지대상
 	                    allSelectTargetModel : [],							//전체 선택시 공지대상자들 아이디를 담아 놓는 모델 
 	                    noticeCdVO : [],		 							//조회시 필요한 공지구분 드랍다운
 	                    noticeTargetVO : {									//조회시 필요한 공지대상 드랍다운

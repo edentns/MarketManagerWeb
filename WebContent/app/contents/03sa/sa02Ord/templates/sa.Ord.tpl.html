@@ -123,52 +123,57 @@
         	<span class="ells"><input type="checkbox" class="checkbox" ng-click="onOrdGrdCkboxClick($event)"/></span>
       	</td>
 		<td class="ta-l" style="padding:0">
-          	<div class="div-rows ells"># if(NO_ORD !== ""){ # 
+          	<div class="div-rows ells">
+							  # if(NO_ORD !== "" && NO_ORD !== null && NO_ORD !== "undefined"){ # 
 							  #: NO_ORD # 
-							  # } #
+							  # }else{ }#
 			</div>
-			<div class="ells"># if(NO_APVL !== ""){ # 
+			<div class="ells"># if(NO_APVL !== "" && NO_APVL !== null && NO_APVL !== "undefined"){ # 
 							  #: NO_APVL # 
-							  # } #
-			</div>
-      	</td>
-		<td class="ta-l" style="padding:0">
-          	<div class="div-rows ells"># if(NM_MRK !== ""){ #
-                  	    	   #: NM_MRK # 
-                      	       # } #
-			</div>
-			<div class="ells"># if(NO_MRKORD !== ""){ # 
-							   #: NO_MRKORD # 
-							   # } #
-			</div>
-      	</td>
-		<td class="ta-l" style="padding:0">
-         	<div class="div-rows ells"># if(NO_MRKITEM !== ""){ #
-          	    	   	       #: NO_MRKITEM # 
-              	    	   	   # } #
-			</div>
-			<div class="ells"># if(NO_MRKREGITEM !== ""){ # 
-							   #: NO_MRKREGITEM # 
-							   # } #
+							  # }else{ } #
 			</div>
       	</td>
 		<td class="ta-l" style="padding:0">
           	<div class="div-rows ells">
-							   # if(NM_MRKITEM !== ""){ #
-							   #: NM_MRKITEM #
-							   #} #
+							  # if(NM_MRK !== "" && NM_MRK !== null && NM_MRK !== "undefined"){ #
+                  	    	  #: NM_MRK  # 
+                      	      # }else{ } #
 			</div>
-			<div class="ells"># if(NM_MRKOPT !== ""){ # 
-							   #: NM_MRKOPT # 
-							   # } #
+			<div class="ells"># if(NO_MRKORD !== "" && NO_MRKORD !== null && NO_MRKORD !== "undefined"){ # 
+							  #: NO_MRKORD # 
+							  # }else{ }   #
+			</div>
+      	</td>
+		<td class="ta-l" style="padding:0">
+         	<div class="div-rows ells">
+							  # if(NO_MRKITEM !== "" && NO_MRKITEM !== null && NO_MRKITEM !== "undefined"){ #
+          	    	   	      #: NO_MRKITEM # 
+              	    	   	  # }else{ }    #
+			</div>
+			<div class="ells"># if(NO_MRKREGITEM !== "" && NO_MRKREGITEM !== null && NO_MRKREGITEM !== "undefined"){ # 
+							  #: NO_MRKREGITEM # 
+							  # }else{ }	   #
+			</div>
+      	</td>
+		<td class="ta-l" style="padding:0">
+          	<div class="div-rows ells">
+							   # if(NM_MRKITEM !== "" && NM_MRKITEM !== null && NM_MRKITEM !== "undefined"){ #
+							   #: NM_MRKITEM #
+							   # }else{ }	 #
+			</div>
+			<div class="ells"> 
+							   # if(NM_MRKOPT !== "" && NM_MRKOPT !== null && NM_MRKOPT !== "undefined"){ #	
+							   #: NM_MRKOPT #
+							   # }else{ }	# 
 			</div>
      	</td>
 		<td class="ta-r" style="padding:0">
-          	<div class="div-rows ells"># if(AM_ORDSALEPRC !== "" && AM_ORDSALEPRC !== null && AM_ORDSALEPRC !== "undefined" ){ #
-							   		   #= kendo.toString(AM_ORDSALEPRC,'C0', 'ko-KR') #
-    						   		   # }else{ #
-										 0
-							  		   #}#
+          	<div class="div-rows ells">
+							  # if(AM_ORDSALEPRC !== "" && AM_ORDSALEPRC !== null && AM_ORDSALEPRC !== "undefined"){ #
+							  #= kendo.toString(AM_ORDSALEPRC,'C0', 'ko-KR') #
+    						  # }else{ #
+							    0
+							  #}#
 			</div>
 			<div class="ells"># if(AM_PCHSPRC !== "" && AM_PCHSPRC !== null && AM_PCHSPRC !== "undefined"){ #
 							  #= kendo.toString(AM_PCHSPRC,'C0', 'ko-KR') #
@@ -178,73 +183,87 @@
 			</div>
       	</td>
 		<td class="ta-c" style="padding:0">
-          	<div class="div-rows ells"># if(NM_PCHR !== ""){ #
-				    		   		   #: NM_PCHR #
-							   		   # } #
+          	<div class="div-rows ells">
+							  # if(NM_PCHR !== "" && NM_PCHR !== null && NM_PCHR !== "undefined"){ #
+				    		  #: NM_PCHR 	#
+							  # }else{ }	# 
 			</div>
-			<div class="ells"># if(NM_CONS !== ""){ # 
-							   #: NM_CONS # 
-							   # } #
-			</div>
-      	</td>
-		<td class="ta-l" style="padding:0">
-          	<div class="div-rows ells"># if(NO_PCHRPHNE !== ""){ #
-							   #: NO_PCHRPHNE #
-							   # } #
-			</div>
-			<div class="ells"># if(NO_CONSHDPH !== ""){ # 
-							   #: NO_CONSHDPH # 
-							   # } #
+			<div class="ells"> 
+							  # if(NM_CONS !== "" && NM_CONS !== null && NM_CONS !== "undefined"){ #
+							  #: NM_CONS 	# 
+							  # }else{ }	#  	
 			</div>
       	</td>
 		<td class="ta-l" style="padding:0">
-          	<div class="div-rows ells"># if(DC_PCHREMI !== ""){ #
-							   #: DC_PCHREMI #
-						       # } #
+          	<div class="div-rows ells">		
+							  # if(NO_PCHRPHNE !== "" && NO_PCHRPHNE !== null && NO_PCHRPHNE !== "undefined"){ #					  
+							  #: NO_PCHRPHNE #		
+							  # }else{ } 	 #						  
 			</div>
-			<div class="ells"># if(DC_CONSNEWADDR !== ""){ # 
-							   #: DC_CONSNEWADDR # 
-							   # } #
+			<div class="ells"> 
+							  # if(NO_CONSHDPH !== "" && NO_CONSHDPH !== null && NO_CONSHDPH !== "undefined"){ #
+							  #: NO_CONSHDPH # 
+							  # }else{ }	 #
+			</div>
+      	</td>
+		<td class="ta-l" style="padding:0">
+          	<div class="div-rows ells">
+							# if(DC_PCHREMI !== "" && DC_PCHREMI !== null && DC_PCHREMI !== "undefined"){ #
+							#: DC_PCHREMI #
+							# }else{ }	  #
+			</div>
+			<div class="ells">
+						    # if(DC_CONSNEWADDR !== "" && DC_CONSNEWADDR !== null && DC_CONSNEWADDR !== "undefined"){ #
+							#: DC_CONSNEWADDR # 
+							# }else{ }	 	  #
 			</div>
       	</td> 
 		<td class="ta-l" style="padding:0">
-          	<div class="div-rows ells"># if(DC_PCHRREQCTT !== ""){ #
-							   #: DC_PCHRREQCTT #
-    						   # } #
+          	<div class="div-rows ells">
+						    # if(DC_PCHRREQCTT !== "" && DC_PCHRREQCTT !== null && DC_PCHRREQCTT !== "undefined"){ #
+							#: DC_PCHRREQCTT #
+							# }else{ }	 	 #
 			</div>
-			<div class="ells"># if(DC_CONSOLDADDR !== ""){ # 
-							   #: DC_CONSOLDADDR # 
-							   # } #
+			<div class="ells">
+							# if(DC_CONSOLDADDR !== "" && DC_CONSOLDADDR !== null && DC_CONSOLDADDR !== "undefined"){ #	
+							#: DC_CONSOLDADDR # 
+							# }else{ }	 	 #
 			</div>
       	</td>
 		<td class="ta-l" style="padding:0">
-          	<div class="div-rows ells"># if(CD_ORDSTAT !== ""){ #
-							   <co04-cd-to-nm cd="#:CD_ORDSTAT#" nm-box="ordDataVO.ordStatusOp">
-							   # } #
+          	<div class="div-rows ells">
+							# if(CD_ORDSTAT !== "" && CD_ORDSTAT !== null && CD_ORDSTAT !== "undefined"){ #
+							<co04-cd-to-nm cd="#:CD_ORDSTAT#" nm-box="ordDataVO.ordStatusOp">
+							# }else{ }	   #
 			</div>
-			<div class="ells"># if(DC_SHPWAY !== ""){ # 
-							   #: DC_SHPWAY # 
-							   # } #
+			<div class="ells">
+							# if(DC_SHPWAY !== "" && DC_SHPWAY !== null && DC_SHPWAY !== "undefined"){ #  
+							#: DC_SHPWAY # 
+							# }else{ }	 	 #
 			</div>
       	</td>
 		<td class="ta-c" style="padding:0">
-        	<div class="div-rows ells"># if(DTS_APVL !== ""){ #
-							   #: DTS_APVL #
-							   # } #
+        	<div class="div-rows ells">
+							# if(DTS_APVL !== "" && DTS_APVL !== null && DTS_APVL !== "undefined"){ #
+							#: DTS_APVL #
+							# }else{ }	 	 #							
 			</div>
-			<div class="ells"># if(DTS_ORD !== ""){ # 
-							   #: DTS_ORD # 
-							   # } #
+			<div class="ells">
+							# if(DTS_ORD !== "" && DTS_ORD !== null && DTS_ORD !== "undefined"){ # 
+							#: DTS_ORD # 
+							# }else{ }	 	 #  
 			</div>
       	</td>
 		<td class="ta-l" style="padding:0">
-        	<div class="div-rows ells"># if(YN_CONN !== ""){ #
-							   #: YN_CONN #
-						       # } #
+        	<div class="div-rows ells">
+							# if(YN_CONN !== "" && YN_CONN !== null && YN_CONN !== "undefined"){ #
+							#: YN_CONN #
+							# }else{ }	 	 #
 			</div>
-			<div class="ells"># if(DTS_ORDDTRM !== ""){ # 
-							   #: DTS_ORDDTRM # 
-							   # } #
+			<div class="ells">
+							# if(DTS_ORDDTRM !== "" && DTS_ORDDTRM !== null && DTS_ORDDTRM !== "undefined"){ #
+							#: DTS_ORDDTRM  # 
+							# }else{ }	 	 #
 			</div>
       	</td>
 	</tr>			
