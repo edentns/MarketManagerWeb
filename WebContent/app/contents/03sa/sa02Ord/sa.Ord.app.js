@@ -8,11 +8,25 @@
 
     ordApp.config(["$stateProvider", function ($stateProvider) {
         $stateProvider.state("app.saOrd", {
-            url		: "/03sa/saOrd?menu",
+            url		: "/03sa/saOrd/:kind?menu&noOrd&noMrkord",
             views	: {
                 contentView	: {
-                    templateUrl	: "app/contents/03sa/sa02Ord/templates/sa.Ord.tpl.html",
-                    controller  : "sa.OrdCtrl",
+                    templateUrl	: function($stateParams){
+                    	if ($stateParams.menu) {
+                            $stateParams.kind = "";
+                        }else{
+                        	$stateParams.kind = "Info";
+                        }
+                    	return "app/contents/03sa/sa02Ord/templates/sa.Ord"+ $stateParams.kind +".tpl.html";
+                    },
+                    controllerProvider  : ["$stateParams",function($stateParams){
+                    	if ($stateParams.menu) {
+                            $stateParams.kind = "";
+                        }else{
+                        	$stateParams.kind = "Info";
+                        }
+                    	return "sa.Ord"+ $stateParams.kind +"Ctrl";                                  
+                    }],
                     resolve		: {
                         resData: ["AuthSvc", "$q", function (AuthSvc, $q) {
                             var defer 	= $q.defer(),

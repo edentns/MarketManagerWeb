@@ -669,6 +669,40 @@
 				}
 				return retStr;
 			};
+			
+			/**
+			 * 조회 화면의 공통 코드 조회
+			 * @param {JSON * 2개 입력}
+			 * @returns 콩통 코드 리스트 출력
+			 */
+			this.getCommonCodeList = function ( param ) {
+				var self = this;
+
+				return $http({
+					method	: "GET",
+					url		: APP_CONFIG.domain + "/code/common/"+param.lnomngcdhd+"/"+param.lcdcls
+				}).success(function (data, status, headers, config) {
+					
+				}).error(function (data, status, headers, config) {
+					
+				});
+			};
+			
+			/**
+			 * 마켓정보 list
+			 * @param {없음}
+			 * @returns 마켓정보 리스트 출력
+			 */
+			this.csMrkList = function () {					
+				return $http({
+					method	: "GET",
+					url		: APP_CONFIG.domain +"/cs/mrklist"
+				}).success(function (data, status, headers, config) {
+					
+				}).error(function (data, status, headers, config) {
+					
+				});
+			};
 		}
 	]);
 }());

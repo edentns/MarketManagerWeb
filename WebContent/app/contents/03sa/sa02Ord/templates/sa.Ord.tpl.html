@@ -3,7 +3,7 @@
         <div id="app-content-header">
             <ol class="breadcrumb">
                 <li><a href="#99sy/syDashboard"><i class="fa fa-home fa-2x"></i></a></li>
-                <li><a href="#03sa/saOrd">주문관리</a></li>
+                <li><a href="#03sa/saOrd">주문관리 / 주문</a></li>
             </ol>
         </div>
     </div>
@@ -11,7 +11,7 @@
     <div class="row">
         <!-- 검색 -->
         <div class="content-area-container col-xs-12">
-        	<div data-content-box-layer data-box-title="csDataVO.boxTitle">
+        	<div data-content-box-layer data-box-title="ordDataVO.boxTitle">
                 <form class="search-type1" id="myForm">
                 	<table>
                         <colgroup>
@@ -28,13 +28,13 @@
                         <tr>
                             <th>마켓명</th>
                             <td>
-                            	<co01-mcbox id="cs-mrk" title="마켓명" model="csDataVO.csMrkNameMo" options="csDataVO.csMrkNameOp " setting="csDataVO.setting"  style="width:100%;">
+                            	<co01-mcbox id="cs-mrk" title="마켓명" model="ordDataVO.ordMrkNameMo" options="ordDataVO.ordMrkNameOp" setting="ordDataVO.setting"  style="width:100%;">
         						</co01-mcbox> 
                             </td>
                             <th>상품명</th>
                             <td>
-                            	<input data-ng-model="csDataVO.procName.value"
-                            			focus="csDataVO.procName.focus"
+                            	<input data-ng-model="ordDataVO.procName.value"
+                            			focus="ordDataVO.procName.focus"
                             			title="상품명"
                             			data-eden-type="kor" 
                             			type="text" 
@@ -42,20 +42,24 @@
                             </td>		
                             <th>주문상태</th>
                             <td>            
-       							<co01-mcbox id="cs-status" title="주문상태" model="csDataVO.csStatusMo" options="csDataVO.csStatusOp" setting="csDataVO.setting"  style="width:100%;">
+       							<co01-mcbox id="cs-status" title="주문상태" model="ordDataVO.ordStatusMo" options="ordDataVO.ordStatusOp" setting="ordDataVO.setting"  style="width:100%;">
         						</co01-mcbox>        						
                             </td>   
                             <th>주문번호</th>
                             <td>     
-					            <co01-mcbox id="cs-code" title="주문번호" model="csDataVO.csQuestionCodeMo" options="csDataVO.csQuestionCodeOp" setting="csDataVO.setting"  style="width:100%;">
-        						</co01-mcbox> 
+					            <input data-ng-model="ordDataVO.orderNo.value"
+                            			focus="ordDataVO.orderNo.focus"
+                            			title="구매자/수취인"
+                            			data-eden-type="kor" 
+                            			type="text" 
+                            			class="form-control" style="width:100%;"/>
                             </td>         
                         </tr>
                         <tr>
                             <th>구매자/수취인</th>
                             <td>                            	              	
-                            	<input data-ng-model="csDataVO.buyerName.value"
-                            			focus="csDataVO.buyerName.focus"
+                            	<input data-ng-model="ordDataVO.buyerName.value"
+                            			focus="ordDataVO.buyerName.focus"
                             			title="구매자/수취인"
                             			data-eden-type="kor" 
                             			type="text" 
@@ -63,8 +67,8 @@
                             </td>
                             <th>담당자(주문확정)</th>
                             <td>                            	              	
-                            	<input data-ng-model="csDataVO.orderNo.value"
-                            			focus="csDataVO.orderNo.focus"
+                            	<input data-ng-model="ordDataVO.admin.value"
+                            			focus="ordDataVO.orderNo.focus"
                             			title="담당자(주문확정)"
                             			data-eden-type="kor" 
                             			type="text" 
@@ -80,117 +84,176 @@
                             </td>                            
                         </tr>
                         <tr>
-                            <th>기간</th>
-                            <td colspan="7">                            	              	
-                            	<div class="frm-group" data-date-search-group="csDataVO.datesetting" style="display:inline-block;"></div>
+                            <th>기간</th>                            
+                            <td>
+                            	<select ng-model="ordDataVO.betweenDateOptionMo"
+        								ng-options="option.CD_DEF as option.NM_DEF for option in ordDataVO.betweenDateOptionOp"
+        								class="form-control"
+        								style="width: 100%">
+        						</select>	
+                            </td>
+                            <td colspan="6">                            	              	
+                            	<div class="frm-group" data-date-search-group="ordDataVO.datesetting" style="display:inline-block;"></div>
                             </td>
                         </tr>
                         </tbody>
                     </table>         		     
                     <div class="btn-group1 mt-20">
-                        <kendo-button type="submit" class="k-primary" title="검색" data-ng-click="csDataVO.inQuiry()" style="width:70px;" >검색</kendo-button>
-                        <kendo-button type="botton" title="초기화" data-ng-click="csDataVO.inIt()" style="width:70px;" >초기화</kendo-button>
+                        <kendo-button type="submit" class="k-primary" title="검색" data-ng-click="ordDataVO.inQuiry()" style="width:70px;">검색</kendo-button>
+                        <kendo-button type="botton" title="초기화" data-ng-click="ordDataVO.inIt()" style="width:70px;">초기화</kendo-button>
                     </div>
                     <br/>
-                    <p class="text-center">총  <strong>{{csDataVO.dataTotal}}</strong>건이 검색되었습니다.</p>
+                    <p class="text-center">총  <strong>{{ordDataVO.dataTotal}}</strong>건이 검색되었습니다.</p>
                 </form>
             </div>
         </div>
                 
-        <!-- 주문 리스트 -->          
-		<div class="content-area-container col-xs-12" style="padding:50px 0px 0px 0px;">				
-	        <div id="divCsGrd" kendo-grid="ordkg" options="gridCsVO">
+        <!-- 주문 목록 -->          
+		<div class="content-area-container col-xs-12" style="padding:10px 0px 0px 0px;">				
+	        <div id="divOrdGrd" kendo-grid="ordkg" options="gridOrdVO">
 	        </div>	            
         </div>
     </div>
 </div>
 
-<!-- ord 조회 그리드 -->
-<script id="ord_template" type="text/x-kendo-template">		
-     <tr data-uid="#= uid #">
-        <td class="ta-c">
-            <span class="ells"><input type="checkbox" class="checkbox" ng-click="onCsGrdCkboxClick($event)"/></span>
-        </td>
+<!-- 주문 조회 그리드 -->
+<script id="ord_template" type="text/x-kendo-template">
+  	<tr data-uid="#= uid #" ng-dblclick="grdDblClickGo('#: NO_ORD #','#: NO_MRKORD #')">
 		<td class="ta-c">
-            <span class="seq ells"># if(NO_INQ !== ""){ # 
-								   #: NO_INQ # 
-								   # } #
-			</span>
-        </td>
-		<td class="ta-l">
-            <span class="ells"># if(NM_MRK !== ""){ #
-                               #: NM_MRK # 
-                               # } #
-			</span>
-        </td>
-		<td class="ta-l">
-            <span class="ells"># if(DTS_INQREG !== ""){ #
-                               #: DTS_INQREG # 
-                               # } #
-			</span>
-        </td>
-		<td class="ta-l">
-            <span class="ells">
-							   # if(CD_INQSTAT !== ""){ #
-							   <co04-cd-to-nm cd="#:CD_INQSTAT#" nm-box="csDataVO.csStatusOp">
-							   #} #
-			</span>
-        </td>
-		<td class="ta-l">
-            <span class="ells"># if(DC_INQTITLE !== ""){ #
-							   #: DC_INQTITLE #
-      						   # } #
-			</span>
-        </td>
-		<td class="ta-l">
-            <span class="ells"># if(DC_INQCTT !== ""){ #
-					    	   #: DC_INQCTT #
- 							   # } #
-			</span>
-        </td>
-		<td class="ta-l">
-            <span class="ells"># if(DC_ANSCTT !== ""){ #
-							   #: DC_ANSCTT #
+        	<span class="ells"><input type="checkbox" class="checkbox" ng-click="onOrdGrdCkboxClick($event)"/></span>
+      	</td>
+		<td class="ta-l" style="padding:0">
+          	<div class="div-rows ells"># if(NO_ORD !== ""){ # 
+							  #: NO_ORD # 
+							  # } #
+			</div>
+			<div class="ells"># if(NO_APVL !== ""){ # 
+							  #: NO_APVL # 
+							  # } #
+			</div>
+      	</td>
+		<td class="ta-l" style="padding:0">
+          	<div class="div-rows ells"># if(NM_MRK !== ""){ #
+                  	    	   #: NM_MRK # 
+                      	       # } #
+			</div>
+			<div class="ells"># if(NO_MRKORD !== ""){ # 
+							   #: NO_MRKORD # 
 							   # } #
-			</span>
-        </td>
-		<td class="ta-l">
-            <span class="ells"># if(DTS_ANSREG !== ""){ #
-							   #: DTS_ANSREG #
-						       # } #
-			</span>
-        </td> 
-		<td class="ta-l">
-            <span class="ells"># if(CD_INQCLFT !== ""){ #
-							   <co04-cd-to-nm cd="#:CD_INQCLFT#" nm-box="csDataVO.csQuestionCodeOp">
-      						   # } #
-			</span>
-        </td>
-		<td class="ta-l">
-            <span class="ells"># if(NM_INQ !== ""){ #
-					    	   #: NM_INQ #
- 							   # } #
-			</span>
-        </td>
-		<td class="ta-l">
-            <span class="ells"># if(NM_MRKITEM !== ""){ #
+			</div>
+      	</td>
+		<td class="ta-l" style="padding:0">
+         	<div class="div-rows ells"># if(NO_MRKITEM !== ""){ #
+          	    	   	       #: NO_MRKITEM # 
+              	    	   	   # } #
+			</div>
+			<div class="ells"># if(NO_MRKREGITEM !== ""){ # 
+							   #: NO_MRKREGITEM # 
+							   # } #
+			</div>
+      	</td>
+		<td class="ta-l" style="padding:0">
+          	<div class="div-rows ells">
+							   # if(NM_MRKITEM !== ""){ #
 							   #: NM_MRKITEM #
+							   #} #
+			</div>
+			<div class="ells"># if(NM_MRKOPT !== ""){ # 
+							   #: NM_MRKOPT # 
 							   # } #
-			</span>
-        </td>
-		<td class="ta-l">
-            <span class="ells"># if(NO_MRKORD !== ""){ #
-							   #: NO_MRKORD #
+			</div>
+     	</td>
+		<td class="ta-r" style="padding:0">
+          	<div class="div-rows ells"># if(AM_ORDSALEPRC !== "" && AM_ORDSALEPRC !== null && AM_ORDSALEPRC !== "undefined" ){ #
+							   		   #= kendo.toString(AM_ORDSALEPRC,'C0', 'ko-KR') #
+    						   		   # }else{ #
+										 0
+							  		   #}#
+			</div>
+			<div class="ells"># if(AM_PCHSPRC !== "" && AM_PCHSPRC !== null && AM_PCHSPRC !== "undefined"){ #
+							  #= kendo.toString(AM_PCHSPRC,'C0', 'ko-KR') #
+							  # }else{ #
+								0
+							  #}#
+			</div>
+      	</td>
+		<td class="ta-c" style="padding:0">
+          	<div class="div-rows ells"># if(NM_PCHR !== ""){ #
+				    		   		   #: NM_PCHR #
+							   		   # } #
+			</div>
+			<div class="ells"># if(NM_CONS !== ""){ # 
+							   #: NM_CONS # 
+							   # } #
+			</div>
+      	</td>
+		<td class="ta-l" style="padding:0">
+          	<div class="div-rows ells"># if(NO_PCHRPHNE !== ""){ #
+							   #: NO_PCHRPHNE #
+							   # } #
+			</div>
+			<div class="ells"># if(NO_CONSHDPH !== ""){ # 
+							   #: NO_CONSHDPH # 
+							   # } #
+			</div>
+      	</td>
+		<td class="ta-l" style="padding:0">
+          	<div class="div-rows ells"># if(DC_PCHREMI !== ""){ #
+							   #: DC_PCHREMI #
 						       # } #
-			</span>
-        </td>
-	</tr>
+			</div>
+			<div class="ells"># if(DC_CONSNEWADDR !== ""){ # 
+							   #: DC_CONSNEWADDR # 
+							   # } #
+			</div>
+      	</td> 
+		<td class="ta-l" style="padding:0">
+          	<div class="div-rows ells"># if(DC_PCHRREQCTT !== ""){ #
+							   #: DC_PCHRREQCTT #
+    						   # } #
+			</div>
+			<div class="ells"># if(DC_CONSOLDADDR !== ""){ # 
+							   #: DC_CONSOLDADDR # 
+							   # } #
+			</div>
+      	</td>
+		<td class="ta-l" style="padding:0">
+          	<div class="div-rows ells"># if(CD_ORDSTAT !== ""){ #
+							   <co04-cd-to-nm cd="#:CD_ORDSTAT#" nm-box="ordDataVO.ordStatusOp">
+							   # } #
+			</div>
+			<div class="ells"># if(DC_SHPWAY !== ""){ # 
+							   #: DC_SHPWAY # 
+							   # } #
+			</div>
+      	</td>
+		<td class="ta-c" style="padding:0">
+        	<div class="div-rows ells"># if(DTS_APVL !== ""){ #
+							   #: DTS_APVL #
+							   # } #
+			</div>
+			<div class="ells"># if(DTS_ORD !== ""){ # 
+							   #: DTS_ORD # 
+							   # } #
+			</div>
+      	</td>
+		<td class="ta-l" style="padding:0">
+        	<div class="div-rows ells"># if(YN_CONN !== ""){ #
+							   #: YN_CONN #
+						       # } #
+			</div>
+			<div class="ells"># if(DTS_ORDDTRM !== ""){ # 
+							   #: DTS_ORDDTRM # 
+							   # } #
+			</div>
+      	</td>
+	</tr>			
 </script>
 
-<!-- cs 답변등록 팝업 그리드 -->
+<!-- 주문 취소 팝업 -->
 <script id="ord_popup_template" type="text/x-kendo-template">
-<div class="not_pop_title"><h3><span class="k-icon k-edit"></span>문의 답변 등록</h3></div>
-<table class="signal">
+<div class="not_pop_title"><h4>주문 취소 입력</h4></div>
+<table class="table signal">
 	<colgroup>
       <col style="width: 14%;">
       <col style="width: 30%;">
@@ -199,7 +262,7 @@
     </colgroup>
     <tbody data-uid="#= uid #">	
 	<tr class="border-bottom-line border-top-line">	
-		<td class="border-right-line">
+		<td class="active border-right-line">
 			마켓
 		</td>
 		<td class="border-right-line">
@@ -207,80 +270,99 @@
 			#: NM_MRK #
 			#}#
 		</td>
-		<td class="border-right-line">
+		<td class="active border-right-line">
 			주문번호
 		</td>
-		<td class="border-right-line">
+		<td>
 			#if(NO_MRKORD){ #
 			#: NO_MRKORD #
 			#}#
 		</td>
 	</tr>
 	<tr class="border-bottom-line">
-		<td class="border-right-line">
+		<td class="active border-right-line">
 			상품코드
 		</td>
-		<td class="border-right-line" colspan="3">
-			#if(CD_MRKITEM){ #
-			#: CD_MRKITEM #
+		<td colspan="3">
+			#if(NO_MRKITEM){ #
+			#: NO_MRKITEM #
 			#}#	
 		</td>
 	</tr>
 	<tr class="border-bottom-line">
-		<td class="border-right-line">
-			상품명/옵션
+		<td class="active border-right-line">
+			상품명
 		</td>
-		<td class="border-right-line" colspan="3">
+		<td colspan="3">
 			#if(NM_MRKITEM){ #
 			#: NM_MRKITEM #
 			#}#
 		</td>
 	</tr>
 	<tr class="border-bottom-line">
-		<td class="border-right-line">
-			문의자
+		<td class="active border-right-line">
+			구매자
 		</td>
 		<td class="border-right-line">
-			#if(NM_INQ){ #
-			#: NM_INQ #
+			#if(NM_PCHR){ #
+			#: NM_PCHR #
 			#}#	
 		</td>
-		<td class="border-right-line">
-			문의일시
+		<td class="active border-right-line">
+			배송방법
 		</td>
-		<td class="border-right-line">
-			#if(DTS_INQREG){ #
-			#: DTS_INQREG #
+		<td>
+			#if(DC_SHPWAY){ #
+			#: DC_SHPWAY #
 			#}#			
 		</td>
 	</tr>
 	<tr class="border-bottom-line">
-		<td class="border-right-line">
-			문의구분
+		<td class="active border-right-line">
+			구매수량
 		</td>
-		<td colspan="3">
-			#if(CD_INQCLFT){ #
-			<co04-cd-to-nm cd="#:CD_INQCLFT#" nm-box="csDataVO.csQuestionCodeOp">
+		<td class="ta-r">
+			#if(QT_ORD){ #
+			#: QT_ORD #
 			#}#
+
+		<td class="active border-right-line">
+		</td>
+		<td>
+		</td>
+	</tr>
+	<tr class="border-bottom-line">
+		<td class="active border-right-line">
+			<code>*</code>취소사유코드
+		</td>
+		<td>
+			<select kendo-drop-down-list
+                k-options="ordDataVO.cancelCodeOp"
+				name="CD_CCLRSN"
+				data-bind="value: CD_CCLRSN"
+                style="width: 100%">
+			</select>
+		</td>
+		<td colspan="2">
 		</td> 
 	</tr>
 	<tr class="border-bottom-line">
-		<td class="border-right-line">
-			답변내용
+		<td class="active border-right-line">
+			<code>*</code>주문취소사유
 		</td>
 		<td colspan="3">			
-			<textarea class="k-textbox" name="DC_ANSCTT" data-bind="value: DC_ANSCTT" style="width:100%; height:150px;"></textarea>
+			<textarea class="k-textbox" name="DC_CCLCTT" data-bind="value: DC_CCLCTT" style="width:100%; height:150px;"></textarea>
 		</td> 
 	</tr>
 	</tbody>
 </table>
 </script>
 
-<!-- 그리드 툴바 템플릿 -->
+<!-- 주문 조회 그리드 툴바 템플릿 -->
 <script id="ord-toolbar-template" type="text/x-kendo-template">
-	<button class="k-button k-button-icontext k-grid-edit" ng-click="onCsGridEditClick()"><span class="k-icon k-edit"></span>답변등록</button>    
-    <a class="k-button k-button-icontext k-grid-info" ng-click=""><span class="k-icon k-i-info"></span>문의정보 가오기</a>
-	<a class="k-button k-button-icontext k-grid-send" ng-click=""><span class="k-icon k-i-send"></span>답변 전송하기</a>
+	<a class="k-button k-button-icontext k-grid-custom" ng-click="showPopup('어떻게 할지 고민중입니다.')"><span class="k-icon k-i-custom"></span>신규주문 가져오기</a>
+	<a class="k-button k-button-icontext k-grid-edit"><span class="k-icon k-i-close"></span>주문취소</a>        
+	<a class="k-button k-button-icontext k-grid-save"><span class="k-icon k-i-update"></span>주문 확정</a>  
 </script>
 
 <!-- 검색시 유효성 검사 경고창 -->
@@ -290,10 +372,18 @@
 
 <span kendo-notification="notf1" k-options="notf1Options"></span>
 
+  <!-- 사용가능한  아이콘
+  k-i-undo
+  k-i-redo
+  k-i-lock
+  k-i-clock
+  k-i-calendar
+  print
+  delete 모양이 다름
+  k-i-custom 
+  --> 
+
 <style>
-.not_pop_title{
-	padding: 10px;
-}
 .k-edit-form-container{
     width: 900px;
 }
@@ -308,6 +398,19 @@
 .k-popup-edit-form .k-edit-field > .k-widget:not(.k-tooltip){
     width: 98%;
 }
+.ells{
+	text-overflow: ellipsis; 
+	white-space: nowrap; 
+	overflow:hidden;
+	height: 31px;
+	padding: 7px 7px 0 7px;	
+}
+.div-rows{
+	border-bottom: solid 1px #bbdceb;	
+}
+.not_pop_title{
+	padding: 10px;
+}
 .signal{    
     width: 99%;
     margin: 5px;
@@ -320,58 +423,5 @@
 }
 .border-bottom-line{	
 	border-bottom: 1px solid #eee;
-}
-.k-edit-form-container .k-edit-buttons{
-	border-style: none;
-}
-#example{
-    min-height: 200px;
-}
-#example .title {
-    font-weight: bold;
-    margin-bottom: 25px;
-}
-.search-wrapper {
-    width: 100%;
-}
-.query-match {
-	color: red;
-}
-.select-all-wrapper {
-    margin-top: 20px;
-    margin-bottom: 20px;
-}
-.selected-count {
-    float: right;
-    color: #aaa;
-}
-.k-treeview {
-    border-width: 1px!important;
-    padding: 5px;
-}
-.selectedName {
-    padding: 5px 10px;
-    background: #aaa;
-    color: white;
-    float: left;
-    margin-right: 5px;
-    margin-bottom: 5px;
-    border-radius: 10px;
-} 
-.class-target-dropdown{
-	width:65%; 
-	display:inline-block; 
-	vertical-align:middle;
-}
-.class-target-button{
-	width:33%; 
-	display:inline-block; 
-	vertical-align:middle; 
-	text-align:right;
-}
-.ells{
-	text-overflow: ellipsis; 
-	white-space: nowrap; 
-	overflow:hidden;
 }
 </style>
