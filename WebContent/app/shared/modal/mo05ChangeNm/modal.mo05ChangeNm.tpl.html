@@ -1,0 +1,21 @@
+<div class="modal-header">
+	<h3 class="modal-title">이름변경</h3>
+</div>
+<div class="modal-body" style="max-width:550px">
+	<form name="changeNmForm" style="padding: 10px;">
+		<div>
+			<table>
+				<col width="90"><col width="100%">
+				<tr>
+					<td><code>*</code>명칭</td>
+				    <td><input class="form-control" id="nmChange" type="text" title="명칭입력" placeholder="명칭을 입력해주세요." data-ng-model="changeNmVO.nmChange" required>
+				    </td>
+				</tr>
+			</table>
+		</div>
+		<div class="modal-footer">
+			<button type="submit" class="btn btn-primary" title="확인" data-ng-click="changeNmVO.doConfirm()" data-ng-disabled="changeNmForm.$invalid">확인</button>
+			<button class="btn btn-warning" title="취소" data-ng-click="changeNmVO.doCancle()">취소</button>
+		</div>
+	</form>
+</div>

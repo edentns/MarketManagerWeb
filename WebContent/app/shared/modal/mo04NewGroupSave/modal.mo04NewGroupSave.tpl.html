@@ -1,0 +1,21 @@
+<div class="modal-header">
+	<h3 class="modal-title">메뉴그룹등록</h3>
+</div>
+<div class="modal-body" style="max-width:550px">
+	<form name="newGroupForm" style="padding: 10px;">
+		<div>
+			<table>
+				<col width="90"><col width="100%">
+				<tr>
+					<td><code>*</code>그룹명</td>
+				    <td><input class="form-control" id="nmGroup" type="text" title="그룹명입력" placeholder="그룹명을 입력해주세요." data-ng-model="newGroupVO.nmGroup" required>
+				    </td>
+				</tr>
+			</table>
+		</div>
+		<div class="modal-footer">
+			<button type="submit" class="btn btn-primary" title="확인" data-ng-click="newGroupVO.doConfirm()" data-ng-disabled="newGroupForm.$invalid">확인</button>
+			<button class="btn btn-warning" title="취소" data-ng-click="newGroupVO.doCancle()">취소</button>
+		</div>
+	</form>
+</div>
