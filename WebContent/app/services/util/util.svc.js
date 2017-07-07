@@ -6,11 +6,52 @@
 	 * @description
 	 * 공통 유틸 서비스
 	 */
-	angular.module('edtApp.common.service').service('UtilSvc', ['$rootScope', '$state', '$window', '$http', 'APP_CONFIG', 'MenuSvc',
-		function ($rootScope, $state, $window, $http, APP_CONFIG, MenuSvc) {
+	angular.module('edtApp.common.service').service('UtilSvc', ['$rootScope', '$state', '$window', '$http', 'APP_CONFIG', 'MenuSvc', '$q',
+		function ($rootScope, $state, $window, $http, APP_CONFIG, MenuSvc, $q) {
 			var user = $rootScope.webApp.user,
 				menu = $rootScope.webApp.menu;
 
+	        /**
+	         * Get group info.
+	         * @returns {Promise}
+	         */
+	        this.getGroup = function(bRefresh) {
+		        var self = this,
+		            defer = $q.defer(),
+			        group;
+
+		        if(bRefresh) {
+		        	var param = {
+						procedureParam:"USP_SY_02LOGIN04_GET"
+					};
+					self.getList(param).then(function (res) {
+						$rootScope.$emit("event:setGroup", res.data.results[0]);
+						defer.resolve(res.data.results[0]);
+					});
+
+			        return defer.promise;
+		        }
+		        
+		        if (!$rootScope.webApp.group) {
+					group = JSON.parse($window.localStorage.getItem("GROUP"));
+			        if (group) {
+			        	$rootScope.webApp.group = group;
+				        defer.resolve($rootScope.webApp.group);
+			        } else {
+						// 자신의 그룹을 조회함
+						var param = {
+							procedureParam:"USP_SY_02LOGIN04_GET"
+						};
+						self.getList(param).then(function (res) {
+							$rootScope.$emit("event:setGroup", res.data.results[0]);
+						});
+			        }
+		        } else {
+					defer.resolve($rootScope.webApp.group);
+		        }
+
+		        return defer.promise;
+	        }
 
 			/**
 			 * 값이 유효한지 체크한다.
@@ -668,40 +709,6 @@
 					}
 				}
 				return retStr;
-			};
-			
-			/**
-			 * 조회 화면의 공통 코드 조회
-			 * @param {JSON * 2개 입력}
-			 * @returns 콩통 코드 리스트 출력
-			 */
-			this.getCommonCodeList = function ( param ) {
-				var self = this;
-
-				return $http({
-					method	: "GET",
-					url		: APP_CONFIG.domain + "/code/common/"+param.lnomngcdhd+"/"+param.lcdcls
-				}).success(function (data, status, headers, config) {
-					
-				}).error(function (data, status, headers, config) {
-					
-				});
-			};
-			
-			/**
-			 * 마켓정보 list
-			 * @param {없음}
-			 * @returns 마켓정보 리스트 출력
-			 */
-			this.csMrkList = function () {					
-				return $http({
-					method	: "GET",
-					url		: APP_CONFIG.domain +"/cs/mrklist"
-				}).success(function (data, status, headers, config) {
-					
-				}).error(function (data, status, headers, config) {
-					
-				});
 			};
 		}
 	]);
