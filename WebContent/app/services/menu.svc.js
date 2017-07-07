@@ -29,6 +29,7 @@
 			self.path  = self.state +'({ menu: true })';
 			self.className = menu.NM_ICON;
 			self.seq = menu.SQ_M;
+			self.hasMenu   = "hasMenu";
 		};
 
 		Node.prototype = {
