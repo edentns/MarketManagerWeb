@@ -50,15 +50,15 @@
                     	}
                 	};
 
-                	$scope.$watch('options.ynReset', function (newValue, oldValue) {
-                		if(newValue === 'Y') {
+                	$scope.$watch('options.bReset', function (newValue, oldValue) {
+                		if(newValue) {
 	                		$scope.selectAll();
 	                		if($scope.setting.allCheckYn) {
 	                			if($scope.setting.allCheckYn == "n" || $scope.setting.allCheckYn == "N") {
 	                				$scope.deselectAll();
 	                			}
 	                		}
-	                		$scope.options.ynReset = 'N';
+	                		$scope.options.bReset = false;
                 		}
 				    });
                 	
