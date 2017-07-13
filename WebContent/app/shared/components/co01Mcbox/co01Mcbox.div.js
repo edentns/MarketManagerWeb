@@ -39,6 +39,7 @@
     	    	        allCheckYn: "y",
     	    	        arrayModel: []
     	        	};
+                	
                 	$scope.initLoad = function () {
                 		var self = this;
                 		
@@ -48,6 +49,18 @@
                     		if($scope.setting.name    ) co01McboxVO.name     = $scope.setting.name;
                     	}
                 	};
+
+                	$scope.$watch('options.ynReset', function (newValue, oldValue) {
+                		if(newValue === 'Y') {
+	                		$scope.selectAll();
+	                		if($scope.setting.allCheckYn) {
+	                			if($scope.setting.allCheckYn == "n" || $scope.setting.allCheckYn == "N") {
+	                				$scope.deselectAll();
+	                			}
+	                		}
+	                		$scope.options.ynReset = 'N';
+                		}
+				    });
                 	
                 	$scope.$watch('options', function (newValue, oldValue) {
                 		$scope.selectAll();
