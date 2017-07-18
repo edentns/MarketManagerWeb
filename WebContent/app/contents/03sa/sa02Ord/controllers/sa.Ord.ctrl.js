@@ -110,15 +110,20 @@
                 	me.buyerName.value = "";
                 	me.orderNo.value = "";
                 	me.admin.value = "";
-                	me.ordMrkNameMo = "*";
-                	me.ordStatusMo = "*";
                 	me.betweenDateOptionMo = me.betweenDateOptionOp[0].CD_DEF; 
                 	
-                	me.datesetting.selected = "1Week";
-                	if(!me.datesetting.period.start){//초기화 여러번 누르면 요일이 사라져서 추가
-                		me.datesetting.period.start = angular.copy(today);
-                    	me.datesetting.period.end = angular.copy(today);
-                	}
+                	if ($scope.$$phase == '$apply' || $scope.$$phase == '$digest' ) {
+		        	    me.datesetting.selected = "1Week";
+		        	    me.ordStatusOp = angular.copy(me.ordStatusOp);
+		        	    me.ordMrkNameOp = angular.copy(me.ordMrkNameOp);
+		        	} else {
+		        		$scope.$apply(function() {
+		        			me.datesetting.selected = "1Week";
+		        			me.ordStatusOp = angular.copy(me.ordStatusOp);
+				        	me.ordMrkNameOp = angular.copy(me.ordMrkNameOp);
+		        	    });
+		        	};
+                	
                 	me.dataTotal = 0;
                 	me.resetAtGrd = $scope.ordkg;
                 	me.resetAtGrd.dataSource.data([]);	            		            	
@@ -127,9 +132,9 @@
 	            $scope.readValidation = function(idx){
 	            	var result = true;
 	            	
-            		if(idx.IN_NM_MRK === null || idx.IN_NM_MRK === ""){ $scope.showPopup("마켓명을 입력해 주세요."); result = false; return; };
-            		if(idx.IN_CD_ORDSTAT === null || idx.IN_CD_ORDSTAT === ""){ $scope.showPopup("주문상태를 입력해 주세요."); result = false; return;};
-            		if(idx.IN_DTS_CHK === null || idx.IN_DTS_CHK === ""){ $scope.showPopup("기간을 선택해 주세요."); result = false; return;};		
+            		if(idx.NM_MRK === null || idx.NM_MRK === ""){ $scope.showPopup("마켓명을 입력해 주세요."); result = false; return; };
+            		if(idx.CD_ORDSTAT === null || idx.CD_ORDSTAT === ""){ $scope.showPopup("주문상태를 입력해 주세요."); result = false; return;};
+            		if(idx.DTS_CHK === null || idx.DTS_CHK === ""){ $scope.showPopup("기간을 선택해 주세요."); result = false; return;};		
 	            
 	            	return result;
 	            };	 
@@ -590,7 +595,7 @@
                 	rowTemplate: kendo.template($.trim($("#ord_template").html())),
                 	//altRowTemplate: kendo.template($.trim($("#ord_alt_template").html())),
                 	//detailTemplate : kendo.template($.trim($("#ord_detail_template").html())),
-                	height: 540
+                	height: 530
                 	//모델과 그리드 셀을 제대로 연동 안시키면 수정 팝업 연 후 닫을 때 로우가 사라짐(즉 크레에이트인지 에딧인지 구분을 못함)
                 	//id는 유니크한 모델값으로 해야함 안그러면 cancel 시에 row grid가 중복 되는 현상이 발생
                 	//rowTemplate을 사용한 colunm은 lock을 사용할 수 없음	                    	
@@ -620,7 +625,6 @@
 	                if (widget === grd){ 
 	                	//주문취소 팝업 가져오기
 	                	widget.element.find(".k-grid-edit").on("click", function(e){
-	                		e.preventDefault();
 	                		var	chked = grd.element.find("input:checked"),
 		            			chkedLeng = grd.element.find("input:checked").length;
 	                    		                    
