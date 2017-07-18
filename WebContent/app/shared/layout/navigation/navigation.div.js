@@ -2,17 +2,21 @@
 	'use strict';
 
 	angular.module('edtApp.common.directive')
-		.directive('menuNavigation', ['$window', function ($window) {
+		.directive('menuNavigation', ['$window', 'UtilSvc', 'FavoritesSvc', "$q", "$rootScope", "$modal", function ($window, UtilSvc, FavoritesSvc, $q, $rootScope, $modal) {
 			return {
-				templateUrl: 'menuNavigation/template',
+				templateUrl: 'app/shared/layout/navigation/navigation.tpl.html',
 				restrict: 'AE',
 				scope: {
 					menuConfig: '='
 				},
 				link: function (scope) {
-
-					scope.menuList = scope.menuConfig.data;
-
+					var bFavorites = false;
+					
+					scope.menuList  = scope.menuConfig.data;
+					UtilSvc.getGroup(true).then(function(res) {
+						scope.groupList = res;
+					});
+					
 					$('.main-menu').on('click', 'a', function (e) {
 						var obj = $(this),
 							parents 		= obj.parents('li'),
@@ -51,6 +55,148 @@
 							$window.localStorage.setItem("recentUrl", JSON.stringify({href: strHref}));
 						}
 					});
+					
+					scope.onFavorites = function() {
+				        //var defer = $q.defer();
+						var param = {
+							procedureParam:"USP_SY_02LOGIN03_GET"
+						};
+						UtilSvc.getList(param).then(function (res) {
+							scope.favoritesList = FavoritesSvc.setMenu(res.data.results[0]).getNavigation();
+							
+							//alert("즐겨찾기 클릭");
+						});
+						bFavorites = true;
+				        //return defer.promise;
+					};
+
+					scope.onMenu = function() {
+						bFavorites = false;
+						//alert("메뉴 클릭");
+					};
+					
+					scope.onSelect = function(kendoEvent) {
+						var noMygrp = '',
+						    noM     = '';
+						
+						if(kendoEvent.item && kendoEvent.item.id === '') return;
+						
+						if(bFavorites) {
+							switch(kendoEvent.item.id) { 
+							case "changeNm" : 
+								var self = this,
+								modalInstance = $modal.open({
+									options: {
+										modal: true,
+										resizable: true,
+										width: 450,
+										visible: false
+									},
+									templateUrl : "app/shared/modal/mo05ChangeNm/modal.mo05ChangeNm.tpl.html",
+			                        controller  : "modal.mo05ChangeNmCtrl",
+			                        size        : "sm",
+			                        resolve     : {
+				                    	resData: ["$stateParams", "$q", "AuthSvc", "sy.AtrtSvc",
+											function ($stateParams, $q, AuthSvc) {
+												var defer   = $q.defer(),
+													resData = {};
+												
+												// 1. 그룹이면
+												if(kendoEvent.target.attributes[2].value === "ROOT") {
+													resData.noMygrp = kendoEvent.target.id;
+													resData.noM     = '';
+												}
+												else {
+													resData.noMygrp = kendoEvent.target.attributes[2].value;
+													resData.noM     = kendoEvent.target.id;
+												}
+												
+												defer.resolve(resData);
+												
+												return defer.promise;
+											}
+				                    	]
+				                    }
+								});
+								modalInstance.result.then(function ( result ) {
+									scope.onFavorites();
+									UtilSvc.getGroup(true).then(function(res) {
+										scope.groupList = res;
+									});
+			                    });
+								break;
+							case "deleteThis" :
+								// 1. 그룹이면
+								if(kendoEvent.target.attributes[2].value === "ROOT") {
+									noMygrp = kendoEvent.target.id;
+								}
+								else {
+									noMygrp = kendoEvent.target.attributes[2].value;
+									noM     = kendoEvent.target.id;
+								}
+								FavoritesSvc.deleteGrpMenu(noMygrp, noM).then(function(res) {
+									if(res.status === 200) {
+										alert('삭제완료하였습니다.');
+										scope.onFavorites();
+										UtilSvc.getGroup(true).then(function(res) {
+											scope.groupList = res;
+										});
+									}
+								});
+								break;
+							default : 
+								// 1. 그룹이면
+								if(kendoEvent.target.attributes[2].value === "ROOT") {
+									noMygrp = kendoEvent.target.id;
+								}
+								else {
+									noMygrp = kendoEvent.target.attributes[2].value;
+									noM     = kendoEvent.target.id;
+								}
+								FavoritesSvc.changeGrpMenu(noMygrp, noM, kendoEvent.item.id).then(function(res) {
+									if(res.status === 200) {
+										alert('변경완료하였습니다.');
+										scope.onFavorites();
+										UtilSvc.getGroup(true).then(function(res) {
+											scope.groupList = res;
+										});
+									}
+								});
+								break;	
+							}
+						}
+						else {
+							switch(kendoEvent.item.id) { 
+							case "newGroup" : 
+								// 팝업 띄워서 그룹 등록// 메뉴를 등록함.
+								var self = this,
+									modalInstance = $modal.open({
+									options: {
+										modal: true,
+										resizable: true,
+										width: 450,
+										visible: false
+									},
+									templateUrl : "app/shared/modal/mo04NewGroupSave/modal.mo04NewGroupSave.tpl.html",
+			                        controller  : "modal.mo04NewGroupSaveCtrl",
+			                        size        : "sm"
+								});
+								modalInstance.result.then(function ( result ) {
+									UtilSvc.getGroup(true).then(function(res) {
+										scope.groupList = res;
+									});
+			                    });
+							break;
+							default : 
+								FavoritesSvc.saveGrpMenu(kendoEvent.target.id, kendoEvent.target.textContent, kendoEvent.item.id).then(function(res) {
+									if(res.status === 200) {
+										alert('메뉴저장완료하였습니다.');
+									}
+								});
+							break;
+							}
+						}
+					};
 				}
 			};
 		}])
@@ -74,82 +220,26 @@
 		}])
 
 		.run(['$templateCache', function ($templateCache) {
-			$templateCache.put('menuNavigation/template', '' +
-					'<ul class="nav main-menu">' +
-				      '<div kendo-tab-strip k-content-urls="[null,null]">' +
-				        '<ul style="height: 35px;">' +
-				          '<li style="height: 34px">즐겨찾기</li>' +
-				          '<li class="k-state-active" style="height: 34px">메&nbsp뉴</li>' +
-				        '</ul>' +
-				        '<div style="padding: 1em; height: 800px;">' +
-				          '<li ng-repeat="menu in menuList" ng-class="{\'dropdown\': menu._children.length > 0, opened: menu.active}">' +
-						    '<div class="hasGroupMenu">' +
-						      '<a ng-if="menu._children.length == 0" ui-sref="{{menu.path}}" title="{{menu.name}}" ng-class="{\'active-parent active\': menu.active}" ' +
-						       'ng-style="{\'padding-left\': menu.depth * 15 +\'px\'}">' +
-						       '<i class="fa {{menu.className}}"></i>&nbsp;<span>{{menu.name}}</span>'+
-						      '</a>' +
-						    '</div>' +
-						    '<ul kendo-context-menu ' +
-					         'k-filter="\'.hasGroupMenu\'" ' +
-					         'k-on-open="menuOpen = menuOpen + 1" ' +
-					         'k-on-close="menuOpen = menuOpen - 1" ' +
-					         'k-on-select="onSelect(kendoEvent)"> ' +
-					          '<li>이름변경</li> ' +
-					          '<li>그룹변경 ' +
-					            '<ul> ' +
-					              '<li>등록1</li> ' +
-					              '&nbsp;-------------' +
-					              '<li>새그룹</li> ' +
-					            '</ul> ' +
-					          '</li> ' +
-					          '<li>삭제</li> ' +
-					        '</ul>' +
-						    '<a ng-if="menu._children.length > 0" class="dropdown-toggle" href="#" title="{{menu.name}}" ng-class="{\'active-parent active\': menu.active}" ' + 
-						     'ng-style="{\'padding-left\': menu.depth * 15 +\'px\'}">' +
-						    '<i class="fa {{menu.className}}"></i>&nbsp;<span>{{menu.name}}</span>' +
-						    '</a>' +
-						    '<ul ng-if="menu._children.length > 0" menu-node="menu._children" class="dropdown-menu"></ul>' +
-					      '</li>' +
-					    '</div>' +
-					    '<div style="padding: 1em; height: 800px;">' +
-					      '<li ng-repeat="menu in menuList" ng-class="{\'dropdown\': menu._children.length > 0, opened: menu.active}">' +
-						    '<div class="hasMenu">' +
-						      '<a ng-if="menu._children.length == 0" ui-sref="{{menu.path}}" title="{{menu.name}}" ng-class="{\'active-parent active\': menu.active}" ' + 
-						       'ng-style="{\'padding-left\': menu.depth * 15 +\'px\'}">' +
-							  '<i class="fa {{menu.className}}"></i>&nbsp;<span>{{menu.name}}</span>' +
-						      '</a>' +
-						    '</div>' +
-						    '<ul kendo-context-menu ' +
-					         'k-filter="\'.hasMenu\'" ' +
-					         'k-on-open="menuOpen = menuOpen + 1" ' +
-					         'k-on-close="menuOpen = menuOpen - 1" ' +
-					         'k-on-select="onSelect(kendoEvent)"> ' +
-					          '<li>즐겨찾기등록 ' +
-					            '<ul> ' +
-					              '<li>등록1</li> ' +
-					              '&nbsp;-------------' +
-					              '<li>새그룹</li> ' +
-					            '</ul> ' +
-					          '</li> ' +
-					        '</ul>' +
-						    '<a ng-if="menu._children.length > 0" class="dropdown-toggle" href="#" title="{{menu.name}}" ng-class="{\'active-parent active\': menu.active}" ' +
-						     'ng-style="{\'padding-left\': menu.depth * 15 +\'px\'}">' +
-							'<i class="fa {{menu.className}}"></i>&nbsp;<span>{{menu.name}}</span>' +
-						    '</a>' +
-						    '<ul ng-if="menu._children.length > 0" menu-node="menu._children" class="dropdown-menu"></ul>' +
-					      '</li>' +
-					    '</div>' +
-				      '</div>' +
-					'</ul>'
-			);
-
 			$templateCache.put('menuNode/template',
 				'<li ng-repeat="menu in menuNode" ng-class="{\'dropdown\': menu._children.length > 0, opened: menu.active}">' +
-					'<div class="hasMenu"><a ng-if="menu._children.length == 0" ui-sref="{{menu.path}}" title="{{menu.name}}" ng-class="{\'active-parent active\': menu.active}" ng-style="{\'padding-left\': menu.depth * 15 +\'px\'}">{{menu.name}}</a></div>' +
-					'<a ng-if="menu._children.length > 0" class="dropdown-toggle" href="#" title="{{menu.name}}" ng-class="{\'active-parent\': menu.active}" ng-style="{\'padding-left\': menu.depth * 15 +\'px\'}">{{menu.name}}</a>' +
+					'<a ng-if="menu._children.length == 0" ' +
+					   'ui-sref="{{menu.path}}" ' +
+					   'title="{{menu.name}}" ' +
+					   'ng-class="{\'active-parent active\': menu.active}" ' +
+					   'ng-style="{\'padding-left\': menu.depth * 15 +\'px\'}">' +
+						'<div class="{{menu.hasMenu}}" id="{{menu.entity.NO_M}}" p-id="{{menu.entity.ID_M_P}}">' +
+							'{{menu.name}}' +
+						'</div>' +	
+					'</a>' +
+				    '<a ng-if="menu._children.length > 0" ' +
+				       'class="dropdown-toggle" ' +
+				       'href="#" ' +
+				       'title="{{menu.name}}" ' +
+				       'ng-class="{\'active-parent\': menu.active}" ' +
+				       'ng-style="{\'padding-left\': menu.depth * 15 +\'px\'}">' +
+				       '{{menu.name}}</a>' +
 					'<ul ng-if="menu._children.length > 0" menu-node="menu._children" class="dropdown-menu"></ul>' +
 				'</li>'
 			);
-
 		}]);
 }());

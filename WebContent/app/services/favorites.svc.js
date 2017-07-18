@@ -2,10 +2,10 @@
 	'use strict';
 
 	angular.module('edtApp.common.service')
-		.factory('MenuSvc', MenuSvc);
+		.factory('FavoritesSvc', FavoritesSvc);
 
-	MenuSvc.$inject = ['$rootScope', '$state'];
-	function MenuSvc($rootScope, $state) {
+	FavoritesSvc.$inject = ['$rootScope', '$state', '$http', 'APP_CONFIG'];
+	function FavoritesSvc($rootScope, $state, $http, APP_CONFIG) {
 		var self = this,
 			PK = 'ID_M',
 			FK = 'ID_M_P',
@@ -16,26 +16,26 @@
 			Node;
 
 		Node = function (menu) {
-			var self = this;
-			self.entity = menu;
+			var self       = this;
+			self.entity    = menu;
 
-			self._parent = null;
+			self._parent   = null;
 			self._children = [];
-			self.depth = 0;
-			self.active = false;
+			self.depth     = 0;
+			self.active    = false;
 
-			self.name = menu.NM_M;
-			self.state = menu.ID_CMP;
-			self.path  = self.state +'({ menu: true })';
+			self.name      = menu.NM_M;
+			self.state     = menu.ID_CMP;
+			self.path      = self.state +'({ menu: true })';
 			self.className = menu.NM_ICON;
-			self.seq = menu.SQ_M;
-			self.hasMenu   = "hasMenu";
+			self.seq       = menu.SQ_M;
+			self.hasMenu   = "hasGroupMenu";
 		};
 
 		Node.prototype = {
 			// Root인지 판단한다.
 			isRoot: function () {
-				return this.entity[FK]===null || this.entity[FK]===0;
+				return this.entity[FK]===null || this.entity[FK]===0 || this.entity[FK]==='';
 			},
 
 			// 자식노드가 있는지 판단한다.
@@ -67,6 +67,48 @@
 
 
 		return {
+			/**
+			 * 메뉴를 메뉴그룹에 등록한다.
+			 * @param {{NM_MYGRP:string}}
+			 * @returns {*}
+			 */
+			saveGrpMenu : function (noM, nmM, noMygrp) {
+				return $http({
+					method	: "POST",
+					url		: APP_CONFIG.domain +"/saveGrpMenu",
+					headers	: { "Content-Type": "application/x-www-form-urlencoded; text/plain; */*; charset=utf-8" },
+					data	: $.param({NO_M:noM, NM_M:nmM, NO_MYGRP:noMygrp})
+				});
+			},
+			
+			/**
+			 * 메뉴를 메뉴그룹에 삭제한다.
+			 * @param {{NO_MYGRP:string, NO_M:string}}
+			 * @returns {*}
+			 */
+			deleteGrpMenu : function (noMygrp, noM) {
+				return $http({
+					method	: "POST",
+					url		: APP_CONFIG.domain +"/deleteGrpMenu",
+					headers	: { "Content-Type": "application/x-www-form-urlencoded; text/plain; */*; charset=utf-8" },
+					data	: $.param({NO_MYGRP:noMygrp, NO_M:noM})
+				});
+			},
+
+			/**
+			 * 메뉴에 그룹을 변경한다.
+			 * @param {{NO_MYGRP:string, NO_M:string, NO_MYGRPCHG:string}}
+			 * @returns {*}
+			 */
+			changeGrpMenu : function (noMygrp, noM, noMygrpChg) {
+				return $http({
+					method	: "POST",
+					url		: APP_CONFIG.domain +"/changeGrpMenu",
+					headers	: { "Content-Type": "application/x-www-form-urlencoded; text/plain; */*; charset=utf-8" },
+					data	: $.param({NO_MYGRP:noMygrp, NO_M:noM, NO_MYGRPCHG:noMygrpChg})
+				});
+			},
+			
 			// 전체 메뉴를 가져온다.
 			getMenu: function () {
 				return _data;
@@ -101,11 +143,7 @@
 
 			// 메뉴데이터를 셋한다.
 			setMenu: function (menuList) {
-				_data = menuList.sort(function (a, b) {
-					if (a[PK] > b[PK]) { return 1; }
-					else if (a[PK] < b[PK]) { return -1; }
-					else { return 0; }
-				});
+				_data = menuList;
 				_compositData = [];
 
 				var self = this,
@@ -191,13 +229,7 @@
 						});
 						break;
 				}
-
-
 			}
-
 		};
 	}
-
-
-
 }());

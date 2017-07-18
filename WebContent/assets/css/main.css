@@ -284,7 +284,8 @@ input[type=radio] {
   padding-left: 5px;
   }
 /* bootstrap */
-.nav li > a:hover {
+.nav li > a:hover, 
+.nav li > div > a:hover {
   cursor: pointer;
   }
 .btn {
