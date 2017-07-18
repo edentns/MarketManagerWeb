@@ -13,7 +13,7 @@
 					var bFavorites = false;
 					
 					scope.menuList  = scope.menuConfig.data;
-					UtilSvc.getGroup(false).then(function(res) {
+					UtilSvc.getGroup(true).then(function(res) {
 						scope.groupList = res;
 					});
 					
@@ -222,15 +222,15 @@
 		.run(['$templateCache', function ($templateCache) {
 			$templateCache.put('menuNode/template',
 				'<li ng-repeat="menu in menuNode" ng-class="{\'dropdown\': menu._children.length > 0, opened: menu.active}">' +
-					'<div class="{{menu.hasMenu}}" id="{{menu.entity.NO_M}}" p-id="{{menu.entity.ID_M_P}}">' +
-						'<a ng-if="menu._children.length == 0" ' +
-						   'ui-sref="{{menu.path}}" ' +
-						   'title="{{menu.name}}" ' +
-						   'ng-class="{\'active-parent active\': menu.active}" ' +
-						   'ng-style="{\'padding-left\': menu.depth * 15 +\'px\'}">' +
-						   '{{menu.name}}' +
-						'</a>' +
-					'</div>' +
+					'<a ng-if="menu._children.length == 0" ' +
+					   'ui-sref="{{menu.path}}" ' +
+					   'title="{{menu.name}}" ' +
+					   'ng-class="{\'active-parent active\': menu.active}" ' +
+					   'ng-style="{\'padding-left\': menu.depth * 15 +\'px\'}">' +
+						'<div class="{{menu.hasMenu}}" id="{{menu.entity.NO_M}}" p-id="{{menu.entity.ID_M_P}}">' +
+							'{{menu.name}}' +
+						'</div>' +	
+					'</a>' +
 				    '<a ng-if="menu._children.length > 0" ' +
 				       'class="dropdown-toggle" ' +
 				       'href="#" ' +

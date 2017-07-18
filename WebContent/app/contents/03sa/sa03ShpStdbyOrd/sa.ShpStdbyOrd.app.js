@@ -8,11 +8,25 @@
 
     shpStdbyOrdApp.config(["$stateProvider", function ($stateProvider) {
         $stateProvider.state("app.saShpStdbyOrd", {
-            url		: "/03sa/saShpStdbyOrd?menu",
+            url		: "/03sa/saShpStdbyOrd/:kind?menu&noOrd&noMrkord&noMrk",
             views	: {
                 contentView	: {
-                    templateUrl	: "app/contents/03sa/sa03ShpStdbyOrd/templates/sa.ShpStdbyOrd.tpl.html",
-                    controller  : "sa.ShpStdbyOrdCtrl",
+                    templateUrl	: function($stateParams){
+                    	if ($stateParams.menu) {
+                            $stateParams.kind = "";
+                        }else{
+                        	$stateParams.kind = "Info";
+                        }
+                    	return "app/contents/03sa/sa03ShpStdbyOrd/templates/sa.ShpStdbyOrd"+ $stateParams.kind +".tpl.html";                    	
+                    },
+                    controllerProvider  : ["$stateParams",function($stateParams){
+                    	if ($stateParams.menu) {
+                            $stateParams.kind = "";
+                        }else{
+                        	$stateParams.kind = "Info";
+                        }
+                    	return "sa.ShpStdbyOrd"+ $stateParams.kind +"Ctrl";                                  
+                    }],
                     resolve		: {
                         resData: ["AuthSvc", "$q", function (AuthSvc, $q) {
                             var defer 	= $q.defer(),

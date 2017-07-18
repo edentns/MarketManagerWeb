@@ -1,4 +1,4 @@
-<div id="app-content" class="col-xs-12 col-sm-10">
+<div id="app-content" class="col-xs-12 col-sm-10">	
     <div class="row">
         <div id="app-content-header">
             <ol class="breadcrumb">
@@ -8,42 +8,41 @@
         </div>
     </div>
     
-	<div class="row">
+    <form id="ordershp_form" kendo-validator="validator" ng-submit="validate($event)" k-options="myValidatorOptions">    
+	<div class="row">		
         <!-- 주문 정보 -->
         <div class="content-area-container col-xs-12">
-        	<div data-content-box-layer data-box-title="ordInfoDataVO.orderInfo.boxTitle">
-        		<form class="search-type1">
-	                <table>
-	                	<colgroup>
-	                           <col style="width: 10%;">
-	                           <col style="width: 20%;">
-	                           <col style="width: 10%;">
-	                           <col style="width: 20%;">
-	                           <col style="width: 10%;">
-	                           <col style="width: 20%;">
-	                       </colgroup>
-	                       <tbody>
-	                       	<tr>
-	                       		<th>마켓명</th>
-	                       		<td>{{ordInfoDataVO.ds.NM_MRK}}</td>
-	                       		<th>마켓ID</th>
-	                       		<td>{{ordInfoDataVO.ds.DC_MRKID}}</td>
-	                       		<th>주문번호</th>
-	                       		<td>{{ordInfoDataVO.ds.NO_MRKORD}}</td>
-	                       	</tr>
-	                       	<tr>
-	                       		<th>판매자 URL</th>
-	                       		<td>{{ordInfoDataVO.ds.DC_SALEMNGURL}}</td>
-	                       		<th>매핑여부</th>
-	                       		<td>{{ordInfoDataVO.ds.YN_CONN}}</td>
-	                       		<th>주문상태</th>
-	                       		<td>
-	                       			<co04-cd-to-nm cd="{{ordInfoDataVO.ds.CD_ORDSTAT}}" nm-box="ordInfoDataVO.ordStatusOp">	                       			
-	                       		</td>
-	                       	</tr>
-	                       </tbody>
-	                </table>
-                </form>
+        	<div data-content-box-layer data-box-title="ordInfoDataVO.orderInfo.boxTitle">        		
+                <table class="table table-bordered">
+                	   <colgroup>
+                           <col style="width: 10%;">
+                           <col style="width: 20%;">
+                           <col style="width: 10%;">
+                           <col style="width: 20%;">
+                           <col style="width: 10%;">
+                           <col style="width: 20%;">
+                       </colgroup>
+                       <tbody>
+                       	<tr>
+                       		<th>마켓명</th>
+                       		<td>{{ordInfoDataVO.ds.NM_MRK}}</td>
+                       		<th>마켓ID</th>
+                       		<td>{{ordInfoDataVO.ds.DC_MRKID}}</td>
+                       		<th>주문번호</th>
+                       		<td>{{ordInfoDataVO.ds.NO_MRKORD}}</td>
+                       	</tr>
+                       	<tr>
+                       		<th>판매자 URL</th>
+                       		<td>{{ordInfoDataVO.ds.DC_SALEMNGURL}}</td>
+                       		<th>매핑여부</th>
+                       		<td>{{ordInfoDataVO.ds.YN_CONN}}</td>
+                       		<th>주문상태</th>
+                       		<td>
+                       			<co04-cd-to-nm cd="{{ordInfoDataVO.ds.CD_ORDSTAT}}" nm-box="ordInfoDataVO.ordStatusOp">                       			                		
+                       		</td>
+                       	</tr>
+                       </tbody>
+                </table>                
             </div>
         </div>        
     </div>
@@ -52,8 +51,7 @@
         <!-- 상품 정보  -->
         <div class="content-area-container col-xs-12">
         	<div data-content-box-layer data-box-title="ordInfoDataVO.procInfo.boxTitle">
-        		<form class="search-type1">
-                <table class="table-bordered">
+                <table class="table table-bordered">
                 	<colgroup>
                            <col style="width: 10%;">
                            <col style="width: 20%;">
@@ -81,7 +79,6 @@
                        	</tr>
                        </tbody>
                 </table>
-                </form>
             </div>
         </div>        
     </div>
@@ -90,8 +87,7 @@
         <!-- 구매자 정보 -->
         <div class="content-area-container col-xs-12">
         	<div data-content-box-layer data-box-title="ordInfoDataVO.buyerInfo.boxTitle">
-        		<form class="search-type1">
-                <table class="table-bordered">
+                <table class="table table-bordered">
                 	<colgroup>
                            <col style="width: 10%;">
                            <col style="width: 20%;">
@@ -119,7 +115,6 @@
                        	</tr>
                        </tbody>
                 </table>
-                </form>
             </div>
         </div>        
     </div>
@@ -128,8 +123,7 @@
         <!-- 수령인 정보 -->
         <div class="content-area-container col-xs-12">
         	<div data-content-box-layer data-box-title="ordInfoDataVO.receiveInfo.boxTitle">
-        		<form class="search-type1">
-                <table class="table-bordered">
+                <table class="table table-bordered">
                 	<colgroup>
                            <col style="width: 10%;">
                            <col style="width: 20%;">
@@ -167,7 +161,9 @@
                        		<th>수량</th>
                        		<td>{{ordInfoDataVO.ds.QT_ORD}}</td>
                        		<th>금액</th>
-                       		<td>{{ordInfoDataVO.ds.AM_ORDSALEPRC | number:0}}</td>
+                       		<td>
+                       			<kendo-custom-currency-directive val="{{ordInfoDataVO.ds.AM_ORDSALEPRC}}" decimal="c"/>
+                       		</td>
                        	</tr>
                        	<tr>
                        		<th>결제번호</th>
@@ -179,7 +175,6 @@
                        	</tr>
                        </tbody>
                 </table>
-                </form>
             </div>
         </div>        
     </div>
@@ -188,8 +183,7 @@
         <!-- 배송정보 -->
         <div class="content-area-container col-xs-12">
         	<div data-content-box-layer data-box-title="ordInfoDataVO.deliveryInfo.boxTitle">
-        		<form class="search-type1">
-                <table class="table-bordered">
+                <table class="table table-bordered">
                 	<colgroup>
                            <col style="width: 10%;">
                            <col style="width: 20%;">
@@ -205,7 +199,9 @@
                        		<th>배송비 결제 내용</th>
                        		<td>{{ordInfoDataVO.ds.DC_SHPCOSTAPVL}}</td>
                        		<th>배송비</th>
-                       		<td>{{ordInfoDataVO.ds.AM_SHPCOST | number:0}}</td>
+                       		<td>                			
+                       			<kendo-custom-currency-directive val="{{ordInfoDataVO.ds.AM_SHPCOST}}" decimal="c"/>
+                       		</td>
                        	</tr>
                        	<tr>
                        		<th>배송지연일</th>
@@ -215,167 +211,67 @@
                        		<th>배송비 상태</th>
                        		<td>{{ordInfoDataVO.ds.DC_SHPCOSTSTAT}}</td>
                        	</tr>
+                       	<tr>
+                       		<th>택배사</th>
+                       		<td>
+                       			<!-- <input id="dropdownlist" 
+                       					name="CD_PARS"
+                       					ng-model="ordInfoDataVO.inputs.CD_PARS" 
+                       					style="width: 100%;" 
+                       					data-required-msg="택배사를 선택해 주세요."
+                       					required /> -->		
+                       			<select 
+                       				id="CD_PARS"
+                       				name="CD_PARS"                       				 
+						            kendo-drop-down-list style="width: 100%"
+						            k-option-label="'-- 택배사를 선택해 주세요 --'"
+						            k-options="ordInfoDataVO.shpCodeOptions"
+						            k-ng-model="ordInfoDataVO.ds.CD_PARS"
+						            data-required-msg="택배사를 선택해 주세요."				            
+                       				required >
+                       			</select>	
+                       			<span class="k-invalid-msg" data-for="CD_PARS"></span>
+							</td>
+                       		<th>송장번호</th>
+                       		<td>
+                       			<input type="text" 
+                       				name="NO_INVO" 
+                       				ng-model="ordInfoDataVO.ds.NO_INVO" 
+                       				class="k-textbox" 
+                       				style="width: 100%;" 
+									data-required-msg="송장번호를 입력해 주세요."
+									data-lengthy-msg="송장번호를 100자 이내로 입력해 주세요."
+									lengthy required />
+								<span class="k-invalid-msg" data-for="NO_INVO"></span>	
+                       		</td>
+                       		<th></th>
+                       		<td></td>
+                       	</tr>
                        </tbody>
                 </table>
-                </form>
             </div>
         </div>        
     </div>
-   	
-	<div class="btn-group1 mt-20">
-		<kendo-button type="submit" class="k-primary" title="주문확정" data-ng-click="ordInfoDataVO.doOrdConfirm()" ng-if="ordInfoDataVO.buttonHidden('002')" style="width:80px;">주문확정</kendo-button>
-		<kendo-button type="botton" title="주문취소" data-ng-click="ordInfoDataVO.ordCancelPopOptionsOpen()" ng-if="ordInfoDataVO.buttonHidden('006')" style="width:80px;"><span class="k-icon k-i-delete"></span>주문취소</kendo-button>
-		<kendo-button type="botton" title="목록" data-ng-click="ordInfoDataVO.goBack()" style="width:80px;"><span class="k-icon k-i-undo"></span>목록</kendo-button>
+   	   	
+	<div class="btn-group1 mt-20 mb-20">		
+		<kendo-button type="button" ng-click="ordInfoDataVO.shpOutPrint()" style="width:120px;"><span class="k-icon k-i-update"></span>송장출력</kendo-button>
+		<kendo-button type="submit" ng-click="ordInfoDataVO.shpInfoReg()" style="width:120px;"><span class="k-icon k-i-add"></span>배송정보등록</kendo-button>        
+		<kendo-button type="submit" ng-click="ordInfoDataVO.shpInfoSend()" style="width:120px;"><span class="k-icon k-i-redo"></span>배송정보전송</kendo-button>
+		<kendo-button type="button" ng-click="ordInfoDataVO.goBack()" style="width:80px;">목록</kendo-button>   
 	</div>
-    
+	
+	</form>  
 </div>
 
-<!-- 주문 취소 팝업 div-->
-<div kendo-window="win" k-options = "ordInfoDataVO.ordCancelPopOptions"></div> 
-            
-<!-- 주문 취소 팝업 template -->
-<script id="ordinfo_popup_template" type="text/x-kendo-template">
-<form id="ordercancel_form" kendo-validator="validator" ng-submit="validate($event)" k-options="myValidatorOptions">
-<div class="k-edit-form-container">
-<div class="not_pop_title"><h4>주문 취소 입력</h4></div>
-<table class="signal">
-	<colgroup>
-      <col style="width: 14%;">
-      <col style="width: 30%;">
-      <col style="width: 14%;">
-      <col style="width: 30%;">
-    </colgroup>
-    <tbody>	
-	<tr class="border-bottom-line border-top-line">	
-		<td class="border-right-line">
-			마켓
-		</td>
-		<td class="border-right-line">
-			{{ordInfoDataVO.ds.NM_MRK}}
-		</td>
-		<td class="border-right-line">
-			주문번호
-		</td>
-		<td>
-			{{ordInfoDataVO.ds.NO_MRKORD}}
-		</td>
-	</tr>
-	<tr class="border-bottom-line">
-		<td class="border-right-line">
-			상품코드
-		</td>
-		<td colspan="3">
-			{{ordInfoDataVO.ds.CD_MRKSSPL}}
-		</td>
-	</tr>
-	<tr class="border-bottom-line">
-		<td class="border-right-line">
-			상품명
-		</td>
-		<td colspan="3">
-			{{ordInfoDataVO.ds.NM_MRKITEM}}
-		</td>
-	</tr>
-	<tr class="border-bottom-line">
-		<td class="border-right-line">
-			구매자
-		</td>
-		<td class="border-right-line">
-			{{ordInfoDataVO.ds.NM_PCHR}}
-		</td>
-		<td class="border-right-line">
-			배송방법
-		</td>
-		<td>	
-			{{ordInfoDataVO.ds.DC_SHPWAY}}
-		</td>
-	</tr>
-	<tr class="border-bottom-line">
-		<td class="border-right-line">
-			구매수량
-		</td>
-		<td colspan="3">
-			{{ordInfoDataVO.ds.QT_ORD}}
-		</td> 
-	</tr>
-	<tr class="border-bottom-line">
-		<td class="border-right-line">
-			<code>*</code>취소사유코드
-		</td>
-		<td>
-			<span ng-if="ordInfoDataVO.cancelCodeOptions.dataSource">
-				<select kendo-drop-down-list
-					name="CD_CCLRSN"
-            		k-options = "ordInfoDataVO.cancelCodeOptions"
-					k-ng-model="ordInfoDataVO.inputs.CD_CCLRSN"				
-					data-required-msg="취소 사유코드를 입력해 주세요."
-					required
-                    style="width: 100%;">
-				</select>	
-			</span>
-		</td>
-		<td colspan="2">
-		</td> 
-	</tr>
-	<tr class="border-bottom-line">
-		<td class="border-right-line">
-			<code>*</code>주문취소사유
-		</td>
-		<td colspan="3">			
-			<textarea class="k-textbox" 
-					  name="DC_CCLCTT" 
-			 		  data-ng-model="ordInfoDataVO.inputs.DC_CCLCTT"
-					  data-required-msg="주문취소사유를 입력해 주세요."
-					  data-lengthy-msg="주문취소사유를 1000자 이내로 입력해 주세요."
-					  lengthy
-					  required
-					  style="width:100%; height:150px;"></textarea>
-		</td> 
-	</tr>
-	</tbody>
-</table>
-<div class="k-edit-buttons k-state-default">
-	<kendo-button type="submit" class="k-primary" ng-click="ordInfoDataVO.doOrdCancel()"><span class="k-icon k-i-update"></span>저장</kendo-button>
-	<kendo-button type="button" ng-click="ordInfoDataVO.ordCancelPopOptionsClose()"><span class="k-icon k-i-cancel"></span>닫기</kendo-button>        
-</div>	
-</div>
-</form>
-</script>     
-                       
 <style>
-.k-edit-form-container{
-    width: 920px;
-}
-.k-popup-edit-form .k-edit-label{
-    width: 20%;
-    text-align: left;
-}
-.k-popup-edit-form .k-edit-field{
-    width: 70%;
-}
-.k-popup-edit-form .k-edit-field > .k-textbox,
-.k-popup-edit-form .k-edit-field > .k-widget:not(.k-tooltip){
-    width: 98%;
-}
-.not_pop_title{
-	padding: 10px;
-}
-.signal{    
-    width: 99%;
-    margin: 5px;
-}
-.border-right-line{    
-	border-right: 1px solid #eee;    
-}
-.border-top-line{	
-	border-top: 1px solid #eee;
-}
-.border-bottom-line{	
-	border-bottom: 1px solid #eee;
-}
 span.k-widget.k-tooltip-validation{
 	position: absolute;
 	margin: 3px;
 	display: block;
 }
+table > tbody > tr> th{
+    background-color: #63CC9E;
+    border-color: rgba(0, 0, 0, 0.3);
+    color: #f8f8f8;
+}    
 </style>
