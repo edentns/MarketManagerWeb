@@ -1,0 +1,63 @@
+<div class="modal-header">
+	<h3 class="modal-title">거래처 검색</h3>
+</div>
+<div class="modal-body">
+	<div class="simple-search">
+		<form class="col-xs-12 left-group">
+			<select class="form-control wid-x5" id="searchCode"
+                    data-ng-model="searchCompanyVO.selectedCode" style="width: 150px"
+                    data-ng-options="item.CD_DEF as item.NM_DEF for item in searchCompanyVO.searchCodeList">
+                <option value="">검색유형선택</option>
+            </select>
+			<input type="text" eden-type="kor" class="form-control" title="검색어 입력" data-ng-model="searchCompanyVO.searchWord" autofocus>
+			<button type="submit" class="btn btn-primary" data-ng-click="searchCompanyVO.doInquiry()" title="">검색</button>
+		</form>
+	</div>
+	<div>
+		<table ng-table="searchCompanyVO.tbl.tableParams" class="table table-bordered no-footer">
+			<tr data-ng-if="searchCompanyVO.isSearchStatus && searchCompanyVO.data.length>0"
+				ng-repeat="companyInfo in $data"
+				ng-click="searchCompanyVO.changeSelected(companyInfo)"
+				ng-dblclick="searchCompanyVO.doDblConfirm(companyInfo)"
+				ng-class="{'success': companyInfo.selected}">
+				<td data-title="'상품코드'" header-class="ta-c" sortable="'CD_SIGNITEM'" style="width: 8%">
+					{{companyInfo.CD_SIGNITEM}}
+				</td>
+				<td data-title="'상품명'" header-class="ta-c" sortable="'NM_ITEM'" style="width: 14%">
+					{{companyInfo.NM_ITEM}}
+				</td>
+				<td data-title="'상품약어'" header-class="ta-c" sortable="'DC_ITEMABBR'" style="width: 11%">
+					{{companyInfo.DC_ITEMABBR}}
+				</td>
+				<td data-title="'상품분류'" header-class="ta-c" sortable="'ID_CTGR'" style="width: 11%">
+					{{companyInfo.ID_CTGR}}
+				</td>
+				<td data-title="'판매가'" header-class="ta-c" sortable="'S_ITEMPRC'" style="width: 11%">
+					{{companyInfo.S_ITEMPRC}}
+				</td>
+				<td data-title="'구매가'" header-class="ta-c" sortable="'B_ITEMPRC'" style="width: 11%">
+					{{companyInfo.B_ITEMPRC}}
+				</td>
+				<td data-title="'상품구분'" header-class="ta-c" sortable="'CD_ITEMCLFT'" style="width: 11%">
+					{{companyInfo.CD_ITEMCLFT}}
+				</td>
+				<td data-title="'상품종류'" header-class="ta-c" sortable="'CD_ITEMKIND'" style="width: 11%">
+					{{companyInfo.CD_ITEMKIND}}
+				</td>
+				<td data-title="'등록일시'" header-class="ta-c" sortable="'DT_RLS'">
+					{{companyInfo.DT_RLS}}
+				</td>
+			</tr>
+			<tr data-ng-if="searchCompanyVO.isSearchStatus && searchCompanyVO.data.length==0">
+				<td colspan="9"><span>검색된 상품이 없습니다.</span></td>
+			</tr>
+			<tr data-ng-if="!searchCompanyVO.isSearchStatus">
+				<td colspan="9"><span>상품을 검색해주세요.</span></td>
+			</tr>
+		</table>
+	</div>
+	<div class="modal-footer">
+		<button type="submit" class="btn btn-primary" title="거래처 확인" data-ng-click="searchCompanyVO.doConfirm()">확인</button>
+		<button type="button" class="btn btn-warning" title="취소" data-ng-click="searchCompanyVO.doCancle()">취소</button>
+	</div>
+</div>
