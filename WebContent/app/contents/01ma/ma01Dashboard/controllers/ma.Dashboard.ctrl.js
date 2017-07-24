@@ -19,6 +19,13 @@
 		                	name        : 'ma.JoinItemCtrl',
 		                	displayName : '가입상품',
 		                	templateURL : 'app/contents/01ma/ma01Dashboard/templates/ma.JoinItem.tpl.html'
+		                },
+		                {
+		                	visible     : true,
+		                	order       : 2,
+		                	name        : 'ma.MonthJoinCtrl',
+		                	displayName : '월별가입자수',
+		                	templateURL : 'app/contents/01ma/ma01Dashboard/templates/ma.MonthJoin.tpl.html'
 		                }
 		            ];
 	            

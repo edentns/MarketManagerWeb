@@ -1,0 +1,34 @@
+<div data-ng-controller="ma.MonthJoinCtrl">
+    <div class="box-content-article">
+        <div class="article-view">
+              <!-- CHART -->
+              <div data-ng-show="monthJoin.tabName == 'CHART'" class="jui-chart">
+                  <form class="box-content-search">
+                      <div data-inline-period-search data-ng-model="monthJoin.chart.search.period" data-change="monthJoin.find()" data-is-execute="false"></div>
+                      <div class="jui-bar-chart jui-bar-radio-group" style="overflow:hidden; margin-top:10px; margin-left:-5px;">
+                          <div data-ng-repeat="code in monthJoin.chart.search.codeList" style="float:left; margin-right:10px;">
+                              <label>
+                                  <input type="radio" data-ng-model="monthJoin.chart.search.selected" data-ng-value="code.value" data-ng-change="monthJoin.chart.search.changeSelectedData()">
+                                  {{code.name}}
+                              </label>
+                          </div>
+                      </div>
+                  </form>
+                  <div class="row jui-chart-row" style="margin-top:50px;">
+                      <div id="monthJoinChart" kendo-chart k-options="monthJoin.chart.options" k-data-source="monthJoin.chart.dataSource"/>
+                  </div>
+              </div>
+
+              <!-- TABLE -->
+              <div data-ng-show="monthJoin.tabName == 'TABLE'">
+                  <form class="box-content-search">
+                      <div data-inline-period-search data-ng-model="monthJoin.table.search.period" data-change="monthJoin.find()" data-is-execute="false"></div>
+                  </form>
+                  <div class="tbl-type1 mt-5">
+                      <kendo-grid options="monthJoin.table">
+		              </kendo-grid>
+                  </div>
+              </div>
+        </div>
+    </div>
+</div>
