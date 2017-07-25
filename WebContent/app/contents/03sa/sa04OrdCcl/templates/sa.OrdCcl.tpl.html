@@ -3,8 +3,636 @@
         <div id="app-content-header">
             <ol class="breadcrumb">
                 <li><a href="#99sy/syDashboard"><i class="fa fa-home fa-2x"></i></a></li>
-                <li><a href="#03sa/saOrdCcl">주문취소관리</a></li>
+                <li><a href="#03sa/saOrdCcl">/ 주문·배송 / 주문 / 주문취소</a></li>
             </ol>
         </div>
     </div>
+    
+     <div class="row">
+        <!-- 검색 -->
+        <div class="content-area-container col-xs-12">
+        	<div data-content-box-layer data-box-title="ordCancelManagementDataVO.boxTitle">
+                <form class="search-type1" id="myForm">
+                	<table>
+                        <colgroup>
+                            <col style="width: 7%;">
+                            <col style="width: 18%;">
+                            <col style="width: 7%;">
+                            <col style="width: 23%;">
+                            <col style="width: 7%;">
+                            <col style="width: 18%;">
+                            <col style="width: 7%;">
+                            <col style="width: 18%;">
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th>마켓명</th>
+                            <td>
+                            	<co01-mcbox title="마켓명" model="ordCancelManagementDataVO.ordMrkNameMo" options="ordCancelManagementDataVO.ordMrkNameOp" setting="ordCancelManagementDataVO.setting" style="width:100%;">
+        						</co01-mcbox> 
+                            </td>
+                            <th>상품명</th>
+                            <td>
+                            	<input data-ng-model="ordCancelManagementDataVO.procName.value"
+                            			focus="ordCancelManagementDataVO.procName.focus"
+                            			title="상품명"
+                            			data-eden-type="kor" 
+                            			type="text" 
+                            			class="form-control" style="width:100%;"/>
+                            </td>		
+                            <th>주문상태</th>
+                            <td>            
+       							<co01-mcbox id="shpbyord-status" title="주문상태" model="ordCancelManagementDataVO.ordStatusMo" options="ordCancelManagementDataVO.ordStatusOp" setting="ordCancelManagementDataVO.setting"  style="width:100%;">
+        						</co01-mcbox>        						
+                            </td>   
+                            <th>주문번호</th>
+                            <td>     
+					            <input data-ng-model="ordCancelManagementDataVO.orderNo.value"
+                            			focus="ordCancelManagementDataVO.orderNo.focus"
+                            			title="주문번호"
+                            			data-eden-type="kor" 
+                            			type="text" 
+                            			class="form-control" style="width:100%;"/>
+                            </td>         
+                        </tr>
+                        <tr>
+                            <th>구매자/수취인</th>
+                            <td>                            	              	
+                            	<input data-ng-model="ordCancelManagementDataVO.buyerName.value"
+                            			focus="ordCancelManagementDataVO.buyerName.focus"
+                            			title="구매자/수취인"
+                            			data-eden-type="kor" 
+                            			type="text" 
+                            			class="form-control" style="width:100%;"/>
+                            </td>
+                            <th>취소상태</th>
+                            <td><co01-mcbox title="취소상태" model="ordCancelManagementDataVO.cancelStatusMo" options="ordCancelManagementDataVO.cancelStatusOp" setting="ordCancelManagementDataVO.setting" style="width:100%;">
+        						</co01-mcbox> </td>
+                            <th></th>
+                            <td></td>
+                            <th></th>
+                            <td></td>                            
+                        </tr>
+                        <tr>
+                            <th>기간</th>                            
+                            <td>
+                            	<select ng-model="ordCancelManagementDataVO.betweenDateOptionMo"
+        								ng-options="option.CD_DEF as option.NM_DEF for option in ordCancelManagementDataVO.betweenDateOptionOp"
+        								class="form-control"
+        								style="width: 100%">
+        						</select>	
+                            </td>
+                            <td colspan="6">                            	              	
+                            	<div class="frm-group" data-date-search-group="ordCancelManagementDataVO.datesetting" style="display:inline-block;"></div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>         		     
+                    <div class="btn-group1 mt-20">
+                        <kendo-button type="submit" class="k-primary" title="검색" data-ng-click="ordCancelManagementDataVO.inQuiry()" style="width:70px;">검색</kendo-button>
+                        <kendo-button type="botton" title="초기화" data-ng-click="ordCancelManagementDataVO.inIt()" style="width:70px;">초기화</kendo-button>
+                    </div>
+                    <br/>
+                    <p class="text-center" ng-if="ordCancelManagementDataVO.dataTotal > 0">총  <strong>{{ordCancelManagementDataVO.dataTotal}}</strong>건이 검색되었습니다.</p>
+                </form>
+            </div>
+        </div>
+        
+        <!-- 주문 목록 -->          
+		<div class="content-area-container col-xs-12" >				
+	        <div id="divOrdCancelManagementGrd" kendo-grid="ordCancelManagementkg" options="grdOrdCancelManagementVO">
+	        </div>	            
+        </div>
+    </div>
 </div>
+
+<!-- 주문 조회 그리드 -->	
+<script id="ocm_template" type="text/x-kendo-template">
+  	<tr data-uid="#= uid #">
+		<td class="ta-c">
+        	<span class="ells"><input type="checkbox" class="checkbox" ng-click="onOrdGrdCkboxClick($event)"/></span>
+      	</td>
+		<td class="ta-l" style="padding:0">
+          	<div>
+				# if(NO_ORD){			#
+				<span>#: NO_ORD			#</span>
+				# }else{ }	 			#
+			</div>
+			<div>
+				# if(NO_APVL){			#
+		  		<span>#: NO_APVL 		#</span>
+				# }else{ }	 			#
+			</div>
+      	</td>
+		<td class="ta-l" style="padding:0">
+          	<div>
+				# if(NM_MRK){			#
+				<span>#: NM_MRK			#</span>
+				# }else{ }	 			#
+			</div>
+			<div>
+				# if(NO_MRKORD){		#
+				<span>#: NO_MRKORD 		#</span>
+				# }else{ }	 			#
+			</div>
+      	</td>
+		<td class="ta-l" style="padding:0">
+          	<div>
+				# if(NO_MRKITEM){		#
+				<span>#: NO_MRKITEM 	#</span>
+				# }else{ }	 			#
+			</div>
+			<div>
+				# if(NO_MRKREGITEM){	#
+				<span>#: NO_MRKREGITEM 	#</span>
+				# }else{ }	 			#
+			</div>
+      	</td>
+		<td class="ta-l" style="padding:0">
+         	<div >
+				# if(NM_MRKITEM){		#
+				<span>#: NM_MRKITEM 	#</span>
+				# }else{ }	 			#
+			</div>
+			<div>
+				# if(NM_MRKOPT){		#
+				<span>#: NM_MRKOPT 		#</span>
+				# }else{ }	 			#
+			</div>
+      	</td>
+		<td class="ta-r" style="padding:0">
+          	<div>
+				# if(QT_ORD){			#
+				<span>#: QT_ORD 		#</span>
+				# }else{ }	 			#
+			</div>
+			<div> 
+				# if(QT_CCL){			#
+				<span>#: QT_CCL 		#</span>
+				# }else{ }	 			#
+			</div>
+     	</td>
+		<td class="ta-r" style="padding:0">
+          	<div>
+				# if(NM_PCHR){			#
+				<span>#: NM_PCHR 		#</span>
+				# }else{ }	 			#
+			</div>
+			<div>
+				# if(AM_ORDSALEPRC){	#
+				<span>#= kendo.toString(AM_ORDSALEPRC,'C0', 'ko-KR') # </span>
+				# }else{ }	 			#
+			</div>
+      	</td>
+		<td class="ta-c" style="padding:0">
+          	<div>
+				# if(NO_PCHRPHNE){		#
+				<span>#: NO_PCHRPHNE	#</span>
+				# }else{ }	 			#	
+			</div>
+			<div> 
+				# if(DC_APVLWAY){		#
+				<span>#: DC_APVLWAY 	#</span>
+				# }else{ }	 			#	 	
+			</div>
+      	</td>
+		<td class="ta-l" style="padding:0">
+          	<div>		
+				# if(DC_PCHREMI){		#
+				<span>#: DC_PCHREMI 	#</span>
+				# }else{ }	 			#					  
+			</div>
+			<div> 
+				# if(NM_CONS){			#
+				<span>#: NM_CONS 		#</span>
+				# }else{ }	 			#
+			</div>
+      	</td>
+		<td class="ta-l" style="padding:0">
+          	<div>
+				# if(CD_CCLRSN){		#
+				<span><co04-cd-to-nm cd="#:CD_CCLRSN#" nm-box="ordCancelManagementDataVO.cancelCodeOp.dataSource"></span>
+				# }else{ }		 		#
+			</div>
+			<div>
+				# if(DC_CONSNEWADDR){	#
+				<span>#: DC_CONSNEWADDR #</span>
+				# }else{ }	 			#
+			</div>
+      	</td> 
+		<td class="ta-l" style="padding:0">
+          	<div>
+				# if(CD_ORDSTAT){		#
+				<span><co04-cd-to-nm cd="#:CD_ORDSTAT#" nm-box="ordCancelManagementDataVO.ordStatusOp"></span>
+				# }else{ }	 			#
+			</div>
+			<div>
+				# if(DC_SHPWAY){		#
+				<span>#: DC_SHPWAY 		#</span>
+				# }else{ }	 			#
+			</div>
+      	</td>
+		<td class="ta-l" style="padding:0">
+          	<div>
+				# if(DTS_ORD){			#
+				<span>#: DTS_ORD 		#</span>
+				# }else{ }	 			#
+			</div>
+			<div>
+				# if(DTS_CCLREQ){		#
+				<span>#: DTS_CCLREQ 	#</span>
+				# }else{ }	 			#
+			</div>
+      	</td>
+		<td class="ta-c" style="padding:0">
+        	<div>
+				# if(DTS_CCLAPPRRJT){	#
+				<span>#: DTS_CCLAPPRRJT	#</span>
+				# }else{ }	 			#							
+			</div>
+			<div>
+				# if(NO_UPDATE){		#
+				<span>#: NO_UPDATE 		#</span>
+				# }else{ }	 			#  
+			</div>
+      	</td>
+		<td class="ta-r" style="padding:0">
+        	<div>
+				# if(YN_CONN){ 			#
+				<span>#: YN_CONN 		#</span>
+				# }else{ }	 			#
+			</div>
+			<div>
+				# if(CD_CCLSTAT){ 		#
+				<span><co04-cd-to-nm cd="#:CD_CCLSTAT#" nm-box="ordCancelManagementDataVO.cancelStatusOp"></span>
+				# }else{ }	 			#
+			</div>
+      	</td>
+	</tr>	
+</script>
+
+<!-- 주문 조회 알트 그리트  -->
+<script id="ocm_alt_template" type="text/x-kendo-template">
+  	<tr class="k-alt" data-uid="#= uid #">
+		<td class="ta-c">
+        	<span class="ells"><input type="checkbox" class="checkbox" ng-click="onOrdGrdCkboxClick($event)"/></span>
+      	</td>
+		<td class="ta-l" style="padding:0">
+          	<div>
+				# if(NO_ORD){			#
+				<span>#: NO_ORD			#</span>
+				# }else{ }	 			#
+			</div>
+			<div>
+				# if(NO_APVL){			#
+		  		<span>#: NO_APVL 		#</span>
+				# }else{ }	 			#
+			</div>
+      	</td>
+		<td class="ta-l" style="padding:0">
+          	<div>
+				# if(NM_MRK){			#
+				<span>#: NM_MRK			#</span>
+				# }else{ }	 			#
+			</div>
+			<div>
+				# if(NO_MRKORD){		#
+				<span>#: NO_MRKORD 		#</span>
+				# }else{ }	 			#
+			</div>
+      	</td>
+		<td class="ta-l" style="padding:0">
+          	<div>
+				# if(NO_MRKITEM){		#
+				<span>#: NO_MRKITEM 	#</span>
+				# }else{ }	 			#
+			</div>
+			<div>
+				# if(NO_MRKREGITEM){	#
+				<span>#: NO_MRKREGITEM 	#</span>
+				# }else{ }	 			#
+			</div>
+      	</td>
+		<td class="ta-l" style="padding:0">
+         	<div >
+				# if(NM_MRKITEM){		#
+				<span>#: NM_MRKITEM 	#</span>
+				# }else{ }	 			#
+			</div>
+			<div>
+				# if(NM_MRKOPT){		#
+				<span>#: NM_MRKOPT 		#</span>
+				# }else{ }	 			#
+			</div>
+      	</td>
+		<td class="ta-r" style="padding:0">
+          	<div>
+				# if(QT_ORD){			#
+				<span>#: QT_ORD 		#</span>
+				# }else{ }	 			#
+			</div>
+			<div> 
+				# if(QT_CCL){			#
+				<span>#: QT_CCL 		#</span>
+				# }else{ }	 			#
+			</div>
+     	</td>
+		<td class="ta-r" style="padding:0">
+          	<div>
+				# if(NM_PCHR){			#
+				<span>#: NM_PCHR 		#</span>
+				# }else{ }	 			#
+			</div>
+			<div>
+				# if(AM_ORDSALEPRC){	#
+				<span>#= kendo.toString(AM_ORDSALEPRC,'C0', 'ko-KR') # </span>
+				# }else{ }	 			#
+			</div>
+      	</td>
+		<td class="ta-c" style="padding:0">
+          	<div>
+				# if(NO_PCHRPHNE){		#
+				<span>#: NO_PCHRPHNE	#</span>
+				# }else{ }	 			#	
+			</div>
+			<div> 
+				# if(DC_APVLWAY){		#
+				<span>#: DC_APVLWAY 	#</span>
+				# }else{ }	 			#	 	
+			</div>
+      	</td>
+		<td class="ta-l" style="padding:0">
+          	<div>		
+				# if(DC_PCHREMI){		#
+				<span>#: DC_PCHREMI 	#</span>
+				# }else{ }	 			#					  
+			</div>
+			<div> 
+				# if(NM_CONS){			#
+				<span>#: NM_CONS 		#</span>
+				# }else{ }	 			#
+			</div>
+      	</td>
+		<td class="ta-l" style="padding:0">
+          	<div>
+				# if(CD_CCLRSN){		#
+				<span><co04-cd-to-nm cd="#:CD_CCLRSN#" nm-box="ordCancelManagementDataVO.cancelCodeOp.dataSource"></span>
+				# }else{ }		 		#
+			</div>
+			<div>
+				# if(DC_CONSNEWADDR){	#
+				<span>#: DC_CONSNEWADDR #</span>
+				# }else{ }	 			#
+			</div>
+      	</td> 
+		<td class="ta-l" style="padding:0">
+          	<div>
+				# if(CD_ORDSTAT){		#
+				<span><co04-cd-to-nm cd="#:CD_ORDSTAT#" nm-box="ordCancelManagementDataVO.ordStatusOp"></span>
+				# }else{ }	 			#
+			</div>
+			<div>
+				# if(DC_SHPWAY){		#
+				<span>#: DC_SHPWAY 		#</span>
+				# }else{ }	 			#
+			</div>
+      	</td>
+		<td class="ta-l" style="padding:0">
+          	<div>
+				# if(DTS_ORD){			#
+				<span>#: DTS_ORD 		#</span>
+				# }else{ }	 			#
+			</div>
+			<div>
+				# if(DTS_CCLREQ){		#
+				<span>#: DTS_CCLREQ 	#</span>
+				# }else{ }	 			#
+			</div>
+      	</td>
+		<td class="ta-c" style="padding:0">
+        	<div>
+				# if(DTS_CCLAPPRRJT){	#
+				<span>#: DTS_CCLAPPRRJT	#</span>
+				# }else{ }	 			#							
+			</div>
+			<div>
+				# if(NO_UPDATE){		#
+				<span>#: NO_UPDATE 		#</span>
+				# }else{ }	 			#  
+			</div>
+      	</td>
+		<td class="ta-r" style="padding:0">
+        	<div>
+				# if(YN_CONN){ 			#
+				<span>#: YN_CONN 		#</span>
+				# }else{ }	 			#
+			</div>
+			<div>
+				# if(CD_CCLSTAT){ 		#
+				<span><co04-cd-to-nm cd="#:CD_CCLSTAT#" nm-box="ordCancelManagementDataVO.cancelStatusOp"></span>
+				# }else{ }				#
+			</div>
+      	</td>
+	</tr>	
+</script>
+
+<!-- 주문 취소 팝업 -->
+<script id="ocm_popup_template" type="text/x-kendo-template">
+	<div class="not_pop_title"><h4>주문 취소 거부 입력</h4></div>
+
+	<table class="table signal">
+		<colgroup>
+      		<col style="width: 14%;">
+      		<col style="width: 30%;">
+      		<col style="width: 14%;">
+      		<col style="width: 30%;">
+    	</colgroup>
+    	<tbody data-uid="#= uid #">	
+			<tr class="border-bottom-line border-top-line">	
+				<td class="active border-right-line">
+					마켓
+				</td>
+				<td class="border-right-line">
+					#if(NM_MRK){ #
+					#: NM_MRK #
+					#}#
+				</td>
+				<td class="active border-right-line">
+					주문번호
+				</td>
+				<td>
+					#if(NO_MRKORD){ #
+					#: NO_MRKORD #
+					#}#
+				</td>
+			</tr>
+
+			<tr class="border-bottom-line">
+				<td class="active border-right-line">
+					상품코드
+				</td>
+				<td colspan="3">
+					#if(NO_MRKITEM){ #
+					#: NO_MRKITEM #
+					#}#	
+				</td>
+			</tr>
+			<tr class="border-bottom-line">
+				<td class="active border-right-line">
+					상품명
+				</td>
+				<td colspan="3">
+					#if(NM_MRKITEM){ #
+					#: NM_MRKITEM #
+					#}#
+				</td>
+			</tr>
+
+			<tr class="border-bottom-line">
+				<td class="active border-right-line">
+					구매자
+				</td>
+				<td class="border-right-line">
+					#if(NM_PCHR){ #
+					#: NM_PCHR #
+					#}#	
+				</td>
+				<td class="active border-right-line">
+					배송방법
+				</td>
+				<td>
+					#if(DC_SHPWAY){ #
+					#: DC_SHPWAY #
+					#}#			
+				</td>
+			</tr>
+
+			<tr class="border-bottom-line">
+				<td class="active border-right-line">
+					구매수량
+				</td>
+				<td class="ta-r">
+					#if(QT_ORD){ #
+					#: QT_ORD #
+					#}#	
+				</td>
+				<td class="active border-right-line">
+				</td>
+				<td>
+				</td>
+			</tr>
+
+			<tr class="border-bottom-line">
+				<td class="active border-right-line">
+					주문취소코드
+				</td>
+				<td>
+					<select kendo-drop-down-list
+               		 	k-options="ordCancelManagementDataVO.cancelCodeOp"
+						name="CD_CCLRSN"
+						data-bind="value: CD_CCLRSN"
+                		style="width: 100%">
+					</select>
+				</td>
+				<td colspan="2">
+				</td> 
+			</tr>
+
+			<tr class="border-bottom-line">
+				<td class="active border-right-line">
+					주문취소사유
+				</td>
+				<td colspan="3">			
+					<textarea class="k-textbox k-state-disabled" name="DC_CCLRSNCTT" data-bind="value: DC_CCLRSNCTT" disabled="disabled" style="width:100%; height:100px; overflow-y: scroll;"></textarea>
+				</td> 
+			</tr>
+
+			<tr class="border-bottom-line">
+				<td class="active border-right-line">
+					<code>*</code>취소거부코드
+				</td>
+				<td>
+					<select kendo-drop-down-list
+               		 	k-options="ordCancelManagementDataVO.cancelRejectCodeOp"
+						name="CD_CCLRJT"
+						data-bind="value: CD_CCLRJT"
+                		style="width: 100%">
+					</select>
+				</td>
+				<td colspan="2">
+				</td> 
+			</tr>
+
+			<tr class="border-bottom-line">
+				<td class="active border-right-line">
+					<code>*</code>취소거부사유
+				</td>
+				<td colspan="3">			
+					<textarea class="k-textbox" name="DC_CCLRJTCTT" data-bind="value: DC_CCLRJTCTT" style="width:100%; height:100px; overflow-y: scroll;"></textarea>
+				</td> 
+			</tr>
+		</tbody>
+	</table>
+</script>
+
+<!-- 주문 조회 그리드 툴바 템플릿 -->
+<script id="ocm-toolbar-template" type="text/x-kendo-template">
+	<a class="k-button k-button-icontext k-grid-cclinfo ccl-confirm"><span class="k-icon k-i-update"></span>취소 승인</a>
+	<a class="k-button k-button-icontext k-grid-edit"><span class="k-icon k-i-cancel"></span>취소 거부</a>        
+	<a class="k-button k-button-icontext k-grid-openccl"><span class="k-icon k-i"></span>취소정보 가져오기</a>
+	<a class="k-button k-button-icontext k-grid-cclinfo ccl-send"><span class="k-icon k-i-redo"></span>취소결과 전송</a>  
+</script>
+
+
+<style>
+.k-edit-form-container{
+    width: 900px;
+}
+.k-popup-edit-form .k-edit-label{
+    width: 20%;
+    text-align: left;
+}
+.k-popup-edit-form .k-edit-field{
+    width: 70%;
+}
+.k-popup-edit-form .k-edit-field > .k-textbox,
+.k-popup-edit-form .k-edit-field > .k-widget:not(.k-tooltip){
+    width: 98%;
+}
+.div-rows{
+	border-bottom: solid 1px #bbdceb;	
+}
+.not_pop_title{
+	padding: 10px;
+}
+.signal{    
+    width: 99%;
+    margin: 5px;
+}
+.border-right-line{    
+	border-right: 1px solid #eee;    
+}
+.border-top-line{	
+	border-top: 1px solid #eee;
+}
+.border-bottom-line{	
+	border-bottom: 1px solid #eee;
+}
+.ROW_CHK{
+	margin-bottom: 5px;
+	display:inline-block;
+}
+.k-grid-content > table > tbody > tr > td > div{
+	height: 24px;
+	text-overflow: ellipsis; 
+	white-space: nowrap; 
+	overflow:hidden;
+	padding: 2px 1px 0 2px;
+}
+.k-grid-content > table > tbody > tr > td > div:nth-child(odd){
+	border-bottom: solid 1px #bbdceb;	
+}
+.k-grid-content > table > tbody > tr > td > div > span{
+	
+}
+</style>

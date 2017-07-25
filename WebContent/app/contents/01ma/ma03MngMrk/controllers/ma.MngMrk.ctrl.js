@@ -88,7 +88,15 @@
                 	me.methodDataCode = "";
                 	me.statusDataCode = "";
                 	me.searchText.value = "";
-                	me.datesetting.selected = "current";
+                	
+                	$timeout(function(){
+                		angular.element(".frm-group").find("button:eq(0)").triggerHandler("click");
+                		angular.element(".frm-group").find("button:eq(2)").triggerHandler("click");
+                	},0);                	
+                	        			
+                	me.methodDataSource = angular.copy(me.methodDataSource);
+                	me.statusDataSoruce = angular.copy(me.statusDataSoruce);
+                	
                 	me.resetAtGrd = $scope.gridMngMrkUserVO;
                 	me.resetAtGrd.dataSource.data([]);
                 };
@@ -116,7 +124,6 @@
                         	}
                         },
                         noRecords: true,
-                        //scrollable: false,
                     	dataSource: new kendo.data.DataSource({
                     		transport: {
                     			read: function(e) {                    				
@@ -178,8 +185,6 @@
                     				}
                     			}
                     		},
-                            //serverPaging: true,
-                            //serverSorting: true,
                     		pageSize: 11,
                     		batch: true,
                     		schema: {
@@ -208,27 +213,12 @@
 	                    							 	,nullable: false
                     							 },
                     					CD_ITLWAY : {
-                    								   //defaultValue: { CD_DEF: '', NM_DEF: "선택"},
-				                    				  /*validation: {
-			                    					   		cd_itlwayvalidation: function (input) {
-			                    					   			//경고문에 잘 안보여서 삭제
-				                                                if (input.is("[name='CD_ITLWAY']") && input.val() === "" || input.val() === "선택") {
-				                                                	input.attr("data-cd_itlwayvalidation-msg", "연동방법을 입력해 주세요.");
-				                                                    return false;
-				                                                }
-				                                               return true;
-				        								   	}
-				        							   },*/
 				        							   editable: true
 				        						 },
                     					DT_ITLSTART:{
-                    								   //type: "string", 
-                    								   //validation: {required: true}, 
-                    								   editable: false//, 
-                    								   //nullable: false
+                    								   editable: false
                     						     },
                     					CD_ITLSTAT: {
-                    								   //defaultValue: "미연동",
 				        							  editable: false
                     							},                    					
                     					DC_MRKID: {

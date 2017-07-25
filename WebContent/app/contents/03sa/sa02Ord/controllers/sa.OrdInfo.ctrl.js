@@ -58,7 +58,7 @@
 	        		deliveryInfo : { boxTitle : "배송 정보" },
 	        		inputs: {
 	        			CD_CCLRSN : "001",
-	        			DC_CCLCTT : ""
+	        			DC_CCLRSNCTT : ""
 	        		}
 		        };
 	            	            	            
@@ -125,7 +125,7 @@
 	            	if(this.inputs.CD_CCLRSN === ""){
 	            		return;
 	            	}
-	            	if(this.inputs.DC_CCLCTT === "" || this.inputs.DC_CCLCTT.length > 10){          		
+	            	if(this.inputs.DC_CCLRSNCTT === "" || this.inputs.DC_CCLRSNCTT.length > 10){          		
 	            	    return;
 	            	}
 	            	if(confirm("현재 주문을 취소 하시겠습니까?")){
@@ -176,13 +176,13 @@
                     },
                     rules: {
                     	lengthy: function(input) {
-	                        if (input.is("[name=DC_CCLCTT]")) {                   	
+	                        if (input.is("[name=DC_CCLRSNCTT]")) {                   	
 	                            return input.val().length < 1000;
 	                        }
 	                        return true;
                     	},
                     	required: function(input) {
-                    		if (input.is("[name=DC_CCLCTT]")) {                   	
+                    		if (input.is("[name=DC_CCLRSNCTT]")) {                   	
                     			return input.val() !== "";
                     		}
                     		if (input.is("[name=CD_CCLRSN]")) {                     	

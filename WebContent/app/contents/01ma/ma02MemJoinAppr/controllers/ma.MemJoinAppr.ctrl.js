@@ -52,18 +52,21 @@
 	            joinerDataVO.inIt = function(){
 	            	var me  = this;
                 	me.searchText.value = "";
-                	me.joinerStatusDt = "*";
-                	me.joinerProcNameDt = "*";
                 	
-                	me.datesetting.selected = "1Week";
+                	me.StatusDtOptionVO.bReset = true;
+                	me.ProcNameDtOptionVO.bReset = true;
+                	
+                	$timeout(function(){
+                		angular.element(".frm-group").find("button:eq(0)").triggerHandler("click");
+                		angular.element(".frm-group").find("button:eq(2)").triggerHandler("click");
+                	},0);   
+                	                	
                 	me.dataTotal = 0;
                 	me.resetAtGrd = $scope.kg;
                 	me.resetAtGrd.dataSource.data([]);
                 	if(me.BetweenDateOptionVO) me.joinerBetweenDate = me.BetweenDateOptionVO[0].CD_DEF;
                 	else                       me.joinerBetweenDate = ""; 
-                	/*$timeout(function () {
-                		joinerDataVO.inQuiry();
-                    }, 0);*/
+                	
 	            };
 	            
 	            var connSetting = $scope.connSetting = {

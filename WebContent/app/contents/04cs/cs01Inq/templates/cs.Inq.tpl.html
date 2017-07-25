@@ -112,76 +112,79 @@
             <span class="ells"><input type="checkbox" class="checkbox" ng-click="onCsGrdCkboxClick($event)"/></span>
         </td>
 		<td class="ta-c">
-            <span class="seq ells"># if(NO_INQ !== ""){ # 
-								   #: NO_INQ # 
-								   # } #
-			</span>
-        </td>
-		<td class="ta-l">
-            <span class="ells"># if(NM_MRK !== ""){ #
-                               #: NM_MRK # 
-                               # } #
-			</span>
-        </td>
-		<td class="ta-l">
-            <span class="ells"># if(DTS_INQREG !== ""){ #
-                               #: DTS_INQREG # 
-                               # } #
+            <span class="seq ells">
+								# if(NO_INQ){ # 
+							   	#: NO_INQ # 
+							   	# }else{} #
 			</span>
         </td>
 		<td class="ta-l">
             <span class="ells">
-							   # if(CD_INQSTAT !== ""){ #
+								# if(NM_MRK){ #
+                               	#: NM_MRK # 
+                               	# }else{} #
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells">
+								# if(DTS_INQREG){ #
+                               	#: DTS_INQREG # 
+                               	# }else{} #
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells">
+							   # if(CD_INQSTAT){ #
 							   <co04-cd-to-nm cd="#:CD_INQSTAT#" nm-box="csDataVO.csStatusOp">
-							   #} #
+							   #}else{} #
 			</span>
         </td>
 		<td class="ta-l">
-            <span class="ells"># if(DC_INQTITLE !== ""){ #
+            <span class="ells"># if(DC_INQTITLE){ #
 							   #: DC_INQTITLE #
-      						   # } #
+      						   # }else{} #
 			</span>
         </td>
 		<td class="ta-l">
-            <span class="ells"># if(DC_INQCTT !== ""){ #
+            <span class="ells"># if(DC_INQCTT){ #
 					    	   #: DC_INQCTT #
- 							   # } #
+ 							   # }else{} #
 			</span>
         </td>
 		<td class="ta-l">
-            <span class="ells"># if(DC_ANSCTT !== ""){ #
+            <span class="ells"># if(DC_ANSCTT){ #
 							   #: DC_ANSCTT #
-							   # } #
+							   # }else{} #
 			</span>
         </td>
 		<td class="ta-l">
-            <span class="ells"># if(DTS_ANSREG !== ""){ #
+            <span class="ells"># if(DTS_ANSREG){ #
 							   #: DTS_ANSREG #
-						       # } #
+						       # }else{} #
 			</span>
         </td> 
 		<td class="ta-l">
-            <span class="ells"># if(CD_INQCLFT !== ""){ #
+            <span class="ells"># if(CD_INQCLFT){ #
 							   <co04-cd-to-nm cd="#:CD_INQCLFT#" nm-box="csDataVO.csQuestionCodeOp">
-      						   # } #
+      						   # }else{} #
 			</span>
         </td>
 		<td class="ta-l">
-            <span class="ells"># if(NM_INQ !== ""){ #
+            <span class="ells"># if(NM_INQ){ #
 					    	   #: NM_INQ #
- 							   # } #
+ 							   # }else{} #
 			</span>
         </td>
 		<td class="ta-l">
-            <span class="ells"># if(NM_MRKITEM !== ""){ #
+            <span class="ells"># if(NM_MRKITEM){ #
 							   #: NM_MRKITEM #
-							   # } #
+							   # }else{} #
 			</span>
         </td>
 		<td class="ta-l">
-            <span class="ells"># if(NO_MRKORD !== ""){ #
+            <span class="ells"># if(NO_MRKORD){ #
 							   #: NO_MRKORD #
-						       # } #
+						       # }else{} #
 			</span>
         </td>
 	</tr>

@@ -103,17 +103,14 @@
                 	me.orderNo.value = "";
                 	me.betweenDateOptionMo = me.betweenDateOptionOp[0].CD_DEF;
                 	        			
-                	//me.datesetting.selected = "1Week";
                 	$timeout(function(){
+                		angular.element(".frm-group").find("button:eq(0)").triggerHandler("click");
                 		angular.element(".frm-group").find("button:eq(2)").triggerHandler("click");
                 	},0);                	
                 	        			
-                /*	초기화 함수에서 option.bReset을 true로 주면 초기화됨.
-                	otherKendoVO1.mcb01Data.bReset = true;*/
-                	
-        			me.ordStatusOp = angular.copy(me.ordStatusOp);
-		        	me.ordMrkNameOp = angular.copy(me.ordMrkNameOp);
-		        	
+                	me.ordStatusOp.bReset = true;
+                	me.ordMrkNameOp.bReset = true;
+                			        	
                 	me.dataTotal = 0;
                 	me.resetAtGrd = $scope.shpbyordkg;
                 	me.resetAtGrd.dataSource.data([]);
@@ -609,7 +606,7 @@
                                 },    
                                 {
 		                        	field: "CD_PARS",
-		                            title: "택배사",
+		                            title: "<code>*</code>택배사",
 		                            width: 100,
 		                            editor: function shipCategoryDropDownEditor(container, options) {	
 		                            	var db = "";
@@ -652,7 +649,7 @@
 		                        },
                                	{
                                     field: "NO_INVO",
-                                    title: "송장번호",
+                                    title: "<code>*</code>송장번호",
                                     width: 100,
 			                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}                  
 		                        },

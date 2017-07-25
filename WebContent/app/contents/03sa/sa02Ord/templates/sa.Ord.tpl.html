@@ -103,13 +103,13 @@
                         <kendo-button type="botton" title="초기화" data-ng-click="ordDataVO.inIt()" style="width:70px;">초기화</kendo-button>
                     </div>
                     <br/>
-                    <p class="text-center">총  <strong>{{ordDataVO.dataTotal}}</strong>건이 검색되었습니다.</p>
+                    <p class="text-center" ng-if="ordDataVO.dataTotal > 0">총  <strong>{{ordDataVO.dataTotal}}</strong>건이 검색되었습니다.</p>
                 </form>
             </div>
         </div>
                 
         <!-- 주문 목록 -->          
-		<div class="content-area-container col-xs-12" style="padding:10px 0px 0px 0px;">				
+		<div class="content-area-container col-xs-12">				
 	        <div id="divOrdGrd" kendo-grid="ordkg" options="gridOrdVO">
 	        </div>	            
         </div>
@@ -123,147 +123,306 @@
         	<span class="ells"><input type="checkbox" class="checkbox" ng-click="onOrdGrdCkboxClick($event)"/></span>
       	</td>
 		<td class="ta-l" style="padding:0">
-          	<div class="div-rows ells">
-							  # if(NO_ORD !== "" && NO_ORD !== null && NO_ORD !== "undefined"){ # 
-							  #: NO_ORD # 
-							  # }else{ }#
+          	<div>
+				# if(NO_ORD){ # 
+				#: NO_ORD # 
+				# }else{ }#
 			</div>
-			<div class="ells"># if(NO_APVL !== "" && NO_APVL !== null && NO_APVL !== "undefined"){ # 
-							  #: NO_APVL # 
-							  # }else{ } #
-			</div>
-      	</td>
-		<td class="ta-l" style="padding:0">
-          	<div class="div-rows ells">
-							  # if(NM_MRK !== "" && NM_MRK !== null && NM_MRK !== "undefined"){ #
-                  	    	  #: NM_MRK  # 
-                      	      # }else{ } #
-			</div>
-			<div class="ells"># if(NO_MRKORD !== "" && NO_MRKORD !== null && NO_MRKORD !== "undefined"){ # 
-							  #: NO_MRKORD # 
-							  # }else{ }   #
+			<div>
+				# if(NO_APVL){ # 
+				#: NO_APVL # 
+				# }else{ } #
 			</div>
       	</td>
 		<td class="ta-l" style="padding:0">
-         	<div class="div-rows ells">
-							  # if(NO_MRKITEM !== "" && NO_MRKITEM !== null && NO_MRKITEM !== "undefined"){ #
-          	    	   	      #: NO_MRKITEM # 
-              	    	   	  # }else{ }    #
+          	<div>
+				# if(NM_MRK){ 	#
+                #: NM_MRK  		# 
+            	# }else{ } 		#
 			</div>
-			<div class="ells"># if(NO_MRKREGITEM !== "" && NO_MRKREGITEM !== null && NO_MRKREGITEM !== "undefined"){ # 
-							  #: NO_MRKREGITEM # 
-							  # }else{ }	   #
+			<div># if(NO_MRKORD){ 	# 
+				#: NO_MRKORD 		# 
+				# }else{ }   		#
 			</div>
       	</td>
 		<td class="ta-l" style="padding:0">
-          	<div class="div-rows ells">
-							   # if(NM_MRKITEM !== "" && NM_MRKITEM !== null && NM_MRKITEM !== "undefined"){ #
-							   #: NM_MRKITEM #
-							   # }else{ }	 #
+         	<div>
+				# if(NO_MRKITEM){ #
+          		#: NO_MRKITEM # 
+            	# }else{ }    #
 			</div>
-			<div class="ells"> 
-							   # if(NM_MRKOPT !== "" && NM_MRKOPT !== null && NM_MRKOPT !== "undefined"){ #	
-							   #: NM_MRKOPT #
-							   # }else{ }	# 
+			<div>
+				# if(NO_MRKREGITEM){ # 
+				#: NO_MRKREGITEM 	# 
+				# }else{ }	   	#
+			</div>
+      	</td>
+		<td class="ta-l" style="padding:0">
+          	<div>
+				# if(NM_MRKITEM){ #
+				#: NM_MRKITEM #
+				# }else{ }	 #
+			</div>
+			<div> 
+				# if(NM_MRKOPT){ #	
+				#: NM_MRKOPT #
+				# }else{ }	# 
 			</div>
      	</td>
 		<td class="ta-r" style="padding:0">
-          	<div class="div-rows ells">
-							  # if(AM_ORDSALEPRC !== "" && AM_ORDSALEPRC !== null && AM_ORDSALEPRC !== "undefined"){ #
-							  #= kendo.toString(AM_ORDSALEPRC,'C0', 'ko-KR') #
-    						  # }else{ #
-							    0
-							  #}#
+          	<div>
+				# if(AM_ORDSALEPRC){ #
+				#= kendo.toString(AM_ORDSALEPRC,'C0', 'ko-KR') #
+    			# }else{ #
+					0
+				#}	#
 			</div>
-			<div class="ells"># if(AM_PCHSPRC !== "" && AM_PCHSPRC !== null && AM_PCHSPRC !== "undefined"){ #
-							  #= kendo.toString(AM_PCHSPRC,'C0', 'ko-KR') #
-							  # }else{ #
-								0
-							  #}#
+			<div>
+				# if(AM_PCHSPRC){ #
+				#= kendo.toString(AM_PCHSPRC,'C0', 'ko-KR') #
+				# }else{ #
+					0
+				#}#
 			</div>
       	</td>
 		<td class="ta-c" style="padding:0">
-          	<div class="div-rows ells">
-							  # if(NM_PCHR !== "" && NM_PCHR !== null && NM_PCHR !== "undefined"){ #
-				    		  #: NM_PCHR 	#
-							  # }else{ }	# 
+          	<div>
+				# if(NM_PCHR){ #
+				#: NM_PCHR 	#
+				# }else{ }	# 
 			</div>
-			<div class="ells"> 
-							  # if(NM_CONS !== "" && NM_CONS !== null && NM_CONS !== "undefined"){ #
-							  #: NM_CONS 	# 
-							  # }else{ }	#  	
-			</div>
-      	</td>
-		<td class="ta-l" style="padding:0">
-          	<div class="div-rows ells">		
-							  # if(NO_PCHRPHNE !== "" && NO_PCHRPHNE !== null && NO_PCHRPHNE !== "undefined"){ #					  
-							  #: NO_PCHRPHNE #		
-							  # }else{ } 	 #						  
-			</div>
-			<div class="ells"> 
-							  # if(NO_CONSHDPH !== "" && NO_CONSHDPH !== null && NO_CONSHDPH !== "undefined"){ #
-							  #: NO_CONSHDPH # 
-							  # }else{ }	 #
+			<div> 
+				# if(NM_CONS){ #
+				#: NM_CONS 	# 
+				# }else{ }	#  	
 			</div>
       	</td>
 		<td class="ta-l" style="padding:0">
-          	<div class="div-rows ells">
-							# if(DC_PCHREMI !== "" && DC_PCHREMI !== null && DC_PCHREMI !== "undefined"){ #
-							#: DC_PCHREMI #
-							# }else{ }	  #
+          	<div>		
+				# if(NO_PCHRPHNE){ 	#					  
+				#: NO_PCHRPHNE 		#		
+				# }else{ } 	 		#						  
 			</div>
-			<div class="ells">
-						    # if(DC_CONSNEWADDR !== "" && DC_CONSNEWADDR !== null && DC_CONSNEWADDR !== "undefined"){ #
-							#: DC_CONSNEWADDR # 
-							# }else{ }	 	  #
+			<div> 
+				# if(NO_CONSHDPH){ 	#
+				#: NO_CONSHDPH 		# 
+				# }else{ }	 		#
+			</div>
+      	</td>
+		<td class="ta-l" style="padding:0">
+          	<div>
+				# if(DC_PCHREMI){ 	#
+				#: DC_PCHREMI 		#
+				# }else{ }	  		#
+			</div>
+			<div>
+				# if(DC_CONSNEWADDR){ #
+				#: DC_CONSNEWADDR # 
+				# }else{ }	 	  #
 			</div>
       	</td> 
 		<td class="ta-l" style="padding:0">
-          	<div class="div-rows ells">
-						    # if(DC_PCHRREQCTT !== "" && DC_PCHRREQCTT !== null && DC_PCHRREQCTT !== "undefined"){ #
-							#: DC_PCHRREQCTT #
-							# }else{ }	 	 #
+          	<div>
+				# if(DC_PCHRREQCTT){ #
+				#: DC_PCHRREQCTT #
+				# }else{ }	 	 #
 			</div>
-			<div class="ells">
-							# if(DC_CONSOLDADDR !== "" && DC_CONSOLDADDR !== null && DC_CONSOLDADDR !== "undefined"){ #	
-							#: DC_CONSOLDADDR # 
-							# }else{ }	 	 #
+			<div>
+				# if(DC_CONSOLDADDR){ #	
+				#: DC_CONSOLDADDR # 
+				# }else{ }	 	 #
 			</div>
       	</td>
 		<td class="ta-l" style="padding:0">
-          	<div class="div-rows ells">
-							# if(CD_ORDSTAT !== "" && CD_ORDSTAT !== null && CD_ORDSTAT !== "undefined"){ #
-							<co04-cd-to-nm cd="#:CD_ORDSTAT#" nm-box="ordDataVO.ordStatusOp">
-							# }else{ }	   #
+          	<div>
+				# if(CD_ORDSTAT){ 	#
+				<co04-cd-to-nm cd="#:CD_ORDSTAT#" nm-box="ordDataVO.ordStatusOp">
+				# }else{ }	   		#
 			</div>
-			<div class="ells">
-							# if(DC_SHPWAY !== "" && DC_SHPWAY !== null && DC_SHPWAY !== "undefined"){ #  
-							#: DC_SHPWAY # 
-							# }else{ }	 	 #
+			<div>
+				# if(DC_SHPWAY){ 	#  
+				#: DC_SHPWAY 		#	 
+				# }else{ }	 	 	#
 			</div>
       	</td>
 		<td class="ta-c" style="padding:0">
-        	<div class="div-rows ells">
-							# if(DTS_APVL !== "" && DTS_APVL !== null && DTS_APVL !== "undefined"){ #
-							#: DTS_APVL #
-							# }else{ }	 	 #							
+        	<div>
+				# if(DTS_APVL){ #
+				#: DTS_APVL #
+				# }else{ }	 	 #							
 			</div>
-			<div class="ells">
-							# if(DTS_ORD !== "" && DTS_ORD !== null && DTS_ORD !== "undefined"){ # 
-							#: DTS_ORD # 
-							# }else{ }	 	 #  
+			<div>
+				# if(DTS_ORD){ # 
+				#: DTS_ORD # 
+				# }else{ }	 	 #  
 			</div>
       	</td>
 		<td class="ta-l" style="padding:0">
-        	<div class="div-rows ells">
-							# if(YN_CONN !== "" && YN_CONN !== null && YN_CONN !== "undefined"){ #
-							#: YN_CONN #
-							# }else{ }	 	 #
+        	<div>
+				# if(YN_CONN){ #
+				#: YN_CONN #
+				# }else{ }	 	 #
 			</div>
-			<div class="ells">
-							# if(DTS_ORDDTRM !== "" && DTS_ORDDTRM !== null && DTS_ORDDTRM !== "undefined"){ #
-							#: DTS_ORDDTRM  # 
-							# }else{ }	 	 #
+			<div>
+				# if(DTS_ORDDTRM){ #
+				#: DTS_ORDDTRM  # 
+				# }else{ }	 	 #
+			</div>
+      	</td>
+	</tr>			
+</script>
+
+<!-- 주문 조회 alt 그리드 -->
+<script id="ord_alt_template" type="text/x-kendo-template">
+  	<tr class="k-alt" data-uid="#= uid #" ng-dblclick="grdDblClickGo('#: NO_ORD #','#: NO_MRKORD #')">
+		<td class="ta-c">
+        	<span class="ells"><input type="checkbox" class="checkbox" ng-click="onOrdGrdCkboxClick($event)"/></span>
+      	</td>
+		<td class="ta-l" style="padding:0">
+          	<div>
+				# if(NO_ORD){ # 
+				#: NO_ORD # 
+				# }else{ }#
+			</div>
+			<div>
+				# if(NO_APVL){ # 
+				#: NO_APVL # 
+				# }else{ } #
+			</div>
+      	</td>
+		<td class="ta-l" style="padding:0">
+          	<div>
+				# if(NM_MRK){ 	#
+                #: NM_MRK  		# 
+            	# }else{ } 		#
+			</div>
+			<div># if(NO_MRKORD){ 	# 
+				#: NO_MRKORD 		# 
+				# }else{ }   		#
+			</div>
+      	</td>
+		<td class="ta-l" style="padding:0">
+         	<div>
+				# if(NO_MRKITEM){ #
+          		#: NO_MRKITEM # 
+            	# }else{ }    #
+			</div>
+			<div>
+				# if(NO_MRKREGITEM){ # 
+				#: NO_MRKREGITEM 	# 
+				# }else{ }	   	#
+			</div>
+      	</td>
+		<td class="ta-l" style="padding:0">
+          	<div>
+				# if(NM_MRKITEM){ #
+				#: NM_MRKITEM #
+				# }else{ }	 #
+			</div>
+			<div> 
+				# if(NM_MRKOPT){ #	
+				#: NM_MRKOPT #
+				# }else{ }	# 
+			</div>
+     	</td>
+		<td class="ta-r" style="padding:0">
+          	<div>
+				# if(AM_ORDSALEPRC){ #
+				#= kendo.toString(AM_ORDSALEPRC,'C0', 'ko-KR') #
+    			# }else{ #
+					0
+				#}	#
+			</div>
+			<div>
+				# if(AM_PCHSPRC){ #
+				#= kendo.toString(AM_PCHSPRC,'C0', 'ko-KR') #
+				# }else{ #
+					0
+				#}#
+			</div>
+      	</td>
+		<td class="ta-c" style="padding:0">
+          	<div>
+				# if(NM_PCHR){ #
+				#: NM_PCHR 	#
+				# }else{ }	# 
+			</div>
+			<div> 
+				# if(NM_CONS){ #
+				#: NM_CONS 	# 
+				# }else{ }	#  	
+			</div>
+      	</td>
+		<td class="ta-l" style="padding:0">
+          	<div>		
+				# if(NO_PCHRPHNE){ 	#					  
+				#: NO_PCHRPHNE 		#		
+				# }else{ } 	 		#						  
+			</div>
+			<div> 
+				# if(NO_CONSHDPH){ 	#
+				#: NO_CONSHDPH 		# 
+				# }else{ }	 		#
+			</div>
+      	</td>
+		<td class="ta-l" style="padding:0">
+          	<div>
+				# if(DC_PCHREMI){ 	#
+				#: DC_PCHREMI 		#
+				# }else{ }	  		#
+			</div>
+			<div>
+				# if(DC_CONSNEWADDR){ #
+				#: DC_CONSNEWADDR # 
+				# }else{ }	 	  #
+			</div>
+      	</td> 
+		<td class="ta-l" style="padding:0">
+          	<div>
+				# if(DC_PCHRREQCTT){ #
+				#: DC_PCHRREQCTT #
+				# }else{ }	 	 #
+			</div>
+			<div>
+				# if(DC_CONSOLDADDR){ #	
+				#: DC_CONSOLDADDR # 
+				# }else{ }	 	 #
+			</div>
+      	</td>
+		<td class="ta-l" style="padding:0">
+          	<div>
+				# if(CD_ORDSTAT){ 	#
+				<co04-cd-to-nm cd="#:CD_ORDSTAT#" nm-box="ordDataVO.ordStatusOp">
+				# }else{ }	   		#
+			</div>
+			<div>
+				# if(DC_SHPWAY){ 	#  
+				#: DC_SHPWAY 		#	 
+				# }else{ }	 	 	#
+			</div>
+      	</td>
+		<td class="ta-c" style="padding:0">
+        	<div>
+				# if(DTS_APVL){ #
+				#: DTS_APVL #
+				# }else{ }	 	 #							
+			</div>
+			<div>
+				# if(DTS_ORD){ # 
+				#: DTS_ORD # 
+				# }else{ }	 	 #  
+			</div>
+      	</td>
+		<td class="ta-l" style="padding:0">
+        	<div>
+				# if(YN_CONN){ #
+				#: YN_CONN #
+				# }else{ }	 	 #
+			</div>
+			<div>
+				# if(DTS_ORDDTRM){ #
+				#: DTS_ORDDTRM  # 
+				# }else{ }	 	 #
 			</div>
       	</td>
 	</tr>			
@@ -370,7 +529,7 @@
 			<code>*</code>주문취소사유
 		</td>
 		<td colspan="3">			
-			<textarea class="k-textbox" name="DC_CCLCTT" data-bind="value: DC_CCLCTT" style="width:100%; height:150px;"></textarea>
+			<textarea class="k-textbox" name="DC_CCLRSNCTT" data-bind="value: DC_CCLRSNCTT" style="width:100%; height:150px;"></textarea>
 		</td> 
 	</tr>
 	</tbody>
@@ -417,13 +576,6 @@
 .k-popup-edit-form .k-edit-field > .k-widget:not(.k-tooltip){
     width: 98%;
 }
-.ells{
-	text-overflow: ellipsis; 
-	white-space: nowrap; 
-	overflow:hidden;
-	height: 31px;
-	padding: 7px 7px 0 7px;	
-}
 .div-rows{
 	border-bottom: solid 1px #bbdceb;	
 }
@@ -442,5 +594,22 @@
 }
 .border-bottom-line{	
 	border-bottom: 1px solid #eee;
+}
+.ROW_CHK{
+	margin-bottom: 5px;
+	display:inline-block;
+}
+.k-grid-content > table > tbody > tr > td > div{
+	height: 24px;
+	text-overflow: ellipsis; 
+	white-space: nowrap; 
+	overflow:hidden;
+	padding: 2px 1px 0 2px;
+}
+.k-grid-content > table > tbody > tr > td > div:nth-child(odd){
+	border-bottom: solid 1px #bbdceb;	
+}
+.k-grid-content > table > tbody > tr > td > div > span{
+	
 }
 </style>

@@ -89,11 +89,16 @@
 	            	me.procName.value = "";
                 	me.buyerName.value = "";
                 	me.orderNo.value = "";
-                	me.csMrkNameMo = "*";
-                	me.csStatusMo = "*";
-                	me.csQuestionCodeMo = "*";
+                	                	                	
+                	$timeout(function(){
+                		angular.element(".frm-group").find("button:eq(0)").triggerHandler("click");
+                		angular.element(".frm-group").find("button:eq(2)").triggerHandler("click");
+                	},0);                	
+                	        			
+                	me.csMrkNameOp.bReset = true;
+                	me.csStatusOp.bReset = true;     
+                	me.csQuestionCodeOp.bReset = true;
                 	
-                	me.datesetting.selected = "1Week";
                 	me.dataTotal = 0;
                 	me.resetAtGrd = $scope.cskg;
                 	me.resetAtGrd.dataSource.data([]);
@@ -196,7 +201,7 @@
 									    DTS_INQREG: 	   {	
 																type: "string", 
 																editable: false,
-																nullable: true
+																nullable: false
 	                    						    	   },
 	                    				CD_INQSTAT: 	   {
 																type: "string", 

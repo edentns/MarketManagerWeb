@@ -128,12 +128,18 @@
                 	
 	            	me.writeText.value = "";
                 	me.contentText.value = "";
-                	me.noticeCdModel = "*";
+                	
                 	me.noticeTargetModel = ["*"];
                 	me.allSelectTargetModel = [];
                 	me.fileDataVO.currentDataList = [];
                 	
-                	me.datesetting.selected = "1Week";
+                	me.noticeCdVO.bReset = true;
+                	
+                	$timeout(function(){
+                		angular.element(".frm-group").find("button:eq(0)").triggerHandler("click");
+                		angular.element(".frm-group").find("button:eq(2)").triggerHandler("click");
+                	},0);                	
+                	        			                	
                 	me.dataTotal = 0;
                 	me.resetAtGrd = $scope.nkg;
                 	me.resetAtGrd.dataSource.data([]);

@@ -96,12 +96,14 @@
 	        		cancelCodeMo : "",
 	        		dataTotal : 0,
 	        		resetAtGrd :""
-		        };	            
+		        };	           
+	            
 	            //조회
             	ordDataVO.inQuiry = function(){
 	            	//var me = this;
 	            	$scope.ordkg.dataSource.read();
 	            };	            
+	            
 	            //초기화버튼
 	            ordDataVO.inIt = function(){      	
             		var me  = this;
@@ -110,20 +112,16 @@
                 	me.buyerName.value = "";
                 	me.orderNo.value = "";
                 	me.admin.value = "";
-                	me.betweenDateOptionMo = me.betweenDateOptionOp[0].CD_DEF; 
-                	
-                	if ($scope.$$phase == '$apply' || $scope.$$phase == '$digest' ) {
-		        	    me.datesetting.selected = "1Week";
-		        	    me.ordStatusOp = angular.copy(me.ordStatusOp);
-		        	    me.ordMrkNameOp = angular.copy(me.ordMrkNameOp);
-		        	} else {
-		        		$scope.$apply(function() {
-		        			me.datesetting.selected = "1Week";
-		        			me.ordStatusOp = angular.copy(me.ordStatusOp);
-				        	me.ordMrkNameOp = angular.copy(me.ordMrkNameOp);
-		        	    });
-		        	};
-                	
+                	me.betweenDateOptionMo = me.betweenDateOptionOp[0].CD_DEF;
+                	               			        	
+                	$timeout(function(){
+                		angular.element(".frm-group").find("button:eq(0)").triggerHandler("click");
+                		angular.element(".frm-group").find("button:eq(2)").triggerHandler("click");
+                	},0);                	
+                	        			
+                	me.ordStatusOp.bReset = true;
+                	me.ordMrkNameOp.bReset = true;  
+		        	                	                	
                 	me.dataTotal = 0;
                 	me.resetAtGrd = $scope.ordkg;
                 	me.resetAtGrd.dataSource.data([]);	            		            	
@@ -139,7 +137,7 @@
 	            	return result;
 	            };	 
 	            
-		        //cs 검색 그리드
+		        //주문 검색 그리드
 	            var grdOrdVO = $scope.gridOrdVO = {
             		autoBind: false,
                     messages: {                        	
@@ -371,17 +369,17 @@
 				  									    	  	}
 															}
                 				    				   },
-                				    DC_CCLCTT: 	       {
+                				 DC_CCLRSNCTT: 	       {
 				                    				    	type: "string",
 															editable: true,
 															validation: {
-																dc_cclcttvalidation: function (input) {
-					  									    		if (input.is("[name='DC_CCLCTT']") && input.val() === "") {
-			                                                        	input.attr("data-dc_cclcttvalidation-msg", "주문취소사유를 입력해 주세요.");
+																dc_cclrsncttvalidation: function (input) {
+					  									    		if (input.is("[name='DC_CCLRSNCTT']") && input.val() === "") {
+			                                                        	input.attr("data-dc_cclrsncttvalidation-msg", "주문취소사유를 입력해 주세요.");
 			                                                            return false;
 			                                                        }
 					  									    		if(input.val().length > 1000){
-					  									    			input.attr("data-dc_cclcttvalidation-msg", "주문취소사유를 1000자 이내로 입력해 주세요.");
+					  									    			input.attr("data-dc_cclrsncttvalidation-msg", "주문취소사유를 1000자 이내로 입력해 주세요.");
 			                                                            return false;
 					  									    		}
 				                                                  return true;
@@ -593,7 +591,7 @@
                 	},
                 	resizable: true,
                 	rowTemplate: kendo.template($.trim($("#ord_template").html())),
-                	//altRowTemplate: kendo.template($.trim($("#ord_alt_template").html())),
+                	altRowTemplate: kendo.template($.trim($("#ord_alt_template").html())),
                 	//detailTemplate : kendo.template($.trim($("#ord_detail_template").html())),
                 	height: 530
                 	//모델과 그리드 셀을 제대로 연동 안시키면 수정 팝업 연 후 닫을 때 로우가 사라짐(즉 크레에이트인지 에딧인지 구분을 못함)
