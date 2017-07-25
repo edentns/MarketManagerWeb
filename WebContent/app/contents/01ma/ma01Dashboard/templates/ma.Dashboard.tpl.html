@@ -7,4 +7,36 @@
             </ol>
         </div>
     </div>
+    <div class="row mt-10">
+        <div  class="col-xs-4 col-xs-push-8 page-search absolute" >
+            <div class="home-search-btn text-right">
+               <div class="btn-group" role="group" aria-label="로걸스토리지 설정">
+                    <button type="button" class="btn btn-default" data-ng-click="vm.removeDashboardSetting()">
+                        <i class="fa fa-undo" aria-hidden="true"></i>
+                    </button>
+                    <button type="button" class="btn btn-default" title="dashboard list 설정" data-ng-click="vm.openDashboardSetting()">
+                        <i class="fa fa-cog" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    	<div class="col-xs-12">
+            <div>
+                <ul class="nav nav-tabs page-tabs">
+                    <li data-ng-repeat="tab in vm.tab.tabs" data-ng-class="{'active': tab.active}">
+                        <a href="#" data-ng-click="vm.tab.changeTab($event, tab)">{{tab.name}}</a>
+                    </li>
+                </ul>
+            </div>
+            <div data-ng-repeat="component in vm.components | filter:{visible:true} | orderBy:'order'">
+                <div class="row mt-10">
+                    <div class="col-xs-12">
+                        <div data-content-box-layer data-box-title="component.displayName">
+                            <div data-ng-include="component.templateURL"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

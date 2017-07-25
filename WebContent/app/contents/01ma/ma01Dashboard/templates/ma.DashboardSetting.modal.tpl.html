@@ -1,0 +1,27 @@
+<div class="modal-header">
+	<h3 class="modal-title">Dashboard Setting</h3>
+</div>
+<div class="modal-body">
+	<div class="hbox dashboard-popup-setting">
+		<div class="hbox-col setting-list">
+			<div eden-list="options" eden-list-draggable="true"></div>
+		</div>
+		<div class="hbox-col setting-list-arrow">
+			<div class="icon-action" data-ng-click="upItem()">
+				<i class="fa fa-arrow-circle-o-up fa-2x" aria-hidden="true"></i>
+			</div>
+			<div class="icon-action" data-ng-click="downItem()">
+				<i class="fa fa-arrow-circle-o-down fa-2x" aria-hidden="true"></i>
+			</div>
+		</div>
+	</div>
+	<ul class="list-explain list-sm">
+		<li>체크된 항목만 Dashboard에 보입니다</li>
+		<li>선택 후 드래그 또는 화살표로 순서 변경이 가능합니다.</li>
+	</ul>
+
+	<div class="modal-footer">
+        <button type="button" class="btn btn-default" title="취소" data-ng-click="cancel()">취소</button>
+		<button type="button" class="btn btn-primary" title="사원 확인" data-ng-click="confirm()">확인</button>
+	</div>
+</div>

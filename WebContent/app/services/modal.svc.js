@@ -206,6 +206,36 @@
 
 					return $modal.open(defaults);
 				};
+				
+				/**
+				 * 상품복사등록 팝업을 연다.
+				 * @param {object} options
+				 */
+				self.openItemCopy = function (options) {
+					var self = this,
+					defaults = {
+						templateUrl: "app/shared/modal/mo06ItemSearch/modal.searchItemCopy.tpl.html",
+						controller : "modal.searchItemCopyCtrl",
+						size       : "lg"
+					};
+
+				if (options) { defaults = angular.extend(defaults, options); }
+
+				return $modal.open(defaults);
+				};
+				
+				self.openCodeUpdate = function (options) {
+					var self = this,
+					defaults = {
+						templateUrl: "app/shared/modal/mo07CodeUpdate/modal.openCodeUpdate.tpl.html",
+						controller : "modal.openCodeUpdateCtrl",
+						size       : "lg"
+					};
+
+				if (options) { defaults = angular.extend(defaults, options); }
+
+				return $modal.open(defaults);
+				};
 			}
 		]);
 }());

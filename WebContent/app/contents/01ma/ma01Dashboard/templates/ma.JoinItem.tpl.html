@@ -1,0 +1,84 @@
+<div data-ng-controller="ma.JoinItemCtrl">
+    <div class="box-content-article">
+        <div class="article-view">
+              <!-- CHART -->
+              <div data-ng-show="joinItem.tabName == 'CHART'" class="jui-chart">
+                  <form class="box-content-search">
+                      <div data-inline-period-search data-ng-model="joinItem.chart.search.period" data-change="joinItem.find()" data-is-execute="false"></div>
+                  </form>
+                  <div class="row jui-chart-row" style="overflow:hidden; margin:0 auto; height:250px;">
+                      <div id="joinitemchart1" kendo-chart k-options="joinItem.chart.options" 
+                      	k-title="{
+                      		position: 'bottom',
+                      		text: '전체',
+                      		padding:10,
+                      		color: 'red',
+                      		font: 'bold 1.2em Arial'
+                      	}" 
+                      	k-series="[{field:'TOT_CNT', type:'pie', categoryField: 'NM_DEF', padding: 0}]" 
+                      	k-data-source="joinItem.chart.config" style="width:25%; float:left; height:250px; padding:0px;"/>
+                      <div id="joinitemchart2" kendo-chart k-options="joinItem.chart.options"  
+                      	k-title="{
+                      		position: 'bottom',
+                      		text: '가입',
+                      		color: 'red',
+                      		font: 'bold 1.2em Arial'
+                      	}" 
+                      	k-series="[{field:'CNT_003', type:'pie', categoryField: 'NM_DEF', padding: 0}]" 
+                      	k-data-source="joinItem.chart.config" style="width:25%; float:left; height:250px; padding:0px;"/>
+                      <div id="joinitemchart3" kendo-chart k-options="joinItem.chart.options"  
+                      	k-title="{
+                      		position: 'bottom',
+                      		text: '요청',
+                      		color: 'blue',
+                      		font: 'bold 1.2em Arial'
+                      	}" 
+                      	k-series="[{field:'CNT_001', type:'pie', categoryField: 'NM_DEF', padding: 0}]" 
+                      	k-data-source="joinItem.chart.config" style="width:25%; float:left; height:250px; padding:0px;"/>
+                      <div id="joinitemchart4" kendo-chart k-options="joinItem.chart.options"  
+                      	k-title="{
+                      		position: 'bottom',
+                      		text: '미가입',
+                      		color: 'blue',
+                      		font: 'bold 1.2em Arial'
+                      	}" 
+                      	k-series="[{field:'CNT_002', type:'pie', categoryField: 'NM_DEF', padding: 0}]" 
+                      	k-data-source="joinItem.chart.config" style="width:25%; float:left; height:250px; padding:0px;"/>
+                      <!-- div class="chart" jui-chart="pie" data-jui-config="joinItem.chart.config"></div> -->
+                  </div>
+              </div>
+
+              <!-- TABLE -->
+              <div data-ng-show="joinItem.tabName == 'TABLE'">
+                  <form class="box-content-search">
+                      <div data-inline-period-search data-ng-model="joinItem.table.search.period" data-change="joinItem.find()" data-is-execute="false"></div>
+                  </form>
+                  <div class="tbl-type1 mt-5">
+                      <table>
+                          <thead>
+                          <tr>
+                              <th scope="col">상태</th>
+                              <th scope="col">합계</th>
+                              <th scope="col">무료</th>
+                              <th scope="col">월정액</th>
+                              <th class="last" scope="col">연간액</th>
+                          </tr>
+                          </thead>
+                          
+                          <tbody>
+                          <tr data-ng-repeat="joinItem in joinItem.table.data">
+                              <td>
+                                  <span>{{joinItem.NM_DEF}}</span>
+                              </td>
+                              <td>{{joinItem.TOT_CNT | number}}</td>
+                              <td>{{joinItem.CNT_001 | number}}</td>
+                              <td>{{joinItem.CNT_002 | number}}</td>
+                              <td class="last">{{joinItem.CNT_003 | number}}</td>
+                          </tr>
+                          </tbody>
+                      </table>
+                  </div>
+              </div>
+        </div>
+    </div>
+</div>
