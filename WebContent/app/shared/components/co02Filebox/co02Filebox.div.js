@@ -334,10 +334,26 @@
                     			phantom:true,
                     			dirty:false
                     		};
-                    		
-                    		$scope.co02FileVO.currentDataList.push(currentData);
-                    		$scope.co02FileVO.dirty = true;
-                    		$scope.co02FileVO.fileName = fileName;
+                		
+                    		if(fileItems._file.type.indexOf('image') > -1){
+                        		var reader = new FileReader();
+                        		reader.onload = function(e) {
+                        			$scope.$apply(function() {
+                        				currentData.imgSrc = e.target.result;
+                        				
+        	                    		$scope.co02FileVO.currentDataList.push(currentData);
+        	                    		$scope.co02FileVO.dirty = true;
+        	                    		$scope.co02FileVO.fileName = fileName;
+                        			})
+                        		}
+
+                        		reader.readAsDataURL(fileItems._file);
+                        	}
+                    		else {
+	                    		$scope.co02FileVO.currentDataList.push(currentData);
+	                    		$scope.co02FileVO.dirty = true;
+	                    		$scope.co02FileVO.fileName = fileName;
+                    		}
                     		return;
                     	}
                     	// image일 경우
