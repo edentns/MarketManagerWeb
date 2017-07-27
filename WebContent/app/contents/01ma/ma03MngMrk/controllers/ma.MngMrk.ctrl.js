@@ -135,7 +135,10 @@
                                     	MA_ITLSTAT: mngMrkDateVO.statusDataCode,
                                     	MA_DT_START: new Date(mngMrkDateVO.datesetting.period.start.y, mngMrkDateVO.datesetting.period.start.m-1, mngMrkDateVO.datesetting.period.start.d).dateFormat("Ymd"),
                                     	MA_DT_END: new Date(mngMrkDateVO.datesetting.period.end.y, mngMrkDateVO.datesetting.period.end.m-1, mngMrkDateVO.datesetting.period.end.d).dateFormat("Ymd")
-                                    };                    				                    				
+                                    };     
+                    				
+                    				$scope.gridMngMrkUserVO.dataSource.page(1);
+                    				
                 					UtilSvc.getList(param).then(function (res) {
                 						mngMrkDateVO.dataTotal = res.data.results[0].length;                						
                 						e.success(res.data.results[0]);

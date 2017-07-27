@@ -3,6 +3,11 @@ encoding//WebContent/app/contents/01ma/ma02MemJoinAppr/templates/ma.MemJoinAppr.
 encoding//WebContent/app/contents/01ma/ma05Notice/templates/ma.Notice.tpl.html=UTF-8
 encoding//WebContent/app/contents/03sa/sa02Ord/templates/sa.Ord.tpl.html=UTF-8
 encoding//WebContent/app/contents/03sa/sa02Ord/templates/sa.OrdInfo.tpl.html=UTF-8
+encoding//WebContent/app/contents/03sa/sa03ShpStdbyOrd/templates/sa.ShpStdbyOrd.tpl.html=UTF-8
+encoding//WebContent/app/contents/03sa/sa03ShpStdbyOrd/templates/sa.ShpStdbyOrdInfo.tpl.html=UTF-8
+encoding//WebContent/app/contents/03sa/sa04OrdCcl/templates/sa.OrdCcl.tpl.html=UTF-8
+encoding//WebContent/app/contents/03sa/sa05ShpIng/templates/sa.ShpIng.tpl.html=UTF-8
 encoding//WebContent/app/contents/04cs/cs01Inq/templates/cs.Inq.tpl.html=UTF-8
 encoding//WebContent/app/contents/99sy/sy02Login/templates/sy.Login.tpl.html=UTF-8
+encoding//WebContent/app/shared/modal/it01ItemCfct/modal.ItemCfct.tpl.html=UTF-8
 encoding/<project>=UTF-8

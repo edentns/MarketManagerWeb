@@ -381,11 +381,6 @@
 															editable: false, 
 															nullable: false
                 				    				   },	
-                				    QT_ORD:			   {
-					                				    	type: "number",
-															editable: false, 
-															nullable: false	
-                				    				   },
                 				    DTS_APVL: 	   	   {
 				                    				    	type: "string", 
 															editable: false, 
@@ -695,7 +690,7 @@
                 	resizable: true,
                 	rowTemplate: kendo.template($.trim($("#ocm_template").html())),
                 	altRowTemplate: kendo.template($.trim($("#ocm_alt_template").html())),
-                	height: 530                  	
+                	height: 560                  	
 	        	};
 	            
 	            //kendo grid 체크박스 옵션

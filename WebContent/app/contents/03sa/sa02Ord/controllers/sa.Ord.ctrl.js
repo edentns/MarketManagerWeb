@@ -174,6 +174,9 @@
             					    DTS_FROM : new Date(ordDataVO.datesetting.period.start.y, ordDataVO.datesetting.period.start.m-1, ordDataVO.datesetting.period.start.d, "00", "00", "00").dateFormat("YmdHis"),           
             					    DTS_TO : new Date(ordDataVO.datesetting.period.end.y, ordDataVO.datesetting.period.end.m-1, ordDataVO.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis")
                                 };   
+                				
+                				$scope.ordkg.dataSource.page(1);
+                				
                 				if($scope.readValidation(param)){
                 					saOrdSvc.orderList(param).then(function (res) {
                     					e.success(res.data);
@@ -396,7 +399,7 @@
                 	columns: [
                 	            {
 			                        field: "ROW_CHK",
-			                        title: "선<br/>택",					                        
+			                        title: "<span class='ROW_CHK'>선<br/>택</span>",					                        
 			                        width: "30px",
 			                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
                 	            },                        

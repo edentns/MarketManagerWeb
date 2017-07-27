@@ -288,6 +288,9 @@
             					    DTS_FROM : new Date(shpbyordDataVO.datesetting.period.start.y, shpbyordDataVO.datesetting.period.start.m-1, shpbyordDataVO.datesetting.period.start.d, "00", "00", "00").dateFormat("YmdHis"),           
             					    DTS_TO : new Date(shpbyordDataVO.datesetting.period.end.y, shpbyordDataVO.datesetting.period.end.m-1, shpbyordDataVO.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis")
                                 };   
+                				
+                				$scope.shpbyordkg.dataSource.page(1);
+                				
                 				if($scope.readValidation(param)){
                 					saShpStdbyOrdSvc.shpbyordList(param).then(function (res) {
                 						shpbyordDataVO.shipCodeTotal = res.data.shpList;
