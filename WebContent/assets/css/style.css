@@ -162,12 +162,13 @@ a.show-sidebar:hover {
   top: 0;
   float: none;
   margin: 0;
+  margin-left: -6px;
   border: 0;
   -webkit-border-radius: 0 4px 4px 0;
   -moz-border-radius: 0 4px 4px 0;
   border-radius: 0 4px 4px 0;
   padding: 0;
-  background: #6AA6D6 url(../img/common/devoops_pattern_b10.png) 0 0 repeat;
+  background: rgba(240, 240, 240, 1) 0 0 repeat;
   box-shadow: none;
   visibility:hidden;
 }
@@ -2306,6 +2307,9 @@ td.beauty-hover {
   .page-404 .form-inline {
     width: 60%;
   }
+  .main-menu .dropdown-menu {
+    border: 1px solid rgba(0, 150, 247, 0.3);
+  }
 }
 @media (min-width: 992px) {
   .nav.main-menu > li > a, .nav.msg-menu > li > a {
@@ -2323,6 +2327,7 @@ td.beauty-hover {
     font-size: 12px;
     left:0;
     margin: 0;
+    border: 0;
     -webkit-border-radius: 0;
     -moz-border-radius: 0;
     border-radius: 0;
@@ -2364,10 +2369,16 @@ td.beauty-hover {
     left: 50%;
     margin-left: -9px;
   }
+  .main-menu .dropdown-menu {
+    border: 1px solid rgba(0, 150, 247, 0.3);
+  }
 }
 @media (max-width: 620px) {
   .user-mini {
     display: none;
+  }
+  .main-menu .dropdown-menu {
+    border: 1px solid rgba(0, 150, 247, 0.3);
   }
 }
 @media (max-width: 400px) {
@@ -2389,5 +2400,8 @@ td.beauty-hover {
   }
   #dashboard_links .nav-pills > li.active > a:before {
     display: none;
+  }
+  .main-menu .dropdown-menu {
+    border: 1px solid rgba(0, 150, 247, 0.3);
   }
 }
