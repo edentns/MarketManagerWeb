@@ -88,7 +88,6 @@
 	            }
 	        };
 	
-	        // TABLE
 	        monthJoin.table = {
 	            search  : {
 	                period      : angular.extend({ type: 'current' }, angular.copy(period))
@@ -163,7 +162,6 @@
           		resizable: true
 	        };
 	
-	        // CHART
 	        monthJoin.chart = {
 	            search: {
 	                selected : '000',
@@ -236,15 +234,7 @@
 	        	seriesColors: ['#9ddffb', '#ffcf88', '#fdea9f', '#03a9f4', '#ff9800', '#fad84a', '#7575ff'],
 	        	tooltip: {
 	        		visible: true,
-                	template: '${ value }건'
-	        	},
-	        	seriesDefaults: {
-	        		labels: {
-	        			position: 'center',
-                		visible: true,
-                		background: 'transparent',
-                		template: '#= value #'
-	        		}
+                	template: '${ series.name } ${ value }건'
 	        	},
 	        	height:300
 	        };

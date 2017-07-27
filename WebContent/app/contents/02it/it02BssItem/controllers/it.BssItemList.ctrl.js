@@ -261,12 +261,7 @@
     				                    				    	type: "string", 
     															editable: false, 
     															nullable: false
-                    				    				   },	
-                    				    DC_ITEMABBR:	   {
-    					                				    	type: "string", 
-    															editable: false, 
-    															nullable: false
-                    				    				   },				   
+                    				    				   },			   
                     				    CD_OPTTP:          {
     				                    				    	type: "string", 
     															editable: false, 

@@ -236,6 +236,45 @@
 
 				return $modal.open(defaults);
 				};
+				
+				self.basicOptGetModal = function (CD_OPTTP, options) {
+					var self = this,
+					defaults = {
+						templateUrl: "app/shared/modal/mo08BasicItemOpt/modal.basicOptGet"+CD_OPTTP+".tpl.html",
+						controller : "modal.basicOptGet"+CD_OPTTP+"Ctrl",
+						size       : "lg"
+					};
+
+				if (options) { defaults = angular.extend(defaults, options); }
+
+				return $modal.open(defaults);
+				};
+				
+				self.otherOptCopyModal = function (CD_OPTTP, options) {
+					var self = this,
+					defaults = {
+						templateUrl: "app/shared/modal/mo09CopyItemOpt/modal.CopyOpt.tpl.html",
+						controller : "modal.otherOptCopyCtrl",
+						windowClass: 'app-modal-window'
+					};
+
+				if (options) { defaults = angular.extend(defaults, options); }
+
+				return $modal.open(defaults);
+				};
+				
+				self.itemPreviewModal = function (options) {
+					var self = this,
+					defaults = {
+						templateUrl: "app/shared/modal/mo09CopyItemOpt/modal.CopyOpt.tpl.html",
+						controller : "modal.otherOptCopyCtrl",
+						windowClass: 'app-modal-window'
+					};
+
+				if (options) { defaults = angular.extend(defaults, options); }
+
+				return $modal.open(defaults);
+				};
 			}
 		]);
 }());

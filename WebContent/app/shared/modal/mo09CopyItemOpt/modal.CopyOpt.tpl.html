@@ -1,0 +1,57 @@
+<div class="modal-header">
+	<h3 class="modal-title">다른상품옵션 복사</h3>
+</div>
+<div class="row">
+<div class="modal-body">
+        <div class="col-xs-6">
+            <div data-content-box-layer data-box-title="syCodeVO.boxTitle">
+                <form class="box-content-search simple-search">
+                    <select class="form-control wid-x5" id="searchCode"
+		                    data-ng-model="syCodeVO.selectedCode" style="width: 150px"
+		                    data-ng-options="item.CD_DEF as item.NM_DEF for item in syCodeVO.searchCodeList">
+		                <option value="">검색유형선택</option>
+		            </select>
+                    <input type="text" eden-type="kor" class="form-control" title="검색어 입력" data-ng-model="syCodeVO.searchWord" autofocus>
+					<kendo-button type="submit" data-ng-click="searchCompanyVO.doInquiry()" title="상품검색">검색</kendo-button>
+				</form>
+                <div class="box-content-article">
+                    <div class="article-header">
+                        <div class="col-xs-6 article-header-box">
+                            <button type="button" class="ae-btn" data-ng-click="syCodeVO.inquiry()"><i class="fa fa-refresh"></i></button>
+                        </div>
+                    </div>
+                    <kendo-grid options="syCodeVO" id="grid" name="grid">
+                	</kendo-grid>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-6">
+            <div data-ng-controller="modal.otherOptCopy002Ctrl" data-ng-if="syCodeVO.selectedData.CD_OPTTP=='002'">
+            	<div data-content-box-layer data-box-title="gridCusCodeVO.boxTitle">
+                	<kendo-grid options="gridCusCodeVO">
+                	</kendo-grid>
+            	</div>
+            </div>
+
+            <div data-ng-controller="modal.otherOptCopy003Ctrl" data-ng-if="syCodeVO.selectedData.CD_OPTTP=='003'">
+                <div data-content-box-layer data-box-title="gridSysCodeVO.boxTitle">
+                    <kendo-grid options="gridSysCodeVO">
+                	</kendo-grid>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<div class="modal-footer">
+		<kendo-button type="submit" title="현재상품에 적용" data-ng-click="syCodeVO.doConfirm()">적용</kendo-button>
+		<kendo-button type="button" title="취소" data-ng-click="syCodeVO.doCancle()">취소</kendo-button>
+	</div>
+
+
+<style>
+.app-modal-window .modal-dialog {
+  width: 1300px;
+}
+
+</style>

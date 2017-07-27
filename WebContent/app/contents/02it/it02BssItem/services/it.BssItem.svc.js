@@ -32,6 +32,22 @@
 					});
 				},
 				
+				saveOpt : function ( aParam, CUD ) {
+                    return $http({
+                        method   : "POST",
+                        url		 : APP_CONFIG.domain +"/it02BssOpt/"+CUD,
+                        data     : aParam
+                    });
+                },
+                
+                saveBssOpt : function ( aParam, CUD ) {
+                    return $http({
+                        method   : "POST",
+                        url		 : APP_CONFIG.domain +"/it02BssBssOpt/"+CUD,
+                        data     : aParam
+                    });
+                },
+				
 				itemCopyModal : function() {
 					var modalInstance = ModalSvc.openItemCopy();
 					return modalInstance.result;
@@ -39,6 +55,21 @@
 				
 				codeUpdateModal : function() {
 					var modalInstance = ModalSvc.openCodeUpdate();
+					return modalInstance.result;
+				},
+				
+				basicOptGetModal : function(CD_OPTTP) {
+					var modalInstance = ModalSvc.basicOptGetModal(CD_OPTTP);
+					return modalInstance.result;
+				},
+				
+				otherOptCopyModal : function(CD_OPTTP) {
+					var modalInstance = ModalSvc.otherOptCopyModal(CD_OPTTP);
+					return modalInstance.result;
+				},
+				
+				itemPreviewModal : function() {
+					var modalInstance = ModalSvc.itemPreviewModal();
 					return modalInstance.result;
 				}
 				

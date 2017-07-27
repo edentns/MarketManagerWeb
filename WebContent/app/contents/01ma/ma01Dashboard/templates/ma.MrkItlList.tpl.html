@@ -1,0 +1,72 @@
+<div data-ng-controller="ma.MrkItlListCtrl">
+    <div class="box-content-article">
+        <div class="article-view">
+              <!-- CHART -->
+              <div data-ng-show="mrkItlList.tabName == 'CHART'" class="jui-chart">
+                  <form class="box-content-search">
+                      <div data-inline-period-search data-ng-model="mrkItlList.chart.search.period" data-change="mrkItlList.find()" data-is-execute="false"></div>
+                  </form>
+                  <div class="settings-head">※ 관리마켓목록</div>
+                  <div class="switch-section">
+	                  <ul>
+	                  	<li data-ng-repeat='mngMrk in mrkItlList.chart.dataSource'>
+	                  		{{mngMrk.NM_MRK}}
+	                  		<input  kendo-mobile-switch type="checkbox" 
+	                  				k-on-label="'사용'" k-off-label="'미사용'" 
+	                  				k-ng-model="mngMrk.YN_DEL" value="{{mngMrk.YN_DEL}}"
+	                  				k-on-change="mrkItlList.chart.search.changeMngMrk(kendoEvent, '{{mngMrk.NO_MNGMRK}}', {{mngMrk.YN_DEL}})"></input>
+	                  	</li>
+	                  </ul>
+	              </div>
+              </div>
+              
+			<style>
+			.switch-section ul {
+				margin: 0;
+				padding: 0;
+			}
+			.switch-section ul li {
+				margin: 0;
+	            padding: 10px 10px 10px 20px;
+	            min-height: 24px;
+	            line-height: 24px;
+	            vertical-align: middle;
+	            border-top: 1px solid rgba(128,128,128,.5);
+	        }
+	        .switch-section {
+	            min-width: 50px;
+	            margin-top: 0px;
+	            padding: 0;
+	        }
+	        .switch-section ul li .km-switch {
+	            float: right;
+	        }
+        .settings-head {
+            height: 40px;
+            line-height: 40px;
+	        vertical-align: middle;
+	        color:white;
+	        padding-left:10px;
+            background: no-repeat 20px 50% #2db245;
+        }
+              </style>
+              
+              <script>
+	              $(function() {
+	                  $(".notifications-switch").kendoMobileSwitch();
+	              });
+              </script>
+
+              <!-- TABLE -->
+              <div data-ng-show="mrkItlList.tabName == 'TABLE'">
+                  <form class="box-content-search">
+                      <div data-inline-period-search data-ng-model="mrkItlList.table.search.period" data-change="mrkItlList.find()" data-is-execute="false"></div>
+                  </form>
+                  <div class="tbl-type1 mt-5">
+                      <kendo-grid options="mrkItlList.table">
+		              </kendo-grid>
+                  </div>
+              </div>
+        </div>
+    </div>
+</div>

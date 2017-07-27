@@ -7,8 +7,8 @@
      * 상품분류관리
      */
     angular.module("it.BssItem.controller")
-        .controller("it.BssItemInfoCtrl", ["$stateParams", "$scope", "$state", "$http", "$q", "$log", "sa.OrdSvc", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "MenuSvc", "it.BssItemSvc",
-            function ($stateParams, $scope, $state, $http, $q, $log, saOrdSvc, APP_CODE, $timeout, resData, Page, UtilSvc, MenuSvc, itBssItemSvc) {
+        .controller("it.BssItemInfoCtrl", ["$stateParams", "$scope", "$state", "$http", "$q", "$log", "sa.OrdSvc", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "MenuSvc", "it.BssItemSvc", "sy.CodeSvc",
+            function ($stateParams, $scope, $state, $http, $q, $log, saOrdSvc, APP_CODE, $timeout, resData, Page, UtilSvc, MenuSvc, itBssItemSvc, SyCodeSvc) {
 	            var page  = $scope.page = new Page({ auth: resData.access }),
 		            today = edt.getToday();       	
             	
@@ -28,10 +28,6 @@
 	        		transInfo : { boxTitle : "배송 정보" },
 	        		opInfo : { boxTitle : "옵션 / 재고" },
 	        		licenseInfo : { boxTitle : "인허가 / 고시정보" },
-	        		inputs: {
-	        			CD_CCLRSN : "001",
-	        			DC_CCLCTT : ""
-	        		},
 	        		itemCtgrList1 : [],
 	        		selectedCtgr1 : {ID_CTGR : "", NM_CTGR: ""},
 	        		itemCtgrList2 : [],
@@ -52,7 +48,8 @@
 	        		optClftList   : [],
 	        		tax           : 0,
 	        		taxValue      : 0,
-	        		NM_COM        : "이든",  //임시값
+	        		NM_COM        : "",
+	        		oriOPTTP      : "",
 	        		param :{
 	        			// 상품정보
 	        			CD_SIGNITEM   : "",
@@ -61,14 +58,13 @@
 	        			YN_BCD        : "N",
 		        		DC_BCD        : "",
 		        		CD_ITEMKIND   : "",
-		        		CD_SIGNITEM   : "",
 		        		CD_ITEMSTAT   : "",
 		        		
 		        		//판매정보
 		        		B_ITEMPRC     : 0,
 		        		CD_TAXCLFT    : "001",
 		        		RT_TAX        : 0,
-		        		S_ITEMPRC     : 0,   
+		        		S_ITEMPRC     : 0,
 		        		CD_PCSUNIT    : "",
 		        		QT_MINPCS     : 0,
 		        		YN_ADULCTFC   : "Y",
@@ -207,46 +203,43 @@
 	                        commands: {
 	                            create: '추가',
 	                            destroy: '삭제',
-	                            save: '저장',
 	                            cancel: '취소'
 	                        }
 	                    },
 	                    edit: function (e) {
 	                        if (e.model.isNew()) {
 	                        	if(e.model.CD_OPT == ""){
-	                        		e.model.set("CD_OPT", "001");
+	                        		e.model.set("CD_ITEM" ,  bssInfoDataVO.CD_ITEM);
 	                        	}
 	                        }
 	            		},
 	                	dataSource: new kendo.data.DataSource({
 	                		transport: {
 	                			read: function(e) {
-	                				/*var param = {
-	                						procedureParam:"USP_SY_09MRK02_GET&L_LIST01@s|L_LIST02@s|L_START_DATE@s|L_END_DATE@s",
-	                						L_LIST01  :  dateVO.selectedMrkIds,
-	                						L_LIST02  :  dateVO.selectedItlStatIds,
-	                						L_START_DATE  : new Date(dateVO.datesetting.period.start.y, dateVO.datesetting.period.start.m-1, dateVO.datesetting.period.start.d).dateFormat("Ymd"),
-	                						L_END_DATE : new Date(dateVO.datesetting.period.end.y, dateVO.datesetting.period.end.m-1, dateVO.datesetting.period.end.d).dateFormat("Ymd")
-	                					};
+	                				var param = {
+                						procedureParam:"MarketManager.USP_IT_02BSSITEMOPT_GET&L_CD_ITEM@s|L_FLAG@s",
+                						L_CD_ITEM  :  bssInfoDataVO.ids,
+                						L_FLAG     :  "1"
+                					};
 	            					UtilSvc.getList(param).then(function (res) {
 	            						e.success(res.data.results[0]);
-	            					});*/
+	            					});
 	                			},
-		                		create: function(e) {
-		                			syMrkSvc.saveUserMrk(e.data.models, "I").success(function () {
-		                				gridOpt1VO.dataSource.read();
+	                			create: function(e) {
+	                				if(bssInfoDataVO.oriOPTTP != bssInfoDataVO.param.CD_OPTTP){
+	                					e.data.models[0].TEMP = bssInfoDataVO.oriOPTTP;
+	                				}
+	                				itBssItemSvc.saveOpt(e.data.models, "I").success(function () {
 		                            });
-		            			},
+	                	        },
 	                			update: function(e) {
-	                				syMrkSvc.saveUserMrk(e.data.models, "U").success(function () {
-	                					gridOpt1VO.dataSource.read();
-	                                });
+	                				itBssItemSvc.saveOpt(e.data.models, "U").success(function () {
+		                            });
 	                			},
 	                			destroy: function(e) {
 	                				var defer = $q.defer();
-	                				syMrkSvc.saveUserMrk(e.data.models, "D").success(function () {
+	                				itBssItemSvc.saveOpt(e.data.models, "D").success(function () {
 	            						defer.resolve();
-	            						gridOpt1VO.dataSource.read();
 	                                });
 	                    			return defer.promise;
 	                			},
@@ -261,20 +254,23 @@
 	                			model: {
 	                    			id: "CD_OPT",
 	                				fields: {
+	                					CD_ITEM:    {  },
 	                					CD_OPT:     {  },
+	                					CD_OPTCLFT: {  },
 	                					NM_OPT:     {  },
-	                					QT_SSQL:    {  },
+	                					QT_SSPL:    { type : "number" },
 	                					NO_MD:      {  },
-	                					S_ITEMPRC:  {  },
+	                					S_ITEMPRC:  { type : "number" },
+	                					TEMP:       {  },
 	                				}
 	                			}
 	                		}
 	                	}),
 	                	navigatable: true,
 	                	toolbar: 
-	                		["create", "save", "cancel",{ template: "<kendo-button class='k-button k-button-icontext' value='옵션구분' ng-click='bssInfoDataVO.codeUpdateModal()'>옵션구분</kendo-button>" }],
+	                		["create", "cancel",{ template: "<kendo-button class='k-button k-button-icontext' value='옵션구분' ng-click='bssInfoDataVO.codeUpdateModal()'>옵션구분</kendo-button>" }],
 	                	columns: [
-	           		           {field: "CD_OPT",   title: "옵션구분", width: 150,
+	           		           {field: "CD_OPTCLFT",   title: "옵션구분", width: 150,
 	   							headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"},
 	           		        editor: 
 	          		       		  function (container, options) {
@@ -288,12 +284,12 @@
 		            		    			valuePrimitive: true
 		            		    		});
 	          		       	   	  }	 ,  template: function(e){
-	            		       		    var cd_opt = e.CD_OPT,
+	            		       		    var cd_opt = e.CD_OPTCLFT,
 	            		       		    	nmd    = "";
 	            		       		    if(cd_opt){
 	            		       		    	var optData = bssInfoDataVO.optClftList;	
 		                		       		for(var i = 0, leng=optData.length; i<leng; i++){
-	                		       			   if(optData[i].CD_DEF === e.CD_OPT){
+	                		       			   if(optData[i].CD_DEF === e.CD_OPTCLFT){
 	                		       				 nmd = optData[i].NM_DEF;	
 	                		       			   }
 		                		       		}	
@@ -302,13 +298,168 @@
 		            		        }},
 	        		           {field: "NM_OPT",   title: "옵션명",  width: 100,
 	   	   						headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}},
-	        		           {field: "QT_SSQL",      title: "재고수량",    width: 100,
+	        		           {field: "QT_SSPL",      title: "재고수량",    width: 100,
 	       	   					headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"},
-	       	   					template:"<span style='float:right'>#: QT_SSQL #</span>"},
+	       	   					template:"<span style='float:right'>#: QT_SSPL #</span>"},
 	        		           {field: "NO_MD",   title: "모델 NO",   width: 100, 
 	           	   				headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}},
-	        		           {field: "S_ITEMPRC", title: "판매가(+,-)", width: 100,
-	       	   					headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}}
+	        		           {field: "S_ITEMPRC", title: "판매가 (+,-)", width: 100,
+	       	   					headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"},
+	           	   				template:"<span style='float:right'>#: S_ITEMPRC #</span>"},
+	           	   				{command: [ "destroy" ]}
+	                	],
+	                    collapse: function(e) {
+	                        // console.log(e.sender);
+	                        this.cancelRow();
+	                    },
+	                	editable: true,
+	                	height: 180
+	                };
+	            
+	            var gridOpt2VO = $scope.gridOpt2VO = {
+	                    messages: {
+	                        noRows: "옵션이 존재하지 않습니다.",
+	                        loading: "옵션을 가져오는 중...",
+	                        requestFailed: "요청 옵션을 가져오는 중 오류가 발생하였습니다.",
+	                        retry: "갱신",
+	                        commands: {
+	                            create: '추가',
+	                            destroy: '삭제',
+	                            cancel: '취소'
+	                        }
+	                    },
+	                    edit: function (e) {
+	                        if (e.model.isNew()) {
+	                        	if(e.model.CD_OPT == ""){
+	                        		e.model.set("CD_ITEM" ,  bssInfoDataVO.CD_ITEM);
+	                        	}
+	                        }
+	            		},
+	                	dataSource: new kendo.data.DataSource({
+	                		transport: {
+	                			read: function(e) {
+	                				var param = {
+                						procedureParam:"MarketManager.USP_IT_02BSSITEMOPT_GET&L_CD_ITEM@s|L_FLAG@s",
+                						L_CD_ITEM  :  bssInfoDataVO.ids,
+                						L_FLAG     :  "2"
+                					};
+	            					UtilSvc.getList(param).then(function (res) {
+	            						e.success(res.data.results[0]);
+	            					});
+	                			},
+	                			create: function(e) {
+	                				if(bssInfoDataVO.oriOPTTP != bssInfoDataVO.param.CD_OPTTP){
+	                					e.data.models[0].TEMP = bssInfoDataVO.oriOPTTP;
+	                				}
+	                				itBssItemSvc.saveOpt(e.data.models, "I").success(function () {
+		                            });
+	                	        },
+	                			update: function(e) {
+	                				itBssItemSvc.saveOpt(e.data.models, "U").success(function () {
+		                            });
+	                			},
+	                			destroy: function(e) {
+	                				var defer = $q.defer();
+	                				itBssItemSvc.saveOpt(e.data.models, "D").success(function () {
+	            						defer.resolve();
+	                                });
+	                    			return defer.promise;
+	                			},
+	                			parameterMap: function(e, operation) {
+	                				if(operation !== "read" && e.models) {
+	                					return {models:kendo.stringify(e.models)};
+	                				}
+	                			}
+	                		},
+	                		batch: true,
+	                		schema: {
+	                			model: {
+	                    			id: "CD_OPT",
+	                				fields: {
+	                					CD_ITEM:      {  },
+	                					CD_OPT:       {  },
+	                					CD_OPTCLFT:   {  },
+	                					NM_OPT:       {  },
+	                					QT_SSPL:      { type : "number" },
+	                					NO_MD:        {  },
+	                					S_ITEMPRC:    { type : "number" },
+	                					L_CD_OPT:     {  },
+	                					L_CD_OPTCLFT: {  },
+	                					L_NM_OPT:     {  },
+	                					TEMP:         {  },
+	                				}
+	                			}
+	                		}
+	                	}),
+	                	navigatable: true,
+	                	toolbar: 
+	                		["create", "cancel",{ template: "<kendo-button class='k-button k-button-icontext' value='옵션구분' ng-click='bssInfoDataVO.codeUpdateModal()'>옵션구분</kendo-button>" }],
+	                	columns: [
+	           		           {field: "CD_OPTCLFT",   title: "옵션구분1", width: 150,
+	   							headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"},
+	           		        editor: 
+	          		       		  function (container, options) {
+		            		       		$('<input required name='+ options.field +' data-bind="value:' + options.field + '" />')
+		            		    		.appendTo(container)
+		            		    		.kendoDropDownList({
+		            		    			autoBind: false,
+		            		    			dataTextField: "NM_DEF",
+		                                    dataValueField: "CD_DEF",
+		            		    			dataSource: bssInfoDataVO.optClftList,
+		            		    			valuePrimitive: true
+		            		    		});
+	          		       	   	  }	 ,  template: function(e){
+	            		       		    var cd_opt = e.CD_OPTCLFT,
+	            		       		    	nmd    = "";
+	            		       		    if(cd_opt){
+	            		       		    	var optData = bssInfoDataVO.optClftList;	
+		                		       		for(var i = 0, leng=optData.length; i<leng; i++){
+	                		       			   if(optData[i].CD_DEF === e.CD_OPTCLFT){
+	                		       				 nmd = optData[i].NM_DEF;
+	                		       			   }
+		                		       		}
+	            		       		    }
+	    	            		        return nmd;
+		            		        }},
+	        		           {field: "NM_OPT",   title: "옵션명1",  width: 100,
+	   	   						headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}},
+	   	   					   {field: "L_CD_OPTCLFT",   title: "옵션구분2", width: 150,
+		   							headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"},
+		           		        editor: 
+		          		       		  function (container, options) {
+			            		       		$('<input required name='+ options.field +' data-bind="value:' + options.field + '" />')
+			            		    		.appendTo(container)
+			            		    		.kendoDropDownList({
+			            		    			autoBind: false,
+			            		    			dataTextField: "NM_DEF",
+			                                    dataValueField: "CD_DEF",
+			            		    			dataSource: bssInfoDataVO.optClftList,
+			            		    			valuePrimitive: true
+			            		    		});
+		          		       	   	  }	 ,  template: function(e){
+		            		       		    var cd_opt = e.L_CD_OPTCLFT,
+		            		       		    	nmd    = "";
+		            		       		    if(cd_opt){
+		            		       		    	var optData = bssInfoDataVO.optClftList;	
+			                		       		for(var i = 0, leng=optData.length; i<leng; i++){
+		                		       			   if(optData[i].CD_DEF === e.L_CD_OPTCLFT){
+		                		       				 nmd = optData[i].NM_DEF;	
+		                		       			   }
+			                		       		}	
+		            		       		    }
+		    	            		        return nmd;
+			            		        }},
+		        		       {field: "L_NM_OPT",   title: "옵션명2",  width: 100,
+			            		headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}},
+	        		           {field: "QT_SSPL",      title: "재고수량",    width: 100,
+	       	   					headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"},
+	       	   					template:"<span style='float:right'>#: QT_SSPL #</span>"},
+	        		           {field: "NO_MD",   title: "모델 NO",   width: 100, 
+	           	   				headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}},
+	        		           {field: "S_ITEMPRC", title: "판매가 (+,-)", width: 100,
+	       	   					headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"},
+	           	   				template:"<span style='float:right'>#: S_ITEMPRC #</span>"},
+	           	   				{command: [ "destroy" ]}
 	                	],
 	                    collapse: function(e) {
 	                        // console.log(e.sender);
@@ -328,6 +479,7 @@
         				if(res.data.results[0].length >= 1){
         					bssInfoDataVO.param = res.data.results[0][0];
         					bssInfoDataVO.NM_COM = res.data.results[0][0].NM_C;
+        					bssInfoDataVO.oriOPTTP = res.data.results[0][0].CD_OPTTP;
         					if(res.data.results[1].length >= 1){
         						self.ctgrChange(0);
         						self.selectedCtgr1.ID_CTGR = res.data.results[1][0].ID_CTGR;
@@ -353,6 +505,7 @@
         			UtilSvc.getList(param).then(function (res) { // 파일첨부 수정 해야함
         				if(res.data.results[0].length >= 1){
         					bssInfoDataVO.param = res.data.results[0][0];
+        					
         				}
         			});	
 	            };
@@ -362,6 +515,7 @@
 	            	
 	            	self.kind = $stateParams.kind;
 	            	self.ids = $stateParams.ids;
+	            	self.CD_ITEM = $stateParams.ids;
 	            	
 	            	self.taxList       = resData.taxCodeList;
 	            	self.itemCtgrList1 = resData.itCtgrList;
@@ -521,8 +675,8 @@
 	            bssInfoDataVO.itemCopyModal = function(){
 	            	itBssItemSvc.itemCopyModal().then(function(it_num) {
 	            		var param = {
-    					procedureParam: "MarketManager.USP_IT_02BSSITEMCOPY_GET&L_CD_ITEM@s",
-    					L_CD_ITEM: it_num
+	    					procedureParam: "MarketManager.USP_IT_02BSSITEMCOPY_GET&L_CD_ITEM@s",
+	    					L_CD_ITEM: it_num
 	    				};	            	
 	        			UtilSvc.getList(param).then(function (res) {
 	        				if(res.data.results[0].length >= 1){
@@ -545,11 +699,57 @@
 					});
 	            };
 	            
+	            bssInfoDataVO.save = function(){
+	            	var a = $("#gridOpt1").data("kendoGrid");
+                	a.dataSource.sync(); 
+	            };
+	            
+	            // 옵션구분
 	            bssInfoDataVO.codeUpdateModal = function(){
 	            	itBssItemSvc.codeUpdateModal().then(function(res) {
 	            		alert(res);
 	            	}, function() {
-						alert("!!");
+	            		SyCodeSvc.getSubcodeList({cd: "IT_000011", search: "all"}).then(function (result) {
+	            			bssInfoDataVO.optClftList = result.data;
+                        });
+					});
+	            };
+	            
+	            // 기본옵션조회 및 설정
+	            bssInfoDataVO.basicOptGet = function(CD_OPTTP){
+	            	itBssItemSvc.basicOptGetModal(CD_OPTTP).then(function(res) {
+	            		for(var i = 0 ; i < res.length ; i++){
+	            			$("#gridOpt1").data('kendoGrid').dataSource.add(res[i]);
+            			}
+	            	}, function() { //dismiss
+	            		SyCodeSvc.getSubcodeList({cd: "IT_000011", search: "all"}).then(function (result) {
+	            			bssInfoDataVO.optClftList = result.data;
+                        });
+					});
+	            };
+	            
+	            // 다른상품옵션복사하기
+	            bssInfoDataVO.otherOptCopy = function(CD_OPTTP){                         //옵션 바뀌면 전 옵션 취소처리 해야함
+	            	itBssItemSvc.otherOptCopyModal(CD_OPTTP).then(function(res) {
+	            		bssInfoDataVO.param.CD_OPTTP = res.CD_OPTTP;
+	            		if(res.CD_OPTTP == "002"){
+	            			bssInfoDataVO.ids = res.CD_ITEM;
+	            			$scope.gridOpt1VO.dataSource.read();
+	            		}else if(res.CD_OPTTP == "003"){
+	            			bssInfoDataVO.ids = res.CD_ITEM;
+	            			$scope.gridOpt2VO.dataSource.read();
+	            		}
+	            	}, function() { //dismiss
+	            		SyCodeSvc.getSubcodeList({cd: "IT_000011", search: "all"}).then(function (result) {
+	            			bssInfoDataVO.optClftList = result.data;
+                        });
+					});
+	            };
+	            
+	            // 미리보기
+	            bssInfoDataVO.goPreview = function(){
+	            	itBssItemSvc.itemPreviewModal().then(function() {
+	            		
 					});
 	            };
 	            

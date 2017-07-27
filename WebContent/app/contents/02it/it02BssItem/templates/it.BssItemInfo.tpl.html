@@ -39,14 +39,14 @@
 	                       	<tr>
 	                       		<th>상품옵션종류</th>
 	                       		<td colspan="5">
-									<kendo-button data-ng-if="bssInfoDataVO.param.CD_OPTTP!='001'" ng-click = "bssInfoDataVO.duplCheck()">기본옵션조회 및 설정</kendo-button>
-	                                <kendo-button data-ng-if="bssInfoDataVO.param.CD_OPTTP!='001'" ng-click = "bssInfoDataVO.itemCopyModal()">다른상품옵션복사하기</kendo-button>
+									<kendo-button data-ng-if="bssInfoDataVO.param.CD_OPTTP!='001'" ng-click = "bssInfoDataVO.basicOptGet(bssInfoDataVO.param.CD_OPTTP)">기본옵션조회 및 설정</kendo-button>
+	                                <kendo-button data-ng-if="bssInfoDataVO.param.CD_OPTTP!='001'" ng-click = "bssInfoDataVO.otherOptCopy(bssInfoDataVO.param.CD_OPTTP)">다른상품옵션복사하기</kendo-button>
 								</td>
 	                       	</tr>
 	                       </tbody>
 	                </table>
-	                <div data-ng-if="bssInfoDataVO.param.CD_OPTTP=='002'"> <kendo-grid options = "gridOpt1VO"></kendo-grid> </div>
-	                <div data-ng-if="bssInfoDataVO.param.CD_OPTTP=='003'"> 옵션2 </div>
+	                <div data-ng-if="bssInfoDataVO.param.CD_OPTTP=='002'"> <kendo-grid options = "gridOpt1VO" id = "gridOpt1"></kendo-grid> </div>
+	                <div data-ng-if="bssInfoDataVO.param.CD_OPTTP=='003'"> <kendo-grid options = "gridOpt2VO" id = "gridOpt2"></kendo-grid> </div>
                 </form>
             </div>
         </div>        
