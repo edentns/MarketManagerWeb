@@ -53,7 +53,6 @@
 	            }
 	        };
 	
-	        // TABLE
 	        joinItem.table = {
 	            search  : {
 	                period      : angular.extend({ type: 'current' }, angular.copy(period))
@@ -66,7 +65,6 @@
 	            data    : {}
 	        };
 	
-	        // CHART
 	        joinItem.chart = {
 	            search: {
 	                field       : 'TOT_CNT',

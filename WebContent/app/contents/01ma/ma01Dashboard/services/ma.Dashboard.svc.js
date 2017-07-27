@@ -28,7 +28,21 @@
                     }
                     
                     return target;
-                }
+                },
+                
+				/**
+				 * 본인확인업데이트
+				 * @param {{bsCd:string, user:string, password:string}} userDataSet
+				 * @returns {*}
+				 */
+				updateMngMrk : function (noMngMrk, ynDel) {
+					return $http({
+						method	: "POST",
+						url		: APP_CONFIG.domain +"/updateMngMrk",
+						headers	: { "Content-Type": "application/x-www-form-urlencoded; text/plain; */*; charset=utf-8" },
+						data    : $.param({NO_MNGMRK:noMngMrk, YN_DEL:ynDel})
+					});
+				}
             };
         }]);
 }());

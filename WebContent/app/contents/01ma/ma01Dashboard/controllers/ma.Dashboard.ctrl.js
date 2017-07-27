@@ -26,6 +26,13 @@
 		                	name        : 'ma.MonthJoinCtrl',
 		                	displayName : '월별가입자수',
 		                	templateURL : 'app/contents/01ma/ma01Dashboard/templates/ma.MonthJoin.tpl.html'
+		                },
+		                {
+		                	visible     : true,
+		                	order       : 3,
+		                	name        : 'ma.MrkItlListCtrl',
+		                	displayName : '마켓연동상태',
+		                	templateURL : 'app/contents/01ma/ma01Dashboard/templates/ma.MrkItlList.tpl.html'
 		                }
 		            ];
 	            
