@@ -210,16 +210,16 @@
 								function ($stateParams, $q, AuthSvc) {
 									var defer   = $q.defer(),
 										resData = {};
-									var key = 'ZjE5YmFiM2ZiZGExNDJjNjhjOGYwMGY3';
+
 									SyLoginSvc.selectCla('001').then(function (res) {
 										if(res.status === 200) {
-											resData.DC_CLA001 = edt.aes256.decrypt(res.data.DC_CLA, key);
+											resData.DC_CLA001 = res.data;
 											SyLoginSvc.selectCla('002').then(function (res) {
 												if(res.status === 200) {
-													resData.DC_CLA002 = edt.aes256.decrypt(res.data.DC_CLA, key);
+													resData.DC_CLA002 = res.data;
 													SyLoginSvc.selectCla('003').then(function (res) {
 														if(res.status === 200) {
-															resData.DC_CLA003 = edt.aes256.decrypt(res.data.DC_CLA, key);
+															resData.DC_CLA003 = res.data;
 															defer.resolve(resData);
 														}
 													});

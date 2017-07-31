@@ -12,6 +12,7 @@
         		var vm = this;
 	            var page  = $scope.page = new Page({ auth: resData.access }),
 		            today = edt.getToday(),
+		            LOCAL_LIST_KEY = 'DASHBOARD-LIST',
 		            defaultComponents=[
 		                {
 		                	visible     : true,
