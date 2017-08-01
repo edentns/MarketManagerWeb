@@ -178,6 +178,19 @@
                     });
             		
             	},
+            	
+            	doConfirm : function () {
+					var self = this;
+					var CD_OPTS = [];
+					for(var i = 0; i<self.dataSource._data.length; i++){
+						if(self.dataSource._data[i].ROW_CHK == true){
+							self.dataSource._data[i].QT_SSPL = 0;
+							self.dataSource._data[i].S_ITEMPRC = self.dataSource._data[i].AM_SALE;
+							CD_OPTS.push(self.dataSource._data[i]);
+						}
+					}
+					$modalInstance.close( CD_OPTS );
+				}
             };
         	
         	$scope.onCsGrdCkboxClick = function(e){

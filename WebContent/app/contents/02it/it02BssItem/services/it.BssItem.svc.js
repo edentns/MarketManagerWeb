@@ -47,6 +47,18 @@
                         data     : aParam
                     });
                 },
+                
+                saveItem : function ( aParam, CUD ) {
+                    return $http({
+                        method   : "POST",
+                        url		 : APP_CONFIG.domain +"/it02BssItem/"+CUD,
+                        data     : aParam
+                    }).success(function (data, status, headers, config) {
+						return data;
+					}).error(function (data, status, headers, config) {
+						console.log("error",data,status,headers,config);
+					});
+                },
 				
 				itemCopyModal : function() {
 					var modalInstance = ModalSvc.openItemCopy();
@@ -68,8 +80,8 @@
 					return modalInstance.result;
 				},
 				
-				itemPreviewModal : function() {
-					var modalInstance = ModalSvc.itemPreviewModal();
+				itemPreviewModal : function(src) {
+					var modalInstance = ModalSvc.itemPreviewModal(src);
 					return modalInstance.result;
 				}
 				

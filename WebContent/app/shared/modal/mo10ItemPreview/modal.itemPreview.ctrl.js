@@ -7,12 +7,12 @@
      * 코드관리 - 사용자코드관리
      */
     angular.module("edtApp.common.modal")
-        .controller("modal.openCodeUpdateCtrl", ["$scope","$modal", "$modalInstance", "$http", "$log", "$timeout", "$q", "sy.CodeSvc", "APP_CODE","UtilSvc",
-            function ($scope, $modal, $modalInstance, $http, $log, $timeout, $q, SyCodeSvc, APP_CODE, UtilSvc) {
+        .controller("modal.itemPreviewCtrl", ["$scope","$modal", "$modalInstance", "$http", "$log", "$timeout", "$q", "sy.CodeSvc", "APP_CODE","UtilSvc","sendData",
+            function ($scope, $modal, $modalInstance, $http, $log, $timeout, $q, SyCodeSvc, APP_CODE, UtilSvc, sendData) {
         	
         	var gridCusCodeVO = $scope.gridCusCodeVO = {
     			NO_MNGCDHD   : "SYCH00038",
-                CD_CLS   : "IT_000011",
+                CD_CLS   : sendData,
                 deleteData : [],
                 messages: {
         			noRows: "옵션구분이 존재하지 않습니다.",
