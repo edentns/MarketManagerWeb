@@ -1,0 +1,76 @@
+<div data-ng-controller="sy.SaCntCtrl">
+    <div class="box-content-article">
+        <div class="article-view">
+              <!-- CHART -->
+              <div data-ng-show="saCnt.tabName == 'CHART'" class="jui-chart">
+                  <form class="box-content-search">
+                      <div data-inline-period-search data-ng-model="saCnt.chart.search.period" data-change="saCnt.find()" data-is-execute="false"></div>
+                  </form>
+                  <div class="row jui-chart-row" style="overflow:hidden; margin:0 auto; height:250px;">
+                      <div id="saCntchart1" kendo-chart k-options="saCnt.chart.options" 
+                      	k-title="{
+                      		position: 'bottom',
+                      		text: '주문진행',
+                      		padding:10,
+                      		color: 'red',
+                      		font: 'bold 1.2em Arial'
+                      	}" 
+                      	k-series="[{field:'CNT', type:'pie', categoryField: 'NM_DEF', padding: 0}]" 
+                      	k-data-source="saCnt.chart.dataOrd" style="width:25%; float:left; height:250px; padding:0px;"></div>
+                      <div id="saCntchart2" kendo-chart k-options="saCnt.chart.options"  
+                      	k-title="{
+                      		position: 'bottom',
+                      		text: '취소',
+                      		color: 'red',
+                      		font: 'bold 1.2em Arial'
+                      	}" 
+                      	k-series="[{field:'CNT', type:'pie', categoryField: 'NM_DEF', padding: 0}]" 
+                      	k-data-source="saCnt.chart.dataCcl" style="width:25%; float:left; height:250px; padding:0px;"></div>
+                      <div id="saCntchart3" kendo-chart k-options="saCnt.chart.options"  
+                      	k-title="{
+                      		position: 'bottom',
+                      		text: '반품',
+                      		color: 'blue',
+                      		font: 'bold 1.2em Arial'
+                      	}" 
+                      	k-series="[{field:'CNT', type:'pie', categoryField: 'NM_DEF', padding: 0}]" 
+                      	k-data-source="saCnt.chart.dataTkbk" style="width:25%; float:left; height:250px; padding:0px;"></div>
+                      <div id="saCntchart4" kendo-chart k-options="saCnt.chart.options"  
+                      	k-title="{
+                      		position: 'bottom',
+                      		text: '교환',
+                      		color: 'blue',
+                      		font: 'bold 1.2em Arial'
+                      	}" 
+                      	k-series="[{field:'CNT', type:'pie', categoryField: 'NM_DEF', padding: 0}]" 
+                      	k-data-source="saCnt.chart.dataEchg" style="width:25%; float:left; height:250px; padding:0px;"></div>
+                  </div>
+              </div>
+
+              <!-- TABLE -->
+              <div data-ng-show="saCnt.tabName == 'TABLE'">
+              	<div style="height:230px;">
+                  <form class="box-content-search">
+                      <div data-inline-period-search data-ng-model="saCnt.table.search.period" data-change="saCnt.find()" data-is-execute="false"></div>
+                  </form>
+                  <div class="col-xs-3 tbl-type1-col mt-5" style="padding:2px;">
+                  	  <kendo-grid options="saCnt.table.optionsOrd">
+		              </kendo-grid>
+                  </div>
+                  <div class="col-xs-3 tbl-type1-col mt-5" style="padding:2px;">
+                  	  <kendo-grid options="saCnt.table.optionsCcl">
+		              </kendo-grid>
+                  </div>
+                  <div class="col-xs-3 tbl-type1-col mt-5" style="padding:2px;">
+                  	  <kendo-grid options="saCnt.table.optionsTkbk">
+		              </kendo-grid>
+                  </div>
+                  <div class="col-xs-3 tbl-type1-col mt-5" style="padding:2px;">
+                  	  <kendo-grid options="saCnt.table.optionsEchg">
+		              </kendo-grid>
+                  </div>
+                 </div>
+              </div>
+        </div>
+    </div>
+</div>

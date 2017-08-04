@@ -1,0 +1,26 @@
+<div data-ng-controller="sy.SaMonthCtrl">
+    <div class="box-content-article">
+        <div class="article-view">
+              <!-- CHART -->
+              <div data-ng-show="saMonth.tabName == 'CHART'" class="jui-chart">
+                  <form class="box-content-search">
+                      <div data-inline-period-search data-ng-model="saMonth.chart.search.period" data-change="saMonth.find()" data-is-execute="false"></div>
+                  </form>
+                  <div class="row jui-chart-row" style="margin-top:50px;">
+                      <div id="saMonthChart" kendo-chart k-options="saMonth.chart.options" k-data-source="saMonth.chart.dataSource"></div>
+                  </div>
+              </div>
+
+              <!-- TABLE -->
+              <div data-ng-show="saMonth.tabName == 'TABLE'">
+                  <form class="box-content-search">
+                      <div data-inline-period-search data-ng-model="saMonth.table.search.period" data-change="saMonth.find()" data-is-execute="false"></div>
+                  </form>
+                  <div class="tbl-type1 mt-5">
+                      <kendo-grid options="saMonth.table">
+		              </kendo-grid>
+                  </div>
+              </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,236 @@
+<div data-ng-controller="sy.DashNoticeCtrl">
+    <div class="box-content-article">
+        <div class="article-view">
+			<!-- CHART -->
+			<div>
+			    <div class="jui-chart-row" style="margin-top:-10px;">	
+					<kendo-grid id="divGrd" options="notice.gridNoticeVO">
+					</kendo-grid> 
+				</div>
+			</div>
+        </div>
+    </div>
+</div>
+
+<!-- 공지사항 조회 그리드 -->
+<script id="ma_notice_template" type="text/x-kendo-template">		
+     <tr data-uid="#= uid #">
+        
+		<td class="ta-c">
+            <span class="ells">#if (CD_NOTICE == "001") {# <span class="ells"> #="일반"# #}
+   		        	   	        else if (CD_NOTICE == "002") {# <span class="ells" style="color:red; font-weight:bold;"> #="긴급"# #}
+   		        		        else {# <span class="ells"> #="기타"# #} #
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells"># if(NM_SUBJECT !== ""){ #
+                               #: NM_SUBJECT # 
+                               # } #
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells"># if(DC_CONTENT !== ""){ #
+							   #: DC_CONTENT #
+							   #} #
+			</span>
+        </td>
+		<td class="ta-c">
+            <span class="ells"># if(DTS_INSERT !== ""){ #
+							   #: DTS_INSERT #
+      						   # } #
+			</span>
+        </td>
+		<td class="ta-c">
+            <span class="ells"># if(NO_WRITE !== ""){ #
+					    	   #: NO_WRITE #
+ 							   # } #
+			</span>
+        </td>
+		<td class="ta-c">
+            <span class="ells"># if(SY_FILES !== ""){ #
+							   #: SY_FILES #
+						       # } #
+			</span>
+        </td>
+	</tr>
+</script>
+
+<script id="ma_notice_popup_template" type="text/x-kendo-template">
+<table class="signal">
+	<colgroup>
+      <col style="width: 8%;">
+      <col style="width: 20%;">
+      <col style="width: 8%;">
+      <col style="width: 31%;">
+      <col style="width: 8%;">
+      <col style="width: 23%;">
+    </colgroup>
+    <tbody data-uid="#= uid #">	
+	<tr class="border-bottom-line border-top-line">	
+		<td class="border-right-line">
+			공지번호
+		</td>
+		<td class="border-right-line">
+			<input type="text" data-bind="value: NO_NOTICE" class="k-textbox" readonly="readonly" > 
+		</td>
+		<td class="border-right-line">
+			공지구분
+		</td>
+		<td class="border-right-line">
+			<input type="text" data-bind="value: CD_NOTICE === '001' ? '일반' : '긴급'" class="k-textbox" readonly="readonly" >
+		</td> 
+		<td class="border-right-line">
+		</td>
+		<td class="border-right-line">
+		</td>
+	</tr>
+	<tr class="border-bottom-line">
+		<td class="border-right-line">
+			우선순위
+		</td>
+		<td class="border-right-line">
+			<input type="text" data-bind="value: SQ_NOTICE" class="k-textbox" readonly="readonly" >
+		</td>
+		<td class="border-right-line">
+			작성자
+		</td>
+		<td class="border-right-line">
+			<input type="text" class="k-textbox" data-bind="value: NO_WRITE" readonly="readonly" >
+		</td>
+		<td class="border-right-line">
+			작성일시
+		</td>
+		<td class="border-right-line">
+			<input type="text" class="k-textbox" data-bind="value: DTS_INSERT" readonly="readonly" >
+		</td> 
+	</tr>
+	<tr class="border-bottom-line">
+		<td class="border-right-line">
+			공지제목
+		</td>
+		<td colspan="5" class="border-right-line">
+			<input type="text" data-bind="value: NM_SUBJECT" class="k-textbox" readonly="readonly">
+		</td> 
+	</tr>
+	<tr class="border-bottom-line">
+		<td class="border-right-line">
+			공지내용
+		</td>
+		<td colspan="5" class="border-right-line">
+			<textarea data-bind="value: DC_CONTENT" readonly="readonly" rows="7"></textarea>
+		</td> 
+	</tr>
+	<tr class="border-bottom-line">
+		<td class="border-right-line" >
+			첨부파일
+		</td>
+		<td id="fileInfo" colspan="5">
+		</td>
+	</tr>
+	</tbody>
+</table>
+</script>
+
+
+<style>
+.not_pop_title{
+	padding: 10px;
+}
+/*
+    Increase the width of the edit form.
+    The default one is 400px.
+*/
+.k-edit-form-container{
+    width: 900px;
+}
+/*
+    Decrease the width of the edit form labels. The default one is 30%.
+    The new width should depend on the column titles.
+    Switch the text alignment to the left. By default, it is to the right.
+*/
+.k-popup-edit-form .k-edit-label{
+    width: 20%;
+    text-align: left;
+}
+/*
+    Increase the width of the textbox containers. The default one is 60%.
+    The sum of label and editor percentage widths should be around 90%, to make up for existing paddings.
+*/
+.k-popup-edit-form .k-edit-field{
+    width: 70%;
+}
+/*
+    Expand the edit textboxes and any other Kendo UI widgets.
+    In case of unexpected side effects, use widget-specific classes, instead of .k-widget.
+*/
+.k-popup-edit-form .k-edit-field > .k-textbox,
+.k-popup-edit-form .k-edit-field > .k-widget:not(.k-tooltip){
+    width: 98%;
+}
+.signal{    
+    width: 99%;
+    margin: 5px;
+}
+.border-right-line{    
+	border-right: 1px solid #eee;    
+}
+.border-top-line{	
+	border-top: 1px solid #eee;
+}
+.border-bottom-line{	
+	border-bottom: 1px solid #eee;
+}
+.k-edit-form-container .k-edit-buttons{
+	border-style: none;
+}
+#example{
+    min-height: 200px;
+}
+#example .title {
+    font-weight: bold;
+    margin-bottom: 25px;
+}
+.search-wrapper {
+    width: 100%;
+}
+.query-match {
+	color: red;
+}
+.select-all-wrapper {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.selected-count {
+    float: right;
+    color: #aaa;
+}
+.k-treeview {
+    border-width: 1px!important;
+    padding: 5px;
+}
+.selectedName {
+    padding: 5px 10px;
+    background: #aaa;
+    color: white;
+    float: left;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    border-radius: 10px;
+} 
+.class-target-dropdown{
+	width:65%; 
+	display:inline-block; 
+	vertical-align:middle;
+}
+.class-target-button{
+	width:33%; 
+	display:inline-block; 
+	vertical-align:middle; 
+	text-align:right;
+}
+.ells{
+	text-overflow: ellipsis; 
+	white-space: nowrap; 
+	overflow:hidden;
+}
+</style>
