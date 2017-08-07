@@ -88,7 +88,13 @@
 	        				retry: "갱신",
 	        			};
 	            	localSelf.navigatable              = true;
-	            	localSelf.pageable                 = true;
+	            	localSelf.pageable                 = {
+				    	messages: {
+				    		empty: "표시할 데이터가 없습니다.",
+				    		display: "총 {2}건 중 {0}-{1}건"
+				    	},
+				    	buttonCount: 4
+				    };
 	            	//localSelf.enableRowSelection       = true;
 	            	//localSelf.enableRowHeaderSelection = false;
 	            	//localSelf.multiSelect              = false;
@@ -102,7 +108,7 @@
         					read: function(e) {
         					}
         				},
-        				pageSize: 10,
+        				pageSize: 8,
         				schema: {
         					model: {
             					id:"ID_CTGR",
@@ -113,9 +119,6 @@
         					}
         				},
         			});
-	            	localSelf.pageable = {
-        				buttonCount: 10
-        			};
 	            	localSelf.columns  = [
 	              		{
 	              			field: "ID_CTGR", 
