@@ -141,6 +141,7 @@
 	            //조회
 	            ordCancelManagementDataVO.inQuiry = function(){
 	            	//var me = this;
+	            	$scope.ordCancelManagementkg.dataSource.page(1);
 	            	$scope.ordCancelManagementkg.dataSource.read();
 	            };	
 	            
@@ -212,10 +213,7 @@
             					    DTS_CHK : ordCancelManagementDataVO.betweenDateOptionMo,  
             					    DTS_FROM : new Date(ordCancelManagementDataVO.datesetting.period.start.y, ordCancelManagementDataVO.datesetting.period.start.m-1, ordCancelManagementDataVO.datesetting.period.start.d, "00", "00", "00").dateFormat("YmdHis"),           
             					    DTS_TO : new Date(ordCancelManagementDataVO.datesetting.period.end.y, ordCancelManagementDataVO.datesetting.period.end.m-1, ordCancelManagementDataVO.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis")
-                                };   
-                				
-                				$scope.ordCancelManagementkg.dataSource.page(1);
-                				
+                                }; 
                 				if($scope.readValidation(param)){
                 					saOrdCclSvc.ocmList(param).then(function (res) {
                     					e.success(res.data);
@@ -234,17 +232,15 @@
                 					if(param.length > 1){
                 						alert("한 건의 주문만 선택할 수 있습니다.");
                 						return false;
-                					}
-                					
+                					};                					
                         			if(param.CD_CCLSTAT !== "001"){
                         				alert("취소요청 된 주문만 취소거부 처리 할 수 있습니다.");
                         				return false;
-                        			}
-                					
+                        			};           					
                 					saOrdCclSvc.ocmReject(param).then(function (res) {
 		                				defer.resolve(); 
 		                				e.success(res.data.results);
-		                				ordCancelManagementDataVO.cancelStatusMo = "003";
+		                				ordCancelManagementDataVO.cancelStatusMo = ordCancelManagementDataVO.cancelStatusMo + "^003";
 		                				$scope.ordCancelManagementkg.dataSource.read();
 		                			});
 		                			return defer.promise;
@@ -771,9 +767,10 @@
 			                			
 		                        		saOrdCclSvc.ocmSend(param).then(function (res) {
 		                					defer.resolve(); 
-		                					$timeout(function(){
+		                					/*$timeout(function(){
 		                						$scope.ordCancelManagementkg.dataSource.read();	  
-		            						}, 0);
+		            						}, 0);*/
+		                					$scope.ordCancelManagementkg.dataSource.read();
 		                    			});
 			                			
 			                			return defer.promise;

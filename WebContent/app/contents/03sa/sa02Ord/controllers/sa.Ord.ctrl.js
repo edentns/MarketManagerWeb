@@ -101,6 +101,7 @@
 	            //조회
             	ordDataVO.inQuiry = function(){
 	            	//var me = this;
+            		$scope.ordkg.dataSource.page(1);
 	            	$scope.ordkg.dataSource.read();
 	            };	            
 	            
@@ -174,9 +175,6 @@
             					    DTS_FROM : new Date(ordDataVO.datesetting.period.start.y, ordDataVO.datesetting.period.start.m-1, ordDataVO.datesetting.period.start.d, "00", "00", "00").dateFormat("YmdHis"),           
             					    DTS_TO : new Date(ordDataVO.datesetting.period.end.y, ordDataVO.datesetting.period.end.m-1, ordDataVO.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis")
                                 };   
-                				
-                				$scope.ordkg.dataSource.page(1);
-                				
                 				if($scope.readValidation(param)){
                 					saOrdSvc.orderList(param).then(function (res) {
                     					e.success(res.data);

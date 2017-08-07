@@ -65,7 +65,8 @@
 		        	var me  = this;
 	            	if(me.methodDataCode === ""){alert("연동방법을 입력해 주세요."); return false;};
                 	if(me.statusDataCode === ""){alert("연동상태를 입력해 주세요."); return false;};
-                	
+
+    				$scope.gridMngMrkUserVO.dataSource.page(1);
 	            	gridMngMrkUserVO.dataSource.read();
                 };
                 
@@ -135,9 +136,7 @@
                                     	MA_ITLSTAT: mngMrkDateVO.statusDataCode,
                                     	MA_DT_START: new Date(mngMrkDateVO.datesetting.period.start.y, mngMrkDateVO.datesetting.period.start.m-1, mngMrkDateVO.datesetting.period.start.d).dateFormat("Ymd"),
                                     	MA_DT_END: new Date(mngMrkDateVO.datesetting.period.end.y, mngMrkDateVO.datesetting.period.end.m-1, mngMrkDateVO.datesetting.period.end.d).dateFormat("Ymd")
-                                    };     
-                    				
-                    				$scope.gridMngMrkUserVO.dataSource.page(1);
+                                    };  
                     				
                 					UtilSvc.getList(param).then(function (res) {
                 						mngMrkDateVO.dataTotal = res.data.results[0].length;                						

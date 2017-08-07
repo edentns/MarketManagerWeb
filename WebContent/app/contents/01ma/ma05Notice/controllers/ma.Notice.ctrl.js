@@ -119,7 +119,7 @@
 	            	var me = this;
 	            	if(me.noticeTargetModel === null || me.noticeTargetModel.length < 1){ alert("공지대상을 입력해 주세요."); return; };
 	            	if(me.noticeCdModel === null || me.noticeCdModel === ""){ alert("공지구분을 입력해 주세요."); return; };
-	            
+	            	$scope.nkg.dataSource.page(1);
 	            	$scope.nkg.dataSource.read();
 	            };	            
 	            //초기화버튼
@@ -209,10 +209,7 @@
                                     	SB_NM: noticeDataVO.contentText.value,
                                     	NOTI_TO: new Date(noticeDataVO.datesetting.period.start.y, noticeDataVO.datesetting.period.start.m-1, noticeDataVO.datesetting.period.start.d, "00", "00", "00").dateFormat("YmdHis"),
                                     	NOTI_FROM: new Date(noticeDataVO.datesetting.period.end.y, noticeDataVO.datesetting.period.end.m-1, noticeDataVO.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis")
-                                    };   
-                    				
-                    				$scope.nkg.dataSource.page(1);
-                    				
+                                    }; 
                 					UtilSvc.getList(param).then(function (res) {          						
                 						e.success(res.data.results[0]);
                 					});

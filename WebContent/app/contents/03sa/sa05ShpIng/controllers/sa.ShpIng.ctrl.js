@@ -147,6 +147,7 @@
 	            //조회
 	            shippingDataVO.inQuiry = function(){
 	            	//var me = this;
+	            	$scope.shippingkg.dataSource.page(1);  // 페이지 인덱스 초기화              
 	            	$scope.shippingkg.dataSource.read();
 	            };
 	            
@@ -262,9 +263,6 @@
             					    DTS_FROM : new Date(shippingDataVO.datesetting.period.start.y, shippingDataVO.datesetting.period.start.m-1, shippingDataVO.datesetting.period.start.d, "00", "00", "00").dateFormat("YmdHis"),           
             					    DTS_TO : new Date(shippingDataVO.datesetting.period.end.y, shippingDataVO.datesetting.period.end.m-1, shippingDataVO.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis")
                                 };   
-                				
-                				$scope.shippingkg.dataSource.page(1);  // 페이지 인덱스 초기화               				
-                				
                 				if($scope.readValidation(param)){
                 					saShpIngSvc.orderList(param).then(function (res) {
 	            						e.success(res.data);			                   				                    					
@@ -320,7 +318,7 @@
                         						defer.resolve();
                         						if(res.data === "success"){
                         							//alert("주문을 취소 하였습니다.");
-                        							shippingDataVO.ordStatusMo = "006";
+                        							shippingDataVO.ordStatusMo = shippingDataVO.ordStatusMo + "^006";	
             	            						$scope.shippingkg.dataSource.read();
                         						}else{
                         							//alert("주문취소를 실패하였습니다.");
