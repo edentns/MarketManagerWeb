@@ -699,7 +699,7 @@
                 	resizable: true,
                 	rowTemplate: kendo.template($.trim($("#ocm_template").html())),
                 	altRowTemplate: kendo.template($.trim($("#ocm_alt_template").html())),
-                	height: 560                  	
+                	height: 552                  	
 	        	};
 	            
 	            //kendo grid 체크박스 옵션

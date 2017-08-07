@@ -285,7 +285,7 @@
                 	scrollable: true,
                 	resizable: true,
                 	//rowTemplate: kendo.template($.trim($("#shpbyord-template").html())),
-                	height: 530,
+                	height: 552,
                 	navigatable: true, //키보드로 그리드 셀 이동 가능
                 	toolbar: [{template: kendo.template($.trim($("#shpbyord-toolbar-template").html()))}],
                 	dataSource: new kendo.data.DataSource({
