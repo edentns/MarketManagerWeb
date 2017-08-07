@@ -11,6 +11,21 @@
 			var user = $rootScope.webApp.user,
 				menu = $rootScope.webApp.menu;
 
+	        this.gridtooltipOptions = {
+        		filter: "td",
+        		position: "right",
+        		content: function(e) {
+        			var cell = $(e.target);
+        			var content = cell.text();
+        			return content;
+        		},
+        		show: function(e) {
+        			this.popup.element[0].style.textAlign = "left";
+        			if(e.sender.content[0].textContent.length < 200) { this.popup.element[0].style.width = "150px"; }
+        			else { this.popup.element[0].style.width = "300px"; }
+        		}
+	        };
+	        
 	        /**
 	         * Get group info.
 	         * @returns {Promise}

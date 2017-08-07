@@ -4,8 +4,10 @@
 			<!-- CHART -->
 			<div>
 			    <div class="jui-chart-row" style="margin-top:-10px;">	
-					<kendo-grid id="divGrd" options="notice.gridNoticeVO">
-					</kendo-grid> 
+			    	<kendo-tooltip options="notice.tooltipOptions">
+						<kendo-grid id="divGrd" options="notice.gridNoticeVO">
+						</kendo-grid> 
+					</kendo-tooltip>
 				</div>
 			</div>
         </div>
@@ -117,7 +119,7 @@
 			공지내용
 		</td>
 		<td colspan="5" class="border-right-line">
-			<textarea data-bind="value: DC_CONTENT" readonly="readonly" rows="7"></textarea>
+			<textarea kendo-editor data-bind="value: DC_HTMLCONTENT" readonly="readonly" rows="7"></textarea>
 		</td> 
 	</tr>
 	<tr class="border-bottom-line">

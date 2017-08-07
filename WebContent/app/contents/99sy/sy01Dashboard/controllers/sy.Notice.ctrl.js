@@ -33,7 +33,9 @@
             	var grid = $("#divGrd").data("kendoGrid");
             	$("#divGrd").data("kendoGrid").editRow($(this));
             });
-            
+
+            notice.tooltipOptions = UtilSvc.gridtooltipOptions;
+	        
 	        notice.gridNoticeVO = {
 				autoBind: false,
 			    messages: {                        	
@@ -147,6 +149,12 @@
 				rowTemplate: kendo.template($.trim($("#ma_notice_template").html())),
 				height: 215                   	
 			};
+	        
+	        $scope.$on("kendoWidgetCreated", function(event, widget) {
+	        	if(widget.textarea) {
+	        		$(widget.body).attr("contenteditable", false);
+	        	}
+	        });
 	        
 	        notice.find();
         }]);
