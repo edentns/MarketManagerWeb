@@ -10,7 +10,7 @@
         .controller("modal.otherOptCopy003Ctrl", [ "$scope", "$http", "$log", "$timeout", "$q", "sy.CodeSvc", "APP_CODE","UtilSvc",
                function ($scope, $http, $log, $timeout, $q, SyCodeSvc, APP_CODE, UtilSvc) {
         	
-        	var gridSysCodeVO = $scope.gridSysCodeVO = {
+        	var copyOpt003VO = $scope.copyOpt003VO = {
     			optClftList : [],
     			messages: {
         			noRows: "옵션이 존재하지 않습니다.",
@@ -46,7 +46,7 @@
            		       		    var cd_opt = e.CD_OPTCLFT,
            		       		    	nmd    = "";
            		       		    if(cd_opt){
-           		       		    	var optData = gridSysCodeVO.optClftList;	
+           		       		    	var optData = copyOpt003VO.optClftList;	
 	                		       	for(var i = 0, leng=optData.length; i<leng; i++){
                		       			   if(optData[i].CD_DEF === e.CD_OPTCLFT){
                		       				 nmd = optData[i].NM_DEF;
@@ -63,7 +63,7 @@
 	            		       		    var cd_opt = e.L_CD_OPTCLFT,
 	            		       		    	nmd    = "";
 	            		       		    if(cd_opt){
-	            		       		    	var optData = gridSysCodeVO.optClftList;
+	            		       		    	var optData = copyOpt003VO.optClftList;
 		                		       		for(var i = 0, leng=optData.length; i<leng; i++){
 	                		       			   if(optData[i].CD_DEF === e.L_CD_OPTCLFT){
 	                		       				 nmd = optData[i].NM_DEF;
@@ -104,6 +104,6 @@
             	}
             };
         	
-        	gridSysCodeVO.initLoad();
+        	copyOpt003VO.initLoad();
         }]);
 }());

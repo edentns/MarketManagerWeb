@@ -263,7 +263,7 @@
 				return $modal.open(defaults);
 				};
 				
-				self.itemPreviewModal = function (src ,options) {
+				self.itemPreviewModal = function (src , options) {
 					var self = this,
 					defaults = {
 						templateUrl: "app/shared/modal/mo10ItemPreview/modal.itemPreview.tpl.html",

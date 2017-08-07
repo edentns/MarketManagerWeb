@@ -24,16 +24,24 @@
                     	return "it.BssItem"+ edt.getMenuFileName($stateParams.kind) +"Ctrl";                                  
                     }],
                     resolve		: {
-                        resData: ["AuthSvc", "$q", "sy.CodeSvc", "UtilSvc", function (AuthSvc, $q, SyCodeSvc, UtilSvc) {
+                        resData: ["AuthSvc", "$q", "sy.CodeSvc", "UtilSvc","$stateParams", function (AuthSvc, $q, SyCodeSvc, UtilSvc, $stateParams) {
                             var defer 	= $q.defer(),
                                 resData = {};
 
                             AuthSvc.isAccess().then(function (result) {
                                 resData.access = result[0];
                                 var param = {
-                					procedureParam: "MarketManager.USP_IT_01ITEMCFCT02_GET&IT_ID_CTGR@s",
-                					IT_ID_CTGR: ""
-                					};
+	                					procedureParam: "MarketManager.USP_IT_01ITEMCFCT02_GET&IT_ID_CTGR@s",
+	                					IT_ID_CTGR: ""
+                					},
+                					fileParam = {
+                                		procedureParam: "MarketManager.USP_IT_02BSSITEMFILE_GET&L_CD_ITEM@s|L_CD_AT_1@s|L_CD_AT_2@s|L_CD_AT_3@s|L_CD_AT_4@s",
+                    					L_CD_ITEM: $stateParams.ids,
+                    					L_CD_AT_1: "004",
+                    					L_CD_AT_2: "007",
+                    					L_CD_AT_3: "005",
+                    					L_CD_AT_4: "006"
+                                    };
                                 $q.all([
                                         SyCodeSvc.getSubcodeList({cd: "SY_000007", search: "all"}).then(function (result) {
                                             return result.data;
@@ -76,6 +84,9 @@
                                         }),
                                         SyCodeSvc.getSubcodeList({cd: "IT_000011", search: "all"}).then(function (result) {
                                             return result.data;
+                                        }),
+                                        UtilSvc.getList(fileParam).then(function (res) {
+                	    					return res.data.results;
                                         })
                                     ]).then(function (result) {
                                         resData.taxCodeList   = result[0];
@@ -93,6 +104,13 @@
                                         resData.ctfInCodeList = result[11];
                                         resData.optTypeCodeList = result[12];
                                         resData.optClftCodeList = result[13];
+                    					
+                                    	if($stateParams.kind == "detail"){
+                	    					resData.fileMainVOcurrentData = result[14][0][0];
+                	        				resData.fileSmallVOcurrentData = result[14][1][0];
+                	        				resData.fileDExVOcurrentDataList = result[14][2];
+                	        				resData.fileDImageVOcurrentDataList = result[14][3];
+                                        }
                                         defer.resolve( resData );
                                     });
                             });

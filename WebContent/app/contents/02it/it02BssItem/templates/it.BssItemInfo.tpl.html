@@ -112,13 +112,13 @@
 	                       		<th><span class="form-required">* </span>대표이미지</th>
 	                       		<td>
 								   <div class="file-ins-input">
-			                           <co02-filebox filevo="bssInfoDataVO.fileMainVO"></co02-filebox>
+			                           <co02-filebox filevo="bssInfoDataVO.fileMainVO" id="fileMainVO"></co02-filebox>
 			                        </div>
 	                       		</td>
 	                       		<th><span class="form-required">* </span>작은이미지</th>
 	                       		<td>
 	                       		   <div class="file-ins-input">
-			                           <co02-filebox filevo="bssInfoDataVO.fileSmallVO"></co02-filebox>
+			                           <co02-filebox filevo="bssInfoDataVO.fileSmallVO" id="fileSmallVO"></co02-filebox>
 			                        </div>
 	                       		</td>
 	                       	</tr>
@@ -126,13 +126,13 @@
 	                       		<th><span class="form-required">* </span>상세설명</th>
 	                       		<td>
 								   <div class="file-ins-input">
-			                           <co02-filebox filevo="bssInfoDataVO.fileDExVO"></co02-filebox>
+			                           <co02-filebox filevo="bssInfoDataVO.fileDExVO" id="fileDExVO"></co02-filebox>
 			                        </div>
 	                       		</td>
 	                       		<th><span class="form-required">* </span>상세이미지</th>
 	                       		<td>
 	                       		   <div class="file-ins-input">
-			                           <co02-filebox filevo="bssInfoDataVO.fileDImageVO"></co02-filebox>
+			                           <co02-filebox filevo="bssInfoDataVO.fileDImageVO" id="fileDImageVO"></co02-filebox>
 			                        </div>
 	                       		</td>
 	                       	</tr>
@@ -270,7 +270,7 @@
 	                       	<tr>
 	                       		<th>브랜드</th>
 	                       		<td><input type="text" class="form-control wid-x4" id="NM_BRD" name="NM_BRD" title="브랜드 입력"
-	                                          maxlength="15" data-ng-model="bssInfoDataVO.param.NM_BRD" style="width: 95%;text-align: right;" >
+	                                          maxlength="15" data-ng-model="bssInfoDataVO.param.NM_BRD" style="width: 95%;" >
 	                            </td>
 	                            <th>출시일자</th>
 	                            <td><input type="text" class="form-control wid-x4" data-jquery-date id="DT_RLS" name="DT_RLS" title="출시일자 입력"
@@ -504,7 +504,7 @@
 	                       		<td>
 	                       			<select class="form-control wid-x5" id="CD_CTFINFO" title="국가"
                                             data-ng-model="bssInfoDataVO.param.CD_CTFINFO" style="width: 95%"
-                                            data-ng-options="item.NM_DEF for item in bssInfoDataVO.ctfInList track by item.CD_DEF">
+                                            data-ng-options="item.CD_DEF as item.NM_DEF for item in bssInfoDataVO.ctfInList">
                                         <option value="">인증유형을 선택하여 주세요.</option>
                                     </select>
 	                       		</td>

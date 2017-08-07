@@ -5,20 +5,20 @@
     <div class="simple-search">
 		<form class="col-xs-12 left-group">
 			<select class="form-control wid-x5" id="searchCode"
-                    data-ng-model="gridCusCodeVO.selectedCode" style="width: 150px"
-                    data-ng-options="item.CD_DEF as item.NM_DEF for item in gridCusCodeVO.searchCodeList">
+                    data-ng-model="bssOpt003VO.selectedCode" style="width: 150px"
+                    data-ng-options="item.CD_DEF as item.NM_DEF for item in bssOpt003VO.searchCodeList">
                 <option value="">검색유형선택</option>
             </select>
-			<input type="text" eden-type="kor" class="form-control" title="검색어 입력" data-ng-model="gridCusCodeVO.searchWord" autofocus>
-			<kendo-button type="submit" data-ng-click="gridCusCodeVO.dataSource.read()" title="">검색</kendo-button>
+			<input type="text" eden-type="kor" class="form-control" title="검색어 입력" data-ng-model="bssOpt003VO.searchWord" autofocus>
+			<kendo-button type="submit" data-ng-click="bssOpt003VO.dataSource.read()" title="">검색</kendo-button>
 		</form>
 	</div>	
     <div>
-   		<div options="gridCusCodeVO" kendo-grid="gridVO">
+   		<div options="bssOpt003VO" kendo-grid="gridVO">
    		</div>
     </div>
     <div class="modal-footer">
-		<kendo-button type="submit" title="거래처 확인" data-ng-click="gridCusCodeVO.doConfirm()">확인</kendo-button>
-		<kendo-button type="button" title="취소" data-ng-click="gridCusCodeVO.doCancle()">취소</kendo-button>
+		<kendo-button type="submit" title="거래처 확인" data-ng-click="bssOpt003VO.doConfirm()">확인</kendo-button>
+		<kendo-button type="button" title="취소" data-ng-click="bssOpt003VO.doCancle()">취소</kendo-button>
 	</div>
 </div>

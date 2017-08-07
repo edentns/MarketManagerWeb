@@ -10,7 +10,7 @@
         .controller("modal.basicOptGet002Ctrl", ["$scope","$modal", "$modalInstance", "$http", "$log", "$timeout", "$q", "sy.CodeSvc", "APP_CODE","UtilSvc","it.BssItemSvc",
             function ($scope, $modal, $modalInstance, $http, $log, $timeout, $q, SyCodeSvc, APP_CODE, UtilSvc, itBssItemSvc) {
         	
-        	var gridCusCodeVO = $scope.gridCusCodeVO = {
+        	var bssOpt002VO = $scope.bssOpt002VO = {
     			NO_MNGCDHD   : "SYCH00038",
                 CD_CLS   : "IT_000011",
                 selectedCode   : "CD_OPTCLFT",
@@ -42,8 +42,8 @@
             			read: function(e) {
             				var param = {
                 					procedureParam:"MarketManager.USP_IT_02BSSITEMBSSOPT_SEARCH&L_SEARCH_TYPE@s|L_SEARCH_WORD@s|L_FLAG@s",
-                					L_SEARCH_TYPE :	gridCusCodeVO.selectedCode,
-                					L_SEARCH_WORD : gridCusCodeVO.searchWord,
+                					L_SEARCH_TYPE :	bssOpt002VO.selectedCode,
+                					L_SEARCH_WORD : bssOpt002VO.searchWord,
                 					L_FLAG: "001"
                                 };
         					UtilSvc.getList(param).then(function (res) {
@@ -52,19 +52,19 @@
             			},
                 		create: function(e) {
                 			itBssItemSvc.saveBssOpt(e.data.models, "I").success(function () {
-                				$scope.gridCusCodeVO.dataSource.read();
+                				$scope.bssOpt002VO.dataSource.read();
                             });
             			},
             			update: function(e) {
             				itBssItemSvc.saveBssOpt(e.data.models, "U").success(function () {
-                				$scope.gridCusCodeVO.dataSource.read();
+                				$scope.bssOpt002VO.dataSource.read();
                             });
             			},
             			destroy: function(e) {
             				var defer = $q.defer();
             				itBssItemSvc.saveBssOpt(e.data.models, "D").success(function () {
         						defer.resolve();
-        						$scope.gridCusCodeVO.dataSource.read();
+        						$scope.bssOpt002VO.dataSource.read();
                             });
                 			return defer.promise;
             			},
@@ -107,14 +107,14 @@
 		            		    			autoBind: false,
 		            		    			dataTextField: "NM_DEF",
 		                                    dataValueField: "CD_DEF",
-		            		    			dataSource: gridCusCodeVO.optClftList,
+		            		    			dataSource: bssOpt002VO.optClftList,
 		            		    			valuePrimitive: true
 		            		    		});
 	          		       	   	  }, template: function(e){
 	            		       		    var cd_opt = e.CD_OPTCLFT,
             		       		    	nmd    = "";
             		       		    if(cd_opt){
-            		       		    	var optData = gridCusCodeVO.optClftList;	
+            		       		    	var optData = bssOpt002VO.optClftList;	
 	                		       		for(var i = 0, leng=optData.length; i<leng; i++){
                 		       			   if(optData[i].CD_DEF === e.CD_OPTCLFT){
                 		       				 nmd = optData[i].NM_DEF;	
@@ -155,6 +155,10 @@
 						}
 					}
 					$modalInstance.close( CD_OPTS );
+				},
+				
+				doCancle : function() {
+					$modalInstance.dismiss( "cancel" );
 				}
             };
         	
@@ -175,6 +179,6 @@
                 };
             };
             
-        	gridCusCodeVO.init();
+        	bssOpt002VO.init();
             }]);
 }());

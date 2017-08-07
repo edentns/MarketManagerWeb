@@ -10,148 +10,138 @@
         .controller("modal.itemPreviewCtrl", ["$scope","$modal", "$modalInstance", "$http", "$log", "$timeout", "$q", "sy.CodeSvc", "APP_CODE","UtilSvc","sendData",
             function ($scope, $modal, $modalInstance, $http, $log, $timeout, $q, SyCodeSvc, APP_CODE, UtilSvc, sendData) {
         	
-        	var gridCusCodeVO = $scope.gridCusCodeVO = {
-    			NO_MNGCDHD   : "SYCH00038",
-                CD_CLS   : sendData,
-                deleteData : [],
-                messages: {
-        			noRows: "옵션구분이 존재하지 않습니다.",
-        			loading: "옵션구분을 가져오는 중...",
-                    requestFailed: "옵션구분을 가져오는 중 오류가 발생하였습니다.",
-        			commands: {
-        				create: '추가',
-        				save: '저장',
-        				cancel: '취소',
-        				destroy: '삭제'
-        			}
-        		},
-        		edit: function (e) {
-                    if (e.model.isNew()) {
-                    	if(e.model.CD_CLS == ""){
-                    		e.model.set("YN_USE", "Y");
-                    		e.model.set("NO_MNGCDHD", $scope.gridCusCodeVO.NO_MNGCDHD);
-                    		e.model.set("CD_CLS", $scope.gridCusCodeVO.CD_CLS);
-                    	}
-                    }
-        		},
-        		dataSource: new kendo.data.DataSource({
-            		transport: {
-            			read: function(e) {
-            				var param = {                    	
-            						procedureParam: "USP_SY_10CODE02_GET&L_NO_MNGCDHD@s|L_CD_CLS@s",
-            						L_NO_MNGCDHD: gridCusCodeVO.NO_MNGCDHD,
-            						L_CD_CLS: gridCusCodeVO.CD_CLS
-                                };
-        					UtilSvc.getList(param).then(function (res) {
-        						e.success(res.data.results[1]);
-        					});
-            			},
-                		create: function(e) {
-                			SyCodeSvc.saveUserCode(e.data.models, "I").success(function () {
-                				$scope.gridCusCodeVO.init();
-                            });
-            			},
-            			update: function(e) {
-                			SyCodeSvc.saveUserCode(e.data.models, "U").success(function () {
-                				$scope.gridCusCodeVO.init();
-                            });
-            			},
-            			destroy: function(e) {
-            				var defer = $q.defer();
-                			SyCodeSvc.saveUserCode(e.data.models, "DS").success(function () {
-        						defer.resolve();
-                				$scope.gridCusCodeVO.init();
-                            });
-                			return defer.promise;
-            			},
-            			parameterMap: function(e, operation) {
-            				
-            			}
-            		},
-            		batch: true,
-            		schema: {
-            			model: {
-            				id: "CD_DEF",
-            				fields: {
-            					CD_CLS: {},
-            					CD_DEF: { validation: {required: true}},
-            					CD_DEF_OLD: {},
-            					NM_DEF: { validation: {required: true}},
-            					DC_RMK1: {},
-            					DC_RMK2: {},
-            					DC_RMK3: {},
-            					DC_RMK4: {},
-            					DC_RMK5: {},
-            					YN_USE:  {},
-            					DTS_UPDATE: {editable: false}
-            				}
-            			}
-            		}
-            	}),
-            	navigatable: true,
-            	toolbar: 
-            		["create", "save", "cancel"],
-            	columns: [
-            	       { field : "CD_DEF_OLD", hidden:true },   
-       		           { field : "CD_DEF", title: "구분코드", width: "160" },
-    		           { field : "NM_DEF", title: "구분코드명", width: "160" },
-    		           { field : "DC_RMK1", title: "비고1", width: "100" },
-                       { field : "DC_RMK2", title: "비고2", width: "100" },
-                       { field : "DC_RMK3", title: "비고3", width: "100" },
-                       { field : "DC_RMK4", title: "비고4", width: "100" },
-                       { field : "DC_RMK5", title: "비고5", width: "100" },
-                       { field : "YN_USE", title: "사용여부", width: "120", cellClass: "ta-c", 
-                    	   template: '#if (YN_USE == "Y") {# #="사용"# #} else {# #="사용안함"# #} #', editor: categoryDropDownEditor},
-                       { field : "DTS_UPDATE", title: "수정일시", width: "150", cellClass: "ta-c", enableCellEdit: false },
-                       {command: [ "destroy" ]}
-            	],
-                collapse: function(e) {
-                    // console.log(e.sender);
-                    this.cancelRow();
-                },
-            	editable: true,
-            	height: 360,
-            	
-            	initLoad: function() {
-            		var self = this;
-            		
-            	    // 코드분류 row클릭시 정보를 받아 사용자코드를 조회한다.
-                    $scope.$on( "codeMng.customer:inquiry", function ( $event, oEntity, aData ) {
-                        self.NO_MNGCDHD = oEntity.NO_MNGCDHD;
-                        self.CD_CLS     = oEntity.CD_CLS;
-                        self.dataSource.data(aData);
-                    });
-            	},
-            	init: function() {
-            		var self = this;
-            		var param = {                    	
-    						procedureParam: "USP_SY_10CODE02_GET&L_NO_MNGCDHD@s|L_CD_CLS@s",
-    						L_NO_MNGCDHD: self.NO_MNGCDHD,
-    						L_CD_CLS: self.CD_CLS
-                    	};
-            		UtilSvc.getList(param).then(function (res) {
-            			self.dataSource.data(res.data.results[1]);
-                    });
+        	var previewVO = $scope.previewVO = {
+    			fileMainVO: "",
+        		fileSmallVO: "",
+        		fileDExVO: [],
+        		fileDImageVO: [],
+        		selectedData : "",
+    			param : {
+					CD_SIGNITEM   : "",
+        			NM_ITEM       : "",
+        			DC_ITEMABBR   : "",
+        			YN_BCD        : "N",
+	        		DC_BCD        : "",
+	        		CD_ITEMKIND   : "",
+	        		CD_ITEMSTAT   : "",
+	        		CD_ITEMCLFT   : "",
+	        		ID_CTGR       : "",
+	        		
+	        		//판매정보
+	        		B_ITEMPRC     : 0,
+	        		CD_TAXCLFT    : "001",
+	        		RT_TAX        : 0,
+	        		S_ITEMPRC     : 0,
+	        		CD_PCSUNIT    : "001",
+	        		QT_MINPCS     : 0,
+	        		YN_ADULCTFC   : "Y",
+	        		DC_PUREWD     : "",
+	        		
+	        		//제조정보
+	        		YN_MNFROWN    : "N",
+	        		NM_MNFR       : "",
+	        		YN_SPLYOWN    : "N",
+	        		NM_SPLY       : "",
+	        		NM_BRD        : "",
+	        		DT_RLS        : "",
+	        		YN_VLDPRDUSE  : "N",
+	        		DTS_VLD       : "",
+	        		CD_COONT      : "001",
+	        		NM_COOAREA    : "",
+	        		NM_SIZE       : "",
+	        		VAL_WET       : "",
+	        		CD_WETUNIT    : "",
+	        		NO_MD         : "",
+	        		
+	        		//배송정보
+	        		YN_BSSSHPINFOUSE : "N",
+	        		CD_DMSTFECTSHP: "001",
+	        		NM_HSCD       : "",
+	        		NM_CTCAITEMCLFT : "",
+	        		NM_CLTH       : "",
+	        		NM_ITEMMNFTMTRLKR : "",
+	        		NM_ITEMMNFTMTRLENG: "",
+	        		CD_ITEMSHPTP  : "001",
+	        		NM_ITEMSHPTP  : "",
+	        		
+	        		//옵션/재고
+	        		CD_OPTTP      : "002",
+	        		
+	        		//인허가/고시정보
+	        		NM_MD         : "",
+	        		NM_CTF        : "",
+	        		NM_MNFCOO     : "",
+	        		NM_MNFRER     : "",
+	        		NO_CSMADVPHNE : "",
+	        		CD_CTFOBJ     : "001",
+	        		CD_CTFINFO    : ""
+    			},
+    			dataSourceH : new kendo.data.DataSource({
+    				  data: [],
+  				  	  group: { field: "NM_OPT" }
+    			}),
+    			
+    			dataSourceL : new kendo.data.DataSource({
+  				  	  data: []
+    			}),
+    			
+    			dataSourceO : new kendo.data.DataSource({
+				  	  data: []
+    			}),
+    			
+    			change : function() {
+    				previewVO.dataSourceL.data(sendData[2]);
+    				previewVO.dataSourceL.filter({
+    	                field: 'NM_OPT',
+    	                operator: 'eq',
+    	                value: previewVO.selectedData
+    	            });
+    				var list = $("#lowOpt").data('kendoDropDownList');
+    				list.value("");
+				},
+    			
+    			initLoad : function() {
+    				previewVO.param = sendData[1];    // 각종 정보
+    				previewVO.param.S_ITEMPRC = Math.round(sendData[1].S_ITEMPRC);
+    				if(sendData[2]){                  // 옵션 정보
+	    				if(previewVO.param.CD_OPTTP == "002"){
+	    					previewVO.dataSourceO.data(sendData[2]);
+	    				}
+	    				else if (previewVO.param.CD_OPTTP == "003"){
+	    					previewVO.dataSourceH.data(sendData[2]);
+	        				var arr = new Array(),
+	        	            	col = 'NM_OPT';
+	        		        
+	        		        for(var iIndex=0; iIndex < previewVO.dataSourceH.view().length; iIndex++) {
+	        		          	var data = new Object() ;
+	        		          	data[col] = previewVO.dataSourceH.view()[iIndex].value;
+	        		            arr.push(data);
+	        		        }
+	        		        previewVO.dataSourceH.data(arr);
+	        		        previewVO.dataSourceH.group([]);
+	    				}
+    				}
+    				previewVO.fileMainVO = sendData[0][0];  // 이미지 정보
+    				previewVO.fileSmallVO = sendData[0][1];
+    				previewVO.fileDExVO = sendData[0][2];
+    				previewVO.fileDImageVO = sendData[0][3];
+				},
+				
+				doCancle : function () {
+					$modalInstance.dismiss( "cancel" );
 				}
             };
         	
-        	function categoryDropDownEditor(container, options) {
-        		$('<input data-text-field="text" data-bind="value:' + options.field + '"/>')
-                    .appendTo(container)
-                    .kendoDropDownList({
-                    	dataTextField: 'text',
-                        dataValueField: 'YN_USE',
-                        dataSource: [{
-            	                	   "text": '사용',
-            	                       "YN_USE": 'Y'
-            	                      }, {
-            	                       "text": '사용안함',
-            	                       "YN_USE": 'N'
-            	                      }]
-                    });
-            }
+        	$scope.optHOptions = {
+                    dataTextField: "NM_OPT",
+                    dataValueField : "L_NM_OPT"
+        	};
         	
-
-        	gridCusCodeVO.initLoad();
-            }]);
+        	$scope.optLOptions = {
+                    dataTextField: "L_NM_OPT"
+        	};
+        
+        	previewVO.initLoad();
+        	 
+        	}]);
 }());

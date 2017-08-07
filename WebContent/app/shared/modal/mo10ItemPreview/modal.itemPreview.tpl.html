@@ -1,16 +1,16 @@
 <div class="modal-header">
 	<h3 class="modal-title">상품 미리보기</h3>
 </div>
-<div class="row">
-	<div class="modal-body" style="margin: 20px;">
+<div class="row under-line" style="margin: 20px;">
+	<div class="modal-body " style="margin: 20px;">
 	    <div style="width: 50%;float: left;border: 1px;">
-	   		<img alt="" data-ng-src='{{gridCusCodeVO.CD_CLS}}' style="width: 95%;height: 95%;float: right;">
+	   		<img alt="" data-ng-src='{{previewVO.fileMainVO}}' style="width: 95%;height: 95%;float: right;">
 	    </div>
 	    <div style="width: 50%;float: right;text-align: left;padding: 10px;background: #F4F4F4;">
 	    	<div class="under-line" style="margin-left: 5px">
-	    		<p>상품번호 : </p>
-	    		<p>123123</p>
-	    		<p>가격</p>
+	    		<p>상품번호 :   {{previewVO.param.CD_SIGNITEM}}</p>
+	    		<p><h3>{{previewVO.param.NM_ITEM}}</h3></p>
+	    		<p><h1>{{previewVO.param.S_ITEMPRC}}원</h1></p>
 	    	</div>
 	   		<table style="margin-bottom: 30px">
 	   			<tr>
@@ -31,19 +31,79 @@
 	   				</td>
 	   			</tr>
    			</table>
-   			<table>
-	   			<tr>
+   			<table >
+	   			<tr data-ng-if="previewVO.param.CD_OPTTP=='002' || previewVO.param.CD_OPTTP=='003'" >
 	   				<td>
 	   					옵션
 	   				</td>
-	   				<td>
-	   					123123
+	   				<td data-ng-if="previewVO.param.CD_OPTTP=='002'">
+	   					<select id="OOPT" kendo-drop-down-list k-options="optHOptions" k-data-source="previewVO.dataSourceO"></select>
+	   				</td>
+	   				<td data-ng-if="previewVO.param.CD_OPTTP=='003'">
+	   					<select id="highOpt" kendo-drop-down-list k-options="optHOptions" k-data-source="previewVO.dataSourceH"
+				            ng-change="previewVO.change()" ng-model="previewVO.selectedData"></select>
+				        <select id="lowOpt" kendo-drop-down-list k-options="optLOptions" k-data-source="previewVO.dataSourceL"></select>
 	   				</td>
 	   			</tr>
 	   		</table>
 	    </div>
 	</div>
 </div>
+<div class="modal-header">
+	<h3 class="modal-title">상세정보</h3>
+</div>
+<div class="row">
+	<div class="modal-body" style="margin: 20px;">
+		<table style="width:80%;margin: auto;">
+			<colgroup>
+                <col style="width: 20%;">
+                <col style="width: 30%;">
+                <col style="width: 20%;">
+                <col style="width: 30%;">
+            </colgroup>
+            <tbody>
+				<tr class="under-line" style="border-top: 1px solid #EAEAEA;">
+					<td style="background: #F4F4F4;">
+						상품상태
+					</td>
+					<td>
+						{{previewVO.param.NM_ITEMKIND}}
+					</td>
+					<td style="background: #F4F4F4;">
+						상품번호
+					</td>
+					<td>
+						{{previewVO.param.CD_SIGNITEM}}
+					</td>
+				</tr>
+				<tr class="under-line">
+					<td style="background: #F4F4F4;">
+						모델명
+					</td>
+					<td>
+						{{previewVO.param.NO_MD}}
+					</td>
+					<td style="background: #F4F4F4;">
+						원산지
+					</td>
+					<td>
+						{{previewVO.param.NM_MNFCOO}}
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<div data-ng-repeat="image in previewVO.fileDExVO" style="text-align: center;">
+	    	<img alt="" data-ng-src='{{image}}' style="width: 70%">
+	    </div>
+	    <div data-ng-repeat="image in previewVO.fileDImageVO" style="text-align: center;">
+	    	<img alt="" data-ng-src='{{image}}' style="width: 70%">
+	    </div>
+    </div>
+</div>
+<div class="modal-footer">
+	<kendo-button type="button" title="취소" data-ng-click="previewVO.doCancle()">확인</kendo-button>
+</div>
+
 
 
 

@@ -132,6 +132,9 @@
             		UtilSvc.getList(param).then(function (res) {
             			self.dataSource.data(res.data.results[1]);
                     });
+				},
+				doCancle : function () {
+					$modalInstance.dismiss( "cancel" );
 				}
             };
         	

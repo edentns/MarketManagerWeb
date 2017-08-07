@@ -50,6 +50,7 @@
 	        		tax           : 0,
 	        		taxValue      : 0,
 	        		NM_COM        : "",
+	        		tempOPTTP     : "",
 	        		oriOPTTP      : "",
 	        		duplFlag      : false,
 	        		param :{
@@ -61,6 +62,7 @@
 		        		DC_BCD        : "",
 		        		CD_ITEMKIND   : "",
 		        		CD_ITEMSTAT   : "",
+		        		CD_ITEMCLFT   : "",
 		        		ID_CTGR       : "",
 		        		
 		        		//판매정보
@@ -117,34 +119,14 @@
 	        			limitCnt: 1,
 	        			bImage: true,
 	        			imgWidth: '0px',
-	        			imgHeight: '0px',
-	        			currentData:{
-	        				
-	        			}
+	        			imgHeight: '0px'
 	        		},
 	        		fileSmallVO: {
 	        			CD_AT:"007",
 	        			limitCnt: 1,
 	        			bImage: true,
 	        			imgWidth: '0px',
-	        			imgHeight: '0px',
-	        			currentData:{
-	        				CD_AT: "",
-	        				CD_REF1: "",
-	        				CD_REF2: "",
-	        				CD_REF3: null,
-	        				CD_REF4: null,
-	        				CD_REF5: "",
-	        				DTS_INSERT: null,
-	        				DTS_UPDATE: null,
-	        				NM_FILE: "",
-	        				NO_AT: 1,
-	        				NO_C: "",
-	        				NO_INSERT: "",
-	        				NO_UPDATE: null,
-	        				SZ_FILE: "",
-	        				YN_DEL: null
-	        			}
+	        			imgHeight: '0px'
 	        		},
 	        		fileDExVO: {
 	        			CD_AT:"005",
@@ -447,6 +429,7 @@
 	                };
 	            	            	            
 	            bssInfoDataVO.initBssItem = function(){
+	            	bssInfoDataVO.duplFlag = true;
 	            	var self = this,
 	            		param = {
     					procedureParam: "MarketManager.USP_IT_02BSSITEMINFO01_GET&L_CD_ITEM@s",
@@ -456,6 +439,7 @@
         				if(res.data.results[0].length >= 1){
         					bssInfoDataVO.param = res.data.results[0][0];
         					bssInfoDataVO.NM_COM = res.data.results[0][0].NM_C;
+        					bssInfoDataVO.tempOPTTP = res.data.results[0][0].CD_OPTTP;
         					bssInfoDataVO.oriOPTTP = res.data.results[0][0].CD_OPTTP;
         					if(res.data.results[1].length >= 1){
         						self.ctgrChange(0);
@@ -473,26 +457,19 @@
         						}
         					}
         				}
+        				bssInfoDataVO.splyChange();
+        				bssInfoDataVO.mrfrChange();
+        				bssInfoDataVO.bcdChange();
+        				bssInfoDataVO.shptpChange();
         			});
-        			param = {
-    					procedureParam: "MarketManager.USP_IT_02BSSITEMFILE_GET&L_CD_ITEM@s|L_CD_AT_1@s|L_CD_AT_2@s|L_CD_AT_3@s|L_CD_AT_4@s",
-    					L_CD_ITEM: self.ids,
-    					L_CD_AT_1: self.fileMainVO.CD_AT,
-    					L_CD_AT_2: self.fileSmallVO.CD_AT,
-    					L_CD_AT_3: self.fileDExVO.CD_AT,
-    					L_CD_AT_4: self.fileDImageVO.CD_AT
-        			};
-        			UtilSvc.getList(param).then(function (res) { // 파일첨부 수정 해야함
-        				$timeout(function() {
-	        				bssInfoDataVO.fileMainVO.currentData = res.data.results[0][0];
-	        				bssInfoDataVO.fileSmallVO.currentData = res.data.results[1][0];
-	        				bssInfoDataVO.fileDExVO.currentDataList = res.data.results[2];
-	        				bssInfoDataVO.fileDImageVO.currentDataList = res.data.results[3];
-        				});
-        			});
+    				bssInfoDataVO.fileMainVO.currentData = resData.fileMainVOcurrentData;
+    				bssInfoDataVO.fileSmallVO.currentData = resData.fileSmallVOcurrentData;
+    				bssInfoDataVO.fileDExVO.currentDataList = resData.fileDExVOcurrentDataList;
+    				bssInfoDataVO.fileDImageVO.currentDataList = resData.fileDImageVOcurrentDataList;
+    				
 	            };
 	            
-	            bssInfoDataVO.getInitializeOrdInfo = function(){
+	            bssInfoDataVO.getInitializeItemInfo = function(){
 	            	var self = this;
 	            	
 	            	self.kind = $stateParams.kind;
@@ -517,6 +494,7 @@
 	            	if(self.kind == "detail"){
 	            		self.initBssItem();
 	            	}else if(self.kind == "insert"){
+	            		self.tempOPTTP = "002";
 	            		self.oriOPTTP = "002";
 	            	}else{
 	                    self.goBack();	                    
@@ -612,14 +590,12 @@
 	            		angular.element("#NM_ITEMSHPTP").attr("readonly", false);
 	            	}
 	            	else {
-	            		self.param.NM_ITEMSHPTP = "";
 	            		angular.element("#NM_ITEMSHPTP").attr("readonly", true);
 	            	}
 	            };
 	            
 	            bssInfoDataVO.sprcCal = function(name,prc, flag){
 	            	var self = this;
-	            	
 	            	if(flag == "R"){
 	            		if(!bssInfoDataVO.inputOnlyNum(prc, flag)){
 		            		return;
@@ -708,30 +684,56 @@
 	            
 	            // 저장
 	            bssInfoDataVO.goSave = function(){
-	            	if (confirm("저장하시겠습니까?")) {
-                        if (bssInfoDataVO.isValid(bssInfoDataVO.param)) {
-                        	var SU = bssInfoDataVO.kind == "detail" ? "U" : "I";
-                        	
-                    		if(bssInfoDataVO.selectedCtgr2.ID_CTGR != ""){
-                    			if(bssInfoDataVO.selectedCtgr3.ID_CTGR != ""){
-                        			bssInfoDataVO.param.ID_CTGR = bssInfoDataVO.selectedCtgr3.ID_CTGR;
-                            	}else{
-                            		bssInfoDataVO.param.ID_CTGR = bssInfoDataVO.selectedCtgr2.ID_CTGR;
-                            	}
-                        	}else{
-                        		bssInfoDataVO.param.ID_CTGR = bssInfoDataVO.selectedCtgr1.ID_CTGR;
-                        	}
-                    		
-                        	itBssItemSvc.saveItem(bssInfoDataVO.param, SU).success(function (res_CDITEM) {
-                        		bssInfoDataVO.CD_ITEM = res_CDITEM;
-                        		if(bssInfoDataVO.param.CD_OPTTP == "002" || bssInfoDataVO.param.CD_OPTTP == "003" ){
-	                        		var grid = $("#gridOpt"+bssInfoDataVO.param.CD_OPTTP).data("kendoGrid");
-	                            	grid.dataSource.sync();
-                        		}
-                            	bssInfoDataVO.fileSave();
-                            });
-                        }
-                    }
+	            	var SU = bssInfoDataVO.kind == "detail" ? "U" : "I";
+	            	if(SU == "I"){
+		            	if (confirm("저장하시겠습니까?")) {
+		                    if (bssInfoDataVO.isValid(bssInfoDataVO.param)) {
+		                		if(bssInfoDataVO.selectedCtgr2.ID_CTGR != ""){
+		                			if(bssInfoDataVO.selectedCtgr3.ID_CTGR != ""){
+		                    			bssInfoDataVO.param.ID_CTGR = bssInfoDataVO.selectedCtgr3.ID_CTGR;
+		                        	}else{
+		                        		bssInfoDataVO.param.ID_CTGR = bssInfoDataVO.selectedCtgr2.ID_CTGR;
+		                        	}
+		                    	}else{
+		                    		bssInfoDataVO.param.ID_CTGR = bssInfoDataVO.selectedCtgr1.ID_CTGR;
+		                    	}
+		                    	itBssItemSvc.saveItem(bssInfoDataVO.param, SU).success(function (res_CDITEM) {
+		                    		bssInfoDataVO.CD_ITEM = res_CDITEM;
+		                    		if(bssInfoDataVO.param.CD_OPTTP == "002" || bssInfoDataVO.param.CD_OPTTP == "003" ){
+		                        		var grid = $("#gridOpt"+bssInfoDataVO.param.CD_OPTTP).data("kendoGrid");
+		                            	grid.dataSource.sync();
+		                    		}
+		                        	bssInfoDataVO.fileSave();
+		                        	alert("기본상품 등록이 완료되었습니다.");
+		                        	bssInfoDataVO.goBack();
+		                        });
+		                    }
+		                }
+	            	}else{
+	            		if (confirm("수정하시겠습니까?")) {
+		                    if (bssInfoDataVO.isValid(bssInfoDataVO.param)) {
+		                		if(bssInfoDataVO.selectedCtgr2.ID_CTGR != ""){
+		                			if(bssInfoDataVO.selectedCtgr3.ID_CTGR != ""){
+		                    			bssInfoDataVO.param.ID_CTGR = bssInfoDataVO.selectedCtgr3.ID_CTGR;
+		                        	}else{
+		                        		bssInfoDataVO.param.ID_CTGR = bssInfoDataVO.selectedCtgr2.ID_CTGR;
+		                        	}
+		                    	}else{
+		                    		bssInfoDataVO.param.ID_CTGR = bssInfoDataVO.selectedCtgr1.ID_CTGR;
+		                    	}
+		                		bssInfoDataVO.param.CD_ITEM = bssInfoDataVO.ids;
+		                    	itBssItemSvc.saveItem(bssInfoDataVO.param, SU).success(function () {
+		                    		if(bssInfoDataVO.param.CD_OPTTP == "002" || bssInfoDataVO.param.CD_OPTTP == "003" ){
+		                        		var grid = $("#gridOpt"+bssInfoDataVO.param.CD_OPTTP).data("kendoGrid");
+		                            	grid.dataSource.sync();
+		                    		}
+		                        	bssInfoDataVO.fileSave();
+		                        	alert("기본상품 수정이 완료되었습니다.");
+		                        	bssInfoDataVO.goBack();
+		                        });
+		                    }
+		                }
+	            	}
 	            };
 	            
 	            bssInfoDataVO.fileSave = function() {
@@ -741,43 +743,29 @@
 			        		if(bssInfoDataVO.fileSmallVO.dirty) {
 				        		bssInfoDataVO.fileSmallVO.CD_REF1 = bssInfoDataVO.CD_ITEM;
 				        		bssInfoDataVO.fileSmallVO.doUpload(function(){
-				        			alert('성공하였습니다.');
+				        			if(bssInfoDataVO.fileDExVO.dirty) {
+						        		bssInfoDataVO.fileDExVO.CD_REF1 = bssInfoDataVO.CD_ITEM;
+						        		bssInfoDataVO.fileDExVO.doUpload(function(){
+						        			if(bssInfoDataVO.fileDImageVO.dirty) {
+								        		bssInfoDataVO.fileDImageVO.CD_REF1 = bssInfoDataVO.CD_ITEM;
+								        		bssInfoDataVO.fileDImageVO.doUpload(function(){
+								        		}, function() {
+								        			alert('상세이미지 첨부파일업로드 실패하였습니다.');
+								        		});
+							        		}
+						        		}, function() {
+						        			alert('상세설명 첨부파일업로드 실패하였습니다.');
+						        		});
+					        		}
 				        		}, function() {
 				        			alert('작은이미지 첨부파일업로드 실패하였습니다.');
 				        		});
 			        		}
 			        		else {
-			        			alert('성공하였습니다.');
 			        		}
-		        			alert('성공하였습니다.');
 		        		}, function() {
 		        			alert('대표이미지 첨부파일업로드 실패하였습니다.');
 		        		});
-	        		}
-	        		else {
-	        			alert('성공하였습니다.');
-	        		}
-	        		if(bssInfoDataVO.fileDExVO.dirty) {
-		        		bssInfoDataVO.fileDExVO.CD_REF1 = bssInfoDataVO.CD_ITEM;
-		        		bssInfoDataVO.fileDExVO.doUpload(function(){
-		        			if(bssInfoDataVO.fileDImageVO.dirty) {
-				        		bssInfoDataVO.fileDImageVO.CD_REF1 = bssInfoDataVO.CD_ITEM;
-				        		bssInfoDataVO.fileDImageVO.doUpload(function(){
-				        			alert('성공하였습니다.');
-				        		}, function() {
-				        			alert('상세설명 첨부파일업로드 실패하였습니다.');
-				        		});
-			        		}
-			        		else {
-			        			alert('성공하였습니다.');
-			        		}
-			        		alert('성공하였습니다.');
-		        		}, function() {
-		        			alert('상세이미지 첨부파일업로드 실패하였습니다.');
-		        		});
-	        		}
-	        		else {
-	        			alert('성공하였습니다.');
 	        		}
 	        	};
 	            
@@ -819,6 +807,7 @@
 	            // 다른상품옵션복사하기
 	            bssInfoDataVO.otherOptCopy = function(CD_OPTTP){
 	            	itBssItemSvc.otherOptCopyModal(CD_OPTTP).then(function(res) {
+	            		bssInfoDataVO.tempOPTTP = bssInfoDataVO.param.CD_OPTTP;
 	            		bssInfoDataVO.param.CD_OPTTP = res.CD_OPTTP;
 	            		bssInfoDataVO.optChange();
 	            		$timeout(function() {
@@ -856,26 +845,59 @@
 	            
 	            // 미리보기
 	            bssInfoDataVO.goPreview = function(){
-	            	var self = this;
-	            	itBssItemSvc.itemPreviewModal(self.fileMainVO.imgSrc).then(function() {    // 원래 있는 파일 조건 걸기
+	            	var self = this,
+	            		paramList = [],
+	            	    imageList = [],
+	            	  	DexImage = [],
+	            	  	Dimage = [];
+	            	for(var i = 0 ; i < self.iKindList.length ; i++){
+	            		if(bssInfoDataVO.param.CD_ITEMKIND == self.iKindList[i].CD_DEF){
+	            			bssInfoDataVO.param.NM_ITEMKIND = self.iKindList[i].NM_DEF;
+	            		}
+	            	}
+	            	imageList.push(self.fileMainVO.imgSrc);
+	            	imageList.push(self.fileSmallVO.imgSrc);
+	            	for(var i = 0 ; i < self.fileDExVO.currentDataList.length ; i++ ){
+	            		if(self.fileDExVO.currentDataList[i].phantom){
+	            			DexImage.push(self.fileDExVO.currentDataList[i].imgSrc);
+	            		}else{
+	            			DexImage.push(self.fileDExVO.currentDataList[i].NM_FILEPATH);
+	            		}
+	            	}
+	            	for(var i = 0 ; i < self.fileDImageVO.currentDataList.length ; i++ ){
+	            		if(self.fileDImageVO.currentDataList[i].phantom){
+	            			Dimage.push(self.fileDImageVO.currentDataList[i].imgSrc);
+	            		}else{
+	            			Dimage.push(self.fileDImageVO.currentDataList[i].NM_FILEPATH);
+	            		}
+	            	}
+	            	imageList.push(DexImage);
+	            	imageList.push(Dimage);
+	            	paramList.push(imageList);
+	            	paramList.push(bssInfoDataVO.param);
+	            	if(bssInfoDataVO.param.CD_OPTTP == "002" || bssInfoDataVO.param.CD_OPTTP == "003"){
+		            	var grid = $("#gridOpt"+bssInfoDataVO.param.CD_OPTTP).data("kendoGrid");
+		            	paramList.push(grid._data);
+	            	}
+	            	itBssItemSvc.itemPreviewModal(paramList).then(function() {    
 	            		// 파람 src ctgr 
 					});
 	            };
 	            
 	            // 옵션유형 바뀔떄
 	            bssInfoDataVO.optChange = function(){
-	            	console.log(bssInfoDataVO.param.CD_OPTTP  +" <---바뀔 opptp  "+ bssInfoDataVO.oriOPTTP+" <---원래 opptp  ");
-	            	var grid = $("#gridOpt"+bssInfoDataVO.oriOPTTP).data("kendoGrid");
-	            	if(grid.dataSource){
-		            	if(bssInfoDataVO.oriOPTTP != bssInfoDataVO.param.CD_OPTTP && grid.dataSource.hasChanges() && (bssInfoDataVO.param.CD_OPTTP == "002" || bssInfoDataVO.param.CD_OPTTP == "003")){
+	            	if(bssInfoDataVO.tempOPTTP == "002" || bssInfoDataVO.tempOPTTP == "003"){
+	            	var grid = $("#gridOpt"+bssInfoDataVO.tempOPTTP).data("kendoGrid");
+		            	if(bssInfoDataVO.tempOPTTP != bssInfoDataVO.param.CD_OPTTP && grid.dataSource._data.length != 0){
 		            		if (confirm("원래의 옵션이 취소됩니다.\n계속 하시겠습니까?")) {
 	        					grid.cancelChanges();
 		            		}else{
 		            			$timeout(function() {
-		            				bssInfoDataVO.param.CD_OPTTP = bssInfoDataVO.oriOPTTP;
+		            				bssInfoDataVO.param.CD_OPTTP = bssInfoDataVO.tempOPTTP;
 		            			});
 		            		}
 		            	}
+		            	bssInfoDataVO.tempOPTTP = bssInfoDataVO.param.CD_OPTTP;
 	            	}
 	            };
 	            
@@ -925,7 +947,8 @@
 	            
 	            // 유효성 체크
 	            bssInfoDataVO.isValid = function (param) {
-	                var data = param;
+	                var data = param,
+	                	self = this;
 	                
 	                // --------- 상품정보
 	                // 중복확인
@@ -948,6 +971,13 @@
 		                return edt.invalidFocus("ctgr1", "[필수] 상품분류를 선택해주세요.");
 	                }
                     
+                    // 바코드
+                    if (data.YN_BCD == "N"){
+                    	if(!(data.DC_BCD).trim()){
+                    		return edt.invalidFocus("DC_BCD", "[필수] 바코드 없는 사유를 입력해주세요.");
+                    	}
+                    }
+                    
                     // 상품종류
 	                if (!(data.CD_ITEMKIND).trim()) {
 		                return edt.invalidFocus("CD_ITEMKIND", "[필수] 상품종류를 선택해주세요.");
@@ -964,11 +994,25 @@
 	                }
 
 	                // 이미지 4개
-	                /*if (data.DC_REPREMI.email1 || data.DC_REPREMI.email2) {
-						if (!/^[-A-Za-z0-9_]+[-A-Za-z0-9_.]*[@]{1}[-A-Za-z0-9_]+[-A-Za-z0-9_.]*[.]{1}[A-Za-z]{2,5}$/.test(data.DC_REPREMI.email1 +"@"+ data.DC_REPREMI.email2)) {
-							return edt.invalidFocus("userEmail", "[형식] 이메일은 유효하지 않은 형식입니다.");
-						}
-	                }*/
+	                // - 대표이미지
+	                if(!self.fileMainVO.fileName || self.fileMainVO.fileName==""){
+	                	 return edt.invalidFocus("filevo-004", "[필수] 대표이미지를  등록해주세요.");
+	                }
+	                
+	                // - 작은이미지
+	                if(!self.fileSmallVO.fileName || self.fileSmallVO.fileName==""){
+	                	 return edt.invalidFocus("fileSmallVO", "[필수] 작은이미지를 등록해주세요.");
+	                }
+	                
+	                // - 상세설명
+	                if(self.fileDExVO.currentDataList.length == 0){
+	                	 return edt.invalidFocus("fileDExVO", "[필수] 상세설명이미지를  등록 해주세요.");
+	                }
+	                
+	                // - 상세이미지
+	                if(self.fileDImageVO.currentDataList.length == 0){
+	                	 return edt.invalidFocus("fileDImageVO", "[필수] 상세이미지를  등록 해주세요.");
+	                }
 	                
 	                // --------- 판매정보
 	                // 구매가
@@ -989,8 +1033,10 @@
                     // --------- 제조 정보
                     
                     // 출시일자 형식
-                    if (!moment(data.DT_RLS, "YYYY-MM-DD", true).isValid()) {
-	                    return edt.invalidFocus("DT_RLS", "[형식] 출시일자는 유효하지 않은 형식입니다.(ex-\"2014-11-18\")");
+                    if(data.DT_RLS){
+	                    if (!moment(data.DT_RLS, "YYYY-MM-DD", true).isValid()) {
+		                    return edt.invalidFocus("DT_RLS", "[형식] 출시일자는 유효하지 않은 형식입니다.(ex-\"2014-11-18\")");
+	                    }
                     }
                     
                     // 유효기간 
@@ -1000,10 +1046,20 @@
                         }
                     }
                     
+                    // --------- 배송정보
+                    
+                    if(bssInfoDataVO.param.CD_ITEMSHPTP == "999"){
+                    	if(!(data.NM_ITEMSHPTP).trim()){
+                    		return edt.invalidFocus("NM_ITEMSHPTP", "[형식] 상품배송유형 기타 란에 유효하지 않은 형식입니다.");
+                    	}
+                    }else{
+                    	bssInfoDataVO.param.NM_ITEMSHPTP ="";
+                    }
+                    
                     // --------- 옵션 / 재고
                     
-                    var grid = $("#gridOpt"+bssInfoDataVO.param.CD_OPTTP).data("kendoGrid");
 	                if(bssInfoDataVO.param.CD_OPTTP=="002" ||  bssInfoDataVO.param.CD_OPTTP=="003"){
+	                    var grid = $("#gridOpt"+bssInfoDataVO.param.CD_OPTTP).data("kendoGrid");
 	                    if(grid._data.length == 0){
 	                    	return edt.invalidFocus("gridOpt"+bssInfoDataVO.param.CD_OPTTP, "[필수] 옵션을 입력해주세요.");
 	                    }
@@ -1013,6 +1069,6 @@
                 };
 	            	      	            
 		        //초기 화면 로드시 조회
-		        bssInfoDataVO.getInitializeOrdInfo();
+		        bssInfoDataVO.getInitializeItemInfo();
             }]);
 }());
