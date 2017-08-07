@@ -250,6 +250,9 @@
                 			else {
                 				self.doUploadAll();
                 			}
+                    		loFnSuccessCallBack = fnSuccessCallBack;
+                    		loFnFailCallBack = fnFailCallBack;
+                    		
                 			return;
                 		}
                 		

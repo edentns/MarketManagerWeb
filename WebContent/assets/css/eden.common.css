@@ -82,6 +82,35 @@ input.box-control {background-color: #fff; border: 1px solid #dfdfdf; border-top
 
 .tbl-type1 tbody tr.statistics td, .tbl-type1 tbody tr.statistics th {background-color: rgba(234,234,234,0.1); font-weight: bold; color: #b81900;}
 
+.tbl-type1-col {}
+.tbl-type1-col .box-control {font-size: 11px;}
+.tbl-type1-col table {width: 100%; text-align: left;}
+.tbl-type1-col thead tr td, .tbl-type1 tbody tr td, .tbl-type1 tfoot tr td {vertical-align: middle;}
+.tbl-type1-col thead th {padding: 4px 0; background: #eee; border-right: 1px solid #dadada; color: #303030; text-align: center;}
+.tbl-type1-col thead tr:first-child th {border-top: 2px solid #bababa !important;}
+.tbl-type1-col thead th.first {border-right: 1px solid #bababa;}
+.tbl-type1-col thead th.last,
+.tbl-type1-col tbody td.last,
+.tbl-type1-col tfoot td.last {border-right: none;}
+.tbl-type1-col thead th.btline {border-bottom: 1px solid #dadada;}
+.tbl-type1-col tbody th {padding: 4px 4px; border-right: 1px solid #bababa; border-bottom: 1px solid #dadada; text-align: center; font-weight: normal; color: #606060;}
+.tbl-type1-col tbody tr.pointdata th,
+.tbl-type1-col tbody tr.pointdata td,
+.tbl-type1-col tbody tr th.pointdata {background: #eee; font-weight: bold; color: #303030;}
+.tbl-type1-col tbody tr td button.tbl-icon-btn, .tbl-type1 thead tr th button.tbl-icon-btn {margin: 0; padding: 0; border: 0px; background-color: transparent;}
+.tbl-type1-col tbody tr td button.tbl-icon-btn i, .tbl-type1 thead tr th button.tbl-icon-btn i {margin: 0; padding: 0; vertical-align: -27%; font-size: 11px;}
+.tbl-type1-col tbody th,
+.tbl-type1-col tbody td,
+.tbl-type1-col tfoot th,
+.tbl-type1-col tfoot td {padding: 4px 4px !important; border-right: 1px solid #dadada; border-bottom: 1px solid #dadada;color: #606060;}
+.tbl-type1-col tfoot th {background: #eee; border-right: 1px solid #bababa; color: #303030; text-align: center; border-top: 2px solid #bababa;}
+.tbl-type1-col tfoot td {background: #eee; font-weight: bold; color: #303030; border-top: 2px solid #bababa;}
+
+.tbl-type1 tbody tr td a.btn {margin:0 !important;}
+.tbl-type1 tbody.hover tr:hover td {background-color: rgba(0,84,255, 0.2); cursor: auto;}
+
+.tbl-type1 tbody tr.statistics td, .tbl-type1 tbody tr.statistics th {background-color: rgba(234,234,234,0.1); font-weight: bold; color: #b81900;}
+
 
 /* eden div table */
 .eden-table {position: relative; box-sizing: content-box; box-sizing: border-box; width: 100%;}

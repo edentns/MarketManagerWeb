@@ -12,7 +12,7 @@
             views	: {
                 contentView	: {
                     templateUrl	: "app/contents/99sy/sy01Dashboard/templates/sy.Dashboard.tpl.html",
-                    controller  : "sy.DashboardCtrl",
+                    controller  : "sy.DashboardCtrl as vm",
                     resolve		: {
                         resData: ["AuthSvc", "$q", function (AuthSvc, $q) {
                             var defer 	= $q.defer(),

@@ -263,11 +263,14 @@
 				return $modal.open(defaults);
 				};
 				
-				self.itemPreviewModal = function (options) {
+				self.itemPreviewModal = function (src ,options) {
 					var self = this,
 					defaults = {
-						templateUrl: "app/shared/modal/mo09CopyItemOpt/modal.CopyOpt.tpl.html",
-						controller : "modal.otherOptCopyCtrl",
+						templateUrl: "app/shared/modal/mo10ItemPreview/modal.itemPreview.tpl.html",
+						controller : "modal.itemPreviewCtrl",
+						resolve    : { sendData:function(){
+							return src;
+							}},
 						windowClass: 'app-modal-window'
 					};
 

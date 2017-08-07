@@ -3,54 +3,11 @@
         <div id="app-content-header">
             <ol class="breadcrumb">
                 <li><a href="#99sy/syDashboard"><i class="fa fa-home fa-2x"></i></a></li>
-                <li><a href="#02it/itBssItem">기본상품관리 / 신규등록</a></li>
+                <li><a href="#02it/itBssItem/list">기본상품관리</a></li>
             </ol>
         </div>
     </div>
-    
-    <div class="row">
-        <!-- 옵션/재고 정보 -->
-        <div class="content-area-container col-xs-12">
-        	<div data-content-box-layer data-box-title="bssInfoDataVO.opInfo.boxTitle">
-        		<form class="search-type1">
-                	<table class="table-bordered">
-	                	<colgroup>
-	                           <col style="width: 13%;">
-	                           <col style="width: 20%;">
-	                           <col style="width: 13%;">
-	                           <col style="width: 20%;">
-	                           <col style="width: 13%;">
-	                           <col style="width: 20%;">
-	                       </colgroup>
-	                       <tbody>
-	                       	<tr>
-	                       		<th>옵션유형 선택</th>
-	                       		<td colspan="3">
-	                       			<div data-ng-repeat = "list in bssInfoDataVO.optList" style="float: left">
-		                         		<input type="radio" name="optRadio" data-ng-model="bssInfoDataVO.param.CD_OPTTP" value="{{list.CD_DEF}}" >
-		                         		<label>
-		                         			{{list.NM_DEF}}
-		                         		</label>
-		                         	</div>
-		                        </td>
-	                       		<th></th>
-	                       		<td></td>
-	                       	</tr>
-	                       	<tr>
-	                       		<th>상품옵션종류</th>
-	                       		<td colspan="5">
-									<kendo-button data-ng-if="bssInfoDataVO.param.CD_OPTTP!='001'" ng-click = "bssInfoDataVO.basicOptGet(bssInfoDataVO.param.CD_OPTTP)">기본옵션조회 및 설정</kendo-button>
-	                                <kendo-button data-ng-if="bssInfoDataVO.param.CD_OPTTP!='001'" ng-click = "bssInfoDataVO.otherOptCopy(bssInfoDataVO.param.CD_OPTTP)">다른상품옵션복사하기</kendo-button>
-								</td>
-	                       	</tr>
-	                       </tbody>
-	                </table>
-	                <div data-ng-if="bssInfoDataVO.param.CD_OPTTP=='002'"> <kendo-grid options = "gridOpt1VO" id = "gridOpt1"></kendo-grid> </div>
-	                <div data-ng-if="bssInfoDataVO.param.CD_OPTTP=='003'"> <kendo-grid options = "gridOpt2VO" id = "gridOpt2"></kendo-grid> </div>
-                </form>
-            </div>
-        </div>        
-    </div>
+    <kendo-button type="botton" title="미리보기" data-ng-click="bssInfoDataVO.goPreview()" style="width:80px;"><span class="k-icon k-i-window"></span>미리보기</kendo-button>
     
 	<div class="row">
         <!-- 상품 정보 -->
@@ -70,9 +27,9 @@
 	                       		<td colspan="3">
 	                       		   <span data-ng-if="page.isWriteable()">
 	                                   <input type="text" class="form-control wid-x4" id="CD_SIGNITEM" name="CD_SIGNITEM" title="상품코드 입력"
-	                                          maxlength="15" data-ng-model="bssInfoDataVO.param.CD_SIGNITEM">
+	                                          maxlength="15" data-ng-model="bssInfoDataVO.param.CD_SIGNITEM" ng-change = "bssInfoDataVO.duplChange()">
 	                               </span>
-	                               <kendo-button ng-click ="bssInfoDataVO.duplCheck()">중복확인</kendo-button>
+	                               <kendo-button ng-click ="bssInfoDataVO.duplCheck()" id="duple">중복확인</kendo-button>
 	                               <kendo-button ng-click ="bssInfoDataVO.itemCopyModal()">상품복사등록</kendo-button>
                                 </td>
 	                       	</tr>
@@ -205,21 +162,21 @@
 	                       		<th><span class="form-required">* </span>구매가</th>
 	                       		<td>
 	                       		   <span style="width: 100%">
-	                                   <input type="text" class="form-control wid-x4" id="B_ITEMPRC" name="B_ITEMPRC" title="구매가"
-	                                          maxlength="15" data-ng-model="bssInfoDataVO.param.B_ITEMPRC" style="width: 95%;text-align: right;" >
+	                                   <input type="text" class="form-control wid-x4" id="B_ITEMPRC" name="B_ITEMPRC" title="구매가" data-eden-type="kor"
+	                                          maxlength="15" data-ng-model="bssInfoDataVO.param.B_ITEMPRC" style="width: 95%;text-align: right;" ng-keyup="bssInfoDataVO.inputNumber(bssInfoDataVO.param.B_ITEMPRC, 'B')">
 	                               </span>
 	                       		</td>
 	                       		<th><span class="form-required">* </span>과세구분</th>
 	                       		<td colspan="3">
 	                       		   <div data-ng-repeat = "list in bssInfoDataVO.taxList" style="float: left;">
-		                         		<input type="radio" name="taxRadio" data-ng-model="bssInfoDataVO.param.CD_TAXCLFT" value="{{list.CD_DEF}}" data-ng-change="bssInfoDataVO.taxChange()">
+		                         		<input type="radio" name="taxRadio" data-ng-model="bssInfoDataVO.param.CD_TAXCLFT" value="{{list.CD_DEF}}" data-ng-change="bssInfoDataVO.taxChange()" >
 		                         		<label >
 		                         			{{list.NM_DEF}}
 		                         		</label>
 		                         		<sapn data-ng-if = "list.CD_DEF == '001'">
 		                         				&nbsp;&nbsp;과세율
 		                         			<input type="text" class="form-control wid-x4" id="RT_TAX" name="RT_TAX" title="과세율 입력"
-	                                          	maxlength="2" data-ng-model="bssInfoDataVO.param.RT_TAX" style="text-align: right;" ng-keyup="bssInfoDataVO.sprcCal()">%
+	                                          	maxlength="2" data-ng-model="bssInfoDataVO.param.RT_TAX" style="text-align: right;" ng-keyup="bssInfoDataVO.sprcCal('', bssInfoDataVO.param.RT_TAX ,'R')">%
 		                         		</sapn>
 		                           </div>
 	                       		</td>
@@ -227,13 +184,13 @@
 	                       	<tr>
 	                       		<th><span class="form-required">* </span>판매가</th>
 	                       		<td style="border: 0px"><input type="text" class="form-control wid-x4" id="S_ITEMPRC" name="S_ITEMPRC" title="판매가 입력"
-	                                          maxlength="15" data-ng-model="bssInfoDataVO.param.S_ITEMPRC" style="width: 95%;text-align: right;" ng-keyup="bssInfoDataVO.sprcCal()">
+	                                          maxlength="15" data-ng-model="bssInfoDataVO.param.S_ITEMPRC" style="width: 95%;text-align: right;" ng-keyup="bssInfoDataVO.sprcCal('',bssInfoDataVO.param.S_ITEMPRC, 'S')">
 	                            </td>
 	                            <td style="border: 0px">
 	                            	<label>&nbsp; =&nbsp;&nbsp; 상품금액</label></td>
 	                            <td style="border: 0px" colspan="2">
 	                            	<input type="text" class="form-control wid-x4" id="tax" name="tax" title="상품금액 입력"
-	                                          maxlength="15" data-ng-model="bssInfoDataVO.tax" style="width: 69%" ng-keyup="bssInfoDataVO.sprcCal('tax')">
+	                                          maxlength="15" data-ng-model="bssInfoDataVO.tax" style="width: 69%" ng-keyup="bssInfoDataVO.sprcCal('tax',bssInfoDataVO.tax, 'T')">
 	                                <label>&nbsp;&nbsp; +&nbsp;&nbsp; 과세금액 ( &nbsp;&nbsp; {{bssInfoDataVO.taxValue}} &nbsp;&nbsp; )</label>
 	                            </td>
 	                       	</tr>
@@ -243,12 +200,12 @@
 	                       		    <select class="form-control wid-x5" id="CD_PCSUNIT" title="상품상태"
                                             data-ng-model="bssInfoDataVO.param.CD_PCSUNIT" style="width: 150px"
                                             data-ng-options="item.CD_DEF as item.NM_DEF for item in bssInfoDataVO.pscUnitList">
-                                        <option value="">상태선택</option>
+                                        <option value="">단위선택</option>
                                     </select>
                                 </td>
 	                       		<th>최소구매수량</th>
-	                       		<td><input type="text" class="form-control wid-x4" id="QT_MINPCS" name="QT_MINPSC" title="최소구매수량입력"
-	                                   maxlength="10" data-ng-model="bssInfoDataVO.param.QT_MINPCS" style="width: 95%;text-align: right;" >
+	                       		<td><input type="text" class="form-control wid-x4" id="QT_MINPCS" name="QT_MINPCS" title="최소구매수량입력"
+	                                   maxlength="10" data-ng-model="bssInfoDataVO.param.QT_MINPCS" style="width: 95%;text-align: right;" ng-keyup="bssInfoDataVO.inputOnlyNum( bssInfoDataVO.param.QT_MINPCS , 'Q')">
 	                            </td>
 	                       		<th><span class="form-required">* </span>성인인증</th>
 	                       		<td><input type="radio" name="adulRaBtn"
@@ -326,8 +283,8 @@
                                         <option value="N">없음</option>
                                         <option value="Y">있음</option>
                                     </select>
-                                    <input type="text" class="form-control wid-x5" data-jquery-date id="DTS_VLD" title="사유 입력"
-			                                maxlength="20" data-ng-model="bssInfoDataVO.param.DTS_VLD" placeholder="'1988-01-21' 포멧으로 입력해주세요." style="width: 77%" readonly="true">
+                                    <input type="text" class="form-control wid-x5" data-jquery-date id="DTS_VLD" title="사유 입력" data-ng-if="bssInfoDataVO.param.YN_VLDPRDUSE=='Y'"
+			                                maxlength="20" data-ng-model="bssInfoDataVO.param.DTS_VLD" placeholder="'1988-01-21' 포멧으로 입력해주세요." style="width: 77%">
 	                       		</td>
 	                       	</tr>
 	                       	<tr>
@@ -448,7 +405,49 @@
         </div>        
     </div>
     
-    
+    <div class="row">
+        <!-- 옵션/재고 정보 -->
+        <div class="content-area-container col-xs-12">
+        	<div data-content-box-layer data-box-title="bssInfoDataVO.opInfo.boxTitle">
+        		<form class="search-type1">
+                	<table class="table-bordered">
+	                	<colgroup>
+                           <col style="width: 13%;">
+                           <col style="width: 20%;">
+                           <col style="width: 13%;">
+                           <col style="width: 20%;">
+                           <col style="width: 13%;">
+                           <col style="width: 20%;">
+                       </colgroup>
+	                       <tbody>
+	                       	<tr>
+	                       		<th>옵션유형 선택</th>
+	                       		<td colspan="3">
+	                       			<div data-ng-repeat = "list in bssInfoDataVO.optList" style="float: left">
+		                         		<input type="radio" name="optRadio" data-ng-model="bssInfoDataVO.param.CD_OPTTP" value="{{list.CD_DEF}}" data-ng-change="bssInfoDataVO.optChange()">
+		                         		<label>
+		                         			{{list.NM_DEF}}
+		                         		</label>
+		                         	</div>
+		                        </td>
+	                       		<th></th>
+	                       		<td></td>
+	                       	</tr>
+	                       	<tr>
+	                       		<th>상품옵션종류</th>
+	                       		<td colspan="5">
+									<kendo-button data-ng-if="bssInfoDataVO.param.CD_OPTTP!='001'" ng-click = "bssInfoDataVO.basicOptGet(bssInfoDataVO.param.CD_OPTTP)">기본옵션조회 및 설정</kendo-button>
+	                                <kendo-button data-ng-if="bssInfoDataVO.param.CD_OPTTP!='001'" ng-click = "bssInfoDataVO.otherOptCopy(bssInfoDataVO.param.CD_OPTTP)">다른상품옵션복사하기</kendo-button>
+								</td>
+	                       	</tr>
+	                       </tbody>
+	                </table>
+	                <div data-ng-if="bssInfoDataVO.param.CD_OPTTP=='002'"> <kendo-grid options = "gridOpt002VO" id = "gridOpt002"></kendo-grid> </div>
+	                <div data-ng-if="bssInfoDataVO.param.CD_OPTTP=='003'"> <kendo-grid options = "gridOpt003VO" id = "gridOpt003"></kendo-grid> </div>
+                </form>
+            </div>
+        </div>        
+    </div>
     
     <div class="row">
         <!-- 인허가 고시 정보 -->
@@ -496,7 +495,7 @@
 	                       		<td colspan="3">
 	                       			<div data-ng-repeat = "list in bssInfoDataVO.ctfList" style="float: left">
 		                         		<input type="radio" name="ctfRadio" data-ng-model="bssInfoDataVO.param.CD_CTFOBJ" value="{{list.CD_DEF}}">
-		                         		<label >
+		                         		<label>
 		                         			{{list.NM_DEF}}
 		                         		</label>
 		                         	</div>

@@ -59,7 +59,7 @@
                 					NM_ITEM:      { },
                 					DC_ITEMABBR:  { },
                 					CD_ITEMCLFT:  { },
-                					NM_ITEM:      { }
+                					NM_OPTTP:     { }
                 				}
                 			}
                 		}

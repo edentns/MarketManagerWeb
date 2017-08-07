@@ -1,9 +1,59 @@
 <div class="modal-header">
-	<h3 class="modal-title">옵션구분 수정</h3>
+	<h3 class="modal-title">상품 미리보기</h3>
 </div>
-<div class="modal-body">
-    <div>
-   		<kendo-grid options="gridCusCodeVO">
-   		</kendo-grid>
-    </div>
+<div class="row">
+	<div class="modal-body" style="margin: 20px;">
+	    <div style="width: 50%;float: left;border: 1px;">
+	   		<img alt="" data-ng-src='{{gridCusCodeVO.CD_CLS}}' style="width: 95%;height: 95%;float: right;">
+	    </div>
+	    <div style="width: 50%;float: right;text-align: left;padding: 10px;background: #F4F4F4;">
+	    	<div class="under-line" style="margin-left: 5px">
+	    		<p>상품번호 : </p>
+	    		<p>123123</p>
+	    		<p>가격</p>
+	    	</div>
+	   		<table style="margin-bottom: 30px">
+	   			<tr>
+	   				<td>
+	   					배송방법
+	   				</td>
+	   				<td>
+	   					123123
+	   				</td>
+	   			</tr>
+	   			</br></br></br>
+	   			<tr class="under-line">
+	   				<td>
+	   					배송비결제
+	   				</td>
+	   				<td>
+	   					123123
+	   				</td>
+	   			</tr>
+   			</table>
+   			<table>
+	   			<tr>
+	   				<td>
+	   					옵션
+	   				</td>
+	   				<td>
+	   					123123
+	   				</td>
+	   			</tr>
+	   		</table>
+	    </div>
+	</div>
 </div>
+
+
+
+
+<style>
+.app-modal-window .modal-dialog {
+  width: 1000px;
+}
+.under-line{
+  border-bottom: 1px solid #EAEAEA;
+}
+
+</style>

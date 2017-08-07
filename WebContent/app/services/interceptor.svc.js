@@ -6,7 +6,7 @@
 	 * @name edtApp.common.service:InterceptorSvc
 	 */
 	angular.module("edtApp.common.service")
-		.factory("InterceptorSvc", ["$rootScope", "$q", "$location", function ($rootScope, $q, $location) {
+		.factory("InterceptorSvc", ["$rootScope", "$q", "$location", "APP_CONFIG", function ($rootScope, $q, $location, APP_CONFIG) {
 			var	reqsTotal 		= 0,	// total request count
 				reqsComplated 	= 0;	// total response count
 
@@ -27,11 +27,36 @@
 						$rootScope.$emit("event:loading", true);
 					}
 
+					if(APP_CONFIG.encrypt &&
+					   config.data && 
+					   config.method !== "GET") {
+						var key = 'ZjE5YmFiM2ZiZGExNDJjNjhjOGYwMGY3';
+						var test = '';
+						if(config.data != null && typeof config.data == 'object') {
+							config.data = JSON.stringify(config.data);
+						}
+						test = edt.aes256.encrypt(config.data, key);
+						config.data = test;
+					}
+					
 					return config;
 				},
 				response: function (config) {
+					var test = null;
 					reqsComplated++;
 
+					if(config.data && config.data.enc) {
+						var key = 'ZjE5YmFiM2ZiZGExNDJjNjhjOGYwMGY3';
+						test = edt.aes256.decrypt(config.data.enc, key);
+						//config.data = JSON.parse(test);
+						try {
+							config.data = JSON.parse(test);
+						}
+						catch(e) {
+							config.data = test;
+						}
+					}
+					
 					if ($rootScope.webApp.loader.auto) {
 						if (reqsComplated >= reqsTotal) {
 							init();
