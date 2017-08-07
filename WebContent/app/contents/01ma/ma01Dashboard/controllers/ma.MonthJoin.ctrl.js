@@ -21,8 +21,8 @@
 	            grid_con_center   = {"class":"table-cell", style: "text-align: center; font-size: 12px"},
 	            grid_con_right    = {"class":"table-cell", style: "text-align: right; font-size: 12px"},
 	            grid_con_left     = {"class":"table-cell", style: "text-align: left; font-size: 12px"},
-	            grid_tot_center   = "<div class='table-cell' style='text-align:center; font-size:12px; color:red;'>총 합계</div>",
-	            grid_tot_right    = "<div class='table-cell' style='text-align:right; font-size:12px; color:red;'>#= sum #</div>",
+	            grid_tot_center   = "<div class='table-footer-cell' style='text-align:center; font-size:12px; color:red;'>총 합계</div>",
+	            grid_tot_right    = "<div class='table-footer-cell' style='text-align:right; font-size:12px; color:red;'>#= sum #</div>",
 	            grid_group_center = "<div class='table-cell' style='text-align:center; font-size:12px; color:blue;'>그룹합계</div>",
 	            grid_group_right  = "<div class='table-cell' style='text-align:right; font-size:12px; color:blue;'>#= sum #</div>",
 	            grid_header       = {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"};
@@ -90,7 +90,7 @@
 	
 	        monthJoin.table = {
 	            search  : {
-	                period      : angular.extend({ type: 'current' }, angular.copy(period))
+	                period      : angular.extend({ type: 'year' }, angular.copy(period))
 	            },
 	            total   : {
 	                CNT_001 : 0,
@@ -157,15 +157,14 @@
           			allowUnsort: false,
           			showIndexes: true
           		},
-          		scrollable: true,
-          		groupable: true,
-          		resizable: true
+          		scrollable: false,
+          		groupable: false
 	        };
 	
 	        monthJoin.chart = {
 	            search: {
 	                selected : '000',
-	                period   : angular.extend({ type: 'current' }, angular.copy(period)),
+	                period   : angular.extend({ type: 'year' }, angular.copy(period)),
 	                changeSelectedData: function() {
 	                	var chart = $("#monthJoinChart").data("kendoChart");
 	                	monthJoin.chart.dataSource.filter({field:"CD_DEF", operator:"startswith", value:monthJoin.chart.search.selected});;

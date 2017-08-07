@@ -167,6 +167,19 @@
                 	me.resetAtGrd = $scope.ordCancelManagementkg;
                 	me.resetAtGrd.dataSource.data([]);	            		            	
 	            };	
+
+	            ordCancelManagementDataVO.isOpen = function (val) {
+	            	if(val) {
+	            		$scope.ordCancelManagementkg.wrapper.height(552);
+	            		$scope.ordCancelManagementkg.resize();
+	            		grdOrdCancelManagementVO.dataSource.pageSize(7);
+	            	}
+	            	else {
+	            		$scope.ordCancelManagementkg.wrapper.height(798);
+	            		$scope.ordCancelManagementkg.resize();
+	            		grdOrdCancelManagementVO.dataSource.pageSize(12);
+	            	}
+	            };
 	            
 	            //조회 유효성 검증
 	            $scope.readValidation = function(idx){       	

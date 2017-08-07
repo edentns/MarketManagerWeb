@@ -68,6 +68,19 @@
                 	else                       me.joinerBetweenDate = ""; 
                 	
 	            };
+
+	            joinerDataVO.isOpen = function (val) {
+	            	if(val) {
+	            		$scope.kg.wrapper.height(593);
+	            		$scope.kg.resize();
+	            		gridJoinerMemVO.dataSource.pageSize(11);
+	            	}
+	            	else {
+	            		$scope.kg.wrapper.height(798);
+	            		$scope.kg.resize();
+	            		gridJoinerMemVO.dataSource.pageSize(20);
+	            	}
+	            };
 	            
 	            var connSetting = $scope.connSetting = {
 			        //가입자 상태

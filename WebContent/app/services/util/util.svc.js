@@ -493,14 +493,14 @@
 
 			this.localStorage = {
 				setItem: function(name, data) {
-					var fixKey 	= user.NO_C +''+ user.CD,
+					var fixKey 	= user.NO_C +''+ user.NO_EMP,
 						key 	= fixKey +''+ MenuSvc.getNO_M($state.current.name) +'-'+ name;
 
 					$window.localStorage.setItem(key, JSON.stringify(data));
 				},
 				
 				getItem: function(name) {
-					var fixKey 	= user.NO_C +''+ user.CD,
+					var fixKey 	= user.NO_C +''+ user.NO_EMP,
 						key 	= fixKey +''+ MenuSvc.getNO_M($state.current.name) +'-'+ name,
 						result;
 
@@ -514,7 +514,7 @@
 				},
                 
                 removeItem: function(name) {
-                    var fixKey 	= user.NO_C +''+ user.CD,
+                    var fixKey 	= user.NO_C +''+ user.NO_EMP,
                         key 	= fixKey +''+ MenuSvc.getNO_M($state.current.name) +'-'+ name;
                     
                     $window.localStorage.removeItem(key);

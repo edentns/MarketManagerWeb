@@ -115,7 +115,19 @@
                 	me.dataTotal = 0;
                 	me.resetAtGrd = $scope.shpbyordkg;
                 	me.resetAtGrd.dataSource.data([]);
-	            };	
+	            };
+
+	            shpbyordDataVO.isOpen = function (val) {
+	            	if(val) {
+	            		$scope.shpbyordkg.wrapper.height(552);
+	            		$scope.shpbyordkg.resize();
+	            	}
+	            	else {
+	            		$scope.shpbyordkg.wrapper.height(798);
+	            		$scope.shpbyordkg.resize();
+	            	}
+	            };
+	            
 	            //popup insert & update Validation
 	            $scope.readValidation = function(idx){
 	            	var result = true;

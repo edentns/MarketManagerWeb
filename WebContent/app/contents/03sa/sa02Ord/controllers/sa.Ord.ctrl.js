@@ -126,7 +126,21 @@
                 	me.dataTotal = 0;
                 	me.resetAtGrd = $scope.ordkg;
                 	me.resetAtGrd.dataSource.data([]);	            		            	
-	            };	
+	            };
+
+	            ordDataVO.isOpen = function (val) {
+	            	if(val) {
+	            		$scope.ordkg.wrapper.height(552);
+	            		$scope.ordkg.resize();
+	            		grdOrdVO.dataSource.pageSize(7);
+	            	}
+	            	else {
+	            		$scope.ordkg.wrapper.height(798);
+	            		$scope.ordkg.resize();
+	            		grdOrdVO.dataSource.pageSize(12);
+	            	}
+	            };
+	            
 	            //popup insert & update Validation
 	            $scope.readValidation = function(idx){
 	            	var result = true;

@@ -169,7 +169,9 @@
 	        		visible: true,
                 	template: '${ series.name } ${ value }건'
 	        	},
-	        	height:200
+	        	chartArea: {
+	        		height:300
+	        	}
 	        };
 	        
 	        mrkSaCnt.chart.options.dataSource = new kendo.data.DataSource({
