@@ -34,6 +34,7 @@
             	$("#divGrd").data("kendoGrid").editRow($(this));
             });
 
+            UtilSvc.gridtooltipOptions.filter = "td";
             notice.tooltipOptions = UtilSvc.gridtooltipOptions;
 	        
 	        notice.gridNoticeVO = {

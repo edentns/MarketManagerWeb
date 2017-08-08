@@ -613,6 +613,8 @@
                 	//id는 유니크한 모델값으로 해야함 안그러면 cancel 시에 row grid가 중복 되는 현상이 발생
                 	//rowTemplate을 사용한 colunm은 lock을 사용할 수 없음	                    	
 	        	};
+	            UtilSvc.gridtooltipOptions.filter = "td div";
+	            grdOrdVO.tooltipOptions = UtilSvc.gridtooltipOptions;
 	            
 	            //kendo grid 체크박스 옵션
                 $scope.onOrdGrdCkboxClick = function(e){

@@ -109,9 +109,11 @@
         </div>
                 
         <!-- 주문 목록 -->          
-		<div class="content-area-container col-xs-12" style="padding:0px 0px 0px 0px;">				
-	        <div id="divOrdGrd" kendo-grid="ordkg" options="gridOrdVO">
-	        </div>	            
+		<div class="content-area-container col-xs-12" style="padding:0px 0px 0px 0px;">		
+			<kendo-tooltip options="gridOrdVO.tooltipOptions">		
+		        <div id="divOrdGrd" kendo-grid="ordkg" options="gridOrdVO">
+		        </div>	            
+		    </kendo-tooltip>
         </div>
     </div>
 </div>
