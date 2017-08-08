@@ -10,8 +10,8 @@
     
     <div class="row">
         <!-- 검색 -->
-        <div class="content-area-container col-xs-12">
-        	<div data-content-box-layer data-box-title="csDataVO.boxTitle">
+        <div class="content-area-container col-xs-12" style="margin:0px 0px -5px 0px;">
+        	<div data-content-box-layer data-box-title="csDataVO.boxTitle" data-is-open="csDataVO.isOpen(val)">
                 <form class="search-type1" id="myForm">
                 	<table>
                         <colgroup>
@@ -98,9 +98,11 @@
         </div>
                 
         <!-- 승인 리스트 -->          
-		<div class="content-area-container col-xs-12" style="padding:50px 0px 0px 0px;">				
-	        <div id="divCsGrd" kendo-grid="cskg" options="gridCsVO">
-	        </div>	            
+		<div class="content-area-container col-xs-12" style="padding:0px 0px 0px 0px;">			
+			<kendo-tooltip options="gridCsVO.tooltipOptions">				
+		        <div id="divCsGrd" kendo-grid="cskg" options="gridCsVO">
+		        </div>	  
+		    </kendo-tooltip>          
         </div>
     </div>
 </div>
@@ -109,7 +111,7 @@
 <script id="cs_template" type="text/x-kendo-template">		
      <tr data-uid="#= uid #">
         <td class="ta-c">
-            <span class="ells"><input type="checkbox" class="checkbox" ng-click="onCsGrdCkboxClick($event)"/></span>
+            <span class="ells"><input type="checkbox" style="margin-left:auto; margin-right:auto;" class="checkbox" ng-click="onCsGrdCkboxClick($event)"/></span>
         </td>
 		<td class="ta-c">
             <span class="seq ells">
@@ -125,14 +127,14 @@
                                	# }else{} #
 			</span>
         </td>
-		<td class="ta-l">
+		<td class="ta-c">
             <span class="ells">
 								# if(DTS_INQREG){ #
                                	#: DTS_INQREG # 
                                	# }else{} #
 			</span>
         </td>
-		<td class="ta-l">
+		<td class="ta-c">
             <span class="ells">
 							   # if(CD_INQSTAT){ #
 							   <co04-cd-to-nm cd="#:CD_INQSTAT#" nm-box="csDataVO.csStatusOp">
@@ -157,19 +159,19 @@
 							   # }else{} #
 			</span>
         </td>
-		<td class="ta-l">
+		<td class="ta-c">
             <span class="ells"># if(DTS_ANSREG){ #
 							   #: DTS_ANSREG #
 						       # }else{} #
 			</span>
         </td> 
-		<td class="ta-l">
+		<td class="ta-c">
             <span class="ells"># if(CD_INQCLFT){ #
 							   <co04-cd-to-nm cd="#:CD_INQCLFT#" nm-box="csDataVO.csQuestionCodeOp">
       						   # }else{} #
 			</span>
         </td>
-		<td class="ta-l">
+		<td class="ta-c">
             <span class="ells"># if(NM_INQ){ #
 					    	   #: NM_INQ #
  							   # }else{} #

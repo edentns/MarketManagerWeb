@@ -103,6 +103,20 @@
                 	me.resetAtGrd = $scope.cskg;
                 	me.resetAtGrd.dataSource.data([]);
 	            };	
+	            
+	            csDataVO.isOpen = function (val) {
+	            	if(val) {
+	            		$scope.cskg.wrapper.height(552);
+	            		$scope.cskg.resize();
+	            		gridCsVO.dataSource.pageSize(16);
+	            	}
+	            	else {
+	            		$scope.cskg.wrapper.height(798);
+	            		$scope.cskg.resize();
+	            		gridCsVO.dataSource.pageSize(25);
+	            	}
+	            };
+	            
 	            //popup insert & update Validation
 	            $scope.readValidation = function(idx){
 	            	var result = true;
@@ -128,7 +142,8 @@
                     	sortable: true,                    	
                         pageable: {
                         	messages: {
-                        		empty: "표시할 데이터가 없습니다."
+                        		empty: "표시할 데이터가 없습니다.",
+                        		display: "총 {2}건 중 {0}-{1}건의 자료 입니다."
                         	}
                         },
                         noRecords: true,
@@ -172,7 +187,7 @@
                     			csDataVO.dataTotal = data.length;
                     			//console.log("변화된 데이터 => ",data.length);
                     		},
-                    		pageSize: 11,
+                    		pageSize: 16,
                     		batch: true,
                     		schema: {
                     			model: {
@@ -270,79 +285,79 @@
 								{
 								   field: "ROW_CHK",
 								   title: "선택",
-								   width: 30,
-								   headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 10px"}
+								   width: 40,
+								   headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}
 							    },    
                		            {
 								   field: "NO_INQ",
 								   title: "문의 번호",
-								   width: 30,
-								   headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 10px"},
+								   width: 130,
+								   headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"},
                		            },
             		            {
                		        	   field: "NM_MRK",
                		        	   title: "마켓명",
                		        	   width: 100,
-               		        	   headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 10px"}
+               		        	   headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}
             		            },
             		            {
                		        	   field: "DTS_INQREG",
                		        	   title: "문의등록일시",
-               		        	   width: 100,
-               		        	   headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 10px"}            		            
+               		        	   width: 130,
+               		        	   headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}            		            
                		            },
 	            		        {
            		        	       field: "CD_INQSTAT",
            		        	       title: "상태",
-           		        	       width: 50,
-           		        	       headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 10px"}
+           		        	       width: 90,
+           		        	       headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}
            		        	    },
             		            {
             		        	   field: "DC_INQTITLE",
             		               title: "문의제목",
-            		               width: 120,
-            		               headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 10px"}
+            		               width: 200,
+            		               headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}
             		            },
             		            {
             		        	   field: "DC_INQCTT",
             		               title: "문의내용",
-            		               width: 70,
-            		               headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 10px"}            		            },
+            		               width: 200,
+            		               headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}            		            },
             		            {
             		        	   field: "DC_ANSCTT",
             		               title: "답변내용",
-            		               width: 80,
-            		               headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 10px"}
+            		               width: 200,
+            		               headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
             		            },
             		            {
             		        	   field: "DTS_ANSREG",
             		               title: "답변일시",
-            		               width: 50,
-            		               headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 10px"},           		               
+            		               width: 130,
+            		               headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},           		               
             		            },
             		            {
             		        	   field: "CD_INQCLFT",
             		        	   title: "문의구분",
-            		        	   width: 50,
-            		        	   headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 10px"}
+            		        	   width: 80,
+            		        	   headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
            		        	    },
            		        	    {
              		        	   field: "NM_INQ",
              		        	   title: "문의자",
-             		        	   width: 50,
-             		        	   headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 10px"}
+             		        	   width: 130,
+             		        	   headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
             		        	},
         		        	    {
              		        	   field: "NM_MRKITEM",
              		        	   title: "상품명",
-             		        	   width: 50,
-             		        	   headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 10px"}
+             		        	   width: 200,
+             		        	   headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
             		        	},
         		        	    {
              		        	   field: "NO_MRKORD",
              		        	   title: "주문번호",
-             		        	   width: 50,
-             		        	   headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 10px"}
+             		        	   width: 130,
+             		        	   headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
             		        	}            		        	
                     	],
                     	dataBound: function(e) {
@@ -362,11 +377,14 @@
                     	},	
                     	resizable: true,
                     	rowTemplate: kendo.template($.trim($("#cs_template").html())),
-                    	height: 500       
+                    	height: 552       
                     	//모델과 그리드 셀을 제대로 연동 안시키면 수정 팝업 연 후 닫을 때 로우가 사라짐(즉 크레에이트인지 에딧인지 구분을 못함)
                     	//id는 유니크한 모델값으로 해야함 안그러면 cancel 시에 row grid가 중복 되는 현상이 발생
         		};
-                                
+
+	            UtilSvc.gridtooltipOptions.filter = "td";
+	            gridCsVO.tooltipOptions = UtilSvc.gridtooltipOptions;
+	            
                 //kendo grid 체크박스 옵션
                 $scope.onCsGrdCkboxClick = function(e){
 	                var element =$(e.currentTarget);
