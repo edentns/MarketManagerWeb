@@ -23,14 +23,14 @@
 		                     </colgroup>
 		                     <tbody>
 		                     <tr>
-		                         <th><span class="form-required">* </span>회사명</th>
+		                         <th>회사명<span class="form-required">* </span></th>
 		                         <td>
 		                             <span data-ng-if="page.isWriteable()">
 		                                 <input type="text" class="form-control wid-x4" id="userNM_C" name="userNM_C" title="회사명 입력"
 		                                        maxlength="50" data-ng-model="syCinfoVO.param.NM_C" data-eden-type="kor">
 		                             </span>
 		                         </td>
-		                         <th><span class="form-required">* </span>대표자명</th>
+		                         <th>대표자명<span class="form-required">* </span></th>
 		                         <td>
 		                             <span data-ng-if="page.isWriteable()">
 		                                 <input type="text" class="form-control wid-x4" id="userNM_RPSTT" name="userNM_RPSTT" title="대표자명 입력"
@@ -39,16 +39,16 @@
 		                         </td>
 		                     </tr>
 		                     <tr data-ng-if="page.isWriteable()">
-		                         <th><span class="form-required">* </span>사업자구분</th>
+		                         <th>사업자구분<span class="form-required">* </span></th>
 		                         <td>
-		                         	<div data-ng-repeat = "list in syCinfoVO.bsnCodeList" style="float: left">
+		                         	<div data-ng-repeat = "list in syCinfoVO.bsnCodeList" style="float: left; margin-right: 7px;">
 		                         		<input type="radio" name="bsnRadio" data-ng-model="syCinfoVO.param.CD_BSNSCLFT" value="{{list.CD_DEF}}">
 		                         		<label >
 		                         			{{list.NM_DEF}}
 		                         		</label>
 		                         	</div>
 		                         </td>
-		                         <th><span class="form-required">* </span>사업자등록번호</th>
+		                         <th>사업자등록번호<span class="form-required">* </span></th>
 		                         <td>
 			                         <span data-ng-if="page.isWriteable()">
 			                                 <input type="text" class="form-control wid-x6" id="userNO_BSNSTGTT" name="userNO_BSNSTGTT" title="사업자등록번호 입력"
@@ -57,14 +57,14 @@
 		                         </td>
 		                     </tr>
 		                     <tr data-ng-if="page.isWriteable()">
-		                         <th><span class="form-required">* </span>통신판매신고번호</th>
+		                         <th>통신판매신고번호<span class="form-required">* </span></th>
 		                         <td>
 		                             <input type="radio" name="comRaBtn" data-ng-change="syCinfoVO.CommsaleChange()" 
-		                             data-ng-model="syCinfoVO.param.YN_COMMSALEREG" value="Y">신고 
+		                             data-ng-model="syCinfoVO.param.YN_COMMSALEREG" value="Y"><label>신고</label>&nbsp&nbsp
 		                             <input type="text" class="form-control wid-x6" id="userNO_COMMSALEREG" name="userNO_COMMSALEREG" title="사업자등록번호 입력"
 			                                maxlength="20" data-ng-model="syCinfoVO.param.NO_COMMSALEREG" readonly="true">
 		                         	 <input type="radio" name="comRaBtn" data-ng-change="syCinfoVO.CommsaleChange()" 
-		                         	 data-ng-model="syCinfoVO.param.YN_COMMSALEREG" value="N">미신고
+		                         	 data-ng-model="syCinfoVO.param.YN_COMMSALEREG" value="N"><label>미신고</label>
 		                         </td>
 		                         <th>법인등록번호</th>
 		                         <td>
@@ -101,7 +101,7 @@
 		                         </td>
 		                         <th>국내/해외배송</th>
 		                         <td>
-		                         	<div data-ng-repeat = "list in syCinfoVO.dmstCodeList" style="float: left">
+		                         	<div data-ng-repeat = "list in syCinfoVO.dmstCodeList" style="float: left; margin-right: 7px;">
 		                         		<input type="radio" name="dmstRadio" data-ng-model="syCinfoVO.param.CD_DMSTFECTSHP" value="{{list.CD_DEF}}">
 		                         		<label >
 		                         			{{list.NM_DEF}}

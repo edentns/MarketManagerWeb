@@ -12,8 +12,6 @@
 	            var page  = $scope.page = new Page({ auth: resData.access }),
 		            today = edt.getToday();
 	            
-            	kendo.culture('ko-KR');// 이거 해야지 원화로 나옴
-	            
 	            //마켓명 드랍 박스 실행	
 	            var mrkName = (function(){
         			UtilSvc.csMrkList().then(function (res) {
@@ -172,6 +170,19 @@
                 	me.resetAtGrd = $scope.shippingkg;
                 	me.resetAtGrd.dataSource.data([]);
 	            };	
+
+	            shippingDataVO.isOpen = function (val) {
+	            	if(val) {
+	            		$scope.shippingkg.wrapper.height(552);
+	            		$scope.shippingkg.resize();
+	            		grdShippngVO.dataSource.pageSize(7);
+	            	}
+	            	else {
+	            		$scope.shippingkg.wrapper.height(798);
+	            		$scope.shippingkg.resize();
+	            		grdShippngVO.dataSource.pageSize(12);
+	            	}
+	            };
 	            
 	            //popup insert & update Validation
 	            $scope.readValidation = function(idx){
@@ -244,7 +255,7 @@
                 	resizable: true,
                 	rowTemplate: kendo.template($.trim($("#shipping_template").html())),
                 	altRowTemplate: kendo.template($.trim($("#shipping_alt_template").html())),
-                	height: 550,
+                	height: 552,
                 	navigatable: true, //키보드로 그리드 셀 이동 가능
                 	toolbar: [{template: kendo.template($.trim($("#shipping_toolbar_template").html()))}],
                 	dataSource: new kendo.data.DataSource({

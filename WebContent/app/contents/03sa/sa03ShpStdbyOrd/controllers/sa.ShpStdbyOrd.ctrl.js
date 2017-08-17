@@ -12,8 +12,6 @@
 	            var page  = $scope.page = new Page({ auth: resData.access }),
 		            today = edt.getToday();
 	            
-	            kendo.culture('ko-KR');// 이거 해야지 원화로 나옴
-	            
 	            //마켓명 드랍 박스 실행	
 	            var mrkName = (function(){
         			UtilSvc.csMrkList().then(function (res) {
