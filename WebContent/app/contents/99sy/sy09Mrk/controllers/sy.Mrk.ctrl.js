@@ -271,9 +271,9 @@
           	                 template: function(e){
         		           		 var returnPWDMsg = "";
         		           		 if(e.NEW_DC_PWD == "" || e.NEW_DC_PWD == null && e.DC_PWD != ""){
-        		           			 returnPWDMsg = "*".repeat(e.DC_PWD_LEN);
+        		           			 if(e.DC_PWD_LEN != null) returnPWDMsg = Array(e.DC_PWD_LEN + 1).join("*");
           		           		 }else if(e.NEW_DC_PWD != "" && e.NEW_DC_PWD  != null){
-          		           			 returnPWDMsg = "*".repeat(e.NEW_DC_PWD.length);
+          		           			 returnPWDMsg = Array(e.NEW_DC_PWD.length + 1).join("*");
           		           		 }
           		           		 return returnPWDMsg;
         		           	 },
@@ -285,9 +285,9 @@
 	          		           	 ,template: function(e){  
 	          		           		 var returnAPIMsg = "";
 	          		           		 if(e.NEW_API_KEY == "" || e.NEW_API_KEY == null && e.API_KEY != ""){
-	          		           			 returnAPIMsg = "*".repeat(e.API_KEY_LEN);
+	          		           		     if(e.API_KEY_LEN != null) returnAPIMsg = Array(e.API_KEY_LEN + 1).join("*");
 	          		           		 }else if(e.NEW_API_KEY != "" && e.NEW_API_KEY != null){
-	          		           			 returnAPIMsg = "*".repeat(e.NEW_API_KEY.length);
+	          		           			 returnAPIMsg = Array(e.NEW_API_KEY.length + 1).join("*");
 	          		           		 }
 	          		           		 return returnAPIMsg;
 	          		           	 },

@@ -101,7 +101,20 @@
                 	me.resetAtGrd = $scope.gridMngMrkUserVO;
                 	me.resetAtGrd.dataSource.data([]);
                 };
-                                                            
+
+                mngMrkDateVO.isOpen = function (val) {
+	            	if(val) {
+	            		$scope.kg.wrapper.height(593);
+	            		$scope.kg.resize();
+	            		gridMngMrkUserVO.dataSource.pageSize(11);
+	            	}
+	            	else {
+	            		$scope.kg.wrapper.height(798);
+	            		$scope.kg.resize();
+	            		gridMngMrkUserVO.dataSource.pageSize(20);
+	            	}
+	            };
+	                                                       
                 //마켓 검색 그리드
                 var gridMngMrkUserVO = $scope.gridMngMrkUserVO = {
                 		autoBind: false,
@@ -120,9 +133,7 @@
                     	boxTitle : "마켓 리스트",
                     	sortable: true,                    	
                         pageable: {
-                        	messages: {
-                        		empty: "표시할 데이터가 없습니다."
-                        	}
+                        	messages: UtilSvc.gridPageableMessages
                         },
                         noRecords: true,
                     	dataSource: new kendo.data.DataSource({
@@ -392,9 +403,9 @@
             		           	 ,template: function(e){
             		           		 var returnPWDMsg = "";
             		           		 if(e.NEW_DC_PWD === "" || e.NEW_DC_PWD === null && e.DC_PWD != ""){
-            		           			 returnPWDMsg = "*".repeat(e.DC_PWD_LEN);
+            		           			 if(e.DC_PWD_LEN != null) returnPWDMsg = Array(e.DC_PWD_LEN + 1).join("*");
 	          		           		 }else if(e.NEW_DC_PWD != "" && e.NEW_DC_PWD  != null){
-	          		           			 returnPWDMsg = "*".repeat(e.NEW_DC_PWD.length);
+	          		           			 returnPWDMsg = Array(e.NEW_DC_PWD.length + 1).join("*");
 	          		           		 }
 	          		           		 return returnPWDMsg;
             		           	 }
@@ -410,9 +421,9 @@
 	          		           	 ,template: function(e){  
 	          		           		 var returnAPIMsg = "";
 	          		           		 if(e.NEW_API_KEY === "" || e.NEW_API_KEY === null && e.API_KEY != ""){
-	          		           			 returnAPIMsg = "*".repeat(e.API_KEY_LEN);
+	          		           			 if(e.API_KEY_LEN != null) returnAPIMsg = Array(e.API_KEY_LEN + 1).join("*");
 	          		           		 }else if(e.NEW_API_KEY != "" && e.NEW_API_KEY != null){
-	          		           			 returnAPIMsg = "*".repeat(e.NEW_API_KEY.length);
+	          		           			 returnAPIMsg = Array(e.NEW_API_KEY.length + 1).join("*");
 	          		           		 }
 	          		           		 return returnAPIMsg;
 	          		           	 }
@@ -437,7 +448,7 @@
                     	editable: {
                     	    confirmation: "삭제 하시겠습니까?",
                     	},
-                    	height: 590
+                    	height: 593
         		};        
             }]);
 }());

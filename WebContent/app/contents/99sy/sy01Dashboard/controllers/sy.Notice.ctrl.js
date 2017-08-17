@@ -47,10 +47,7 @@
 				url : APP_CONFIG.domain +"/ut05FileUpload",
 				sortable: true,                    	
 			    pageable: {
-			    	messages: {
-			    		empty: "표시할 데이터가 없습니다.",
-			    		display: "총 {2}건 중 {0}-{1}건의 자료 입니다."
-			    	}
+			    	messages: UtilSvc.gridPageableMessages
 			    },
 			    noRecords: true,
 				currentFileList:[],

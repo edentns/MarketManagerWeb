@@ -60,6 +60,42 @@
             		);
 	            };
 
+	            ma04MrkOptVO.isOpen = function (val) {
+	            	var iMinHeight = 317
+	            	  , iMaxHeight = 398
+	            	  , iMinPageS = 9
+	            	  , iMaxPageS = 12;
+	            	
+	            	if(val) {
+	            		$scope.kg0.wrapper.height(iMinHeight);
+	            		$scope.kg1.wrapper.height(iMinHeight);
+	            		$scope.kg2.wrapper.height(iMinHeight);
+	            		$scope.kg3.wrapper.height(iMinHeight);
+	            		$scope.kg0.resize();
+	            		$scope.kg1.resize();
+	            		$scope.kg2.resize();
+	            		$scope.kg3.resize();
+	            		ma04MrkOptGridVO[0].dataSource.pageSize(iMinPageS);
+	            		ma04MrkOptGridVO[1].dataSource.pageSize(iMinPageS);
+	            		ma04MrkOptGridVO[2].dataSource.pageSize(iMinPageS);
+	            		ma04MrkOptGridVO[3].dataSource.pageSize(iMinPageS);
+	            	}
+	            	else {
+	            		$scope.kg0.wrapper.height(iMaxHeight);
+	            		$scope.kg1.wrapper.height(iMaxHeight);
+	            		$scope.kg2.wrapper.height(iMaxHeight);
+	            		$scope.kg3.wrapper.height(iMaxHeight);
+	            		$scope.kg0.resize();
+	            		$scope.kg1.resize();
+	            		$scope.kg2.resize();
+	            		$scope.kg3.resize();
+	            		ma04MrkOptGridVO[0].dataSource.pageSize(iMaxPageS);
+	            		ma04MrkOptGridVO[1].dataSource.pageSize(iMaxPageS);
+	            		ma04MrkOptGridVO[2].dataSource.pageSize(iMaxPageS);
+	            		ma04MrkOptGridVO[3].dataSource.pageSize(iMaxPageS);
+	            	}
+	            };
+	                  
 				var ma04MrkOptGridVO = $scope.ma04MrkOptGridVO = [{
 	        			boxTitle: "대분류",
 	                    selectable: "multipleLarge"
@@ -88,7 +124,10 @@
 	        				retry: "갱신",
 	        			};
 	            	localSelf.navigatable              = true;
-	            	localSelf.pageable                 = true;
+	            	localSelf.pageable = {
+	            		messages: UtilSvc.gridPageableMessages
+	            	};
+	            	//localSelf.pageable                 = true;
 	            	//localSelf.enableRowSelection       = true;
 	            	//localSelf.enableRowHeaderSelection = false;
 	            	//localSelf.multiSelect              = false;
@@ -102,7 +141,7 @@
         					read: function(e) {
         					}
         				},
-        				pageSize: 10,
+        				pageSize: 9,
         				schema: {
         					model: {
             					id:"ID_CTGR",

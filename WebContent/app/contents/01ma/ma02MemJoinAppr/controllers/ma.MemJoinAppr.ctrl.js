@@ -132,9 +132,7 @@
                     	boxTitle : "회원 리스트",
                     	sortable: true,                    	
                         pageable: {
-                        	messages: {
-                        		empty: "표시할 데이터가 없습니다."
-                        	}
+                        	messages: UtilSvc.gridPageableMessages
                         },
                         noRecords: true,
                     	dataSource: new kendo.data.DataSource({
@@ -331,7 +329,7 @@
                     	},*/
                     	resizable: true,
                     	rowTemplate: kendo.template($.trim($("#template").html())),
-                    	height: 590
+                    	height: 593
         		};    
                 
                 $scope.checkedIds = [];

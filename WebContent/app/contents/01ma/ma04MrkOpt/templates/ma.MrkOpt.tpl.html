@@ -10,7 +10,7 @@
     <div class="row">
         <!-- 검색 -->
         <div class="content-area-container col-xs-12" style="margin:0px 0px -5px 0px;">
-        	<div data-content-box-layer data-box-title="ma04MrkOptVO.boxTitle">
+        	<div data-content-box-layer data-box-title="ma04MrkOptVO.boxTitle" data-is-open="ma04MrkOptVO.isOpen(val)">
                 <form class="search-type1" id="myForm">
                 	<table>
                         <colgroup>
@@ -50,22 +50,18 @@
         <!-- 조회 리스트 -->          
 		<div class="content-area-container col-xs-12" style="padding:0px 0px 0px 0px;">
 			<div class="content-area-container col-xs-4">
-                <kendo-grid options="ma04MrkOptGridVO[0]">
-                </kendo-grid>
+				<div kendo-grid="kg0" options="ma04MrkOptGridVO[0]"></div>
 			</div>
 			<div class="content-area-container col-xs-4">
-                <kendo-grid options="ma04MrkOptGridVO[1]">
-                </kendo-grid>
+				<div kendo-grid="kg1" options="ma04MrkOptGridVO[1]"></div>
 			</div>
 			<div class="content-area-container col-xs-4">
-                <kendo-grid options="ma04MrkOptGridVO[2]">
-                </kendo-grid>
+				<div kendo-grid="kg2" options="ma04MrkOptGridVO[2]"></div>
 			</div>
         </div>
               
 		<div class="content-area-container col-xs-12" style="padding:0px 0px 0px 0px;">
-            <kendo-grid options="ma04MrkOptGridVO[3]">
-            </kendo-grid>
+			<div kendo-grid="kg3" options="ma04MrkOptGridVO[3]"></div>
         </div>
     </div>
 </div>

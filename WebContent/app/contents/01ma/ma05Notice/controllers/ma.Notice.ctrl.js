@@ -193,9 +193,7 @@
                     	boxTitle : "공지 리스트",
                     	sortable: true,                    	
                         pageable: {
-                        	messages: {
-                        		empty: "표시할 데이터가 없습니다."
-                        	}
+                        	messages: UtilSvc.gridPageableMessages
                         },
                         noRecords: true,
                     	dataSource: new kendo.data.DataSource({
