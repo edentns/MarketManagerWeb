@@ -36,7 +36,8 @@
             			});  
                 	}
 				};
-            	            
+                
+	            	            
 	            var bssItemDataVO = $scope.bssItemDataVO = {
 	            	boxTitle : "검색",
 	            	setting : {
@@ -73,20 +74,7 @@
 	            bssItemDataVO.inQuiry = function(){
 	            	$scope.gridBssVO.dataSource.read();
 	            };	 
-
-	            bssItemDataVO.isOpen = function (val) {
-	            	if(val) {
-	            		$scope.gridBssVO.wrapper.height(658);
-	            		$scope.gridBssVO.resize();
-	            		gridBssVO.dataSource.pageSize(11);
-	            	}
-	            	else {
-	            		$scope.gridBssVO.wrapper.height(798);
-	            		$scope.gridBssVO.resize();
-	            		gridBssVO.dataSource.pageSize(15);
-	            	}
-	            };
-	            	
+	            
 	            //초기화버튼
 	            bssItemDataVO.init = function(){
 	            	$window.location.reload();
@@ -135,7 +123,9 @@
                     	boxTitle : "기본상품 리스트",
                     	sortable: false,                    	
                         pageable: {
-                        	messages: UtilSvc.gridPageableMessages
+                        	messages: {
+                        		empty: "표시할 데이터가 없습니다."
+                        	}
                         },
                         noRecords: true,
                     	dataSource: new kendo.data.DataSource({
@@ -488,7 +478,7 @@
                     	},	
                     	resizable: true,
                     	rowTemplate: kendo.template($.trim($("#bss_template").html())),
-                    	height: 658      
+                    	height: 500      
                     	//모델과 그리드 셀을 제대로 연동 안시키면 수정 팝업 연 후 닫을 때 로우가 사라짐(즉 크레에이트인지 에딧인지 구분을 못함)
                     	//id는 유니크한 모델값으로 해야함 안그러면 cancel 시에 row grid가 중복 되는 현상이 발생
         		};

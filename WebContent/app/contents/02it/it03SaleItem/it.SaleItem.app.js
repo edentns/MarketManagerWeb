@@ -8,11 +8,21 @@
 
     saleItemApp.config(["$stateProvider", function ($stateProvider) {
         $stateProvider.state("app.itSaleItem", {
-            url		: "/02it/itSaleItem?menu",
+            url		: "/02it/itSaleItem?:kind?menu&ids",
             views	: {
                 contentView	: {
-                    templateUrl	: "app/contents/02it/it03SaleItem/templates/it.SaleItem.tpl.html",
-                    controller  : "it.SaleItemCtrl",
+                	templateUrl	: function($stateParams){
+                    	if ($stateParams.menu) {
+                            $stateParams.kind = "list";
+                        }
+                    	return "app/contents/02it/it03SaleItem/templates/it.SaleItem"+ edt.getMenuFileName($stateParams.kind) +".tpl.html";
+                    },
+                    controllerProvider  : ["$stateParams",function($stateParams){
+                    	if ($stateParams.menu) {
+                            $stateParams.kind = "list";
+                        }
+                    	return "it.SaleItem"+ edt.getMenuFileName($stateParams.kind) +"Ctrl";                                  
+                    }],
                     resolve		: {
                     	resData: ["AuthSvc", "$q", "sy.CodeSvc", "UtilSvc","$stateParams", function (AuthSvc, $q, SyCodeSvc, UtilSvc, $stateParams) {
                             var defer 	= $q.defer(),
@@ -31,7 +41,10 @@
                     					L_CD_AT_2: "007",
                     					L_CD_AT_3: "005",
                     					L_CD_AT_4: "006"
-                                    };
+                                    },
+                                    cmrkParam = {
+                                		procedureParam: "MarketManager.USP_IT_03SALEITEM_CMRK_GET"
+                                	};
                                 $q.all([
                                         SyCodeSvc.getSubcodeList({cd: "SY_000007", search: "all"}).then(function (result) {
                                             return result.data;
@@ -77,6 +90,9 @@
                                         }),
                                         UtilSvc.getList(fileParam).then(function (res) {
                 	    					return res.data.results;
+                                        }),
+                                        UtilSvc.getList(cmrkParam).then(function (res) {
+                	    					return res.data.results[0];
                                         })
                                     ]).then(function (result) {
                                         resData.taxCodeList   = result[0];
@@ -94,6 +110,7 @@
                                         resData.ctfInCodeList = result[11];
                                         resData.optTypeCodeList = result[12];
                                         resData.optClftCodeList = result[13];
+                                        resData.cmrkList      = result[15];
                     					
                                     	if($stateParams.kind == "detail"){
                 	    					resData.fileMainVOcurrentData = result[14][0][0];

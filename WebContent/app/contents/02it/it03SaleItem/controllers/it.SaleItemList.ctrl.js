@@ -7,21 +7,25 @@
      * 판매상품관리
      */
     angular.module("it.SaleItem.controller")
-        .controller("it.SaleItemCtrl", ["$scope", "$state", "$http", "$window", "$q", "$log", "it.BssItemSvc", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "sy.CodeSvc",
+        .controller("it.SaleItemListCtrl", ["$scope", "$state", "$http", "$window", "$q", "$log", "it.BssItemSvc", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "sy.CodeSvc",
             function ($scope, $state, $http, $window, $q, $log, itBssItemSvc, APP_CODE, $timeout, resData, Page, UtilSvc, SyCodeSvc) {
 	            var page  = $scope.page = new Page({ auth: resData.access }),
 		            today = edt.getToday();
 	            
-	            $scope.bssItemInsert = function() {
-	            	$state.go('app.itBssItem', { kind: "insert", menu: null, ids: "new" });
+	            $scope.saleItemInsert = function(flag) {
+	            	if(flag == "new"){
+	            		$state.go('app.itSaleItem', { kind: "insert", menu: null, ids: flag });
+	            	}else if(flag == "sale"){
+	            		alert("판매등록");
+	            	}
 				};
 
                 $scope.grdDblClickGo = function(cd_item){
-                	$state.go( "app.itBssItem", { kind: "detail", menu: null, ids: cd_item});
+                	$state.go( "app.itSaleItem", { kind: "detail", menu: null, ids: cd_item});
                 };
                 
-                $scope.bssItemDelete = function(a) {
-                	var grid = $scope.gridBssVO,
+                $scope.saleItemDelete = function(a) {
+                	var grid = $scope.gridSaleVO,
                 	    dataItem = grid._data,
                 	    deleteItem = [];
                 	
@@ -32,17 +36,22 @@
                     });
                 	if(confirm('정말로 삭제하시겠습니까?')){
                 		itBssItemSvc.deleteBssItem(deleteItem).then(function(res) {
-            				$scope.gridBssVO.dataSource.read();
+            				$scope.gridSaleVO.dataSource.read();
             			});  
                 	}
 				};
                 
 	            	            
-	            var bssItemDataVO = $scope.bssItemDataVO = {
+	            var saleItemDataVO = $scope.saleItemDataVO = {
 	            	boxTitle : "검색",
 	            	setting : {
 	        			id: "CD_DEF",
 	        			name: "NM_DEF",
+	        			maxNames: 2
+	        		},
+	        		cmrkSetting : {
+	        			id: "NO_MRK",
+	        			name: "NM_MRK",
 	        			maxNames: 2
 	        		},
 	        		signItem : { value: "" , focus: false },
@@ -58,25 +67,28 @@
 	        		iKindIds      : "*",
 	        		iStatList     : [],
 	        		iStatIds      : "*",
+	        		cmrkList      : [],
+	        		cmrkIds       : "*",
 	        		dataTotal     : 0
 	            };	            
 	            
 	            //처음 화면들어왓을때
-	            bssItemDataVO.doQuiry = function(){
-	            	bssItemDataVO.adulYnList  = resData.adulYnList;
-	            	bssItemDataVO.taxClftList = resData.taxCodeList;
-	            	bssItemDataVO.iClftList   = resData.iClftCodeList;
-	            	bssItemDataVO.iKindList   = resData.iKindCodeList;
-	            	bssItemDataVO.iStatList   = resData.iStatCodeList;
+	            saleItemDataVO.doQuiry = function(){
+	            	saleItemDataVO.adulYnList  = resData.adulYnList;
+	            	saleItemDataVO.taxClftList = resData.taxCodeList;
+	            	saleItemDataVO.iClftList   = resData.iClftCodeList;
+	            	saleItemDataVO.iKindList   = resData.iKindCodeList;
+	            	saleItemDataVO.iStatList   = resData.iStatCodeList;
+	            	saleItemDataVO.cmrkList    = resData.cmrkList;
 	            };
 	            
 	            //조회
-	            bssItemDataVO.inQuiry = function(){
-	            	$scope.gridBssVO.dataSource.read();
+	            saleItemDataVO.inQuiry = function(){
+	            	$scope.gridSaleVO.dataSource.read();
 	            };	 
 	            
 	            //초기화버튼
-	            bssItemDataVO.init = function(){
+	            saleItemDataVO.init = function(){
 	            	$window.location.reload();
 	            	/*var self = this;
 	            	$q.all([
@@ -99,18 +111,9 @@
                         	self.iStatCodeList = result[3];
                         });*/
 	            };	
-	            //popup insert & update Validation - 현재 사용안함
-	            $scope.readValidation = function(idx){
-	            	var result = true;
-	            	
-            		if(idx.I_CD_CLFT === null || idx.I_CD_CLFT === ""){ $scope.showPopup("상품을 입력해 주세요."); result = false; return; };
-            		if(idx.I_CD_INQSTAT === null || idx.I_CD_INQSTAT === ""){ $scope.showPopup("상태값을 입력해 주세요."); result = false; return;};
-            		if(idx.I_CD_INQCLFT === null || idx.I_CD_INQCLFT === ""){ $scope.showPopup("문의 구분을 입력해 주세요."); result = false; return;};		
 	            
-	            	return result;
-	            };	               
-	            //기본상품 검색 그리드
-                var gridBssVO = $scope.gridBssVO = {
+	            //판매상품 검색 그리드
+                var gridSaleVO = $scope.gridSaleVO = {
                 		autoBind: false,
                         messages: {                        	
                             requestFailed: "상품정보를 가져오는 중 오류가 발생하였습니다.",
@@ -120,39 +123,32 @@
                             }
                             ,noRecords: "검색된 데이터가 없습니다."
                         },
-                    	boxTitle : "기본상품 리스트",
+                    	boxTitle : "판매상품 리스트",
                     	sortable: false,                    	
                         pageable: {
-                        	messages: UtilSvc.gridPageableMessages
+                        	messages: {
+                        		empty: "표시할 데이터가 없습니다."
+                        	}
                         },
                         noRecords: true,
                     	dataSource: new kendo.data.DataSource({
                     		transport: {
                     			read: function(e) {
                     				var param = {
-                    					procedureParam:"USP_IT_02BSSITEM01_GET&I_CD_CLFT@s|I_NM_ITEM@s|I_NM_MNFR@s|I_YN_ADULCTFC@s|I_CD_TAXCLFT@s|I_CD_ITEMCLFT@s|I_CD_ITEMKIND@s|I_CD_ITEMSTAT@s",
-                    					I_CD_CLFT :	bssItemDataVO.signItem.value,
-                    					I_NM_ITEM : bssItemDataVO.nmItem.value,
-                    		        	I_NM_MNFR :	bssItemDataVO.nmMnfr.value,
-                    					I_YN_ADULCTFC : bssItemDataVO.adulYnIds,
-                    					I_CD_TAXCLFT  : bssItemDataVO.taxClftIds,
-                    					I_CD_ITEMCLFT : bssItemDataVO.iClftIds,
-                    					I_CD_ITEMKIND : bssItemDataVO.iKindIds,
-                    					I_CD_ITEMSTAT : bssItemDataVO.iStatIds
+                    					procedureParam:"USP_IT_03SALEITEM_LIST_GET&I_CD_SIGNITEM@s|I_NM_ITEM@s|I_NM_MNFR@s|I_YN_ADULCTFC@s|I_CD_TAXCLFT@s|I_CD_ITEMCLFT@s|I_CD_ITEMKIND@s|I_NO_MRK@s",
+                    					I_CD_SIGNITEM :	saleItemDataVO.signItem.value,
+                    					I_NM_ITEM : saleItemDataVO.nmItem.value,
+                    		        	I_NM_MNFR :	saleItemDataVO.nmMnfr.value,
+                    					I_YN_ADULCTFC : saleItemDataVO.adulYnIds,
+                    					I_CD_TAXCLFT  : saleItemDataVO.taxClftIds,
+                    					I_CD_ITEMCLFT : saleItemDataVO.iClftIds,
+                    					I_CD_ITEMKIND : saleItemDataVO.iKindIds,
+                    					I_NO_MRK      : saleItemDataVO.cmrkIds
                                     };
                     				UtilSvc.getList(param).then(function (res) {
                 						e.success(res.data.results[0]);
                 					});
-                    			},                    			
-                    			update: function(e) {
-                    				var defer = $q.defer(),
-    	                			 	param = e.data.models[0];
-                    				itBssItemSvc.csUpdate(param).then(function(res) {
-    	                				defer.resolve();
-    	                				$scope.cskg.dataSource.read();
-    	                			});  
-                    				return defer.promise;
-                    			}, 	                		
+                    			},   		
                     			parameterMap: function(e, operation) {
                     				if(operation !== "read" && e.models) {
                     					return {models:kendo.stringify(e.models)};
@@ -161,7 +157,7 @@
                     		},
                     		change: function(e){
                     			var data = this.data();
-                    			bssItemDataVO.dataTotal = data.length;
+                    			saleItemDataVO.dataTotal = data.length;
                     			//console.log("변화된 데이터 => ",data.length);
                     		},
                     		pageSize: 11,
@@ -301,16 +297,26 @@
     															nullable: false
                     				    				   },
                     				    CD_TAXCLFT: 	   {
-   				                    				    	type: "string", 
-   															editable: false, 
-   															nullable: false
-                   				    				   		}
+	   				                    				    	type: "string", 
+	   															editable: false, 
+	   															nullable: false
+                   				    				   	   },
+                   				    	S_CD_ITEM: 	  	   {
+					                    				    	type: "string", 
+																editable: false, 
+																nullable: false
+   				    				   					   },
+   				    				    CD_BDLITEMCPST:    {
+					                    				    	type: "string", 
+																editable: false, 
+																nullable: false
+	               				    				   	   }
                     				}
                     			}
                     		},
                     	}),                    	
                     	navigatable: true, //키보드로 그리드 셀 이동 가능
-                    	toolbar: [{template: kendo.template($.trim($("#bss-toolbar-template").html()))}],
+                    	toolbar: [{template: kendo.template($.trim($("#Sale-toolbar-template").html()))}],
                     	columns: [
                   	            {
   			                        field: "ROW_CHK",
@@ -346,7 +352,7 @@
   				                                }
   			                                ]
   		                        },                        
-  		                      {
+  		                        {
   		                        	field: "CD_PRCCLFT_S",	
   		                            title: "판매가",
   		                            width: 100,		                            
@@ -430,7 +436,7 @@
   				                                }
   			                                ]
   		                        } ,  
-  		                      {
+  		                        {
   		                        	field: "NM_BRD",
   		                            title: "브랜드",
   		                            width: 100,
@@ -444,6 +450,20 @@
   				                                }
   			                                ]
   		                        } ,  
+  		                        {
+  		                        	field: "S_CD_ITEM",
+  		                            title: "판매Site",
+  		                            width: 100,
+  		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
+  		                            columns: [ 
+  		                                       	{
+  				                                    field: "CD_BDLITEMCPST",
+  				                                    title: "묶음상품구성",
+  				                                    width: 100,
+  							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
+  				                                }
+  			                                ]
+  		                        } , 
   		                        {
   		                        	field: "DTS_INSERT",
   		                            title: "등록일시",
@@ -475,19 +495,19 @@
                     		confirmation: false
                     	},	
                     	resizable: true,
-                    	rowTemplate: kendo.template($.trim($("#bss_template").html())),
+                    	rowTemplate: kendo.template($.trim($("#Sale_template").html())),
                     	height: 500      
                     	//모델과 그리드 셀을 제대로 연동 안시키면 수정 팝업 연 후 닫을 때 로우가 사라짐(즉 크레에이트인지 에딧인지 구분을 못함)
                     	//id는 유니크한 모델값으로 해야함 안그러면 cancel 시에 row grid가 중복 되는 현상이 발생
         		};
                                 
                 //kendo grid 체크박스 옵션
-                $scope.onBssGrdCkboxClick = function(e){
+                $scope.onSaleGrdCkboxClick = function(e){
 	                var element =$(e.currentTarget);
 	                
 	                var checked = element.is(':checked'),
 	                	row = element.closest("tr"),
-	                	grid = $scope.gridBssVO,
+	                	grid = $scope.gridSaleVO,
 	                	dataItem = grid.dataItem(row);
 	                 	                
 	                dataItem.ROW_CHK = checked;
@@ -540,6 +560,6 @@
                     }, "warning");
                 };
                 
-                bssItemDataVO.doQuiry();
+                saleItemDataVO.doQuiry();
             }]);
 }());

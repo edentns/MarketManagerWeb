@@ -28,15 +28,6 @@
         				destroy: '삭제'
         			}
         		},
-        		edit: function (e) {
-                    if (e.model.isNew()) {
-                    	if(e.model.CD_CLS == ""){
-                    		/*e.model.set("YN_USE", "Y");
-                    		e.model.set("NO_MNGCDHD", $scope.gridCusCodeVO.NO_MNGCDHD);
-                    		e.model.set("CD_CLS", $scope.gridCusCodeVO.CD_CLS);*/
-                    	}
-                    }
-        		},
         		dataSource: new kendo.data.DataSource({
             		transport: {
             			read: function(e) {
@@ -176,14 +167,18 @@
             		SyCodeSvc.getSubcodeList({cd: "IT_000011", search: "all"}).then(function (result) {
 						self.optClftList = result.data;
                     });
-            		
             	},
             	
             	doConfirm : function () {
-					var self = this;
-					var CD_OPTS = [];
+					var self = this,
+						CD_OPTS = [];
+					var grid = $("#gridVO").data("kendoGrid").dataSource;
+					if(grid.hasChanges()){
+						alert("변경사항이 있습니다");
+						return;
+					}
 					for(var i = 0; i<self.dataSource._data.length; i++){
-						if(self.dataSource._data[i].ROW_CHK == true){
+						if(self.dataSource._data[i].ROW_CHK){
 							self.dataSource._data[i].QT_SSPL = 0;
 							self.dataSource._data[i].S_ITEMPRC = self.dataSource._data[i].AM_SALE;
 							CD_OPTS.push(self.dataSource._data[i]);

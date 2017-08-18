@@ -6,13 +6,13 @@
      * @name sa.Ord.controller : sa.OrdCtrl
      * 상품분류관리
      */
-    angular.module("it.BssItem.controller")
-        .controller("it.BssItemInfoCtrl", ["$stateParams", "$scope", "$state", "$http", "$q", "$log", "sa.OrdSvc", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "MenuSvc", "it.BssItemSvc", "sy.CodeSvc",
-            function ($stateParams, $scope, $state, $http, $q, $log, saOrdSvc, APP_CODE, $timeout, resData, Page, UtilSvc, MenuSvc, itBssItemSvc, SyCodeSvc) {
+    angular.module("it.SaleItem.controller")
+        .controller("it.SaleItemInfoCtrl", ["$stateParams", "$scope", "$state", "$http", "$q", "$log", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "MenuSvc", "it.BssItemSvc", "sy.CodeSvc", "it.SaleItemSvc",
+            function ($stateParams, $scope, $state, $http, $q, $log, APP_CODE, $timeout, resData, Page, UtilSvc, MenuSvc, itBssItemSvc, SyCodeSvc, itSaleItemSvc) {
 	            var page  = $scope.page = new Page({ auth: resData.access }),
 		            today = edt.getToday();       	
             	
-	            var bssInfoDataVO = $scope.bssInfoDataVO = {       	
+	            var saleInfoDataVO = $scope.saleInfoDataVO = {       	
 	        		kind : "",
 	        		CD_ITEM : "",
 	        		ds : {},
@@ -29,6 +29,7 @@
 	        		transInfo : { boxTitle : "배송 정보" },
 	        		opInfo : { boxTitle : "옵션 / 재고" },
 	        		licenseInfo : { boxTitle : "인허가 / 고시정보" },
+	        		setItem : { boxTitle : "묶음상품구성" },
 	        		itemCtgrList1 : [],
 	        		selectedCtgr1 : {ID_CTGR : "", NM_CTGR: ""},
 	        		itemCtgrList2 : [],
@@ -161,7 +162,7 @@
 	                    edit: function (e) {
 	                        if (e.model.isNew()) {
 	                        	if(e.model.CD_OPT == ""){
-	                        		e.model.set("CD_ITEM" ,  bssInfoDataVO.ids);
+	                        		e.model.set("CD_ITEM" ,  saleInfoDataVO.ids);
 	                        	}
 	                        }
 	            		},
@@ -170,20 +171,20 @@
 	                			read: function(e) {
 	                				var param = {
                 						procedureParam:"MarketManager.USP_IT_02BSSITEMOPT_GET&L_CD_ITEM@s|L_FLAG@s",
-                						L_CD_ITEM  :  bssInfoDataVO.ids,
+                						L_CD_ITEM  :  saleInfoDataVO.ids,
                 						L_FLAG     :  "1"
                 					};
 	            					UtilSvc.getList(param).then(function (res) {
 	            						e.success(res.data.results[0]);
-	            						bssInfoDataVO.NM_COM = res.data.results[1][0].NM_C;
+	            						saleInfoDataVO.NM_COM = res.data.results[1][0].NM_C;
 	            					});
 	                			},
 	                			create: function(e) {
-	                				if(bssInfoDataVO.oriOPTTP != bssInfoDataVO.param.CD_OPTTP){
-	                					e.data.models[0].TEMP = bssInfoDataVO.oriOPTTP;
+	                				if(saleInfoDataVO.oriOPTTP != saleInfoDataVO.param.CD_OPTTP){
+	                					e.data.models[0].TEMP = saleInfoDataVO.oriOPTTP;
 	                				}
 	                				for(var i = 0 ; i < e.data.models.length ; i++){
-	                					e.data.models[i].CD_ITEM = bssInfoDataVO.CD_ITEM;
+	                					e.data.models[i].CD_ITEM = saleInfoDataVO.CD_ITEM;
 	                				}
 	                				itBssItemSvc.saveOpt(e.data.models, "I").success(function () {
 		                            });
@@ -224,7 +225,7 @@
 	                	}),
 	                	navigatable: true,
 	                	toolbar: 
-	                		["create", "cancel",{ template: "<kendo-button class='k-button k-button-icontext' value='옵션구분' ng-click='bssInfoDataVO.codeUpdateModal()'>옵션구분</kendo-button>" }],
+	                		["create", "cancel",{ template: "<kendo-button class='k-button k-button-icontext' value='옵션구분' ng-click='saleInfoDataVO.codeUpdateModal()'>옵션구분</kendo-button>" }],
 	                	columns: [
 	           		           {field: "CD_OPTCLFT",   title: "옵션구분", width: 150,
 	   							headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"},
@@ -236,14 +237,14 @@
 		            		    			autoBind: false,
 		            		    			dataTextField: "NM_DEF",
 		                                    dataValueField: "CD_DEF",
-		            		    			dataSource: bssInfoDataVO.optClftList,
+		            		    			dataSource: saleInfoDataVO.optClftList,
 		            		    			valuePrimitive: true
 		            		    		});
 	          		       	   	  }	 ,  template: function(e){
 	            		       		    var cd_opt = e.CD_OPTCLFT,
 	            		       		    	nmd    = "";
 	            		       		    if(cd_opt){
-	            		       		    	var optData = bssInfoDataVO.optClftList;	
+	            		       		    	var optData = saleInfoDataVO.optClftList;	
 		                		       		for(var i = 0, leng=optData.length; i<leng; i++){
 	                		       			   if(optData[i].CD_DEF === e.CD_OPTCLFT){
 	                		       				 nmd = optData[i].NM_DEF;	
@@ -287,7 +288,7 @@
 	                    edit: function (e) {
 	                        if (e.model.isNew()) {
 	                        	if(e.model.CD_OPT == ""){
-	                        		e.model.set("CD_ITEM" ,  bssInfoDataVO.ids);
+	                        		e.model.set("CD_ITEM" ,  saleInfoDataVO.ids);
 	                        	}
 	                        }
 	            		},
@@ -296,7 +297,7 @@
 	                			read: function(e) {
 	                				var param = {
                 						procedureParam:"MarketManager.USP_IT_02BSSITEMOPT_GET&L_CD_ITEM@s|L_FLAG@s",
-                						L_CD_ITEM  :  bssInfoDataVO.ids,
+                						L_CD_ITEM  :  saleInfoDataVO.ids,
                 						L_FLAG     :  "2"
                 					};
 	            					UtilSvc.getList(param).then(function (res) {
@@ -304,11 +305,11 @@
 	            					});
 	                			},
 	                			create: function(e) {
-	                				if(bssInfoDataVO.oriOPTTP != bssInfoDataVO.param.CD_OPTTP){
-	                					e.data.models[0].TEMP = bssInfoDataVO.oriOPTTP;
+	                				if(saleInfoDataVO.oriOPTTP != saleInfoDataVO.param.CD_OPTTP){
+	                					e.data.models[0].TEMP = saleInfoDataVO.oriOPTTP;
 	                				}
 	                				for(var i = 0 ; i < e.data.models.length ; i++){
-	                					e.data.models[i].CD_ITEM = bssInfoDataVO.CD_ITEM;
+	                					e.data.models[i].CD_ITEM = saleInfoDataVO.CD_ITEM;
 	                				}
 	                				itBssItemSvc.saveOpt(e.data.models, "I").success(function () {
 		                            });
@@ -352,7 +353,7 @@
 	                	}),
 	                	navigatable: true,
 	                	toolbar: 
-	                		["create", "cancel",{ template: "<kendo-button class='k-button k-button-icontext' value='옵션구분' ng-click='bssInfoDataVO.codeUpdateModal()'>옵션구분</kendo-button>" }],
+	                		["create", "cancel",{ template: "<kendo-button class='k-button k-button-icontext' value='옵션구분' ng-click='saleInfoDataVO.codeUpdateModal()'>옵션구분</kendo-button>" }],
 	                	columns: [
 	           		           {field: "CD_OPTCLFT",   title: "옵션구분1", width: 150,
 	   							headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"},
@@ -364,14 +365,14 @@
 		            		    			autoBind: false,
 		            		    			dataTextField: "NM_DEF",
 		                                    dataValueField: "CD_DEF",
-		            		    			dataSource: bssInfoDataVO.optClftList,
+		            		    			dataSource: saleInfoDataVO.optClftList,
 		            		    			valuePrimitive: true
 		            		    		});
 	          		       	   	  }	 ,  template: function(e){
 	            		       		    var cd_opt = e.CD_OPTCLFT,
 	            		       		    	nmd    = "";
 	            		       		    if(cd_opt){
-	            		       		    	var optData = bssInfoDataVO.optClftList;	
+	            		       		    	var optData = saleInfoDataVO.optClftList;	
 		                		       		for(var i = 0, leng=optData.length; i<leng; i++){
 	                		       			   if(optData[i].CD_DEF === e.CD_OPTCLFT){
 	                		       				 nmd = optData[i].NM_DEF;
@@ -392,14 +393,14 @@
 			            		    			autoBind: false,
 			            		    			dataTextField: "NM_DEF",
 			                                    dataValueField: "CD_DEF",
-			            		    			dataSource: bssInfoDataVO.optClftList,
+			            		    			dataSource: saleInfoDataVO.optClftList,
 			            		    			valuePrimitive: true
 			            		    		});
 		          		       	   	  }	 ,  template: function(e){
 		            		       		    var cd_opt = e.L_CD_OPTCLFT,
 		            		       		    	nmd    = "";
 		            		       		    if(cd_opt){
-		            		       		    	var optData = bssInfoDataVO.optClftList;	
+		            		       		    	var optData = saleInfoDataVO.optClftList;	
 			                		       		for(var i = 0, leng=optData.length; i<leng; i++){
 		                		       			   if(optData[i].CD_DEF === e.L_CD_OPTCLFT){
 		                		       				 nmd = optData[i].NM_DEF;	
@@ -428,8 +429,8 @@
 	                	height: 180
 	                };
 	            	            	            
-	            bssInfoDataVO.initBssItem = function(){
-	            	bssInfoDataVO.duplFlag = true;
+	            saleInfoDataVO.initBssItem = function(){
+	            	saleInfoDataVO.duplFlag = true;
 	            	var self = this,
 	            		param = {
     					procedureParam: "MarketManager.USP_IT_02BSSITEMINFO01_GET&L_CD_ITEM@s",
@@ -437,10 +438,10 @@
     				};	            	
         			UtilSvc.getList(param).then(function (res) {
         				if(res.data.results[0].length >= 1){
-        					bssInfoDataVO.param = res.data.results[0][0];
-        					bssInfoDataVO.NM_COM = res.data.results[0][0].NM_C;
-        					bssInfoDataVO.tempOPTTP = res.data.results[0][0].CD_OPTTP;
-        					bssInfoDataVO.oriOPTTP = res.data.results[0][0].CD_OPTTP;
+        					saleInfoDataVO.param = res.data.results[0][0];
+        					saleInfoDataVO.NM_COM = res.data.results[0][0].NM_C;
+        					saleInfoDataVO.tempOPTTP = res.data.results[0][0].CD_OPTTP;
+        					saleInfoDataVO.oriOPTTP = res.data.results[0][0].CD_OPTTP;
         					if(res.data.results[1].length >= 1){
         						self.ctgrChange(0);
         						self.selectedCtgr1.ID_CTGR = res.data.results[1][0].ID_CTGR;
@@ -457,21 +458,21 @@
         						}
         					}
         				}
-        				bssInfoDataVO.taxChange();
-        				bssInfoDataVO.sprcCal('', Number(bssInfoDataVO.param.RT_TAX) ,'R');
-        				bssInfoDataVO.splyChange();
-        				bssInfoDataVO.mrfrChange();
-        				bssInfoDataVO.bcdChange();
-        				bssInfoDataVO.shptpChange();
+        				saleInfoDataVO.taxChange();
+        				saleInfoDataVO.sprcCal('', Number(saleInfoDataVO.param.RT_TAX) ,'R');
+        				saleInfoDataVO.splyChange();
+        				saleInfoDataVO.mrfrChange();
+        				saleInfoDataVO.bcdChange();
+        				saleInfoDataVO.shptpChange();
         			});
-    				bssInfoDataVO.fileMainVO.currentData = resData.fileMainVOcurrentData;
-    				bssInfoDataVO.fileSmallVO.currentData = resData.fileSmallVOcurrentData;
-    				bssInfoDataVO.fileDExVO.currentDataList = resData.fileDExVOcurrentDataList;
-    				bssInfoDataVO.fileDImageVO.currentDataList = resData.fileDImageVOcurrentDataList;
+    				saleInfoDataVO.fileMainVO.currentData = resData.fileMainVOcurrentData;
+    				saleInfoDataVO.fileSmallVO.currentData = resData.fileSmallVOcurrentData;
+    				saleInfoDataVO.fileDExVO.currentDataList = resData.fileDExVOcurrentDataList;
+    				saleInfoDataVO.fileDImageVO.currentDataList = resData.fileDImageVOcurrentDataList;
     				
 	            };
 	            
-	            bssInfoDataVO.getInitializeItemInfo = function(){
+	            saleInfoDataVO.getInitializeItemInfo = function(){
 	            	var self = this;
 	            	
 	            	self.kind = $stateParams.kind;
@@ -503,11 +504,11 @@
 	            	}
 		        };
 		        
-		        bssInfoDataVO.goBack = function() {
-		        	$state.go('app.itBssItem', { kind: 'list', menu: null, ids: null });
+		        saleInfoDataVO.goBack = function() {
+		        	$state.go('app.itSaleItem', { kind: 'list', menu: null, ids: null });
 		        };
 	            
-	            bssInfoDataVO.ctgrChange = function(flag){
+	            saleInfoDataVO.ctgrChange = function(flag){
 	            	var self = this,
 	            	    param = {
         					procedureParam: "MarketManager.USP_IT_01ITEMCFCT02_GET&IT_ID_CTGR@s",
@@ -544,7 +545,7 @@
 	            	}
 	            };
 	            
-	            bssInfoDataVO.bcdChange = function(){
+	            saleInfoDataVO.bcdChange = function(){
 	            	var self = this;
 	            	if(self.param.YN_BCD == "Y"){
 	            		self.param.DC_BCD = "";
@@ -553,7 +554,7 @@
 	            	else angular.element("#DC_BCD").attr("readonly", false);
 	            };
 	            
-	            bssInfoDataVO.mrfrChange = function(){
+	            saleInfoDataVO.mrfrChange = function(){
 	            	var self = this;
 	            	if(self.param.YN_MNFROWN == "Y"){
 	            		self.param.NM_MNFR = self.NM_COM;
@@ -565,7 +566,7 @@
 	            	}
 	            };
 	            
-	            bssInfoDataVO.splyChange = function(){
+	            saleInfoDataVO.splyChange = function(){
 	            	var self = this;
 	            	if(self.param.YN_SPLYOWN == "Y"){
 	            		self.param.NM_SPLY = self.NM_COM;
@@ -576,7 +577,7 @@
 	            	}
 	            };
 	            
-	            /*bssInfoDataVO.vldChange = function(){
+	            /*saleInfoDataVO.vldChange = function(){
 	            	var self = this;
 	            	if(self.param.YN_VLDPRDUSE == "N"){
 	            		self.param.DT_VLD = "";
@@ -585,7 +586,7 @@
 	            	else angular.element("#DTS_VLD").attr("display", false);
 	            };*/
 	            
-	            bssInfoDataVO.shptpChange = function(){
+	            saleInfoDataVO.shptpChange = function(){
 	            	var self = this;
 	            	if(self.param.CD_ITEMSHPTP == "999"){
 	            		angular.element("#NM_ITEMSHPTP").attr("readonly", false);
@@ -595,14 +596,14 @@
 	            	}
 	            };
 	            
-	            bssInfoDataVO.sprcCal = function(name,prc, flag){
+	            saleInfoDataVO.sprcCal = function(name,prc, flag){
 	            	var self = this;
 	            	if(flag == "R"){
-	            		if(!bssInfoDataVO.inputOnlyNum(prc, flag)){
+	            		if(!saleInfoDataVO.inputOnlyNum(prc, flag)){
 		            		return;
 		            	}
 	            	}else {
-	            		if(!bssInfoDataVO.inputNumber(prc, flag)){
+	            		if(!saleInfoDataVO.inputNumber(prc, flag)){
 		            		return;
 		            	}
 	            	}
@@ -618,7 +619,7 @@
 	            	}
 	            };
 	            
-	            bssInfoDataVO.taxChange = function(){
+	            saleInfoDataVO.taxChange = function(){
 	            	var self = this;
 	            	if(self.param.CD_TAXCLFT == "001"){
 	            		angular.element("#RT_TAX").attr("readonly", false);
@@ -631,7 +632,7 @@
 	            };
 	            
 	            // 중복환인
-	            bssInfoDataVO.duplCheck = function(){
+	            saleInfoDataVO.duplCheck = function(){
 	            	var self = this;
 	            	
             		if (!(self.param.CD_SIGNITEM).trim()) {
@@ -648,7 +649,7 @@
 	            };
 	            
 	            //  상품복사등록
-	            bssInfoDataVO.itemCopyModal = function(){
+	            saleInfoDataVO.itemCopyModal = function(){
 	            	itBssItemSvc.itemCopyModal().then(function(it_num) {
 	            		var param = {
 	    					procedureParam: "MarketManager.USP_IT_02BSSITEMCOPY_GET&L_CD_ITEM@s",
@@ -656,28 +657,28 @@
 	    				};	            	
 	        			UtilSvc.getList(param).then(function (res) {
 	        				if(res.data.results[0].length >= 1){
-	        					bssInfoDataVO.param.CD_SIGNITEM = res.data.results[0][0].CD_SIGNITEM;
-	        					bssInfoDataVO.param.DC_ITEMABBR = res.data.results[0][0].DC_ITEMABBR;
-	        					bssInfoDataVO.param.NM_ITEM     = res.data.results[0][0].NM_ITEM;
-	        					bssInfoDataVO.param.YN_BCD      = res.data.results[0][0].YN_BCD;
-	        					bssInfoDataVO.param.DC_BCD      = res.data.results[0][0].DC_BCD;
-	        					bssInfoDataVO.param.CD_ITEMCLFT = res.data.results[0][0].CD_ITEMCLFT;
-	        					bssInfoDataVO.param.CD_ITEMSTAT = res.data.results[0][0].CD_ITEMSTAT;
-	        					bssInfoDataVO.param.CD_ITEMKIND = res.data.results[0][0].CD_ITEMKIND;
-	        					bssInfoDataVO.bcdChange();
+	        					saleInfoDataVO.param.CD_SIGNITEM = res.data.results[0][0].CD_SIGNITEM;
+	        					saleInfoDataVO.param.DC_ITEMABBR = res.data.results[0][0].DC_ITEMABBR;
+	        					saleInfoDataVO.param.NM_ITEM     = res.data.results[0][0].NM_ITEM;
+	        					saleInfoDataVO.param.YN_BCD      = res.data.results[0][0].YN_BCD;
+	        					saleInfoDataVO.param.DC_BCD      = res.data.results[0][0].DC_BCD;
+	        					saleInfoDataVO.param.CD_ITEMCLFT = res.data.results[0][0].CD_ITEMCLFT;
+	        					saleInfoDataVO.param.CD_ITEMSTAT = res.data.results[0][0].CD_ITEMSTAT;
+	        					saleInfoDataVO.param.CD_ITEMKIND = res.data.results[0][0].CD_ITEMKIND;
+	        					saleInfoDataVO.bcdChange();
 	        					if(res.data.results[1].length >= 1){
-	        						bssInfoDataVO.ctgrChange(0);
-	        						bssInfoDataVO.selectedCtgr1.ID_CTGR = res.data.results[1][0].ID_CTGR;
-	        						bssInfoDataVO.selectedCtgr1.NM_CTGR = res.data.results[1][0].NM_CTGR;
+	        						saleInfoDataVO.ctgrChange(0);
+	        						saleInfoDataVO.selectedCtgr1.ID_CTGR = res.data.results[1][0].ID_CTGR;
+	        						saleInfoDataVO.selectedCtgr1.NM_CTGR = res.data.results[1][0].NM_CTGR;
 	        						if(res.data.results[1].length >= 2){
-	        							bssInfoDataVO.ctgrChange(1);
-	            						bssInfoDataVO.selectedCtgr2.ID_CTGR = res.data.results[1][1].ID_CTGR;
-	            						bssInfoDataVO.selectedCtgr2.NM_CTGR = res.data.results[1][1].NM_CTGR;
+	        							saleInfoDataVO.ctgrChange(1);
+	            						saleInfoDataVO.selectedCtgr2.ID_CTGR = res.data.results[1][1].ID_CTGR;
+	            						saleInfoDataVO.selectedCtgr2.NM_CTGR = res.data.results[1][1].NM_CTGR;
 	        						}
 	        						if(res.data.results[1].length >= 3){
-	            						bssInfoDataVO.ctgrChange(2);
-	            						bssInfoDataVO.selectedCtgr3.ID_CTGR = res.data.results[1][2].ID_CTGR;
-	            						bssInfoDataVO.selectedCtgr3.NM_CTGR = res.data.results[1][2].NM_CTGR;
+	            						saleInfoDataVO.ctgrChange(2);
+	            						saleInfoDataVO.selectedCtgr3.ID_CTGR = res.data.results[1][2].ID_CTGR;
+	            						saleInfoDataVO.selectedCtgr3.NM_CTGR = res.data.results[1][2].NM_CTGR;
 	        						}
 	        					}
 	        				}
@@ -686,74 +687,74 @@
 	            };
 	            
 	            // 저장
-	            bssInfoDataVO.goSave = function(){
-	            	var SU = bssInfoDataVO.kind == "detail" ? "U" : "I";
+	            saleInfoDataVO.goSave = function(){
+	            	var SU = saleInfoDataVO.kind == "detail" ? "U" : "I";
 	            	if(SU == "I"){
 		            	if (confirm("저장하시겠습니까?")) {
-		                    if (bssInfoDataVO.isValid(bssInfoDataVO.param)) {
-		                		if(bssInfoDataVO.selectedCtgr2.ID_CTGR != ""){
-		                			if(bssInfoDataVO.selectedCtgr3.ID_CTGR != ""){
-		                    			bssInfoDataVO.param.ID_CTGR = bssInfoDataVO.selectedCtgr3.ID_CTGR;
+		                    if (saleInfoDataVO.isValid(saleInfoDataVO.param)) {
+		                		if(saleInfoDataVO.selectedCtgr2.ID_CTGR != ""){
+		                			if(saleInfoDataVO.selectedCtgr3.ID_CTGR != ""){
+		                    			saleInfoDataVO.param.ID_CTGR = saleInfoDataVO.selectedCtgr3.ID_CTGR;
 		                        	}else{
-		                        		bssInfoDataVO.param.ID_CTGR = bssInfoDataVO.selectedCtgr2.ID_CTGR;
+		                        		saleInfoDataVO.param.ID_CTGR = saleInfoDataVO.selectedCtgr2.ID_CTGR;
 		                        	}
 		                    	}else{
-		                    		bssInfoDataVO.param.ID_CTGR = bssInfoDataVO.selectedCtgr1.ID_CTGR;
+		                    		saleInfoDataVO.param.ID_CTGR = saleInfoDataVO.selectedCtgr1.ID_CTGR;
 		                    	}
-		                		bssInfoDataVO.param.RT_TAX = Number(bssInfoDataVO.param.RT_TAX);
-		                    	itBssItemSvc.saveItem(bssInfoDataVO.param, SU).success(function (res_CDITEM) {
-		                    		bssInfoDataVO.CD_ITEM = res_CDITEM;
-		                    		if(bssInfoDataVO.param.CD_OPTTP == "002" || bssInfoDataVO.param.CD_OPTTP == "003" ){
-		                        		var grid = $("#gridOpt"+bssInfoDataVO.param.CD_OPTTP).data("kendoGrid");
+		                    	itSaleItemSvc.saveItem(saleInfoDataVO.param, SU).success(function (res_CDITEM) {
+		                    		saleInfoDataVO.CD_ITEM = res_CDITEM;
+		                    		saleInfoDataVO.param.RT_TAX = Number(saleInfoDataVO.param.RT_TAX);
+		                    		if(saleInfoDataVO.param.CD_OPTTP == "002" || saleInfoDataVO.param.CD_OPTTP == "003" ){
+		                        		var grid = $("#gridOpt"+saleInfoDataVO.param.CD_OPTTP).data("kendoGrid");
 		                            	grid.dataSource.sync();
 		                    		}
-		                        	bssInfoDataVO.fileSave();
-		                        	alert("기본상품 등록이 완료되었습니다.");
-		                        	bssInfoDataVO.goBack();
+		                        	saleInfoDataVO.fileSave();
+		                        	alert("판매상품 등록이 완료되었습니다.");
+		                        	saleInfoDataVO.goBack();
 		                        });
 		                    }
 		                }
 	            	}else{
 	            		if (confirm("수정하시겠습니까?")) {
-		                    if (bssInfoDataVO.isValid(bssInfoDataVO.param)) {
-		                		if(bssInfoDataVO.selectedCtgr2.ID_CTGR != ""){
-		                			if(bssInfoDataVO.selectedCtgr3.ID_CTGR != ""){
-		                    			bssInfoDataVO.param.ID_CTGR = bssInfoDataVO.selectedCtgr3.ID_CTGR;
+		                    if (saleInfoDataVO.isValid(saleInfoDataVO.param)) {
+		                		if(saleInfoDataVO.selectedCtgr2.ID_CTGR != ""){
+		                			if(saleInfoDataVO.selectedCtgr3.ID_CTGR != ""){
+		                    			saleInfoDataVO.param.ID_CTGR = saleInfoDataVO.selectedCtgr3.ID_CTGR;
 		                        	}else{
-		                        		bssInfoDataVO.param.ID_CTGR = bssInfoDataVO.selectedCtgr2.ID_CTGR;
+		                        		saleInfoDataVO.param.ID_CTGR = saleInfoDataVO.selectedCtgr2.ID_CTGR;
 		                        	}
 		                    	}else{
-		                    		bssInfoDataVO.param.ID_CTGR = bssInfoDataVO.selectedCtgr1.ID_CTGR;
+		                    		saleInfoDataVO.param.ID_CTGR = saleInfoDataVO.selectedCtgr1.ID_CTGR;
 		                    	}
-		                		bssInfoDataVO.param.CD_ITEM = bssInfoDataVO.ids;
-		                		bssInfoDataVO.param.RT_TAX = Number(bssInfoDataVO.param.RT_TAX);
-		                    	itBssItemSvc.saveItem(bssInfoDataVO.param, SU).success(function () {
-		                    		if(bssInfoDataVO.param.CD_OPTTP == "002" || bssInfoDataVO.param.CD_OPTTP == "003" ){
-		                        		var grid = $("#gridOpt"+bssInfoDataVO.param.CD_OPTTP).data("kendoGrid");
+		                		saleInfoDataVO.param.CD_ITEM = saleInfoDataVO.ids;
+		                		saleInfoDataVO.param.RT_TAX = Number(saleInfoDataVO.param.RT_TAX);
+		                    	itSaleItemSvc.saveItem(saleInfoDataVO.param, SU).success(function () {
+		                    		if(saleInfoDataVO.param.CD_OPTTP == "002" || saleInfoDataVO.param.CD_OPTTP == "003" ){
+		                        		var grid = $("#gridOpt"+saleInfoDataVO.param.CD_OPTTP).data("kendoGrid");
 		                            	grid.dataSource.sync();
 		                    		}
-		                        	bssInfoDataVO.fileSave();
-		                        	alert("기본상품 수정이 완료되었습니다.");
-		                        	bssInfoDataVO.goBack();
+		                        	saleInfoDataVO.fileSave();
+		                        	alert("판매상품 수정이 완료되었습니다.");
+		                        	saleInfoDataVO.goBack();
 		                        });
 		                    }
 		                }
 	            	}
 	            };
 	            
-	            bssInfoDataVO.fileSave = function() {
-	        		if(bssInfoDataVO.fileMainVO.dirty) {
-		        		bssInfoDataVO.fileMainVO.CD_REF1 = bssInfoDataVO.CD_ITEM;
-		        		bssInfoDataVO.fileMainVO.doUpload(function(){
-			        		if(bssInfoDataVO.fileSmallVO.dirty) {
-				        		bssInfoDataVO.fileSmallVO.CD_REF1 = bssInfoDataVO.CD_ITEM;
-				        		bssInfoDataVO.fileSmallVO.doUpload(function(){
-				        			if(bssInfoDataVO.fileDExVO.dirty) {
-						        		bssInfoDataVO.fileDExVO.CD_REF1 = bssInfoDataVO.CD_ITEM;
-						        		bssInfoDataVO.fileDExVO.doUpload(function(){
-						        			if(bssInfoDataVO.fileDImageVO.dirty) {
-								        		bssInfoDataVO.fileDImageVO.CD_REF1 = bssInfoDataVO.CD_ITEM;
-								        		bssInfoDataVO.fileDImageVO.doUpload(function(){
+	            saleInfoDataVO.fileSave = function() {
+	        		if(saleInfoDataVO.fileMainVO.dirty) {
+		        		saleInfoDataVO.fileMainVO.CD_REF1 = saleInfoDataVO.CD_ITEM;
+		        		saleInfoDataVO.fileMainVO.doUpload(function(){
+			        		if(saleInfoDataVO.fileSmallVO.dirty) {
+				        		saleInfoDataVO.fileSmallVO.CD_REF1 = saleInfoDataVO.CD_ITEM;
+				        		saleInfoDataVO.fileSmallVO.doUpload(function(){
+				        			if(saleInfoDataVO.fileDExVO.dirty) {
+						        		saleInfoDataVO.fileDExVO.CD_REF1 = saleInfoDataVO.CD_ITEM;
+						        		saleInfoDataVO.fileDExVO.doUpload(function(){
+						        			if(saleInfoDataVO.fileDImageVO.dirty) {
+								        		saleInfoDataVO.fileDImageVO.CD_REF1 = saleInfoDataVO.CD_ITEM;
+								        		saleInfoDataVO.fileDImageVO.doUpload(function(){
 								        		}, function() {
 								        			alert('상세이미지 첨부파일업로드 실패하였습니다.');
 								        		});
@@ -775,18 +776,18 @@
 	        	};
 	            
 	            // 옵션구분
-	            bssInfoDataVO.codeUpdateModal = function(){
+	            saleInfoDataVO.codeUpdateModal = function(){
 	            	itBssItemSvc.codeUpdateModal().then(function(res) {
 	            		alert(res);
 	            	}, function() {
 	            		SyCodeSvc.getSubcodeList({cd: "IT_000011", search: "all"}).then(function (result) {
-	            			bssInfoDataVO.optClftList = result.data;
+	            			saleInfoDataVO.optClftList = result.data;
                         });
 					});
 	            };
 	            
 	            // 기본옵션조회 및 설정
-	            bssInfoDataVO.basicOptGet = function(CD_OPTTP){
+	            saleInfoDataVO.basicOptGet = function(CD_OPTTP){
 	            	itBssItemSvc.basicOptGetModal(CD_OPTTP).then(function(res) {
 	            		if(CD_OPTTP == "002"){
 	            			for(var i = 0 ; i < res.length ; i++){
@@ -810,11 +811,11 @@
 	            };
 	            
 	            // 다른상품옵션복사하기
-	            bssInfoDataVO.otherOptCopy = function(CD_OPTTP){
+	            saleInfoDataVO.otherOptCopy = function(CD_OPTTP){
 	            	itBssItemSvc.otherOptCopyModal(CD_OPTTP).then(function(res) {
-	            		bssInfoDataVO.tempOPTTP = bssInfoDataVO.param.CD_OPTTP;
-	            		bssInfoDataVO.param.CD_OPTTP = res.CD_OPTTP;
-	            		bssInfoDataVO.optChange();
+	            		saleInfoDataVO.tempOPTTP = saleInfoDataVO.param.CD_OPTTP;
+	            		saleInfoDataVO.param.CD_OPTTP = res.CD_OPTTP;
+	            		saleInfoDataVO.optChange();
 	            		$timeout(function() {
 		            		if(res.CD_OPTTP == "002"){
 		            			var param = {
@@ -849,15 +850,15 @@
 	            };
 	            
 	            // 미리보기
-	            bssInfoDataVO.goPreview = function(){
+	            saleInfoDataVO.goPreview = function(){
 	            	var self = this,
 	            		paramList = [],
 	            	    imageList = [],
 	            	  	DexImage = [],
 	            	  	Dimage = [];
 	            	for(var i = 0 ; i < self.iKindList.length ; i++){
-	            		if(bssInfoDataVO.param.CD_ITEMKIND == self.iKindList[i].CD_DEF){
-	            			bssInfoDataVO.param.NM_ITEMKIND = self.iKindList[i].NM_DEF;
+	            		if(saleInfoDataVO.param.CD_ITEMKIND == self.iKindList[i].CD_DEF){
+	            			saleInfoDataVO.param.NM_ITEMKIND = self.iKindList[i].NM_DEF;
 	            		}
 	            	}
 	            	imageList.push(self.fileMainVO.imgSrc);
@@ -879,9 +880,9 @@
 	            	imageList.push(DexImage);
 	            	imageList.push(Dimage);
 	            	paramList.push(imageList);
-	            	paramList.push(bssInfoDataVO.param);
-	            	if(bssInfoDataVO.param.CD_OPTTP == "002" || bssInfoDataVO.param.CD_OPTTP == "003"){
-		            	var grid = $("#gridOpt"+bssInfoDataVO.param.CD_OPTTP).data("kendoGrid");
+	            	paramList.push(saleInfoDataVO.param);
+	            	if(saleInfoDataVO.param.CD_OPTTP == "002" || saleInfoDataVO.param.CD_OPTTP == "003"){
+		            	var grid = $("#gridOpt"+saleInfoDataVO.param.CD_OPTTP).data("kendoGrid");
 		            	paramList.push(grid._data);
 	            	}
 	            	itBssItemSvc.itemPreviewModal(paramList).then(function() {    
@@ -890,41 +891,41 @@
 	            };
 	            
 	            // 옵션유형 바뀔떄
-	            bssInfoDataVO.optChange = function(){
-	            	if(bssInfoDataVO.tempOPTTP == "002" || bssInfoDataVO.tempOPTTP == "003"){
-	            	var grid = $("#gridOpt"+bssInfoDataVO.tempOPTTP).data("kendoGrid");
-		            	if(bssInfoDataVO.tempOPTTP != bssInfoDataVO.param.CD_OPTTP && grid.dataSource._data.length != 0){
+	            saleInfoDataVO.optChange = function(){
+	            	if(saleInfoDataVO.tempOPTTP == "002" || saleInfoDataVO.tempOPTTP == "003"){
+	            	var grid = $("#gridOpt"+saleInfoDataVO.tempOPTTP).data("kendoGrid");
+		            	if(saleInfoDataVO.tempOPTTP != saleInfoDataVO.param.CD_OPTTP && grid.dataSource._data.length != 0){
 		            		if (confirm("원래의 옵션이 취소됩니다.\n계속 하시겠습니까?")) {
 	        					grid.cancelChanges();
 		            		}else{
 		            			$timeout(function() {
-		            				bssInfoDataVO.param.CD_OPTTP = bssInfoDataVO.tempOPTTP;
+		            				saleInfoDataVO.param.CD_OPTTP = saleInfoDataVO.tempOPTTP;
 		            			});
 		            		}
 		            	}
-		            	bssInfoDataVO.tempOPTTP = bssInfoDataVO.param.CD_OPTTP;
+		            	saleInfoDataVO.tempOPTTP = saleInfoDataVO.param.CD_OPTTP;
 	            	}
 	            };
 	            
 	            // 상품코드 수정시 중복체크 flag = false
-	            bssInfoDataVO.duplChange = function () {
-	            	bssInfoDataVO.duplFlag = false;
+	            saleInfoDataVO.duplChange = function () {
+	            	saleInfoDataVO.duplFlag = false;
 	            };
 	            
 	            // 판매가 구매가 tax (숫자 + 소수점)
-	            bssInfoDataVO.inputNumber = function (prc, flag) {
+	            saleInfoDataVO.inputNumber = function (prc, flag) {
 	            	var _pattern = /^(\d{1,15}([.]\d{0,4})?)?$/;
 	            	var value = prc;
 	            	
 	            	if (!_pattern.test(value)) {
 	            		value = value.slice(0, -1);
 	            		if(flag == "B"){
-	            			bssInfoDataVO.param.B_ITEMPRC = value;
+	            			saleInfoDataVO.param.B_ITEMPRC = value;
 	            		}else if (flag == "S" ){
-	            			bssInfoDataVO.param.S_ITEMPRC = value;
+	            			saleInfoDataVO.param.S_ITEMPRC = value;
 	            			return false;
 	            		}else if (flag == "T" ){
-	            			bssInfoDataVO.tax = value;
+	            			saleInfoDataVO.tax = value;
 	            		}
 	                    alert("숫자만 입력이 가능하며, 소수점 넷째자리까지만 허용됩니다.");
 	                    return;
@@ -933,16 +934,16 @@
 	            };
 	            
 	            // 과세율 최소구매수량 숫자만 QT_MINPCS , RT_TAX
-	            bssInfoDataVO.inputOnlyNum = function (prc, flag) {
+	            saleInfoDataVO.inputOnlyNum = function (prc, flag) {
 	            	var _pattern = /^[0-9]*$/;
 	            	var value = prc;
 	            	
 	            	if (!_pattern.test(value)) {
 	            		if(flag == "Q"){
 	            			value = value.slice(0, -1);
-	            			bssInfoDataVO.param.QT_MINPCS = value;
+	            			saleInfoDataVO.param.QT_MINPCS = value;
 	            		}else if (flag == "R" ){
-	            			bssInfoDataVO.param.RT_TAX = 0;
+	            			saleInfoDataVO.param.RT_TAX = 0;
 	            		}
 	                    alert("숫자만 입력이 가능합니다.");	
 	                    return false;
@@ -951,13 +952,13 @@
 	            };
 	            
 	            // 유효성 체크
-	            bssInfoDataVO.isValid = function (param) {
+	            saleInfoDataVO.isValid = function (param) {
 	                var data = param,
 	                	self = this;
 	                
 	                // --------- 상품정보
 	                // 중복확인
-                    if (!bssInfoDataVO.duplFlag) {
+                    if (!saleInfoDataVO.duplFlag) {
                     	return edt.invalidFocus("duple", "[필수] 중복확인을 해주세요.");
                     }
 
@@ -972,7 +973,7 @@
                     }
                     
                     // 상품분류
-                    if (bssInfoDataVO.selectedCtgr1.ID_CTGR == "") {
+                    if (saleInfoDataVO.selectedCtgr1.ID_CTGR == "") {
 		                return edt.invalidFocus("ctgr1", "[필수] 상품분류를 선택해주세요.");
 	                }
                     
@@ -1053,20 +1054,20 @@
                     
                     // --------- 배송정보
                     
-                    if(bssInfoDataVO.param.CD_ITEMSHPTP == "999"){
+                    if(saleInfoDataVO.param.CD_ITEMSHPTP == "999"){
                     	if(!(data.NM_ITEMSHPTP).trim()){
                     		return edt.invalidFocus("NM_ITEMSHPTP", "[형식] 상품배송유형 기타 란에 유효하지 않은 형식입니다.");
                     	}
                     }else{
-                    	bssInfoDataVO.param.NM_ITEMSHPTP ="";
+                    	saleInfoDataVO.param.NM_ITEMSHPTP ="";
                     }
                     
                     // --------- 옵션 / 재고
                     
-	                if(bssInfoDataVO.param.CD_OPTTP=="002" ||  bssInfoDataVO.param.CD_OPTTP=="003"){
-	                    var grid = $("#gridOpt"+bssInfoDataVO.param.CD_OPTTP).data("kendoGrid");
+	                if(saleInfoDataVO.param.CD_OPTTP=="002" ||  saleInfoDataVO.param.CD_OPTTP=="003"){
+	                    var grid = $("#gridOpt"+saleInfoDataVO.param.CD_OPTTP).data("kendoGrid");
 	                    if(grid._data.length == 0){
-	                    	return edt.invalidFocus("gridOpt"+bssInfoDataVO.param.CD_OPTTP, "[필수] 옵션을 입력해주세요.");
+	                    	return edt.invalidFocus("gridOpt"+saleInfoDataVO.param.CD_OPTTP, "[필수] 옵션을 입력해주세요.");
 	                    }
 	                }
 
@@ -1074,6 +1075,6 @@
                 };
 	            	      	            
 		        //초기 화면 로드시 조회
-		        bssInfoDataVO.getInitializeItemInfo();
+		        saleInfoDataVO.getInitializeItemInfo();
             }]);
 }());

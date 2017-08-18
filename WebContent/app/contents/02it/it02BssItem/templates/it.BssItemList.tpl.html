@@ -10,8 +10,8 @@
     
     <div class="row">
         <!-- 검색 -->
-        <div class="content-area-container col-xs-12" style="margin:0px 0px -5px 0px;">
-        	<div data-content-box-layer data-box-title="bssItemDataVO.boxTitle" data-is-open="bssItemDataVO.isOpen(val)">
+        <div class="content-area-container col-xs-12">
+        	<div data-content-box-layer data-box-title="bssItemDataVO.boxTitle">
                 <form class="search-type1" id="myForm">
                 	<table>
                         <colgroup>
@@ -83,16 +83,18 @@
                         </tr>
                         </tbody>
                     </table>         		     
-                    <div class="btn-group1 mt-10">
+                    <div class="btn-group1 mt-20">
                         <kendo-button type="submit" class="k-primary" title="검색" data-ng-click="bssItemDataVO.inQuiry()" style="width:70px;" >검색</kendo-button>
                         <kendo-button type="submit" title="초기화" data-ng-click="bssItemDataVO.init()" style="width:70px;" >초기화</kendo-button>
                     </div>
+                    <br/>
+                    <p class="text-center">총  <strong>{{bssItemDataVO.dataTotal}}</strong>건이 검색되었습니다.</p>
                 </form>
             </div>
         </div>
                 
         <!-- 승인 리스트 -->          
-		<div class="content-area-container col-xs-12" style="padding:0px;">				
+		<div class="content-area-container col-xs-12" style="padding:50px 0px 0px 0px;">				
 	        <div id="divBssVO" kendo-grid="gridBssVO" options="gridBssVO">
 	        </div>	            
         </div>
@@ -236,7 +238,7 @@
 							# }else{ }	 	 #
 			</div>
 			<div class="ells">
-							# if(DTS_VLD !== "" && DTS_VLD !== null && DTS_VLD !== "undefined"){ #  
+							# if(DTS_VLD !== "" || DTS_VLD !== null || DTS_VLD !== "undefined"){ #  
 							#: DTS_VLD # 
 							# }else{ #
 							#: "-"   #
@@ -244,95 +246,6 @@
 			</div>
       	</td>
 	</tr>			
-</script>
-
-<!-- cs 답변등록 팝업 그리드 -->
-<script id="cs_popup_template" type="text/x-kendo-template">
-<div class="not_pop_title"><h3><span class="k-icon k-edit"></span>문의 답변 등록</h3></div>
-<table class="signal">
-	<colgroup>
-      <col style="width: 14%;">
-      <col style="width: 30%;">
-      <col style="width: 14%;">
-      <col style="width: 30%;">
-    </colgroup>
-    <tbody data-uid="#= uid #">	
-	<tr class="border-bottom-line border-top-line">	
-		<td class="border-right-line">
-			마켓
-		</td>
-		<td class="border-right-line">
-			#if(NM_MRK){ #
-			#: NM_MRK #
-			#}#
-		</td>
-		<td class="border-right-line">
-			주문번호
-		</td>
-		<td class="border-right-line">
-			#if(NO_MRKORD){ #
-			#: NO_MRKORD #
-			#}#
-		</td>
-	</tr>
-	<tr class="border-bottom-line">
-		<td class="border-right-line">
-			상품코드
-		</td>
-		<td class="border-right-line" colspan="3">
-			#if(CD_MRKITEM){ #
-			#: CD_MRKITEM #
-			#}#	
-		</td>
-	</tr>
-	<tr class="border-bottom-line">
-		<td class="border-right-line">
-			상품명/옵션
-		</td>
-		<td class="border-right-line" colspan="3">
-			#if(NM_MRKITEM){ #
-			#: NM_MRKITEM #
-			#}#
-		</td>
-	</tr>
-	<tr class="border-bottom-line">
-		<td class="border-right-line">
-			문의자
-		</td>
-		<td class="border-right-line">
-			#if(NM_INQ){ #
-			#: NM_INQ #
-			#}#	
-		</td>
-		<td class="border-right-line">
-			문의일시
-		</td>
-		<td class="border-right-line">
-			#if(DTS_INQREG){ #
-			#: DTS_INQREG #
-			#}#			
-		</td>
-	</tr>
-	<tr class="border-bottom-line">
-		<td class="border-right-line">
-			문의구분
-		</td>
-		<td colspan="3">
-			#if(CD_INQCLFT){ #
-			<co04-cd-to-nm cd="#:CD_INQCLFT#" nm-box="bssItemDataVO.csQuestionCodeOp">
-			#}#
-		</td> 
-	</tr>
-	<tr class="border-bottom-line">
-		<td class="border-right-line">
-			답변내용
-		</td>
-		<td colspan="3">			
-			<textarea class="k-textbox" name="DC_ANSCTT" data-bind="value: DC_ANSCTT" style="width:100%; height:150px;"></textarea>
-		</td> 
-	</tr>
-	</tbody>
-</table>
 </script>
 
 <!-- 그리드 툴바 템플릿 -->
