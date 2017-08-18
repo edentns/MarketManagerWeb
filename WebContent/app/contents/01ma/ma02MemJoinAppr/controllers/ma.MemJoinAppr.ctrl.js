@@ -71,7 +71,7 @@
 
 	            joinerDataVO.isOpen = function (val) {
 	            	if(val) {
-	            		$scope.kg.wrapper.height(667);
+	            		$scope.kg.wrapper.height(657);
 	            		$scope.kg.resize();
 	            		gridJoinerMemVO.dataSource.pageSize(20);
 	            	}
@@ -329,7 +329,7 @@
                     	},*/
                     	resizable: true,
                     	rowTemplate: kendo.template($.trim($("#template").html())),
-                    	height: 667
+                    	height: 657
         		};    
                 
                 $scope.checkedIds = [];

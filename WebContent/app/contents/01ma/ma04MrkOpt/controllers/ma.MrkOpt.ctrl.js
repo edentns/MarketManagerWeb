@@ -61,7 +61,7 @@
 	            };
 
 	            ma04MrkOptVO.isOpen = function (val) {
-	            	var iMinHeight = 354
+	            	var iMinHeight = 349
 	            	  , iMaxHeight = 398
 	            	  , iMinPageS = 10
 	            	  , iMaxPageS = 12;
@@ -129,7 +129,7 @@
         				buttonCount: 10
 	            	};
 	            	localSelf.change                   = rowClick;
-	            	localSelf.height                   = 354;
+	            	localSelf.height                   = 349;
 	            	localSelf.dataSource = new kendo.data.DataSource({
         				autoBind: false,
         				transport: {

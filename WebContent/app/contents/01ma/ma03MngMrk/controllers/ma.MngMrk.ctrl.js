@@ -102,7 +102,7 @@
 
                 mngMrkDateVO.isOpen = function (val) {
 	            	if(val) {
-	            		$scope.kg.wrapper.height(667);
+	            		$scope.kg.wrapper.height(657);
 	            		$scope.kg.resize();
 	            		gridMngMrkUserVO.dataSource.pageSize(20);
 	            	}
@@ -446,7 +446,7 @@
                     	editable: {
                     	    confirmation: "삭제 하시겠습니까?",
                     	},
-                    	height: 667
+                    	height: 657
         		};        
             }]);
 }());

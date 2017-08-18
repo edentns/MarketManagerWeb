@@ -155,7 +155,7 @@
 	            
 	            noticeDataVO.isOpen = function (val) {
 	            	if(val) {
-	            		$scope.nkg.wrapper.height(667);
+	            		$scope.nkg.wrapper.height(657);
 	            		$scope.nkg.resize();
 	            		gridNoticeVO.dataSource.pageSize(20);
 	            	}
@@ -521,7 +521,7 @@
                 		},*/
                     	resizable: true,
                     	rowTemplate: kendo.template($.trim($("#ma_notice_template").html())),
-                    	height: 667                    	
+                    	height: 657                    	
         		};
                 
                 $scope.checkedIds = [];
