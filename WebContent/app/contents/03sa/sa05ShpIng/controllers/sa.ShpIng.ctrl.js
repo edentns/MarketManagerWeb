@@ -173,9 +173,9 @@
 
 	            shippingDataVO.isOpen = function (val) {
 	            	if(val) {
-	            		$scope.shippingkg.wrapper.height(552);
+	            		$scope.shippingkg.wrapper.height(616);
 	            		$scope.shippingkg.resize();
-	            		grdShippngVO.dataSource.pageSize(7);
+	            		grdShippngVO.dataSource.pageSize(9);
 	            	}
 	            	else {
 	            		$scope.shippingkg.wrapper.height(798);
@@ -255,7 +255,7 @@
                 	resizable: true,
                 	rowTemplate: kendo.template($.trim($("#shipping_template").html())),
                 	altRowTemplate: kendo.template($.trim($("#shipping_alt_template").html())),
-                	height: 552,
+                	height: 616,
                 	navigatable: true, //키보드로 그리드 셀 이동 가능
                 	toolbar: [{template: kendo.template($.trim($("#shipping_toolbar_template").html()))}],
                 	dataSource: new kendo.data.DataSource({
@@ -353,7 +353,7 @@
                 			var data = this.data();
                 			shippingDataVO.dataTotal = data.length;
                 		},                		
-                		pageSize: 7,
+                		pageSize: 9,
                 		batch: true,
                 		schema: {
                 			model: {

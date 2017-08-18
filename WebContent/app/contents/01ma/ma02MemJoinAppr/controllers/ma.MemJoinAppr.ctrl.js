@@ -71,14 +71,14 @@
 
 	            joinerDataVO.isOpen = function (val) {
 	            	if(val) {
-	            		$scope.kg.wrapper.height(593);
+	            		$scope.kg.wrapper.height(667);
 	            		$scope.kg.resize();
-	            		gridJoinerMemVO.dataSource.pageSize(11);
+	            		gridJoinerMemVO.dataSource.pageSize(20);
 	            	}
 	            	else {
 	            		$scope.kg.wrapper.height(798);
 	            		$scope.kg.resize();
-	            		gridJoinerMemVO.dataSource.pageSize(20);
+	            		gridJoinerMemVO.dataSource.pageSize(24);
 	            	}
 	            };
 	            
@@ -170,7 +170,7 @@
                     				}
                     			}
                     		},
-                    		pageSize: 11,
+                    		pageSize: 20,
                     		change: function(e){
                     			var data = this.data();
                     			joinerDataVO.dataTotal = data.length;
@@ -329,7 +329,7 @@
                     	},*/
                     	resizable: true,
                     	rowTemplate: kendo.template($.trim($("#template").html())),
-                    	height: 593
+                    	height: 667
         		};    
                 
                 $scope.checkedIds = [];

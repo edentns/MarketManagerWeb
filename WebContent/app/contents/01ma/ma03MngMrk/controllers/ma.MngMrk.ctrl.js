@@ -57,9 +57,7 @@
  	        		   maxNames: 2
               	    }
 	            };
-	            	            
-	            kendo.culture("ko-KR");    
-		        
+	            	  
 	            //검색
 	            mngMrkDateVO.doInquiry = function () {
 		        	var me  = this;
@@ -104,14 +102,14 @@
 
                 mngMrkDateVO.isOpen = function (val) {
 	            	if(val) {
-	            		$scope.kg.wrapper.height(593);
+	            		$scope.kg.wrapper.height(667);
 	            		$scope.kg.resize();
-	            		gridMngMrkUserVO.dataSource.pageSize(11);
+	            		gridMngMrkUserVO.dataSource.pageSize(20);
 	            	}
 	            	else {
 	            		$scope.kg.wrapper.height(798);
 	            		$scope.kg.resize();
-	            		gridMngMrkUserVO.dataSource.pageSize(20);
+	            		gridMngMrkUserVO.dataSource.pageSize(24);
 	            	}
 	            };
 	                                                       
@@ -198,7 +196,7 @@
                     				}
                     			}
                     		},
-                    		pageSize: 11,
+                    		pageSize: 20,
                     		batch: true,
                     		schema: {
                     			model: {
@@ -448,7 +446,7 @@
                     	editable: {
                     	    confirmation: "삭제 하시겠습니까?",
                     	},
-                    	height: 593
+                    	height: 667
         		};        
             }]);
 }());

@@ -87,12 +87,10 @@
                         </tr>
                         </tbody>
                     </table>         		     
-                    <div class="btn-group1 mt-20">
+                    <div class="btn-group1 mt-10">
                         <kendo-button type="submit" class="k-primary" title="검색" data-ng-click="shpbyordDataVO.inQuiry()" style="width:70px;">검색</kendo-button>
                         <kendo-button type="botton" title="초기화" data-ng-click="shpbyordDataVO.inIt()" style="width:70px;">초기화</kendo-button>
                     </div>
-                    <br/>
-                    <p class="text-center">총  <strong>{{shpbyordDataVO.dataTotal}}</strong>건이 검색되었습니다.</p>
                 </form>
             </div>
         </div>
@@ -108,10 +106,21 @@
 <!-- 주문 조회 그리드 툴바 템플릿 -->
 <script id="shpbyord-toolbar-template" type="text/x-kendo-template">
 	<!-- <a class="k-button k-button-icontext k-grid-save1"><span class="k-icon"></span>배송지연</a> -->
-	<!-- <a class="k-button k-button-icontext k-grid-save2"><span class="k-icon k-i-close"></span>주문취소</a> -->        
-	<a class="k-button k-button-icontext k-grid-no-out"><span class="k-icon k-i-update"></span>송장출력</a>
-	<a class="k-button k-button-icontext k-grid-delivery-info"><span class="k-icon k-i-add"></span>배송정보등록</a>        
-	<a class="k-button k-button-icontext k-grid-delivery-info-send"><span class="k-icon k-i-redo"></span>배송정보전송</a>    
+	<!-- <a class="k-button k-button-icontext k-grid-save2"><span class="k-icon k-i-close"></span>주문취소</a> -->  
+	<div class="row">   
+		<div class="col-xs-4" style="padding:0px;">   
+			<div style="margin-left:15px;">
+				<a class="k-button k-button-icontext k-grid-no-out"><span class="k-icon k-i-update"></span>송장출력</a>
+				<a class="k-button k-button-icontext k-grid-delivery-info"><span class="k-icon k-i-add"></span>배송정보등록</a>        
+				<a class="k-button k-button-icontext k-grid-delivery-info-send"><span class="k-icon k-i-redo"></span>배송정보전송</a>
+			</div>
+		</div>
+		<div class="col-xs-8" style="padding:0px;">
+			<div style="margin-right:35px;">    
+				<p class="text-right" style="margin:0px;">총  <strong>{{shpbyordDataVO.dataTotal}}</strong> 건이 검색</p>
+			</div>
+		</div>
+	</div>
 </script>
 
 <!-- 주문 조회 그리드 -->

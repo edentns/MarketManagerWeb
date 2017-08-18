@@ -61,9 +61,9 @@
 	            };
 
 	            ma04MrkOptVO.isOpen = function (val) {
-	            	var iMinHeight = 317
+	            	var iMinHeight = 354
 	            	  , iMaxHeight = 398
-	            	  , iMinPageS = 9
+	            	  , iMinPageS = 10
 	            	  , iMaxPageS = 12;
 	            	
 	            	if(val) {
@@ -125,23 +125,18 @@
 	        			};
 	            	localSelf.navigatable              = true;
 	            	localSelf.pageable = {
-	            		messages: UtilSvc.gridPageableMessages
+	            		messages: UtilSvc.gridPageableMessages,
+        				buttonCount: 10
 	            	};
-	            	//localSelf.pageable                 = true;
-	            	//localSelf.enableRowSelection       = true;
-	            	//localSelf.enableRowHeaderSelection = false;
-	            	//localSelf.multiSelect              = false;
-	            	//localSelf.editable                 = false;
-	            	//localSelf.selected                 = null;
 	            	localSelf.change                   = rowClick;
-	            	localSelf.height                   = 317;
+	            	localSelf.height                   = 354;
 	            	localSelf.dataSource = new kendo.data.DataSource({
         				autoBind: false,
         				transport: {
         					read: function(e) {
         					}
         				},
-        				pageSize: 9,
+        				pageSize: 10,
         				schema: {
         					model: {
             					id:"ID_CTGR",
@@ -152,9 +147,6 @@
         					}
         				},
         			});
-	            	localSelf.pageable = {
-        				buttonCount: 10
-        			};
 	            	localSelf.columns  = [
 	              		{
 	              			field: "ID_CTGR", 

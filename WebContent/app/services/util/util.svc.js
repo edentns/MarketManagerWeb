@@ -11,10 +11,10 @@
 			var user = $rootScope.webApp.user,
 				menu = $rootScope.webApp.menu;
 			this.gridPageableMessages = {
-				display: "총 {2}건 중 {0}-{1}건의 자료 입니다.",
+				display: "총 {2}건 중 {0}-{1}건",
 				empty: "표시할 데이터가 없습니다.",
 				first: "첫번째 페이지",
-				previous: "전 페이지",
+				previous: "이전 페이지",
 				next: "다음 페이지",
 				last: "마지막 페이지"
 			};

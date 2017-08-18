@@ -298,8 +298,8 @@ Contents Box 영역 - layout
 
 .box-content {
     position      : relative;
-    padding       : 15px;
-    background    : #FCFCFC;
+    padding: 10px;
+    background    : #faffff;
     border-radius : 0 0 3px 3px;
     -webkit-border-radius : 0 0 3px 3px;
     -moz-border-radius    : 0 0 3px 3px;

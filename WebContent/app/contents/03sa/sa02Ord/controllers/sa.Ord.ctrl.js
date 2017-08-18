@@ -130,9 +130,9 @@
 
 	            ordDataVO.isOpen = function (val) {
 	            	if(val) {
-	            		$scope.ordkg.wrapper.height(552);
+	            		$scope.ordkg.wrapper.height(616);
 	            		$scope.ordkg.resize();
-	            		grdOrdVO.dataSource.pageSize(7);
+	            		grdOrdVO.dataSource.pageSize(9);
 	            	}
 	            	else {
 	            		$scope.ordkg.wrapper.height(798);
@@ -223,7 +223,7 @@
                 			var data = this.data();
                 			ordDataVO.dataTotal = data.length;
                 		},
-                		pageSize: 6,
+                		pageSize: 9,
                 		batch: true,
                 		schema: {
                 			model: {
@@ -605,7 +605,7 @@
                 	rowTemplate: kendo.template($.trim($("#ord_template").html())),
                 	altRowTemplate: kendo.template($.trim($("#ord_alt_template").html())),
                 	//detailTemplate : kendo.template($.trim($("#ord_detail_template").html())),
-                	height: 552
+                	height: 616
                 	//모델과 그리드 셀을 제대로 연동 안시키면 수정 팝업 연 후 닫을 때 로우가 사라짐(즉 크레에이트인지 에딧인지 구분을 못함)
                 	//id는 유니크한 모델값으로 해야함 안그러면 cancel 시에 row grid가 중복 되는 현상이 발생
                 	//rowTemplate을 사용한 colunm은 lock을 사용할 수 없음	                    	

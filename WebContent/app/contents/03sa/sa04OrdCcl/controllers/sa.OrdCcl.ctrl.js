@@ -168,9 +168,9 @@
 
 	            ordCancelManagementDataVO.isOpen = function (val) {
 	            	if(val) {
-	            		$scope.ordCancelManagementkg.wrapper.height(552);
+	            		$scope.ordCancelManagementkg.wrapper.height(616);
 	            		$scope.ordCancelManagementkg.resize();
-	            		grdOrdCancelManagementVO.dataSource.pageSize(7);
+	            		grdOrdCancelManagementVO.dataSource.pageSize(9);
 	            	}
 	            	else {
 	            		$scope.ordCancelManagementkg.wrapper.height(798);
@@ -264,7 +264,7 @@
                 			var data = this.data();
                 			ordCancelManagementDataVO.dataTotal = data.length;
                 		},
-                		pageSize: 7,
+                		pageSize: 9,
                 		batch: true,
                 		schema: {
                 			model: {
@@ -694,7 +694,7 @@
                 	resizable: true,
                 	rowTemplate: kendo.template($.trim($("#ocm_template").html())),
                 	altRowTemplate: kendo.template($.trim($("#ocm_alt_template").html())),
-                	height: 552                  	
+                	height: 616                  	
 	        	};
 	            
 	            //kendo grid 체크박스 옵션

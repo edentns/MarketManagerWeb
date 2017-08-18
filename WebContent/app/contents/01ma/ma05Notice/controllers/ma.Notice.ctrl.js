@@ -151,7 +151,21 @@
                 	$scope.memSearchPopGrd.selectAll = false;
                 	$scope.memSearchPopGrd.selectAllItems();
                 	$scope.memSearchPopGrd.searchValue = ""; 	//공지대상 검색 팝업창 초기화
-	            };	   
+	            };
+	            
+	            noticeDataVO.isOpen = function (val) {
+	            	if(val) {
+	            		$scope.nkg.wrapper.height(667);
+	            		$scope.nkg.resize();
+	            		gridNoticeVO.dataSource.pageSize(20);
+	            	}
+	            	else {
+	            		$scope.nkg.wrapper.height(798);
+	            		$scope.nkg.resize();
+	            		gridNoticeVO.dataSource.pageSize(24);
+	            	}
+	            };
+	            
 	            //popup insert & update Validation
 	            $scope.insertValidation = function(org){
 	            	var result = true;
@@ -307,7 +321,7 @@
                     		       alert("remove")
                     		    }*/                    			
                     		},
-                    		pageSize: 11,
+                    		pageSize: 20,
                     		batch: true,
                     		schema: {
                     			model: {
@@ -507,7 +521,7 @@
                 		},*/
                     	resizable: true,
                     	rowTemplate: kendo.template($.trim($("#ma_notice_template").html())),
-                    	height: 590                    	
+                    	height: 667                    	
         		};
                 
                 $scope.checkedIds = [];

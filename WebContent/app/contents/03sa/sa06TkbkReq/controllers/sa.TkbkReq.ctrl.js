@@ -174,9 +174,9 @@
 
 	            tkbkDataVO.isOpen = function (val) {
 	            	if(val) {
-	            		$scope.tkbkkg.wrapper.height(552);
+	            		$scope.tkbkkg.wrapper.height(616);
 	            		$scope.tkbkkg.resize();
-	            		grdTkbkVO.dataSource.pageSize(7);
+	            		grdTkbkVO.dataSource.pageSize(9);
 	            	}
 	            	else {
 	            		$scope.tkbkkg.wrapper.height(798);
@@ -258,7 +258,7 @@
                 	resizable: true,
                 	rowTemplate: kendo.template($.trim($("#tkbk_template").html())),
                 	altRowTemplate: kendo.template($.trim($("#tkbk_alt_template").html())),
-                	height: 552,
+                	height: 616,
                 	navigatable: true, //키보드로 그리드 셀 이동 가능
                 	toolbar: [{template: kendo.template($.trim($("#tkbk_toolbar_template").html()))}],
                 	dataSource: new kendo.data.DataSource({
@@ -405,7 +405,7 @@
                 			var data = this.data();
                 			tkbkDataVO.dataTotal = data.length;
                 		},                		
-                		pageSize: 7,
+                		pageSize: 9,
                 		batch: true,
                 		schema: {
                 			model: {

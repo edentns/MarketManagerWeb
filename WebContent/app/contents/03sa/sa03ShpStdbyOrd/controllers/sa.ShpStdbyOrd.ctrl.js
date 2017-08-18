@@ -117,7 +117,7 @@
 
 	            shpbyordDataVO.isOpen = function (val) {
 	            	if(val) {
-	            		$scope.shpbyordkg.wrapper.height(552);
+	            		$scope.shpbyordkg.wrapper.height(616);
 	            		$scope.shpbyordkg.resize();
 	            	}
 	            	else {
@@ -283,7 +283,7 @@
                 	scrollable: true,
                 	resizable: true,
                 	//rowTemplate: kendo.template($.trim($("#shpbyord-template").html())),
-                	height: 552,
+                	height: 616,
                 	navigatable: true, //키보드로 그리드 셀 이동 가능
                 	toolbar: [{template: kendo.template($.trim($("#shpbyord-toolbar-template").html()))}],
                 	dataSource: new kendo.data.DataSource({
