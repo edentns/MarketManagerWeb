@@ -3,8 +3,8 @@
 
     // [sa] EchgReq
     var echgReqApp = angular.module("sa.EchgReq", ["sa.EchgReq.controller", "sa.EchgReq.service"]);
-    angular.module("sa.EchgReq.controller", [] );
-    angular.module("sa.EchgReq.service", [] );
+    angular.module("sa.EchgReq.controller", []);
+    angular.module("sa.EchgReq.service", []);
 
     echgReqApp.config(["$stateProvider", function ($stateProvider) {
         $stateProvider.state("app.saEchgReq", {

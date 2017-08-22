@@ -135,7 +135,7 @@
 	            		angular.element("input[name=NO_INVO]").focus();
 	            	    return false;
 	            	}
-	            	if(this.ds.CD_ORDSTAT > stat){
+	            	if(this.ds.CD_ORDSTAT !== stat){
 	            		alert('주문 상태를 확인 후 등록을 해주세요.');
 	            	    return false;
 	            	}	            	

@@ -540,3 +540,18 @@ form[name="businessForm"]:after {content: ''; display: block; clear: both;}
 }
 .content-header:before, .content-header:after, .left-panel:before, .left-panel:after, .right-panel:before, .right-panel:after { display: table; content: ""; }
 .content-header:after, .left-panel:after, .right-panel:after { clear: both; }
+
+.k-grid-content > table > tbody > tr > td > div.custom-style{
+	height: 24px;
+	text-overflow: ellipsis; 
+	white-space: nowrap; 
+	overflow:hidden;
+	padding: 2px 1px 0 2px;
+}
+.k-grid-content > table > tbody > tr > td > div.custom-style-checkbox{
+	position: relative;
+    top: -7px;
+} 
+.k-grid-content > table > tbody > tr > td > div.custom-style:nth-child(odd){
+	border-bottom: solid 1px #bbdceb;	
+}

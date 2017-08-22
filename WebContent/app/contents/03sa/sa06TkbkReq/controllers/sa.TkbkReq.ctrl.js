@@ -7,8 +7,8 @@
      * 상품분류관리
      */
     angular.module("sa.TkbkReq.controller")
-        .controller("sa.TkbkReqCtrl", ["$scope", "$http", "$q", "$log", "sa.TkbkReqSvc", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "MenuSvc", "$window",
-            function ($scope, $http, $q, $log, saTkbkReqSvc, APP_CODE, $timeout, resData, Page, UtilSvc, MenuSvc, $window) {
+        .controller("sa.TkbkReqCtrl", ["$scope", "$http", "$q", "$log", "sa.TkbkReqSvc", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "MenuSvc", "$window", "Util03saSvc",
+            function ($scope, $http, $q, $log, saTkbkReqSvc, APP_CODE, $timeout, resData, Page, UtilSvc, MenuSvc, $window, Util03saSvc) {
 	            var page  = $scope.page = new Page({ auth: resData.access }),
 		            today = edt.getToday();
 	            
@@ -142,14 +142,27 @@
 	        		userInfo : JSON.parse($window.localStorage.getItem("USER")).NM_EMP,
 	        		updateChange : "",
 	        		dataTotal : 0,
-	        		resetAtGrd : ""
+	        		resetAtGrd : "",
+	        		param : ""
 	            };   
 		            
 	            //조회
 	            tkbkDataVO.inQuiry = function(){
-	            	//var me = this;
-	            	$scope.tkbkkg.dataSource.page(1);  // 페이지 인덱스 초기화
-	            	$scope.tkbkkg.dataSource.read();
+	            	var self = this;
+	            	self.param = {
+    				    NM_MRKITEM : tkbkDataVO.procName.value,
+					    NO_MRK : tkbkDataVO.ordMrkNameMo, 
+					    CD_ORDSTAT : tkbkDataVO.ordStatusMo,
+					    NO_MRKORD : tkbkDataVO.orderNo.value,      
+					    NM_PCHR : tkbkDataVO.buyerName.value,
+					    DTS_CHK : tkbkDataVO.betweenDateOptionMo,  
+					    DTS_FROM : new Date(tkbkDataVO.datesetting.period.start.y, tkbkDataVO.datesetting.period.start.m-1, tkbkDataVO.datesetting.period.start.d, "00", "00", "00").dateFormat("YmdHis"),           
+					    DTS_TO : new Date(tkbkDataVO.datesetting.period.end.y, tkbkDataVO.datesetting.period.end.m-1, tkbkDataVO.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis")
+                    };	            	
+    				if(Util03saSvc.readValidation(self.param)){
+    					$scope.tkbkkg.dataSource.data([]);
+    	            	$scope.tkbkkg.dataSource.page(1);  // 페이지 인덱스 초기화
+    				}
 	            };
 		            
 	            //초기화버튼
@@ -169,39 +182,12 @@
                 	me.ordStatusOp.bReset = true;
                 	me.ordMrkNameOp.bReset = true;
                 			        	
+                	angular.element($("#grd_chk_master")).prop("checked",false);
                 	me.dataTotal = 0;
                 	me.resetAtGrd = $scope.tkbkkg;
                 	me.resetAtGrd.dataSource.data([]);
 	            };	
-		            
-	            //popup insert & update Validation
-	            $scope.readValidation = function(idx){
-	            	var result = true;
-            		if(idx.NM_MRK === null || idx.NM_MRK === ""){ alert("마켓명을 입력해 주세요."); result = false; return; };
-            		if(idx.CD_ORDSTAT === null || idx.CD_ORDSTAT === ""){ alert("주문상태를 입력해 주세요."); result = false; return;};
-            		if(idx.DTS_CHK === null || idx.DTS_CHK === ""){ alert("기간을 선택해 주세요."); result = false; return;};			            
-	            	return result;
-	            };
-	            
-	            //kendo grid 체크박스 옵션
-                $scope.onOrdGrdCkboxClick = function(e){
-	                var element = $(e.currentTarget);
-	                
-	                var checked = element.is(':checked'),
-	                	row = element.closest("tr"),
-	                	grid = $scope.tkbkkg,
-	                	dataItem = grid.dataItem(row);               
-	                	                
-	                dataItem.ROW_CHK = checked;
-	                dataItem.dirty = checked;
-	                
-	                if(checked){
-	                	row.addClass("k-state-selected");
-	                }else{
-	                	row.removeClass("k-state-selected");
-	                };
-                }; 
-	            
+		                  
                 //검색 그리드
 	            var grdTkbkVO = $scope.grdTkbkVO = {
             		autoBind: false,
@@ -222,7 +208,7 @@
                     },
                     noRecords: true,
                     dataBound: function(e) {
-                        this.expandRow(this.tbody.find("tr.k-master-row").first());// 마스터 테이블을 확장하므로 세부행을 볼 수 있음     
+                        //this.expandRow(this.tbody.find("tr.k-master-row").first());
                     },
                     collapse: function(e) {
                         this.cancelRow();
@@ -256,7 +242,7 @@
                 	dataSource: new kendo.data.DataSource({
                 		transport: {
                 			read: function(e) {
-                				var param = {
+                				/*var param = {
                 				    NM_MRKITEM : tkbkDataVO.procName.value,
             					    NO_MRK : tkbkDataVO.ordMrkNameMo, 
             					    CD_ORDSTAT : tkbkDataVO.ordStatusMo,
@@ -265,15 +251,17 @@
             					    DTS_CHK : tkbkDataVO.betweenDateOptionMo,  
             					    DTS_FROM : new Date(tkbkDataVO.datesetting.period.start.y, tkbkDataVO.datesetting.period.start.m-1, tkbkDataVO.datesetting.period.start.d, "00", "00", "00").dateFormat("YmdHis"),           
             					    DTS_TO : new Date(tkbkDataVO.datesetting.period.end.y, tkbkDataVO.datesetting.period.end.m-1, tkbkDataVO.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis")
-                                };   
-                				
-                				if($scope.readValidation(param)){
+                                };                   				
+                				if(Util03saSvc.readValidation(param)){
                 					saTkbkReqSvc.orderList(param).then(function (res) {                						
 	            						e.success(res.data);			                   				                    					
                 					});                					
                 				}else{
                 					e.error();
-                				};
+                				};*/
+                				saTkbkReqSvc.orderList(tkbkDataVO.param).then(function (res) {                						
+            						e.success(res.data);			                   				                    					
+            					});
                 			},
                 			update: function(e){                				
                 				switch(tkbkDataVO.updateChange){
@@ -287,12 +275,12 @@
                         					if(param.length !== 1){
                         						alert("반품승인 된 주문만 접수 처리 할 수 있습니다.");
                         						return;
-                        					};                                       					
+                        					};     
                         					saTkbkReqSvc.tkbkCompleted(param[0]).then(function (res) {
                         						defer.resolve();
                         						if(res.data === "success"){
                         							alert("반품상품접수를  완료 하였습니다.");
-                        							tkbkDataVO.ordStatusMo = tkbkDataVO.ordStatusMo + "^007";
+                        							//tkbkDataVO.ordStatusMo = (tkbkDataVO.ordStatusMo === '*') ? tkbkDataVO.ordStatusMo : tkbkDataVO.ordStatusMo + "^007";
             	            						$scope.tkbkkg.dataSource.read();
                         						}else{
                         							alert("반품상품접수를 실패하였습니다.");
@@ -307,17 +295,17 @@
                 						if(confirm("선택하신 주문을 반품 거부하시겠습니까?")){
                 							var defer = $q.defer(),	
                 								param = e.data.models.filter(function(ele){
-                									return (ele.ROW_CHK === true && ele.CD_TKBKSTAT === "001" && (ele.NO_ORD) && ele.NO_ORD !== "");
+                									return (ele.ROW_CHK === true && ele.CD_TKBKSTAT === "001" && (ele.NO_ORD) && ele.NO_ORD !== "" && ele.CD_ORDSTAT === '005');
                 								});                             					
                         					if(param.length !== 1){
-                        						alert("반품요청 된 주문만 거부 처리 할 수 있습니다.");
+                        						alert("배송완료 된 반품요청 주문만 거부 처리 할 수 있습니다.");
                         						return;
-                        					};                        					
+                        					};  
                         					saTkbkReqSvc.tkbkReject(param[0]).then(function (res) {
                         						defer.resolve();
                         						if(res.data === "success"){
                         							alert("반품거부 하였습니다.");
-                        							tkbkDataVO.ordStatusMo = tkbkDataVO.ordStatusMo + "^005";
+                        							//tkbkDataVO.ordStatusMo = (tkbkDataVO.ordStatusMo === '*') ? tkbkDataVO.ordStatusMo : tkbkDataVO.ordStatusMo + "^005";
             	            						$scope.tkbkkg.dataSource.read();
                         						}else{
                         							alert("반품거부를 실패하였습니다.");
@@ -333,18 +321,17 @@
                 						if(confirm("선택하신 주문을 반품 승인하시겠습니까?")){
                 							var defer = $q.defer()
                 								param = e.data.models.filter(function(ele){
-                									return (ele.ROW_CHK === true && ele.CD_TKBKSTAT === "001" && (ele.NO_ORD) && ele.NO_ORD !== "");
-                								}); 
-                							
+                									return (ele.ROW_CHK === true && ele.CD_TKBKSTAT === "001" && (ele.NO_ORD) && ele.NO_ORD !== "" && ele.CD_ORDSTAT === '005');
+                								});                 							
                 							if(e.data.models.length !== param.length){
-                								alert("반품요청 된 주문만 승인 처리 할 수 있습니다.");
+                								alert("배송완료 된 반품요청 주문만 승인 처리 할 수 있습니다.");
                         						return;
                 							};
                 							saTkbkReqSvc.tkbkConfirm(param).then(function (res) {
                         						defer.resolve();
                         						if(res.data === "success"){
                         							alert("반품승인 하였습니다.");                        							
-                        							tkbkDataVO.ordStatusMo = tkbkDataVO.ordStatusMo + "^007";
+                        							//tkbkDataVO.ordStatusMo = (tkbkDataVO.ordStatusMo === '*') ? tkbkDataVO.ordStatusMo : tkbkDataVO.ordStatusMo + "^007";
             	            						$scope.tkbkkg.dataSource.read();
                         						}else{
                         							alert("반품승인을 실패하였습니다.");
@@ -370,8 +357,8 @@
                 							saTkbkReqSvc.tkbkInterfacesend(param).then(function (res) {
                         						defer.resolve();
                         						if(res.data === "success"){
-                        							alert("반품결과가 전송되었습니다.");                        							
-                        							tkbkDataVO.ordStatusMo = tkbkDataVO.ordStatusMo + "^007";
+                        							alert("반품결과가 전송되었습니다.");                        				
+                        							//tkbkDataVO.ordStatusMo = (tkbkDataVO.ordStatusMo === '*') ? tkbkDataVO.ordStatusMo : tkbkDataVO.ordStatusMo + "^007";                        							
             	            						$scope.tkbkkg.dataSource.read();
                         						}else{
                         							alert("반품결과 전송이 실패하였습니다.");
@@ -396,6 +383,7 @@
                 		change: function(e){
                 			var data = this.data();
                 			tkbkDataVO.dataTotal = data.length;
+                			angular.element($("#grd_chk_master")).prop("checked",false);
                 		},                		
                 		pageSize: 7,
                 		batch: true,
@@ -631,9 +619,9 @@
                 	columns: [	
 								{
 								    field: "ROW_CHK",
-								    title: "<span class='ROW_CHK'>선<br/>택</span>",					                        
+								    title: "<input class='k-checkbox' type='checkbox' id='grd_chk_master' ng-click='onOrdGrdCkboxAllClick($event)'><label class='k-checkbox-label k-no-text' for='grd_chk_master' style='margin-bottom:0;'>​</label>",					                        
 								    width: "30px",
-								    headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
+								    headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px; vertical-align:middle;"}
 								},                        
 								{	
 									field: "NO_ORD",
@@ -679,7 +667,7 @@
 								},                        
 								{
 									field: "NM_MRKITEM",
-								    title: "상품명 / 옵션(상품구성",
+								    title: "상품명 / 옵션(상품구성)",
 								    width: 100,
 								    headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
 								    columns: [ 
@@ -839,6 +827,64 @@
 								}                	           
                     ]                	          	
 	        	};
+	            
+	            //kendo grid 체크박스 옵션
+                $scope.onOrdGrdCkboxClick = function(e){
+	                var i = 0,
+	                	element = $(e.currentTarget),
+	                	checked = element.is(':checked'),
+	                	row = element.closest("tr"),
+	                	grid = $scope.tkbkkg,
+	                	dataItem = grid.dataItem(row),
+	                	allChecked = true;
+	                 	                
+	                dataItem.ROW_CHK = checked;
+	                dataItem.dirty = checked;
+	                
+	                for(i; i<element.parents('tbody').find("tr").length; i+=1){
+	                	if(!element.parents('tbody').find("tr:eq("+i+")").find(".k-checkbox").is(":checked")){
+	                		allChecked = false;
+	                	}
+	                }
+	                
+	                angular.element($("#grd_chk_master")).prop("checked",allChecked);
+	                
+	                if(checked){
+	                	row.addClass("k-state-selected");
+	                }else{
+	                	row.removeClass("k-state-selected");
+	                };
+                };
+                
+                //kendo grid 체크박스 all click
+                $scope.onOrdGrdCkboxAllClick = function(e){
+	                var i = 0,
+	                	element = $(e.currentTarget),
+	                	checked = element.is(':checked'),
+	                	row = element.parents("div").find(".k-grid-content table tr"),
+	                	grid = $scope.tkbkkg,
+	                	dataItem = grid.dataItems(row),
+	                	dbLength = dataItem.length;
+	                
+	                if(dbLength < 1){	                	
+	                	alert("전체 선택 할 데이터가 없습니다.");
+	                	angular.element($("#grd_chk_master")).prop("checked",false);
+	                	return;
+	                };   
+	                
+	                for(i; i<dbLength; i += 1){
+	                	dataItem[i].ROW_CHK = checked;
+	                	dataItem[i].dirty = checked;
+	                };
+	                
+	                if(checked){
+	                	row.addClass("k-state-selected");
+	                	row.find(".k-checkbox").prop( "checked", true );
+	                }else{
+	                	row.removeClass("k-state-selected");
+	                	row.find(".k-checkbox").prop( "checked", false );
+	                };
+                };  
 	            	            
 	            $scope.$on("kendoWidgetCreated", function(event, widget){
                 	var grd = $scope.tkbkkg;
@@ -846,9 +892,9 @@
 	                if (widget === grd){
 	                	//반품접수
 	                	widget.element.find(".k-grid-tkbk-accept").on("click", function(e){
-	                		var	chked = grd.element.find("input:checked"),
+	                		var	chked = grd.element.find(".k-grid-content input:checked"),
 	                			grdItem = grd.dataItem(chked.closest("tr")),
-		            			chkedLeng = grd.element.find("input:checked").length;
+		            			chkedLeng = grd.element.find(".k-grid-content input:checked").length;
 	                    		                    
 		                    if(chkedLeng === 1){
 		                    	if(grdItem.CD_TKBKSTAT === "002"){
@@ -870,9 +916,9 @@
 	                	
 	                	//반품거부
 	                	widget.element.find(".k-grid-tkbk-reject").on("click", function(e){
-	                		var	chked = grd.element.find("input:checked"),
+	                		var	chked = grd.element.find(".k-grid-content input:checked"),
 	                			grdItem = grd.dataItem(chked.closest("tr")),	
-		            			chkedLeng = grd.element.find("input:checked").length;
+		            			chkedLeng = grd.element.find(".k-grid-content input:checked").length;
 	                    		                    
 		                    if(chkedLeng === 1){
 		                    	if(grdItem.CD_TKBKSTAT === "001"){
@@ -890,7 +936,7 @@
 	                	
 	                	//반품승인
 	                	widget.element.find(".k-grid-tkbk-confirm").on("click", function(e){  
-	                		var chkedLeng = grd.element.find("input:checked").length;
+	                		var chkedLeng = grd.element.find(".k-grid-content input:checked").length;
 	                		
 	                		if(chkedLeng < 1){
                 				alert("주문을 선택해 주세요.");	
@@ -902,7 +948,7 @@
 	                	
 	                	//반품요청 결과전송
 	                	widget.element.find(".k-grid-tkbk-send").on("click", function(e){
-	                		var chkedLeng = grd.element.find("input:checked").length;
+	                		var chkedLeng = grd.element.find(".k-grid-content input:checked").length;
 	                		
 	                		if(chkedLeng < 1){
                 				alert("주문을 선택해 주세요.");	

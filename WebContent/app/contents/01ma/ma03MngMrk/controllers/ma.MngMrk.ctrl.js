@@ -51,23 +51,36 @@
 	        		   name: "NM_DEF",
 	        		   maxNames: 2
              	    },
-             	   statusDataSetting: {
+             	    statusDataSetting: {
               		   id: "CD_DEF",
  	        		   name: "NM_DEF",
  	        		   maxNames: 2
-              	    }
+              	    },
+              	    param: ""
 	            };
 	            	            
 	            kendo.culture("ko-KR");    
 		        
 	            //검색
 	            mngMrkDateVO.doInquiry = function () {
-		        	var me  = this;
+		        	var me  = this;                	
+                	me.param = {
+                    	procedureParam: "MarketManager.USP_MA_03SEARCH01_GET&NO_M@s|MA_NM_MRK@s|MA_CD_ITLWY@s|MA_ITLSTAT@s|MA_DT_START@s|MA_DT_END@s",
+                    	NO_M: menuId,
+                    	MA_NM_MRK: mngMrkDateVO.searchText.value,
+                    	MA_CD_ITLWY: mngMrkDateVO.methodDataCode,
+                    	MA_ITLSTAT: mngMrkDateVO.statusDataCode,
+                    	MA_DT_START: new Date(mngMrkDateVO.datesetting.period.start.y, mngMrkDateVO.datesetting.period.start.m-1, mngMrkDateVO.datesetting.period.start.d).dateFormat("Ymd"),
+                    	MA_DT_END: new Date(mngMrkDateVO.datesetting.period.end.y, mngMrkDateVO.datesetting.period.end.m-1, mngMrkDateVO.datesetting.period.end.d).dateFormat("Ymd")
+                    };  	               	
+
 	            	if(me.methodDataCode === ""){alert("연동방법을 입력해 주세요."); return false;};
                 	if(me.statusDataCode === ""){alert("연동상태를 입력해 주세요."); return false;};
-
+                	if(me.param.MA_DT_START > me.param.MA_DT_END){alert("기간을 올바르게 입력해 주세요."); return false;};
+                	
+                	$scope.gridMngMrkUserVO.dataSource.data([]);
     				$scope.gridMngMrkUserVO.dataSource.page(1);
-	            	gridMngMrkUserVO.dataSource.read();
+	            	//gridMngMrkUserVO.dataSource.read();
                 };
                 
                 //새로 저장시 유효성 검사 (수정 할 땐 비밀번호를 따로 입력할 필요할 없어서 required 하지 않아서 저장시 따로 함수를 만듦 kendo로는  editable true 일때만 됨)
@@ -104,8 +117,8 @@
                                                             
                 //마켓 검색 그리드
                 var gridMngMrkUserVO = $scope.gridMngMrkUserVO = {
-                		autoBind: false,
-                        messages: {                        	
+                		autoBind: false, 
+                        messages: {
                             //loading: "마켓정보를 가져오는 중...",
                             requestFailed: "마켓정보를 가져오는 중 오류가 발생하였습니다.",
                             //retry: "갱신",
@@ -118,27 +131,18 @@
                             ,noRecords: "검색된 데이터가 없습니다."
                         },
                     	boxTitle : "마켓 리스트",
-                    	sortable: true,                    	
+                    	sortable: true,         	
                         pageable: {
                         	messages: {
-                        		empty: "표시할 데이터가 없습니다."
+                        		empty: "표시할 데이터가 없습니다.",
+                        		display: "총 {2}건 중 {0}~{1}건의 자료 입니다."
                         	}
                         },
                         noRecords: true,
                     	dataSource: new kendo.data.DataSource({
                     		transport: {
-                    			read: function(e) {                    				
-                    				var param = {
-                                    	procedureParam: "MarketManager.USP_MA_03SEARCH01_GET&NO_M@s|MA_NM_MRK@s|MA_CD_ITLWY@s|MA_ITLSTAT@s|MA_DT_START@s|MA_DT_END@s",
-                                    	NO_M: menuId,
-                                    	MA_NM_MRK: mngMrkDateVO.searchText.value,
-                                    	MA_CD_ITLWY: mngMrkDateVO.methodDataCode,
-                                    	MA_ITLSTAT: mngMrkDateVO.statusDataCode,
-                                    	MA_DT_START: new Date(mngMrkDateVO.datesetting.period.start.y, mngMrkDateVO.datesetting.period.start.m-1, mngMrkDateVO.datesetting.period.start.d).dateFormat("Ymd"),
-                                    	MA_DT_END: new Date(mngMrkDateVO.datesetting.period.end.y, mngMrkDateVO.datesetting.period.end.m-1, mngMrkDateVO.datesetting.period.end.d).dateFormat("Ymd")
-                                    };  
-                    				
-                					UtilSvc.getList(param).then(function (res) {
+                    			read: function(e) {   
+                					UtilSvc.getList(mngMrkDateVO.param).then(function (res) {
                 						mngMrkDateVO.dataTotal = res.data.results[0].length;                						
                 						e.success(res.data.results[0]);
                 					});
@@ -148,11 +152,11 @@
     	                			var param = {
                                     	data: e.data.models
                                     };
-    	                			if(!isValid(param)) { return };
+    	                			if(!isValid(param)) { return false; };
     	                			MaMngMrkSvc.mngmrkInsert(param).then(function(res) {
     	                				defer.resolve();
-    	                				mngMrkDateVO.init();
-    	                				gridMngMrkUserVO.dataSource.read();
+    	                				//mngMrkDateVO.init();
+    	                				$scope.gridMngMrkUserVO.dataSource.read();
     	                			});
     	                			return defer.promise;
     	            			},
@@ -164,8 +168,8 @@
     	                			if(!isValid(param)) { return };
     	                			MaMngMrkSvc.mngmrkUpdate(param).then(function(res) {
     	                				defer.resolve();
-    	                				mngMrkDateVO.init();
-    	                				gridMngMrkUserVO.dataSource.read();
+    	                				//mngMrkDateVO.init();
+    	                				$scope.gridMngMrkUserVO.dataSource.read();
     	                			});
     	                			return defer.promise;
                     			},
@@ -176,8 +180,8 @@
                                     };
     	                			MaMngMrkSvc.mngmrkDelete(param).then(function(res) {
     	                				defer.resolve();
-    	                				mngMrkDateVO.init();
-    	                				gridMngMrkUserVO.dataSource.read();
+    	                				//mngMrkDateVO.init();
+    	                				$scope.gridMngMrkUserVO.dataSource.read();
     	                			});
     	                			return defer.promise;
                     			},
@@ -193,7 +197,11 @@
                     			model: {
                         			id: "NM_MRK",
                     				fields: {
-                    					ROW_NUM: {type: "number", editable: false},
+                    					ROW_NUM: {
+                    								type: "number",
+                    								editable: false,
+                    								sortable: true
+                    							  },
                     					NO_MNGMRK: {type: "string", editable: false},                    					
                     					NM_MRK: {
 	                    								validation: {
@@ -390,12 +398,21 @@
             		                 $('<input type="password" class="k-textbox" name="' + options.field + '"/>').appendTo(container);
             	                 }
             		           	 ,template: function(e){
-            		           		 var returnPWDMsg = "";
+            		           		 var returnPWDMsg = "",
+            		           			 count = 0,
+            		           			 i = 0;
+            		           		 
             		           		 if(e.NEW_DC_PWD === "" || e.NEW_DC_PWD === null && e.DC_PWD != ""){
-            		           			 returnPWDMsg = "*".repeat(e.DC_PWD_LEN);
+            		           			count = e.DC_PWD_LEN;
+            		           			//returnPWDMsg = "*".repeat(e.DC_PWD_LEN);
 	          		           		 }else if(e.NEW_DC_PWD != "" && e.NEW_DC_PWD  != null){
-	          		           			 returnPWDMsg = "*".repeat(e.NEW_DC_PWD.length);
+	          		           			 count = e.NEW_DC_PWD.length;
+	          		           			//returnPWDMsg = "*".repeat(e.NEW_DC_PWD.length);
 	          		           		 }
+            		           		 
+            		           		 for(i; i<count; i++){
+            		           			returnPWDMsg = returnPWDMsg + "*"; 
+            		           		 }
 	          		           		 return returnPWDMsg;
             		           	 }
             		           },
@@ -408,12 +425,20 @@
 	          		                 $('<input type="password" class="k-textbox" name="' + options.field + '"/>').appendTo(container);
 	          	                 }
 	          		           	 ,template: function(e){  
-	          		           		 var returnAPIMsg = "";
+	          		           		 var returnAPIMsg = "",
+			          		           	 count = 0,
+		   		           			     i = 0;
+	          		           		 
 	          		           		 if(e.NEW_API_KEY === "" || e.NEW_API_KEY === null && e.API_KEY != ""){
-	          		           			 returnAPIMsg = "*".repeat(e.API_KEY_LEN);
+	          		           			 count = e.API_KEY_LEN;
+	          		           			 //returnAPIMsg = "*".repeat(e.API_KEY_LEN);
 	          		           		 }else if(e.NEW_API_KEY != "" && e.NEW_API_KEY != null){
-	          		           			 returnAPIMsg = "*".repeat(e.NEW_API_KEY.length);
-	          		           		 }
+	          		           			 count = e.NEW_API_KEY.length;
+	          		           			 //returnAPIMsg = "*".repeat(e.NEW_API_KEY.length);
+	          		           		 }	          		           		 
+		          		           	 for(i; i<count; i++){
+		          		           		 returnAPIMsg = returnAPIMsg + "*";
+	         		           		 }
 	          		           		 return returnAPIMsg;
 	          		           	 }
             		           },
@@ -427,9 +452,6 @@
            		        	      command: [ "destroy" ]
            		        	   }
                     	],
-                    	dataBound: function() {
-                            this.expandRow(this.tbody.find("tr.k-master-row").first());
-                        },
                         collapse: function(e) {
                             // console.log(e.sender);
                             this.cancelRow();

@@ -26,7 +26,7 @@
         					noticeDataVO.noticeCdVO = res.data.results[0];
         					noticeDataVO.popUpNoticeCdVO.dataSource = res.data.results[0];
         				}
-        			});		
+        			});
 	            }());
 	            
 	            //공지 대상
@@ -114,14 +114,29 @@
         			limitCnt: 5,
         			currentDataList:[]
         		};	 
+	            
 	            //조회
 	            noticeDataVO.inQuiry = function(){
 	            	var me = this;
+	            	me.param = {
+                    	procedureParam: "MarketManager.USP_MA_05NOTICE_SEARCH01_GET&NO_WR@s|ARR_CD_NO@s|ARR_NO_C@s|SB_NM@s|NOTI_TO@s|NOTI_FROM@s",    
+                    	NO_WR: noticeDataVO.writeText.value,
+                    	ARR_CD_NO: noticeDataVO.noticeCdModel,                                    	
+                    	ARR_NO_C: noticeDataVO.noticeTargetModel.toString().replace(/,/g,'^'),
+                    	SB_NM: noticeDataVO.contentText.value,
+                    	NOTI_TO: new Date(noticeDataVO.datesetting.period.start.y, noticeDataVO.datesetting.period.start.m-1, noticeDataVO.datesetting.period.start.d, "00", "00", "00").dateFormat("YmdHis"),
+                    	NOTI_FROM: new Date(noticeDataVO.datesetting.period.end.y, noticeDataVO.datesetting.period.end.m-1, noticeDataVO.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis")
+                    }; 
+	            		          
 	            	if(me.noticeTargetModel === null || me.noticeTargetModel.length < 1){ alert("공지대상을 입력해 주세요."); return; };
 	            	if(me.noticeCdModel === null || me.noticeCdModel === ""){ alert("공지구분을 입력해 주세요."); return; };
+	            	if(me.param.NOTI_TO > me.param.NOTI_FROM){ alert("공지일자를 올바르게 선택해 주세요."); return; };
+	            	
+	            	$scope.nkg.dataSource.data([]);
 	            	$scope.nkg.dataSource.page(1);
-	            	$scope.nkg.dataSource.read();
-	            };	            
+	            	//$scope.nkg.dataSource.read();
+	            };	        
+	            
 	            //초기화버튼
 	            noticeDataVO.inIt = function(){
 	            	var me  = this;
@@ -152,6 +167,7 @@
                 	$scope.memSearchPopGrd.selectAllItems();
                 	$scope.memSearchPopGrd.searchValue = ""; 	//공지대상 검색 팝업창 초기화
 	            };	   
+	            
 	            //popup insert & update Validation
 	            $scope.insertValidation = function(org){
 	            	var result = true;
@@ -167,6 +183,7 @@
 	            	});
 	            	return result;
 	            };
+	            
 	            //저장 후 조회
 	            noticeDataVO.afterSaveQuery = function(param){
 	            	var me = this;
@@ -194,23 +211,15 @@
                     	sortable: true,                    	
                         pageable: {
                         	messages: {
-                        		empty: "표시할 데이터가 없습니다."
+                        		empty: "표시할 데이터가 없습니다.",
+                        		display: "총 {2}건 중 {0}~{1}건의 자료 입니다."
                         	}
                         },
                         noRecords: true,
                     	dataSource: new kendo.data.DataSource({
                     		transport: {
-                    			read: function(e) {
-                    				var param = {
-                                    	procedureParam: "MarketManager.USP_MA_05NOTICE_SEARCH01_GET&NO_WR@s|ARR_CD_NO@s|ARR_NO_C@s|SB_NM@s|NOTI_TO@s|NOTI_FROM@s",    
-                                    	NO_WR: noticeDataVO.writeText.value,
-                                    	ARR_CD_NO: noticeDataVO.noticeCdModel,                                    	
-                                    	ARR_NO_C: noticeDataVO.noticeTargetModel.toString().replace(/,/g,'^'),
-                                    	SB_NM: noticeDataVO.contentText.value,
-                                    	NOTI_TO: new Date(noticeDataVO.datesetting.period.start.y, noticeDataVO.datesetting.period.start.m-1, noticeDataVO.datesetting.period.start.d, "00", "00", "00").dateFormat("YmdHis"),
-                                    	NOTI_FROM: new Date(noticeDataVO.datesetting.period.end.y, noticeDataVO.datesetting.period.end.m-1, noticeDataVO.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis")
-                                    }; 
-                					UtilSvc.getList(param).then(function (res) {          						
+                    			read: function(e) {                    				
+                					UtilSvc.getList(noticeDataVO.param).then(function (res) {          						
                 						e.success(res.data.results[0]);
                 					});
                     			},
@@ -526,6 +535,7 @@
 	
 	                $scope.checkedIds[dataItem.ROW_NUM] = checked;	                	                
 	                dataItem.ROW_CHK = checked;
+	                dataItem.dirty = checked;
 	                
 	                if (checked) {
 	                	row.addClass("k-state-selected");

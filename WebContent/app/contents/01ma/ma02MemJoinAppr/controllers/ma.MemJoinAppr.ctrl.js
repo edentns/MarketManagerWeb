@@ -36,17 +36,32 @@
                     ProcNameDtOptionVO : [],
                     BetweenDateOptionVO : [],
              	    dataTotal : 0,
-             	    resetAtGrd : ""
+             	    resetAtGrd : "",
+             	    param: ""
 	            };	            
 	            //조회
 	            joinerDataVO.inQuiry = function(){
 	            	var me  = this;
+                	
+                	me.param = {
+                    	procedureParam: "MarketManager.USP_MA_02JOINSEARCH01_GET&NM@s|YL@s|IL@s|RMK@s|RMKTO@s|RMKFROM@s",      	
+                    	NM:joinerDataVO.searchText.value,
+                    	YL:joinerDataVO.joinerStatusDt,
+                    	IL:joinerDataVO.joinerProcNameDt,
+                    	RMK:joinerDataVO.joinerBetweenDate,
+                    	RMKTO:new Date(joinerDataVO.datesetting.period.start.y, joinerDataVO.datesetting.period.start.m-1, joinerDataVO.datesetting.period.start.d, "00", "00", "00").dateFormat("YmdHis"),
+                    	RMKFROM:new Date(joinerDataVO.datesetting.period.end.y, joinerDataVO.datesetting.period.end.m-1, joinerDataVO.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis")
+                    };
+                	
 	            	if(me.joinerStatusDt === ""){alert("가입자 상태 값을 입력해 주세요."); return false;};
                 	if(me.joinerProcNameDt === ""){alert("상품명을 입력해 주세요."); return false;};
                 	if(me.joinerBetweenDate === ""){alert("기간을 입력해 주세요."); return false;};
+                	if(me.param.RMKTO > me.param.RMKFROM){alert("기간을 올바르게 입력해 주세요."); return false;};
 	            	  
                 	$scope.checkedIds = [];
-	            	$scope.kg.dataSource.read();	            	
+                	$scope.kg.dataSource.data([]);
+                	$scope.kg.dataSource.page(1);
+	            	//$scope.kg.dataSource.read();	            	
 	            };
 	            //초기화버튼
 	            joinerDataVO.inIt = function(){
@@ -120,26 +135,18 @@
                     	sortable: true,                    	
                         pageable: {
                         	messages: {
-                        		empty: "표시할 데이터가 없습니다."
+                        		empty: "표시할 데이터가 없습니다.",
+                        		display: "총 {2}건 중 {0}~{1}건의 자료 입니다."
                         	}
                         },
                         noRecords: true,
                     	dataSource: new kendo.data.DataSource({
                     		transport: {
-                    			read: function(e) {                    				
-                    				var param = {
-                                    	procedureParam: "MarketManager.USP_MA_02JOINSEARCH01_GET&NM@s|YL@s|IL@s|RMK@s|RMKTO@s|RMKFROM@s",      	
-                                    	NM:joinerDataVO.searchText.value,
-                                    	YL:joinerDataVO.joinerStatusDt,
-                                    	IL:joinerDataVO.joinerProcNameDt,
-                                    	RMK:joinerDataVO.joinerBetweenDate,
-                                    	RMKTO:new Date(joinerDataVO.datesetting.period.start.y, joinerDataVO.datesetting.period.start.m-1, joinerDataVO.datesetting.period.start.d, "00", "00", "00").dateFormat("YmdHis"),
-                                    	RMKFROM:new Date(joinerDataVO.datesetting.period.end.y, joinerDataVO.datesetting.period.end.m-1, joinerDataVO.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis")
-                                    };                    				                    				
-                					UtilSvc.getList(param).then(function (res) {
+                    			read: function(e) {         				                    				
+                					UtilSvc.getList(joinerDataVO.param).then(function (res) {
                 						//joinerDataVO.dataTotal = res.data.results[0].length;                						
-                						e.success(res.data.results[0]);
-                					});
+                						e.success(res.data.results[0]);   
+                					});                					
                     			},
     	                		create: function(e) {
     	                			var defer = $q.defer();
@@ -161,8 +168,16 @@
                     		},
                     		pageSize: 11,
                     		change: function(e){
-                    			var data = this.data();
+                    			var data = this.data(),
+                    			   	   i = 0,
+                    			   	   sum = 0;
+                    			
                     			joinerDataVO.dataTotal = data.length;
+        					
+            					for(i; i<data.length; i+=1){
+            						sum += 1;
+            						data[i].ROW_NUM = sum;
+            					};
                     		},
                     		batch: true,
                     		schema: {
@@ -170,7 +185,7 @@
                         			id: "CD_D_NM_C",
                     				fields: {
                     					ROW_CHK: 			   {editable: false,  nullable: false},
-                    					ROW_NUM:			   {type: "string", editable: false, nullable: true}, 
+                    					ROW_NUM:			   {type: "number", editable: false, nullable: true}, 
                     					NO_C_NM_C:			   {type: "string", editable: false, nullable: true},                       					
                     					NO_C: 			   	   {type: "string", editable: false, nullable: true},
                     					NM_C: 			   	   {type: "string", editable: false, nullable: true},
@@ -195,10 +210,10 @@
                     	/*selectable: "multiple, row",*/
                     	columns: [
 								{
-								   field: "ROW_CHK",
-								   title: "선택",
-								   width: 20,
-								   headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}
+								   field: "",
+								   title: "",
+								   width: 35,
+								   headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}								   
 							    },    
                		            {
 								   field: "ROW_NUM",
@@ -286,19 +301,17 @@
             		        	}
                     	],
                     	dataBound: function(e) {
-                            this.expandRow(this.tbody.find("tr.k-master-row").first()); //마스터 테이블을 확장하므로 세부행을 볼 수 있음
-                                                        
-                            var rows = this.items();
+                           /* var rows = this.items();
                             $(rows).each(function () {
                                 var index = $(this).index() + 1,
                                     rowLabel = $(this).find(".seq"),
-                                	grid = $scope.kg,                                
+                                	grid = $scope.kg,
                                 	dataItem = grid.dataItem($(this));
                                 
                                 //로우 카운트 표시
                                 $(rowLabel).html(index);
                                 dataItem.ROW_NUM = index;
-                            });                            
+                            });  */                          
                         },                        
                         collapse: function(e) {
                             this.cancelRow();
@@ -325,20 +338,20 @@
                 
                 //체크박스 옵션
                 $scope.onClick = function(e){
-	                var element =$(e.currentTarget);
-	                
-	                var checked = element.is(':checked'),
+	                var element =$(e.currentTarget),
+	                 	checked = element.is(':checked'),
 	                	row = element.closest("tr"),
 	                	grid = $scope.kg,
 	                	dataItem = grid.dataItem(row);
 	
 	                $scope.checkedIds[dataItem.ROW_NUM] = checked;
 	                dataItem.ROW_CHK = checked;
+	                dataItem.dirty = checked;
 	                
 	                if (checked) {
-	                  row.addClass("k-state-selected");
+	                	row.addClass("k-state-selected");
 	                } else {
-	                  row.removeClass("k-state-selected");
+	                	row.removeClass("k-state-selected");
 	                }
                 };
                 
@@ -365,7 +378,7 @@
                 		};
                 	};
                 	return result;
-                }
+                };
                                 
 	            connSetting.joinerStatusDt();
 	            connSetting.joinerProcNameDt();

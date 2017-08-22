@@ -3,8 +3,684 @@
         <div id="app-content-header">
             <ol class="breadcrumb">
                 <li><a href="#99sy/syDashboard"><i class="fa fa-home fa-2x"></i></a></li>
-                <li><a href="#03sa/saEchgReq">교환요청관리</a></li>
+                <li><a href="#03sa/saEchgReq"> 주문·배송 / 배송 / 교환요청 </a></li>
             </ol>
         </div>
     </div>
+    
+    <div class="row">
+        <!-- 검색 -->
+        <div class="content-area-container col-xs-12">
+        	<div data-content-box-layer data-box-title="echgDataVO.boxTitle">
+                <form class="search-type1" id="myForm">
+                	<table>
+                        <colgroup>
+                            <col style="width: 7%;">
+                            <col style="width: 18%;">
+                            <col style="width: 7%;">
+                            <col style="width: 23%;">
+                            <col style="width: 7%;">
+                            <col style="width: 18%;">
+                            <col style="width: 7%;">
+                            <col style="width: 18%;">
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th>마켓명</th>
+                            <td>
+                            	<co01-mcbox title="마켓명" model="echgDataVO.ordMrkNameMo" options="echgDataVO.ordMrkNameOp" setting="echgDataVO.setting" style="width:100%;">
+        						</co01-mcbox> 
+                            </td>
+                            <th>상품명</th>
+                            <td>
+                            	<input data-ng-model="echgDataVO.procName.value"
+                            			focus="echgDataVO.procName.focus"
+                            			title="상품명"
+                            			data-eden-type="kor" 
+                            			type="text" 
+                            			class="form-control" style="width:100%;"/>
+                            </td>		
+                            <th>주문상태</th>
+                            <td>            
+       							<co01-mcbox id="shpbyord-status" title="주문상태" model="echgDataVO.ordStatusMo" options="echgDataVO.ordStatusOp" setting="echgDataVO.setting"  style="width:100%;">
+        						</co01-mcbox>        						
+                            </td>   
+                            <th>주문번호</th>
+                            <td>     
+					            <input data-ng-model="echgDataVO.orderNo.value"
+                            			focus="echgDataVO.orderNo.focus"
+                            			title="주문번호"
+                            			data-eden-type="kor" 
+                            			type="text" 
+                            			class="form-control" style="width:100%;"/>
+                            </td>         
+                        </tr>
+                        <tr>
+                            <th>구매자/수취인</th>
+                            <td>                            	              	
+                            	<input data-ng-model="echgDataVO.buyerName.value"
+                            			focus="echgDataVO.buyerName.focus"
+                            			title="구매자/수취인"
+                            			data-eden-type="kor" 
+                            			type="text" 
+                            			class="form-control" style="width:100%;"/>
+                            </td>
+                            <th></th>
+                            <td></td>
+                            <th></th>
+                            <td></td>
+                            <th></th>
+                            <td></td>                            
+                        </tr>
+                        <tr>
+                            <th>기간</th>                            
+                            <td>
+                            	<select ng-model="echgDataVO.betweenDateOptionMo"
+        								ng-options="option.CD_DEF as option.NM_DEF for option in echgDataVO.betweenDateOptionOp"
+        								class="form-control"
+        								style="width: 100%">
+        						</select>	
+                            </td>
+                            <td colspan="6">                            	              	
+                            	<div class="frm-group" data-date-search-group="echgDataVO.datesetting" style="display:inline-block;"></div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>         		     
+                    <div class="btn-group1 mt-20">
+                        <kendo-button type="submit" class="k-primary" title="검색" data-ng-click="echgDataVO.inQuiry()" style="width:70px;">검색</kendo-button>
+                        <kendo-button type="botton" title="초기화" data-ng-click="echgDataVO.inIt()" style="width:70px;">초기화</kendo-button>
+                    </div>
+                    <br/>
+                    <p class="text-center" ng-if="echgDataVO.dataTotal > 0">총  <strong>{{echgDataVO.dataTotal}}</strong>건이 검색되었습니다.</p>
+                </form>
+            </div>
+        </div>
+        
+        <!-- 주문 목록 -->          
+		<div class="content-area-container col-xs-12">				
+	        <div id="divEchgGrd" kendo-grid="echgkg" options="grdEchgVO">
+	        </div>	            
+        </div>
+    </div>
 </div>
+
+<!-- 주문 조회 그리드 -->
+<script id="echg_template" type="text/x-kendo-template">
+  	<tr data-uid="#= uid #">
+		<td class="ta-c">
+        	<div class="custom-style-checkbox">
+        		<input class='k-checkbox' data-role='checkbox' type='checkbox' ng-click="onOrdGrdCkboxClick($event)" id="#= uid #_alt">
+				<label class='k-checkbox-label k-no-text' for="#= uid #_alt"></label>
+			</div>	
+      	</td>
+		<td class="ta-l" style="padding:0">
+          	<div class="custom-style">
+				# if(NO_ORD){ # 
+				#: NO_ORD # 
+				# }else{ }#
+			</div>
+			<div class="custom-style">
+				# if(NO_APVL){ # 
+				#: NO_APVL # 
+				# }else{ } #
+			</div>
+      	</td>
+		<td class="ta-l" style="padding:0">
+          	<div class="custom-style">
+				# if(NM_MRK){ 	#
+                #: NM_MRK  		# 
+            	# }else{ } 		#
+			</div>
+			<div class="custom-style">
+				# if(NO_MRKORD){ 	# 
+				#: NO_MRKORD 		# 
+				# }else{ }   		#
+			</div>
+      	</td>
+		<td class="ta-l" style="padding:0">
+         	<div class="custom-style">
+				# if(NO_MRKITEM){ #
+          		#: NO_MRKITEM # 
+            	# }else{ }    #
+			</div>
+			<div class="custom-style">
+				# if(NO_MRKREGITEM){ # 
+				#: NO_MRKREGITEM 	# 
+				# }else{ }	   	#
+			</div>
+      	</td>
+		<td style="padding:0">
+          	<div class="ta-l custom-style">
+				# if(NM_MRKITEM){ 	#
+				#: NM_MRKITEM 		#
+				# }else{ }	 		#
+				# if(NM_MRKOPT){ 	#	
+					&nbsp;/&nbsp; 
+				#: NM_MRKOPT 		#
+				# }else{ }			# 
+			</div>
+			<div class="ta-c custom-style">
+				# if(CD_ECHGSTAT){ 	#
+				<co04-cd-to-nm cd="#:CD_ECHGSTAT#" nm-box="echgDataVO.echgStatusOp">	
+				# }else{ }			#
+			</div>
+     	</td>
+		<td class="ta-r" style="padding:0">
+          	<div class="custom-style">
+				# if(QT_ORD){ #
+				#: QT_ORD #
+    			# }else{} #
+			</div>
+			<div class="custom-style">
+				# if(QT_ECHG){ #
+				#: QT_ECHG #
+				# }else{} #
+			</div>
+      	</td>
+		<td style="padding:0">
+          	<div class="ta-l custom-style">
+				# if(NM_PCHR){ #
+				#: NM_PCHR 	#
+				# }else{ }	# 
+			</div>
+			<div class="ta-r custom-style"> 
+				# if(AM_ORDSALEPRC){ #
+				#= kendo.toString(AM_ORDSALEPRC,'C0', 'ko-KR') #
+				# }else{ #
+					0
+				#}#
+			</div>
+      	</td>
+		<td class="ta-c" style="padding:0">
+          	<div class="custom-style">		
+				# if(NO_PCHRPHNE){ 	#					  
+				#: NO_PCHRPHNE 		#		
+				# }else{ } 	 		#						  
+			</div>
+			<div class="custom-style"> 
+				# if(NM_CONS){ 		#
+				#: NM_CONS 			# 
+				# }else{ }	 		#
+			</div>
+      	</td>
+		<td class="ta-l" style="padding:0">
+          	<div class="custom-style">
+				# if(DC_PCHREMI){ 	#
+				#: DC_PCHREMI 		#
+				# }else{ }	  		#
+			</div>
+			<div class="custom-style">
+				# if(NO_CONSPHNE){ 	#
+				#: NO_CONSPHNE 		# 
+				# }else{ }	 	  	#
+			</div>
+      	</td> 
+		<td class="ta-l" style="padding:0">
+          	<div class="custom-style">
+				# if(DC_ECHGRSNCTT){ 	#
+				#: DC_ECHGRSNCTT		#
+				# }else{ }	 	 		#
+			</div>
+			<div class="custom-style">
+				# if(DC_CONSNEWADDR){ 	#	
+				#: DC_CONSNEWADDR 		# 
+				# }else{ }	 	 		#
+			</div>
+      	</td>
+		<td class="ta-l" style="padding:0">
+			<div class="custom-style">
+				# if(CD_ORDSTAT){ 	#
+				<co04-cd-to-nm cd="#:CD_ORDSTAT#" nm-box="echgDataVO.ordStatusOp">
+				# }else{ }	   		#
+			</div>
+			<div class="custom-style">
+				# if(DC_SHPWAY){ 	#
+				#: DC_SHPWAY 		#
+				# }else{ }	   		#
+			</div>
+		</td>
+		<td class="ta-c" style="padding:0">          	
+			<div class="custom-style">
+				# if(DTS_ORD){ 		#  
+				#: DTS_ORD 			#	 
+				# }else{ }	 		#
+			</div>
+			<div class="custom-style">
+				# if(DTS_ECHGREQ){ 	#  
+				#: DTS_ECHGREQ 		#	 
+				# }else{ }	 		#
+			</div>
+      	</td>
+		<td style="padding:0">
+        	<div class="ta-c custom-style">
+				# if(DT_SND){  		#
+				#: DT_SND			#
+				# }else{ }	 	 	#		
+			</div>
+			<div class="ta-l custom-style">				 
+				# if(NO_INVO){ 		#
+				#: NO_INVO			#
+				# }else{ }	 		#
+			</div>
+      	</td>
+		<td style="padding:0">
+        	<div class="ta-c never-fix custom-style">
+				# if(DTS_ECHGAPPRRJT){ 	#
+				#: DTS_ECHGAPPRRJT 		#
+				# }else{ }	 			# 
+			</div>
+			<div class="ta-l custom-style">
+				# if(CD_PARS){  		# 
+				#: CD_PARS				# 
+				# }else{ } 				# 
+			</div>
+      	</td>
+		<td style="padding:0">
+        	<div class="ta-c custom-style">
+				# if(NO_ECHGCPLT){  	#
+				#: NO_ECHGCPLT 			#	
+				# }else{ }	 			#
+			</div>
+			<div class="ta-l custom-style">
+				# if(YN_CONN){ 	#
+				#: 	YN_CONN		#
+				# }else{ }	 	#
+			</div>
+      	</td>
+	</tr>			
+</script>
+
+<!-- 주문 조회 alt 그리드 -->
+<script id="echg_alt_template" type="text/x-kendo-template">
+  	<tr class="k-alt" data-uid="#= uid #" >
+		<td class="ta-c">
+        	<div class="custom-style-checkbox">
+        		<input class='k-checkbox' data-role='checkbox' type='checkbox' ng-click="onOrdGrdCkboxClick($event)" id="#= uid #_alt">
+				<label class='k-checkbox-label k-no-text' for="#= uid #_alt"></label>
+			</div>	
+      	</td>
+		<td class="ta-l" style="padding:0">
+          	<div class="custom-style">
+				# if(NO_ORD){ # 
+				#: NO_ORD # 
+				# }else{ }#
+			</div>
+			<div class="custom-style">
+				# if(NO_APVL){ # 
+				#: NO_APVL # 
+				# }else{ } #
+			</div>
+      	</td>
+		<td class="ta-l" style="padding:0">
+          	<div class="custom-style">
+				# if(NM_MRK){ 	#
+                #: NM_MRK  		# 
+            	# }else{ } 		#
+			</div>
+			<div class="custom-style">
+				# if(NO_MRKORD){ 	# 
+				#: NO_MRKORD 		# 
+				# }else{ }   		#
+			</div>
+      	</td>
+		<td class="ta-l" style="padding:0">
+         	<div class="custom-style">
+				# if(NO_MRKITEM){ #
+          		#: NO_MRKITEM # 
+            	# }else{ }    #
+			</div>
+			<div class="custom-style">
+				# if(NO_MRKREGITEM){ # 
+				#: NO_MRKREGITEM 	# 
+				# }else{ }	   	#
+			</div>
+      	</td>
+		<td style="padding:0">
+          	<div class="ta-l custom-style">
+				# if(NM_MRKITEM){ 	#
+				#: NM_MRKITEM 		#
+				# }else{ }	 		#
+				# if(NM_MRKOPT){ 	#	
+					&nbsp;/&nbsp; 
+				#: NM_MRKOPT 		#
+				# }else{ }			# 
+			</div>
+			<div class="ta-c custom-style">
+				# if(CD_ECHGSTAT){ 	#
+				<co04-cd-to-nm cd="#:CD_ECHGSTAT#" nm-box="echgDataVO.echgStatusOp">	
+				# }else{ }			#
+			</div>
+     	</td>
+		<td class="ta-r" style="padding:0">
+          	<div class="custom-style">
+				# if(QT_ORD){ #
+				#: QT_ORD #
+    			# }else{} #
+			</div>
+			<div class="custom-style">
+				# if(QT_ECHG){ #
+				#: QT_ECHG #
+				# }else{} #
+			</div>
+      	</td>
+		<td style="padding:0">
+          	<div class="ta-l custom-style">
+				# if(NM_PCHR){ #
+				#: NM_PCHR 	#
+				# }else{ }	# 
+			</div>
+			<div class="ta-r custom-style"> 
+				# if(AM_ORDSALEPRC){ #
+				#= kendo.toString(AM_ORDSALEPRC,'C0', 'ko-KR') #
+				# }else{ #
+					0
+				#}#
+			</div>
+      	</td>
+		<td class="ta-c" style="padding:0">
+          	<div class="custom-style">		
+				# if(NO_PCHRPHNE){ 	#					  
+				#: NO_PCHRPHNE 		#		
+				# }else{ } 	 		#						  
+			</div>
+			<div class="custom-style"> 
+				# if(NM_CONS){ 		#
+				#: NM_CONS 			# 
+				# }else{ }	 		#
+			</div>
+      	</td>
+		<td class="ta-l" style="padding:0">
+          	<div class="custom-style">
+				# if(DC_PCHREMI){ 	#
+				#: DC_PCHREMI 		#
+				# }else{ }	  		#
+			</div>
+			<div class="custom-style">
+				# if(NO_CONSPHNE){ 	#
+				#: NO_CONSPHNE 		# 
+				# }else{ }	 	  	#
+			</div>
+      	</td> 
+		<td class="ta-l" style="padding:0">
+          	<div class="custom-style">
+				# if(DC_ECHGRSNCTT){ 	#
+				#: DC_ECHGRSNCTT		#
+				# }else{ }	 	 		#
+			</div>
+			<div class="custom-style">
+				# if(DC_CONSNEWADDR){ 	#	
+				#: DC_CONSNEWADDR 		# 
+				# }else{ }	 	 		#
+			</div>
+      	</td>
+		<td class="ta-l" style="padding:0">
+			<div class="custom-style">
+				# if(CD_ORDSTAT){ 	#
+				<co04-cd-to-nm cd="#:CD_ORDSTAT#" nm-box="echgDataVO.ordStatusOp">
+				# }else{ }	   		#
+			</div>
+			<div class="custom-style">
+				# if(DC_SHPWAY){ 	#
+				#: DC_SHPWAY 		#
+				# }else{ }	   		#
+			</div>
+		</td>
+		<td class="ta-c" style="padding:0">          	
+			<div class="custom-style">
+				# if(DTS_ORD){ 		#  
+				#: DTS_ORD 			#	 
+				# }else{ }	 		#
+			</div>
+			<div class="custom-style">
+				# if(DTS_ECHGREQ){ 	#  
+				#: DTS_ECHGREQ 		#	 
+				# }else{ }	 		#
+			</div>
+      	</td>
+		<td style="padding:0">
+        	<div class="ta-c custom-style">
+				# if(DT_SND){  		#
+				#: DT_SND			#
+				# }else{ }	 	 	#		
+			</div>
+			<div class="ta-l custom-style">				 
+				# if(NO_INVO){ 		#
+				#: NO_INVO			#
+				# }else{ }	 		#
+			</div>
+      	</td>
+		<td style="padding:0">
+        	<div class="ta-c never-fix custom-style">
+				# if(DTS_ECHGAPPRRJT){ 	#
+				#: DTS_ECHGAPPRRJT 		#
+				# }else{ }	 			# 
+			</div>
+			<div class="ta-l custom-style">
+				# if(CD_PARS){  		# 
+				#: CD_PARS				# 
+				# }else{ } 				# 
+			</div>
+      	</td>
+		<td style="padding:0">
+        	<div class="ta-c custom-style">
+				# if(NO_ECHGCPLT){  	#
+				#: NO_ECHGCPLT 			#	
+				# }else{ }	 			#
+			</div>
+			<div class="ta-l custom-style">
+				# if(YN_CONN){ 	#
+				#: 	YN_CONN		#
+				# }else{ }	 	#
+			</div>
+      	</td>
+	</tr>			
+</script>
+
+<!-- 교환 팝업 -->
+<script id="echg_popup_template" type="text/x-kendo-template">
+<div class="not_pop_title" ng-if="echgDataVO.updateChange === '001'">
+	<h4>교환상품접수 입력</h4>
+</div>
+<div class="not_pop_title" ng-if="echgDataVO.updateChange === '002'">
+	<h4>교환거부 입력</h4>
+</div>
+<table class="table signal">
+	<colgroup>
+      <col style="width: 14%;">
+      <col style="width: 30%;">
+      <col style="width: 14%;">
+      <col style="width: 30%;">
+    </colgroup>
+    <tbody data-uid="#= uid #">	
+	<tr class="border-bottom-line border-top-line">	
+		<td class="active border-right-line">
+			마켓
+		</td>
+		<td class="border-right-line">
+			#if(NM_MRK){ #
+			#: NM_MRK #
+			#}#
+		</td>
+		<td class="active border-right-line">
+			주문번호
+		</td>
+		<td>
+			#if(NO_MRKORD){ #
+			#: NO_MRKORD #
+			#}#
+		</td>
+	</tr>
+	<tr class="border-bottom-line">
+		<td class="active border-right-line">
+			상품코드
+		</td>
+		<td colspan="3">
+			#if(NO_MRKITEM){ #
+			#: NO_MRKITEM #
+			#}#	
+		</td>
+	</tr>
+	<tr class="border-bottom-line">
+		<td class="active border-right-line">
+			상품명
+		</td>
+		<td colspan="3">
+			#if(NM_MRKITEM){ #
+			#: NM_MRKITEM #
+			#}#
+		</td>
+	</tr>
+	<tr class="border-bottom-line">
+		<td class="active border-right-line">
+			구매자
+		</td>
+		<td class="border-right-line">
+			#if(NM_PCHR){ #
+			#: NM_PCHR #
+			#}#	
+		</td>
+		<td class="active border-right-line">
+			배송방법
+		</td>
+		<td>
+			#if(DC_SHPWAY){ #
+			#: DC_SHPWAY #
+			#}#			
+		</td>
+	</tr>
+	<tr class="border-bottom-line">
+		<td class="active border-right-line">
+			구매수량
+		</td>
+		<td class="ta-r">
+			#if(QT_ORD){ #
+			#: QT_ORD #
+			#}#
+		<td class="active border-right-line">
+			교환요청수량
+		</td>
+		<td class="ta-r">
+			#if(QT_ECHG){ #
+			#: QT_ECHG #
+			#}#
+		</td>
+	</tr>	
+	<tr class="border-bottom-line" ng-if="echgDataVO.updateChange === '001'">
+		<td class="active border-right-line">
+			접수자
+		</td>
+		<td>
+			{{echgDataVO.userInfo}}
+		</td>
+		<td colspan="2">
+		</td> 
+	</tr>
+	<tr class="border-bottom-line" ng-if="echgDataVO.updateChange === '001'">
+		<td class="active border-right-line">
+			<code>*</code>접수일자
+		</td>
+		<td colspan="3">
+			<input kendo-date-time-picker				
+			 id="DTS_RECER"
+			 name="DTS_RECER"
+			 k-options="echgDataVO.dateOptions"
+             data-bind="value: DTS_RECER"
+             style="width: 50%;" />
+		</td> 
+	</tr>	
+
+	<tr class="border-bottom-line" ng-if="echgDataVO.updateChange === '002'">
+		<td class="active border-right-line">
+			교환사유코드
+		</td>
+		<td>
+			<select kendo-drop-down-list 
+				k-options="echgDataVO.cdEchgrsnOp"
+				name="CD_ECHGRSN"
+				data-bind="value: CD_ECHGRSN"
+                style="width: 100%">
+			</select>
+		</td>
+		<td colspan="2">
+		</td> 
+	</tr>
+	<tr class="border-bottom-line" ng-if="echgDataVO.updateChange === '002'">
+		<td class="active border-right-line">
+			교환요청내용
+		</td>
+		<td colspan="3">			
+			<textarea class="k-textbox k-state-disabled" name="DC_ECHGRSNCTT" data-bind="value: DC_ECHGRSNCTT" disabled="disabled" style="width:100%; height:150px; overflow-y: scroll;"></textarea>
+		</td> 
+	</tr>
+	<tr class="border-bottom-line" ng-if="echgDataVO.updateChange === '002'">
+		<td class="active border-right-line">
+			<code>*</code>교환요청 거부코드
+		</td>
+		<td>
+			<select kendo-drop-down-list 
+				id="CD_ECHGRJTRSN"
+				k-options="echgDataVO.cdEchgrjtOp"
+				name="CD_ECHGRJTRSN"
+				data-bind="value: CD_ECHGRJTRSN"
+                style="width: 100%">
+			</select>
+		</td>
+		<td colspan="2">
+		</td> 
+	</tr>
+	<tr class="border-bottom-line" ng-if="echgDataVO.updateChange === '002'">
+		<td class="active border-right-line">
+			<code>*</code>교환요청 거부사유
+		</td>
+		<td colspan="3">			
+			<textarea class="k-textbox" name="DC_ECHGRJTCTT" data-bind="value: DC_ECHGRJTCTT" style="width:100%; height:150px; overflow-y: scroll;"></textarea>
+		</td> 
+	</tr>
+	</tbody>
+</table>
+</script>
+
+<!-- 교환 요청 그리드 툴바 템플릿 -->
+<script id="echg_toolbar_template" type="text/x-kendo-template">
+	<a class="k-button k-button-icontext k-grid-echg-confirm"><span class="k-icon k-i"></span>교환승인</a>
+	<a class="k-button k-button-icontext k-grid-echg-reject"><span class="k-icon k-i"></span>교환거부</a>
+	<a class="k-button k-button-icontext k-grid-echg-accept"><span class="k-icon k-i"></span>교환상품접수</a>            
+	<a class="k-button k-button-icontext k-grid-echg-open"><span class="k-icon k-i"></span>취소/반품정보 가져오기</a>
+</script>
+
+<style>
+.k-edit-form-container{
+    width: 100%;
+}
+.k-popup-edit-form .k-edit-label{
+    width: 20%;
+    text-align: left;
+}
+.k-popup-edit-form .k-edit-field{
+    width: 70%;
+}
+.k-popup-edit-form .k-edit-field > .k-textbox,
+.k-popup-edit-form .k-edit-field > .k-widget:not(.k-tooltip){
+    width: 98%;
+}
+.div-rows{
+	border-bottom: solid 1px #bbdceb;	
+}
+.not_pop_title{
+	padding: 10px;
+}
+.signal{
+    width: 99%;
+    margin: 5px;
+}
+.border-right-line{    
+	border-right: 1px solid #eee;    
+}
+.border-top-line{	
+	border-top: 1px solid #eee;
+}
+.border-bottom-line{	
+	border-bottom: 1px solid #eee;
+}
+</style>

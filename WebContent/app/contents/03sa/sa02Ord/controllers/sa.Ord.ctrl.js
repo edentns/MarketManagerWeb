@@ -7,8 +7,8 @@
      * 상품분류관리
      */
     angular.module("sa.Ord.controller")
-        .controller("sa.OrdCtrl", ["$scope", "$state", "$http", "$q", "$log", "sa.OrdSvc", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "MenuSvc",
-            function ($scope, $state, $http, $q, $log, saOrdSvc, APP_CODE, $timeout, resData, Page, UtilSvc, MenuSvc) {
+        .controller("sa.OrdCtrl", ["$scope", "$state", "$http", "$q", "$log", "sa.OrdSvc", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "MenuSvc", "Util03saSvc",
+            function ($scope, $state, $http, $q, $log, saOrdSvc, APP_CODE, $timeout, resData, Page, UtilSvc, MenuSvc, Util03saSvc) {
 	            var page  = $scope.page = new Page({ auth: resData.access }),
 		            today = edt.getToday();
 	            
@@ -31,7 +31,7 @@
         				if(res.data.length >= 1){
         					ordDataVO.ordStatusOp = res.data;
         				}
-        			});		
+        			});
 	            }());
 	            
 	            //기간 상태 드랍 박스 실행	
@@ -45,7 +45,7 @@
         					ordDataVO.betweenDateOptionOp = res.data;
         					ordDataVO.betweenDateOptionMo = res.data[0].CD_DEF; //처음 로딩 때 초기 인덱스를 위하여
         				}
-        			});		
+        			});
 	            }());
 	            
 	            //취소 사유 코드 드랍 박스 실행	
@@ -95,18 +95,31 @@
     				},
 	        		cancelCodeMo : "",
 	        		dataTotal : 0,
-	        		resetAtGrd :""
+	        		resetAtGrd :"",
+	        		param : ""
 		        };	           
 	            
 	            //조회
             	ordDataVO.inQuiry = function(){
-	            	//var me = this;
-            		$scope.ordkg.dataSource.page(1);
-	            	$scope.ordkg.dataSource.read();
+	            	var me = this;
+	            	me.param = {	  
+    				    NM_MRKITEM : ordDataVO.procName.value,
+					    NM_MRK : ordDataVO.ordMrkNameMo, 
+					    CD_ORDSTAT : ordDataVO.ordStatusMo,
+					    NO_MRKORD : ordDataVO.orderNo.value,      
+					    NM_PCHR : ordDataVO.buyerName.value,
+					    NO_ORDDTRM : ordDataVO.admin.value,  
+					    DTS_CHK : ordDataVO.betweenDateOptionMo,  
+					    DTS_FROM : new Date(ordDataVO.datesetting.period.start.y, ordDataVO.datesetting.period.start.m-1, ordDataVO.datesetting.period.start.d, "00", "00", "00").dateFormat("YmdHis"),           
+					    DTS_TO : new Date(ordDataVO.datesetting.period.end.y, ordDataVO.datesetting.period.end.m-1, ordDataVO.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis"),				    
+                    };   
+    				if(Util03saSvc.readValidation(me.param)){
+    					$scope.ordkg.dataSource.read();
+    				};	            	
 	            };	            
 	            
 	            //초기화버튼
-	            ordDataVO.inIt = function(){      	
+	            ordDataVO.inIt = function(){
             		var me  = this;
                 	
 	            	me.procName.value = "";
@@ -123,21 +136,12 @@
                 	me.ordStatusOp.bReset = true;
                 	me.ordMrkNameOp.bReset = true;  
 		        	                	                	
+                	angular.element($("#grd_chk_master")).prop("checked",false);
                 	me.dataTotal = 0;
                 	me.resetAtGrd = $scope.ordkg;
                 	me.resetAtGrd.dataSource.data([]);	            		            	
 	            };	
-	            //popup insert & update Validation
-	            $scope.readValidation = function(idx){
-	            	var result = true;
-	            	
-            		if(idx.NM_MRK === null || idx.NM_MRK === ""){ $scope.showPopup("마켓명을 입력해 주세요."); result = false; return; };
-            		if(idx.CD_ORDSTAT === null || idx.CD_ORDSTAT === ""){ $scope.showPopup("주문상태를 입력해 주세요."); result = false; return;};
-            		if(idx.DTS_CHK === null || idx.DTS_CHK === ""){ $scope.showPopup("기간을 선택해 주세요."); result = false; return;};		
-	            
-	            	return result;
-	            };	 
-	            
+	            	            
 		        //주문 검색 그리드
 	            var grdOrdVO = $scope.gridOrdVO = {
             		autoBind: false,
@@ -153,7 +157,7 @@
                 	/*sortable: true,   윗 컬럼으로 소트가 되지 않아서 빼버림    
             	    columnMenu: {
             		    sortable: false
-            		},*/
+            		},*/                	
                     pageable: {
                     	messages: {
                     		empty: "표시할 데이터가 없습니다.",
@@ -164,7 +168,7 @@
                 	dataSource: new kendo.data.DataSource({
                 		transport: {
                 			read: function(e) {
-                				var param = {	  
+                				/*var param = {	  
                 				    NM_MRKITEM : ordDataVO.procName.value,
             					    NM_MRK : ordDataVO.ordMrkNameMo, 
             					    CD_ORDSTAT : ordDataVO.ordStatusMo,
@@ -173,15 +177,26 @@
             					    NO_ORDDTRM : ordDataVO.admin.value,  
             					    DTS_CHK : ordDataVO.betweenDateOptionMo,  
             					    DTS_FROM : new Date(ordDataVO.datesetting.period.start.y, ordDataVO.datesetting.period.start.m-1, ordDataVO.datesetting.period.start.d, "00", "00", "00").dateFormat("YmdHis"),           
-            					    DTS_TO : new Date(ordDataVO.datesetting.period.end.y, ordDataVO.datesetting.period.end.m-1, ordDataVO.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis")
+            					    DTS_TO : new Date(ordDataVO.datesetting.period.end.y, ordDataVO.datesetting.period.end.m-1, ordDataVO.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis"),
+            					    PAGE: parseInt(e.data.page), 
+            					    PAGE_SIZE: parseInt(e.data.pageSize) 
                                 };   
-                				if($scope.readValidation(param)){
+                				if(Util03saSvc.readValidation(param)){
                 					saOrdSvc.orderList(param).then(function (res) {
                     					e.success(res.data);
                         			});
                 				}else{
                 					e.error();
-                				};
+                				};*/                				
+                				var pager = {
+		                					PAGE: parseInt(e.data.page),
+		                					PAGE_SIZE: parseInt(e.data.pageSize)
+                						},
+                					searchParam = $.extend(ordDataVO.param, pager);
+        					     
+                				saOrdSvc.orderList(searchParam).then(function (res) {
+                					e.success(res.data);
+                    			});
                 			},
                 			update: function(e){
                 				if(confirm("주문 취소 하시겠습니까?")){                					
@@ -209,16 +224,21 @@
                 			}
                 		},
                 		change: function(e){
-                			var data = this.data();
-                			ordDataVO.dataTotal = data.length;
+                			var data = this.data();                			
+                			ordDataVO.dataTotal = $scope.ordkg.dataSource.total();
+                			angular.element($("#grd_chk_master")).prop("checked",false);
                 		},
-                		pageSize: 6,
+                		serverPaging: true,
+                		page: 1,
+                		pageSize: 6,                		
                 		batch: true,
                 		schema: {
+                			data: "queryList",
+                            total: "total",
                 			model: {
                     			id: "NO_ORD",
                 				fields: {						                    
-                					ROW_CHK: 		   {	
+                					ROW_CHK: 		   {
 				                    						type: "boolean", 
 															editable: true,  
 															nullable: false
@@ -357,7 +377,22 @@
 				                    				    	type: "string", 
 															editable: false, 
 															nullable: false
-                				    				   },                				    				   			
+                				    				   },   
+				    				AM_ITEMPRC: 	   {
+					                				    	type: "number", 
+															editable: false, 
+															nullable: false
+								    				   },
+   				    				SALES: 	   	   	   {	
+				                    				    	type: "number", 
+															editable: false, 
+															nullable: false
+			   				    				   	   },	
+   				    				AM_SHPCOST: 	   {
+				                    				    	type: "number", 
+															editable: false, 
+															nullable: false
+				   				    				   },				   
                 				    CD_CCLRSN: 	       {
 				                    				    	type: "string", 
 															validation: {
@@ -370,7 +405,7 @@
 				  									    	  	}
 															}
                 				    				   },
-                				 DC_CCLRSNCTT: 	       {
+                				    DC_CCLRSNCTT: 	       {
 				                    				    	type: "string",
 															editable: true,
 															validation: {
@@ -393,13 +428,17 @@
                 		},
                 	}),
                 	navigatable: true, //키보드로 그리드 셀 이동 가능
+                	//selectable: "multiple, row",
+                	//persistSelection: true,
                 	toolbar: [{template: kendo.template($.trim($("#ord-toolbar-template").html()))}],
                 	columns: [
-                	            {
-			                        field: "ROW_CHK",
-			                        title: "<span class='ROW_CHK'>선<br/>택</span>",					                        
+                	            {   
+                	            	field: "ROW_CHK",
+			                        /*title: "<span class='ROW_CHK k-checkbox'>선<br/>택</span>",*/
+			                        title: "<input class='k-checkbox' type='checkbox' id='grd_chk_master' ng-click='onOrdGrdCkboxAllClick($event)'><label class='k-checkbox-label k-no-text' for='grd_chk_master' style='margin-bottom:0;'>​</label>",
 			                        width: "30px",
-			                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
+			                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px; vertical-align:middle;"},
+			                        selectable: true
                 	            },                        
 		                        {	
                 	            	field: "NO_ORD",
@@ -493,7 +532,7 @@
 		                            columns: [ 
 		                                       	{
 				                                    field: "NO_CONSHDPH",
-				                                    title: "휴대전화",
+				                                    title: "전화번호",
 				                                    width: 100,
 							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
 				                                }
@@ -520,8 +559,8 @@
 		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
 		                            columns: [ 
 		                                       	{
-				                                    field: "DC_CONSOLDADDR",
-				                                    title: "주소2",
+				                                    field: "QT_ORD",
+				                                    title: "주문수량",
 				                                    width: 100,
 							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
 				                                }
@@ -540,38 +579,66 @@
 							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
 				                                }
 			                                ]
-		                        } ,                        
+		                        },                        
 		                        {
-		                        	field: "DTS_APVL",
-		                            title: "결제일시",
+		                        	field: "DTS_ORD",
+                                    title: "주문일시",
 		                            width: 100,
 		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
 		                            columns: [ 
-		                                       	{
-				                                    field: "DTS_ORD",
-				                                    title: "주문일시",
+		                                       	{   
+				                                    field: "DTS_APVL",
+						                            title: "결제일시",
 				                                    width: 100,
 							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
 				                                }
 			                                ]
 		                        },                        
 		                        {
-		                        	field: "YN_CONN",
-		                            title: "연동구분",
+		                        	
+		                        	field: "DTS_ORDDTRM",
+	                                title: "주문확정일시",
 		                            width: 100,
 		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
 		                            columns: [
 		                                       	{
-				                                    field: "DTS_ORDDTRM",
-				                                    title: "주문확정일시",
+		                                       		field: "YN_CONN",
+		        		                            title: "연동구분",	
 				                                    width: 100,
 							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
 				                                }
 			                                ]
-		                        }
+		                        },                        
+		                        {
+		                        	field: "AM_ITEMPRC",
+                                    title: "주문상품단가",
+		                            width: 100,
+		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
+		                            columns: [ 
+		                                       	{   
+				                                    field: "SALES",
+						                            title: "판매금액",
+				                                    width: 100,
+							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
+				                                }
+			                                ]
+		                        },                        
+		                        {
+		                        	
+		                        	field: "AM_SHPCOST",
+	                                title: "배송비",
+		                            width: 100,
+		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
+		                            columns: [
+		                                       	{
+				                                    width: 100,
+							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
+				                                }
+			                                ]
+		                        }    
                     ],
                 	dataBound: function(e) {
-                        this.expandRow(this.tbody.find("tr.k-master-row").first());// 마스터 테이블을 확장하므로 세부행을 볼 수 있음                                                  
+                        //this.expandRow(this.tbody.find("tr.k-master-row").first());                                        
                     },
                     collapse: function(e) {
                         this.cancelRow();
@@ -602,21 +669,61 @@
 	            
 	            //kendo grid 체크박스 옵션
                 $scope.onOrdGrdCkboxClick = function(e){
-	                var element =$(e.currentTarget);
-	                
-	                var checked = element.is(':checked'),
+	                var i = 0,
+	                	element = $(e.currentTarget),
+	                	checked = element.is(':checked'),
 	                	row = element.closest("tr"),
 	                	grid = $scope.ordkg,
-	                	dataItem = grid.dataItem(row);
+	                	dataItem = grid.dataItem(row),
+	                	allChecked = true;
 	                 	                
 	                dataItem.ROW_CHK = checked;
+                	dataItem.dirty = checked;
+	                
+	                for(i; i<grid.dataSource.data().length; i+=1){
+	                	if(!grid.dataSource.data()[i].ROW_CHK){
+	                		allChecked = false;
+	                	}
+	                }
+	                
+	                angular.element($("#grd_chk_master")).prop("checked",allChecked);
 	                
 	                if(checked){
 	                	row.addClass("k-state-selected");
 	                }else{
 	                	row.removeClass("k-state-selected");
 	                };
-                };                                
+                };
+                
+                //kendo grid 체크박스 all click
+                $scope.onOrdGrdCkboxAllClick = function(e){
+	                var i = 0,
+	                	element = $(e.currentTarget),
+	                	checked = element.is(':checked'),
+	                	row = element.parents("div").find(".k-grid-content table tr"),
+	                	grid = $scope.ordkg,
+	                	dataItem = grid.dataItems(row),
+	                	dbLength = dataItem.length;
+	                
+	                if(dbLength < 1){	                	
+	                	alert("전체 선택 할 데이터가 없습니다.");
+	                	angular.element($("#grd_chk_master")).prop("checked",false);
+	                	return;
+	                };   
+	                
+	                for(i; i<dbLength; i += 1){
+	                	dataItem[i].ROW_CHK = checked;
+	                	dataItem[i].dirty = checked;
+	                };
+	                
+	                if(checked){
+	                	row.addClass("k-state-selected");
+	                	row.find(".k-checkbox").prop( "checked", true );
+	                }else{
+	                	row.removeClass("k-state-selected");
+	                	row.find(".k-checkbox").prop( "checked", false );
+	                };
+                };
                 
                 $scope.$on("kendoWidgetCreated", function(event, widget){
                 	var grd = $scope.ordkg;
@@ -624,8 +731,8 @@
 	                if (widget === grd){ 
 	                	//주문취소 팝업 가져오기
 	                	widget.element.find(".k-grid-edit").on("click", function(e){
-	                		var	chked = grd.element.find("input:checked"),
-		            			chkedLeng = grd.element.find("input:checked").length;
+	                		var	chked = grd.element.find(".k-grid-content input:checked"),
+		            			chkedLeng = grd.element.find(".k-grid-content input:checked").length;
 	                    		                    
 		                    if(chkedLeng === 1){
 		                		grd.editRow(chked.closest('tr'));
@@ -641,16 +748,15 @@
 	                	widget.element.find(".k-grid-save").on("click", function(e){
 	                		e.preventDefault();
 	                		
-	                		var	chkedLeng = grd.element.find("input:checked").length,
+	                		var	chkedLeng = grd.element.find(".k-grid-content input:checked").length,
 	            				param = {
 		                			data: []
 		                		};           			
 	                		
 	                		if(chkedLeng < 1){
 	                			alert("확정할 주문을 선택해 주세요!");
-		                	}else{
-		                		
-		                		angular.forEach(grd.dataSource.data(), function(val, idx){		                			
+		                	}else{		                		
+		                		angular.forEach(grd.dataSource.data(), function(val, idx){             			
 		                			if(val.ROW_CHK === true && val.CD_ORDSTAT === "001"){
 		                				param.data.push(val);
 		                			}

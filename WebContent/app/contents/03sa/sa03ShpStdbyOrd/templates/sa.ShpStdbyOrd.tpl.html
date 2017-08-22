@@ -118,7 +118,8 @@
 <script id="shpbyord-template" type="text/x-kendo-template">
   	<tr data-uid="#= uid #" ng-dblclick="grdDblClickGo('#: NO_ORD #','#: NO_MRKORD #')">
 		<td class="ta-c">
-        	<span class="ells"><input type="checkbox" class="checkbox" ng-click="onOrdGrdCkboxClick($event)"/></span>
+        	<input class='k-checkbox' data-role='checkbox' type='checkbox' ng-click="onOrdGrdCkboxClick($event)" id="#= uid #_alt">
+			<label class='k-checkbox-label k-no-text' for="#= uid #_alt"></label>
       	</td>
 		<!-- 관리번호 -->
 		<td class="ta-l">
@@ -300,5 +301,29 @@
 .k-grid td{
     white-space: nowrap;
     text-overflow: ellipsis;
+}
+.k-grid-content > table > tbody > tr > td{
+	text-align: left;
+}
+.k-grid-content > table > tbody > tr > td:nth-child(1) {
+	text-align: center;
+}
+.k-grid-content > table > tbody > tr > td:nth-child(8) {
+	text-align: center;
+}
+.k-grid-content > table > tbody > tr > td:nth-child(13) {
+	text-align: center;
+}
+.k-grid-content > table > tbody > tr > td:nth-child(15) {
+	text-align: center;
+}
+.k-grid-content > table > tbody > tr > td:nth-child(16) {
+	text-align: right;
+}
+.k-grid-content > table > tbody > tr > td:nth-child(17) {
+	text-align: right;
+}
+.k-grid-content > table > tbody > tr > td:nth-child(21) {
+	text-align: center;
 }
 </style>

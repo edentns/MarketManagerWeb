@@ -120,64 +120,68 @@
 <script id="ord_template" type="text/x-kendo-template">
   	<tr data-uid="#= uid #" ng-dblclick="grdDblClickGo('#: NO_ORD #','#: NO_MRKORD #')">
 		<td class="ta-c">
-        	<span class="ells"><input type="checkbox" class="checkbox" ng-click="onOrdGrdCkboxClick($event)"/></span>
+			<div class="custom-style-checkbox">
+				<input class='k-checkbox' data-role='checkbox' type='checkbox' ng-click="onOrdGrdCkboxClick($event)" id="#= uid #_row">
+				<label class='k-checkbox-label k-no-text' for="#= uid #_row"></label>
+			<div>					
       	</td>
 		<td class="ta-l" style="padding:0">
-          	<div>
+          	<div class="custom-style">
 				# if(NO_ORD){ # 
 				#: NO_ORD # 
 				# }else{ }#
 			</div>
-			<div>
+			<div class="custom-style">
 				# if(NO_APVL){ # 
 				#: NO_APVL # 
 				# }else{ } #
 			</div>
       	</td>
 		<td class="ta-l" style="padding:0">
-          	<div>
+          	<div class="custom-style">
 				# if(NM_MRK){ 	#
                 #: NM_MRK  		# 
             	# }else{ } 		#
 			</div>
-			<div># if(NO_MRKORD){ 	# 
+			<div class="custom-style">
+				# if(NO_MRKORD){ 	# 
 				#: NO_MRKORD 		# 
 				# }else{ }   		#
 			</div>
       	</td>
 		<td class="ta-l" style="padding:0">
-         	<div>
+         	<div class="custom-style">
 				# if(NO_MRKITEM){ #
           		#: NO_MRKITEM # 
             	# }else{ }    #
 			</div>
-			<div>
+			<div class="custom-style">
 				# if(NO_MRKREGITEM){ # 
 				#: NO_MRKREGITEM 	# 
 				# }else{ }	   	#
 			</div>
       	</td>
 		<td class="ta-l" style="padding:0">
-          	<div>
+          	<div class="custom-style">
 				# if(NM_MRKITEM){ #
 				#: NM_MRKITEM #
 				# }else{ }	 #
 			</div>
-			<div> 
+			<div class="custom-style"> 
 				# if(NM_MRKOPT){ #	
 				#: NM_MRKOPT #
 				# }else{ }	# 
 			</div>
      	</td>
 		<td class="ta-r" style="padding:0">
-          	<div>
+          	<div class="custom-style">
 				# if(AM_ORDSALEPRC){ #
 				#= kendo.toString(AM_ORDSALEPRC,'C0', 'ko-KR') #
     			# }else{ #
 					0
 				#}	#
 			</div>
-			<div>
+			<div class="custom-style">
 				# if(AM_PCHSPRC){ #
 				#= kendo.toString(AM_PCHSPRC,'C0', 'ko-KR') #
 				# }else{ #
@@ -186,87 +190,114 @@
 			</div>
       	</td>
 		<td class="ta-c" style="padding:0">
-          	<div>
+          	<div class="custom-style">
 				# if(NM_PCHR){ #
 				#: NM_PCHR 	#
 				# }else{ }	# 
 			</div>
-			<div> 
+			<div class="custom-style"> 
 				# if(NM_CONS){ #
 				#: NM_CONS 	# 
 				# }else{ }	#  	
 			</div>
       	</td>
 		<td class="ta-l" style="padding:0">
-          	<div>		
+          	<div class="custom-style">		
 				# if(NO_PCHRPHNE){ 	#					  
 				#: NO_PCHRPHNE 		#		
 				# }else{ } 	 		#						  
 			</div>
-			<div> 
+			<div class="custom-style"> 
 				# if(NO_CONSHDPH){ 	#
 				#: NO_CONSHDPH 		# 
 				# }else{ }	 		#
 			</div>
       	</td>
 		<td class="ta-l" style="padding:0">
-          	<div>
+          	<div class="custom-style">
 				# if(DC_PCHREMI){ 	#
 				#: DC_PCHREMI 		#
 				# }else{ }	  		#
 			</div>
-			<div>
+			<div class="custom-style">
 				# if(DC_CONSNEWADDR){ #
 				#: DC_CONSNEWADDR # 
 				# }else{ }	 	  #
 			</div>
       	</td> 
-		<td class="ta-l" style="padding:0">
-          	<div>
-				# if(DC_PCHRREQCTT){ #
-				#: DC_PCHRREQCTT #
-				# }else{ }	 	 #
+		<td style="padding:0">
+          	<div class="ta-l custom-style">
+				# if(DC_PCHRREQCTT){ 	#
+				#: DC_PCHRREQCTT 		#
+				# }else{ }	 	 		#
 			</div>
-			<div>
-				# if(DC_CONSOLDADDR){ #	
-				#: DC_CONSOLDADDR # 
-				# }else{ }	 	 #
+			<div class="ta-r custom-style">
+				# if(QT_ORD){ 			#	
+				#: QT_ORD 				# 
+				# }else{ }	 	 		#
 			</div>
       	</td>
 		<td class="ta-l" style="padding:0">
-          	<div>
-				# if(CD_ORDSTAT){ 	#
+          	<div class="custom-style">
+				# if(CD_ORDSTAT){ 		#
 				<co04-cd-to-nm cd="#:CD_ORDSTAT#" nm-box="ordDataVO.ordStatusOp">
-				# }else{ }	   		#
+				# }else{ }	   			#
 			</div>
-			<div>
-				# if(DC_SHPWAY){ 	#  
-				#: DC_SHPWAY 		#	 
-				# }else{ }	 	 	#
+			<div class="custom-style">
+				# if(DC_SHPWAY){ 		#  
+				#: DC_SHPWAY 			#	 
+				# }else{ }	 	 		#
 			</div>
       	</td>
 		<td class="ta-c" style="padding:0">
-        	<div>
-				# if(DTS_APVL){ #
-				#: DTS_APVL #
-				# }else{ }	 	 #							
+        	<div class="custom-style">
+				# if(DTS_APVL){ 		#
+				#: DTS_APVL 			#
+				# }else{ }	 	 		#							
 			</div>
-			<div>
-				# if(DTS_ORD){ # 
-				#: DTS_ORD # 
-				# }else{ }	 	 #  
+			<div class="custom-style">
+				# if(DTS_ORD){ 			# 
+				#: DTS_ORD 				# 
+				# }else{ }	 	 		#  
 			</div>
       	</td>
 		<td class="ta-l" style="padding:0">
-        	<div>
-				# if(YN_CONN){ #
-				#: YN_CONN #
-				# }else{ }	 	 #
+        	<div class="custom-style">
+				# if(DTS_ORDDTRM){ 		#
+				#: DTS_ORDDTRM  		# 
+				# }else{ }	 	 		#
 			</div>
-			<div>
-				# if(DTS_ORDDTRM){ #
-				#: DTS_ORDDTRM  # 
-				# }else{ }	 	 #
+			<div class="custom-style">
+				# if(YN_CONN){ 			#
+				#: YN_CONN 				#
+				# }else{ }	 	 		#				
+			</div>
+      	</td>
+		<td class="ta-r" style="padding:0">
+        	<div class="custom-style">
+				# if(AM_ITEMPRC){ #
+				#= kendo.toString(AM_ITEMPRC,'C0', 'ko-KR') #
+				# }else{ #
+					0 
+				#}	 	 #							
+			</div>
+			<div class="custom-style">
+				# if(SALES){ # 
+				#= kendo.toString(SALES,'C0', 'ko-KR') # 
+				# }else{ #
+					0 
+				#}	 	 #  
+			</div>
+      	</td>
+		<td class="ta-r" style="padding:0">
+        	<div class="custom-style">
+				# if(AM_SHPCOST){ 	#
+				#= kendo.toString(AM_SHPCOST,'C0', 'ko-KR') #
+				# }else{ #
+					0 
+				#}	 	 #
+			</div>
+			<div class="custom-style">			
 			</div>
       	</td>
 	</tr>			
@@ -276,64 +307,68 @@
 <script id="ord_alt_template" type="text/x-kendo-template">
   	<tr class="k-alt" data-uid="#= uid #" ng-dblclick="grdDblClickGo('#: NO_ORD #','#: NO_MRKORD #')">
 		<td class="ta-c">
-        	<span class="ells"><input type="checkbox" class="checkbox" ng-click="onOrdGrdCkboxClick($event)"/></span>
+			<div class="custom-style-checkbox">
+        		<input class='k-checkbox' data-role='checkbox' type='checkbox' ng-click="onOrdGrdCkboxClick($event)" id="#= uid #_alt">
+				<label class='k-checkbox-label k-no-text' for="#= uid #_alt"></label>
+			</div>				
       	</td>
 		<td class="ta-l" style="padding:0">
-          	<div>
+          	<div class="custom-style">
 				# if(NO_ORD){ # 
 				#: NO_ORD # 
 				# }else{ }#
 			</div>
-			<div>
+			<div class="custom-style">
 				# if(NO_APVL){ # 
 				#: NO_APVL # 
 				# }else{ } #
 			</div>
       	</td>
 		<td class="ta-l" style="padding:0">
-          	<div>
+          	<div class="custom-style">
 				# if(NM_MRK){ 	#
                 #: NM_MRK  		# 
             	# }else{ } 		#
 			</div>
-			<div># if(NO_MRKORD){ 	# 
+			<div class="custom-style">
+				# if(NO_MRKORD){ 	# 
 				#: NO_MRKORD 		# 
 				# }else{ }   		#
 			</div>
       	</td>
 		<td class="ta-l" style="padding:0">
-         	<div>
+         	<div class="custom-style">
 				# if(NO_MRKITEM){ #
           		#: NO_MRKITEM # 
             	# }else{ }    #
 			</div>
-			<div>
+			<div class="custom-style">
 				# if(NO_MRKREGITEM){ # 
 				#: NO_MRKREGITEM 	# 
 				# }else{ }	   	#
 			</div>
       	</td>
 		<td class="ta-l" style="padding:0">
-          	<div>
+          	<div class="custom-style">
 				# if(NM_MRKITEM){ #
 				#: NM_MRKITEM #
 				# }else{ }	 #
 			</div>
-			<div> 
+			<div class="custom-style"> 
 				# if(NM_MRKOPT){ #	
 				#: NM_MRKOPT #
 				# }else{ }	# 
 			</div>
      	</td>
 		<td class="ta-r" style="padding:0">
-          	<div>
+          	<div class="custom-style">
 				# if(AM_ORDSALEPRC){ #
 				#= kendo.toString(AM_ORDSALEPRC,'C0', 'ko-KR') #
     			# }else{ #
 					0
 				#}	#
 			</div>
-			<div>
+			<div class="custom-style">
 				# if(AM_PCHSPRC){ #
 				#= kendo.toString(AM_PCHSPRC,'C0', 'ko-KR') #
 				# }else{ #
@@ -342,87 +377,114 @@
 			</div>
       	</td>
 		<td class="ta-c" style="padding:0">
-          	<div>
+          	<div class="custom-style">
 				# if(NM_PCHR){ #
 				#: NM_PCHR 	#
 				# }else{ }	# 
 			</div>
-			<div> 
+			<div class="custom-style"> 
 				# if(NM_CONS){ #
 				#: NM_CONS 	# 
 				# }else{ }	#  	
 			</div>
       	</td>
 		<td class="ta-l" style="padding:0">
-          	<div>		
+          	<div class="custom-style">		
 				# if(NO_PCHRPHNE){ 	#					  
 				#: NO_PCHRPHNE 		#		
 				# }else{ } 	 		#						  
 			</div>
-			<div> 
+			<div class="custom-style"> 
 				# if(NO_CONSHDPH){ 	#
 				#: NO_CONSHDPH 		# 
 				# }else{ }	 		#
 			</div>
       	</td>
 		<td class="ta-l" style="padding:0">
-          	<div>
+          	<div class="custom-style">
 				# if(DC_PCHREMI){ 	#
 				#: DC_PCHREMI 		#
 				# }else{ }	  		#
 			</div>
-			<div>
+			<div class="custom-style">
 				# if(DC_CONSNEWADDR){ #
 				#: DC_CONSNEWADDR # 
 				# }else{ }	 	  #
 			</div>
       	</td> 
-		<td class="ta-l" style="padding:0">
-          	<div>
-				# if(DC_PCHRREQCTT){ #
-				#: DC_PCHRREQCTT #
-				# }else{ }	 	 #
+		<td style="padding:0">
+          	<div class="ta-l custom-style">
+				# if(DC_PCHRREQCTT){ 	#
+				#: DC_PCHRREQCTT 		#
+				# }else{ }	 	 		#
 			</div>
-			<div>
-				# if(DC_CONSOLDADDR){ #	
-				#: DC_CONSOLDADDR # 
-				# }else{ }	 	 #
+			<div class="ta-r custom-style">
+				# if(QT_ORD){ 			#	
+				#: QT_ORD 				# 
+				# }else{ }	 	 		#
 			</div>
       	</td>
 		<td class="ta-l" style="padding:0">
-          	<div>
-				# if(CD_ORDSTAT){ 	#
+          	<div class="custom-style">
+				# if(CD_ORDSTAT){ 		#
 				<co04-cd-to-nm cd="#:CD_ORDSTAT#" nm-box="ordDataVO.ordStatusOp">
-				# }else{ }	   		#
+				# }else{ }	   			#
 			</div>
-			<div>
-				# if(DC_SHPWAY){ 	#  
-				#: DC_SHPWAY 		#	 
-				# }else{ }	 	 	#
+			<div class="custom-style">
+				# if(DC_SHPWAY){ 		#  
+				#: DC_SHPWAY 			#	 
+				# }else{ }	 	 		#
 			</div>
       	</td>
 		<td class="ta-c" style="padding:0">
-        	<div>
-				# if(DTS_APVL){ #
-				#: DTS_APVL #
-				# }else{ }	 	 #							
+        	<div class="custom-style">
+				# if(DTS_APVL){ 		#
+				#: DTS_APVL 			#
+				# }else{ }	 	 		#							
 			</div>
-			<div>
-				# if(DTS_ORD){ # 
-				#: DTS_ORD # 
-				# }else{ }	 	 #  
+			<div class="custom-style">
+				# if(DTS_ORD){ 			# 
+				#: DTS_ORD 				# 
+				# }else{ }	 	 		#  
 			</div>
       	</td>
 		<td class="ta-l" style="padding:0">
-        	<div>
-				# if(YN_CONN){ #
-				#: YN_CONN #
-				# }else{ }	 	 #
+        	<div class="custom-style">
+				# if(DTS_ORDDTRM){ 		#
+				#: DTS_ORDDTRM  		# 
+				# }else{ }	 	 		#
 			</div>
-			<div>
-				# if(DTS_ORDDTRM){ #
-				#: DTS_ORDDTRM  # 
-				# }else{ }	 	 #
+			<div class="custom-style">
+				# if(YN_CONN){ 			#
+				#: YN_CONN 				#
+				# }else{ }	 	 		#				
+			</div>
+      	</td>
+		<td class="ta-r" style="padding:0">
+        	<div class="custom-style">
+				# if(AM_ITEMPRC){ #
+				#= kendo.toString(AM_ITEMPRC,'C0', 'ko-KR') #
+				# }else{ #
+					0 
+				#}	 	 #							
+			</div>
+			<div class="custom-style">
+				# if(SALES){ # 
+				#= kendo.toString(SALES,'C0', 'ko-KR') # 
+				# }else{ #
+					0 
+				#}	 	 #  
+			</div>
+      	</td>
+		<td class="ta-r" style="padding:0">
+        	<div class="custom-style">
+				# if(AM_SHPCOST){ 	#
+				#= kendo.toString(AM_SHPCOST,'C0', 'ko-KR') #
+				# }else{ #
+					0 
+				#}	 	 #
+			</div>
+			<div class="custom-style">			
 			</div>
       	</td>
 	</tr>			
@@ -538,7 +600,7 @@
 
 <!-- 주문 조회 그리드 툴바 템플릿 -->
 <script id="ord-toolbar-template" type="text/x-kendo-template">
-	<a class="k-button k-button-icontext k-grid-custom" ng-click="showPopup('어떻게 할지 고민중입니다.')"><span class="k-icon k-i-custom"></span>신규주문 가져오기</a>
+	<a class="k-button k-button-icontext k-grid-custom" ng-click="showPopup('신규주문 가져오기는 [공사중]입니다.')"><span class="k-icon k-i-custom"></span>신규주문 가져오기</a>
 	<a class="k-button k-button-icontext k-grid-edit"><span class="k-icon k-i-close"></span>주문취소</a>        
 	<a class="k-button k-button-icontext k-grid-save"><span class="k-icon k-i-update"></span>주문 확정</a>  
 </script>
@@ -550,16 +612,17 @@
 
 <span kendo-notification="notf1" k-options="notf1Options"></span>
 
-  <!-- 사용가능한  아이콘
-  k-i-undo
-  k-i-redo
-  k-i-lock
-  k-i-clock
-  k-i-calendar
-  print
-  delete 모양이 다름
-  k-i-custom 
-  --> 
+<!-- 
+	사용가능한  아이콘
+	  k-i-undo
+	  k-i-redo
+	  k-i-lock
+	  k-i-clock
+	  k-i-calendar
+	  print
+	  delete 모양이 다름
+	  k-i-custom 
+--> 
 
 <style>
 .k-edit-form-container{
@@ -594,22 +657,5 @@
 }
 .border-bottom-line{	
 	border-bottom: 1px solid #eee;
-}
-.ROW_CHK{
-	margin-bottom: 5px;
-	display:inline-block;
-}
-.k-grid-content > table > tbody > tr > td > div{
-	height: 24px;
-	text-overflow: ellipsis; 
-	white-space: nowrap; 
-	overflow:hidden;
-	padding: 2px 1px 0 2px;
-}
-.k-grid-content > table > tbody > tr > td > div:nth-child(odd){
-	border-bottom: solid 1px #bbdceb;	
-}
-.k-grid-content > table > tbody > tr > td > div > span{
-	
 }
 </style>

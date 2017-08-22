@@ -227,7 +227,8 @@
 						            k-option-label="'-- 택배사를 선택해 주세요 --'"
 						            k-options="ordInfoDataVO.shpCodeOptions"
 						            k-ng-model="ordInfoDataVO.ds.CD_PARS"
-						            data-required-msg="택배사를 선택해 주세요."				            
+						            data-required-msg="택배사를 선택해 주세요."
+						            ng-disabled="ordInfoDataVO.ds.CD_ORDSTAT > '003'"
                        				required >
                        			</select>	
                        			<span class="k-invalid-msg" data-for="CD_PARS"></span>
@@ -242,7 +243,7 @@
                        				style="width: 100%;" 
 									data-required-msg="송장번호를 입력해 주세요."
 									data-lengthy-msg="송장번호를 100자 이내로 입력해 주세요."
-									lengthy required />
+									ng-disabled="ordInfoDataVO.ds.CD_ORDSTAT > '003'"									
 								<span class="k-invalid-msg" data-for="NO_INVO"></span>	
                        		</td>
                        		<th></th>
@@ -254,10 +255,10 @@
         </div>        
     </div>
    	   	
-	<div class="btn-group1 mt-20 mb-20">		
-		<kendo-button type="button" ng-click="ordInfoDataVO.shpOutPrint()" style="width:120px;"><span class="k-icon k-i-update"></span>송장출력</kendo-button>
-		<kendo-button type="submit" ng-click="ordInfoDataVO.shpInfoReg()" style="width:120px;"><span class="k-icon k-i-add"></span>배송정보등록</kendo-button>        
-		<kendo-button type="submit" ng-click="ordInfoDataVO.shpInfoSend()" style="width:120px;"><span class="k-icon k-i-redo"></span>배송정보전송</kendo-button>
+	<div class="btn-group1 mt-20 mb-20">
+		<kendo-button type="button" ng-click="ordInfoDataVO.shpOutPrint()" style="width:120px;" ng-if="ordInfoDataVO.ds.CD_ORDSTAT < '003'"><span class="k-icon k-i-update"></span>송장출력</kendo-button>
+		<kendo-button type="submit" ng-click="ordInfoDataVO.shpInfoReg()" style="width:120px;" ng-if="ordInfoDataVO.ds.CD_ORDSTAT < '004'"><span class="k-icon k-i-add"></span>배송정보등록</kendo-button>	        
+		<kendo-button type="submit" ng-click="ordInfoDataVO.shpInfoSend()" style="width:120px;" ng-if="ordInfoDataVO.ds.CD_ORDSTAT < '005' && ordInfoDataVO.ds.INVO_YN !== ordInfoDataVO.ds.NO_ORD"><span class="k-icon k-i-redo"></span>배송정보전송</kendo-button>
 		<kendo-button type="button" ng-click="ordInfoDataVO.goBack()" style="width:80px;">목록</kendo-button>   
 	</div>
 	

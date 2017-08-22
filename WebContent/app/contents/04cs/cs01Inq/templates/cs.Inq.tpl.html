@@ -98,7 +98,7 @@
         </div>
                 
         <!-- 승인 리스트 -->          
-		<div class="content-area-container col-xs-12" style="padding:50px 0px 0px 0px;">				
+		<div class="content-area-container col-xs-12">				
 	        <div id="divCsGrd" kendo-grid="cskg" options="gridCsVO">
 	        </div>	            
         </div>
@@ -109,7 +109,8 @@
 <script id="cs_template" type="text/x-kendo-template">		
      <tr data-uid="#= uid #">
         <td class="ta-c">
-            <span class="ells"><input type="checkbox" class="checkbox" ng-click="onCsGrdCkboxClick($event)"/></span>
+            <input class='k-checkbox' data-role='checkbox' type='checkbox' ng-click="onOrdGrdCkboxClick($event)" id="#= uid #">
+			<label class='k-checkbox-label k-no-text' for="#= uid #"></label>
         </td>
 		<td class="ta-c">
             <span class="seq ells">
@@ -282,8 +283,8 @@
 <!-- 그리드 툴바 템플릿 -->
 <script id="cs-toolbar-template" type="text/x-kendo-template">
 	<button class="k-button k-button-icontext k-grid-edit" ng-click="onCsGridEditClick()"><span class="k-icon k-edit"></span>답변등록</button>    
-    <a class="k-button k-button-icontext k-grid-info" ng-click=""><span class="k-icon k-i-info"></span>문의정보 가오기</a>
-	<a class="k-button k-button-icontext k-grid-send" ng-click=""><span class="k-icon k-i-send"></span>답변 전송하기</a>
+    <a class="k-button k-button-icontext k-grid-info" ng-click="onOpen()"><span class="k-icon k-i-info"></span>문의정보 가오기</a>
+	<a class="k-button k-button-icontext k-grid-send" ng-click="onSend()"><span class="k-icon k-i-send"></span>답변 전송하기</a>
 </script>
 
 <!-- 검색시 유효성 검사 경고창 -->

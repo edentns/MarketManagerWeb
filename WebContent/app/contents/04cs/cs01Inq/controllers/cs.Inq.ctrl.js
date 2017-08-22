@@ -75,12 +75,27 @@
 	        		csQuestionCodeOp : [],
 	        		csQuestionCodeMo : "*",
 	        		dataTotal : 0,
-	        		resetAtGrd:""
+	        		resetAtGrd:"",
+	        		param : ""
 	            };	            
 	            //조회
 	            csDataVO.inQuiry = function(){	
-	            	//var me = this;	            	
-	            	$scope.cskg.dataSource.read();
+	            	var me = this;
+	            	me.param = {
+    					I_NO_MRK: csDataVO.csMrkNameMo,
+    					I_NM_MRKITEM: csDataVO.procName.value,                                    	
+    					I_CD_INQSTAT: csDataVO.csStatusMo,
+    					I_CD_INQCLFT: csDataVO.csQuestionCodeMo,
+    					I_NM_INQ: csDataVO.buyerName.value,
+    					I_NO_MRKORD: csDataVO.orderNo.value,
+    					I_DTS_INQREG_F: new Date(csDataVO.datesetting.period.start.y, csDataVO.datesetting.period.start.m-1, csDataVO.datesetting.period.start.d, "00", "00", "00").dateFormat("YmdHis"),
+    					I_DTS_INQREG_T: new Date(csDataVO.datesetting.period.end.y, csDataVO.datesetting.period.end.m-1, csDataVO.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis")
+                    };   
+    				if($scope.readValidation(csDataVO.param)){
+    					$scope.cskg.dataSource.data([]);
+    	            	$scope.cskg.dataSource.page(1);
+    	            	//$scope.cskg.dataSource.read();
+    				};	            	
 	            };	            
 	            //초기화버튼
 	            csDataVO.inIt = function(){
@@ -109,33 +124,35 @@
 	            	
             		if(idx.I_NO_MRK === null || idx.I_NO_MRK === ""){ $scope.showPopup("마켓명을 입력해 주세요."); result = false; return; };
             		if(idx.I_CD_INQSTAT === null || idx.I_CD_INQSTAT === ""){ $scope.showPopup("상태값을 입력해 주세요."); result = false; return;};
-            		if(idx.I_CD_INQCLFT === null || idx.I_CD_INQCLFT === ""){ $scope.showPopup("문의 구분을 입력해 주세요."); result = false; return;};		
-	            
+            		if(idx.I_CD_INQCLFT === null || idx.I_CD_INQCLFT === ""){ $scope.showPopup("문의 구분을 입력해 주세요."); result = false; return;};
+            		if(idx.I_DTS_INQREG_F > idx.I_DTS_INQREG_T){ $scope.showPopup("문의일자를 올바르게 입력해 주세요."); result = false; return;};
+            		
 	            	return result;
 	            };	               
 	            //cs 검색 그리드
                 var gridCsVO = $scope.gridCsVO = {
                 		autoBind: false,
                         messages: {                        	
-                            requestFailed: "마켓정보를 가져오는 중 오류가 발생하였습니다.",
+                            requestFailed: "주문정보를 가져오는 중 오류가 발생하였습니다.",
                             commands: {
                                 update: "저장",
                                 canceledit: "닫기"
                             }
                             ,noRecords: "검색된 데이터가 없습니다."
-                        },
-                    	boxTitle : "CS 리스트",
-                    	sortable: true,                    	
-                        pageable: {
+                        },                    	
+                    	pageable: {
                         	messages: {
-                        		empty: "표시할 데이터가 없습니다."
+                        		empty: "표시할 데이터가 없습니다.",
+                        		display: "총 {2}건 중 {0}~{1}건의 자료 입니다."
                         	}
                         },
+                    	boxTitle : "CS 리스트",
+                    	sortable: true,    
                         noRecords: true,
                     	dataSource: new kendo.data.DataSource({
                     		transport: {
                     			read: function(e) {
-                    				var param = {
+                    				/*var param = {
                     					I_NO_MRK: csDataVO.csMrkNameMo,
                     					I_NM_MRKITEM: csDataVO.procName.value,                                    	
                     					I_CD_INQSTAT: csDataVO.csStatusMo,
@@ -147,8 +164,8 @@
                                     };   
                     				if(!$scope.readValidation(param)){
                     					e.error();
-                    				}
-                    				csInqSvc.csList(param).then(function (res) {      						
+                    				}*/
+                    				csInqSvc.csList(csDataVO.param).then(function (res) {      						
                 						e.success(res.data);
                 					});
                     			},                    			
@@ -170,7 +187,6 @@
                     		change: function(e){
                     			var data = this.data();
                     			csDataVO.dataTotal = data.length;
-                    			//console.log("변화된 데이터 => ",data.length);
                     		},
                     		pageSize: 11,
                     		batch: true,
@@ -272,7 +288,7 @@
 								   title: "선택",
 								   width: 30,
 								   headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 10px"}
-							    },    
+							    }, 							
                		            {
 								   field: "NO_INQ",
 								   title: "문의 번호",
@@ -346,7 +362,7 @@
             		        	}            		        	
                     	],
                     	dataBound: function(e) {
-                            this.expandRow(this.tbody.find("tr.k-master-row").first());// 마스터 테이블을 확장하므로 세부행을 볼 수 있음                                                  
+                           // this.expandRow(this.tbody.find("tr.k-master-row").first());                                                  
                         },
                         /*selectable: "row",*/
                         collapse: function(e) {
@@ -362,7 +378,7 @@
                     	},	
                     	resizable: true,
                     	rowTemplate: kendo.template($.trim($("#cs_template").html())),
-                    	height: 500       
+                    	height: 540       
                     	//모델과 그리드 셀을 제대로 연동 안시키면 수정 팝업 연 후 닫을 때 로우가 사라짐(즉 크레에이트인지 에딧인지 구분을 못함)
                     	//id는 유니크한 모델값으로 해야함 안그러면 cancel 시에 row grid가 중복 되는 현상이 발생
         		};
@@ -377,6 +393,7 @@
 	                	dataItem = grid.dataItem(row);
 	                 	                
 	                dataItem.ROW_CHK = checked;
+	                dataItem.dirty = checked;
 	                
 	                if (checked) {
 	                	row.addClass("k-state-selected");
@@ -401,6 +418,16 @@
                 	}
                 };	
                 
+                $scope.onOpen = function(){
+                	$scope.showPopup("문의정보 가져오기는 준비중 입니다.");
+                	return;
+                };
+                
+                $scope.onSend = function(){
+                	$scope.showPopup("답변 전송하기는 준비중 입니다.");
+                	return;
+                };
+                
                 //alert 경고
                 $scope.notf1Options = {
             		position: {
@@ -424,7 +451,7 @@
                     $scope.notf1.show({
                       kValue: msg
                     }, "warning");
-                };               
+                };
                 
             }]);
 }());
