@@ -34,19 +34,28 @@
                             			type="text" 
                             			class="form-control" style="width:100%;"/>
                             </td>
-                            <th>과세구분</th>
-                            <td>
-                            	<co01-mcbox id="SaleList_tax" title="과세구분" model="saleItemDataVO.taxClftIds" options="saleItemDataVO.taxClftList" setting="saleItemDataVO.setting"  style="width:100%;">
-        						</co01-mcbox> 
-                            </td>
-                            <th>제조사</th>
-                            <td col>                            	              	
-                            	<input data-ng-model="saleItemDataVO.nmMnfr.value"
-                            			focus="saleItemDataVO.nmMnfr.focus"
-                            			title="구매자"
-                            			data-eden-type="kor" 
-                            			type="text" 
-                            			class="form-control" style="width:100%;"/>
+                            <th>판매SITE</th>
+                            <td>                            	              	
+                            	<co01-mcbox id="SaleList_cmrk" title="판매SITE" model="saleItemDataVO.cmrkIds" options="saleItemDataVO.cmrkList" setting="saleItemDataVO.cmrkSetting"  style="width:100%;">
+        						</co01-mcbox>
+                            </td>  
+                            <th>상품분류</th>
+                            <td colspan="3">                            	              	
+                            	<select class="form-control wid-x5" id="ctgr1" title="대분류선택"
+                                         data-ng-model="saleItemDataVO.selectedCtgr1" style="width: 150px" ng-change="saleItemDataVO.ctgrChange('1')"
+                                         data-ng-options="ctgr.NM_CTGR for ctgr in saleItemDataVO.itemCtgrList1 track by ctgr.ID_CTGR">
+                                     <option value="">대분류선택</option>
+                                 </select>
+                                 <select class="form-control wid-x5" id="ctgr2" title="중분류선택"
+                                         data-ng-model="saleItemDataVO.selectedCtgr2" style="width: 150px" ng-change="saleItemDataVO.ctgrChange('2')"
+                                         data-ng-options="ctgr.NM_CTGR for ctgr in saleItemDataVO.itemCtgrList2 track by ctgr.ID_CTGR">
+                                     <option value="">중분류선택</option>
+                                 </select>
+                                 <select class="form-control wid-x5" id="ctgr3" title="소분류선택"
+                                         data-ng-model="saleItemDataVO.selectedCtgr3" style="width: 150px"
+                                         data-ng-options="ctgr.NM_CTGR for ctgr in saleItemDataVO.itemCtgrList3 track by ctgr.ID_CTGR">
+                                     <option value="">소분류선택</option>
+                                 </select>
                             </td>		
                             
                         </tr>
@@ -62,7 +71,7 @@
                             </td>
                             <th>상품상태</th>
                             <td>                            	              	
-                            	<co01-mcbox id="SaleList_iClft" title="상품상태" model="saleItemDataVO.iClftIds" options="saleItemDataVO.iClftList" setting="saleItemDataVO.setting"  style="width:100%;">
+                            	<co01-mcbox id="SaleList_iStat" title="상품상태" model="saleItemDataVO.iStatIds" options="saleItemDataVO.iStatList" setting="saleItemDataVO.setting"  style="width:100%;">
         						</co01-mcbox>
                             </td>
                             <th>판매일자</th>
@@ -82,7 +91,7 @@
             </div>
         </div>
                 
-        <!-- 승인 리스트 -->          
+        <!-- SALESITE 리스트 -->          
 		<div class="content-area-container col-xs-12" style="padding:50px 0px 0px 0px;">				
 	        <div id="divSaleVO" kendo-grid="gridSaleVO" options="gridSaleVO">
 	        </div>	            
@@ -90,11 +99,18 @@
     </div>
 </div>
 
-<!-- cs 조회 그리드 -->
+<!-- SALESITE 조회 그리드 -->
 <script id="sale_template" type="text/x-kendo-template">
-	<tr data-uid="#= uid #" ng-dblclick="grdDblClickGo('#: CD_ITEM #')">
+	<tr data-uid="#= uid #" ng-dblclick="grdDblClickGo('#: NO_MRKREGITEM #')">
 		<td class="ta-c">
         	<span class="ells"><input type="checkbox" class="checkbox" ng-click="onSaleGrdCkboxClick($event)"/></span>
+      	</td>
+		<td class="ta-l" style="padding:0">
+          	<div class="div-rows ells">
+							  # if(NO_MRK !== "" && NO_MRK !== null && NO_MRK !== "undefined"){ #
+                  	    	  #: NO_MRK  # 
+                      	      # }else{ } #
+			</div>
       	</td>
 		<td class="ta-l" style="padding:0">
           	<div class="div-rows ells">
@@ -102,162 +118,91 @@
 							  #: CD_SIGNITEM # 
 							  # }else{ } #
 			</div>
-			<div class="ells"># if(ID_CTGR !== "" && ID_CTGR !== null && ID_CTGR !== "undefined"){ # 
-							  #: ID_CTGR # 
-							  # }else{ } #
-			</div>
       	</td>
 		<td class="ta-l" style="padding:0">
           	<div class="div-rows ells">
-							  # if(NM_ITEM !== "" && NM_ITEM !== null && NM_ITEM !== "undefined"){ #
-                  	    	  #: NM_ITEM  # 
+							  # if(NO_MRKITEM !== "" && NO_MRKITEM !== null && NO_MRKITEM !== "undefined"){ #
+                  	    	  #: NO_MRKITEM  # 
                       	      # }else{ } #
 			</div>
-			<div class="ells"># if(DC_ITEMABBR !== "" && DC_ITEMABBR !== null && DC_ITEMABBR !== "undefined"){ # 
-							  #: DC_ITEMABBR # 
+      	</td>
+		<td class="ta-l" style="padding:0">
+         	<div class="ells"># if(NM_ITEM !== "" && NM_ITEM !== null && NM_ITEM !== "undefined"){ #
+							  #: NM_ITEM #
 							  # }else{  #
-							  #: "-" #
-                              #}	 # 	
+							   #: "-" #
+                               #}	# 
 			</div>
       	</td>
 		<td class="ta-l" style="padding:0">
-         	<div class="ells"># if(CD_PRCCLFT_S !== "" && CD_PRCCLFT_S !== null && CD_PRCCLFT_S !== "undefined"){ #
-							  #= kendo.toString(CD_PRCCLFT_S,'C0', 'ko-KR') #
-							  # }else{ #
-								0
-							  #}#
-			</div>
-			<div class="ells"># if(CD_PRCCLFT_B !== "" && CD_PRCCLFT_B !== null && CD_PRCCLFT_B !== "undefined"){ #
-							  #= kendo.toString(CD_PRCCLFT_B,'C0', 'ko-KR') #
-							  # }else{ #
-								0
-							  #}#
+          	<div class="ells"> 
+							   # if(CD_ITEM !== "" && CD_ITEM !== null && CD_ITEM !== "undefined"){ #	
+							   #: CD_ITEM #
+							   # }else{ }	# 
 			</div>
       	</td>
 		<td class="ta-l" style="padding:0">
           	<div class="div-rows ells">
-							   # if(NM_MNFR !== "" && NM_MNFR !== null && NM_MNFR !== "undefined"){ #
-							   #: NM_MNFR #
-							   # }else{  #
-							   #: "-" #
-                               #}	# 	
+							  # if(NM_CTGR !== "" && NM_CTGR !== null && NM_CTGR !== "undefined"){ #
+				    		  #: NM_CTGR #
+							  # }else{  #
+							  #: "-" #
+                              #}	# 
 			</div>
-			<div class="ells"> 
-							   # if(CD_ITEMCLFT !== "" && CD_ITEMCLFT !== null && CD_ITEMCLFT !== "undefined"){ #	
-							   #: CD_ITEMCLFT #
-							   # }else{ }	# 
-			</div>
-     	</td>
+      	</td>
 		<td class="ta-r" style="padding:0">
           	<div class="ells"> 
-							   # if(CD_TAXCLFT !== "" && CD_TAXCLFT !== null && CD_TAXCLFT !== "undefined"){ #	
-							   #: CD_TAXCLFT #
-							   # }else{ }	# 
+							  # if(AM_ITEMPRC !== "" && AM_ITEMPRC !== null && AM_ITEMPRC !== "undefined"){ #
+							  #: AM_ITEMPRC #
+							  # }else{  #
+							  #: "-" #
+                              #}	# 						  
 			</div>
-			<div class="ells"> 
-							   # if(YN_ADULCTFC == "Y"){ #	
-							   #: "인증" #
-							   # }else{  #
-							   #: "비인증" #
-                               #}	#  
+      	</td>
+		<td class="ta-r" style="padding:0">
+          	<div class="div-rows ells">
+							수수료
+			</div>
+      	</td> 
+		<td class="ta-r" style="padding:0">
+          	<div class="div-rows ells">
+						    # if(QT_SALE !== "" && QT_SALE !== null && QT_SALE !== "undefined"){ #
+							#: QT_SALE #
+							# }else{ #
+							#: "-"   #
+							# }	 	 #
 			</div>
       	</td>
 		<td class="ta-c" style="padding:0">
-          	<div class="div-rows ells">
-							  # if(SF_M !== "" && SF_M !== null && SF_M !== "undefined"){ #
-				    		  #: "등록" 	#
-							  # }else{  #
-							  #: "미등록" #
-                              #}	# 
-			</div>
-			<div class="ells"> 
-							  # if(SF_DI !== "" && SF_DI !== null && SF_DI !== "undefined"){ #
-							  #: "등록" 	#
-							  # }else{  #
-							  #: "미등록" #
-                              #}	# 	
-			</div>
-      	</td>
-		<td class="ta-l" style="padding:0">
-          	<div class="ells"> 
-							  # if(SF_DE !== "" && SF_DE !== null && SF_DE !== "undefined"){ #
-							  #: "등록" 	#
-							  # }else{  #
-							  #: "미등록" #
-                              #}	# 						  
-			</div>
-			<div class="ells"> 
-							  # if(CD_OPTTP !== "" && CD_OPTTP !== null && CD_OPTTP !== "undefined"){ #
-							  #: CD_OPTTP # 
-							  # }else{ }	 #
-			</div>
-      	</td>
-		<td class="ta-l" style="padding:0">
-          	<div class="div-rows ells">
-							# if( (NM_MD !== "" && NM_MD !== null && NM_MD !== "undefined") || (NM_CTF !== "" && NM_CTF !== null && NM_CTF !== "undefined") || (NM_MNFRER !== "" && NM_MNFRER !== null && NM_MNFRER !== "undefined") || (NO_CSMADVPHNE !== "" && NO_CSMADVPHNE !== null && NO_CSMADVPHNE !== "undefined")  || (CD_CTFOBJ !== "" && CD_CTFOBJ !== null && CD_CTFOBJ !== "undefined") || (CD_CTFINFO !== "" && CD_CTFINFO !== null && CD_CTFINFO !== "undefined") ){ #
-							#: "인증" #
-							# }else{ #
-							#: "미인증" #
-							# }	 	 #
-			</div>
-			<div class="ells">
-						    # if(CD_ITEMKIND !== "" && CD_ITEMKIND !== null && CD_ITEMKIND !== "undefined"){ #
-							#: CD_ITEMKIND # 
-							# }else{ }	 	  #
-			</div>
-      	</td> 
-		<td class="ta-l" style="padding:0">
-          	<div class="div-rows ells">
-						    # if(NM_BRD !== "" && NM_BRD !== null && NM_BRD !== "undefined"){ #
-							#: NM_BRD #
-							# }else{ #
-							#: "-"   #
-							# }	 	 #
-			</div>
-			<div class="ells">
-							# if(CD_ITEMSTAT !== "" && CD_ITEMSTAT !== null && CD_ITEMSTAT !== "undefined"){ #	
-							#: CD_ITEMSTAT # 
-							# }else{ }	 	 #
-			</div>
-      	</td>
-		<td class="ta-l" style="padding:0">
-          	<div class="ells">
-							# if(S_CD_ITEM !== "" && S_CD_ITEM !== null && S_CD_ITEM !== "undefined"){ #	
-							#: S_CD_ITEM # 
-							# }else{ #
-							#: "-"   #
-							# }	 	 #
-			</div>
-			<div class="ells">
-							# if(CD_BDLITEMCPST !== "" && CD_BDLITEMCPST !== null && CD_BDLITEMCPST !== "undefined" ){ #  
-							#: CD_BDLITEMCPST # 
-							# }else{ #
-							#: "-"   #
-							# }	 	 #
-			</div>
-      	</td>
-		<td class="ta-l" style="padding:0">
           	<div class="ells">
 							# if(DTS_INSERT !== "" && DTS_INSERT !== null && DTS_INSERT !== "undefined"){ #	
 							#: DTS_INSERT # 
-							# }else{ }	 	 #
-			</div>
-			<div class="ells">
-							# if(DTS_VLD !== "" && DTS_VLD !== null && DTS_VLD !== "undefined" || DTS_VLD != "0000-00-00" ){ #  
-							#: DTS_VLD # 
 							# }else{ #
 							#: "-"   #
 							# }	 	 #
+			</div>
+      	</td>
+		<td class="ta-c" style="padding:0">
+          	<div class="ells">
+							# if(DTS_SALESTART !== "" && DTS_SALESTART !== null && DTS_SALESTART !== "undefined"){ #	
+							#: DTS_SALESTART # 
+							# }else{ }	 	 #
+			</div>
+      	</td>
+		<td class="ta-c" style="padding:0">
+          	<div class="ells">
+							# if(DTS_SALEEND !== "" && DTS_SALEEND !== null && DTS_SALEEND !== "undefined"){ #	
+							#: DTS_SALEEND # 
+							# }else{ }	 	 #
 			</div>
       	</td>
 	</tr>			
 </script>
 
 <!-- 그리드 툴바 템플릿 -->
-<script id="Sale-toolbar-template" type="text/x-kendo-template">
-	<button class="k-button k-button-icontext k-grid-edit" ng-click="saleItemInsert('sale')"><span class="k-icon k-edit"></span>판매등록</button>
-	<button class="k-button k-button-icontext k-grid-edit" ng-click="saleItemInsert('new')"><span class="k-icon k-edit"></span>신규등록</button>    
-    <button class="k-button k-button-icontext k-grid-delete" ng-click="saleItemDelete(this)"><span class="k-icon k-delete"></span>삭제</button>
+<script id="sale-toolbar-template" type="text/x-kendo-template">
+	<button class="k-button k-button-icontext k-grid-edit" ng-click="saleItemInsert('sale')"><span class="k-icon k-edit"></span>등록된상품가져오기</button>
+	<button class="k-button k-button-icontext k-grid-edit" ng-click="saleItemInsert('new')"><span class="k-icon k-edit"></span>미리보기</button>
 </script>
 
 <!-- 검색시 유효성 검사 경고창 -->

@@ -95,9 +95,13 @@
                 		}
                 		
                 		$scope.filevo = $scope.co02FileVO;
-                		$scope.filevo_back = angular.copy($scope.filevo);
+                		if($scope.filevo_back === {}) $scope.filevo_back = angular.copy($scope.filevo);
                 	};
 
+                	$scope.$watch('filevo.currentData', function (newValue, oldValue) {
+                		$scope.initLoad();
+				    });
+                	
                     /**
                      * @description 단건 파일 삭제
                      */

@@ -469,7 +469,6 @@
     				saleInfoDataVO.fileSmallVO.currentData = resData.fileSmallVOcurrentData;
     				saleInfoDataVO.fileDExVO.currentDataList = resData.fileDExVOcurrentDataList;
     				saleInfoDataVO.fileDImageVO.currentDataList = resData.fileDImageVOcurrentDataList;
-    				
 	            };
 	            
 	            saleInfoDataVO.getInitializeItemInfo = function(){

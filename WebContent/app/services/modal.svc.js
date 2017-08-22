@@ -278,6 +278,22 @@
 
 				return $modal.open(defaults);
 				};
+				
+				self.saleSiteDetail = function (NO_MRKREGITEM, options) {
+					var self = this,
+					defaults = {
+						templateUrl: "app/shared/modal/mo11SaleSiteDetail/modal.saleSiteDetail.tpl.html",
+						controller : "modal.saleSiteDetailCtrl",
+						resolve    : { NO_MRKREGITEM:function(){
+							return NO_MRKREGITEM;
+							}},
+						size       : "lg"
+					};
+
+				if (options) { defaults = angular.extend(defaults, options); }
+
+				return $modal.open(defaults);
+				};
 			}
 		]);
 }());
