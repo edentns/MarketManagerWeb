@@ -183,6 +183,19 @@
                 	me.resetAtGrd = $scope.ordCancelManagementkg;
                 	me.resetAtGrd.dataSource.data([]);	            		            	
 	            };	
+
+	            ordCancelManagementDataVO.isOpen = function (val) {
+	            	if(val) {
+	            		$scope.ordCancelManagementkg.wrapper.height(616);
+	            		$scope.ordCancelManagementkg.resize();
+	            		grdOrdCancelManagementVO.dataSource.pageSize(9);
+	            	}
+	            	else {
+	            		$scope.ordCancelManagementkg.wrapper.height(798);
+	            		$scope.ordCancelManagementkg.resize();
+	            		grdOrdCancelManagementVO.dataSource.pageSize(12);
+	            	}
+	            };
 	            	            	            
 	            //주문 검색 그리드
 	            var grdOrdCancelManagementVO = $scope.grdOrdCancelManagementVO = {
@@ -201,10 +214,7 @@
             		    sortable: false
             		},*/
                     pageable: {
-                    	messages: {
-                    		empty: "표시할 데이터가 없습니다.",
-                    		display: "총 {2}건 중 {0}~{1}건의 자료 입니다."
-                    	}
+                    	messages: UtilSvc.gridPageableMessages
                     },
                     noRecords: true,
                 	dataSource: new kendo.data.DataSource({
@@ -266,7 +276,7 @@
                 			ordCancelManagementDataVO.dataTotal = data.length;
                 			angular.element($("#grd_chk_master")).prop("checked",false);
                 		},
-                		pageSize: 7,
+                		pageSize: 9,
                 		batch: true,
                 		schema: {
                 			model: {
@@ -684,7 +694,7 @@
                 	resizable: true,
                 	rowTemplate: kendo.template($.trim($("#ocm_template").html())),
                 	altRowTemplate: kendo.template($.trim($("#ocm_alt_template").html())),
-                	height: 560                  	
+                	height: 616                  	
 	        	};
 	            
 	            //kendo grid 체크박스 옵션

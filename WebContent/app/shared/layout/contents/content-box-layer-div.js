@@ -17,7 +17,8 @@
 					scope       : {
 						boxTitle : "=",
 						open : "=",
-						contentHeight : "@"
+						contentHeight : "@",
+						isOpen : "&"
 					},
 					replace     : true,
 					link        : function (scope, element) {
@@ -40,6 +41,8 @@
 							scope._open = !scope._open;
 							scope._icon = scope._open ? icon.open : icon.close;
 							scope.$apply();
+							
+							if(scope.isOpen) scope.isOpen({val:scope._open});
 						});
 
 

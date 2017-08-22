@@ -130,7 +130,19 @@
                 	me.dataTotal = 0;
                 	me.resetAtGrd = $scope.shpbyordkg;
                 	me.resetAtGrd.dataSource.data([]);
-	            };	
+	            };
+
+	            shpbyordDataVO.isOpen = function (val) {
+	            	if(val) {
+	            		$scope.shpbyordkg.wrapper.height(616);
+	            		$scope.shpbyordkg.resize();
+	            	}
+	            	else {
+	            		$scope.shpbyordkg.wrapper.height(798);
+	            		$scope.shpbyordkg.resize();
+	            	}
+	            };
+	            
 	            
 	            // 유효성 검사
 	            var updateValidation = function(param, btnCase){
@@ -262,7 +274,7 @@
                 	scrollable: true,
                 	resizable: true,
                 	//rowTemplate: kendo.template($.trim($("#shpbyord-template").html())),
-                	height: 530,
+                	height: 616,
                 	navigatable: true, //키보드로 그리드 셀 이동 가능
                 	toolbar: [{template: kendo.template($.trim($("#shpbyord-toolbar-template").html()))}],
                 	dataSource: new kendo.data.DataSource({

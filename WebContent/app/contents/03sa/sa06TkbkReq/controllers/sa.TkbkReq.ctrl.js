@@ -188,6 +188,19 @@
                 	me.resetAtGrd.dataSource.data([]);
 	            };	
 		                  
+	            tkbkDataVO.isOpen = function (val) {
+	            	if(val) {
+	            		$scope.tkbkkg.wrapper.height(616);
+	            		$scope.tkbkkg.resize();
+	            		grdTkbkVO.dataSource.pageSize(9);
+	            	}
+	            	else {
+	            		$scope.tkbkkg.wrapper.height(798);
+	            		$scope.tkbkkg.resize();
+	            		grdTkbkVO.dataSource.pageSize(12);
+	            	}
+	            };	                
+	            
                 //검색 그리드
 	            var grdTkbkVO = $scope.grdTkbkVO = {
             		autoBind: false,
@@ -201,10 +214,7 @@
                     },
                 	boxTitle : "주문 목록",
                 	pageable: {
-                    	messages: {
-                    		empty: "표시할 데이터가 없습니다.",
-                    		display: "총 {2}건 중 {0}~{1}건의 자료 입니다."
-                    	}
+                    	messages: UtilSvc.gridPageableMessages
                     },
                     noRecords: true,
                     dataBound: function(e) {
@@ -236,29 +246,12 @@
                 	resizable: true,
                 	rowTemplate: kendo.template($.trim($("#tkbk_template").html())),
                 	altRowTemplate: kendo.template($.trim($("#tkbk_alt_template").html())),
-                	height: 550,
+                	height: 616,
                 	navigatable: true, //키보드로 그리드 셀 이동 가능
                 	toolbar: [{template: kendo.template($.trim($("#tkbk_toolbar_template").html()))}],
                 	dataSource: new kendo.data.DataSource({
                 		transport: {
-                			read: function(e) {
-                				/*var param = {
-                				    NM_MRKITEM : tkbkDataVO.procName.value,
-            					    NO_MRK : tkbkDataVO.ordMrkNameMo, 
-            					    CD_ORDSTAT : tkbkDataVO.ordStatusMo,
-            					    NO_MRKORD : tkbkDataVO.orderNo.value,      
-            					    NM_PCHR : tkbkDataVO.buyerName.value,
-            					    DTS_CHK : tkbkDataVO.betweenDateOptionMo,  
-            					    DTS_FROM : new Date(tkbkDataVO.datesetting.period.start.y, tkbkDataVO.datesetting.period.start.m-1, tkbkDataVO.datesetting.period.start.d, "00", "00", "00").dateFormat("YmdHis"),           
-            					    DTS_TO : new Date(tkbkDataVO.datesetting.period.end.y, tkbkDataVO.datesetting.period.end.m-1, tkbkDataVO.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis")
-                                };                   				
-                				if(Util03saSvc.readValidation(param)){
-                					saTkbkReqSvc.orderList(param).then(function (res) {                						
-	            						e.success(res.data);			                   				                    					
-                					});                					
-                				}else{
-                					e.error();
-                				};*/
+                			read: function(e) {                				
                 				saTkbkReqSvc.orderList(tkbkDataVO.param).then(function (res) {                						
             						e.success(res.data);			                   				                    					
             					});

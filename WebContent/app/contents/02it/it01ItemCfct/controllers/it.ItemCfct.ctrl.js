@@ -182,13 +182,16 @@
                         },
         			};
 	            	localSelf.navigatable              = true;
-	            	localSelf.pageable                 = true;
+	            	localSelf.pageable                 = {
+				    	messages: UtilSvc.gridPageableMessages,
+				    	buttonCount: 10
+				    };
 	            	//localSelf.enableRowSelection       = true;
 	            	//localSelf.enableRowHeaderSelection = false;
 	            	//localSelf.multiSelect              = false;
 	            	//localSelf.editable                 = false;
 	            	//localSelf.selected                 = null;
-	            	localSelf.height                   = 317;
+	            	localSelf.height                   = 792;
 	            	localSelf.dataSource = new kendo.data.DataSource({
 	            		autoBind: false,
         				transport: {
@@ -240,9 +243,6 @@
         				},
         			});
 	            	localSelf.editable = {confirmation:false};
-	            	localSelf.pageable = {
-        				buttonCount: 10
-        			};
 	            	localSelf.toolbar = 
                 		[{ template: "<div ng-click='it01ItemCfctVO.add("+localSelf.iIndex+")' class='k-button k-button-icontext'><span class='k-icon k-i-add'></span>추가</div>"},
                 		 { template: "<div ng-click='it01ItemCfctVO.save("+localSelf.iIndex+")' class='k-button k-button-icontext'><span class='k-icon k-i-update'></span>저장</div>"},

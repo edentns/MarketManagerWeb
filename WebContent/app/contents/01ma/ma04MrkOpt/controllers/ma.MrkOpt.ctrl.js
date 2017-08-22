@@ -60,6 +60,42 @@
             		);
 	            };
 
+	            ma04MrkOptVO.isOpen = function (val) {
+	            	var iMinHeight = 349
+	            	  , iMaxHeight = 398
+	            	  , iMinPageS = 10
+	            	  , iMaxPageS = 12;
+	            	
+	            	if(val) {
+	            		$scope.kg0.wrapper.height(iMinHeight);
+	            		$scope.kg1.wrapper.height(iMinHeight);
+	            		$scope.kg2.wrapper.height(iMinHeight);
+	            		$scope.kg3.wrapper.height(iMinHeight);
+	            		$scope.kg0.resize();
+	            		$scope.kg1.resize();
+	            		$scope.kg2.resize();
+	            		$scope.kg3.resize();
+	            		ma04MrkOptGridVO[0].dataSource.pageSize(iMinPageS);
+	            		ma04MrkOptGridVO[1].dataSource.pageSize(iMinPageS);
+	            		ma04MrkOptGridVO[2].dataSource.pageSize(iMinPageS);
+	            		ma04MrkOptGridVO[3].dataSource.pageSize(iMinPageS);
+	            	}
+	            	else {
+	            		$scope.kg0.wrapper.height(iMaxHeight);
+	            		$scope.kg1.wrapper.height(iMaxHeight);
+	            		$scope.kg2.wrapper.height(iMaxHeight);
+	            		$scope.kg3.wrapper.height(iMaxHeight);
+	            		$scope.kg0.resize();
+	            		$scope.kg1.resize();
+	            		$scope.kg2.resize();
+	            		$scope.kg3.resize();
+	            		ma04MrkOptGridVO[0].dataSource.pageSize(iMaxPageS);
+	            		ma04MrkOptGridVO[1].dataSource.pageSize(iMaxPageS);
+	            		ma04MrkOptGridVO[2].dataSource.pageSize(iMaxPageS);
+	            		ma04MrkOptGridVO[3].dataSource.pageSize(iMaxPageS);
+	            	}
+	            };
+	                  
 				var ma04MrkOptGridVO = $scope.ma04MrkOptGridVO = [{
 	        			boxTitle: "대분류",
 	                    selectable: "multipleLarge"
@@ -88,14 +124,12 @@
 	        				retry: "갱신",
 	        			};
 	            	localSelf.navigatable              = true;
-	            	localSelf.pageable                 = true;
-	            	//localSelf.enableRowSelection       = true;
-	            	//localSelf.enableRowHeaderSelection = false;
-	            	//localSelf.multiSelect              = false;
-	            	//localSelf.editable                 = false;
-	            	//localSelf.selected                 = null;
+	            	localSelf.pageable = {
+	            		messages: UtilSvc.gridPageableMessages,
+        				buttonCount: 10
+	            	};
 	            	localSelf.change                   = rowClick;
-	            	localSelf.height                   = 317;
+	            	localSelf.height                   = 349;
 	            	localSelf.dataSource = new kendo.data.DataSource({
         				autoBind: false,
         				transport: {
@@ -113,9 +147,6 @@
         					}
         				},
         			});
-	            	localSelf.pageable = {
-        				buttonCount: 10
-        			};
 	            	localSelf.columns  = [
 	              		{
 	              			field: "ID_CTGR", 

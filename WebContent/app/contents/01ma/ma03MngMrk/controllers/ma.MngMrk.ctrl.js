@@ -114,7 +114,20 @@
                 	me.resetAtGrd = $scope.gridMngMrkUserVO;
                 	me.resetAtGrd.dataSource.data([]);
                 };
-                                                            
+
+                mngMrkDateVO.isOpen = function (val) {
+	            	if(val) {
+	            		$scope.kg.wrapper.height(657);
+	            		$scope.kg.resize();
+	            		gridMngMrkUserVO.dataSource.pageSize(20);
+	            	}
+	            	else {
+	            		$scope.kg.wrapper.height(798);
+	            		$scope.kg.resize();
+	            		gridMngMrkUserVO.dataSource.pageSize(24);
+	            	}
+	            };
+	                                                       
                 //마켓 검색 그리드
                 var gridMngMrkUserVO = $scope.gridMngMrkUserVO = {
                 		autoBind: false, 
@@ -133,10 +146,7 @@
                     	boxTitle : "마켓 리스트",
                     	sortable: true,         	
                         pageable: {
-                        	messages: {
-                        		empty: "표시할 데이터가 없습니다.",
-                        		display: "총 {2}건 중 {0}~{1}건의 자료 입니다."
-                        	}
+                        	messages: UtilSvc.gridPageableMessages
                         },
                         noRecords: true,
                     	dataSource: new kendo.data.DataSource({
@@ -191,7 +201,7 @@
                     				}
                     			}
                     		},
-                    		pageSize: 11,
+                    		pageSize: 20,
                     		batch: true,
                     		schema: {
                     			model: {
@@ -398,21 +408,12 @@
             		                 $('<input type="password" class="k-textbox" name="' + options.field + '"/>').appendTo(container);
             	                 }
             		           	 ,template: function(e){
-            		           		 var returnPWDMsg = "",
-            		           			 count = 0,
-            		           			 i = 0;
-            		           		 
+            		           		 var returnPWDMsg = "";
             		           		 if(e.NEW_DC_PWD === "" || e.NEW_DC_PWD === null && e.DC_PWD != ""){
-            		           			count = e.DC_PWD_LEN;
-            		           			//returnPWDMsg = "*".repeat(e.DC_PWD_LEN);
+            		           			 if(e.DC_PWD_LEN != null) returnPWDMsg = Array(e.DC_PWD_LEN + 1).join("*");
 	          		           		 }else if(e.NEW_DC_PWD != "" && e.NEW_DC_PWD  != null){
-	          		           			 count = e.NEW_DC_PWD.length;
-	          		           			//returnPWDMsg = "*".repeat(e.NEW_DC_PWD.length);
+	          		           			 returnPWDMsg = Array(e.NEW_DC_PWD.length + 1).join("*");
 	          		           		 }
-            		           		 
-            		           		 for(i; i<count; i++){
-            		           			returnPWDMsg = returnPWDMsg + "*"; 
-            		           		 }
 	          		           		 return returnPWDMsg;
             		           	 }
             		           },
@@ -425,20 +426,12 @@
 	          		                 $('<input type="password" class="k-textbox" name="' + options.field + '"/>').appendTo(container);
 	          	                 }
 	          		           	 ,template: function(e){  
-	          		           		 var returnAPIMsg = "",
-			          		           	 count = 0,
-		   		           			     i = 0;
-	          		           		 
+	          		           		 var returnAPIMsg = "";
 	          		           		 if(e.NEW_API_KEY === "" || e.NEW_API_KEY === null && e.API_KEY != ""){
-	          		           			 count = e.API_KEY_LEN;
-	          		           			 //returnAPIMsg = "*".repeat(e.API_KEY_LEN);
+	          		           			 if(e.API_KEY_LEN != null) returnAPIMsg = Array(e.API_KEY_LEN + 1).join("*");
 	          		           		 }else if(e.NEW_API_KEY != "" && e.NEW_API_KEY != null){
-	          		           			 count = e.NEW_API_KEY.length;
-	          		           			 //returnAPIMsg = "*".repeat(e.NEW_API_KEY.length);
-	          		           		 }	          		           		 
-		          		           	 for(i; i<count; i++){
-		          		           		 returnAPIMsg = returnAPIMsg + "*";
-	         		           		 }
+	          		           			 returnAPIMsg = Array(e.NEW_API_KEY.length + 1).join("*");
+	          		           		 }
 	          		           		 return returnAPIMsg;
 	          		           	 }
             		           },
@@ -459,7 +452,7 @@
                     	editable: {
                     	    confirmation: "삭제 하시겠습니까?",
                     	},
-                    	height: 590
+                    	height: 657
         		};        
             }]);
 }());

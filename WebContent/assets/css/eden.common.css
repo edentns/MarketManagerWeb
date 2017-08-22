@@ -179,7 +179,7 @@ input.box-control {background-color: #fff; border: 1px solid #dfdfdf; border-top
 .form-type1 .wid-x2, .search-type1 .wid-x2, .tbl-type1 .wid-x2, .tbl-type2 .wid-x2 {width: 16.66666667%;}
 .form-type1 .wid-x1, .search-type1 .wid-x1, .tbl-type1 .wid-x1, .tbl-type2 .wid-x1 {width: 8.33333333%;}
 .form-type1 input[type="checkbox"], .search-type1 input[type="checkbox"], .tbl-type1 input[type="checkbox"], .tbl-type2 input[type="checkbox"] {width: 16px; height: 16px; vertical-align: middle; margin: 0;}
-.form-type1 input[type="radio"], .search-type1 input[type="radio"], .tbl-type1 input[type="radio"], .tbl-type2 input[type="radio"] {width: 20px; height: 20px; vertical-align: text-top;}
+.form-type1 input[type="radio"], .search-type1 input[type="radio"], .tbl-type1 input[type="radio"], .tbl-type2 input[type="radio"] {width: 15px; height: 15px; vertical-align: -webkit-baseline-middle ;}
 .search-type1 tbody td, .form-type1 tbody td {border-bottom: 1px solid #dadada; vertical-align: middle; color: #606060; text-align: left;}
 .form-type1 tbody th {text-align: left;}
 .form-type1 tbody td span.sel-product {display: inline-block; width: 70px; font-weight: bold;}

@@ -83,6 +83,19 @@
                 	else                       me.joinerBetweenDate = ""; 
                 	
 	            };
+
+	            joinerDataVO.isOpen = function (val) {
+	            	if(val) {
+	            		$scope.kg.wrapper.height(657);
+	            		$scope.kg.resize();
+	            		gridJoinerMemVO.dataSource.pageSize(20);
+	            	}
+	            	else {
+	            		$scope.kg.wrapper.height(798);
+	            		$scope.kg.resize();
+	            		gridJoinerMemVO.dataSource.pageSize(24);
+	            	}
+	            };
 	            
 	            var connSetting = $scope.connSetting = {
 			        //가입자 상태
@@ -166,7 +179,7 @@
                     				}
                     			}
                     		},
-                    		pageSize: 11,
+                    		pageSize: 20,
                     		change: function(e){
                     			var data = this.data(),
                     			   	   i = 0,

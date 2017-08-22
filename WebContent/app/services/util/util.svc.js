@@ -10,7 +10,30 @@
 		function ($rootScope, $state, $window, $http, APP_CONFIG, MenuSvc, $q) {
 			var user = $rootScope.webApp.user,
 				menu = $rootScope.webApp.menu;
-
+			this.gridPageableMessages = {
+				display: "총 {2}건 중 {0}-{1}건",
+				empty: "표시할 데이터가 없습니다.",
+				first: "첫번째 페이지",
+				previous: "이전 페이지",
+				next: "다음 페이지",
+				last: "마지막 페이지"
+			};
+			
+	        this.gridtooltipOptions = {
+        		filter: "td",
+        		position: "right",
+        		content: function(e) {
+        			var cell = $(e.target);
+        			var content = cell.text();
+        			return content;
+        		},
+        		show: function(e) {
+        			this.popup.element[0].style.textAlign = "left";
+        			if(e.sender.content[0].textContent.length < 200) { this.popup.element[0].style.width = "150px"; }
+        			else { this.popup.element[0].style.width = "300px"; }
+        		}
+	        };
+	        
 	        /**
 	         * Get group info.
 	         * @returns {Promise}
@@ -493,14 +516,14 @@
 
 			this.localStorage = {
 				setItem: function(name, data) {
-					var fixKey 	= user.NO_C +''+ user.CD,
+					var fixKey 	= user.NO_C +''+ user.NO_EMP,
 						key 	= fixKey +''+ MenuSvc.getNO_M($state.current.name) +'-'+ name;
 
 					$window.localStorage.setItem(key, JSON.stringify(data));
 				},
 				
 				getItem: function(name) {
-					var fixKey 	= user.NO_C +''+ user.CD,
+					var fixKey 	= user.NO_C +''+ user.NO_EMP,
 						key 	= fixKey +''+ MenuSvc.getNO_M($state.current.name) +'-'+ name,
 						result;
 
@@ -514,7 +537,7 @@
 				},
                 
                 removeItem: function(name) {
-                    var fixKey 	= user.NO_C +''+ user.CD,
+                    var fixKey 	= user.NO_C +''+ user.NO_EMP,
                         key 	= fixKey +''+ MenuSvc.getNO_M($state.current.name) +'-'+ name;
                     
                     $window.localStorage.removeItem(key);

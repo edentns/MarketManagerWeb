@@ -3,9 +3,11 @@
         <div class="article-view">
 			<!-- CHART -->
 			<div>
-			    <div class="jui-chart-row" style="margin-top:-10px;">	
-					<kendo-grid id="divGrd" options="notice.gridNoticeVO">
-					</kendo-grid> 
+			    <div class="jui-chart-row">	
+			    	<kendo-tooltip options="notice.tooltipOptions">
+						<kendo-grid id="divGrd" options="notice.gridNoticeVO">
+						</kendo-grid> 
+					</kendo-tooltip>
 				</div>
 			</div>
         </div>
@@ -66,65 +68,21 @@
       <col style="width: 23%;">
     </colgroup>
     <tbody data-uid="#= uid #">	
-	<tr class="border-bottom-line border-top-line">	
-		<td class="border-right-line">
-			공지번호
-		</td>
-		<td class="border-right-line">
-			<input type="text" data-bind="value: NO_NOTICE" class="k-textbox" readonly="readonly" > 
-		</td>
-		<td class="border-right-line">
-			공지구분
-		</td>
-		<td class="border-right-line">
-			<input type="text" data-bind="value: CD_NOTICE === '001' ? '일반' : '긴급'" class="k-textbox" readonly="readonly" >
-		</td> 
-		<td class="border-right-line">
-		</td>
-		<td class="border-right-line">
-		</td>
-	</tr>
 	<tr class="border-bottom-line">
-		<td class="border-right-line">
-			우선순위
-		</td>
-		<td class="border-right-line">
-			<input type="text" data-bind="value: SQ_NOTICE" class="k-textbox" readonly="readonly" >
-		</td>
-		<td class="border-right-line">
-			작성자
-		</td>
-		<td class="border-right-line">
-			<input type="text" class="k-textbox" data-bind="value: NO_WRITE" readonly="readonly" >
-		</td>
-		<td class="border-right-line">
-			작성일시
-		</td>
-		<td class="border-right-line">
-			<input type="text" class="k-textbox" data-bind="value: DTS_INSERT" readonly="readonly" >
-		</td> 
-	</tr>
-	<tr class="border-bottom-line">
-		<td class="border-right-line">
-			공지제목
-		</td>
-		<td colspan="5" class="border-right-line">
+		<td colspan="6" class="border-right-line">
 			<input type="text" data-bind="value: NM_SUBJECT" class="k-textbox" readonly="readonly">
 		</td> 
 	</tr>
 	<tr class="border-bottom-line">
-		<td class="border-right-line">
-			공지내용
-		</td>
-		<td colspan="5" class="border-right-line">
-			<textarea data-bind="value: DC_CONTENT" readonly="readonly" rows="7"></textarea>
+		<td colspan="6" class="border-right-line">
+			<textarea kendo-editor data-tools="[]" data-bind="value: DC_HTMLCONTENT" readonly="readonly" style="height:400px;"></textarea>
 		</td> 
 	</tr>
 	<tr class="border-bottom-line">
 		<td class="border-right-line" >
 			첨부파일
 		</td>
-		<td id="fileInfo" colspan="5">
+		<td id="fileInfo" colspan="5" style="text-align:left;">
 		</td>
 	</tr>
 	</tbody>
@@ -142,6 +100,8 @@
 */
 .k-edit-form-container{
     width: 900px;
+    margin: 0;
+    padding: 0;
 }
 /*
     Decrease the width of the edit form labels. The default one is 30%.
@@ -168,8 +128,9 @@
     width: 98%;
 }
 .signal{    
-    width: 99%;
-    margin: 5px;
+    width: 100%;
+    margin: 0;
+    padding: 0;
 }
 .border-right-line{    
 	border-right: 1px solid #eee;    
@@ -182,9 +143,12 @@
 }
 .k-edit-form-container .k-edit-buttons{
 	border-style: none;
+	margin: 0;
+	padding: 0px 5px 5px 0px;
+	text-align: center;
 }
 #example{
-    min-height: 200px;
+    min-height: 100px;
 }
 #example .title {
     font-weight: bold;

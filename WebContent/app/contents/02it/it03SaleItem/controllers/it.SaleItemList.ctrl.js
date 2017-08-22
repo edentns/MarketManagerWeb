@@ -3,12 +3,12 @@
 
     /**
      * @ngdoc function
-     * @name it.SaleSiteItem.controller : it.SaleSiteItemCtrl
-     * 상품분류관리
+     * @name it.SaleItem.controller : it.SaleItemCtrl
+     * 판매상품관리
      */
-    angular.module("it.SaleSiteItem.controller")
-        .controller("it.SaleSiteItemCtrl", ["$scope", "$http", "$q", "$log", "it.SaleSiteItemSvc", "APP_CODE", "$timeout", "resData", "Page",
-            function ($scope, $http, $q, $log, itSaleSiteItemSvc, APP_CODE, $timeout, resData, Page) {
+    angular.module("it.SaleItem.controller")
+        .controller("it.SaleItemListCtrl", ["$scope", "$state", "$http", "$window", "$q", "$log", "it.BssItemSvc", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "sy.CodeSvc",
+            function ($scope, $state, $http, $window, $q, $log, itBssItemSvc, APP_CODE, $timeout, resData, Page, UtilSvc, SyCodeSvc) {
 	            var page  = $scope.page = new Page({ auth: resData.access }),
 		            today = edt.getToday();
 	            
@@ -53,15 +53,6 @@
 	        			id: "NO_MRK",
 	        			name: "NM_MRK",
 	        			maxNames: 2
-	        		},
-	        		datesetting : {
-	        			dateType   : 'basic',
-						buttonList : ['current', '1Day', '1Week', '1Month'],
-						selected   : 'current',
-						period : {
-							start : angular.copy(today),
-							end   : angular.copy(today)
-						}
 	        		},
 	        		signItem : { value: "" , focus: false },
 	        		nmItem   : { value: "" , focus: false },
@@ -325,7 +316,7 @@
                     		},
                     	}),                    	
                     	navigatable: true, //키보드로 그리드 셀 이동 가능
-                    	toolbar: [{template: kendo.template($.trim($("#sale-toolbar-template").html()))}],
+                    	toolbar: [{template: kendo.template($.trim($("#Sale-toolbar-template").html()))}],
                     	columns: [
                   	            {
   			                        field: "ROW_CHK",
@@ -504,7 +495,7 @@
                     		confirmation: false
                     	},	
                     	resizable: true,
-                    	rowTemplate: kendo.template($.trim($("#sale_template").html())),
+                    	rowTemplate: kendo.template($.trim($("#Sale_template").html())),
                     	height: 500      
                     	//모델과 그리드 셀을 제대로 연동 안시키면 수정 팝업 연 후 닫을 때 로우가 사라짐(즉 크레에이트인지 에딧인지 구분을 못함)
                     	//id는 유니크한 모델값으로 해야함 안그러면 cancel 시에 row grid가 중복 되는 현상이 발생
@@ -570,6 +561,5 @@
                 };
                 
                 saleItemDataVO.doQuiry();
-                
             }]);
 }());

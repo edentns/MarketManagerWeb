@@ -166,7 +166,21 @@
                 	$scope.memSearchPopGrd.selectAll = false;
                 	$scope.memSearchPopGrd.selectAllItems();
                 	$scope.memSearchPopGrd.searchValue = ""; 	//공지대상 검색 팝업창 초기화
-	            };	   
+	            };
+	            
+	            noticeDataVO.isOpen = function (val) {
+	            	if(val) {
+	            		$scope.nkg.wrapper.height(657);
+	            		$scope.nkg.resize();
+	            		gridNoticeVO.dataSource.pageSize(20);
+	            	}
+	            	else {
+	            		$scope.nkg.wrapper.height(798);
+	            		$scope.nkg.resize();
+	            		gridNoticeVO.dataSource.pageSize(24);
+	            	}
+	            };
+	            
 	            
 	            //popup insert & update Validation
 	            $scope.insertValidation = function(org){
@@ -210,10 +224,7 @@
                     	boxTitle : "공지 리스트",
                     	sortable: true,                    	
                         pageable: {
-                        	messages: {
-                        		empty: "표시할 데이터가 없습니다.",
-                        		display: "총 {2}건 중 {0}~{1}건의 자료 입니다."
-                        	}
+                        	messages: UtilSvc.gridPageableMessages
                         },
                         noRecords: true,
                     	dataSource: new kendo.data.DataSource({
@@ -318,7 +329,7 @@
                     		       alert("remove")
                     		    }*/                    			
                     		},
-                    		pageSize: 11,
+                    		pageSize: 20,
                     		batch: true,
                     		schema: {
                     			model: {
@@ -518,7 +529,7 @@
                 		},*/
                     	resizable: true,
                     	rowTemplate: kendo.template($.trim($("#ma_notice_template").html())),
-                    	height: 590                    	
+                    	height: 657                    	
         		};
                 
                 $scope.checkedIds = [];

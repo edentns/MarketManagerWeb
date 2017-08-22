@@ -55,7 +55,7 @@
 	
 	        joinItem.table = {
 	            search  : {
-	                period      : angular.extend({ type: 'current' }, angular.copy(period))
+	                period      : angular.extend({ type: 'year' }, angular.copy(period))
 	            },
 	            total   : {
 	                CNT_001 : 0,
@@ -68,7 +68,7 @@
 	        joinItem.chart = {
 	            search: {
 	                field       : 'TOT_CNT',
-	                period      : angular.extend({ type: 'current' }, angular.copy(period)),
+	                period      : angular.extend({ type: 'year' }, angular.copy(period)),
 	                changeSelectedData: function() {
 	                	var chart = $("#joinitemchart").data("kendoChart");
 	                	chart.options.series[0].field = joinItem.chart.search.field;

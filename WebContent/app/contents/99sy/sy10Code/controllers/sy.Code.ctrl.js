@@ -11,22 +11,25 @@
             function ($scope, $http, $q, $log, SyCodeSvc, APP_CODE, $timeout, resData, Page, UtilSvc) {
 	            var page  = $scope.page = new Page({ auth: resData.access }),
 		            today = edt.getToday();
-	            
 
 	            var rowClick = function( arg ) {
 	            	var selected = $.map(this.select(), function(item) {
 	            		var innerValue = new Array();
 	            		innerValue[0]=item.childNodes[0].innerText;
 	            		innerValue[1]=item.childNodes[1].innerText;
+	            		innerValue[2]=item.childNodes[4].innerText;
+	            		if(innerValue[2] == "가능")innerValue[2] = "N";
+	            		else innerValue[2] = "Y";
+	            		
 	            		return innerValue;
                     });
 	            	var codeParam = {
 	            		NO_MNGCDHD : selected[0],
-                        CD_CLS : selected[1]
+                        CD_CLS : selected[1],
+	            		YN_SYS : selected[2]
 	            	};
 	            	$scope.syCodeVO.inquiryAll(codeParam);
 				};
-				
 	            
 	            var syCodeVO = $scope.syCodeVO = {
             		boxTitle : "코드분류",
@@ -40,9 +43,9 @@
         			NO_MNGCDHD   : "",
                     CD_CLS   : "",
                     messages: {
-            			noRows: "사용자코드가 존재하지 않습니다.",
-            			loading: "ERP 사용자정보를 가져오는 중...",
-                        requestFailed: "요청 ERP 사용자정보를 가져오는 중 오류가 발생하였습니다."
+            			noRows: "코드가 존재하지 않습니다.",
+            			loading: "코드를 가져오는 중...",
+                        requestFailed: "요청 코드를 가져오는 중 오류가 발생하였습니다."
             		},
                     data : [],
                     multiSelect : false,
@@ -103,24 +106,22 @@
 
                             var codeParam = {
                             	NO_MNGCDHD : "",
-                                CD_CLS : ""
+                                CD_CLS : "",
+                                YN_SYS : ""
                             };
 
                             if (res.data.results[0].length > 0) {
                                 $timeout(function () {
-                                    //self.gridApi.selection.selectRow( self.data[0] );
                                     self.selected = res.data.results[0][0];
 
                                     codeParam.NO_MNGCDHD = self.selected.NO_MNGCDHD;
                                     codeParam.CD_CLS = self.selected.CD_CLS;
+                                    codeParam.YN_SYS = self.selected.YN_SYS;
                                     
                                     self.inquiryAll(codeParam);
                                 });
-
                             } else {
                                 $scope.$emit( "event:autoLoader", true );
-                                //self.selected = null;
-                                //syCodeVO.broadcastData(codeParam, []);
                             }
     					});
                     },
@@ -139,14 +140,7 @@
 					},
 					
                 };
-	            
-            
-            
-            	
 	            syCodeVO.initLoad();
-	            
-	            
-	            
 	            
 
                 /**

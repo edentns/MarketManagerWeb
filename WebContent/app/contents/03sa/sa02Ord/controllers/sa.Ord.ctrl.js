@@ -140,7 +140,21 @@
                 	me.dataTotal = 0;
                 	me.resetAtGrd = $scope.ordkg;
                 	me.resetAtGrd.dataSource.data([]);	            		            	
-	            };	
+	            };
+
+	            ordDataVO.isOpen = function (val) {
+	            	if(val) {
+	            		$scope.ordkg.wrapper.height(616);
+	            		$scope.ordkg.resize();
+	            		grdOrdVO.dataSource.pageSize(9);
+	            	}
+	            	else {
+	            		$scope.ordkg.wrapper.height(798);
+	            		$scope.ordkg.resize();
+	            		grdOrdVO.dataSource.pageSize(12);
+	            	}
+	            };
+	            
 	            	            
 		        //주문 검색 그리드
 	            var grdOrdVO = $scope.gridOrdVO = {
@@ -159,10 +173,7 @@
             		    sortable: false
             		},*/                	
                     pageable: {
-                    	messages: {
-                    		empty: "표시할 데이터가 없습니다.",
-                    		display: "총 {2}건 중 {0}-{1}건의 자료 입니다."
-                    	}
+                    	messages: UtilSvc.gridPageableMessages
                     },
                     noRecords: true,
                 	dataSource: new kendo.data.DataSource({
@@ -229,8 +240,8 @@
                 			angular.element($("#grd_chk_master")).prop("checked",false);
                 		},
                 		serverPaging: true,
-                		page: 1,
-                		pageSize: 6,                		
+                		page: 1,   		
+                		pageSize: 9,
                 		batch: true,
                 		schema: {
                 			data: "queryList",

@@ -10,7 +10,7 @@
         .controller("modal.otherOptCopy002Ctrl", ["$scope", "$http", "$log", "$timeout", "$q", "sy.CodeSvc", "APP_CODE","UtilSvc",
             function ($scope, $http, $log, $timeout, $q, SyCodeSvc, APP_CODE, UtilSvc) {
         	
-        	var gridCusCodeVO = $scope.gridCusCodeVO = {
+        	var copyOpt002VO = $scope.copyOpt002VO = {
                 messages: {
         			noRows: "옵션이 존재하지 않습니다.",
         			loading: "옵션정보를 가져오는 중...",
@@ -61,7 +61,7 @@
 	            		       		    var cd_opt = e.CD_OPTCLFT,
 	            		       		    	nmd    = "";
 	            		       		    if(cd_opt){
-	            		       		    	var optData = gridCusCodeVO.optClftList;	
+	            		       		    	var optData = copyOpt002VO.optClftList;	
 		                		       		for(var i = 0, leng=optData.length; i<leng; i++){
 	                		       			   if(optData[i].CD_DEF === e.CD_OPTCLFT){
 	                		       				 nmd = optData[i].NM_DEF;	
@@ -114,6 +114,6 @@
                     });
 				}
             };
-        	gridCusCodeVO.initLoad();
+        	copyOpt002VO.initLoad();
             }]);
 }());

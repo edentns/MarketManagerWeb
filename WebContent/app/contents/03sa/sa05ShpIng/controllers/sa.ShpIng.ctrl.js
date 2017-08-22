@@ -187,6 +187,19 @@
                 	me.resetAtGrd = $scope.shippingkg;
                 	me.resetAtGrd.dataSource.data([]);
 	            };	
+
+	            shippingDataVO.isOpen = function (val) {
+	            	if(val) {
+	            		$scope.shippingkg.wrapper.height(616);
+	            		$scope.shippingkg.resize();
+	            		grdShippngVO.dataSource.pageSize(9);
+	            	}
+	            	else {
+	            		$scope.shippingkg.wrapper.height(798);
+	            		$scope.shippingkg.resize();
+	            		grdShippngVO.dataSource.pageSize(12);
+	            	}
+	            };
 	            	            	   	            
                 //검색 그리드
 	            var grdShippngVO = $scope.grdShippngVO = {
@@ -201,10 +214,7 @@
                     },
                 	boxTitle : "주문 목록",
                 	pageable: {
-                    	messages: {
-                    		empty: "표시할 데이터가 없습니다.",
-                    		display: "총 {2}건 중 {0}~{1}건의 자료 입니다."
-                    	}
+                    	messages: UtilSvc.gridPageableMessages
                     },
                     noRecords: true,
                   /*  dataBound: function(e) {
@@ -234,7 +244,7 @@
                 	resizable: true,
                 	rowTemplate: kendo.template($.trim($("#shipping_template").html())),
                 	altRowTemplate: kendo.template($.trim($("#shipping_alt_template").html())),
-                	height: 550,
+                	height: 616,
                 	navigatable: true, //키보드로 그리드 셀 이동 가능
                 	toolbar: [{template: kendo.template($.trim($("#shipping_toolbar_template").html()))}],
                 	dataSource: new kendo.data.DataSource({
@@ -336,7 +346,7 @@
                 			shippingDataVO.dataTotal = data.length;
                 			angular.element($("#grd_chk_master")).prop("checked",false);
                 		},                		
-                		pageSize: 7,
+                		pageSize: 9,
                 		batch: true,
                 		schema: {
                 			model: {

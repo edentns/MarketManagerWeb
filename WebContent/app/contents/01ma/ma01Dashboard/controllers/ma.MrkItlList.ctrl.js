@@ -58,14 +58,14 @@
 	
 	        mrkItlList.table = {
 	            search  : {
-	                period      : angular.extend({ type: 'current' }, angular.copy(period))
+	                period      : angular.extend({ type: 'year' }, angular.copy(period))
 	            },
 	            data    : {},
 	            messages: {
     				noRows: "정보가 존재하지 않습니다.",
     				loading: "정보를 가져오는 중...",
     				requestFailed: "정보를 가져오는 중 오류가 발생하였습니다.",
-    				retry: "갱신",
+    				retry: "갱신"
     			},
     			dataSource: new kendo.data.DataSource({
     				autoBind: false,
@@ -94,7 +94,7 @@
 	
 	        mrkItlList.chart = {
 	            search: {
-	                period   : angular.extend({ type: 'current' }, angular.copy(period)),
+	                period   : angular.extend({ type: 'year' }, angular.copy(period)),
 	                changeMngMrk: function(e, NO_MNGMRK, YN_DEL) {
 	                	
 	                	//console.log(e, "  데이터 --> [",NO_MNGMRK,"], [",YN_DEL,"];");

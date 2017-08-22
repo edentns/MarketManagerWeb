@@ -33,7 +33,10 @@
             	var grid = $("#divGrd").data("kendoGrid");
             	$("#divGrd").data("kendoGrid").editRow($(this));
             });
-            
+
+            UtilSvc.gridtooltipOptions.filter = "td";
+            notice.tooltipOptions = UtilSvc.gridtooltipOptions;
+	        
 	        notice.gridNoticeVO = {
 				autoBind: false,
 			    messages: {                        	
@@ -44,10 +47,7 @@
 				url : APP_CONFIG.domain +"/ut05FileUpload",
 				sortable: true,                    	
 			    pageable: {
-			    	messages: {
-			    		empty: "표시할 데이터가 없습니다.",
-			    		display: "총 {2}건 중 {0}-{1}건의 자료 입니다."
-			    	}
+			    	messages: UtilSvc.gridPageableMessages
 			    },
 			    noRecords: true,
 				currentFileList:[],
@@ -147,6 +147,12 @@
 				rowTemplate: kendo.template($.trim($("#ma_notice_template").html())),
 				height: 215                   	
 			};
+	        
+	        $scope.$on("kendoWidgetCreated", function(event, widget) {
+	        	if(widget.textarea) {
+	        		$(widget.body).attr("contenteditable", false);
+	        	}
+	        });
 	        
 	        notice.find();
         }]);

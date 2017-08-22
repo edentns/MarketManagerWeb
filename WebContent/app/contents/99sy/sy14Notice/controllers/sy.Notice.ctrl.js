@@ -70,6 +70,20 @@
                 	me.resetAtGrd.dataSource.data([]);
                 	
 	            };
+
+	            noticeDataVO.isOpen = function (val) {
+	            	if(val) {
+	            		$scope.nkg.wrapper.height(593);
+	            		$scope.nkg.resize();
+	            		gridNoticeVO.dataSource.pageSize(11);
+	            	}
+	            	else {
+	            		$scope.nkg.wrapper.height(798);
+	            		$scope.nkg.resize();
+	            		gridNoticeVO.dataSource.pageSize(20);
+	            	}
+	            };
+	              
 	            //저장 후 조회
 	            noticeDataVO.afterSaveQuery = function(param){
 	            	var me = this;
@@ -95,9 +109,7 @@
                     	url : APP_CONFIG.domain +"/ut05FileUpload",
                     	sortable: true,                    	
                         pageable: {
-                        	messages: {
-                        		empty: "표시할 데이터가 없습니다."
-                        	}
+                        	messages: UtilSvc.gridPageableMessages
                         },
                         noRecords: true,
                 		currentFileList:[],
@@ -241,7 +253,7 @@
 						},
                     	resizable: true,
                     	rowTemplate: kendo.template($.trim($("#ma_notice_template").html())),
-                    	height: 590                    	
+                    	height: 593                    	
         		};
                 
                 

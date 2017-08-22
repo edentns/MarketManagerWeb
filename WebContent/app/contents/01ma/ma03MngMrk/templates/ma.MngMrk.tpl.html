@@ -10,7 +10,7 @@
     <div class="row">
         <!-- 검색 -->
         <div class="content-area-container col-xs-12">
-        	<div data-content-box-layer data-box-title="mngMrkDateVO.boxTitle">
+        	<div data-content-box-layer data-box-title="mngMrkDateVO.boxTitle" data-is-open="mngMrkDateVO.isOpen(val)">
                 <form class="search-type1" id="myForm">
                 	<table>
                         <colgroup>
@@ -46,20 +46,18 @@
                         </tr>
                         </tbody>
                     </table>                    
-                    <div class="btn-group1 mt-20">
+                    <div class="btn-group1 mt-10">
                         <kendo-button type="submit "style="width:70px;" class="k-primary" title="검색" data-ng-click="mngMrkDateVO.doInquiry()">검색</kendo-button>
                         <kendo-button type="botton" style="width:70px;" class="" title="초기화" data-ng-click="mngMrkDateVO.init()">초기화</kendo-button>                       
                     </div>
-                    <br/>
-                    <p class="text-center">총  <strong>{{mngMrkDateVO.dataTotal}}</strong>건이 검색되었습니다.</p>
                 </form>
             </div>
         </div>
                 
         <!-- 조회 리스트 -->          
-		<div class="content-area-container col-xs-12" style="padding:0px 0px 0px 0px; margin-top:-5px;">				
-	        <kendo-grid options="gridMngMrkUserVO">
-	        </kendo-grid>	            
+		<div class="content-area-container col-xs-12" style="padding:0px 0px 0px 0px; margin-top:-5px;">	
+			<div kendo-grid="kg" options="gridMngMrkUserVO">
+	        </div>            
         </div>
     </div>
 </div>

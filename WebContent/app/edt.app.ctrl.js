@@ -8,6 +8,6 @@ angular.module('edtApp')
 		$scope.menu = {
 			data: MenuSvc.getNavigation()
 		};
-
+		kendo.culture('ko-KR');
 	}]);
 }());

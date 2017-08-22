@@ -10,8 +10,8 @@
     
     <div class="row">
         <!-- 검색 -->
-        <div class="content-area-container col-xs-12">
-        	<div data-content-box-layer data-box-title="csDataVO.boxTitle">
+        <div class="content-area-container col-xs-12" style="margin:0px 0px -5px 0px;">
+        	<div data-content-box-layer data-box-title="csDataVO.boxTitle" data-is-open="csDataVO.isOpen(val)">
                 <form class="search-type1" id="myForm">
                 	<table>
                         <colgroup>
@@ -87,20 +87,20 @@
                         </tr>
                         </tbody>
                     </table>         		     
-                    <div class="btn-group1 mt-20">
+                    <div class="btn-group1 mt-10">
                         <kendo-button type="submit" class="k-primary" title="검색" data-ng-click="csDataVO.inQuiry()" style="width:70px;" >검색</kendo-button>
                         <kendo-button type="botton" title="초기화" data-ng-click="csDataVO.inIt()" style="width:70px;" >초기화</kendo-button>
                     </div>
-                    <br/>
-                    <p class="text-center">총  <strong>{{csDataVO.dataTotal}}</strong>건이 검색되었습니다.</p>
                 </form>
             </div>
         </div>
                 
         <!-- 승인 리스트 -->          
-		<div class="content-area-container col-xs-12">				
-	        <div id="divCsGrd" kendo-grid="cskg" options="gridCsVO">
-	        </div>	            
+		<div class="content-area-container col-xs-12" style="padding:0px 0px 0px 0px;">			
+			<kendo-tooltip options="gridCsVO.tooltipOptions">				
+		        <div id="divCsGrd" kendo-grid="cskg" options="gridCsVO">
+		        </div>	  
+		    </kendo-tooltip>          
         </div>
     </div>
 </div>
@@ -126,14 +126,14 @@
                                	# }else{} #
 			</span>
         </td>
-		<td class="ta-l">
+		<td class="ta-c">
             <span class="ells">
 								# if(DTS_INQREG){ #
                                	#: DTS_INQREG # 
                                	# }else{} #
 			</span>
         </td>
-		<td class="ta-l">
+		<td class="ta-c">
             <span class="ells">
 							   # if(CD_INQSTAT){ #
 							   <co04-cd-to-nm cd="#:CD_INQSTAT#" nm-box="csDataVO.csStatusOp">
@@ -158,13 +158,13 @@
 							   # }else{} #
 			</span>
         </td>
-		<td class="ta-l">
+		<td class="ta-c">
             <span class="ells"># if(DTS_ANSREG){ #
 							   #: DTS_ANSREG #
 						       # }else{} #
 			</span>
         </td> 
-		<td class="ta-l">
+		<td class="ta-c">
             <span class="ells"># if(CD_INQCLFT){ #
 							   <co04-cd-to-nm cd="#:CD_INQCLFT#" nm-box="csDataVO.csQuestionCodeOp">
       						   # }else{} #

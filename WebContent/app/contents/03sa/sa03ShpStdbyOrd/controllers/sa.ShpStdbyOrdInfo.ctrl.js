@@ -10,9 +10,7 @@
     angular.module("sa.ShpStdbyOrd.controller")
         .controller("sa.ShpStdbyOrdInfoCtrl", ["$stateParams", "$scope", "$state", "$http", "$q", "$log", "sa.ShpStdbyOrdSvc", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "MenuSvc",
             function ($stateParams, $scope, $state, $http, $q, $log, ShpStdbyOrdSvc, APP_CODE, $timeout, resData, Page, UtilSvc, MenuSvc) {	            
-        	
-        		kendo.culture('ko-KR');// 이거 해야지 원화로 나옴
-        	        		
+        	    		
 	            //주문상태 드랍 박스 실행	
 	            var orderStatus = (function(){
 					var param = {

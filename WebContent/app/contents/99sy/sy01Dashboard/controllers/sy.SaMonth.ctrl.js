@@ -189,7 +189,9 @@
 	        		visible: true,
                 	template: '${ series.name } ${ value }건'
 	        	},
-	        	height:300
+	        	chartArea: {
+	        		height:300
+	        	}
 	        };
         }]);
 }());

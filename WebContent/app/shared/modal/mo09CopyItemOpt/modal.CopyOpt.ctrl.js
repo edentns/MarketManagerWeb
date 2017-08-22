@@ -21,13 +21,13 @@
 	            		CD_ITEM : selected[0],
 	            		CD_OPTTP : selected[1]
 	            	};
-	            	$scope.syCodeVO.selectedData.CD_ITEM = selected[0];
-	            	$scope.syCodeVO.selectedData.CD_OPTTP = selected[1];
-	            	$scope.syCodeVO.inquiryAll(itemParam);
+	            	$scope.copyOptVO.selectedData.CD_ITEM = selected[0];
+	            	$scope.copyOptVO.selectedData.CD_OPTTP = selected[1];
+	            	$scope.copyOptVO.inquiryAll(itemParam);
 				};
 				
 	            
-	            var syCodeVO = $scope.syCodeVO = {
+	            var copyOptVO = $scope.copyOptVO = {
             		boxTitle : "상품",
             		searchCodeList : [],
             		selectedData: {
@@ -130,10 +130,21 @@
 					
 					doConfirm: function() {
 						var self = this;
+						if(self.selectedData.CD_OPTTP == "001"){
+							alert("옵션이 없는상품 입니다.");
+							return;
+						}else if(self.selectedData.CD_OPTTP == "004"){
+							alert("옵션3인 상품입니다.");
+							return;
+						}
 						$modalInstance.close( self.selectedData );
+					},
+					
+					doCancle : function () {
+						$modalInstance.dismiss( "cancel" );
 					}
 					
                 };
-	            syCodeVO.initLoad();
+	            copyOptVO.initLoad();
             }]);
 }());

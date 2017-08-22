@@ -10,7 +10,7 @@
         .controller("modal.basicOptGet002Ctrl", ["$scope","$modal", "$modalInstance", "$http", "$log", "$timeout", "$q", "sy.CodeSvc", "APP_CODE","UtilSvc","it.BssItemSvc",
             function ($scope, $modal, $modalInstance, $http, $log, $timeout, $q, SyCodeSvc, APP_CODE, UtilSvc, itBssItemSvc) {
         	
-        	var gridCusCodeVO = $scope.gridCusCodeVO = {
+        	var bssOpt002VO = $scope.bssOpt002VO = {
     			NO_MNGCDHD   : "SYCH00038",
                 CD_CLS   : "IT_000011",
                 selectedCode   : "CD_OPTCLFT",
@@ -28,22 +28,13 @@
         				destroy: '삭제'
         			}
         		},
-        		edit: function (e) {
-                    if (e.model.isNew()) {
-                    	if(e.model.CD_CLS == ""){
-                    		/*e.model.set("YN_USE", "Y");
-                    		e.model.set("NO_MNGCDHD", $scope.gridCusCodeVO.NO_MNGCDHD);
-                    		e.model.set("CD_CLS", $scope.gridCusCodeVO.CD_CLS);*/
-                    	}
-                    }
-        		},
         		dataSource: new kendo.data.DataSource({
             		transport: {
             			read: function(e) {
             				var param = {
                 					procedureParam:"MarketManager.USP_IT_02BSSITEMBSSOPT_SEARCH&L_SEARCH_TYPE@s|L_SEARCH_WORD@s|L_FLAG@s",
-                					L_SEARCH_TYPE :	gridCusCodeVO.selectedCode,
-                					L_SEARCH_WORD : gridCusCodeVO.searchWord,
+                					L_SEARCH_TYPE :	bssOpt002VO.selectedCode,
+                					L_SEARCH_WORD : bssOpt002VO.searchWord,
                 					L_FLAG: "001"
                                 };
         					UtilSvc.getList(param).then(function (res) {
@@ -52,19 +43,19 @@
             			},
                 		create: function(e) {
                 			itBssItemSvc.saveBssOpt(e.data.models, "I").success(function () {
-                				$scope.gridCusCodeVO.dataSource.read();
+                				$scope.bssOpt002VO.dataSource.read();
                             });
             			},
             			update: function(e) {
             				itBssItemSvc.saveBssOpt(e.data.models, "U").success(function () {
-                				$scope.gridCusCodeVO.dataSource.read();
+                				$scope.bssOpt002VO.dataSource.read();
                             });
             			},
             			destroy: function(e) {
             				var defer = $q.defer();
             				itBssItemSvc.saveBssOpt(e.data.models, "D").success(function () {
         						defer.resolve();
-        						$scope.gridCusCodeVO.dataSource.read();
+        						$scope.bssOpt002VO.dataSource.read();
                             });
                 			return defer.promise;
             			},
@@ -85,7 +76,6 @@
 							    NM_OPT: { },
 							    CD_OPT: { },
 							    CD_OPTCLFT: { },
-							    QT_SSPL: { type : "number" },
 							    AM_SALE: { type : "number" },
 							    NO_MD : { }
             				}
@@ -107,14 +97,14 @@
 		            		    			autoBind: false,
 		            		    			dataTextField: "NM_DEF",
 		                                    dataValueField: "CD_DEF",
-		            		    			dataSource: gridCusCodeVO.optClftList,
+		            		    			dataSource: bssOpt002VO.optClftList,
 		            		    			valuePrimitive: true
 		            		    		});
 	          		       	   	  }, template: function(e){
 	            		       		    var cd_opt = e.CD_OPTCLFT,
-            		       		    	nmd    = "";
+            		       		    		nmd    = "";
             		       		    if(cd_opt){
-            		       		    	var optData = gridCusCodeVO.optClftList;	
+            		       		    	var optData = bssOpt002VO.optClftList;	
 	                		       		for(var i = 0, leng=optData.length; i<leng; i++){
                 		       			   if(optData[i].CD_DEF === e.CD_OPTCLFT){
                 		       				 nmd = optData[i].NM_DEF;	
@@ -126,7 +116,6 @@
        		           { field : "NM_OPT", title: "옵션명", width: "160" },
        		           { field : "NO_MD", title: "모델 NO.", width: "160" },
        		           { field : "AM_SALE", title: "판매가 (+ , -)", width: "160" },
-       		           { field : "QT_SSPL", title: "", hidden:true },
                        {command: [ "destroy" ]}
             	],
                 collapse: function(e) {
@@ -147,14 +136,23 @@
 				doConfirm : function () {
 					var self = this;
 					var CD_OPTS = [];
+					var grid = $("#gridVO").data("kendoGrid").dataSource;
+					if(grid.hasChanges()){
+						alert("변경사항이 있습니다");
+						return;
+					}
 					for(var i = 0; i<self.dataSource._data.length; i++){
-						if(self.dataSource._data[i].ROW_CHK == true){
+						if(self.dataSource._data[i].ROW_CHK){
 							self.dataSource._data[i].QT_SSPL = 0;
 							self.dataSource._data[i].S_ITEMPRC = self.dataSource._data[i].AM_SALE;
 							CD_OPTS.push(self.dataSource._data[i]);
 						}
 					}
 					$modalInstance.close( CD_OPTS );
+				},
+				
+				doCancle : function() {
+					$modalInstance.dismiss( "cancel" );
 				}
             };
         	
@@ -175,6 +173,6 @@
                 };
             };
             
-        	gridCusCodeVO.init();
+        	bssOpt002VO.init();
             }]);
 }());

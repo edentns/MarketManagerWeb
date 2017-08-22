@@ -3,7 +3,7 @@
         <div id="app-content-header">
             <ol class="breadcrumb">
                 <li><a href="#99sy/syDashboard"><i class="fa fa-home fa-2x"></i></a></li>
-                <li><a href="#02it/itBssItem/list">기본상품관리</a></li>
+                <li><a href="#02it/itSaleItem/list">판매상품관리</a></li>
             </ol>
         </div>
     </div>
@@ -11,7 +11,7 @@
 	<div class="row">
         <!-- 상품 정보 -->
         <div class="content-area-container col-xs-12">
-        	<div data-content-box-layer data-box-title="bssInfoDataVO.itemInfo.boxTitle">
+        	<div data-content-box-layer data-box-title="saleInfoDataVO.itemInfo.boxTitle">
         		<form class="search-type1">
 	                <table>
 	                	<colgroup>
@@ -26,10 +26,10 @@
 	                       		<td colspan="3">
 	                       		   <span data-ng-if="page.isWriteable()">
 	                                   <input type="text" class="form-control wid-x4" id="CD_SIGNITEM" name="CD_SIGNITEM" title="상품코드 입력"
-	                                          maxlength="15" data-ng-model="bssInfoDataVO.param.CD_SIGNITEM" ng-change = "bssInfoDataVO.duplChange()">
+	                                          maxlength="15" data-ng-model="saleInfoDataVO.param.CD_SIGNITEM" ng-change = "saleInfoDataVO.duplChange()">
 	                               </span>
-	                               <kendo-button ng-click ="bssInfoDataVO.duplCheck()" id="duple">중복확인</kendo-button>
-	                               <kendo-button ng-click ="bssInfoDataVO.itemCopyModal()">상품복사등록</kendo-button>
+	                               <kendo-button ng-click ="saleInfoDataVO.duplCheck()" id="duple">중복확인</kendo-button>
+	                               <kendo-button ng-click ="saleInfoDataVO.itemCopyModal()">상품복사등록</kendo-button>
                                 </td>
 	                       	</tr>
 	                       	<tr>
@@ -37,14 +37,14 @@
 	                       		<td style="width: 100%">
 								   <span >
 	                                   <input type="text" class="form-control wid-x8" id="NM_ITEM" name="NM_ITEM" title="상품명 입력"
-	                                          maxlength="100" data-ng-model="bssInfoDataVO.param.NM_ITEM">
+	                                          maxlength="100" data-ng-model="saleInfoDataVO.param.NM_ITEM">
 	                               </span>
 	                       		</td>
 	                       		<th>상품약어</th>
 	                       		<td>
 	                       		   <span style="width: 100%">
 	                                   <input type="text" class="form-control wid-x8" id="DC_ITEMABBR" name="DC_ITEMABBR" title="상품약어 입력"
-	                                          maxlength="15" data-ng-model="bssInfoDataVO.param.DC_ITEMABBR">
+	                                          maxlength="15" data-ng-model="saleInfoDataVO.param.DC_ITEMABBR">
 	                               </span>
 	                       		</td>
 	                       	</tr>
@@ -53,18 +53,18 @@
 	                       		<td>
 								   <span data-ng-if="page.isWriteable()">
                                     <select class="form-control wid-x5" id="ctgr1" title="대분류선택"
-                                            data-ng-model="bssInfoDataVO.selectedCtgr1" style="width: 150px" ng-change="bssInfoDataVO.ctgrChange('1')"
-                                            data-ng-options="ctgr.NM_CTGR for ctgr in bssInfoDataVO.itemCtgrList1 track by ctgr.ID_CTGR">
+                                            data-ng-model="saleInfoDataVO.selectedCtgr1" style="width: 150px" ng-change="saleInfoDataVO.ctgrChange('1')"
+                                            data-ng-options="ctgr.NM_CTGR for ctgr in saleInfoDataVO.itemCtgrList1 track by ctgr.ID_CTGR">
                                         <option value="">대분류선택</option>
                                     </select>
                                     <select class="form-control wid-x5" id="ctgr2" title="중분류선택"
-                                            data-ng-model="bssInfoDataVO.selectedCtgr2" style="width: 150px" ng-change="bssInfoDataVO.ctgrChange('2')"
-                                            data-ng-options="ctgr.NM_CTGR for ctgr in bssInfoDataVO.itemCtgrList2 track by ctgr.ID_CTGR">
+                                            data-ng-model="saleInfoDataVO.selectedCtgr2" style="width: 150px" ng-change="saleInfoDataVO.ctgrChange('2')"
+                                            data-ng-options="ctgr.NM_CTGR for ctgr in saleInfoDataVO.itemCtgrList2 track by ctgr.ID_CTGR">
                                         <option value="">중분류선택</option>
                                     </select>
                                     <select class="form-control wid-x5" id="ctgr3" title="소분류선택"
-                                            data-ng-model="bssInfoDataVO.selectedCtgr3" style="width: 150px"
-                                            data-ng-options="ctgr.NM_CTGR for ctgr in bssInfoDataVO.itemCtgrList3 track by ctgr.ID_CTGR">
+                                            data-ng-model="saleInfoDataVO.selectedCtgr3" style="width: 150px"
+                                            data-ng-options="ctgr.NM_CTGR for ctgr in saleInfoDataVO.itemCtgrList3 track by ctgr.ID_CTGR">
                                         <option value="">소분류선택</option>
                                     </select>
                                 </span>
@@ -72,27 +72,27 @@
 	                       		<th><span class="form-required">* </span>바코드</th>
 	                       		<td>
 	                       			<select class="form-control wid-x5" id="YN_BCD" title="바코드유무"
-                                            data-ng-model="bssInfoDataVO.param.YN_BCD" style="width: 100px" ng-change="bssInfoDataVO.bcdChange()">
+                                            data-ng-model="saleInfoDataVO.param.YN_BCD" style="width: 100px" ng-change="saleInfoDataVO.bcdChange()">
                                         <option value="N">없음</option>
                                         <option value="Y">있음</option>
                                     </select>
                                     <input type="text" class="form-control wid-x5" id="DC_BCD" title="사유 입력"
-			                                maxlength="20" data-ng-model="bssInfoDataVO.param.DC_BCD" placeholder="바코드 없는 사유">
+			                                maxlength="20" data-ng-model="saleInfoDataVO.param.DC_BCD" placeholder="바코드 없는 사유">
 	                       		</td>
 	                       	</tr><tr>
 	                       		<th><span class="form-required">* </span>상품종류</th>
 	                       		<td>
 								   <select class="form-control wid-x5" id="CD_ITEMKIND" title="상품종류"
-                                            data-ng-model="bssInfoDataVO.param.CD_ITEMKIND" style="width: 150px"
-                                            data-ng-options="item.CD_DEF as item.NM_DEF for item in bssInfoDataVO.iKindList">
+                                            data-ng-model="saleInfoDataVO.param.CD_ITEMKIND" style="width: 150px"
+                                            data-ng-options="item.CD_DEF as item.NM_DEF for item in saleInfoDataVO.iKindList">
                                         <option value="">종류선택</option>
                                     </select>
 	                       		</td>
 	                       		<th><span class="form-required">* </span>상품구분</th>
 	                       		<td>
 	                       		   <select class="form-control wid-x5" id="CD_ITEMCLFT" title="상품구분"
-                                            data-ng-model="bssInfoDataVO.param.CD_ITEMCLFT" style="width: 150px"
-                                            data-ng-options="item.CD_DEF as item.NM_DEF for item in bssInfoDataVO.iClftList">
+                                            data-ng-model="saleInfoDataVO.param.CD_ITEMCLFT" style="width: 150px"
+                                            data-ng-options="item.CD_DEF as item.NM_DEF for item in saleInfoDataVO.iClftList">
                                         <option value="">구분선택</option>
                                     </select>
 	                       		</td>
@@ -100,8 +100,8 @@
 	                       		<th><span class="form-required">* </span>상품상태</th>
 	                       		<td>
 								   <select class="form-control wid-x5" id="CD_ITEMSTAT" title="상품상태"
-                                            data-ng-model="bssInfoDataVO.param.CD_ITEMSTAT" style="width: 150px"
-                                            data-ng-options="item.CD_DEF as item.NM_DEF for item in bssInfoDataVO.iStatList">
+                                            data-ng-model="saleInfoDataVO.param.CD_ITEMSTAT" style="width: 150px"
+                                            data-ng-options="item.CD_DEF as item.NM_DEF for item in saleInfoDataVO.iStatList">
                                         <option value="">상태선택</option>
                                     </select>
 	                       		</td>
@@ -111,13 +111,13 @@
 	                       		<th><span class="form-required">* </span>대표이미지</th>
 	                       		<td>
 								   <div class="file-ins-input">
-			                           <co02-filebox filevo="bssInfoDataVO.fileMainVO" id="fileMainVO"></co02-filebox>
+			                           <co02-filebox filevo="saleInfoDataVO.fileMainVO" id="fileMainVO"></co02-filebox>
 			                        </div>
 	                       		</td>
 	                       		<th><span class="form-required">* </span>작은이미지</th>
 	                       		<td>
 	                       		   <div class="file-ins-input">
-			                           <co02-filebox filevo="bssInfoDataVO.fileSmallVO" id="fileSmallVO"></co02-filebox>
+			                           <co02-filebox filevo="saleInfoDataVO.fileSmallVO" id="fileSmallVO"></co02-filebox>
 			                        </div>
 	                       		</td>
 	                       	</tr>
@@ -125,13 +125,13 @@
 	                       		<th><span class="form-required">* </span>상세설명</th>
 	                       		<td>
 								   <div class="file-ins-input">
-			                           <co02-filebox filevo="bssInfoDataVO.fileDExVO" id="fileDExVO"></co02-filebox>
+			                           <co02-filebox filevo="saleInfoDataVO.fileDExVO" id="fileDExVO"></co02-filebox>
 			                        </div>
 	                       		</td>
 	                       		<th><span class="form-required">* </span>상세이미지</th>
 	                       		<td>
 	                       		   <div class="file-ins-input">
-			                           <co02-filebox filevo="bssInfoDataVO.fileDImageVO" id="fileDImageVO"></co02-filebox>
+			                           <co02-filebox filevo="saleInfoDataVO.fileDImageVO" id="fileDImageVO"></co02-filebox>
 			                        </div>
 	                       		</td>
 	                       	</tr>
@@ -145,7 +145,7 @@
     <div class="row">
         <!-- 판매 정보  -->
         <div class="content-area-container col-xs-12">
-        	<div data-content-box-layer data-box-title="bssInfoDataVO.sellInfo.boxTitle">
+        	<div data-content-box-layer data-box-title="saleInfoDataVO.sellInfo.boxTitle">
         		<form class="search-type1">
 	                <table class="table-bordered">
 	                	<colgroup>
@@ -162,20 +162,20 @@
 	                       		<td>
 	                       		   <span style="width: 100%">
 	                                   <input type="text" class="form-control wid-x4" id="B_ITEMPRC" name="B_ITEMPRC" title="구매가" data-eden-type="kor"
-	                                          maxlength="15" data-ng-model="bssInfoDataVO.param.B_ITEMPRC" style="width: 95%;text-align: right;" ng-keyup="bssInfoDataVO.inputNumber(bssInfoDataVO.param.B_ITEMPRC, 'B')">
+	                                          maxlength="15" data-ng-model="saleInfoDataVO.param.B_ITEMPRC" style="width: 95%;text-align: right;" ng-keyup="saleInfoDataVO.inputNumber(saleInfoDataVO.param.B_ITEMPRC, 'B')">
 	                               </span>
 	                       		</td>
 	                       		<th><span class="form-required">* </span>과세구분</th>
 	                       		<td colspan="3">
-	                       		   <div data-ng-repeat = "list in bssInfoDataVO.taxList" style="float: left;">
-		                         		<input type="radio" name="taxRadio" data-ng-model="bssInfoDataVO.param.CD_TAXCLFT" value="{{list.CD_DEF}}" data-ng-change="bssInfoDataVO.taxChange()" >
+	                       		   <div data-ng-repeat = "list in saleInfoDataVO.taxList" style="float: left;">
+		                         		<input type="radio" name="taxRadio" data-ng-model="saleInfoDataVO.param.CD_TAXCLFT" value="{{list.CD_DEF}}" data-ng-change="saleInfoDataVO.taxChange()" >
 		                         		<label >
 		                         			{{list.NM_DEF}}
 		                         		</label>
 		                         		<sapn data-ng-if = "list.CD_DEF == '001'">
 		                         				&nbsp;&nbsp;과세율
 		                         			<input type="text" class="form-control wid-x4" id="RT_TAX" name="RT_TAX" title="과세율 입력"
-	                                          	maxlength="2" data-ng-model="bssInfoDataVO.param.RT_TAX" style="text-align: right;" ng-keyup="bssInfoDataVO.sprcCal('', bssInfoDataVO.param.RT_TAX ,'R')">%
+	                                          	maxlength="2" data-ng-model="saleInfoDataVO.param.RT_TAX" style="text-align: right;" ng-keyup="saleInfoDataVO.sprcCal('', saleInfoDataVO.param.RT_TAX ,'R')">%
 		                         		</sapn>
 		                           </div>
 	                       		</td>
@@ -183,41 +183,41 @@
 	                       	<tr>
 	                       		<th><span class="form-required">* </span>판매가</th>
 	                       		<td style="border: 0px"><input type="text" class="form-control wid-x4" id="S_ITEMPRC" name="S_ITEMPRC" title="판매가 입력"
-	                                          maxlength="15" data-ng-model="bssInfoDataVO.param.S_ITEMPRC" style="width: 95%;text-align: right;" ng-keyup="bssInfoDataVO.sprcCal('',bssInfoDataVO.param.S_ITEMPRC, 'S')">
+	                                          maxlength="15" data-ng-model="saleInfoDataVO.param.S_ITEMPRC" style="width: 95%;text-align: right;" ng-keyup="saleInfoDataVO.sprcCal('',saleInfoDataVO.param.S_ITEMPRC, 'S')">
 	                            </td>
 	                            <td style="border: 0px">
 	                            	<label>&nbsp; =&nbsp;&nbsp; 상품금액</label></td>
 	                            <td style="border: 0px" colspan="2">
 	                            	<input type="text" class="form-control wid-x4" id="tax" name="tax" title="상품금액 입력"
-	                                          maxlength="15" data-ng-model="bssInfoDataVO.tax" style="width: 69%" ng-keyup="bssInfoDataVO.sprcCal('tax',bssInfoDataVO.tax, 'T')">
-	                                <label>&nbsp;&nbsp; +&nbsp;&nbsp; 과세금액 ( &nbsp;&nbsp; {{bssInfoDataVO.taxValue}} &nbsp;&nbsp; )</label>
+	                                          maxlength="15" data-ng-model="saleInfoDataVO.tax" style="width: 69%" ng-keyup="saleInfoDataVO.sprcCal('tax',saleInfoDataVO.tax, 'T')">
+	                                <label>&nbsp;&nbsp; +&nbsp;&nbsp; 과세금액 ( &nbsp;&nbsp; {{saleInfoDataVO.taxValue}} &nbsp;&nbsp; )</label>
 	                            </td>
 	                       	</tr>
 	                       	<tr>
 	                       		<th><span class="form-required">* </span>구매단위</th>
 	                       		<td>
 	                       		    <select class="form-control wid-x5" id="CD_PCSUNIT" title="상품상태"
-                                            data-ng-model="bssInfoDataVO.param.CD_PCSUNIT" style="width: 150px"
-                                            data-ng-options="item.CD_DEF as item.NM_DEF for item in bssInfoDataVO.pscUnitList">
+                                            data-ng-model="saleInfoDataVO.param.CD_PCSUNIT" style="width: 150px"
+                                            data-ng-options="item.CD_DEF as item.NM_DEF for item in saleInfoDataVO.pscUnitList">
                                         <option value="">단위선택</option>
                                     </select>
                                 </td>
 	                       		<th>최소구매수량</th>
 	                       		<td><input type="text" class="form-control wid-x4" id="QT_MINPCS" name="QT_MINPCS" title="최소구매수량입력"
-	                                   maxlength="10" data-ng-model="bssInfoDataVO.param.QT_MINPCS" style="width: 95%;text-align: right;" ng-keyup="bssInfoDataVO.inputOnlyNum( bssInfoDataVO.param.QT_MINPCS , 'Q')">
+	                                   maxlength="10" data-ng-model="saleInfoDataVO.param.QT_MINPCS" style="width: 95%;text-align: right;" ng-keyup="saleInfoDataVO.inputOnlyNum( saleInfoDataVO.param.QT_MINPCS , 'Q')">
 	                            </td>
 	                       		<th><span class="form-required">* </span>성인인증</th>
 	                       		<td><input type="radio" name="adulRaBtn"
-		                             data-ng-model="bssInfoDataVO.param.YN_ADULCTFC" value="Y">사용 
+		                             data-ng-model="saleInfoDataVO.param.YN_ADULCTFC" value="Y">사용 
 		                         	 <input type="radio" name="adulRaBtn"
-		                         	 data-ng-model="bssInfoDataVO.param.YN_ADULCTFC" value="N">사용안함
+		                         	 data-ng-model="saleInfoDataVO.param.YN_ADULCTFC" value="N">사용안함
 		                        </td>
 	                       	</tr>
 	                       	<tr>
 	                       		<th>홍보문구</th>
 	                       		<td colspan="5">
 	                       		<input type="text" class="form-control wid-x4" id="DC_PUREWD" name="DC_PUREWD" title="홍보문구입력"
-	                                   maxlength="500" data-ng-model="bssInfoDataVO.param.DC_PUREWD" style="width: 90%">
+	                                   maxlength="500" data-ng-model="saleInfoDataVO.param.DC_PUREWD" style="width: 90%">
 	                            </td>
 	                       	</tr>
 	                       </tbody>
@@ -230,7 +230,7 @@
     <div class="row">
         <!-- 제조 정보 -->
         <div class="content-area-container col-xs-12">
-        	<div data-content-box-layer data-box-title="bssInfoDataVO.prodInfo.boxTitle">
+        	<div data-content-box-layer data-box-title="saleInfoDataVO.prodInfo.boxTitle">
         		<form class="search-type1">
                 	<table class="table-bordered">
 	                	<colgroup>
@@ -246,77 +246,77 @@
 	                       		<th>제조사</th>
 	                       		<td colspan="3">
 	                       			<label>자체제작 
-								    	<input type="checkbox" ng-model="bssInfoDataVO.param.YN_MNFROWN"
-								           ng-true-value="Y" ng-false-value="N" ng-change="bssInfoDataVO.mrfrChange()">
+								    	<input type="checkbox" ng-model="saleInfoDataVO.param.YN_MNFROWN"
+								           ng-true-value="Y" ng-false-value="N" ng-change="saleInfoDataVO.mrfrChange()">
 								    </label>
 	                       		   <span style="width: 100%">
 	                                   <input type="text" class="form-control wid-x4" id="NM_MNFR" name="NM_MNFR" title="제조사 입력"
-	                                          maxlength="15" data-ng-model="bssInfoDataVO.param.NM_MNFR" style="width: 80%" >
+	                                          maxlength="15" data-ng-model="saleInfoDataVO.param.NM_MNFR" style="width: 80%" >
 	                               </span>
 	                       		</td>
 	                       		<th>공급사</th>
 	                       		<td>
 		                       		<label>자체공급 
-								    	<input type="checkbox" ng-model="bssInfoDataVO.param.YN_SPLYOWN"
-								           ng-true-value="Y" ng-false-value="N" ng-change="bssInfoDataVO.splyChange()">
+								    	<input type="checkbox" ng-model="saleInfoDataVO.param.YN_SPLYOWN"
+								           ng-true-value="Y" ng-false-value="N" ng-change="saleInfoDataVO.splyChange()">
 								    </label>
 	                       		   <span style="width: 100%">
 	                                   <input type="text" class="form-control wid-x4" id="NM_SPLY" name="NM_SPLY" title="공급사 입력"
-	                                          maxlength="15" data-ng-model="bssInfoDataVO.param.NM_SPLY" style="width: 80%" >
+	                                          maxlength="15" data-ng-model="saleInfoDataVO.param.NM_SPLY" style="width: 80%" >
 	                               </span>
 	                       		</td>
 	                       	</tr>
 	                       	<tr>
 	                       		<th>브랜드</th>
 	                       		<td><input type="text" class="form-control wid-x4" id="NM_BRD" name="NM_BRD" title="브랜드 입력"
-	                                          maxlength="15" data-ng-model="bssInfoDataVO.param.NM_BRD" style="width: 95%;" >
+	                                          maxlength="15" data-ng-model="saleInfoDataVO.param.NM_BRD" style="width: 95%;" >
 	                            </td>
 	                            <th>출시일자</th>
 	                            <td><input type="text" class="form-control wid-x4" data-jquery-date id="DT_RLS" name="DT_RLS" title="출시일자 입력"
-	                                       placeholder="'1988-01-21' 포멧으로 입력해주세요." maxlength="15" data-ng-model="bssInfoDataVO.param.DT_RLS" style="width: 95%" >
+	                                       placeholder="'1988-01-21' 포멧으로 입력해주세요." maxlength="15" data-ng-model="saleInfoDataVO.param.DT_RLS" style="width: 95%" >
 	                            </td>
 	                            <th>유효기간</th>
 	                            <td>
 	                       			<select class="form-control wid-x5" id="YN_VLDPRDUSE" title="유효기간유무"
-                                            data-ng-model="bssInfoDataVO.param.YN_VLDPRDUSE" style="width: 70px" ng-change="bssInfoDataVO.vldChange()">
+                                            data-ng-model="saleInfoDataVO.param.YN_VLDPRDUSE" style="width: 70px" ng-change="saleInfoDataVO.vldChange()">
                                         <option value="N">없음</option>
                                         <option value="Y">있음</option>
                                     </select>
-                                    <input type="text" class="form-control wid-x5" data-jquery-date id="DTS_VLD" title="사유 입력" data-ng-if="bssInfoDataVO.param.YN_VLDPRDUSE=='Y'"
-			                                maxlength="20" data-ng-model="bssInfoDataVO.param.DTS_VLD" placeholder="'1988-01-21' 포멧으로 입력해주세요." style="width: 77%">
+                                    <input type="text" class="form-control wid-x5" data-jquery-date id="DTS_VLD" title="사유 입력" data-ng-if="saleInfoDataVO.param.YN_VLDPRDUSE=='Y'"
+			                                maxlength="20" data-ng-model="saleInfoDataVO.param.DTS_VLD" placeholder="'1988-01-21' 포멧으로 입력해주세요." style="width: 77%">
 	                       		</td>
 	                       	</tr>
 	                       	<tr>
 	                       		<th><span class="form-required">* </span>원산지</th>
 	                       		<td style="border: 0px">
 	                       		    <select class="form-control wid-x5" id="CD_COONT" title="국가"
-                                            data-ng-model="bssInfoDataVO.param.CD_COONT" style="width: 150px"
-                                            data-ng-options="item.CD_DEF as item.NM_DEF for item in bssInfoDataVO.conList">
+                                            data-ng-model="saleInfoDataVO.param.CD_COONT" style="width: 150px"
+                                            data-ng-options="item.CD_DEF as item.NM_DEF for item in saleInfoDataVO.conList">
                                         <option value="">국가선택</option>
                                     </select>
                                 </td>
 	                       		<td colspan="4" style="border: 0px"><input type="text" class="form-control wid-x4" id="NM_COOAREA" name="NM_COOAREA" title="지역입력"
-	                                   maxlength="10" data-ng-model="bssInfoDataVO.param.NM_COOAREA" style="width: 19%;" placeholder="도시(지역)">
+	                                   maxlength="10" data-ng-model="saleInfoDataVO.param.NM_COOAREA" style="width: 19%;" placeholder="도시(지역)">
 	                            </td>
 	                       	</tr>
 	                       	<tr>
 	                       		<th>사이즈</th>
 	                       		<td><input type="text" class="form-control wid-x4" id="NM_SIZE" name="NM_SIZE" title="사이즈 입력"
-	                                          maxlength="15" data-ng-model="bssInfoDataVO.param.NM_SIZE" style="width: 95%" placeholder="가로*세로*높이">
+	                                          maxlength="15" data-ng-model="saleInfoDataVO.param.NM_SIZE" style="width: 95%" placeholder="가로*세로*높이">
 	                            </td>
 	                            <th>무게</th>
 	                            <td><input type="text" class="form-control wid-x4" id="VAL_WET" name="VAL_WET" title="무게 입력"
-	                                       maxlength="50" data-ng-model="bssInfoDataVO.param.VAL_WET" style="width: 45%;text-align: right;" >
+	                                       maxlength="50" data-ng-model="saleInfoDataVO.param.VAL_WET" style="width: 45%;text-align: right;" >
 	                            	<select class="form-control wid-x5" id="CD_WETUNIT" title="무게"
-                                            data-ng-model="bssInfoDataVO.param.CD_WETUNIT" style="width: 150px"
-                                            data-ng-options="item.CD_DEF as item.NM_DEF for item in bssInfoDataVO.wetList">
+                                            data-ng-model="saleInfoDataVO.param.CD_WETUNIT" style="width: 150px"
+                                            data-ng-options="item.CD_DEF as item.NM_DEF for item in saleInfoDataVO.wetList">
                                         <option value="">무게선택</option>
                                     </select>
 	                            </td>
 	                            <th>모델No.</th>
 	                            <td>
                                     <input type="text" class="form-control wid-x5" id="NO_MD" title="모델No 입력"
-			                               maxlength="50" data-ng-model="bssInfoDataVO.param.NO_MD" style="width: 95%">
+			                               maxlength="50" data-ng-model="saleInfoDataVO.param.NO_MD" style="width: 95%">
 	                       		</td>
 	                       	</tr>
 	                       </tbody>
@@ -329,7 +329,7 @@
     <div class="row">
         <!-- 배송 정보 -->
         <div class="content-area-container col-xs-12">
-        	<div data-content-box-layer data-box-title="bssInfoDataVO.transInfo.boxTitle">
+        	<div data-content-box-layer data-box-title="saleInfoDataVO.transInfo.boxTitle">
         		<form class="search-type1">
                 	<table class="table-bordered">
 	                	<colgroup>
@@ -344,13 +344,13 @@
 	                       	<tr>
 	                       		<th><span class="form-required">* </span>기본배송정보사용여부</th>
 	                       		<td>
-	                       		   <input type="checkbox" ng-model="bssInfoDataVO.param.YN_BSSSHPINFOUSE"
+	                       		   <input type="checkbox" ng-model="saleInfoDataVO.param.YN_BSSSHPINFOUSE"
 								          ng-true-value="Y" ng-false-value="N">
 	                       		</td>
 	                       		<th><span class="form-required">* </span>국내/해외배송</th>
 	                       		<td colspan="3">
-	                       		   <div data-ng-repeat = "list in bssInfoDataVO.dmstList" style="float: left">
-		                         		<input type="radio" name="dmstRadio" data-ng-model="bssInfoDataVO.param.CD_DMSTFECTSHP" value="{{list.CD_DEF}}">
+	                       		   <div data-ng-repeat = "list in saleInfoDataVO.dmstList" style="float: left">
+		                         		<input type="radio" name="dmstRadio" data-ng-model="saleInfoDataVO.param.CD_DMSTFECTSHP" value="{{list.CD_DEF}}">
 		                         		<label >
 		                         			{{list.NM_DEF}}
 		                         		</label>
@@ -361,40 +361,40 @@
 	                       		<th>HS코드</th>
 	                       		<td>
 	                       		    <input type="text" class="form-control wid-x4" id="NM_HSCD" name="NM_HSCD" title="HS코드입력"
-	                                   maxlength="100" data-ng-model="bssInfoDataVO.param.NM_HSCD" style="width: 95%;" >
+	                                   maxlength="100" data-ng-model="saleInfoDataVO.param.NM_HSCD" style="width: 95%;" >
                                 </td>
 	                       		<th>통관용 상품구분</th>
 	                       		<td><input type="text" class="form-control wid-x4" id="NM_CTCAITEMCLFT" name="NM_CTCAITEMCLFT" title="통관용 상품구분 입력"
-	                                   maxlength="100" data-ng-model="bssInfoDataVO.param.NM_CTCAITEMCLFT" style="width: 95%;" >
+	                                   maxlength="100" data-ng-model="saleInfoDataVO.param.NM_CTCAITEMCLFT" style="width: 95%;" >
 	                            </td>
 	                       		<th>옷감</th>
 	                       		<td><input type="text" class="form-control wid-x4" id="NM_CLTH" name="NM_CLTH" title="옷감 입력"
-	                                   maxlength="100" data-ng-model="bssInfoDataVO.param.NM_CLTH" style="width: 95%;" >
+	                                   maxlength="100" data-ng-model="saleInfoDataVO.param.NM_CLTH" style="width: 95%;" >
 	                            </td>
 	                       	</tr>
 	                       	<tr>
 	                       		<th>상품제작소재</th>
 	                       		<td>
 	                       		<input type="text" class="form-control wid-x4" id="NM_ITEMMNFTMTRLKR" name="NM_ITEMMNFTMTRLKR" title="홍보문구입력"
-	                                   maxlength="100" data-ng-model="bssInfoDataVO.param.NM_ITEMMNFTMTRLKR" style="width: 95%">
+	                                   maxlength="100" data-ng-model="saleInfoDataVO.param.NM_ITEMMNFTMTRLKR" style="width: 95%">
 	                            </td>
 	                            <th>영문</th>
 	                       		<td colspan="3">
 	                       		<input type="text" class="form-control wid-x4" id="NM_ITEMMNFTMTRLENG" name="NM_ITEMMNFTMTRLENG" title="홍보문구입력"
-	                                   maxlength="100" data-ng-model="bssInfoDataVO.param.NM_ITEMMNFTMTRLENG" style="width: 95%">
+	                                   maxlength="100" data-ng-model="saleInfoDataVO.param.NM_ITEMMNFTMTRLENG" style="width: 95%">
 	                            </td>
 	                       	</tr>
 	                       	<tr>
 	                       		<th>상품배송유형</th>
 	                       		<td colspan="5">
-	                       		   <div data-ng-repeat = "list in bssInfoDataVO.shptpList" style="float: left">
-		                         		<input type="radio" name="shptpRadio" data-ng-model="bssInfoDataVO.param.CD_ITEMSHPTP" value="{{list.CD_DEF}}" data-ng-change="bssInfoDataVO.shptpChange()">
+	                       		   <div data-ng-repeat = "list in saleInfoDataVO.shptpList" style="float: left">
+		                         		<input type="radio" name="shptpRadio" data-ng-model="saleInfoDataVO.param.CD_ITEMSHPTP" value="{{list.CD_DEF}}" data-ng-change="saleInfoDataVO.shptpChange()">
 		                         		<label>
 		                         			{{list.NM_DEF}}
 		                         		</label>
 		                         	</div>
 		                         	<input type="text" class="form-control wid-x4" id="NM_ITEMSHPTP" name="NM_ITEMSHPTP" title="기타입력"
-	                                   maxlength="50" data-ng-model="bssInfoDataVO.param.NM_ITEMSHPTP" style="width: 20%" readonly="false">
+	                                   maxlength="50" data-ng-model="saleInfoDataVO.param.NM_ITEMSHPTP" style="width: 20%" readonly="false">
 	                       		</td>
 	                       	</tr>
 	                       </tbody>
@@ -407,7 +407,7 @@
     <div class="row">
         <!-- 옵션/재고 정보 -->
         <div class="content-area-container col-xs-12">
-        	<div data-content-box-layer data-box-title="bssInfoDataVO.opInfo.boxTitle">
+        	<div data-content-box-layer data-box-title="saleInfoDataVO.opInfo.boxTitle">
         		<form class="search-type1">
                 	<table class="table-bordered">
 	                	<colgroup>
@@ -422,8 +422,8 @@
 	                       	<tr>
 	                       		<th>옵션유형 선택</th>
 	                       		<td colspan="3">
-	                       			<div data-ng-repeat = "list in bssInfoDataVO.optList" style="float: left">
-		                         		<input type="radio" name="optRadio" data-ng-model="bssInfoDataVO.param.CD_OPTTP" value="{{list.CD_DEF}}" data-ng-change="bssInfoDataVO.optChange()">
+	                       			<div data-ng-repeat = "list in saleInfoDataVO.optList" style="float: left">
+		                         		<input type="radio" name="optRadio" data-ng-model="saleInfoDataVO.param.CD_OPTTP" value="{{list.CD_DEF}}" data-ng-change="saleInfoDataVO.optChange()">
 		                         		<label>
 		                         			{{list.NM_DEF}}
 		                         		</label>
@@ -435,14 +435,14 @@
 	                       	<tr>
 	                       		<th>상품옵션종류</th>
 	                       		<td colspan="5">
-									<kendo-button data-ng-if="bssInfoDataVO.param.CD_OPTTP!='001'" ng-click = "bssInfoDataVO.basicOptGet(bssInfoDataVO.param.CD_OPTTP)">기본옵션조회 및 설정</kendo-button>
-	                                <kendo-button data-ng-if="bssInfoDataVO.param.CD_OPTTP!='001'" ng-click = "bssInfoDataVO.otherOptCopy(bssInfoDataVO.param.CD_OPTTP)">다른상품옵션복사하기</kendo-button>
+									<kendo-button data-ng-if="saleInfoDataVO.param.CD_OPTTP!='001'" ng-click = "saleInfoDataVO.basicOptGet(saleInfoDataVO.param.CD_OPTTP)">기본옵션조회 및 설정</kendo-button>
+	                                <kendo-button data-ng-if="saleInfoDataVO.param.CD_OPTTP!='001'" ng-click = "saleInfoDataVO.otherOptCopy(saleInfoDataVO.param.CD_OPTTP)">다른상품옵션복사하기</kendo-button>
 								</td>
 	                       	</tr>
 	                       </tbody>
 	                </table>
-	                <div data-ng-if="bssInfoDataVO.param.CD_OPTTP=='002'"> <kendo-grid options = "gridOpt002VO" id = "gridOpt002"></kendo-grid> </div>
-	                <div data-ng-if="bssInfoDataVO.param.CD_OPTTP=='003'"> <kendo-grid options = "gridOpt003VO" id = "gridOpt003"></kendo-grid> </div>
+	                <div data-ng-if="saleInfoDataVO.param.CD_OPTTP=='002'"> <kendo-grid options = "gridOpt002VO" id = "gridOpt002"></kendo-grid> </div>
+	                <div data-ng-if="saleInfoDataVO.param.CD_OPTTP=='003'"> <kendo-grid options = "gridOpt003VO" id = "gridOpt003"></kendo-grid> </div>
                 </form>
             </div>
         </div>        
@@ -451,7 +451,7 @@
     <div class="row">
         <!-- 인허가 고시 정보 -->
         <div class="content-area-container col-xs-12">
-        	<div data-content-box-layer data-box-title="bssInfoDataVO.licenseInfo.boxTitle">
+        	<div data-content-box-layer data-box-title="saleInfoDataVO.licenseInfo.boxTitle">
         		<form class="search-type1">
 	                <table class="table-bordered">
 	                	<colgroup>
@@ -466,25 +466,25 @@
 	                       	<tr>
 	                       		<th>품명 및 모델명</th>
 	                       		<td><input type="text" class="form-control wid-x4" id="NM_MD" name="NM_MD" title="품명 및 모델 입력"
-	                                       maxlength="50" data-ng-model="bssInfoDataVO.param.NM_MD" style="width: 95%">
+	                                       maxlength="50" data-ng-model="saleInfoDataVO.param.NM_MD" style="width: 95%">
 	                            </td>
 	                       		<th>인증사항</th>
 	                       		<td><input type="text" class="form-control wid-x4" id="NM_CTF" name="NM_CTF" title="인증 사항 입력"
-	                                       maxlength="50" data-ng-model="bssInfoDataVO.param.NM_CTF" style="width: 95%">
+	                                       maxlength="50" data-ng-model="saleInfoDataVO.param.NM_CTF" style="width: 95%">
 	                            </td>
 	                       		<th>제조국(원산지)</th>
 	                       		<td><input type="text" class="form-control wid-x4" id="NM_MNFCOO" name="NM_MNFCOO" title="제조국 입력"
-	                                       maxlength="50" data-ng-model="bssInfoDataVO.param.NM_MNFCOO" style="width: 95%">
+	                                       maxlength="50" data-ng-model="saleInfoDataVO.param.NM_MNFCOO" style="width: 95%">
 	                            </td>
 	                       	</tr>
 	                       	<tr>
 	                       		<th>제조자(수입자)</th>
 	                       		<td><input type="text" class="form-control wid-x4" id="NM_MNFRER" name="NM_MNFRER" title="제조자(수입자)입력"
-	                                       maxlength="50" data-ng-model="bssInfoDataVO.param.NM_MNFRER" style="width: 95%">
+	                                       maxlength="50" data-ng-model="saleInfoDataVO.param.NM_MNFRER" style="width: 95%">
 	                            </td>
 	                       		<th>소비자상담 관련 전화번호</th>
 	                       		<td><input type="text" class="form-control wid-x4" id="NO_CSMADVPHNE" name="NO_CSMADVPHNE" title="소비자상담 관련 전화번호 입력"
-	                                       maxlength="30" data-ng-model="bssInfoDataVO.param.NO_CSMADVPHNE" style="width: 95%">
+	                                       maxlength="30" data-ng-model="saleInfoDataVO.param.NO_CSMADVPHNE" style="width: 95%">
 	                            </td>
 	                       		<th></th>
 	                       		<td></td>
@@ -492,8 +492,8 @@
 	                       	<tr>
 	                       		<th>인증대상</th>
 	                       		<td colspan="3">
-	                       			<div data-ng-repeat = "list in bssInfoDataVO.ctfList" style="float: left">
-		                         		<input type="radio" name="ctfRadio" data-ng-model="bssInfoDataVO.param.CD_CTFOBJ" value="{{list.CD_DEF}}">
+	                       			<div data-ng-repeat = "list in saleInfoDataVO.ctfList" style="float: left">
+		                         		<input type="radio" name="ctfRadio" data-ng-model="saleInfoDataVO.param.CD_CTFOBJ" value="{{list.CD_DEF}}">
 		                         		<label>
 		                         			{{list.NM_DEF}}
 		                         		</label>
@@ -502,8 +502,8 @@
 	                       		<th>인증정보</th>
 	                       		<td>
 	                       			<select class="form-control wid-x5" id="CD_CTFINFO" title="국가"
-                                            data-ng-model="bssInfoDataVO.param.CD_CTFINFO" style="width: 95%"
-                                            data-ng-options="item.CD_DEF as item.NM_DEF for item in bssInfoDataVO.ctfInList">
+                                            data-ng-model="saleInfoDataVO.param.CD_CTFINFO" style="width: 95%"
+                                            data-ng-options="item.CD_DEF as item.NM_DEF for item in saleInfoDataVO.ctfInList">
                                         <option value="">인증유형을 선택하여 주세요.</option>
                                     </select>
 	                       		</td>
@@ -514,127 +514,80 @@
             </div>
         </div>        
     </div>
-   	
+    <div class="row">
+        <!-- 묶음상품구성 정보 -->
+        <div class="content-area-container col-xs-12">
+        	<div data-content-box-layer data-box-title="saleInfoDataVO.setItem.boxTitle">
+        		<!-- <form class="search-type1">
+	                <table class="table-bordered">
+	                	<colgroup>
+                           <col style="width: 10%;">
+                           <col style="width: 20%;">
+                           <col style="width: 10%;">
+                           <col style="width: 20%;">
+                           <col style="width: 10%;">
+                           <col style="width: 20%;">
+                        </colgroup>
+	                       <tbody>
+	                       	<tr>
+	                       		<th>품명 및 모델명</th>
+	                       		<td><input type="text" class="form-control wid-x4" id="NM_MD" name="NM_MD" title="품명 및 모델 입력"
+	                                       maxlength="50" data-ng-model="saleInfoDataVO.param.NM_MD" style="width: 95%">
+	                            </td>
+	                       		<th>인증사항</th>
+	                       		<td><input type="text" class="form-control wid-x4" id="NM_CTF" name="NM_CTF" title="인증 사항 입력"
+	                                       maxlength="50" data-ng-model="saleInfoDataVO.param.NM_CTF" style="width: 95%">
+	                            </td>
+	                       		<th>제조국(원산지)</th>
+	                       		<td><input type="text" class="form-control wid-x4" id="NM_MNFCOO" name="NM_MNFCOO" title="제조국 입력"
+	                                       maxlength="50" data-ng-model="saleInfoDataVO.param.NM_MNFCOO" style="width: 95%">
+	                            </td>
+	                       	</tr>
+	                       	<tr>
+	                       		<th>제조자(수입자)</th>
+	                       		<td><input type="text" class="form-control wid-x4" id="NM_MNFRER" name="NM_MNFRER" title="제조자(수입자)입력"
+	                                       maxlength="50" data-ng-model="saleInfoDataVO.param.NM_MNFRER" style="width: 95%">
+	                            </td>
+	                       		<th>소비자상담 관련 전화번호</th>
+	                       		<td><input type="text" class="form-control wid-x4" id="NO_CSMADVPHNE" name="NO_CSMADVPHNE" title="소비자상담 관련 전화번호 입력"
+	                                       maxlength="30" data-ng-model="saleInfoDataVO.param.NO_CSMADVPHNE" style="width: 95%">
+	                            </td>
+	                       		<th></th>
+	                       		<td></td>
+	                       	</tr>
+	                       	<tr>
+	                       		<th>인증대상</th>
+	                       		<td colspan="3">
+	                       			<div data-ng-repeat = "list in saleInfoDataVO.ctfList" style="float: left">
+		                         		<input type="radio" name="ctfRadio" data-ng-model="saleInfoDataVO.param.CD_CTFOBJ" value="{{list.CD_DEF}}">
+		                         		<label>
+		                         			{{list.NM_DEF}}
+		                         		</label>
+		                         	</div>
+	                       		</td>
+	                       		<th>인증정보</th>
+	                       		<td>
+	                       			<select class="form-control wid-x5" id="CD_CTFINFO" title="국가"
+                                            data-ng-model="saleInfoDataVO.param.CD_CTFINFO" style="width: 95%"
+                                            data-ng-options="item.CD_DEF as item.NM_DEF for item in saleInfoDataVO.ctfInList">
+                                        <option value="">인증유형을 선택하여 주세요.</option>
+                                    </select>
+	                       		</td>
+	                       	</tr>
+	                       </tbody>
+	                </table>
+                </form> -->
+            </div>
+        </div>        
+    </div>
 	<div class="btn-group1 mt-20">
-		<kendo-button type="botton" title="저장" data-ng-click="bssInfoDataVO.goSave()" style="width:80px;"><span class="k-icon k-i-update"></span>저장</kendo-button>
-		<kendo-button type="botton" title="미리보기" data-ng-click="bssInfoDataVO.goPreview()" style="width:80px;"><span class="k-icon k-i-window"></span>미리보기</kendo-button>
-		<kendo-button type="botton" title="목록" data-ng-click="bssInfoDataVO.goBack()" style="width:80px;"><span class="k-icon k-i-undo"></span>취소</kendo-button>
+		<kendo-button type="botton" title="저장" data-ng-click="saleInfoDataVO.goSave()" style="width:80px;"><span class="k-icon k-i-update"></span>저장</kendo-button>
+		<kendo-button type="botton" title="미리보기" data-ng-click="saleInfoDataVO.goPreview()" style="width:80px;"><span class="k-icon k-i-window"></span>미리보기</kendo-button>
+		<kendo-button type="botton" title="목록" data-ng-click="saleInfoDataVO.goBack()" style="width:80px;"><span class="k-icon k-i-undo"></span>취소</kendo-button>
 	</div>
     </br></br>
 </div>
 
-<!-- 주문 취소 팝업 div-->
-<div kendo-window="win" k-options = "bssInfoDataVO.ordCancelPopOptions"></div> 
-            
-<!-- 주문 취소 팝업 template -->
-<script id="ordinfo_popup_template" type="text/x-kendo-template">
-<form id="ordercancel_form" kendo-validator="validator" ng-submit="validate($event)" k-options="myValidatorOptions">
-<div class="k-edit-form-container">
-<div class="not_pop_title"><h4>주문 취소 입력</h4></div>
-<table class="signal">
-	<colgroup>
-      <col style="width: 14%;">
-      <col style="width: 30%;">
-      <col style="width: 14%;">
-      <col style="width: 30%;">
-    </colgroup>
-    <tbody>	
-	<tr class="border-bottom-line border-top-line">	
-		<td class="border-right-line">
-			마켓
-		</td>
-		<td class="border-right-line">
-			{{bssInfoDataVO.ds.NM_MRK}}
-		</td>
-		<td class="border-right-line">
-			주문번호
-		</td>
-		<td>
-			{{bssInfoDataVO.ds.NO_MRKORD}}
-		</td>
-	</tr>
-	<tr class="border-bottom-line">
-		<td class="border-right-line">
-			상품코드
-		</td>
-		<td colspan="3">
-			{{bssInfoDataVO.ds.CD_MRKSSPL}}
-		</td>
-	</tr>
-	<tr class="border-bottom-line">
-		<td class="border-right-line">
-			상품명
-		</td>
-		<td colspan="3">
-			{{bssInfoDataVO.ds.NM_MRKITEM}}
-		</td>
-	</tr>
-	<tr class="border-bottom-line">
-		<td class="border-right-line">
-			구매자
-		</td>
-		<td class="border-right-line">
-			{{bssInfoDataVO.ds.NM_PCHR}}
-		</td>
-		<td class="border-right-line">
-			배송방법
-		</td>
-		<td>	
-			{{bssInfoDataVO.ds.DC_SHPWAY}}
-		</td>
-	</tr>
-	<tr class="border-bottom-line">
-		<td class="border-right-line">
-			구매수량
-		</td>
-		<td colspan="3">
-			{{bssInfoDataVO.ds.QT_ORD}}
-		</td> 
-	</tr>
-	<tr class="border-bottom-line">
-		<td class="border-right-line">
-			<code>*</code>취소사유코드
-		</td>
-		<td>
-			<span ng-if="bssInfoDataVO.cancelCodeOptions.dataSource">
-				<select kendo-drop-down-list
-					name="CD_CCLRSN"
-            		k-options = "bssInfoDataVO.cancelCodeOptions"
-					k-ng-model="bssInfoDataVO.inputs.CD_CCLRSN"				
-					data-required-msg="취소 사유코드를 입력해 주세요."
-					required
-                    style="width: 100%;">
-				</select>	
-			</span>
-		</td>
-		<td colspan="2">
-		</td> 
-	</tr>
-	<tr class="border-bottom-line">
-		<td class="border-right-line">
-			<code>*</code>주문취소사유
-		</td>
-		<td colspan="3">			
-			<textarea class="k-textbox" 
-					  name="DC_CCLCTT" 
-			 		  data-ng-model="bssInfoDataVO.inputs.DC_CCLCTT"
-					  data-required-msg="주문취소사유를 입력해 주세요."
-					  data-lengthy-msg="주문취소사유를 1000자 이내로 입력해 주세요."
-					  lengthy
-					  required
-					  style="width:100%; height:150px;"></textarea>
-		</td> 
-	</tr>
-	</tbody>
-</table>
-<div class="k-edit-buttons k-state-default">
-	<kendo-button type="submit" class="k-primary" ng-click="bssInfoDataVO.doOrdCancel()"><span class="k-icon k-i-update"></span>저장</kendo-button>
-	<kendo-button type="button" ng-click="bssInfoDataVO.ordCancelPopOptionsClose()"><span class="k-icon k-i-cancel"></span>닫기</kendo-button>        
-</div>	
-</div>
-</form>
-</script>     
-                       
 <style>
 .k-edit-form-container{
     width: 920px;

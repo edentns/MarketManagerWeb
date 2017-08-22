@@ -13,6 +13,7 @@
         	var gridCusCodeVO = $scope.gridCusCodeVO = {
     			NO_MNGCDHD   : "",
                 CD_CLS   : "",
+                YN_SYS   : "",
                 deleteData : [],
                 messages: {
         			noRows: "사용자코드가 존재하지 않습니다.",
@@ -38,14 +39,6 @@
         		dataSource: new kendo.data.DataSource({
             		transport: {
             			read: function(e) {
-//            				param = {                    	
-//            						procedureParam: "USP_SY_10CODE02_GET&L_NO_MNGCDHD@s|L_CD_CLS@s",
-//            						L_NO_MNGCDHD: self.NO_MNGCDHD,
-//            						L_CD_CLS: self.CD_CLS
-//                                },
-//        					UtilSvc.getGWList(param).then(function (res) {
-//        						e.success(res.data.results[0]);
-//        					});
             			},
                 		create: function(e) {
                 			SyCodeSvc.saveUserCode(e.data.models, "I").success(function () {
@@ -91,7 +84,9 @@
             	}),
             	navigatable: true,
             	toolbar: 
-            		["create", "save", "cancel"],
+            		["create",
+            		 { template: "<div ng-click='gridCusCodeVO.doSave()' class='k-button k-button-icontext'><span class='k-icon k-i-update'></span>저장</div>"},
+            		 "cancel"],
             	columns: [
             	       { field : "CD_DEF_OLD", hidden:true },   
        		           { field : "CD_DEF", title: "구분코드", width: "160" },
@@ -120,7 +115,13 @@
                     $scope.$on( "codeMng.customer:inquiry", function ( $event, oEntity, aData ) {
                         self.NO_MNGCDHD = oEntity.NO_MNGCDHD;
                         self.CD_CLS     = oEntity.CD_CLS;
+                        self.YN_SYS     = oEntity.YN_SYS;
                         self.dataSource.data(aData);
+                        $("#gridCusCodeVO .k-grid-toolbar").show();
+                        
+            			if(self.YN_SYS == "Y"){
+            				$("#gridCusCodeVO .k-grid-toolbar").hide();
+            			}
                     });
             	},
             	init: function() {
@@ -133,6 +134,24 @@
             		UtilSvc.getList(param).then(function (res) {
             			self.dataSource.data(res.data.results[1]);
                     });
+				},
+				doSave : function() {
+					var grid = $("#gridCusCodeVO").data("kendoGrid").dataSource,
+						dirtys = [];
+					for(var i in grid._data){
+						if(grid._data[i].dirty) dirtys.push(grid._data[i].CD_DEF);
+					}
+					for(var i in dirtys){
+						var check = 0;
+						for(var j in grid._data){
+							if(dirtys[i] == grid._data[j].CD_DEF) check++;
+						}
+						if(check >= 2){
+							alert(dirtys[i]+" 구분코드가 중복됩니다.");
+							return;
+						}
+					}
+					grid.sync();
 				}
             };
         	
@@ -151,7 +170,6 @@
             	                      }]
                     });
             }
-        	
 
         	gridCusCodeVO.initLoad();
             }]);

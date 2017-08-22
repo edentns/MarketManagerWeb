@@ -10,8 +10,8 @@
     
     <div class="row">
         <!-- 검색 -->
-        <div class="content-area-container col-xs-12">
-        	<div data-content-box-layer data-box-title="ordDataVO.boxTitle">
+        <div class="content-area-container col-xs-12" style="margin:0px 0px -5px 0px;">
+        	<div data-content-box-layer data-box-title="ordDataVO.boxTitle" data-is-open="ordDataVO.isOpen(val)">
                 <form class="search-type1" id="myForm">
                 	<table>
                         <colgroup>
@@ -98,20 +98,20 @@
                         </tr>
                         </tbody>
                     </table>         		     
-                    <div class="btn-group1 mt-20">
+                    <div class="btn-group1 mt-10">
                         <kendo-button type="submit" class="k-primary" title="검색" data-ng-click="ordDataVO.inQuiry()" style="width:70px;">검색</kendo-button>
                         <kendo-button type="botton" title="초기화" data-ng-click="ordDataVO.inIt()" style="width:70px;">초기화</kendo-button>
                     </div>
-                    <br/>
-                    <p class="text-center" ng-if="ordDataVO.dataTotal > 0">총  <strong>{{ordDataVO.dataTotal}}</strong>건이 검색되었습니다.</p>
                 </form>
             </div>
         </div>
                 
         <!-- 주문 목록 -->          
-		<div class="content-area-container col-xs-12">				
-	        <div id="divOrdGrd" kendo-grid="ordkg" options="gridOrdVO">
-	        </div>	            
+		<div class="content-area-container col-xs-12" style="padding:0px 0px 0px 0px;">		
+			<kendo-tooltip options="gridOrdVO.tooltipOptions">		
+		        <div id="divOrdGrd" kendo-grid="ordkg" options="gridOrdVO">
+		        </div>	            
+		    </kendo-tooltip>
         </div>
     </div>
 </div>
