@@ -101,7 +101,7 @@
                 	$scope.$watch('filevo.currentData', function (newValue, oldValue) {
                 		$scope.initLoad();
 				    });
-                	
+
                     /**
                      * @description 단건 파일 삭제
                      */
@@ -421,8 +421,7 @@
                     $scope.co02FileVO.uploader.onErrorItem = function (item, response, status, headers) {
                     	$scope.filevo.isUploadSuccess = false;
                     };
-                    
-                    $scope.initLoad();
+                    //$scope.initLoad();
                 }]
             }
         }]);

@@ -64,7 +64,7 @@
 	            	ctgrId: [""],
 	            	initLoad: function(bLoading) {
 	            		var self = this;
-	            		self.ctgrId                   = resData.cfctData[0].ID_CTGR;
+	            		//self.ctgrId                   = resData.cfctData[0].ID_CTGR;
 
 	            		if(bLoading) {
 		                	angular.forEach($scope.it01ItemCfctGridVO, function (it01ItemCfctLocalGridVO, iIndex) {
@@ -202,14 +202,14 @@
         						var param = [];
                 				param.push(e.data);
         						itItemCfctSvc.saveCtgr(param, "I").success(function () {
-                    				$scope.it01ItemCfctVO.doInquiry();
+                    				//$scope.it01ItemCfctVO.doInquiry();
                                 });
 	            			},
                 			update: function(e) {
                 				var param = [];
                 				param.push(e.data);
                 				itItemCfctSvc.saveCtgr(param, "U").success(function () {
-                    				$scope.it01ItemCfctVO.doInquiry();
+                    				//$scope.it01ItemCfctVO.doInquiry();
                                 });
                 			},
                 			destroy: function(e) {
@@ -218,7 +218,7 @@
                 				param.push(e.data);
                 				itItemCfctSvc.saveCtgr(param, "D").success(function () {
             						defer.resolve();
-                    				$scope.it01ItemCfctVO.doInquiry();
+                    				//$scope.it01ItemCfctVO.doInquiry();
                                 });
                     			return defer.promise;
                 			},
@@ -242,7 +242,9 @@
         					}
         				},
         			});
-	            	localSelf.editable = {confirmation:false};
+	            	localSelf.editable = {
+	            		confirmation:false
+	            	};
 	            	localSelf.toolbar = 
                 		[{ template: "<div ng-click='it01ItemCfctVO.add("+localSelf.iIndex+")' class='k-button k-button-icontext'><span class='k-icon k-i-add'></span>추가</div>"},
                 		 { template: "<div ng-click='it01ItemCfctVO.save("+localSelf.iIndex+")' class='k-button k-button-icontext'><span class='k-icon k-i-update'></span>저장</div>"},

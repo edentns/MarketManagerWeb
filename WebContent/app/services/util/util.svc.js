@@ -276,6 +276,24 @@
 				}
 			};
 
+			/**
+			 * date관련 함수
+			 * @type {{}}
+			 */
+			this.dateFormat = function (val) {
+				var yhPattern = /(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})/,
+				    yPattern = /(\d{4})(\d{2})(\d{2})/,
+				    ret = '';
+				
+				if(val.length === 14) {
+					ret = val.replace(yhPattern, '$1-$2-$3 $4:$5');
+				}
+				else if(val.length === 8) {
+					val.replace(yhPattern, '$1-$2-$3');
+				}
+				
+				return ret;
+			};
 
 			/**
 			 * 다운로드 관련 함수

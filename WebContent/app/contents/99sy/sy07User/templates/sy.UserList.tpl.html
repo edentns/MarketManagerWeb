@@ -10,8 +10,8 @@
 
     <!-- 검색 -->
     <div class="row">
-        <div class="content-area-container col-xs-12">
-            <div data-content-box-layer data-box-title="syUserVO.boxTitle">
+        <div class="content-area-container col-xs-12" style="margin:0px 0px -5px 0px;">
+            <div data-content-box-layer data-box-title="syUserVO.boxTitle" data-is-open="syUserVO.isOpen(val)">
                 <form class="search-type1">
                     <table>
                         <colgroup>
@@ -55,9 +55,9 @@
                         </tbody>
                     </table>
 
-                    <div class="btn-group1 mt-20">
-                        <button type="submit" class="btn btn-primary" title="사원검색" data-ng-click="syUserVO.doInquiry()">검색</button>
-                        <button type="button" class="btn btn-danger" title="검색조건 초기화" data-ng-click="syUserVO.init()">초기화</button>
+                    <div class="btn-group1 mt-10">
+                        <kendo-button type="submit" class="k-primary" title="검색" data-ng-click="syUserVO.doInquiry()" style="width:70px;">검색</kendo-button>
+                        <kendo-button type="botton" title="초기화" data-ng-click="syUserVO.init()" style="width:70px;">초기화</kendo-button>
                     </div>
                 </form>
             </div>
@@ -66,76 +66,15 @@
 
     <!-- 유저 리스트 -->
     <div class="row">
-        <div class="content-area-container col-xs-12">
-            <div class="box">
-                <div class="box-header">
-                    <div class="box-name">
-                        <i class="fa fa-cogs"></i>
-                        <span>유저</span>
-                    </div>
-                    <div class="box-icons">
-                        <a class="collapse-link">
-                            <i class="fa fa-chevron-up"></i>
-                        </a>
-                    </div>
-                </div>
-                <div class="box-content" style="height:590px; margin-bottom:-10px;">
-                    <div class="box-content-article">
-                        <div class="article-header">
-                            <div class="col-xs-6 article-header-box">
-                                <div class="info">Total : <span class="total-count">{{syUserVO.total}}</span> 명</div>
-                            </div>
-                            <div class="col-xs-6 article-header-box ta-r grid-export">
-                                <button data-ng-if="page.isWriteable()" type="button" class="ae-btn ae-add-btn" title="유저 등록" data-ng-click="syUserVO.moveInsertPage()"><i class="fa fa-plus"></i> 등록</button>
-                            </div>
-                        </div>
-
-                        <div class="article-view">
-                            <table data-ng-table="syUserVO.tbl.tableParams" class="table table-bordered table-striped table-hover table-condensed no-footer">
-                                <colgroup>
-                                    <col style="width: 10%;">
-                                    <col style="width: 8%;">
-                                    <col style="width: 12%;">
-                                    <col style="width: 8%;">
-                                    <col style="width: 10%;">
-                                    <col style="width: 14%;">
-                                    <col style="width: 8%;">
-                                    <col style="width: 10%;">
-                                    <col style="width: 15%;">
-                                </colgroup>
-                                <thead>
-                                <tr>
-                                    <th class="ta-c sortable"
-                                        data-ng-repeat="column in syUserVO.tbl.columns"
-                                        data-ng-show="column.visible"
-                                        data-ng-class="{
-												   'last': $last,
-												   'sort-asc': syUserVO.tbl.tableParams.isSortBy(column.field, 'asc'),
-									   			 'sort-desc': syUserVO.tbl.tableParams.isSortBy(column.field, 'desc')}"
-                                        data-ng-click="syUserVO.tbl.tableParams.sorting(column.field, syUserVO.tbl.tableParams.isSortBy(column.field, 'asc') ? 'desc' : 'asc')">
-                                        <div>{{column.title}}</div>
-                                    </th>
-                                </tr>
-                                </thead>
-                                <tbody class="hover">
-                                <tr ng-repeat="info in $data" data-ng-dblclick="syUserVO.moveDetailPage(info)">
-                                    <td><span>{{info.DC_ID}}</span></td>
-                                    <td><span>{{info.NM_EMP}}</span></td>
-                                    <td><span>{{info.NM_DEPT}}</span></td>
-                                    <td><span>{{info.CD_RANK}}</span></td>
-                                    <td><span>{{info.NO_CEPH}}</span></td>
-                                    <td><span>{{info.DC_EMIADDR}}</span></td>
-                                    <td><span>{{info.CD_EMPSTAT}}</span></td>
-                                    <td><span>{{info.NO_ATRT}}</span></td>
-                                    <td><span>{{info.DT_EMP}}</span></td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="content-area-container col-xs-12" style="padding:0px 0px 0px 0px;">
+            <div id="userkg" kendo-grid="userkg" options="gridUserVO">
+		    </div>	
         </div>
     </div>
     <!--/ 유저 리스트 END -->
 </div>
+
+<!-- 그리드 툴바 템플릿 -->
+<script id="toolbar-template" type="text/x-kendo-template">
+	<button class="k-button k-button-icontext k-grid-edit" ng-click="syUserVO.moveInsertPage()"><span class="k-icon k-edit"></span>신규등록</button>    
+</script>

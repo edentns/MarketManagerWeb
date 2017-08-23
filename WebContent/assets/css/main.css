@@ -124,7 +124,9 @@ textarea {
   }
 input[type=checkbox],
 input[type=radio] {
-  margin: 2px 0 0;
+/*  margin: 2px 0 0;*/
+	margin-left:auto;
+	margin-right:auto;
   }
 /*
  * init data-range-picker

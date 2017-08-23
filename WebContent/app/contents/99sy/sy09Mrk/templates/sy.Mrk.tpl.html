@@ -10,7 +10,7 @@
     
     <div class="row">
 		<div class="content-area-container col-xs-12">
-			<div data-content-box-layer data-box-title="dateVO.boxTitle">
+			<div data-content-box-layer data-box-title="dateVO.boxTitle" data-is-open="dateVO.isOpen(val)">
                 <form class="search-type1">
                 	<table>
                         <colgroup>
@@ -48,25 +48,16 @@
                         </tr>
                         </tbody>
                     </table>                    
-                    <div class="btn-group1 mt-20">
-                        <button type="submit" class="btn btn-primary" data-ng-click="dateVO.doInquiry()">검색</button>
-                        <button type="submit" class="btn btn-danger" data-ng-click="dateVO.doInit()">초기화</button>
+                    <div class="btn-group1 mt-10">
+                        <kendo-button type="submit "style="width:70px;" class="k-primary" title="검색" data-ng-click="dateVO.doInquiry()">검색</kendo-button>
+                        <kendo-button type="botton" style="width:70px;" class="" title="초기화" data-ng-click="dateVO.doInit()">초기화</kendo-button>
                     </div>
                 </form>
             </div>
         </div>
+        <div class="content-area-container col-xs-12" style="padding:0px 0px 0px 0px; margin-top:-5px;">
+	    	<div kendo-grid="mrkKg" options="gridMrkVO">
+		    </div> 
+	    </div>    
     </div>
-    
-    <div class="row">
-		<div class="content-area-container col-xs-12">
-			<div data-content-box-layer data-box-title="gridMrkVO.boxTitle">
-                <kendo-grid options="gridMrkVO">
-                </kendo-grid>
-            </div>
-        </div>
-    </div>
-    
-    		
-
-    
 </div>

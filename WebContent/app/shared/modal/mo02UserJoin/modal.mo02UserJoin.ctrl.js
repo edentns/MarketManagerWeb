@@ -83,13 +83,13 @@
 						
 						if(res.data !== 'null') {
 							if(res.data.CD_JOINYN == '001') {
-								alert(res.data.DTS_JOINREQ + '에 가입요청 중 입니다.');
+								alert(UtilSvc.dateFormat(res.data.DTS_JOINREQ) + '에 가입요청 중 입니다.');
 							}
 							else if(res.data.CD_JOINYN == '002') {
 								alert('미가입상태입니다. 관리자에게 문의바랍니다.');
 							}
 							else if(res.data.CD_JOINYN == '003') {
-								alert(res.data.DTS_JOIN + '에 가입 중 입니다.');
+								alert(UtilSvc.dateFormat(res.data.DTS_JOIN) + '에 가입 중 입니다.');
 							}
 							else {
 								alert('관리자에게 문의바랍니다.');

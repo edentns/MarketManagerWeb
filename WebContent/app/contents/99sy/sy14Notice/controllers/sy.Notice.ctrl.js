@@ -73,14 +73,14 @@
 
 	            noticeDataVO.isOpen = function (val) {
 	            	if(val) {
-	            		$scope.nkg.wrapper.height(593);
+	            		$scope.nkg.wrapper.height(657);
 	            		$scope.nkg.resize();
-	            		gridNoticeVO.dataSource.pageSize(11);
+	            		gridNoticeVO.dataSource.pageSize(20);
 	            	}
 	            	else {
 	            		$scope.nkg.wrapper.height(798);
 	            		$scope.nkg.resize();
-	            		gridNoticeVO.dataSource.pageSize(20);
+	            		gridNoticeVO.dataSource.pageSize(24);
 	            	}
 	            };
 	              
@@ -253,7 +253,7 @@
 						},
                     	resizable: true,
                     	rowTemplate: kendo.template($.trim($("#ma_notice_template").html())),
-                    	height: 593                    	
+                    	height: 657                    	
         		};
                 
                 

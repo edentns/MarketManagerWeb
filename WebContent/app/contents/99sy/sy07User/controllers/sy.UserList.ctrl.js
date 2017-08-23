@@ -81,13 +81,28 @@
                     vo.getSubcodeList( {cd: "SY_000020", search: "all"} );
                     vo.getSubcodeList( {cd: "SY_000025", search: "all"} );
                     vo.getSubcodeList( param );
+
                     vo.doInquiry(1);
                 };
-                vo.doReload = function (data) {// 테이블 데이터를 갱신하다.
-                    vo.tbl.tableParams.settings({data: data});
-                    vo.tbl.tableParams.page(1);
-                    vo.tbl.tableParams.reload();
-                };
+
+                vo.isOpen = function (val) {
+	            	if(val) {
+	            		$scope.userkg.wrapper.height(658);
+	            		$scope.userkg.resize();
+	            		grdUserVO.dataSource.pageSize(20);
+	            	}
+	            	else {
+	            		$scope.userkg.wrapper.height(798);
+	            		$scope.userkg.resize();
+	            		grdUserVO.dataSource.pageSize(24);
+	            	}
+	            };
+
+//                vo.doReload = function (data) {// 테이블 데이터를 갱신하다.
+//                    vo.tbl.tableParams.settings({data: data});
+//                    vo.tbl.tableParams.page(1);
+//                    vo.tbl.tableParams.reload();
+//                };
                 vo.doInquiry = function (flag) {// 검새조건에 해당하는 유저 정보를 가져온다.
                 	if(flag != 1){
 	                	if(vo.selectedDeptIds == ""){
@@ -104,19 +119,9 @@
 	                		return false;
 	                	}
                 	}
-                	var param = {
-    						procedureParam:"USP_SY_07USER01_GET&L_LIST01@s|L_LIST02@s|L_LIST03@s|L_LIST04@s|L_SEARCH_NAME@s",
-    						L_LIST01  :  vo.selectedDeptIds,
-    						L_LIST02  :  vo.selectedRankIds,
-    						L_LIST03  :  vo.selectedStatIds,
-    						L_LIST04  :  vo.selectedAtrtIds,
-    						L_SEARCH_NAME  : vo.searchName
-    					};
-    					UtilSvc.getList(param).then(function (res) {
-    						vo.total = res.data.results[0].length;
-                            vo.data = res.data.results[0];
-                            vo.doReload(res.data.results[0]);
-    					});
+
+            		grdUserVO.dataSource.page(1);
+	            	grdUserVO.dataSource.read();
                 };
                 
                 /**
@@ -151,10 +156,131 @@
                 vo.moveInsertPage = function () {// 사원등록페이지로 이동한다.
                     $state.go('app.syUser', { kind: 'insert', menu: null, ids: null });
                 };
-                vo.moveDetailPage = function (info) {// 사원 수정,상세페이지로 이동한다.
-                    $state.go('app.syUser', { kind: 'detail', menu: null, ids: info.NO_EMP });
-                };
 
+                $("#userkg").delegate("tbody>tr", "dblclick", function(e, a){
+                	var grid = $scope.userkg,
+                	    selectedRow = grid.select(),
+                	    dataItem = grid.dataItem(selectedRow);
+                	
+                	$state.go('app.syUser', { kind: 'detail', menu: null, ids: dataItem.NO_EMP });
+                });
+
+		        //주문 검색 그리드
+	            var grdUserVO = $scope.gridUserVO = {
+            		autoBind: false,
+                    messages: {                        	
+                        requestFailed: "사용자정보를 가져오는 중 오류가 발생하였습니다.",
+                        commands: {
+                            insert: "등록"
+                        }
+                        ,noRecords: "검색된 데이터가 없습니다."
+                    },
+                	boxTitle : "사용자 목록",
+                	selectable: true,
+                	/*sortable: true,   윗 컬럼으로 소트가 되지 않아서 빼버림    
+            	    columnMenu: {
+            		    sortable: false
+            		},*/
+                    pageable: {
+                    	messages: UtilSvc.gridPageableMessages
+                    },
+                    noRecords: true,
+                	dataSource: new kendo.data.DataSource({
+                		transport: {
+                			read: function(e) {
+                				var param = {
+            						procedureParam:"USP_SY_07USER01_GET&L_LIST01@s|L_LIST02@s|L_LIST03@s|L_LIST04@s|L_SEARCH_NAME@s",
+            						L_LIST01  :  vo.selectedDeptIds,
+            						L_LIST02  :  vo.selectedRankIds,
+            						L_LIST03  :  vo.selectedStatIds,
+            						L_LIST04  :  vo.selectedAtrtIds,
+            						L_SEARCH_NAME  : vo.searchName
+            					};
+            					UtilSvc.getList(param).then(function (res) {
+            						e.success(res.data.results[0]);
+            					});
+                			}
+                		},
+                		pageSize: 20,
+                		batch: true,
+                		schema: {
+                			model: {
+                    			id: "NO_ORD",
+                				fields: {	
+                                    DC_ID: {type: "string"},
+                                    NM_EMP: {type: "string"},
+                                    NM_DEPT: {type: "string"},
+                                    CD_RANK: {type: "string"},
+                                    NO_CEPH: {type: "string"},
+                                    DC_EMIADDR: {type: "string"},
+                                    CD_EMPSTAT: {type: "string"},
+                                    NO_ATRT: {type: "string"},
+                                    DT_EMP: {type: "string"}
+                				}
+                			}
+                		},
+                	}),
+                	navigatable: true, //키보드로 그리드 셀 이동 가능
+                	toolbar: [{template: kendo.template($.trim($("#toolbar-template").html()))}],
+                	columns: [               
+		                        {	
+                	            	field: "DC_ID",
+		                            title: "사원아이디",
+		                            width: "100px",
+		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
+		                        },                        
+		                        {	
+                	            	field: "NM_EMP",
+		                            title: "성명",
+		                            width: "100px",
+		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
+		                        },                        
+		                        {	
+                	            	field: "NM_DEPT",
+		                            title: "부서",
+		                            width: "100px",
+		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
+		                        },                        
+		                        {	
+                	            	field: "CD_RANK",
+		                            title: "직급",
+		                            width: "100px",
+		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
+		                        },
+		                        {
+		                        	field: "NO_CEPH",	
+		                            title: "휴대폰번호",
+		                            width: 100,
+		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
+		                        },
+		                        {
+		                        	field: "DC_EMIADDR",	
+		                            title: "E-mail",
+		                            width: 100,
+		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
+		                        },
+		                        {
+		                        	field: "CD_EMPSTAT",	
+		                            title: "상태",
+		                            width: 100,
+		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
+		                        },
+		                        {
+		                        	field: "NO_ATRT",	
+		                            title: "권한",
+		                            width: 100,
+		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
+		                        },
+		                        {
+		                        	field: "DT_EMP",	
+		                            title: "입사일자",
+		                            width: 100,
+		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
+		                        }
+                    ],
+                	height: 658	                    	
+	        	};
+	            
                 vo.init();
             }
         ]);

@@ -53,8 +53,6 @@
 						}
 	        		}
                 };
-
-                kendo.culture("ko-KR");
                 
                 dateVO.doInit = function() {
 					var param = {
@@ -63,7 +61,20 @@
 					dateVO.getSubCodeList( {cd: "SY_000017", search: "all"} );
 					dateVO.getSubCodeList( param );
 				};
-				
+
+				dateVO.isOpen = function (val) {
+	            	if(val) {
+	            		$scope.mrkKg.wrapper.height(657);
+	            		$scope.mrkKg.resize();
+	            		gridMrkVO.dataSource.pageSize(20);
+	            	}
+	            	else {
+	            		$scope.mrkKg.wrapper.height(798);
+	            		$scope.mrkKg.resize();
+	            		gridMrkVO.dataSource.pageSize(24);
+	            	}
+	            };
+	                  
 				dateVO.getSubCodeList = function (param) {
                     var self = this;
                     SyCodeSvc.getSubcodeList(param).then(function (result) {
@@ -125,7 +136,10 @@
                         	}
                         }
             		},
-                	boxTitle : "마켓 정보",
+                	boxTitle : "마켓 정보",                 	
+                    pageable: {
+                    	messages: UtilSvc.gridPageableMessages
+                    },
                 	dataSource: new kendo.data.DataSource({
                 		transport: {
                 			read: function(e) {
@@ -165,6 +179,7 @@
                 			}
                 		},
                 		batch: true,
+                		pageSize: 20,
                 		schema: {
                 			model: {
                     			id: "NO_MNGMRK",
@@ -321,7 +336,7 @@
                         });
                     },
                 	editable: true,
-                	height: 550
+                	height: 657
                 };
                 
                 

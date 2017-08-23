@@ -55,12 +55,12 @@
                         <tr>
                             <th>이름<span class="form-required">* </span></th>
                             <td colspan="3">
-                                <span data-ng-if="page.isWriteable() && syUserVO.kind=='insert'">
+                                <span data-ng-if="page.isWriteable()">
                                     <input type="text" class="form-control wid-x6" id="userNM_EMP" title="이름 입력"
                                            maxlength="20"
                                            data-ng-model="syUserVO.param.NM_EMP" data-eden-type="kor">
                                 </span>
-                                <span data-ng-if="!page.isWriteable() || syUserVO.kind=='detail'">
+                                <span data-ng-if="!page.isWriteable()">
                                     {{syUserVO.param.NM_EMP}}
                                 </span>
                             </td>
