@@ -298,7 +298,7 @@
                 				}else{
                 					e.error();
                 				};*/
-                				saShpStdbyOrdSvc.shpbyordList(param).then(function (res) {
+                				saShpStdbyOrdSvc.shpbyordList(shpbyordDataVO.param).then(function (res) {
             						shpbyordDataVO.shipCodeTotal = res.data.shpList;
             						e.success(res.data.searchList);	                    					                   				                    					
                     			});

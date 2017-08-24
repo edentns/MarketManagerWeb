@@ -10,8 +10,8 @@
     
     <div class="row">
         <!-- 검색 -->
-        <div class="content-area-container col-xs-12">
-        	<div data-content-box-layer data-box-title="saleItemDataVO.boxTitle">
+        <div class="content-area-container col-xs-12" style="margin:0px 0px -5px 0px;">
+        	<div data-content-box-layer data-box-title="saleItemDataVO.boxTitle" data-is-open="saleItemDataVO.isOpen(val)">
                 <form class="search-type1" id="myForm">
                 	<table>
                         <colgroup>
@@ -83,18 +83,16 @@
                         </tr>
                         </tbody>
                     </table>         		     
-                    <div class="btn-group1 mt-20">
+                    <div class="btn-group1 mt-10">
                         <kendo-button type="submit" class="k-primary" title="검색" data-ng-click="saleItemDataVO.inQuiry()" style="width:70px;" >검색</kendo-button>
                         <kendo-button type="submit" title="초기화" data-ng-click="saleItemDataVO.init()" style="width:70px;" >초기화</kendo-button>
                     </div>
-                    <br/>
-                    <p class="text-center">총  <strong>{{saleItemDataVO.dataTotal}}</strong>건이 검색되었습니다.</p>
                 </form>
             </div>
         </div>
                 
         <!-- 승인 리스트 -->          
-		<div class="content-area-container col-xs-12" style="padding:50px 0px 0px 0px;">				
+		<div class="content-area-container col-xs-12" style="padding:0px 0px 0px 0px;">				
 	        <div id="divSaleVO" kendo-grid="gridSaleVO" options="gridSaleVO">
 	        </div>	            
         </div>
@@ -105,26 +103,29 @@
 <script id="Sale_template" type="text/x-kendo-template">
 	<tr data-uid="#= uid #" ng-dblclick="grdDblClickGo('#: CD_ITEM #')">
 		<td class="ta-c">
-        	<span class="ells"><input type="checkbox" class="checkbox" ng-click="onSaleGrdCkboxClick($event)"/></span>
+			<div class="custom-style-checkbox">
+				<input class='k-checkbox' data-role='checkbox' type='checkbox' ng-click="onSaleGrdCkboxClick($event)" id="#= uid #_row">
+				<label class='k-checkbox-label k-no-text' style="vertical-align:middle;" for="#= uid #_row"></label>
+			<div>		
       	</td>
 		<td class="ta-l" style="padding:0">
-          	<div class="div-rows ells">
+          	<div class="custom-style">
 							  # if(CD_SIGNITEM !== "" && CD_SIGNITEM !== null && CD_SIGNITEM !== "undefined"){ # 
 							  #: CD_SIGNITEM # 
 							  # }else{ } #
 			</div>
-			<div class="ells"># if(ID_CTGR !== "" && ID_CTGR !== null && ID_CTGR !== "undefined"){ # 
+			<div class="custom-style"># if(ID_CTGR !== "" && ID_CTGR !== null && ID_CTGR !== "undefined"){ # 
 							  #: ID_CTGR # 
 							  # }else{ } #
 			</div>
       	</td>
 		<td class="ta-l" style="padding:0">
-          	<div class="div-rows ells">
+          	<div class="custom-style">
 							  # if(NM_ITEM !== "" && NM_ITEM !== null && NM_ITEM !== "undefined"){ #
                   	    	  #: NM_ITEM  # 
                       	      # }else{ } #
 			</div>
-			<div class="ells"># if(DC_ITEMABBR !== "" && DC_ITEMABBR !== null && DC_ITEMABBR !== "undefined"){ # 
+			<div class="custom-style"># if(DC_ITEMABBR !== "" && DC_ITEMABBR !== null && DC_ITEMABBR !== "undefined"){ # 
 							  #: DC_ITEMABBR # 
 							  # }else{  #
 							  #: "-" #
@@ -132,13 +133,13 @@
 			</div>
       	</td>
 		<td class="ta-l" style="padding:0">
-         	<div class="ells"># if(CD_PRCCLFT_S !== "" && CD_PRCCLFT_S !== null && CD_PRCCLFT_S !== "undefined"){ #
+         	<div class="custom-style"># if(CD_PRCCLFT_S !== "" && CD_PRCCLFT_S !== null && CD_PRCCLFT_S !== "undefined"){ #
 							  #= kendo.toString(CD_PRCCLFT_S,'C0', 'ko-KR') #
 							  # }else{ #
 								0
 							  #}#
 			</div>
-			<div class="ells"># if(CD_PRCCLFT_B !== "" && CD_PRCCLFT_B !== null && CD_PRCCLFT_B !== "undefined"){ #
+			<div class="custom-style"># if(CD_PRCCLFT_B !== "" && CD_PRCCLFT_B !== null && CD_PRCCLFT_B !== "undefined"){ #
 							  #= kendo.toString(CD_PRCCLFT_B,'C0', 'ko-KR') #
 							  # }else{ #
 								0
@@ -146,26 +147,26 @@
 			</div>
       	</td>
 		<td class="ta-l" style="padding:0">
-          	<div class="div-rows ells">
+          	<div class="custom-style">
 							   # if(NM_MNFR !== "" && NM_MNFR !== null && NM_MNFR !== "undefined"){ #
 							   #: NM_MNFR #
 							   # }else{  #
 							   #: "-" #
                                #}	# 	
 			</div>
-			<div class="ells"> 
+			<div class="custom-style"> 
 							   # if(CD_ITEMCLFT !== "" && CD_ITEMCLFT !== null && CD_ITEMCLFT !== "undefined"){ #	
 							   #: CD_ITEMCLFT #
 							   # }else{ }	# 
 			</div>
      	</td>
 		<td class="ta-r" style="padding:0">
-          	<div class="ells"> 
+          	<div class="custom-style"> 
 							   # if(CD_TAXCLFT !== "" && CD_TAXCLFT !== null && CD_TAXCLFT !== "undefined"){ #	
 							   #: CD_TAXCLFT #
 							   # }else{ }	# 
 			</div>
-			<div class="ells"> 
+			<div class="custom-style"> 
 							   # if(YN_ADULCTFC == "Y"){ #	
 							   #: "인증" #
 							   # }else{  #
@@ -174,14 +175,14 @@
 			</div>
       	</td>
 		<td class="ta-c" style="padding:0">
-          	<div class="div-rows ells">
+          	<div class="custom-style">
 							  # if(SF_M !== "" && SF_M !== null && SF_M !== "undefined"){ #
 				    		  #: "등록" 	#
 							  # }else{  #
 							  #: "미등록" #
                               #}	# 
 			</div>
-			<div class="ells"> 
+			<div class="custom-style"> 
 							  # if(SF_DI !== "" && SF_DI !== null && SF_DI !== "undefined"){ #
 							  #: "등록" 	#
 							  # }else{  #
@@ -190,56 +191,56 @@
 			</div>
       	</td>
 		<td class="ta-l" style="padding:0">
-          	<div class="ells"> 
+          	<div class="custom-style"> 
 							  # if(SF_DE !== "" && SF_DE !== null && SF_DE !== "undefined"){ #
 							  #: "등록" 	#
 							  # }else{  #
 							  #: "미등록" #
                               #}	# 						  
 			</div>
-			<div class="ells"> 
+			<div class="custom-style"> 
 							  # if(CD_OPTTP !== "" && CD_OPTTP !== null && CD_OPTTP !== "undefined"){ #
 							  #: CD_OPTTP # 
 							  # }else{ }	 #
 			</div>
       	</td>
 		<td class="ta-l" style="padding:0">
-          	<div class="div-rows ells">
+          	<div class="custom-style">
 							# if( (NM_MD !== "" && NM_MD !== null && NM_MD !== "undefined") || (NM_CTF !== "" && NM_CTF !== null && NM_CTF !== "undefined") || (NM_MNFRER !== "" && NM_MNFRER !== null && NM_MNFRER !== "undefined") || (NO_CSMADVPHNE !== "" && NO_CSMADVPHNE !== null && NO_CSMADVPHNE !== "undefined")  || (CD_CTFOBJ !== "" && CD_CTFOBJ !== null && CD_CTFOBJ !== "undefined") || (CD_CTFINFO !== "" && CD_CTFINFO !== null && CD_CTFINFO !== "undefined") ){ #
 							#: "인증" #
 							# }else{ #
 							#: "미인증" #
 							# }	 	 #
 			</div>
-			<div class="ells">
+			<div class="custom-style">
 						    # if(CD_ITEMKIND !== "" && CD_ITEMKIND !== null && CD_ITEMKIND !== "undefined"){ #
 							#: CD_ITEMKIND # 
 							# }else{ }	 	  #
 			</div>
       	</td> 
 		<td class="ta-l" style="padding:0">
-          	<div class="div-rows ells">
+          	<div class="custom-style">
 						    # if(NM_BRD !== "" && NM_BRD !== null && NM_BRD !== "undefined"){ #
 							#: NM_BRD #
 							# }else{ #
 							#: "-"   #
 							# }	 	 #
 			</div>
-			<div class="ells">
+			<div class="custom-style">
 							# if(CD_ITEMSTAT !== "" && CD_ITEMSTAT !== null && CD_ITEMSTAT !== "undefined"){ #	
 							#: CD_ITEMSTAT # 
 							# }else{ }	 	 #
 			</div>
       	</td>
 		<td class="ta-l" style="padding:0">
-          	<div class="ells">
+          	<div class="custom-style">
 							# if(S_CD_ITEM !== "" && S_CD_ITEM !== null && S_CD_ITEM !== "undefined"){ #	
 							#: S_CD_ITEM # 
 							# }else{ #
 							#: "-"   #
 							# }	 	 #
 			</div>
-			<div class="ells">
+			<div class="custom-style">
 							# if(CD_BDLITEMCPST !== "" && CD_BDLITEMCPST !== null && CD_BDLITEMCPST !== "undefined" ){ #  
 							#: CD_BDLITEMCPST # 
 							# }else{ #
@@ -248,12 +249,12 @@
 			</div>
       	</td>
 		<td class="ta-l" style="padding:0">
-          	<div class="ells">
+          	<div class="custom-style">
 							# if(DTS_INSERT !== "" && DTS_INSERT !== null && DTS_INSERT !== "undefined"){ #	
 							#: DTS_INSERT # 
 							# }else{ }	 	 #
 			</div>
-			<div class="ells">
+			<div class="custom-style">
 							# if(DTS_VLD !== "" && DTS_VLD !== null && DTS_VLD !== "undefined" ){ #  
 							#: DTS_VLD # 
 							# }else{ #
@@ -264,6 +265,171 @@
 	</tr>			
 </script>
 
+<!-- cs 조회 그리드 -->
+<script id="Sale_alt_template" type="text/x-kendo-template">
+	<tr class="k-alt" data-uid="#= uid #" ng-dblclick="grdDblClickGo('#: CD_ITEM #')">
+		<td class="ta-c">
+			<div class="custom-style-checkbox">
+        		<input class='k-checkbox' data-role='checkbox' type='checkbox' ng-click="onSaleGrdCkboxClick($event)" id="#= uid #_alt">
+				<label class='k-checkbox-label k-no-text' style="vertical-align:middle;" for="#= uid #_alt"></label>
+			</div>
+      	</td>
+		<td class="ta-l" style="padding:0">
+          	<div class="custom-style">
+							  # if(CD_SIGNITEM !== "" && CD_SIGNITEM !== null && CD_SIGNITEM !== "undefined"){ # 
+							  #: CD_SIGNITEM # 
+							  # }else{ } #
+			</div>
+			<div class="custom-style"># if(ID_CTGR !== "" && ID_CTGR !== null && ID_CTGR !== "undefined"){ # 
+							  #: ID_CTGR # 
+							  # }else{ } #
+			</div>
+      	</td>
+		<td class="ta-l" style="padding:0">
+          	<div class="custom-style">
+							  # if(NM_ITEM !== "" && NM_ITEM !== null && NM_ITEM !== "undefined"){ #
+                  	    	  #: NM_ITEM  # 
+                      	      # }else{ } #
+			</div>
+			<div class="custom-style"># if(DC_ITEMABBR !== "" && DC_ITEMABBR !== null && DC_ITEMABBR !== "undefined"){ # 
+							  #: DC_ITEMABBR # 
+							  # }else{  #
+							  #: "-" #
+                              #}	 # 	
+			</div>
+      	</td>
+		<td class="ta-l" style="padding:0">
+         	<div class="custom-style"># if(CD_PRCCLFT_S !== "" && CD_PRCCLFT_S !== null && CD_PRCCLFT_S !== "undefined"){ #
+							  #= kendo.toString(CD_PRCCLFT_S,'C0', 'ko-KR') #
+							  # }else{ #
+								0
+							  #}#
+			</div>
+			<div class="custom-style"># if(CD_PRCCLFT_B !== "" && CD_PRCCLFT_B !== null && CD_PRCCLFT_B !== "undefined"){ #
+							  #= kendo.toString(CD_PRCCLFT_B,'C0', 'ko-KR') #
+							  # }else{ #
+								0
+							  #}#
+			</div>
+      	</td>
+		<td class="ta-l" style="padding:0">
+          	<div class="custom-style">
+							   # if(NM_MNFR !== "" && NM_MNFR !== null && NM_MNFR !== "undefined"){ #
+							   #: NM_MNFR #
+							   # }else{  #
+							   #: "-" #
+                               #}	# 	
+			</div>
+			<div class="custom-style"> 
+							   # if(CD_ITEMCLFT !== "" && CD_ITEMCLFT !== null && CD_ITEMCLFT !== "undefined"){ #	
+							   #: CD_ITEMCLFT #
+							   # }else{ }	# 
+			</div>
+     	</td>
+		<td class="ta-r" style="padding:0">
+          	<div class="custom-style"> 
+							   # if(CD_TAXCLFT !== "" && CD_TAXCLFT !== null && CD_TAXCLFT !== "undefined"){ #	
+							   #: CD_TAXCLFT #
+							   # }else{ }	# 
+			</div>
+			<div class="custom-style"> 
+							   # if(YN_ADULCTFC == "Y"){ #	
+							   #: "인증" #
+							   # }else{  #
+							   #: "비인증" #
+                               #}	#  
+			</div>
+      	</td>
+		<td class="ta-c" style="padding:0">
+          	<div class="custom-style">
+							  # if(SF_M !== "" && SF_M !== null && SF_M !== "undefined"){ #
+				    		  #: "등록" 	#
+							  # }else{  #
+							  #: "미등록" #
+                              #}	# 
+			</div>
+			<div class="custom-style"> 
+							  # if(SF_DI !== "" && SF_DI !== null && SF_DI !== "undefined"){ #
+							  #: "등록" 	#
+							  # }else{  #
+							  #: "미등록" #
+                              #}	# 	
+			</div>
+      	</td>
+		<td class="ta-l" style="padding:0">
+          	<div class="custom-style"> 
+							  # if(SF_DE !== "" && SF_DE !== null && SF_DE !== "undefined"){ #
+							  #: "등록" 	#
+							  # }else{  #
+							  #: "미등록" #
+                              #}	# 						  
+			</div>
+			<div class="custom-style"> 
+							  # if(CD_OPTTP !== "" && CD_OPTTP !== null && CD_OPTTP !== "undefined"){ #
+							  #: CD_OPTTP # 
+							  # }else{ }	 #
+			</div>
+      	</td>
+		<td class="ta-l" style="padding:0">
+          	<div class="custom-style">
+							# if( (NM_MD !== "" && NM_MD !== null && NM_MD !== "undefined") || (NM_CTF !== "" && NM_CTF !== null && NM_CTF !== "undefined") || (NM_MNFRER !== "" && NM_MNFRER !== null && NM_MNFRER !== "undefined") || (NO_CSMADVPHNE !== "" && NO_CSMADVPHNE !== null && NO_CSMADVPHNE !== "undefined")  || (CD_CTFOBJ !== "" && CD_CTFOBJ !== null && CD_CTFOBJ !== "undefined") || (CD_CTFINFO !== "" && CD_CTFINFO !== null && CD_CTFINFO !== "undefined") ){ #
+							#: "인증" #
+							# }else{ #
+							#: "미인증" #
+							# }	 	 #
+			</div>
+			<div class="custom-style">
+						    # if(CD_ITEMKIND !== "" && CD_ITEMKIND !== null && CD_ITEMKIND !== "undefined"){ #
+							#: CD_ITEMKIND # 
+							# }else{ }	 	  #
+			</div>
+      	</td> 
+		<td class="ta-l" style="padding:0">
+          	<div class="custom-style">
+						    # if(NM_BRD !== "" && NM_BRD !== null && NM_BRD !== "undefined"){ #
+							#: NM_BRD #
+							# }else{ #
+							#: "-"   #
+							# }	 	 #
+			</div>
+			<div class="custom-style">
+							# if(CD_ITEMSTAT !== "" && CD_ITEMSTAT !== null && CD_ITEMSTAT !== "undefined"){ #	
+							#: CD_ITEMSTAT # 
+							# }else{ }	 	 #
+			</div>
+      	</td>
+		<td class="ta-l" style="padding:0">
+          	<div class="custom-style">
+							# if(S_CD_ITEM !== "" && S_CD_ITEM !== null && S_CD_ITEM !== "undefined"){ #	
+							#: S_CD_ITEM # 
+							# }else{ #
+							#: "-"   #
+							# }	 	 #
+			</div>
+			<div class="custom-style">
+							# if(CD_BDLITEMCPST !== "" && CD_BDLITEMCPST !== null && CD_BDLITEMCPST !== "undefined" ){ #  
+							#: CD_BDLITEMCPST # 
+							# }else{ #
+							#: "-"   #
+							# }	 	 #
+			</div>
+      	</td>
+		<td class="ta-l" style="padding:0">
+          	<div class="custom-style">
+							# if(DTS_INSERT !== "" && DTS_INSERT !== null && DTS_INSERT !== "undefined"){ #	
+							#: DTS_INSERT # 
+							# }else{ }	 	 #
+			</div>
+			<div class="custom-style">
+							# if(DTS_VLD !== "" && DTS_VLD !== null && DTS_VLD !== "undefined" ){ #  
+							#: DTS_VLD # 
+							# }else{ #
+							#: "-"   #
+							# }	 	 #
+			</div>
+      	</td>
+	</tr>			
+</script>
 <!-- 그리드 툴바 템플릿 -->
 <script id="Sale-toolbar-template" type="text/x-kendo-template">
 	<button class="k-button k-button-icontext k-grid-edit" ng-click="saleItemInsert('sale')"><span class="k-icon k-edit"></span>판매등록</button>

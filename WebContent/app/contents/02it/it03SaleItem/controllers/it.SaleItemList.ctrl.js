@@ -111,6 +111,19 @@
                         	self.iStatCodeList = result[3];
                         });*/
 	            };	
+
+	            saleItemDataVO.isOpen = function (val) {
+	            	if(val) {
+	            		$scope.gridSaleVO.wrapper.height(658);
+	            		$scope.gridSaleVO.resize();
+	            		gridSaleVO.dataSource.pageSize(9);
+	            	}
+	            	else {
+	            		$scope.gridSaleVO.wrapper.height(798);
+	            		$scope.gridSaleVO.resize();
+	            		gridSaleVO.dataSource.pageSize(12);
+	            	}
+	            };
 	            
 	            //판매상품 검색 그리드
                 var gridSaleVO = $scope.gridSaleVO = {
@@ -125,10 +138,8 @@
                         },
                     	boxTitle : "판매상품 리스트",
                     	sortable: false,                    	
-                        pageable: {
-                        	messages: {
-                        		empty: "표시할 데이터가 없습니다."
-                        	}
+                    	pageable: {
+                        	messages: UtilSvc.gridPageableMessages
                         },
                         noRecords: true,
                     	dataSource: new kendo.data.DataSource({
@@ -146,7 +157,8 @@
                     					I_NO_MRK      : saleItemDataVO.cmrkIds
                                     };
                     				UtilSvc.getList(param).then(function (res) {
-                						e.success(res.data.results[0]);
+                						e.success(res.data.results[0]);  
+                						gridSaleVO.dataSource.page(1);  // 페이지 인덱스 초기화              
                 					});
                     			},   		
                     			parameterMap: function(e, operation) {
@@ -320,9 +332,10 @@
                     	columns: [
                   	            {
   			                        field: "ROW_CHK",
-  			                        title: "선<br/>택",					                        
-  			                        width: "30px",
-  			                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
+  			                        title: "<input class='k-checkbox' type='checkbox' id='grd_chk_master' ng-click='onSaleGrdCkboxAllClick($event)'><label class='k-checkbox-label k-no-text' for='grd_chk_master' style='margin-bottom:0;'>​</label>",
+			                        width: "30px",
+  			                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px; vertical-align:middle;"},
+  			                        selectable: true
                   	            },                        
   		                        {	
                   	            	field: "CD_SIGNITEM",
@@ -496,7 +509,8 @@
                     	},	
                     	resizable: true,
                     	rowTemplate: kendo.template($.trim($("#Sale_template").html())),
-                    	height: 500      
+                    	altRowTemplate: kendo.template($.trim($("#Sale_alt_template").html())),
+                    	height: 658      
                     	//모델과 그리드 셀을 제대로 연동 안시키면 수정 팝업 연 후 닫을 때 로우가 사라짐(즉 크레에이트인지 에딧인지 구분을 못함)
                     	//id는 유니크한 모델값으로 해야함 안그러면 cancel 시에 row grid가 중복 되는 현상이 발생
         		};
@@ -516,6 +530,36 @@
 	                	row.addClass("k-state-selected");
 	                } else {
 	                	row.removeClass("k-state-selected");
+	                };
+                };
+
+                //kendo grid 체크박스 all click
+                $scope.onSaleGrdCkboxAllClick = function(e){
+	                var i = 0,
+	                	element = $(e.currentTarget),
+	                	checked = element.is(':checked'),
+	                	row = element.parents("div").find(".k-grid-content table tr"),
+	                	grid = $scope.gridSaleVO,
+	                	dataItem = grid.dataItems(row),
+	                	dbLength = dataItem.length;
+	                
+	                if(dbLength < 1){	                	
+	                	alert("전체 선택 할 데이터가 없습니다.");
+	                	angular.element($("#grd_chk_master")).prop("checked",false);
+	                	return;
+	                };   
+	                
+	                for(i; i<dbLength; i += 1){
+	                	dataItem[i].ROW_CHK = checked;
+	                	dataItem[i].dirty = checked;
+	                };
+	                
+	                if(checked){
+	                	row.addClass("k-state-selected");
+	                	row.find(".k-checkbox").prop( "checked", true );
+	                }else{
+	                	row.removeClass("k-state-selected");
+	                	row.find(".k-checkbox").prop( "checked", false );
 	                };
                 };
                 

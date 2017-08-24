@@ -75,6 +75,19 @@
 	            saleItemDataVO.init = function(){
 	            	$window.location.reload();
 	            };	
+
+	            saleItemDataVO.isOpen = function (val) {
+	            	if(val) {
+	            		$scope.gridSaleVO.wrapper.height(657);
+	            		$scope.gridSaleVO.resize();
+	            		gridSaleVO.dataSource.pageSize(20);
+	            	}
+	            	else {
+	            		$scope.gridSaleVO.wrapper.height(798);
+	            		$scope.gridSaleVO.resize();
+	            		gridSaleVO.dataSource.pageSize(24);
+	            	}
+	            };
 	            
 	            //판매상품 검색 그리드
                 var gridSaleVO = $scope.gridSaleVO = {
@@ -89,10 +102,8 @@
                         },
                     	boxTitle : "판매상품 리스트",
                     	sortable: false,                    	
-                        pageable: {
-                        	messages: {
-                        		empty: "표시할 데이터가 없습니다."
-                        	}
+                    	pageable: {
+                        	messages: UtilSvc.gridPageableMessages
                         },
                         noRecords: true,
                     	dataSource: new kendo.data.DataSource({
@@ -121,6 +132,7 @@
                                     };
                     				UtilSvc.getList(param).then(function (res) {
                 						e.success(res.data.results[0]);
+                						gridSaleVO.dataSource.page(1);  // 페이지 인덱스 초기화              
                 					});
                     			},   		
                     			parameterMap: function(e, operation) {
@@ -307,7 +319,7 @@
                     	},	
                     	resizable: true,
                     	rowTemplate: kendo.template($.trim($("#sale_template").html())),
-                    	height: 500      
+                    	height: 657      
                     	//모델과 그리드 셀을 제대로 연동 안시키면 수정 팝업 연 후 닫을 때 로우가 사라짐(즉 크레에이트인지 에딧인지 구분을 못함)
                     	//id는 유니크한 모델값으로 해야함 안그러면 cancel 시에 row grid가 중복 되는 현상이 발생
         		};

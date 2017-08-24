@@ -123,12 +123,12 @@
 	            	if(val) {
 	            		$scope.cskg.wrapper.height(616);
 	            		$scope.cskg.resize();
-	            		gridCsVO.dataSource.pageSize(16);
+	            		if(csDataVO.param !== "") gridCsVO.dataSource.pageSize(16);
 	            	}
 	            	else {
 	            		$scope.cskg.wrapper.height(798);
 	            		$scope.cskg.resize();
-	            		gridCsVO.dataSource.pageSize(25);
+	            		if(csDataVO.param !== "") gridCsVO.dataSource.pageSize(25);
 	            	}
 	            };
 	            

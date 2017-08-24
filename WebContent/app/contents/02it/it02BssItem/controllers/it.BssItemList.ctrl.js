@@ -98,7 +98,21 @@
                         	self.iKindCodeList = result[2];
                         	self.iStatCodeList = result[3];
                         });*/
-	            };	
+	            };
+	            
+	            bssItemDataVO.isOpen = function (val) {
+	            	if(val) {
+	            		$scope.gridBssVO.wrapper.height(658);
+	            		$scope.gridBssVO.resize();
+	            		gridBssVO.dataSource.pageSize(9);
+	            	}
+	            	else {
+	            		$scope.gridBssVO.wrapper.height(798);
+	            		$scope.gridBssVO.resize();
+	            		gridBssVO.dataSource.pageSize(12);
+	            	}
+	            };
+	            
 	            //popup insert & update Validation - 현재 사용안함
 	            $scope.readValidation = function(idx){
 	            	var result = true;
@@ -122,16 +136,15 @@
                         },
                     	boxTitle : "기본상품 리스트",
                     	sortable: false,                    	
-                        pageable: {
-                        	messages: {
-                        		empty: "표시할 데이터가 없습니다."
-                        	}
+                    	pageable: {
+                        	messages: UtilSvc.gridPageableMessages
                         },
                         noRecords: true,
                     	dataSource: new kendo.data.DataSource({
                     		transport: {
                     			read: function(e) {
-                    				var param = {
+                    				var me = this,
+                    					param = {
                     					procedureParam:"USP_IT_02BSSITEM01_GET&I_CD_CLFT@s|I_NM_ITEM@s|I_NM_MNFR@s|I_YN_ADULCTFC@s|I_CD_TAXCLFT@s|I_CD_ITEMCLFT@s|I_CD_ITEMKIND@s|I_CD_ITEMSTAT@s",
                     					I_CD_CLFT :	bssItemDataVO.signItem.value,
                     					I_NM_ITEM : bssItemDataVO.nmItem.value,
@@ -142,8 +155,10 @@
                     					I_CD_ITEMKIND : bssItemDataVO.iKindIds,
                     					I_CD_ITEMSTAT : bssItemDataVO.iStatIds
                                     };
+                    				console.log("1111");
                     				UtilSvc.getList(param).then(function (res) {
-                						e.success(res.data.results[0]);
+                						e.success(res.data.results[0]);  
+                						gridBssVO.dataSource.page(1);  // 페이지 인덱스 초기화              
                 					});
                     			},                    			
                     			update: function(e) {
@@ -166,7 +181,7 @@
                     			bssItemDataVO.dataTotal = data.length;
                     			//console.log("변화된 데이터 => ",data.length);
                     		},
-                    		pageSize: 11,
+                    		pageSize: 3,
                     		batch: true,
                     		schema: {
                     			model: {
@@ -316,9 +331,10 @@
                     	columns: [
                   	            {
   			                        field: "ROW_CHK",
-  			                        title: "선<br/>택",					                        
-  			                        width: "30px",
-  			                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
+  			                        title: "<input class='k-checkbox' type='checkbox' id='grd_chk_master' ng-click='onBssGrdCkboxAllClick($event)'><label class='k-checkbox-label k-no-text' for='grd_chk_master' style='margin-bottom:0;'>​</label>",
+			                        width: "30px",
+  			                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px; vertical-align:middle;"},
+  			                        selectable: true
                   	            },                        
   		                        {	
                   	            	field: "CD_SIGNITEM",
@@ -478,7 +494,8 @@
                     	},	
                     	resizable: true,
                     	rowTemplate: kendo.template($.trim($("#bss_template").html())),
-                    	height: 500      
+                    	altRowTemplate: kendo.template($.trim($("#bss_alt_template").html())),
+                    	height: 658      
                     	//모델과 그리드 셀을 제대로 연동 안시키면 수정 팝업 연 후 닫을 때 로우가 사라짐(즉 크레에이트인지 에딧인지 구분을 못함)
                     	//id는 유니크한 모델값으로 해야함 안그러면 cancel 시에 row grid가 중복 되는 현상이 발생
         		};
@@ -501,6 +518,36 @@
 	                };
                 };
                 
+              //kendo grid 체크박스 all click
+                $scope.onBssGrdCkboxAllClick = function(e){
+	                var i = 0,
+	                	element = $(e.currentTarget),
+	                	checked = element.is(':checked'),
+	                	row = element.parents("div").find(".k-grid-content table tr"),
+	                	grid = $scope.gridBssVO,
+	                	dataItem = grid.dataItems(row),
+	                	dbLength = dataItem.length;
+	                
+	                if(dbLength < 1){	                	
+	                	alert("전체 선택 할 데이터가 없습니다.");
+	                	angular.element($("#grd_chk_master")).prop("checked",false);
+	                	return;
+	                };   
+	                
+	                for(i; i<dbLength; i += 1){
+	                	dataItem[i].ROW_CHK = checked;
+	                	dataItem[i].dirty = checked;
+	                };
+	                
+	                if(checked){
+	                	row.addClass("k-state-selected");
+	                	row.find(".k-checkbox").prop( "checked", true );
+	                }else{
+	                	row.removeClass("k-state-selected");
+	                	row.find(".k-checkbox").prop( "checked", false );
+	                };
+                };
+
                 $scope.onCsGridEditClick = function(){            	
                 	var grd = $scope.cskg,
 	            		chked = grd.element.find("input:checked"),

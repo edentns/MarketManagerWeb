@@ -191,7 +191,24 @@
                 	me.resetAtGrd = $scope.echgkg;
                 	me.resetAtGrd.dataSource.data([]);
 	            };	
-		            
+	            
+	            echgDataVO.isOpen = function (val) {
+	            	if(val) {
+	            		$scope.echgkg.wrapper.height(616);
+	            		$scope.echgkg.resize();
+	            		if(echgDataVO.param !== "") {
+	            			grdEchgVO.dataSource.pageSize(9);
+	            		}
+	            	}
+	            	else {
+	            		$scope.echgkg.wrapper.height(798);
+	            		$scope.echgkg.resize();
+	            		if(echgDataVO.param !== "") {
+	            			grdEchgVO.dataSource.pageSize(12);
+	            		}
+	            	}
+	            };	                
+	                
                 //검색 그리드
 	            var grdEchgVO = $scope.grdEchgVO = {
             		autoBind: false,
@@ -205,10 +222,7 @@
                     },
                 	boxTitle : "주문 목록",
                 	pageable: {
-                    	messages: {
-                    		empty: "표시할 데이터가 없습니다.",
-                    		display: "총 {2}건 중 {0}~{1}건의 자료 입니다."
-                    	}
+                    	messages: UtilSvc.gridPageableMessages
                     },
                     noRecords: true,
                     dataBound: function(e) {
@@ -240,7 +254,7 @@
                 	resizable: true,
                 	rowTemplate: kendo.template($.trim($("#echg_template").html())),
                 	altRowTemplate: kendo.template($.trim($("#echg_alt_template").html())),
-                	height: 550,
+                	height: 616,
                 	navigatable: true, //키보드로 그리드 셀 이동 가능
                 	toolbar: [{template: kendo.template($.trim($("#echg_toolbar_template").html()))}],
                 	dataSource: new kendo.data.DataSource({
@@ -362,7 +376,7 @@
                 			echgDataVO.dataTotal = data.length;
                 			angular.element($("#grd_chk_master")).prop("checked",false);
                 		},                		
-                		pageSize: 7,
+                		pageSize: 9,
                 		batch: true,
                 		schema: {
                 			model: {

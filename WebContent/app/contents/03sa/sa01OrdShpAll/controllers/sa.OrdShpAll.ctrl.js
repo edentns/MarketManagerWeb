@@ -12,9 +12,6 @@
 	            var page  = $scope.page = new Page({ auth: resData.access }),
 		            today = edt.getToday();
 	            
-	            
-	            kendo.culture('ko-KR');// 이거 해야지 원화로 나옴
-	            
 	            var searchBox = {
             		//마켓명 드랍 박스 실행	
             		mrkName : (function(){
@@ -124,6 +121,23 @@
                 	me.resetAtGrd = $scope.ordallkg;
                 	me.resetAtGrd.dataSource.data([]);
 	            };		
+
+	            ordAllDataVO.isOpen = function (val) {
+	            	if(val) {
+	            		$scope.ordallkg.wrapper.height(616);
+	            		$scope.ordallkg.resize();
+	            		if(ordAllDataVO.param !== "") {
+	            			grdOrdAllVO.dataSource.pageSize(9);
+	            		}
+	            	}
+	            	else {
+	            		$scope.ordallkg.wrapper.height(798);
+	            		$scope.ordallkg.resize();
+	            		if(ordAllDataVO.param !== "") {
+	            			grdOrdAllVO.dataSource.pageSize(12);
+	            		}
+	            	}
+	            };
 	            	            
 	            //detail Grid
 	            var gridDetailOptions = $scope.gridDetailOptions = (function(e){
@@ -198,11 +212,8 @@
                     },
                 	boxTitle : "주문 목록",
                 	pageable: {
-                    	messages: {
-                    		empty: "표시할 데이터가 없습니다.",
-                    		display: "총 {2}건 중 {0}~{1}건의 자료 입니다."
-                    	}
-                    },                    
+                    	messages: UtilSvc.gridPageableMessages
+                    },                  
                     noRecords: true,
                     dataBound: function(e) {
                        // this.expandRow(this.tbody.find("tr.k-master-row").first()); //상세 테이블 볼때 첫번째 클릭되서 조회됨
@@ -231,7 +242,7 @@
                 	detailTemplate: kendo.template($("#ordall_detail_template").html()),
                 	rowTemplate: kendo.template($.trim($("#ordall_template").html())),
                 	altRowTemplate: kendo.template($.trim($("#ordall_alt_template").html())),
-                	height: 550,
+                	height: 616,
                 	navigatable: true, //키보드로 그리드 셀 이동 가능
                 	toolbar: [{template: kendo.template($.trim($("#ordall_toolbar_template").html()))}],
                 	dataSource: new kendo.data.DataSource({
@@ -254,6 +265,7 @@
                 				}else{
                 					e.error();
                 				}*/
+                				
                 				saOrdShpAllSvc.orderList(ordAllDataVO.param).then(function (res) {
             						e.success(res.data);
             					});
@@ -271,7 +283,7 @@
                 			var data = this.data();
                 			ordAllDataVO.dataTotal = data.length;
                 		},
-                		pageSize: 7,
+                		pageSize: 9,
                 		batch: true,
                 		schema: {
                 			model: {

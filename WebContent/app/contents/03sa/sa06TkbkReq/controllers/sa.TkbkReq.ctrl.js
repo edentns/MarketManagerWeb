@@ -192,12 +192,12 @@
 	            	if(val) {
 	            		$scope.tkbkkg.wrapper.height(616);
 	            		$scope.tkbkkg.resize();
-	            		grdTkbkVO.dataSource.pageSize(9);
+	            		if(tkbkDataVO.param !== "") grdTkbkVO.dataSource.pageSize(9);
 	            	}
 	            	else {
 	            		$scope.tkbkkg.wrapper.height(798);
 	            		$scope.tkbkkg.resize();
-	            		grdTkbkVO.dataSource.pageSize(12);
+	            		if(tkbkDataVO.param !== "") grdTkbkVO.dataSource.pageSize(12);
 	            	}
 	            };	                
 	            
@@ -378,7 +378,7 @@
                 			tkbkDataVO.dataTotal = data.length;
                 			angular.element($("#grd_chk_master")).prop("checked",false);
                 		},                		
-                		pageSize: 7,
+                		pageSize: 9,
                 		batch: true,
                 		schema: {
                 			model: {

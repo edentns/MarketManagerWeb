@@ -153,9 +153,7 @@
 	            		$scope.ordkg.resize();
 	            		grdOrdVO.dataSource.pageSize(12);
 	            	}
-	            };
-	            
-	            	            
+	            };         
 		        //주문 검색 그리드
 	            var grdOrdVO = $scope.gridOrdVO = {
             		autoBind: false,
@@ -179,26 +177,6 @@
                 	dataSource: new kendo.data.DataSource({
                 		transport: {
                 			read: function(e) {
-                				/*var param = {	  
-                				    NM_MRKITEM : ordDataVO.procName.value,
-            					    NM_MRK : ordDataVO.ordMrkNameMo, 
-            					    CD_ORDSTAT : ordDataVO.ordStatusMo,
-            					    NO_MRKORD : ordDataVO.orderNo.value,      
-            					    NM_PCHR : ordDataVO.buyerName.value,
-            					    NO_ORDDTRM : ordDataVO.admin.value,  
-            					    DTS_CHK : ordDataVO.betweenDateOptionMo,  
-            					    DTS_FROM : new Date(ordDataVO.datesetting.period.start.y, ordDataVO.datesetting.period.start.m-1, ordDataVO.datesetting.period.start.d, "00", "00", "00").dateFormat("YmdHis"),           
-            					    DTS_TO : new Date(ordDataVO.datesetting.period.end.y, ordDataVO.datesetting.period.end.m-1, ordDataVO.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis"),
-            					    PAGE: parseInt(e.data.page), 
-            					    PAGE_SIZE: parseInt(e.data.pageSize) 
-                                };   
-                				if(Util03saSvc.readValidation(param)){
-                					saOrdSvc.orderList(param).then(function (res) {
-                    					e.success(res.data);
-                        			});
-                				}else{
-                					e.error();
-                				};*/                				
                 				var pager = {
 		                					PAGE: parseInt(e.data.page),
 		                					PAGE_SIZE: parseInt(e.data.pageSize)
@@ -248,192 +226,65 @@
                             total: "total",
                 			model: {
                     			id: "NO_ORD",
-                				fields: {						                    
-                					ROW_CHK: 		   {
-				                    						type: "boolean", 
-															editable: true,  
-															nullable: false
-            										   },
-								    NO_ORD:	   	   	   {	
-                											type: "string", 
-                											editable: false,
-            												nullable: false
-        											   },                    					
-								    NO_APVL:		   {	
-                											type: "string", 
-                											editable: false, 
-                											nullable: false
-                									   },
-                			        NM_MRK: 	   	   {	
-															type: "string", 
-															editable: false,
-															nullable: false
-                    						    	   },
-						    	    NO_MRKORD: 	   	   {
-															type: "string", 
-															editable: false, 
-															nullable: false
-						    	    				   },
-						    	    NO_MRK: 	   	   {
-															type: "string", 
-															editable: false, 
-															nullable: false
-						    	    				   },						    	    				   
-						    	    NO_MRKITEM: 	   {
-			        										type: "string",
-			        										defaultValue: "",
-			        										nullable: false //true 일때 defaultValue가 안 됨
-						    	    				   },
-	    	    				   	NO_MRKREGITEM: 	   {
-                											type: "string",                     										
-                											editable: false,
-                    										nullable: false
-                									   },                    									   
-								    NM_MRKITEM:	   	   {	
-			    									    	type: "string", 
-								    						editable: true,
-								    						nullable: false
-								    				   },
-								    NM_MRKOPT:	   	   {	
-				       										type: "string", 
-				       										editable: false,
-															nullable: false
-				   									   },
-				   					AM_ORDSALEPRC: 	   {	
-                   											type: "number", 
-                											editable: false,
-                											nullable: false
-                									   },                    					
-                					AM_PCHSPRC: 	   {
-                											type: "number",
-                    										editable: false, 
-                    										nullable: false //true 일때 defaultValue가 안 됨	                    										
-                									   },
-                					NM_PCHR: 	       {
-                    										type: "string",
-                    										editable: true,
-                    									    nullable: false
-                									   },
-                					NM_CONS: 		   {
-                											type: "string", 
-                											editable: false, 
-                											nullable: false
-                									   },
-                					NO_PCHRPHNE: 	   {
-				                    				    	type: "string", 
-															editable: false, 
-															nullable: false
-                				    				   },	
-                				    NO_CONSHDPH: 	   {
-				                    				    	type: "string", 
-															editable: false, 
-															nullable: false
-                				    				   },
-                				    DC_PCHREMI: 	   {
-				                    				    	type: "string", 
-															editable: false, 
-															nullable: false
-                				    				   },	
-                				    NO_CONSPOST:	   {
-					                				    	type: "string", 
-															editable: false, 
-															nullable: false
-                				    				   },				   
-                				    DC_CONSNEWADDR:    {
-				                    				    	type: "string", 
-															editable: false, 
-															nullable: false
-                				    				   },	
-                				    DC_PCHRREQCTT: 	   {
-				                    				    	type: "string", 
-															editable: false, 
-															nullable: false
-                				    				   },	
-                				    DC_CONSOLDADDR:    { 	
-				                    				    	type: "string", 
-															editable: false, 
-															nullable: false
-                				    				   },	
-                				    CD_ORDSTAT: 	   {
-				                    				    	type: "string", 
-															editable: false, 
-															nullable: false
-                				    				   },	
-                				    DC_SHPWAY: 	   	   {	
-				                    				    	type: "string", 
-															editable: false, 
-															nullable: false
-                				    				   },	
-                				    QT_ORD:			   {
-					                				    	type: "number",
-															editable: false, 
-															nullable: false	
-                				    				   },
-                				    DTS_APVL: 	   	   {
-				                    				    	type: "string", 
-															editable: false, 
-															nullable: false
-                				    				   },	
-                				    DTS_ORD: 	   	   {
-				                    				    	type: "string", 
-															editable: false, 
-															nullable: false
-                				    				   },
-                				    YN_CONN: 	   	   {
-				                    				    	type: "string", 
-															editable: false, 
-															nullable: false
-                				    				   },	
-                				    DTS_ORDDTRM: 	   {
-				                    				    	type: "string", 
-															editable: false, 
-															nullable: false
-                				    				   },   
-				    				AM_ITEMPRC: 	   {
-					                				    	type: "number", 
-															editable: false, 
-															nullable: false
-								    				   },
-   				    				SALES: 	   	   	   {	
-				                    				    	type: "number", 
-															editable: false, 
-															nullable: false
-			   				    				   	   },	
-   				    				AM_SHPCOST: 	   {
-				                    				    	type: "number", 
-															editable: false, 
-															nullable: false
-				   				    				   },				   
-                				    CD_CCLRSN: 	       {
-				                    				    	type: "string", 
-															validation: {
-																cd_cclrsnvalidation: function (input) {
-					  									    		if (input.is("[name='CD_CCLRSN']") && input.val() === "") {
-			                                                        	input.attr("data-cd_cclrsnvalidation-msg", "취소 사유코드를 입력해 주세요.");
-			                                                            return false;
-			                                                        }
-				                                                  return true;
-				  									    	  	}
-															}
-                				    				   },
-                				    DC_CCLRSNCTT: 	       {
-				                    				    	type: "string",
-															editable: true,
-															validation: {
-																dc_cclrsncttvalidation: function (input) {
-					  									    		if (input.is("[name='DC_CCLRSNCTT']") && input.val() === "") {
-			                                                        	input.attr("data-dc_cclrsncttvalidation-msg", "주문취소사유를 입력해 주세요.");
-			                                                            return false;
-			                                                        }
-					  									    		if(input.val().length > 1000){
-					  									    			input.attr("data-dc_cclrsncttvalidation-msg", "주문취소사유를 1000자 이내로 입력해 주세요.");
-			                                                            return false;
-					  									    		}
-				                                                  return true;
-				  									    	  	}
-															},
-															nullable: false
-                				    				   }
+                				fields: { 
+                					ROW_CHK       : { type: "boolean", editable: true , nullable: false },
+	                                NO_ORD        : { type: "string" , editable: false, nullable: false },                    					
+	                                NO_APVL       : { type: "string" , editable: false, nullable: false },
+	                                NM_MRK        : { type: "string" , editable: false, nullable: false },
+	                                NO_MRKORD     : { type: "string" , editable: false, nullable: false },
+	                                NO_MRK        : { type: "string" , editable: false, nullable: false },						    	    				   
+	            					NO_MRKITEM    : { type: "string" , defaultValue: "", nullable: false }, //true 일때 defaultValue가 안 됨
+	            					NO_MRKREGITEM : { type: "string" , editable: false, nullable: false },                    									   
+	            					NM_MRKITEM    : { type: "string" , editable: true , nullable: false },
+	            					NM_MRKOPT     : { type: "string" , editable: false, nullable: false },
+	            					AM_ORDSALEPRC : { type: "number" , editable: false, nullable: false },                    					
+	            					AM_PCHSPRC    : { type: "number" , editable: false, nullable: false },
+	            					NM_PCHR       : { type: "string" , editable: true , nullable: false },
+	            					NM_CONS       : { type: "string" , editable: false, nullable: false },
+	            					NO_PCHRPHNE   : { type: "string" , editable: false, nullable: false },	
+	            					NO_CONSHDPH   : { type: "string" , editable: false, nullable: false },
+	            					DC_PCHREMI    : { type: "string" , editable: false, nullable: false },	
+	            					NO_CONSPOST   : { type: "string" , editable: false, nullable: false },				   
+	            					DC_CONSNEWADDR: { type: "string" , editable: false, nullable: false },	
+	            					DC_PCHRREQCTT : { type: "string" , editable: false, nullable: false },	
+	            					DC_CONSOLDADDR: { type: "string" , editable: false, nullable: false },	
+	            					CD_ORDSTAT    : { type: "string" , editable: false, nullable: false },	
+	            					DC_SHPWAY     : { type: "string" , editable: false, nullable: false },	
+	            					QT_ORD        : { type: "number" , editable: false, nullable: false },
+	            					DTS_APVL      : { type: "string" , editable: false, nullable: false },	
+	            					DTS_ORD       : { type: "string" , editable: false, nullable: false },
+	            					YN_CONN       : { type: "string" , editable: false, nullable: false },	
+	            					DTS_ORDDTRM   : { type: "string" , editable: false, nullable: false },   
+	            					AM_ITEMPRC    : { type: "number" , editable: false, nullable: false },
+	            					SALES         : { type: "number" , editable: false, nullable: false },	
+	            					AM_SHPCOST    : { type: "number" , editable: false, nullable: false },				   
+	            					CD_CCLRSN     : { type: "string" , 
+	            										validation: {
+	            											cd_cclrsnvalidation: function (input) {
+	            										    		if (input.is("[name='CD_CCLRSN']") && input.val() === "") {
+	            					                            	input.attr("data-cd_cclrsnvalidation-msg", "취소 사유코드를 입력해 주세요.");
+	            					                                return false;
+	            					                            }
+	            					                          return true;
+	            									    	  	}
+	            										}
+	            								    },
+	            					DC_CCLRSNCTT  : { type: "string", editable: true,
+	            										validation: {
+	            											dc_cclrsncttvalidation: function (input) {
+	            										    		if (input.is("[name='DC_CCLRSNCTT']") && input.val() === "") {
+	            					                            	input.attr("data-dc_cclrsncttvalidation-msg", "주문취소사유를 입력해 주세요.");
+	            					                                return false;
+	            					                            }
+	            										    		if(input.val().length > 1000){
+	            										    			input.attr("data-dc_cclrsncttvalidation-msg", "주문취소사유를 1000자 이내로 입력해 주세요.");
+	            					                                return false;
+	            										    		}
+	            					                          return true;
+	            									    	  	}
+	            										},
+	            										nullable: false
+	            									}
                 				}
                 			}
                 		},
@@ -445,7 +296,6 @@
                 	columns: [
                 	            {   
                 	            	field: "ROW_CHK",
-			                        /*title: "<span class='ROW_CHK k-checkbox'>선<br/>택</span>",*/
 			                        title: "<input class='k-checkbox' type='checkbox' id='grd_chk_master' ng-click='onOrdGrdCkboxAllClick($event)'><label class='k-checkbox-label k-no-text' for='grd_chk_master' style='margin-bottom:0;'>​</label>",
 			                        width: "30px",
 			                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px; vertical-align:middle;"},
@@ -672,7 +522,7 @@
                 	rowTemplate: kendo.template($.trim($("#ord_template").html())),
                 	altRowTemplate: kendo.template($.trim($("#ord_alt_template").html())),
                 	//detailTemplate : kendo.template($.trim($("#ord_detail_template").html())),
-                	height: 530
+                	height: 616
                 	//모델과 그리드 셀을 제대로 연동 안시키면 수정 팝업 연 후 닫을 때 로우가 사라짐(즉 크레에이트인지 에딧인지 구분을 못함)
                 	//id는 유니크한 모델값으로 해야함 안그러면 cancel 시에 row grid가 중복 되는 현상이 발생
                 	//rowTemplate을 사용한 colunm은 lock을 사용할 수 없음	                    	

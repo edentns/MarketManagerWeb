@@ -192,12 +192,12 @@
 	            	if(val) {
 	            		$scope.shippingkg.wrapper.height(616);
 	            		$scope.shippingkg.resize();
-	            		grdShippngVO.dataSource.pageSize(9);
+	            		if(shippingDataVO.param !== "") grdShippngVO.dataSource.pageSize(9);
 	            	}
 	            	else {
 	            		$scope.shippingkg.wrapper.height(798);
 	            		$scope.shippingkg.resize();
-	            		grdShippngVO.dataSource.pageSize(12);
+	            		if(shippingDataVO.param !== "") grdShippngVO.dataSource.pageSize(12);
 	            	}
 	            };
 	            	            	   	            

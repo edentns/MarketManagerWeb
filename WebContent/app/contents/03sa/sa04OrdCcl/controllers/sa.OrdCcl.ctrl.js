@@ -188,12 +188,12 @@
 	            	if(val) {
 	            		$scope.ordCancelManagementkg.wrapper.height(616);
 	            		$scope.ordCancelManagementkg.resize();
-	            		grdOrdCancelManagementVO.dataSource.pageSize(9);
+	            		if(ordCancelManagementDataVO.param !== "") grdOrdCancelManagementVO.dataSource.pageSize(9);
 	            	}
 	            	else {
 	            		$scope.ordCancelManagementkg.wrapper.height(798);
 	            		$scope.ordCancelManagementkg.resize();
-	            		grdOrdCancelManagementVO.dataSource.pageSize(12);
+	            		if(ordCancelManagementDataVO.param !== "") grdOrdCancelManagementVO.dataSource.pageSize(12);
 	            	}
 	            };
 	            	            	            
