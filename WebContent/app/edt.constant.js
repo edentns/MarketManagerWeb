@@ -63,4 +63,97 @@
 		TEAM        : 'team',       // 내부서
 		INDIVIDUAL  : 'individual'  // 나
 	});
+	
+	edtApp.constant('APP_SA_MODEL', {
+		ROW_CHK       : { field: "ROW_CHK"       , type: "boolean", width: "30px" , textAlign: "center", title: "선<br/>택"},
+	    NO_ORD        : { field: "NO_ORD"        , type: "string" , width: "100px", textAlign: "center", title: "관리번호"},                                        
+	    NO_APVL       : { field: "NO_APVL"       , type: "string" , width: "100px", textAlign: "left"  , title: "결제번호"},
+	    NM_MRK        : { field: "NM_MRK"        , type: "string" , width: "100px", textAlign: "center", title: "마켓명"},
+	    NO_MRKORD     : { field: "NO_MRKORD"     , type: "string" , width: "100px", textAlign: "center", title: "주문번호"},
+	    
+	    NO_MRK        : { field: "NO_MRK"        , type: "string" , width: "100px", textAlign: "center"},                                                       
+	    NO_MRKITEM    : { field: "NO_MRKITEM"    , type: "string" , width: "100px", textAlign: "center", title: "마켓상품번호"},
+	    NO_MRKREGITEM : { field: "NO_MRKREGITEM" , type: "string" , width: "100px", textAlign: "center", title: "상품번호"},                                                           
+	    NM_MRKITEM    : { field: "NM_MRKITEM"    , type: "string" , width: "100px", textAlign: "center", title: "상품명"},
+	    NM_MRKOPT     : { field: "NM_MRKOPT"     , type: "string" , width: "100px", textAlign: "left"  , title: "옵션(상품구성)"},
+	    
+	    AM_ORDSALEPRC : { field: "AM_ORDSALEPRC" , type: "number" , width: "100px", textAlign: "right" , title: "판매가"},                                        
+	    AM_PCHSPRC    : { field: "AM_PCHSPRC"    , type: "number" , width: "100px", textAlign: "right" , title: "구입가"},
+	    NM_PCHR       : { field: "NM_PCHR"       , type: "string" , width: "100px", textAlign: "center", title: "구매자"},
+	    NM_CONS       : { field: "NM_CONS"       , type: "string" , width: "100px", textAlign: "center", title: "수취인"},
+	    NO_PCHRPHNE   : { field: "NO_PCHRPHNE"   , type: "string" , width: "100px", textAlign: "center", title: "전화번호"},
+	    
+	    NO_CONSHDPH   : { field: "NO_CONSHDPH"   , type: "string" , width: "100px", textAlign: "center", title: "전화번호"},
+	    DC_PCHREMI    : { field: "DC_PCHREMI"    , type: "string" , width: "100px", textAlign: "left"  , title: "이메일"},    
+	    NO_CONSPOST   : { field: "NO_CONSPOST"   , type: "string" , width: "100px", textAlign: "center"},                   
+	    DC_CONSNEWADDR: { field: "DC_CONSNEWADDR", type: "string" , width: "100px", textAlign: "left"  , title: "주소1"},    
+	    DC_PCHRREQCTT : { field: "DC_PCHRREQCTT" , type: "string" , width: "100px", textAlign: "left"  , title: "요청내용"},
+	    
+	    DC_CONSOLDADDR: { field: "DC_CONSOLDADDR", type: "string" , width: "100px", textAlign: "center"},    
+	    CD_ORDSTAT    : { field: "CD_ORDSTAT"    , type: "string" , width: "100px", textAlign: "center", title: "주문상태"},    
+	    DC_SHPWAY     : { field: "DC_SHPWAY"     , type: "string" , width: "100px", textAlign: "center", title: "배송방법"},    
+	    QT_ORD        : { field: "QT_ORD"        , type: "number" , width: "100px", textAlign: "right" , title: "주문수량"},
+	    DTS_APVL      : { field: "DTS_APVL"      , type: "string" , width: "100px", textAlign: "center", title: "결제일시"},
+	    
+	    DTS_ORD       : { field: "DTS_ORD"       , type: "string" , width: "100px", textAlign: "center", title: "주문일시"},
+	    YN_CONN       : { field: "YN_CONN"       , type: "string" , width: "100px", textAlign: "center", title: "연동구분"},    
+	    DTS_ORDDTRM   : { field: "DTS_ORDDTRM"   , type: "string" , width: "100px", textAlign: "center", title: "주문확정일시"},   
+	    AM_ITEMPRC    : { field: "AM_ITEMPRC"    , type: "number" , width: "100px", textAlign: "right" , title: "주문상품단가"},
+	    SALES         : { field: "SALES"         , type: "number" , width: "100px", textAlign: "right" , title: "판매금액"},
+	    
+	    AM_SHPCOST    : { field: "AM_SHPCOST"    , type: "number" , width: "100px", textAlign: "right" , title: "배송비"},                   
+	    CD_CCLRSN     : { field: "CD_CCLRSN"     , type: "string" , width: "100px", textAlign: "left"  , title: "취소사유"},
+	    DC_CCLRSNCTT  : { field: "DC_CCLRSNCTT"  , type: "string" , width: "100px", textAlign: "center"},
+	    QT_CCL        : { field: "QT_CCL"        , type: "number" , width: "100px", textAlign: "right" , title: "취소수량"},
+	    DC_CCLCTT     : { field: "DC_CCLCTT"     , type: "string" , width: "100px", textAlign: "left"  },
+	    
+	    DC_APVLWAY    : { field: "DC_APVLWAY"    , type: "string" , width: "100px", textAlign: "left"  , title: "결제방법"},
+	    NO_UPDATE     : { field: "NO_UPDATE"     , type: "string" , width: "100px", textAlign: "center", title: "접수확인자"},
+        DTS_CCLREQ    : { field: "DTS_CCLREQ"    , type: "string" , width: "100px", textAlign: "center", title: "취소/반품일시"},
+        DTS_CCLAPPRRJT: { field: "DTS_CCLAPPRRJT", type: "string" , width: "100px", textAlign: "center", title: "취소 확인일시"},
+        CD_CCLSTAT    : { field: "CD_CCLSTAT"    , type: "string" , width: "100px", textAlign: "center", title: "취소상태"},
+        
+        CD_CCLRJT     : { field: "CD_CCLRJT"     , type: "string" , width: "100px", textAlign: "center"},
+        DC_CCLRJTCTT  : { field: "DC_CCLRJTCTT"  , type: "string" , width: "100px", textAlign: "left"  },
+        ITF_CHK       : { field: "ITF_CHK"       , type: "string" , width: "100px", textAlign: "center", title: "전송상태"},
+        DT_SND        : { field: "DT_SND"        , type: "string" , width: "100px", textAlign: "center", title: "배송일자"},
+        CD_SHPSTAT    : { field: "CD_SHPSTAT"    , type: "string" , width: "100px", textAlign: "center", title: "배송상태"},
+        
+        CD_SHPDLY     : { field: "CD_SHPDLY"     , type: "string" , width: "100px", textAlign: "center"},
+        DC_SHPDLYRSN  : { field: "DC_SHPDLYRSN"  , type: "string" , width: "100px", textAlign: "center"},
+        DC_CONSOLDADDR: { field: "DC_CONSOLDADDR", type: "string" , width: "100px", textAlign: "left"  , title: "주소2"},
+        CD_PARS       : { field: "CD_PARS"       , type: "string" , width: "100px", textAlign: "center", title: "택배사"},
+        NO_INVO       : { field: "NO_INVO"       , type: "string" , width: "100px", textAlign: "center", title: "송장번호"},
+        
+        CD_TKBKRSN    : { field: "CD_TKBKRSN"    , type: "string" , width: "100px", textAlign: "center", title: "반품사유"},
+        DTS_TKBKREQ   : { field: "DTS_TKBKREQ"   , type: "string" , width: "100px", textAlign: "center", title: "반품요청확인일시"},
+        DTS_TKBKCPLT  : { field: "DTS_TKBKCPLT"  , type: "string" , width: "100px", textAlign: "center", title: ""},
+        NO_TKBKCPLT   : { field: "NO_TKBKCPLT"   , type: "string" , width: "100px", textAlign: "center", title: "반납상품접수확인자"},
+        QT_TKBK       : { field: "QT_TKBK"       , type: "string" , width: "100px", textAlign: "right" , title: "반품수량"},
+        
+        NO_INSERT     : { field: "NO_INSERT"     , type: "string" , width: "100px", textAlign: "center", title: "반품확인자"},
+        CD_TKBKSTAT   : { field: "CD_TKBKSTAT"   , type: "string" , width: "100px", textAlign: "center", title: "반품상태"},
+        NO_TKBKREQ    : { field: "NO_TKBKREQ"    , type: "string" , width: "100px", textAlign: "center", title: ""},
+        requesteNo    : { field: "requesteNo"    , type: "string" , width: "100px", textAlign: "center", title: ""},
+        mall_no       : { field: "mall_no"       , type: "string" , width: "100px", textAlign: "center", title: "결과 전송 유무"},
+        
+        DC_TKBKRJTCTT : { field: "DC_TKBKRJTCTT" , type: "string" , width: "100px", textAlign: "center", title: ""},
+        CD_TKBKRJT    : { field: "CD_TKBKRJT"    , type: "string" , width: "100px", textAlign: "center", title: ""},
+        DTS_TKBKCPLT_VIEW : { field: "DTS_TKBKCPLT_VIEW", type: "string" , width: "100px", textAlign: "center", title: "반납상품접수일자"},
+        
+        QT_ECHG       : { field: "QT_ECHG"       , type: "string" , width: "100px", textAlign: "right" , title: "교환 요청 수량"},
+        NO_CONSPHNE   : { field: "NO_CONSPHNE"   , type: "string" , width: "100px", textAlign: "center", title: "수취인 전화번호"},
+        DTS_ECHGREQ   : { field: "DTS_ECHGREQ"   , type: "string" , width: "100px", textAlign: "center", title: "교환요청일시"},
+        DTS_ECHGAPPRRJT : { field: "DTS_ECHGAPPRRJT", type: "string" , width: "100px", textAlign: "center", title: "교환상품접수일"},
+        NO_ECHGCPLT   : { field: "NO_ECHGCPLT"   , type: "string" , width: "100px", textAlign: "center", title: "접수확인자"},
+        CD_ECHGSTAT   : { field: "CD_ECHGSTAT"   , type: "string" , width: "100px", textAlign: "center", title: "교환상태"},
+        NO_ECHGREQ    : { field: "NO_ECHGREQ"    , type: "string" , width: "100px", textAlign: "center", title: ""},
+        CD_ECHGRSN    : { field: "CD_ECHGRSN"    , type: "string" , width: "100px", textAlign: "center", title: ""},
+        DC_ECHGRSNCTT : { field: "DC_ECHGRSNCTT" , type: "string" , width: "100px", textAlign: "left"  , title: "교환사유"},
+        CD_ECHGRJTRSN : { field: "CD_ECHGRJTRSN" , type: "string" , width: "100px", textAlign: "center", title: ""},
+        DC_ECHGRJTCTT : { field: "DC_ECHGRJTCTT" , type: "string" , width: "100px", textAlign: "center", title: ""},
+        NO_RECE       : { field: "NO_RECE"       , type: "string" , width: "100px", textAlign: "center", title: ""},
+        DTS_RECER     : { field: "DTS_RECER"     , type: "string" , width: "100px", textAlign: "center", title: ""},
+        NM_PARS       : { field: "NM_PARS"       , type: "string" , width: "100px", textAlign: "center", title: "택배사"}
+	});
 }());

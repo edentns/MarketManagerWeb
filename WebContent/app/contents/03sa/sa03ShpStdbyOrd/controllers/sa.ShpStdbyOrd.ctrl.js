@@ -12,8 +12,6 @@
 	            var page  = $scope.page = new Page({ auth: resData.access }),
 		            today = edt.getToday();
 	            
-	            kendo.culture('ko-KR');// 이거 해야지 원화로 나옴
-	            
 	            //마켓명 드랍 박스 실행	
 	            var mrkName = (function(){
         			UtilSvc.csMrkList().then(function (res) {
@@ -142,7 +140,6 @@
 	            		$scope.shpbyordkg.resize();
 	            	}
 	            };
-	            
 	            
 	            // 유효성 검사
 	            var updateValidation = function(param, btnCase){
@@ -277,6 +274,9 @@
                 	height: 616,
                 	navigatable: true, //키보드로 그리드 셀 이동 가능
                 	toolbar: [{template: kendo.template($.trim($("#shpbyord-toolbar-template").html()))}],
+                	excel: {
+                		fileName: "배송대기.xlsx"
+                	},
                 	dataSource: new kendo.data.DataSource({
                 		transport: {
                 			read: function(e) {

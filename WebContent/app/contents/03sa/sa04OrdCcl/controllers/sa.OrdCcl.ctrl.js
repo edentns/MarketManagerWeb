@@ -7,12 +7,10 @@
      * 상품분류관리
      */
     angular.module("sa.OrdCcl.controller")
-        .controller("sa.OrdCclCtrl", ["$scope", "$http", "$q", "$log", "sa.OrdCclSvc", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "MenuSvc", "Util03saSvc",
-            function ($scope, $http, $q, $log, saOrdCclSvc, APP_CODE, $timeout, resData, Page, UtilSvc, MenuSvc, Util03saSvc) {
+        .controller("sa.OrdCclCtrl", ["$scope", "$http", "$q", "$log", "sa.OrdCclSvc", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "MenuSvc", "Util03saSvc", "APP_SA_MODEL",
+            function ($scope, $http, $q, $log, saOrdCclSvc, APP_CODE, $timeout, resData, Page, UtilSvc, MenuSvc, Util03saSvc, APP_SA_MODEL) {
 	            var page  = $scope.page = new Page({ auth: resData.access }),
 		            today = edt.getToday();
-	            
-	            kendo.culture('ko-KR');// 이거 해야지 원화로 나옴
 	            
 	            //마켓명 드랍 박스 실행	
 	            var mrkName = (function(){
@@ -88,6 +86,104 @@
         				}
         			});
 	            }());
+	            
+	            var grdField =  {
+                    ROW_CHK       : { type: APP_SA_MODEL.ROW_CHK.type        , editable: true , nullable: false },
+                    NO_ORD        : { type: APP_SA_MODEL.NO_ORD.type         , editable: false, nullable: false },
+                    NO_APVL       : { type: APP_SA_MODEL.NO_APVL.type        , editable: false, nullable: false },
+                    NM_MRK        : { type: APP_SA_MODEL.NM_MRK.type         , editable: false, nullable: false },
+                    NO_MRKORD     : { type: APP_SA_MODEL.NO_MRKORD.type      , editable: false, nullable: false },
+                    
+                    NO_MRK        : { type: APP_SA_MODEL.NO_MRK.type         , editable: false, nullable: false },
+                    NO_MRKITEM    : { type: APP_SA_MODEL.NO_MRKITEM.type     , defaultValue: "", nullable: false},
+                    NO_MRKREGITEM : { type: APP_SA_MODEL.NO_MRKREGITEM.type  , editable: false, nullable: false },
+                    NM_MRKITEM    : { type: APP_SA_MODEL.NM_MRKITEM.type     , editable: true , nullable: false },
+                    NM_MRKOPT     : { type: APP_SA_MODEL.NM_MRKOPT.type      , editable: false, nullable: false },
+                    
+                    AM_ORDSALEPRC : { type: APP_SA_MODEL.AM_ORDSALEPRC.type  , editable: false, nullable: false },
+                    NM_PCHR       : { type: APP_SA_MODEL.NM_PCHR.type        , editable: true , nullable: false },
+                    NM_CONS       : { type: APP_SA_MODEL.NM_CONS.type        , editable: false, nullable: false },
+                    NO_PCHRPHNE   : { type: APP_SA_MODEL.NO_PCHRPHNE.type    , editable: false, nullable: false },
+                    QT_CCL        : { type: APP_SA_MODEL.QT_CCL.type         , editable: false, nullable: false },
+                    
+                    DC_PCHREMI    : { type: APP_SA_MODEL.DC_PCHREMI.type     , editable: false, nullable: false },
+                    NO_CONSPOST   : { type: APP_SA_MODEL.NO_CONSPOST.type    , editable: false, nullable: false },
+                    DC_CONSNEWADDR: { type: APP_SA_MODEL.DC_CONSNEWADDR.type , editable: false, nullable: false },
+                    DC_PCHRREQCTT : { type: APP_SA_MODEL.DC_PCHRREQCTT.type  , editable: false, nullable: false },
+                    DC_CCLCTT     : { type: APP_SA_MODEL.DC_CCLCTT.type      , editable: false, nullable: false },
+                    
+                    CD_ORDSTAT    : { type: APP_SA_MODEL.CD_ORDSTAT.type     , editable: false, nullable: false },
+                    DC_SHPWAY     : { type: APP_SA_MODEL.DC_SHPWAY.type      , editable: false, nullable: false },
+                    QT_ORD        : { type: APP_SA_MODEL.QT_ORD.type         , editable: false, nullable: false },
+                    DTS_APVL      : { type: APP_SA_MODEL.DTS_APVL.type       , editable: false, nullable: false },
+                    DC_APVLWAY    : { type: APP_SA_MODEL.DC_APVLWAY.type     , editable: false, nullable: false },
+                    
+                    DTS_ORD       : { type: APP_SA_MODEL.DTS_ORD.type        , editable: false, nullable: false },
+                    YN_CONN       : { type: APP_SA_MODEL.YN_CONN.type        , editable: false, nullable: false },
+                    NO_UPDATE     : { type: APP_SA_MODEL.NO_UPDATE.type      , editable: false, nullable: false },
+                    DTS_CCLREQ    : { type: APP_SA_MODEL.DTS_CCLREQ.type     , editable: false, nullable: false },
+                    DTS_CCLAPPRRJT: { type: APP_SA_MODEL.DTS_CCLAPPRRJT.type , editable: false, nullable: false },
+                    
+                    CD_CCLSTAT    : { type: APP_SA_MODEL.CD_CCLSTAT.type     , editable: false, nullable: false },
+                    CD_CCLRSN     : { type: APP_SA_MODEL.CD_CCLRSN.type      , editable: false, nullable: false },
+                    DC_CCLRSNCTT  : { type: APP_SA_MODEL.DC_CCLRSNCTT.type   , editable: false, nullable: false },
+                    CD_CCLRJT     : { type: APP_SA_MODEL.CD_CCLRJT.type      , editable: true , nullable: false, 
+				                    	validation: {
+											cd_cclrjtvalidation: function (input) {
+										    	if (input.is("[name='CD_CCLRJT']") && input.val() === "") {
+				                                	input.attr("data-cd_cclrjtvalidation-msg", "취소거부코드를 입력해 주세요.");
+				                                    return false;
+				                                }
+				                            	return true;
+									    	}
+										}
+                    				},
+                    				
+                    DC_CCLRJTCTT  : { type: APP_SA_MODEL.DC_CCLRJTCTT.type   , editable: true , nullable: false,
+				                    	validation: {
+											dc_cclrjtcttvalidation: function (input) {
+										    	if (input.is("[name='DC_CCLRJTCTT']") && input.val() === "") {
+				                                	input.attr("data-dc_cclrjtcttvalidation-msg", "취소거부사유를 입력해 주세요.");
+				                                    return false;
+				                                }
+										    	if(input.is("[name='DC_CCLRJTCTT']") && input.val().length > 1000){
+										    		input.attr("data-dc_cclrjtcttvalidation-msg", "취소거부사유룰 1000자 이내로 입력해 주세요.");
+				                                    return false;
+										    	}
+				                            	return true;
+									    	}
+										}
+                    	            },
+                    ITF_CHK       : { type: APP_SA_MODEL.ITF_CHK.type        , editable: false, nullable: true  }
+                };
+
+                APP_SA_MODEL.CD_CCLRSN.fNm  = "ordCancelManagementDataVO.cancelCodeOp.dataSource";
+                APP_SA_MODEL.CD_ORDSTAT.fNm = "ordCancelManagementDataVO.ordStatusOp";
+                APP_SA_MODEL.CD_CCLSTAT.fNm = "ordCancelManagementDataVO.cancelStatusOp";
+                
+                var grdCol = [[APP_SA_MODEL.ROW_CHK],
+                              [APP_SA_MODEL.NO_ORD     , APP_SA_MODEL.NO_APVL       ],
+                              [APP_SA_MODEL.NM_MRK     , APP_SA_MODEL.NO_MRKORD     ],
+                              [APP_SA_MODEL.NO_MRKITEM , APP_SA_MODEL.NO_MRKREGITEM ],
+                              [APP_SA_MODEL.NM_MRKITEM , APP_SA_MODEL.NM_MRKOPT     ],
+                              [APP_SA_MODEL.QT_ORD     , APP_SA_MODEL.QT_CCL        ],
+                              [APP_SA_MODEL.NM_PCHR    , APP_SA_MODEL.AM_ORDSALEPRC ],
+                              [APP_SA_MODEL.NO_PCHRPHNE, APP_SA_MODEL.DC_APVLWAY    ],
+                              [APP_SA_MODEL.DC_PCHREMI , APP_SA_MODEL.NM_CONS       ],
+                              [APP_SA_MODEL.CD_CCLRSN  , APP_SA_MODEL.DC_CONSNEWADDR],
+                              [APP_SA_MODEL.CD_ORDSTAT , APP_SA_MODEL.DC_SHPWAY     ],
+                              [APP_SA_MODEL.DTS_ORD    , APP_SA_MODEL.DTS_CCLREQ    ],
+                              [[APP_SA_MODEL.YN_CONN, APP_SA_MODEL.ITF_CHK], APP_SA_MODEL.CD_CCLSTAT]
+                             ],
+                    grdDetOption      = {},
+                    grdRowTemplate    = "<tr data-uid=\"#= uid #\">\n",
+                    grdAltRowTemplate = "<tr class=\"k-alt\" data-uid=\"#= uid #\">\n",
+                    grdCheckOption    = {clickNm:"onOrdGrdCkboxClick",
+                		                 allClickNm:"onOrdGrdCkboxAllClick"};
+                
+                grdDetOption       = UtilSvc.gridDetOption(grdCheckOption, grdCol);
+                grdRowTemplate     = grdRowTemplate    + grdDetOption.gridContentTemplate;
+                grdAltRowTemplate  = grdAltRowTemplate + grdDetOption.gridContentTemplate;
 	            
 	            var ordCancelManagementDataVO = $scope.ordCancelManagementDataVO = {
 	            		boxTitle : "주문취소관리",
@@ -281,405 +377,13 @@
                 		schema: {
                 			model: {
                     			id: "NO_ORD",
-                				fields: {						                    
-                					ROW_CHK: 		   {	
-				                    						type: "boolean", 
-															editable: true,  
-															nullable: false
-            										   },
-								    NO_ORD:	   	   	   {	
-                											type: "string", 
-                											editable: false,
-            												nullable: false
-        											   },                    					
-								    NO_APVL:		   {	
-                											type: "string", 
-                											editable: false, 
-                											nullable: false
-                									   },
-                			        NM_MRK: 	   	   {	
-															type: "string", 
-															editable: false,
-															nullable: false
-                    						    	   },
-						    	    NO_MRKORD: 	   	   {
-															type: "string", 
-															editable: false, 
-															nullable: false
-						    	    				   },
-						    	    NO_MRK: 	   	   {
-															type: "string", 
-															editable: false, 
-															nullable: false
-						    	    				   },						    	    				   
-						    	    NO_MRKITEM: 	   {
-			        										type: "string",
-			        										defaultValue: "",
-			        										nullable: false //true 일때 defaultValue가 안 됨
-						    	    				   },
-	    	    				   	NO_MRKREGITEM: 	   {
-                											type: "string",                     										
-                											editable: false,
-                    										nullable: false
-                									   },                    									   
-								    NM_MRKITEM:	   	   {	
-			    									    	type: "string", 
-								    						editable: true,
-								    						nullable: false
-								    				   },
-								    NM_MRKOPT:	   	   {	
-				       										type: "string", 
-				       										editable: false,
-															nullable: false
-				   									   },
-				   					AM_ORDSALEPRC: 	   {	
-                   											type: "number", 
-                											editable: false,
-                											nullable: false
-                									   },                    					
-                					QT_ORD: 	   	   {
-                											type: "string",
-                    										editable: false, 
-                    										nullable: false //true 일때 defaultValue가 안 됨	                    										
-                									   },
-                					NM_PCHR: 	       {
-                    										type: "string",
-                    										editable: true,
-                    									    nullable: false
-                									   },
-                					NM_CONS: 		   {
-                											type: "string", 
-                											editable: false, 
-                											nullable: false
-                									   },
-                					NO_PCHRPHNE: 	   {
-				                    				    	type: "string", 
-															editable: false, 
-															nullable: false
-                				    				   },	
-                				    QT_CCL: 	       {
-				                    				    	type: "string", 
-															editable: false, 
-															nullable: false
-                				    				   },
-                				    DC_PCHREMI: 	   {
-				                    				    	type: "string", 
-															editable: false, 
-															nullable: false
-                				    				   },	
-                				    NO_CONSPOST:	   {
-					                				    	type: "string", 
-															editable: false, 
-															nullable: false
-                				    				   },				   
-                				    DC_CONSNEWADDR:    {
-				                    				    	type: "string", 
-															editable: false, 
-															nullable: false
-                				    				   },	
-                				    DC_PCHRREQCTT: 	   {
-				                    				    	type: "string", 
-															editable: false, 
-															nullable: false
-                				    				   },	
-                				    DC_CCLCTT:    	   { 	
-				                    				    	type: "string", 
-															editable: false, 
-															nullable: false
-                				    				   },	
-                				    CD_ORDSTAT: 	   {
-				                    				    	type: "string", 
-															editable: false, 
-															nullable: false
-                				    				   },	
-                				    DC_SHPWAY: 	   	   {	
-				                    				    	type: "string", 
-															editable: false, 
-															nullable: false
-                				    				   },	
-                				    DTS_APVL: 	   	   {
-				                    				    	type: "string", 
-															editable: false, 
-															nullable: false
-                				    				   },	
-                				    DC_APVLWAY: 	   {
-				                    				    	type: "string", 
-															editable: false, 
-															nullable: false
-                				    				   },	
-                				    DTS_ORD: 	   	   {
-				                    				    	type: "string", 
-															editable: false, 
-															nullable: false
-                				    				   },
-                				    YN_CONN: 	   	   {
-				                    				    	type: "string", 
-															editable: false, 
-															nullable: false
-                				    				   },	
-                				    NO_UPDATE: 	       {
-				                    				    	type: "string", 
-															editable: false, 
-															nullable: false
-                				    				   },  	
-                				    DTS_CCLREQ: 	   {
-				                    				    	type: "string", 
-															editable: false, 
-															nullable: false
-                				    				   },                  
-                				    DTS_CCLAPPRRJT:    {
-				                    				    	type: "string", 
-															editable: false, 
-															nullable: false
-                				    				   },
-                				    CD_CCLSTAT:		   {
-					                				    	type: "string", 
-															editable: false,
-															nullable: false
-								    				   },		
-                				    CD_CCLRSN: 	       {
-				                    				    	type: "string", 
-															editable: false,
-															nullable: false
-                				    				   },
-                				    DC_CCLRSNCTT: 	   {
-					                				    	type: "string", 
-															editable: false,
-															nullable: false
-                				    				   },	
-                				    CD_CCLRJT: 	       {
-				                    				    	type: "string", 
-															editable: true,
-															validation: {
-																cd_cclrjtvalidation: function (input) {
-					  									    		if (input.is("[name='CD_CCLRJT']") && input.val() === "") {
-			                                                        	input.attr("data-cd_cclrjtvalidation-msg", "취소거부코드를 입력해 주세요.");
-			                                                            return false;
-			                                                        }
-				                                                  return true;
-				  									    	  	}
-															}, 
-															nullable: false
-               				    				   		},
-               				        DC_CCLRJTCTT: 	    {
-				                    				    	type: "string",
-															editable: true,
-															validation: {
-																dc_cclrjtcttvalidation: function (input) {
-					  									    		if (input.is("[name='DC_CCLRJTCTT']") && input.val() === "") {
-			                                                        	input.attr("data-dc_cclrjtcttvalidation-msg", "취소거부사유를 입력해 주세요.");
-			                                                            return false;
-			                                                        }
-					  									    		if(input.is("[name='DC_CCLRJTCTT']") && input.val().length > 1000){
-					  									    			input.attr("data-dc_cclrjtcttvalidation-msg", "취소거부사유룰 1000자 이내로 입력해 주세요.");
-			                                                            return false;
-					  									    		}
-				                                                  return true;
-				  									    	  	}
-															}, 
-															nullable: false
-               				    				         },
-               				    	ITF_CHK: 		  	{
-               				    							type: "string",
-               				    							editable: false,
-               				    							nullable: true
-               				    						}
-                				}
+                				fields: grdField
                 			}
                 		},
                 	}),
                 	navigatable: true, //키보드로 그리드 셀 이동 가능
                 	toolbar: [{template: kendo.template($.trim($("#ocm-toolbar-template").html()))}],
-                	columns: [
-                	            {
-			                        field: "ROW_CHK",
-			                        title: "<input class='k-checkbox' type='checkbox' id='grd_chk_master' ng-click='onOrdGrdCkboxAllClick($event)'><label class='k-checkbox-label k-no-text' for='grd_chk_master' style='margin-bottom:0;'>​</label>",				                        
-			                        width: "30px",
-			                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px; vertical-align:middle;"}
-                	            },                        
-		                        {	
-                	            	field: "NO_ORD",
-		                            title: "관리번호",
-		                            width: "100px",
-		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
-		                            columns: [ 
-		                                       	{
-				                                    field: "NO_APVL",
-				                                    title: "결제번호",
-				                                    width: 100,
-							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
-				                                }
-			                                 ]
-		                        },
-		                        {
-		                        	field: "NM_MRK",	
-		                            title: "마켓명",
-		                            width: 100,
-		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
-		                            columns: [ 
-		                                       	{
-				                                    field: "NO_MRKORD",
-				                                    title: "주문번호",
-				                                    width: 100,
-							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
-				                                }
-			                                ]
-		                        },                        
-		                        {
-		                        	field: "NO_MRKITEM",
-		                            title: "마켓상품번호",
-		                            width: 100,
-		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
-		                            columns: [ 
-		                                       	{
-				                                    field: "NO_MRKREGITEM",
-				                                    title: "상품번호",
-				                                    width: 100,
-							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
-				                                }
-			                                ]
-		                        },                        
-		                        {
-		                        	field: "NM_MRKITEM",
-		                            title: "상품명",
-		                            width: 100,
-		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
-		                            columns: [ 
-		                                       	{
-				                                    field: "NM_MRKOPT",
-				                                    title: "옵션(상품구성)",
-				                                    width: 100,
-							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
-				                                }
-			                                ]
-		                        },                        
-		                        {
-		                        	field: "QT_ORD",	
-		                            title: "판매수량",
-		                            width: 100,		                            
-		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
-		                            columns: [ 
-		                                       	{
-				                                    field: "QT_CCL",
-				                                    title: "취소수량",
-				                                    width: 100,
-							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
-				                                }
-			                                ]
-		                        },                        
-		                        {
-		                        	field: "NM_PCHR",
-		                            title: "구매자",
-		                            width: 100,
-		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
-		                            columns: [ 
-		                                       	{
-				                                    field: "AM_ORDSALEPRC",
-				                                    title: "판매가",
-				                                    width: 100,
-							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
-				                                }
-			                                ]
-		                        },                        
-		                        {
-		                        	field: "NO_PCHRPHNE",
-		                            title: "전화번호",
-		                            width: 100,
-		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
-		                            columns: [ 
-		                                       	{
-				                                    field: "DC_APVLWAY",
-				                                    title: "결제방법",
-				                                    width: 100,
-							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
-				                                }
-			                                ]
-		                        },                        
-		                        {
-		                        	field: "DC_PCHREMI",
-		                            title: "이메일",
-		                            width: 100,
-		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
-		                            columns: [ 
-		                                       	{
-				                                    field: "NM_CONS",
-				                                    title: "수취인",
-				                                    width: 100,
-							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
-				                                }
-			                                ]
-		                        } ,                        
-		                        {
-		                        	field: "CD_CCLRSN",
-		                            title: "취소사유",
-		                            width: 100,
-		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
-		                            columns: [ 
-		                                       	{
-				                                    field: "DC_CONSNEWADDR",
-				                                    title: "수취인주소",
-				                                    width: 100,
-							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
-				                                }
-			                                ]
-		                        } ,                        
-		                        {
-		                        	field: "CD_ORDSTAT",
-		                            title: "주문상태",
-		                            width: 100,
-		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
-		                            columns: [ 
-		                                       	{
-				                                    field: "DC_SHPWAY",
-				                                    title: "배송방법",
-				                                    width: 100,
-							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
-				                                }
-			                                ]
-		                        } ,                        
-		                        {
-		                        	field: "DTS_ORD",
-		                            title: "주문일시",
-		                            width: 100,
-		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
-		                            columns: [ 
-		                                       	{
-				                                    field: "DTS_CCLREQ",
-				                                    title: "취소일시",
-				                                    width: 100,
-							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
-				                                }
-			                                ]
-		                        },                        
-		                        {
-		                        	field: "DTS_CCLAPPRRJT",
-		                            title: "취소 확인일시",
-		                            width: 100,
-		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
-		                            columns: [
-		                                       	{
-				                                    field: "NO_UPDATE",
-				                                    title: "접수확인자",
-				                                    width: 100,
-							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
-				                                }
-			                                ]
-		                        },                        
-		                        {
-		                        	field: "",
-		                            title: "연동구분 / 전송상태",
-		                            width: 100,
-		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
-		                            columns: [
-		                                       	{
-				                                    field: "CD_CCLSTAT",
-				                                    title: "취소상태",
-				                                    width: 100,
-							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
-				                                }
-			                                ]
-		                        }
-                    ],
+                	columns: grdDetOption.gridColumn,
                     collapse: function(e) {
                         this.cancelRow();
                     },    
@@ -692,11 +396,14 @@
                 		confirmation: false
                 	},
                 	resizable: true,
-                	rowTemplate: kendo.template($.trim($("#ocm_template").html())),
-                	altRowTemplate: kendo.template($.trim($("#ocm_alt_template").html())),
+                	rowTemplate: kendo.template($.trim(grdRowTemplate)),
+                	altRowTemplate: kendo.template($.trim(grdAltRowTemplate)),
                 	height: 616                  	
 	        	};
-	            
+
+	            UtilSvc.gridtooltipOptions.filter = "td div";
+	            grdOrdCancelManagementVO.tooltipOptions = UtilSvc.gridtooltipOptions;
+		        
 	            //kendo grid 체크박스 옵션
                 $scope.onOrdGrdCkboxClick = function(e){
 	                var i = 0,

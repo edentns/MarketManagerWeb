@@ -9,7 +9,9 @@
 	angular.module('edtApp.common.service').service('UtilSvc', ['$rootScope', '$state', '$window', '$http', 'APP_CONFIG', 'MenuSvc', '$q',
 		function ($rootScope, $state, $window, $http, APP_CONFIG, MenuSvc, $q) {
 			var user = $rootScope.webApp.user,
-				menu = $rootScope.webApp.menu;
+				menu = $rootScope.webApp.menu,
+				gridHeaderAttributes = {"class": "table-header-cell", style: "text-align: center; font-size: 12px"};
+			
 			this.gridPageableMessages = {
 				display: "총 {2}건 중 {0}-{1}건",
 				empty: "표시할 데이터가 없습니다.",
@@ -33,6 +35,136 @@
         			else { this.popup.element[0].style.width = "300px"; }
         		}
 	        };
+	        
+	        this.gridBodyTemplate = function(gridContentTemplate, gridColVal) {
+	        	var lGridColVal = {};
+	        	
+	        	if(gridColVal.constructor === Array) {
+	            	gridContentTemplate = gridContentTemplate + "<div class=\"custom-style ";
+					if     (gridColVal[0].textAlign === "center") gridContentTemplate = gridContentTemplate + "ta-c";
+					else if(gridColVal[0].textAlign === "right")  gridContentTemplate = gridContentTemplate + "ta-r";
+					else                                          gridContentTemplate = gridContentTemplate + "ta-l";
+					gridContentTemplate = gridContentTemplate + "\">\n";
+					
+					for(var iIndex = 0; iIndex < gridColVal.length; iIndex++) {
+						gridContentTemplate = gridContentTemplate + "# if("+gridColVal[iIndex].field+"){ #\n";
+						if(iIndex !== 0) gridContentTemplate = gridContentTemplate + "&nbsp;/&nbsp;";
+						
+						if(gridColVal[iIndex].field.indexOf("AM") === 0) {
+							gridContentTemplate = gridContentTemplate + "#= kendo.toString("+gridColVal[iIndex].field+",'C0', 'ko-KR') #\n";
+						}
+						else if(gridColVal[iIndex].field.indexOf("CD") === 0 && gridColVal[iIndex].fNm !== "" && gridColVal[iIndex].fNm !== undefined) {
+							gridContentTemplate = gridContentTemplate + "<co04-cd-to-nm cd=\"#:"+gridColVal[iIndex].field+"#\" nm-box=\""+gridColVal[iIndex].fNm+"\">\n";
+						}
+						else {
+							gridContentTemplate = gridContentTemplate + "#: "+gridColVal[iIndex].field+" #\n";
+						}
+					    gridContentTemplate = gridContentTemplate + "# }else{ }#\n";
+					}
+					gridContentTemplate = gridContentTemplate + "</div>\n";
+	        	}
+	        	else {
+	        		gridContentTemplate = gridContentTemplate + "<div class=\"custom-style ";
+					if     (gridColVal.textAlign === "center") gridContentTemplate = gridContentTemplate + "ta-c";
+					else if(gridColVal.textAlign === "right")  gridContentTemplate = gridContentTemplate + "ta-r";
+					else                                       gridContentTemplate = gridContentTemplate + "ta-l";
+					gridContentTemplate = gridContentTemplate + "\">\n";
+					gridContentTemplate = gridContentTemplate + "# if("+gridColVal.field+"){ #\n";
+					if(gridColVal.field.indexOf("AM") === 0) {
+						gridContentTemplate = gridContentTemplate + "#= kendo.toString("+gridColVal.field+",'C0', 'ko-KR') #\n";
+					}
+					else if(gridColVal.field.indexOf("CD") === 0 && gridColVal.fNm !== "" && gridColVal.fNm !== undefined) {
+						gridContentTemplate = gridContentTemplate + "<co04-cd-to-nm cd=\"#:"+gridColVal.field+"#\" nm-box=\""+gridColVal.fNm+"\">\n";
+					}
+					else {
+						gridContentTemplate = gridContentTemplate + "#: "+gridColVal.field+" #\n";
+					}
+				    gridContentTemplate = gridContentTemplate + "# }else{ }#\n</div>\n";
+	        	}
+			    return gridContentTemplate;
+            };
+	        
+	        this.gridDetOption = function(gridCheckOption, gridCol) {
+	        	var rtnObj = {},
+	        	    me     = this;
+	        	rtnObj.gridColumn = [];
+	        	rtnObj.gridContentTemplate = "";
+	        	
+	        	for(var iIndex = 0; iIndex < gridCol.length; iIndex++) {
+                	var gridColVal = {};
+                	if(gridCol[iIndex][0].constructor === Array) {
+	            		gridColVal.field = gridCol[iIndex][0][0].field;
+	                	gridColVal.width = gridCol[iIndex][0][0].width;
+	                	gridColVal.title = gridCol[iIndex][0][0].title.concat(" / ", gridCol[iIndex][0][1].title);
+                	}
+                	else {
+                		gridColVal.field = gridCol[iIndex][0].field;
+	                	gridColVal.width = gridCol[iIndex][0].width;
+	                	gridColVal.title = gridCol[iIndex][0].title;
+                	}
+                	
+                	if(gridColVal.field === "hierarchy") {
+                		rtnObj.gridContentTemplate = rtnObj.gridContentTemplate + "\t<td class=\"k-hierarchy-cell\">\n" +
+                        "\t\t<a class=\"k-icon k-i-expand\" href=\"\\#\" tabindex=\"-1\"></a>\n" +
+                        "\t</td>\n";
+                		//rtnObj.gridColumn.push(gridColVal);
+                    	continue;
+                	}
+                	else if(gridColVal.field === "ROW_CHK") {
+                		rtnObj.gridContentTemplate = rtnObj.gridContentTemplate + "\t<td class=\"ta-c\">\n" +
+				                         "\t\t<div class=\"custom-style-checkbox\">\n" +
+				                         "\t\t\t<input class='k-checkbox' data-role='checkbox' type='checkbox' ng-click=\""+gridCheckOption.clickNm+"($event)\" id=\"#= uid #_row\">\n" +
+				                         "\t\t\t<label class='k-checkbox-label k-no-text' style=\"vertical-align:middle;\" for=\"#= uid #_row\"></label>\n" +
+				                         "\t\t</div>\n" +
+				                         "\t</td>\n";
+                		if(gridCheckOption.allClickNm !== "" && gridCheckOption.allClickNm !== undefined)
+                			gridColVal.title = "<input class='k-checkbox' type='checkbox' id='grid_chk_master' ng-click='"+gridCheckOption.allClickNm+"($event)'><label class='k-checkbox-label k-no-text' for='grid_chk_master' style='margin-bottom:0;'>​</label>";
+                		
+                		gridColVal.headerAttributes = {"class": "table-header-cell", style: "text-align: center; font-size: 12px; vertical-align:middle;"};
+                		gridColVal.selectable       = true;
+                		rtnObj.gridColumn.push(gridColVal);
+                    	continue;
+                	}
+                	else {
+                		gridColVal.headerAttributes = gridHeaderAttributes;
+                	}
+                	rtnObj.gridContentTemplate = rtnObj.gridContentTemplate + "<td style=\"padding:0\">\n";
+                	rtnObj.gridContentTemplate = me.gridBodyTemplate(rtnObj.gridContentTemplate, gridCol[iIndex][0]);
+                	
+                	if(gridCol[iIndex].length > 1) {
+                		rtnObj.gridContentTemplate = me.gridBodyTemplate(rtnObj.gridContentTemplate, gridCol[iIndex][1]);
+                		if(gridCol[iIndex][1].constructor === Array) {
+                			gridColVal.columns = [{
+                    			field: gridCol[iIndex][1][0].field,
+                    			title: gridCol[iIndex][1][0].title.concat(" / ", gridCol[iIndex][1][1].title),
+                    			width: gridCol[iIndex][1][0].width,
+                    			headerAttributes: gridHeaderAttributes
+                    		}];
+                    	}
+                    	else {
+                    		gridColVal.columns = [{
+                    			field: gridCol[iIndex][1].field,
+                    			title: gridCol[iIndex][1].title,
+                    			width: gridCol[iIndex][1].width,
+                    			headerAttributes: gridHeaderAttributes
+                    		}];
+                    	}
+                	}
+                	else {
+                		rtnObj.gridContentTemplate = rtnObj.gridContentTemplate + "<div class=\"custom-style\"></div>\n";
+                		
+                		gridColVal.columns = [{
+                			width: 100,
+                			headerAttributes: gridHeaderAttributes
+                		}];
+                	}
+                	rtnObj.gridContentTemplate = rtnObj.gridContentTemplate + "</td>\n";
+                	rtnObj.gridColumn.push(gridColVal);
+                }
+                rtnObj.gridContentTemplate = rtnObj.gridContentTemplate + "</tr>\n";
+                
+                return rtnObj;
+	        }
 	        
 	        /**
 	         * Get group info.
