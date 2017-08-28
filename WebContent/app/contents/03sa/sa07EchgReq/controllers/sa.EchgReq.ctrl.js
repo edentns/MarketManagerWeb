@@ -481,7 +481,7 @@
                 		change: function(e){
                 			var data = this.data();
                 			echgDataVO.dataTotal = data.length;
-                			angular.element($("#grd_chk_master")).prop("checked",false);
+                			angular.element($(".k-checkbox:eq(0)")).prop("checked",false);
                 		},                		
                 		pageSize: 9,
                 		batch: true,
@@ -517,7 +517,7 @@
 	                	}
 	                }
 	                
-	                angular.element($("#grd_chk_master")).prop("checked",allChecked);
+	                angular.element($(".k-checkbox:eq(0)")).prop("checked",allChecked);
 	                
 	                if(checked){
 	                	row.addClass("k-state-selected");
@@ -538,7 +538,7 @@
 	                
 	                if(dbLength < 1){	                	
 	                	alert("전체 선택 할 데이터가 없습니다.");
-	                	angular.element($("#grd_chk_master")).prop("checked",false);
+	                	angular.element($(".k-checkbox:eq(0)")).prop("checked",false);
 	                	return;
 	                };   
 	                
@@ -554,7 +554,8 @@
 	                	row.removeClass("k-state-selected");
 	                	row.find(".k-checkbox").prop( "checked", false );
 	                };
-                };	            
+                };	
+                
 	            $scope.$on("kendoWidgetCreated", function(event, widget){
                 	var grd = $scope.echgkg;
                 	

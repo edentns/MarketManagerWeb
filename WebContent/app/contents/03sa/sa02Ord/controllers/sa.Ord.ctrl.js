@@ -146,8 +146,8 @@
                               [APP_SA_MODEL.AM_SHPCOST],
                              ],
                     grdDetOption      = {},
-                    grdRowTemplate    = "<tr data-uid=\"#= uid #\" ng-dblclick=\"grdDblClickGo('#: NO_ORD #','#: NO_MRKORD #')\">\n",
-                    grdAltRowTemplate = "<tr class=\"k-alt\" data-uid=\"#= uid #\" ng-dblclick=\"grdDblClickGo('#: NO_ORD #','#: NO_MRKORD #')\">\n",
+                    grdRowTemplate    = "<tr data-uid=\"#= uid #\" ng-dblclick=\"grdDblClickGo('#: NO_ORD #','#: NO_MRKORD #',$event)\">\n",
+                    grdAltRowTemplate = "<tr class=\"k-alt\" data-uid=\"#= uid #\" ng-dblclick=\"grdDblClickGo('#: NO_ORD #','#: NO_MRKORD #',$event)\">\n",
                     grdCheckOption    = {clickNm:"onOrdGrdCkboxClick",
                 		                 allClickNm:"onOrdGrdCkboxAllClick"};
                 
@@ -310,7 +310,7 @@
                 		change: function(e){
                 			var data = this.data();                			
                 			ordDataVO.dataTotal = $scope.ordkg.dataSource.total();
-                			angular.element($("#grd_chk_master")).prop("checked",false);
+                			angular.element($(".k-checkbox:eq(0)")).prop("checked",false);
                 		},
                 		serverPaging: true,
                 		page: 1,   		
@@ -382,7 +382,7 @@
 	                	}
 	                }
 	                
-	                angular.element($("#grd_chk_master")).prop("checked",allChecked);
+	                angular.element($(".k-checkbox:eq(0)")).prop("checked",allChecked);
 	                
 	                if(checked){
 	                	row.addClass("k-state-selected");
@@ -403,7 +403,7 @@
 	                
 	                if(dbLength < 1){	                	
 	                	alert("전체 선택 할 데이터가 없습니다.");
-	                	angular.element($("#grd_chk_master")).prop("checked",false);
+	                	angular.element($(".k-checkbox:eq(0)")).prop("checked",false);
 	                	return;
 	                };   
 	                
@@ -473,8 +473,16 @@
 	                	});
 	                }
                 });
-                                
-                $scope.grdDblClickGo = function(noOrd, noMrkord){
+                          
+                $scope.grdDblClickGo = function(noOrd, noMrkord, ev){
+                	var getCurrentCell = "";
+		       		
+		       		getCurrentCell = $(ev.target).is("td") ? $(ev.target) : $(ev.target).parents("td");
+		       		
+		       		//체크박스 체크다가 넘어 가면 짜증나니까 체크박스에선 막음
+		       		if(getCurrentCell.find(".k-checkbox").length){
+		       			return;
+		       		}
                 	$state.go("app.saOrd", { kind: "", menu: null, noOrd : noOrd, noMrkord: noMrkord});
                 };
                 

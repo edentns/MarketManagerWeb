@@ -279,25 +279,7 @@
                 	},
                 	dataSource: new kendo.data.DataSource({
                 		transport: {
-                			read: function(e) {
-                				/*var param = {	  
-                				    NM_MRKITEM : shpbyordDataVO.procName.value,
-            					    NO_MRK : shpbyordDataVO.ordMrkNameMo, 
-            					    CD_ORDSTAT : shpbyordDataVO.ordStatusMo,
-            					    NO_MRKORD : shpbyordDataVO.orderNo.value,      
-            					    NM_PCHR : shpbyordDataVO.buyerName.value,
-            					    DTS_CHK : shpbyordDataVO.betweenDateOptionMo,  
-            					    DTS_FROM : new Date(shpbyordDataVO.datesetting.period.start.y, shpbyordDataVO.datesetting.period.start.m-1, shpbyordDataVO.datesetting.period.start.d, "00", "00", "00").dateFormat("YmdHis"),           
-            					    DTS_TO : new Date(shpbyordDataVO.datesetting.period.end.y, shpbyordDataVO.datesetting.period.end.m-1, shpbyordDataVO.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis")
-                                };   
-                				if(Util03saSvc.readValidation(param)){
-                					saShpStdbyOrdSvc.shpbyordList(param).then(function (res) {
-                						shpbyordDataVO.shipCodeTotal = res.data.shpList;
-                						e.success(res.data.searchList);	                    					                   				                    					
-                        			});
-                				}else{
-                					e.error();
-                				};*/
+                			read: function(e) {                				
                 				saShpStdbyOrdSvc.shpbyordList(shpbyordDataVO.param).then(function (res) {
             						shpbyordDataVO.shipCodeTotal = res.data.shpList;
             						e.success(res.data.searchList);	                    					                   				                    					
