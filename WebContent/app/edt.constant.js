@@ -89,7 +89,6 @@
 	    DC_CONSNEWADDR: { field: "DC_CONSNEWADDR", type: "string" , width: "100px", textAlign: "left"  , title: "주소1"},    
 	    DC_PCHRREQCTT : { field: "DC_PCHRREQCTT" , type: "string" , width: "100px", textAlign: "left"  , title: "요청내용"},
 	    
-	    DC_CONSOLDADDR: { field: "DC_CONSOLDADDR", type: "string" , width: "100px", textAlign: "center"},    
 	    CD_ORDSTAT    : { field: "CD_ORDSTAT"    , type: "string" , width: "100px", textAlign: "center", title: "주문상태"},    
 	    DC_SHPWAY     : { field: "DC_SHPWAY"     , type: "string" , width: "100px", textAlign: "center", title: "배송방법"},    
 	    QT_ORD        : { field: "QT_ORD"        , type: "number" , width: "100px", textAlign: "right" , title: "주문수량"},
