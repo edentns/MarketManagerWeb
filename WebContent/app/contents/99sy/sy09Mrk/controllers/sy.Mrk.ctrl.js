@@ -46,7 +46,7 @@
 	        		datesetting : {
 	        			dateType   : 'market',
 						buttonList : ['current', '1Day', '1Week', '1Month'],
-						selected   : '1Month',
+						selected   : 'current',
 						period : {
 							start : angular.copy(today),
 							end   : angular.copy(today)
@@ -60,6 +60,7 @@
                     	};
 					dateVO.getSubCodeList( {cd: "SY_000017", search: "all"} );
 					dateVO.getSubCodeList( param );
+					dateVO.datesetting.selected = "current";
 				};
 
 				dateVO.isOpen = function (val) {

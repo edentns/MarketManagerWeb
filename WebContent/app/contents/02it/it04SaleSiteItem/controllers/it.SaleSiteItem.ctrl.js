@@ -73,7 +73,20 @@
 	            
 	            //초기화버튼
 	            saleItemDataVO.init = function(){
-	            	$window.location.reload();
+	            	saleItemDataVO.taxClftList.bReset   = true;
+	            	saleItemDataVO.iStatList.bReset   = true;
+	            	saleItemDataVO.cmrkList.bReset   = true;
+	            	saleItemDataVO.itemCtgrList2 = "";
+	            	saleItemDataVO.itemCtgrList3 = "";
+	            	saleItemDataVO.itemCtgrList1   = resData.itCtgrList;
+	            	saleItemDataVO.selectedCtgr1 = {ID_CTGR : "", NM_CTGR: ""};
+	            	saleItemDataVO.selectedCtgr2 = {ID_CTGR : "", NM_CTGR: ""};
+	            	saleItemDataVO.selectedCtgr3 = {ID_CTGR : "", NM_CTGR: ""};
+	            	
+	            	saleItemDataVO.signItem.value = "";
+	            	saleItemDataVO.nmItem.value   = "";
+	            	
+	            	saleItemDataVO.datesetting.selected = "current";
 	            };	
 
 	            saleItemDataVO.isOpen = function (val) {

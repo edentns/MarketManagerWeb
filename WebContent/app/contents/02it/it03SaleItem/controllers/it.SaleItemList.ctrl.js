@@ -89,27 +89,16 @@
 	            
 	            //초기화버튼
 	            saleItemDataVO.init = function(){
-	            	$window.location.reload();
-	            	/*var self = this;
-	            	$q.all([
-                            SyCodeSvc.getSubcodeList({cd: "SY_000007", search: "all"}).then(function (result) {
-                                return result.data;
-                            }),
-                            SyCodeSvc.getSubcodeList({cd: "SY_000006", search: "all"}).then(function (result) {
-                                return result.data;
-                            }),
-                            SyCodeSvc.getSubcodeList({cd: "IT_000005", search: "all"}).then(function (result) {
-                                return result.data;
-                            }),
-                            SyCodeSvc.getSubcodeList({cd: "IT_000002", search: "all"}).then(function (result) {
-                                return result.data;
-                            })
-                        ]).then(function (result) {
-                        	self.taxCodeList   = result[0];
-                        	self.iClftCodeList = result[1];
-                        	self.iKindCodeList = result[2];
-                        	self.iStatCodeList = result[3];
-                        });*/
+	            	saleItemDataVO.adulYnList.bReset   = true;
+	            	saleItemDataVO.taxClftList.bReset  = true;
+	            	saleItemDataVO.iClftList.bReset    = true;
+	            	saleItemDataVO.iKindList.bReset    = true;
+	            	saleItemDataVO.iStatList.bReset    = true;
+	            	saleItemDataVO.cmrkList.bReset     = true;
+	            	
+	            	saleItemDataVO.signItem.value = "";
+	            	saleItemDataVO.nmItem.value   = "";
+	            	saleItemDataVO.nmMnfr.value   = "";
 	            };	
 
 	            saleItemDataVO.isOpen = function (val) {

@@ -81,7 +81,8 @@
                     vo.getSubcodeList( {cd: "SY_000020", search: "all"} );
                     vo.getSubcodeList( {cd: "SY_000025", search: "all"} );
                     vo.getSubcodeList( param );
-
+                    vo.searchName = "";
+                    
                     vo.doInquiry(1);
                 };
 

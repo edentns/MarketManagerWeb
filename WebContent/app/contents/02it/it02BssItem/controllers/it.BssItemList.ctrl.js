@@ -68,6 +68,10 @@
 	            	bssItemDataVO.iClftList   = resData.iClftCodeList;
 	            	bssItemDataVO.iKindList   = resData.iKindCodeList;
 	            	bssItemDataVO.iStatList   = resData.iStatCodeList;
+	            	
+	            	bssItemDataVO.signItem.value = "";
+	            	bssItemDataVO.nmItem.value   = "";
+	            	bssItemDataVO.nmMnfr.value   = "";
 	            };
 	            
 	            //조회
@@ -77,27 +81,10 @@
 	            
 	            //초기화버튼
 	            bssItemDataVO.init = function(){
-	            	$window.location.reload();
-	            	/*var self = this;
-	            	$q.all([
-                            SyCodeSvc.getSubcodeList({cd: "SY_000007", search: "all"}).then(function (result) {
-                                return result.data;
-                            }),
-                            SyCodeSvc.getSubcodeList({cd: "SY_000006", search: "all"}).then(function (result) {
-                                return result.data;
-                            }),
-                            SyCodeSvc.getSubcodeList({cd: "IT_000005", search: "all"}).then(function (result) {
-                                return result.data;
-                            }),
-                            SyCodeSvc.getSubcodeList({cd: "IT_000002", search: "all"}).then(function (result) {
-                                return result.data;
-                            })
-                        ]).then(function (result) {
-                        	self.taxCodeList   = result[0];
-                        	self.iClftCodeList = result[1];
-                        	self.iKindCodeList = result[2];
-                        	self.iStatCodeList = result[3];
-                        });*/
+	            	bssItemDataVO.taxClftList.bReset = true;
+	            	bssItemDataVO.iClftList.bReset = true;
+	            	bssItemDataVO.iKindList.bReset = true;
+	            	bssItemDataVO.iStatList.bReset = true;
 	            };
 	            
 	            bssItemDataVO.isOpen = function (val) {

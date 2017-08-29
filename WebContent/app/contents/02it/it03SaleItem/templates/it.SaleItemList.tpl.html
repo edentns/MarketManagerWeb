@@ -114,7 +114,8 @@
 							  #: CD_SIGNITEM # 
 							  # }else{ } #
 			</div>
-			<div class="custom-style"># if(ID_CTGR !== "" && ID_CTGR !== null && ID_CTGR !== "undefined"){ # 
+			<div class="custom-style">
+							  # if(ID_CTGR !== "" && ID_CTGR !== null && ID_CTGR !== "undefined"){ # 
 							  #: ID_CTGR # 
 							  # }else{ } #
 			</div>
@@ -199,9 +200,11 @@
                               #}	# 						  
 			</div>
 			<div class="custom-style"> 
-							  # if(CD_OPTTP !== "" && CD_OPTTP !== null && CD_OPTTP !== "undefined"){ #
-							  #: CD_OPTTP # 
-							  # }else{ }	 #
+							  # if(CD_OPTTP !== "옵션사용안함" ){ #
+							  #: "등록" 	#
+							  # }else{  #
+							  #: "미등록" #
+                              #}	# 
 			</div>
       	</td>
 		<td class="ta-c" style="padding:0">
@@ -365,9 +368,11 @@
                               #}	# 						  
 			</div>
 			<div class="custom-style"> 
-							  # if(CD_OPTTP !== "" && CD_OPTTP !== null && CD_OPTTP !== "undefined"){ #
-							  #: CD_OPTTP # 
-							  # }else{ }	 #
+							  # if(CD_OPTTP !== "옵션사용안함" ){ #
+							  #: "등록" 	#
+							  # }else{  #
+							  #: "미등록" #
+                              #}	# 
 			</div>
       	</td>
 		<td class="ta-c" style="padding:0">

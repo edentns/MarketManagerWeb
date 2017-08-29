@@ -71,7 +71,7 @@
 		        		RT_TAX        : 10,
 		        		S_ITEMPRC     : 0,
 		        		CD_PCSUNIT    : "001",
-		        		QT_MINPCS     : 0,
+		        		QT_MINPCS     : 1,
 		        		YN_ADULCTFC   : "Y",
 		        		DC_PUREWD     : "",
 		        		
@@ -1033,6 +1033,11 @@
                     // 판매가
                     if (!(data.S_ITEMPRC)) {
 	                    return edt.invalidFocus("S_ITEMPRC", "[필수] 판매가를 입력해주세요.");
+                    }
+                    
+                    // 최소구매수량
+                    if (!(data.QT_MINPCS) || data.QT_MINPCS == 0 ) {
+	                    return edt.invalidFocus("QT_MINPCS", "[형식] 최소구매수량은 0 보다 커야합니다.");
                     }
                     
                     // --------- 제조 정보
