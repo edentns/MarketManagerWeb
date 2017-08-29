@@ -96,7 +96,9 @@
                     YN_CONN       : { type: APP_SA_MODEL.YN_CONN.type        , editable: false, nullable: false },
                     DTS_ORDDTRM   : { type: APP_SA_MODEL.DTS_ORDDTRM.type    , editable: false, nullable: false },
                     AM_ITEMPRC    : { type: APP_SA_MODEL.AM_ITEMPRC.type     , editable: false, nullable: false },
-                    SALES         : { type: APP_SA_MODEL.SALES.type          , editable: false, nullable: false },
+                    AM_CMS    : { type: APP_SA_MODEL.AM_CMS.type     , editable: false, nullable: false },
+                    AM_CUSTOM_SALES      : { type: APP_SA_MODEL.AM_CUSTOM_SALES.type        , editable: false, nullable: false },
+                   // NO_MRKITEMORD        : { type: APP_SA_MODEL.NO_MRKITEMORD.type          , editable: false, nullable: false },
                     
                     AM_SHPCOST    : { type: APP_SA_MODEL.AM_SHPCOST.type     , editable: false, nullable: false },
                     CD_CCLRSN     : { type: APP_SA_MODEL.CD_CCLRSN.type      , 
@@ -130,20 +132,22 @@
                 APP_SA_MODEL.CD_ORDSTAT.fNm = "ordDataVO.ordStatusOp";
                 
                 var grdCol = [[APP_SA_MODEL.ROW_CHK],
-                              [APP_SA_MODEL.NO_ORD       , APP_SA_MODEL.NO_APVL       ],
+                              [APP_SA_MODEL.NO_ORD       , [APP_SA_MODEL.NO_APVL, APP_SA_MODEL.NO_MRKORD]],
                               [APP_SA_MODEL.NM_MRK       , APP_SA_MODEL.NO_MRKORD     ],
                               [APP_SA_MODEL.NO_MRKITEM   , APP_SA_MODEL.NO_MRKREGITEM ],
-                              [APP_SA_MODEL.NM_MRKITEM   , APP_SA_MODEL.NM_MRKOPT     ],
-                              [APP_SA_MODEL.AM_ORDSALEPRC, APP_SA_MODEL.AM_PCHSPRC    ],
+                              [APP_SA_MODEL.NM_MRKITEM   , APP_SA_MODEL.NM_MRKOPT     ], 
+                              
+                              [APP_SA_MODEL.AM_ORDSALEPRC, APP_SA_MODEL.AM_CMS		  ],                              
+                              [APP_SA_MODEL.AM_SHPCOST	 , APP_SA_MODEL.AM_CUSTOM_SALES],                              
+                              [APP_SA_MODEL.AM_ITEMPRC	 , APP_SA_MODEL.QT_ORD		  ],
+                              
                               [APP_SA_MODEL.NM_PCHR      , APP_SA_MODEL.NM_CONS       ],
                               [APP_SA_MODEL.NO_PCHRPHNE  , APP_SA_MODEL.NO_CONSHDPH   ],
                               [APP_SA_MODEL.DC_PCHREMI   , APP_SA_MODEL.DC_CONSNEWADDR],
-                              [APP_SA_MODEL.DC_PCHRREQCTT, APP_SA_MODEL.QT_ORD        ],
+                              [APP_SA_MODEL.DC_PCHRREQCTT, APP_SA_MODEL.AM_PCHSPRC    ],
                               [APP_SA_MODEL.CD_ORDSTAT   , APP_SA_MODEL.DC_SHPWAY     ],
                               [APP_SA_MODEL.DTS_ORD      , APP_SA_MODEL.DTS_APVL      ],
-                              [APP_SA_MODEL.DTS_ORDDTRM  , APP_SA_MODEL.YN_CONN       ],
-                              [APP_SA_MODEL.AM_ITEMPRC   , APP_SA_MODEL.SALES         ],
-                              [APP_SA_MODEL.AM_SHPCOST],
+                              [APP_SA_MODEL.DTS_ORDDTRM  , APP_SA_MODEL.YN_CONN       ] 
                              ],
                     grdDetOption      = {},
                     grdRowTemplate    = "<tr data-uid=\"#= uid #\" ng-dblclick=\"grdDblClickGo('#: NO_ORD #','#: NO_MRKORD #',$event)\">\n",

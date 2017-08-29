@@ -203,11 +203,11 @@
 	    	            			result = false;
 	        						return;
 	    	            		}
-	    	            		if(!tempParam[i].NO_APVL){
+	    	            	/*	if(!tempParam[i].NO_APVL){
 	    	            			alert('마켓 결제번호가 있는 주문만 전송 가능합니다.');
 	    	            			result = false;
 	        						return;
-	    	            		}
+	    	            		}*/
 	    	            		if(tempParam[i].INVO_YN === tempParam[i].NO_ORD){
 	    	            			alert('이미 전송 주문이 있습니다.');
 	    	            			result = false;

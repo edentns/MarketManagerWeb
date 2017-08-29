@@ -52,11 +52,9 @@
 						
 						if(gridColVal[iIndex].field.indexOf("AM") === 0) {
 							gridContentTemplate = gridContentTemplate + "#= kendo.toString("+gridColVal[iIndex].field+",'C0', 'ko-KR') #\n";
-						}
-						else if(gridColVal[iIndex].field.indexOf("CD") === 0 && gridColVal[iIndex].fNm !== "" && gridColVal[iIndex].fNm !== undefined) {
+						}else if(gridColVal[iIndex].field.indexOf("CD") === 0 && gridColVal[iIndex].fNm !== "" && gridColVal[iIndex].fNm !== undefined) {
 							gridContentTemplate = gridContentTemplate + "<co04-cd-to-nm cd=\"#:"+gridColVal[iIndex].field+"#\" nm-box=\""+gridColVal[iIndex].fNm+"\">\n";
-						}
-						else {
+						}else {
 							gridContentTemplate = gridContentTemplate + "#: "+gridColVal[iIndex].field+" #\n";
 						}
 					    gridContentTemplate = gridContentTemplate + "# }else{ }#\n";
@@ -65,20 +63,26 @@
 	        	}
 	        	else {
 	        		gridContentTemplate = gridContentTemplate + "<div class=\"custom-style ";
-					if     (gridColVal.textAlign === "center") gridContentTemplate = gridContentTemplate + "ta-c";
-					else if(gridColVal.textAlign === "right")  gridContentTemplate = gridContentTemplate + "ta-r";
-					else                                       gridContentTemplate = gridContentTemplate + "ta-l";
+				
+	        		if(gridColVal.textAlign === "center"){
+						gridContentTemplate = gridContentTemplate + "ta-c";
+					}else if(gridColVal.textAlign === "right"){
+						gridContentTemplate = gridContentTemplate + "ta-r";	
+					}else{
+						gridContentTemplate = gridContentTemplate + "ta-l";
+					}
+					
 					gridContentTemplate = gridContentTemplate + "\">\n";
 					gridContentTemplate = gridContentTemplate + "# if("+gridColVal.field+"){ #\n";
+					
 					if(gridColVal.field.indexOf("AM") === 0) {
 						gridContentTemplate = gridContentTemplate + "#= kendo.toString("+gridColVal.field+",'C0', 'ko-KR') #\n";
-					}
-					else if(gridColVal.field.indexOf("CD") === 0 && gridColVal.fNm !== "" && gridColVal.fNm !== undefined) {
+					}else if(gridColVal.field.indexOf("CD") === 0 && gridColVal.fNm !== "" && gridColVal.fNm !== undefined) {
 						gridContentTemplate = gridContentTemplate + "<co04-cd-to-nm cd=\"#:"+gridColVal.field+"#\" nm-box=\""+gridColVal.fNm+"\">\n";
-					}
-					else {
+					}else {
 						gridContentTemplate = gridContentTemplate + "#: "+gridColVal.field+" #\n";
 					}
+					
 				    gridContentTemplate = gridContentTemplate + "# }else{ }#\n</div>\n";
 	        	}
 			    return gridContentTemplate;

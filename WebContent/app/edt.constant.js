@@ -69,7 +69,7 @@
 	    NO_ORD        : { field: "NO_ORD"        , type: "string" , width: "100px", textAlign: "center", title: "관리번호"},                                        
 	    NO_APVL       : { field: "NO_APVL"       , type: "string" , width: "100px", textAlign: "left"  , title: "결제번호"},
 	    NM_MRK        : { field: "NM_MRK"        , type: "string" , width: "100px", textAlign: "center", title: "마켓명"},
-	    NO_MRKORD     : { field: "NO_MRKORD"     , type: "string" , width: "100px", textAlign: "center", title: "주문번호"},
+	    NO_MRKORD     : { field: "NO_MRKORD"     , type: "string" , width: "100px", textAlign: "center", title: "상품주문번호"},
 	    
 	    NO_MRK        : { field: "NO_MRK"        , type: "string" , width: "100px", textAlign: "center"},                                                       
 	    NO_MRKITEM    : { field: "NO_MRKITEM"    , type: "string" , width: "100px", textAlign: "center", title: "마켓상품번호"},
@@ -98,7 +98,8 @@
 	    YN_CONN       : { field: "YN_CONN"       , type: "string" , width: "100px", textAlign: "center", title: "연동구분"},    
 	    DTS_ORDDTRM   : { field: "DTS_ORDDTRM"   , type: "string" , width: "100px", textAlign: "center", title: "주문확정일시"},   
 	    AM_ITEMPRC    : { field: "AM_ITEMPRC"    , type: "number" , width: "100px", textAlign: "right" , title: "주문상품단가"},
-	    SALES         : { field: "SALES"         , type: "number" , width: "100px", textAlign: "right" , title: "판매금액"},
+	    AM_CUSTOM_SALES  : { field: "AM_CUSTOM_SALES"   , type: "number" , width: "100px", textAlign: "right" , title: "판매가 ＋ 배송비 －수수료"},
+	    AM_CMS	         : { field: "AM_CMS"         	, type: "number" , width: "100px", textAlign: "right" , title: "수수료"},
 	    
 	    AM_SHPCOST    : { field: "AM_SHPCOST"    , type: "number" , width: "100px", textAlign: "right" , title: "배송비"},                   
 	    CD_CCLRSN     : { field: "CD_CCLRSN"     , type: "string" , width: "100px", textAlign: "left"  , title: "취소사유"},
