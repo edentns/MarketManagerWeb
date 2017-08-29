@@ -157,8 +157,7 @@
                     					I_NO_MRK      : saleItemDataVO.cmrkIds
                                     };
                     				UtilSvc.getList(param).then(function (res) {
-                						e.success(res.data.results[0]);  
-                						gridSaleVO.dataSource.page(1);  // 페이지 인덱스 초기화              
+                						e.success(res.data.results[0]);       
                 					});
                     			},   		
                     			parameterMap: function(e, operation) {
@@ -208,8 +207,8 @@
     															editable: false, 
     															nullable: false
     						    	    				   },
-    						    	    CD_PRCCLFT_S: 	   {
-    															type: "string", 
+    						    	    AM_PRCCLFT_S: 	   {
+    															type: "number", 
     															editable: false, 
     															nullable: false
     						    	    				   },						    	    				   
@@ -273,8 +272,8 @@
     															editable: false, 
     															nullable: false
                     				    				   },	
-                    				    CD_PRCCLFT_B: 	   {
-    				                    				    	type: "string", 
+                    				    AM_PRCCLFT_B: 	   {
+    				                    				    	type: "number", 
     															editable: false, 
     															nullable: false
                     				    				   },	
@@ -366,13 +365,13 @@
   			                                ]
   		                        },                        
   		                        {
-  		                        	field: "CD_PRCCLFT_S",	
+  		                        	field: "AM_PRCCLFT_S",	
   		                            title: "판매가",
   		                            width: 100,		                            
   		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
   		                            columns: [ 
   		                                       	{
-  				                                    field: "CD_PRCCLFT_B",
+  				                                    field: "AM_PRCCLFT_B",
   				                                    title: "구입가",
   				                                    width: 100,
   							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
@@ -562,7 +561,7 @@
 	                	row.find(".k-checkbox").prop( "checked", false );
 	                };
                 };
-                
+                /*
                 $scope.onCsGridEditClick = function(){            	
                 	var grd = $scope.cskg,
 	            		chked = grd.element.find("input:checked"),
@@ -577,7 +576,7 @@
                 		//alert("답변 하실 데이터를 선택해 주세요.");
                 		$scope.showPopup("답변 하실 데이터를 선택해 주세요.");
                 	}
-                };	
+                };	*/
                 
                 //alert 경고
                 $scope.notf1Options = {

@@ -151,7 +151,7 @@
 		<td class="ta-r" style="padding:0">
           	<div class="ells"> 
 							  # if(AM_ITEMPRC !== "" && AM_ITEMPRC !== null && AM_ITEMPRC !== "undefined"){ #
-							  #: AM_ITEMPRC #
+							  #= kendo.toString(AM_ITEMPRC , 'C0', 'ko-KR') # 
 							  # }else{  #
 							  #: "-" #
                               #}	# 						  

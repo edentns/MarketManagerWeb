@@ -131,8 +131,7 @@
                     					L_CD_ITEMCTGR : saleItemDataVO.iCtgrId
                                     };
                     				UtilSvc.getList(param).then(function (res) {
-                						e.success(res.data.results[0]);
-                						gridSaleVO.dataSource.page(1);  // 페이지 인덱스 초기화              
+                						e.success(res.data.results[0]);       
                 					});
                     			},   		
                     			parameterMap: function(e, operation) {
@@ -192,7 +191,7 @@
     															nullable: false
     						    	    				   },
     						    	    AM_ITEMPRC: 	   {
-    															type: "string", 
+    															type: "number", 
     															editable: false, 
     															nullable: false
     						    	    				   },

@@ -155,10 +155,8 @@
                     					I_CD_ITEMKIND : bssItemDataVO.iKindIds,
                     					I_CD_ITEMSTAT : bssItemDataVO.iStatIds
                                     };
-                    				console.log("1111");
                     				UtilSvc.getList(param).then(function (res) {
-                						e.success(res.data.results[0]);  
-                						gridBssVO.dataSource.page(1);  // 페이지 인덱스 초기화              
+                						e.success(res.data.results[0]); 
                 					});
                     			},                    			
                     			update: function(e) {
@@ -217,8 +215,8 @@
     															editable: false, 
     															nullable: false
     						    	    				   },
-    						    	    CD_PRCCLFT_S: 	   {
-    															type: "string", 
+    						    	    AM_PRCCLFT_S: 	   {
+    															type: "number", 
     															editable: false, 
     															nullable: false
     						    	    				   },						    	    				   
@@ -282,8 +280,8 @@
     															editable: false, 
     															nullable: false
                     				    				   },	
-                    				    CD_PRCCLFT_B: 	   {
-    				                    				    	type: "string", 
+                    				    AM_PRCCLFT_B: 	   {
+    				                    				    	type: "number", 
     															editable: false, 
     															nullable: false
                     				    				   },	
@@ -365,13 +363,13 @@
   			                                ]
   		                        },                        
   		                      {
-  		                        	field: "CD_PRCCLFT_S",	
+  		                        	field: "AM_PRCCLFT_S",	
   		                            title: "판매가",
   		                            width: 100,		                            
   		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
   		                            columns: [ 
   		                                       	{
-  				                                    field: "CD_PRCCLFT_B",
+  				                                    field: "AM_PRCCLFT_B",
   				                                    title: "구입가",
   				                                    width: 100,
   							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
@@ -483,15 +481,7 @@
                         /*selectable: "row",*/
                         collapse: function(e) {
                             this.cancelRow();
-                        },         	
-                    	editable: {
-                    		mode: "popup",
-                    		window : {
-                    	        title: ""
-                    	    },
-                    		template: kendo.template($.trim($("#cs_popup_template").html())),
-                    		confirmation: false
-                    	},	
+                        },
                     	resizable: true,
                     	rowTemplate: kendo.template($.trim($("#bss_template").html())),
                     	altRowTemplate: kendo.template($.trim($("#bss_alt_template").html())),
