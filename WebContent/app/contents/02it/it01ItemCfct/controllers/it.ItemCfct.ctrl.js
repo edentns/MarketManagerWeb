@@ -129,15 +129,17 @@
 						var grid = $("#grid"+e).data("kendoGrid");
                 		if(gridCheck(e)){
 	                	    if (confirm("저장 하시겠습니까?")) {
-	                	    	grid.saveChanges();
+	                	    	grid.dataSource.sync();
+	                	    	alert("저장이 완료되었습니다");
 	                	    	$scope.it01ItemCfctVO.gridNum="999";
-
-			                	$scope.it01ItemCfctGridVO.doGetList(grid.dataSource._data[0].ID_CTGR
+	                	    	
+	                	    	self.doInquiry();
+			                	/*$scope.it01ItemCfctGridVO.doGetList(grid.dataSource._data[0].ID_CTGR
 				        			, grid.options.iIndex + 1
 				        			, function(res){
 				    					//alert("조회 성공하였습니다.");
 				        			}
-				        		);
+				        		);*/
 	                	    }
                 		}
 					}
@@ -182,10 +184,10 @@
                         },
         			};
 	            	localSelf.navigatable              = true;
-	            	localSelf.pageable                 = {
+	            	/*localSelf.pageable                 = {
 				    	messages: UtilSvc.gridPageableMessages,
 				    	buttonCount: 10
-				    };
+				    };*/
 	            	//localSelf.enableRowSelection       = true;
 	            	//localSelf.enableRowHeaderSelection = false;
 	            	//localSelf.multiSelect              = false;
@@ -194,31 +196,23 @@
 	            	localSelf.height                   = 792;
 	            	localSelf.dataSource = new kendo.data.DataSource({
 	            		autoBind: false,
+	            		batch : true,
         				transport: {
         					read: function(e) {
         						
         					},
         					create: function(e) {
-        						var param = [];
-                				param.push(e.data);
-        						itItemCfctSvc.saveCtgr(param, "I").success(function () {
-                    				//$scope.it01ItemCfctVO.doInquiry();
+        						itItemCfctSvc.saveCtgr(e.data.models, "I").success(function () {
                                 });
 	            			},
                 			update: function(e) {
-                				var param = [];
-                				param.push(e.data);
-                				itItemCfctSvc.saveCtgr(param, "U").success(function () {
-                    				//$scope.it01ItemCfctVO.doInquiry();
+                				itItemCfctSvc.saveCtgr(e.data.models, "U").success(function () {
                                 });
                 			},
                 			destroy: function(e) {
                 				var defer = $q.defer();
-                				var param = [];
-                				param.push(e.data);
-                				itItemCfctSvc.saveCtgr(param, "D").success(function () {
+                				itItemCfctSvc.saveCtgr(e.data.models, "D").success(function () {
             						defer.resolve();
-                    				//$scope.it01ItemCfctVO.doInquiry();
                                 });
                     			return defer.promise;
                 			},
@@ -228,13 +222,33 @@
                 				}
                 			}
         				},
-        				pageSize: 10,
+        				/*pageSize: 10,*/
         				schema: {
         					model: {
             					id:"ID_CTGR",
             					fields: {
             						ID_CTGR: {type:"string"},
-            						NM_CTGR: {type:"string",validation: {required: true}},
+            						NM_CTGR: {type:"string",
+            							validation: {
+											nm_invovalidation: function (input) {
+												if (input.is("[name='NM_CTGR']") && input.val().length == 0) {
+													input.attr("data-nm_invovalidation-msg", "분류명을 입력해주세요.");
+                                                    return false;
+												}
+  									    		if (input.is("[name='NM_CTGR']")) {
+  									    			var grid = $("#grid"+$scope.it01ItemCfctVO.gridNum).data("kendoGrid").dataSource;
+  													var check = 0;
+	  												for(var i = 0 ; i < grid._data.length; i++){
+	  													if(input[0].value == grid._data[i].NM_CTGR) check++;
+	  													if(check >= 2){
+	  														input.attr("data-nm_invovalidation-msg", "분류명이 중복됩니다.");
+	  	                                                    return false;
+	  													}
+	  												}
+                                                }
+  									    		return true;
+									    	  	}
+										}},
             						ID_HRNKCTGR: {defaultValue: ""},
             						YN_USE : {defaultValue: "Y"},
             						YN_DEL : {defaultValue: "N"}
