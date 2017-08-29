@@ -14,12 +14,12 @@
 		            today = edt.getToday(),
 		            LOCAL_LIST_KEY = 'DASHBOARD-LIST',
 		            defaultComponents=[
-		                {
+   		                {
 		                	visible     : true,
 		                	order       : 1,
-		                	name        : 'sy.SaCntCtrl',
-		                	displayName : '주문관련현황',
-		                	templateURL : 'app/contents/99sy/sy01Dashboard/templates/sy.SaCnt.tpl.html'
+		                	name        : 'sy.SaMonthCtrl',
+		                	displayName : '주문월현황',
+		                	templateURL : 'app/contents/99sy/sy01Dashboard/templates/sy.SaMonth.tpl.html'
 		                },
 		                {
 		                	visible     : true,
@@ -31,9 +31,9 @@
 		                {
 		                	visible     : true,
 		                	order       : 3,
-		                	name        : 'sy.SaMonthCtrl',
-		                	displayName : '주문월현황',
-		                	templateURL : 'app/contents/99sy/sy01Dashboard/templates/sy.SaMonth.tpl.html'
+		                	name        : 'sy.SaCntCtrl',
+		                	displayName : '주문관련현황',
+		                	templateURL : 'app/contents/99sy/sy01Dashboard/templates/sy.SaCnt.tpl.html'
 		                }
 		            ];
 	            

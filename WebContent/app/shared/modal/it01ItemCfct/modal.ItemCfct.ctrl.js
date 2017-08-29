@@ -7,8 +7,8 @@
      * 코드관리
      */
     angular.module("edtApp.common.modal")
-        .controller("modal.itemCfct", ["$scope", "$http", "$q", "$log", "ma.MrkOptSvc", "APP_CODE", "$timeout", "Page", "UtilSvc", "sendData",
-            function ($scope, $http, $q, $log, MaMrkOptSvc, APP_CODE, $timeout, Page, UtilSvc, sendData) {
+        .controller("modal.itemCfct", ["$scope", "$http", "$q","$modalInstance", "$log", "ma.MrkOptSvc", "APP_CODE", "$timeout", "Page", "UtilSvc", "sendData",
+            function ($scope, $http, $q, $modalInstance, $log, MaMrkOptSvc, APP_CODE, $timeout, Page, UtilSvc, sendData) {
 
 	            var ma04MrkOptVO = $scope.ma04MrkOptVO = {
 	            	boxTitle: "검색",
@@ -52,14 +52,23 @@
 	            		}
 	    	            
 	            		self.doInquiry();
-	            	}
+	            	},
+	            	
+	            	doCancle : function () {
+						$modalInstance.dismiss( "cancel" );
+					}
 	            };
 	            
 	            ma04MrkOptVO.doInquiry = function() {
 	            	$scope.ma04MrkOptGridVO.doGetList(''
             			, 0      // 처음부터
             			, function(res){
-	    					//alert("조회 성공하였습니다.");
+            				var param = {
+    		    					procedureParam: "MarketManager.USP_MA_04MNGMRK01_GET",
+    		    				};
+    		    				UtilSvc.getList(param).then(function (res) {
+    		    					ma04MrkOptVO.mngMrkDs = res.data.results[0];
+    							});
             			}
             		);
 	            };
@@ -75,6 +84,10 @@
 		            {
 		            	boxTitle: "소분류",
 	                    selectable: "multipleSmall"
+		            },
+		            {
+		            	boxTitle: "세분류",
+	                    selectable: "multipleLowSmall"
 		            }
 		        ];
 

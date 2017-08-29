@@ -1,29 +1,33 @@
-<div class="col-xs-12 col-sm-10">
-    <div class="row">
-        <div id="app-content-header">
-            <ol class="breadcrumb">
-                <li></li>
-            </ol>
-        </div>
+<div class="row">
+  	<div class="modal-body" style="margin: 10px">
+      <form class="box-content-search simple-search">
+          <select kendo-drop-down-list
+	       		  k-options="ma04MrkOptVO.mngMrkDs" k-ng-model="ma04MrkOptVO.mngMrkMd" style="width:13%;">
+	      </select>
+	<kendo-button type="submit" data-ng-click="ma04MrkOptVO.doInquiry()" title="상품검색">검색</kendo-button>
+   </form>
+             
+      <!-- 조회 리스트 -->          
+	<div class="content-area-container col-xs-12" style="padding:0px 0px 0px 0px;">
+		<div class="content-area-container col-xs-4">
+             <kendo-grid options="ma04MrkOptGridVO[0]">
+             </kendo-grid>
+		</div>
+		<div class="content-area-container col-xs-4">
+             <kendo-grid options="ma04MrkOptGridVO[1]">
+             </kendo-grid>
+		</div>
+		<div class="content-area-container col-xs-4">
+             <kendo-grid options="ma04MrkOptGridVO[2]">
+             </kendo-grid>
+		</div>
     </div>
-    
-    <div class="row">
-        
-               
-        <!-- 조회 리스트 -->          
-		<div class="content-area-container col-xs-12" style="padding:0px 0px 0px 0px;">
-			<div class="content-area-container col-xs-4">
-                <kendo-grid options="ma04MrkOptGridVO[0]">
-                </kendo-grid>
-			</div>
-			<div class="content-area-container col-xs-4">
-                <kendo-grid options="ma04MrkOptGridVO[1]">
-                </kendo-grid>
-			</div>
-			<div class="content-area-container col-xs-4">
-                <kendo-grid options="ma04MrkOptGridVO[2]">
-                </kendo-grid>
-			</div>
-        </div>
-    </div>
+    <div class="content-area-container col-xs-12" style="padding:0px 0px 0px 0px;margin-top: 5px">
+		<kendo-grid options="ma04MrkOptGridVO[3]">
+        </kendo-grid>
+     </div>
+  </div>
+</div>
+<div class="modal-footer">
+	<kendo-button type="submit" title="닫기" data-ng-click="ma04MrkOptVO.doCancle()">닫기</kendo-button>
 </div>
