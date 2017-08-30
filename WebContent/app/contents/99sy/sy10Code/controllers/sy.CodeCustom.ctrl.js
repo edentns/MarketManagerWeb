@@ -68,7 +68,26 @@
             				id: "CD_DEF",
             				fields: {
             					CD_CLS: {},
-            					CD_DEF: { validation: {required: true}},
+            					CD_DEF: { validation: {
+            							cd_defvalidation: function (input) {
+										if (input.is("[name='CD_DEF']") && input.val().length == 0) {
+											input.attr("data-cd_defvalidation-msg", "구분코드를 입력해주세요.");
+                                            return false;
+										}
+								    		if (input.is("[name='CD_DEF']")) {
+								    			var grid = $("#gridCusCodeVO").data("kendoGrid").dataSource;
+												var check = 0;
+												for(var i = 0 ; i < grid._data.length; i++){
+													if(input[0].value == grid._data[i].CD_DEF) check++;
+													if(check >= 2){
+														input.attr("data-cd_defvalidation-msg", "구분코드가 중복됩니다.");
+	                                                    return false;
+													}
+												}
+                                        }
+								    		return true;
+							    	  	}
+								}},
             					CD_DEF_OLD: {},
             					NM_DEF: { validation: {required: true}},
             					DC_RMK1: {},
@@ -84,9 +103,7 @@
             	}),
             	navigatable: true,
             	toolbar: 
-            		["create",
-            		 { template: "<div ng-click='gridCusCodeVO.doSave()' class='k-button k-button-icontext'><span class='k-icon k-i-update'></span>저장</div>"},
-            		 "cancel"],
+            		["create", "save", "cancel"],
             	columns: [
             	       { field : "CD_DEF_OLD", hidden:true },   
        		           { field : "CD_DEF", title: "구분코드", width: "160" },
@@ -134,24 +151,6 @@
             		UtilSvc.getList(param).then(function (res) {
             			self.dataSource.data(res.data.results[1]);
                     });
-				},
-				doSave : function() {
-					var grid = $("#gridCusCodeVO").data("kendoGrid").dataSource,
-						dirtys = [];
-					for(var i in grid._data){
-						if(grid._data[i].dirty) dirtys.push(grid._data[i].CD_DEF);
-					}
-					for(var i in dirtys){
-						var check = 0;
-						for(var j in grid._data){
-							if(dirtys[i] == grid._data[j].CD_DEF) check++;
-						}
-						if(check >= 2){
-							alert(dirtys[i]+" 구분코드가 중복됩니다.");
-							return;
-						}
-					}
-					grid.sync();
 				}
             };
         	
