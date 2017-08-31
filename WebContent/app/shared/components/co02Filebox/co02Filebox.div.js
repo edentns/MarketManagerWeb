@@ -53,7 +53,8 @@
 	                	bImage: false,        // 이미지파일여부
 	                	imgSrc: '',
 	                	imgWidth: '100%',
-	                	imgHeight: '100%'
+	                	imgHeight: '100%',
+	                	bDisabled: false
                 	};
 
                     /**
@@ -82,6 +83,7 @@
                 		if($scope.filevo.CD_REF3) $scope.co02FileVO.CD_REF3 = $scope.filevo.CD_REF3;
                 		if($scope.filevo.CD_REF4) $scope.co02FileVO.CD_REF4 = $scope.filevo.CD_REF4;
                 		if($scope.filevo.CD_REF5) $scope.co02FileVO.CD_REF5 = $scope.filevo.CD_REF5;
+                		if($scope.filevo.bDisabled) $scope.co02FileVO.bDisabled = $scope.filevo.bDisabled;
                 		
                 		if($scope.co02FileVO.limitCnt > 1) {
                 			if($scope.filevo.currentDataList) {

@@ -3,8 +3,8 @@
 		<div>
 			<input type='file' ng-attr-id='{{filevo.fileId}}' style='display: none;' nv-file-select uploader='filevo.uploader'>
 			<input type='text' class='form-control' readonly='readonly' data-ng-click='filevo.fileDownload()' style='min-width:190px; max-width:56%; padding-left:2px; padding-right:2px; margin-right:2px;' data-ng-model='filevo.fileName'>
-			<button type='button' class='btn btn-primary' style='margin-right:2px;' title='파일선택' data-ng-click='filevo.fileClick()'>파일선택</button>
-			<button type='button' class='btn btn-primary' style='margin-right:2px;' title='취소' data-ng-click='filevo.fileInit()' data-ng-disabled='!filevo.dirty'>취소</button>
+			<button type='button' class='btn btn-primary' style='margin-right:2px;' title='파일선택' data-ng-click='filevo.fileClick()' data-ng-disabled='filevo.bDisabled'>파일선택</button>
+			<button type='button' class='btn btn-primary' style='margin-right:2px;' title='취소' data-ng-click='filevo.fileInit()' data-ng-disabled='filevo.bDisabled || !filevo.dirty'>취소</button>
 		</div>
 		<div>
 			<table class="table mt-5">
@@ -17,7 +17,7 @@
 					<td style="padding:2px;"><a data-ng-if='!fileInfo.phantom' data-ng-click='filevo.fileMultiDownload($index)'>[다운로드]</a>{{fileInfo.NM_FILE}}</td>
 					<td style="padding:2px;">
 						<!-- button type='button' class='btn btn-primary' style='margin-right:2px;' title='삭제' data-ng-click='filevo.addDeleteDataList($index)'>삭제</button -->
-                        <button type="button" class="btn btn-danger btn-xs" data-ng-click="filevo.addDeleteDataList($index)">
+                        <button type="button" class="btn btn-danger btn-xs" data-ng-click="filevo.addDeleteDataList($index)" data-ng-disabled='filevo.bDisabled'>
                             <span class="glyphicon glyphicon-trash"></span> 삭제
                         </button>
                     </td>
