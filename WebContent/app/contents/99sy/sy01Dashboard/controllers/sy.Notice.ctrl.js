@@ -86,19 +86,18 @@
 			            {
 			        	   field: "CD_NOTICE",
 			        	   title: "공지구분",
-			        	   width: 80,
+			        	   width: 70,
 			        	   headerAttributes: grid_header
 			            },
 				        {
 			    	       field: "NM_SUBJECT",
 			    	       title: "제목",
-			    	       width: 300,
+			    	       width: 250,
 			    	       headerAttributes: grid_header
 			    	    },
 			            {
 			        	   field: "DC_HTMLCONTENT",
 			               title: "공지내용",
-			               width: 300,
 			               headerAttributes: grid_header
 			            },
 			            {
@@ -112,12 +111,7 @@
 			               title: "작성자",
 			               width: 100,
 			               headerAttributes: grid_header
-			            },
-			            {
-			        	   field: "SY_FILES",
-			        	   title: "첨부파일여부",
-			        	   headerAttributes: grid_header
-			    	    }
+			            }
 				],  	
 				editable: {
 					mode: "popup",

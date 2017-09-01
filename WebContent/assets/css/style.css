@@ -11,14 +11,16 @@
 }
 #logo {
   position:relative;
-  background: #525252 url(../img/common/devoops_pattern_b10.png) 0 0 repeat;
+  background: #567fa0 url(../img/common/devoops_pattern_b10.png) 0 0 repeat;
 }
 #logo a {
   color: #fff;
   font-family: 'Righteous', cursive;
   display: block;
-  font-size: 20px;
+  font-size: 14px;
+  font-weight: bold;
   line-height: 50px;
+  text-align: center;
   -webkit-transition: 0.5s;
   -moz-transition: 0.5s;
   -o-transition: 0.5s;
