@@ -30,13 +30,16 @@
                         	deleteItem.push(data.CD_ITEM);
                         }
                     });
-                	if(confirm('정말로 삭제하시겠습니까?')){
-                		itBssItemSvc.deleteBssItem(deleteItem).then(function(res) {
-            				$scope.gridBssVO.dataSource.read();
-            			});  
+                	if(deleteItem.length == 0){
+                		alert("삭제할 상품을 선택해주세요.");
+                	}else{
+                		if(confirm('정말로 삭제하시겠습니까?')){
+                    		itBssItemSvc.deleteBssItem(deleteItem).then(function(res) {
+                				$scope.gridBssVO.dataSource.read();
+                			});  
+                    	}
                 	}
 				};
-                
 	            	            
 	            var bssItemDataVO = $scope.bssItemDataVO = {
 	            	boxTitle : "검색",
@@ -45,9 +48,22 @@
 	        			name: "NM_DEF",
 	        			maxNames: 2
 	        		},
-	        		signItem : { value: "" , focus: false },
-	        		nmItem   : { value: "" , focus: false },
-	        		nmMnfr   : { value: "" , focus: false },
+	        		datesetting : {
+	        			dateType   : 'market',
+						buttonList : ['current', '1Day', '1Week', '1Month'],
+						selected   : 'current',
+						period : {
+							start : angular.copy(today),
+							end   : angular.copy(today)
+						}
+	        		},
+	        		dateOption    : [{CD_DEF : "001" , NM_DEF : "등록일시"},
+	        		                 {CD_DEF : "002" , NM_DEF : "유효일시"}
+	        						],
+	        		selectedDateOption : "001",
+	        		signItem      : { value: "" , focus: false },
+	        		nmItem        : { value: "" , focus: false },
+	        		nmMnfr        : { value: "" , focus: false },
 	        		adulYnList    : [],
 	        		adulYnIds     : "*",
 	        		taxClftList   : [],
@@ -72,6 +88,11 @@
 	            	bssItemDataVO.signItem.value = "";
 	            	bssItemDataVO.nmItem.value   = "";
 	            	bssItemDataVO.nmMnfr.value   = "";
+	            	$timeout(function() {
+	            		if(!page.isWriteable()){
+	    					$("#divBssVO .k-grid-toolbar").hide();
+	    				}
+        			});
 	            };
 	            
 	            //조회
@@ -118,8 +139,8 @@
                             commands: {
                                 update: "저장",
                                 canceledit: "닫기"
-                            }
-                            ,noRecords: "검색된 데이터가 없습니다."
+                            },
+                            noRecords: "검색된 데이터가 없습니다."
                         },
                     	boxTitle : "기본상품 리스트",
                     	sortable: false,                    	
@@ -132,7 +153,7 @@
                     			read: function(e) {
                     				var me = this,
                     					param = {
-                    					procedureParam:"USP_IT_02BSSITEM01_GET&I_CD_CLFT@s|I_NM_ITEM@s|I_NM_MNFR@s|I_YN_ADULCTFC@s|I_CD_TAXCLFT@s|I_CD_ITEMCLFT@s|I_CD_ITEMKIND@s|I_CD_ITEMSTAT@s",
+                    					procedureParam:"USP_IT_02BSSITEM01_GET&I_CD_CLFT@s|I_NM_ITEM@s|I_NM_MNFR@s|I_YN_ADULCTFC@s|I_CD_TAXCLFT@s|I_CD_ITEMCLFT@s|I_CD_ITEMKIND@s|I_CD_ITEMSTAT@s|I_DATEOPT@s|DATE_FROM@s|DATE_TO@s",
                     					I_CD_CLFT :	bssItemDataVO.signItem.value,
                     					I_NM_ITEM : bssItemDataVO.nmItem.value,
                     		        	I_NM_MNFR :	bssItemDataVO.nmMnfr.value,
@@ -140,10 +161,13 @@
                     					I_CD_TAXCLFT  : bssItemDataVO.taxClftIds,
                     					I_CD_ITEMCLFT : bssItemDataVO.iClftIds,
                     					I_CD_ITEMKIND : bssItemDataVO.iKindIds,
-                    					I_CD_ITEMSTAT : bssItemDataVO.iStatIds
+                    					I_CD_ITEMSTAT : bssItemDataVO.iStatIds,
+                    					I_DATEOPT     : bssItemDataVO.selectedDateOption,
+                    					DATE_FROM     : new Date(bssItemDataVO.datesetting.period.start.y, bssItemDataVO.datesetting.period.start.m-1, bssItemDataVO.datesetting.period.start.d, "00", "00", "00").dateFormat("YmdHis"),
+                                    	DATE_TO       : new Date(bssItemDataVO.datesetting.period.end.y, bssItemDataVO.datesetting.period.end.m-1, bssItemDataVO.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis"),
                                     };
                     				UtilSvc.getList(param).then(function (res) {
-                						e.success(res.data.results[0]); 
+                						e.success(res.data.results[0]);
                 					});
                     			},                    			
                     			update: function(e) {
@@ -349,7 +373,7 @@
   				                                }
   			                                ]
   		                        },                        
-  		                      {
+  		                        {
   		                        	field: "AM_PRCCLFT_S",	
   		                            title: "판매가",
   		                            width: 100,		                            
@@ -433,7 +457,7 @@
   				                                }
   			                                ]
   		                        } ,  
-  		                      {
+  		                        {
   		                        	field: "NM_BRD",
   		                            title: "브랜드",
   		                            width: 100,
@@ -461,7 +485,7 @@
   				                                }
   			                                ]
   		                        }
-                      ],
+                        ],
                     	dataBound: function(e) {
                             this.expandRow(this.tbody.find("tr.k-master-row").first());// 마스터 테이블을 확장하므로 세부행을 볼 수 있음                                                  
                         },

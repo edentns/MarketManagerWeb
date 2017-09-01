@@ -69,7 +69,17 @@
 	            		if(bLoading) {
 		                	angular.forEach($scope.it01ItemCfctGridVO, function (it01ItemCfctLocalGridVO, iIndex) {
 		                		it01ItemCfctLocalGridVO = $scope.it01ItemCfctGridVO.addCommonGridVO(it01ItemCfctLocalGridVO, iIndex);
+		                		$timeout(function() {
+			                		if(!page.isWriteable()){
+			                			var grid = $("#grid"+iIndex).data("kendoGrid");
+            	    					/*grid.setOptions({editable : false}); */  
+            	    					/*grid.hideColumn(2);*/
+				    					$("#grid"+iIndex+" .k-grid-toolbar").hide();
+				    					
+				    				}
+		                		});
 		                    });
+		                	
 	            		}
 	    	            
 	            		self.doInquiry();

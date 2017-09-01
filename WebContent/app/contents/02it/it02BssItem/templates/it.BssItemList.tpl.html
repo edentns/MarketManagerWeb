@@ -16,13 +16,13 @@
                 	<table>
                         <colgroup>
                             <col style="width: 7%;">
-                            <col style="width: 18%;">
+                            <col style="width: 19%;">
                             <col style="width: 7%;">
-                            <col style="width: 23%;">
+                            <col style="width: 20%;">
                             <col style="width: 7%;">
-                            <col style="width: 18%;">
+                            <col style="width: 19%;">
                             <col style="width: 7%;">
-                            <col style="width: 18%;">
+                            <col style="width: 19%;">
                         </colgroup>
                         <tbody>
                         <tr>
@@ -77,9 +77,21 @@
                             </td>
                             <th>상품상태</th>
                             <td>                            	              	
-                            	<co01-mcbox id="bssList_iStat" title="상품종류" model="bssItemDataVO.iStatIds" options="bssItemDataVO.iStatList" setting="bssItemDataVO.setting"  style="width:100%;">
+                            	<co01-mcbox id="bssList_iStat" title="상품상태" model="bssItemDataVO.iStatIds" options="bssItemDataVO.iStatList" setting="bssItemDataVO.setting"  style="width:100%;">
         						</co01-mcbox>
                             </td>                            
+                        </tr>
+                        <tr>
+                            <th>일시</th>                            
+                            <td>
+                            	<select ng-model="bssItemDataVO.selectedDateOption"
+        								ng-options="option.CD_DEF as option.NM_DEF for option in bssItemDataVO.dateOption"
+        								class="form-control" style="width: 100%">
+        						</select>	
+                            </td>
+                            <td colspan="6">                            	              	
+                            	<div class="frm-group" data-date-search-group="bssItemDataVO.datesetting" style="display:inline-block;"></div>
+                            </td>
                         </tr>
                         </tbody>
                     </table>         		     
@@ -93,8 +105,8 @@
                 
         <!-- 승인 리스트 -->          
 		<div class="content-area-container col-xs-12" style="padding:0px 0px 0px 0px;">		
-	        <div id="divBssVO" kendo-grid="gridBssVO" options="gridBssVO">
-	        </div>	            
+	        <kendo-grid id="divBssVO" options="gridBssVO">
+	        </kendo-grid>	            
         </div>
     </div>
 </div>

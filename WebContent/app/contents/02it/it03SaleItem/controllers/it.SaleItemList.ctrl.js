@@ -34,10 +34,14 @@
                         	deleteItem.push(data.CD_ITEM);
                         }
                     });
-                	if(confirm('정말로 삭제하시겠습니까?')){
-                		itBssItemSvc.deleteBssItem(deleteItem).then(function(res) {
-            				$scope.gridSaleVO.dataSource.read();
-            			});  
+                	if(deleteItem.length == 0){
+                		alert("삭제할 상품을 선택해주세요.");
+                	}else{
+                		if(confirm('정말로 삭제하시겠습니까?')){
+                    		itBssItemSvc.deleteBssItem(deleteItem).then(function(res) {
+                				$scope.gridSaleVO.dataSource.read();
+                			});  
+                    	}
                 	}
 				};
                 
@@ -80,6 +84,12 @@
 	            	saleItemDataVO.iKindList   = resData.iKindCodeList;
 	            	saleItemDataVO.iStatList   = resData.iStatCodeList;
 	            	saleItemDataVO.cmrkList    = resData.cmrkList;
+	            	
+	            	$timeout(function() {
+	            		if(!page.isWriteable()){
+	    					$("#divSaleVO .k-grid-toolbar").hide();
+	    				}
+        			});
 	            };
 	            
 	            //조회
