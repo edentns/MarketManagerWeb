@@ -86,14 +86,14 @@
 
 	            joinerDataVO.isOpen = function (val) {
 	            	if(val) {
-	            		$scope.kg.wrapper.height(657);
+	            		$scope.kg.wrapper.height(656);
 	            		$scope.kg.resize();
-	            		gridJoinerMemVO.dataSource.pageSize(20);
+	            		if(joinerDataVO.param !== "") gridJoinerMemVO.dataSource.pageSize(20);
 	            	}
 	            	else {
 	            		$scope.kg.wrapper.height(798);
 	            		$scope.kg.resize();
-	            		gridJoinerMemVO.dataSource.pageSize(24);
+	            		if(joinerDataVO.param !== "") gridJoinerMemVO.dataSource.pageSize(24);
 	            	}
 	            };
 	            
@@ -219,7 +219,7 @@
                     		},
                     	}),
                     	navigatable: true, //키보드로 그리드 셀 이동 가능
-                    	toolbar:[{template: '<kendo-button type="botton" title="가입승인" data-ng-click="onGirdClick()">가입승인</kendo-button>'}],
+                    	toolbar:[{template: '<kendo-button type="botton" title="가입승인" data-ng-disabled="!page.isWriteable()" data-ng-click="onGirdClick()">가입승인</kendo-button>'}],
                     	/*selectable: "multiple, row",*/
                     	columns: [
 								{
@@ -344,7 +344,7 @@
                     	},*/
                     	resizable: true,
                     	rowTemplate: kendo.template($.trim($("#template").html())),
-                    	height: 590
+                    	height: 656
         		};    
                 
                 $scope.checkedIds = [];

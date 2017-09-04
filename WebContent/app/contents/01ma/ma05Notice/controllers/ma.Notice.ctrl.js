@@ -485,7 +485,7 @@
                     		template: kendo.template($.trim($("#ma_notice_popup_template").html())),
                     		confirmation: false
                     	},	
-                    	edit: function (e) {         
+                    	edit: function (e) {                      		
                 		    //add a title
                 		    if (e.model.isNew()) {                		    	
                 		        $(".k-grid-update").text("저장");
@@ -509,6 +509,13 @@
                                multiSelect.dataSource.filter({});
                                multiSelect.value(array);
                                multiSelect.trigger("change");
+                               
+                               setTimeout(function () {
+                               	if(!page.isWriteable()) {
+                       				$(".k-grid-update").addClass("k-state-disabled");
+                       				$(".k-grid-update").click(stopEvent);
+                       			}
+                               });
                 		    }                		
                 			// 공지사항 수정시 역으로 공지대상 설정
                 			/*
@@ -577,6 +584,8 @@
                 		chkedLeng = grid.element.find("input:checked").length;
                 	
                 	$scope.deStroyCheck = false;
+                	
+                	if(!page.isWriteable()) return;
                 	
                 	if(chkedLeng < 1){
                 		alert("삭제할 데이터를 선택해 주세요.");
@@ -862,5 +871,19 @@
                        multiSelect.trigger("change");
                    };
                };
+
+               function stopEvent(e) {
+               	e.preventDefault();
+               	e.stopPropagation();
+               }
+               
+               setTimeout(function () {
+               	if(!page.isWriteable()) {
+       				$(".k-grid-add").addClass("k-state-disabled");
+       				$(".k-grid-delete").addClass("k-state-disabled");
+       				$(".k-grid-add").click(stopEvent);
+       				$(".k-grid-delete").click(stopEvent);
+       			}
+               });
             }]);
 }());

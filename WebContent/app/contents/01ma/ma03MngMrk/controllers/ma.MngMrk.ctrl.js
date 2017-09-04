@@ -58,8 +58,6 @@
               	    },
               	    param: ""
 	            };
-	            	            
-	            kendo.culture("ko-KR");    
 		        
 	            //검색
 	            mngMrkDateVO.doInquiry = function () {
@@ -115,6 +113,11 @@
                 	me.resetAtGrd.dataSource.data([]);
                 };
 
+                function stopEvent(e) {
+                	e.preventDefault();
+                	e.stopPropagation();
+                }
+                
                 mngMrkDateVO.isOpen = function (val) {
 	            	if(val) {
 	            		$scope.kg.wrapper.height(657);
@@ -155,6 +158,13 @@
                 					UtilSvc.getList(mngMrkDateVO.param).then(function (res) {
                 						mngMrkDateVO.dataTotal = res.data.results[0].length;                						
                 						e.success(res.data.results[0]);
+
+                	    				setTimeout(function () {
+                	                       	if(!page.isWriteable()) {
+                	               				$(".k-grid-delete").addClass("k-state-disabled");
+                	               				$(".k-grid-delete").click(stopEvent);
+                	               			}
+                	                    });
                 					});
                     			},
     	                		create: function(e) {
@@ -162,6 +172,7 @@
     	                			var param = {
                                     	data: e.data.models
                                     };
+    	                			
     	                			if(!isValid(param)) { return false; };
     	                			MaMngMrkSvc.mngmrkInsert(param).then(function(res) {
     	                				defer.resolve();
@@ -175,6 +186,7 @@
     	                			var param = {
                                     	data: e.data.models
                                     };
+    	                			
     	                			if(!isValid(param)) { return };
     	                			MaMngMrkSvc.mngmrkUpdate(param).then(function(res) {
     	                				defer.resolve();
@@ -183,7 +195,7 @@
     	                			});
     	                			return defer.promise;
                     			},
-                    			destroy: function(e) {
+                    			destroy: function(e) {    	                			
                     				var defer = $q.defer();
     	                			var param = {
     	                				data: e.data.models	
@@ -324,8 +336,8 @@
                     		'<a class="k-button" onclick="save" style = "float:right;">저장</a>'+
                     		'<a class="k-button" onclick="cancel" style = "float:right;">취소</a>'}],
                     		*/
-                    		["create", "save", "cancel"]
-                       ,columns: [
+                    		["create", "save", "cancel"],
+                       columns: [
                		           {
 								   field: "ROW_NUM"
 								  ,title: "순서"
@@ -442,7 +454,7 @@
             		        	 ,headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
            		        	   },          		           
             		           {
-           		        	      command: [ "destroy" ]
+           		        		  command: ["destroy"]
            		        	   }
                     	],
                         collapse: function(e) {
@@ -450,9 +462,20 @@
                             this.cancelRow();
                         },         	
                     	editable: {
-                    	    confirmation: "삭제 하시겠습니까?",
+                    	    confirmation: !page.isWriteable()?false:"삭제 하시겠습니까?",
                     	},
                     	height: 657
-        		};        
+        		};
+
+                setTimeout(function () {
+                	if(!page.isWriteable()) {
+        				$(".k-grid-add").addClass("k-state-disabled");
+        				$(".k-grid-save-changes").addClass("k-state-disabled");
+        				$(".k-grid-cancel-changes").addClass("k-state-disabled");
+        				$(".k-grid-add").click(stopEvent);
+        				$(".k-grid-save-changes").click(stopEvent);
+        				$(".k-grid-cancel-changes").click(stopEvent);
+        			}
+                });
             }]);
 }());
