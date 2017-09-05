@@ -107,6 +107,9 @@
 	    				dataTotal : 0,
 	             	    resetAtGrd : ""
 		        };
+
+	            UtilSvc.gridtooltipOptions.filter = "td";
+	            noticeDataVO.tooltipOptions = UtilSvc.gridtooltipOptions;
 	            
 	            //파일 VO
 	            noticeDataVO.fileDataVO = {
@@ -410,66 +413,59 @@
 								{
 								   field: "ROW_CHK",
 								   title: "선택",
-								   width: 30,
+								   width: 35,
 								   headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}
 							    },    
                		            {
 								   field: "ROW_NUM",
 								   title: "번호",
-								   width: 30,
+								   width: 50,
 								   headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"},
                		            },
             		            {
                		        	   field: "NO_C",
                		        	   title: "공지대상",
-               		        	   width: 100,
+               		        	   width: 200,
                		        	   headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}
             		            },
             		            {
                		        	   field: "CD_NOTICE",
                		        	   title: "공지구분",
-               		        	   width: 100,
+               		        	   width: 70,
                		        	   headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}            		            
                		            },
 	            		        {
            		        	       field: "NM_SUBJECT",
            		        	       title: "제목",
-           		        	       width: 150,
+           		        	       width: 200,
            		        	       headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}
            		        	    },
             		            {
             		        	   field: "DC_HTMLCONTENT",
             		               title: "공지내용",
-            		               width: 120,
             		               headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}
             		            },
             		            {
             		        	   field: "DTS_INSERT",
             		               title: "공지일시",
-            		               width: 70,
+            		               width: 120,
             		               headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}
             		               //format: "{0: yyyy-MM-dd HH:mm:ss}"
             		            },
             		            {
             		        	   field: "NO_WRITE",
             		               title: "작성자",
-            		               width: 80,
+            		               width: 70,
             		               headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
             		            },
             		            {
             		        	   field: "SQ_NOTICE",
             		               title: "우선순위",
-            		               width: 50,
+            		               width: 70,
             		               headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
             		               format: "{0:0}"
             		            },
-            		            {
-            		        	   field: "SY_FILES",
-            		        	   title: "첨부파일여부",
-            		        	   width: 50,
-            		        	   headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
-           		        	    },
-           		        	    { command: ["edit", "destroy"], width: 70 }
+           		        	    { command: ["edit", "destroy"], width: 100 }
                     	],
                     	dataBound: function(e) {
                             this.expandRow(this.tbody.find("tr.k-master-row").first());// 마스터 테이블을 확장하므로 세부행을 볼 수 있음                            
@@ -536,6 +532,7 @@
                 		},*/
                     	resizable: true,
                     	rowTemplate: kendo.template($.trim($("#ma_notice_template").html())),
+                    	altRowTemplate: kendo.template($.trim($("#alt_ma_notice_template").html())),
                     	height: 657                    	
         		};
                 

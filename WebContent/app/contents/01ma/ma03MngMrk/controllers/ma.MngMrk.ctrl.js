@@ -337,22 +337,24 @@
                     		'<a class="k-button" onclick="cancel" style = "float:right;">취소</a>'}],
                     		*/
                     		["create", "save", "cancel"],
-                       columns: [
+                        columns: [
                		           {
 								   field: "ROW_NUM"
 								  ,title: "순서"
 								  ,width: 50
 								  ,headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}
+               		              ,attributes: {class:"ta-r"}
                		           },
             		           {
                		        	   field: "NM_MRK"
-               		        	  ,title: "<code>*</code>마켓명"
+               		        	  ,title: "<span class='form-required'>* </span>마켓명"
                		        	  ,width: 200
                		        	  ,headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}
+            		              ,attributes: {class:"ta-l"}
             		           },
             		           {
                		        	   field: "CD_ITLWAY"
-               		        	  ,title: "<code>*</code>연동방법"
+               		        	  ,title: "<span class='form-required'>* </span>연동방법"
                		        	  ,width: 100
                		        	  ,headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}
 	            		       	  ,editor: 
@@ -407,14 +409,15 @@
             		           },
             		           {
             		        	  field: "DC_MRKID"
-            		             ,title: "<code>*</code>관리자ID"
+            		             ,title: "<span class='form-required'>* </span>관리자ID"
             		             ,width: 100
             		             ,headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}
+         		                 ,attributes: {class:"ta-l"}
             		           },
             		           {
             		        	  field: "NEW_DC_PWD"
-            		             ,title: "<code>*</code>비밀번호"
-            		             ,width: 100
+            		             ,title: "<span class='form-required'>* </span>비밀번호"
+            		             ,width: 150
             		             ,headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
             		           	 ,editor: function (container, options) {
             		                 $('<input type="password" class="k-textbox" name="' + options.field + '"/>').appendTo(container);
@@ -428,6 +431,7 @@
 	          		           		 }
 	          		           		 return returnPWDMsg;
             		           	 }
+           		                 ,attributes: {class:"ta-l"}
             		           },
             		           {
             		        	  field: "NEW_API_KEY"
@@ -446,15 +450,18 @@
 	          		           		 }
 	          		           		 return returnAPIMsg;
 	          		           	 }
+           		                 ,attributes: {class:"ta-l"}
             		           },
             		           {
             		        	  field: "DC_SALEMNGURL"
             		        	 ,title: "판매관리URL"
-            		        	 ,width: 200
+            		        	 ,width: 250
             		        	 ,headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
+         		                 ,attributes: {class:"ta-l"}
            		        	   },          		           
             		           {
            		        		  command: ["destroy"]
+         		                  ,attributes: {class:"ta-l"}
            		        	   }
                     	],
                         collapse: function(e) {
