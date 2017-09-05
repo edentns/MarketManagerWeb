@@ -225,7 +225,7 @@
 								{
 								   field: "",
 								   title: "",
-								   width: 35,
+								   width: 40,
 								   headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}								   
 							    },    
                		            {

@@ -101,31 +101,34 @@
 <script id="sale_template" type="text/x-kendo-template">
 	<tr data-uid="#= uid #" ng-dblclick="grdDblClickGo('#: NO_MRKREGITEM #')">
 		<td class="ta-c">
-        	<span class="ells"><input type="checkbox" class="checkbox" ng-click="onSaleGrdCkboxClick($event)"/></span>
+			<div class="custom-style-checkbox">
+        		<input class='k-checkbox' data-role='checkbox' type='checkbox' ng-click="onSaleGrdCkboxClick($event)" id="#= uid #_row">
+				<label class='k-checkbox-label k-no-text' style="vertical-align:middle;" for="#= uid #_alt"></label>
+			</div>
       	</td>
 		<td class="ta-l" style="padding:0">
-          	<div class="div-rows ells">
+          	<div class="custom-style">
 							  # if(NO_MRK !== "" && NO_MRK !== null && NO_MRK !== "undefined"){ #
                   	    	  #: NO_MRK  # 
                       	      # }else{ } #
 			</div>
       	</td>
 		<td class="ta-l" style="padding:0">
-          	<div class="div-rows ells">
+          	<div class="custom-style">
 							  # if(CD_SIGNITEM !== "" && CD_SIGNITEM !== null && CD_SIGNITEM !== "undefined"){ # 
 							  #: CD_SIGNITEM # 
 							  # }else{ } #
 			</div>
       	</td>
 		<td class="ta-l" style="padding:0">
-          	<div class="div-rows ells">
+          	<div class="custom-style">
 							  # if(NO_MRKITEM !== "" && NO_MRKITEM !== null && NO_MRKITEM !== "undefined"){ #
                   	    	  #: NO_MRKITEM  # 
                       	      # }else{ } #
 			</div>
       	</td>
 		<td class="ta-l" style="padding:0">
-         	<div class="ells"># if(NM_ITEM !== "" && NM_ITEM !== null && NM_ITEM !== "undefined"){ #
+         	<div class="custom-style"># if(NM_ITEM !== "" && NM_ITEM !== null && NM_ITEM !== "undefined"){ #
 							  #: NM_ITEM #
 							  # }else{  #
 							   #: "-" #
@@ -133,14 +136,14 @@
 			</div>
       	</td>
 		<td class="ta-l" style="padding:0">
-          	<div class="ells"> 
+          	<div class="custom-style"> 
 							   # if(CD_ITEM !== "" && CD_ITEM !== null && CD_ITEM !== "undefined"){ #	
 							   #: CD_ITEM #
 							   # }else{ }	# 
 			</div>
       	</td>
 		<td class="ta-l" style="padding:0">
-          	<div class="div-rows ells">
+          	<div class="custom-style">
 							  # if(NM_CTGR !== "" && NM_CTGR !== null && NM_CTGR !== "undefined"){ #
 				    		  #: NM_CTGR #
 							  # }else{  #
@@ -149,7 +152,7 @@
 			</div>
       	</td>
 		<td class="ta-r" style="padding:0">
-          	<div class="ells"> 
+          	<div class="custom-style"> 
 							  # if(AM_ITEMPRC !== "" && AM_ITEMPRC !== null && AM_ITEMPRC !== "undefined"){ #
 							  #= kendo.toString(AM_ITEMPRC , 'C0', 'ko-KR') # 
 							  # }else{  #
@@ -158,12 +161,12 @@
 			</div>
       	</td>
 		<td class="ta-r" style="padding:0">
-          	<div class="div-rows ells">
+          	<div class="custom-style">
 							수수료
 			</div>
       	</td> 
 		<td class="ta-r" style="padding:0">
-          	<div class="div-rows ells">
+          	<div class="custom-style">
 						    # if(QT_SALE !== "" && QT_SALE !== null && QT_SALE !== "undefined"){ #
 							#: QT_SALE #
 							# }else{ #
@@ -172,7 +175,7 @@
 			</div>
       	</td>
 		<td class="ta-c" style="padding:0">
-          	<div class="ells">
+          	<div class="custom-style">
 							# if(DTS_INSERT !== "" && DTS_INSERT !== null && DTS_INSERT !== "undefined"){ #	
 							#: DTS_INSERT # 
 							# }else{ #
@@ -181,14 +184,117 @@
 			</div>
       	</td>
 		<td class="ta-c" style="padding:0">
-          	<div class="ells">
+          	<div class="custom-style">
 							# if(DTS_SALESTART !== "" && DTS_SALESTART !== null && DTS_SALESTART !== "undefined"){ #	
 							#: DTS_SALESTART # 
 							# }else{ }	 	 #
 			</div>
       	</td>
 		<td class="ta-c" style="padding:0">
-          	<div class="ells">
+          	<div class="custom-style">
+							# if(DTS_SALEEND !== "" && DTS_SALEEND !== null && DTS_SALEEND !== "undefined"){ #	
+							#: DTS_SALEEND # 
+							# }else{ }	 	 #
+			</div>
+      	</td>
+	</tr>			
+</script>
+
+<!-- SALESITE 조회 그리드 -->
+<script id="alt_sale_template" type="text/x-kendo-template">
+	<tr class="k-alt" data-uid="#= uid #" ng-dblclick="grdDblClickGo('#: NO_MRKREGITEM #')">
+		<td class="ta-c">
+			<div class="custom-style-checkbox">
+        		<input class='k-checkbox' data-role='checkbox' type='checkbox' ng-click="onSaleGrdCkboxClick($event)" id="#= uid #_alt">
+				<label class='k-checkbox-label k-no-text' style="vertical-align:middle;" for="#= uid #_alt"></label>
+			</div>
+      	</td>
+		<td class="ta-l" style="padding:0">
+          	<div class="custom-style">
+							  # if(NO_MRK !== "" && NO_MRK !== null && NO_MRK !== "undefined"){ #
+                  	    	  #: NO_MRK  # 
+                      	      # }else{ } #
+			</div>
+      	</td>
+		<td class="ta-l" style="padding:0">
+          	<div class="custom-style">
+							  # if(CD_SIGNITEM !== "" && CD_SIGNITEM !== null && CD_SIGNITEM !== "undefined"){ # 
+							  #: CD_SIGNITEM # 
+							  # }else{ } #
+			</div>
+      	</td>
+		<td class="ta-l" style="padding:0">
+          	<div class="custom-style">
+							  # if(NO_MRKITEM !== "" && NO_MRKITEM !== null && NO_MRKITEM !== "undefined"){ #
+                  	    	  #: NO_MRKITEM  # 
+                      	      # }else{ } #
+			</div>
+      	</td>
+		<td class="ta-l" style="padding:0">
+         	<div class="custom-style"># if(NM_ITEM !== "" && NM_ITEM !== null && NM_ITEM !== "undefined"){ #
+							  #: NM_ITEM #
+							  # }else{  #
+							   #: "-" #
+                               #}	# 
+			</div>
+      	</td>
+		<td class="ta-l" style="padding:0">
+          	<div class="custom-style"> 
+							   # if(CD_ITEM !== "" && CD_ITEM !== null && CD_ITEM !== "undefined"){ #	
+							   #: CD_ITEM #
+							   # }else{ }	# 
+			</div>
+      	</td>
+		<td class="ta-l" style="padding:0">
+          	<div class="custom-style">
+							  # if(NM_CTGR !== "" && NM_CTGR !== null && NM_CTGR !== "undefined"){ #
+				    		  #: NM_CTGR #
+							  # }else{  #
+							  #: "-" #
+                              #}	# 
+			</div>
+      	</td>
+		<td class="ta-r" style="padding:0">
+          	<div class="custom-style"> 
+							  # if(AM_ITEMPRC !== "" && AM_ITEMPRC !== null && AM_ITEMPRC !== "undefined"){ #
+							  #= kendo.toString(AM_ITEMPRC , 'C0', 'ko-KR') # 
+							  # }else{  #
+							  #: "-" #
+                              #}	# 						  
+			</div>
+      	</td>
+		<td class="ta-r" style="padding:0">
+          	<div class="custom-style">
+							수수료
+			</div>
+      	</td> 
+		<td class="ta-r" style="padding:0">
+          	<div class="custom-style">
+						    # if(QT_SALE !== "" && QT_SALE !== null && QT_SALE !== "undefined"){ #
+							#: QT_SALE #
+							# }else{ #
+							#: "-"   #
+							# }	 	 #
+			</div>
+      	</td>
+		<td class="ta-c" style="padding:0">
+          	<div class="custom-style">
+							# if(DTS_INSERT !== "" && DTS_INSERT !== null && DTS_INSERT !== "undefined"){ #	
+							#: DTS_INSERT # 
+							# }else{ #
+							#: "-"   #
+							# }	 	 #
+			</div>
+      	</td>
+		<td class="ta-c" style="padding:0">
+          	<div class="custom-style">
+							# if(DTS_SALESTART !== "" && DTS_SALESTART !== null && DTS_SALESTART !== "undefined"){ #	
+							#: DTS_SALESTART # 
+							# }else{ }	 	 #
+			</div>
+      	</td>
+		<td class="ta-c" style="padding:0">
+          	<div class="custom-style">
 							# if(DTS_SALEEND !== "" && DTS_SALEEND !== null && DTS_SALEEND !== "undefined"){ #	
 							#: DTS_SALEEND # 
 							# }else{ }	 	 #

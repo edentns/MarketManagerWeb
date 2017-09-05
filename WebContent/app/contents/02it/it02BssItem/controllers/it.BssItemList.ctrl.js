@@ -110,7 +110,7 @@
 	            
 	            bssItemDataVO.isOpen = function (val) {
 	            	if(val) {
-	            		$scope.gridBssVO.wrapper.height(658);
+	            		$scope.gridBssVO.wrapper.height(615);
 	            		$scope.gridBssVO.resize();
 	            		gridBssVO.dataSource.pageSize(9);
 	            	}
@@ -190,7 +190,7 @@
                     			bssItemDataVO.dataTotal = data.length;
                     			//console.log("변화된 데이터 => ",data.length);
                     		},
-                    		pageSize: 3,
+                    		pageSize: 9,
                     		batch: true,
                     		schema: {
                     			model: {
@@ -341,20 +341,20 @@
                   	            {
   			                        field: "ROW_CHK",
   			                        title: "<input class='k-checkbox' type='checkbox' id='grd_chk_master' ng-click='onBssGrdCkboxAllClick($event)'><label class='k-checkbox-label k-no-text' for='grd_chk_master' style='margin-bottom:0;'>​</label>",
-			                        width: "30px",
+			                        width: "40px",
   			                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px; vertical-align:middle;"},
   			                        selectable: true
                   	            },                        
   		                        {	
                   	            	field: "CD_SIGNITEM",
   		                            title: "상품코드",
-  		                            width: "100px",
+  		                            width: 100,
   		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
   		                            columns: [ 
   		                                       	{
   				                                    field: "CD_ITEMCLFT",
   				                                    title: "상품분류",
-  				                                    width: 100,
+  				  		                            width: 100,
   							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
   				                                }
   			                                 ]
@@ -368,7 +368,7 @@
   		                                       	{
   				                                    field: "DC_ITEMABBR",
   				                                    title: "상품약어",
-  				                                    width: 100,
+  				  		                            width: 100,
   							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
   				                                }
   			                                ]
@@ -376,13 +376,13 @@
   		                        {
   		                        	field: "AM_PRCCLFT_S",	
   		                            title: "판매가",
-  		                            width: 100,		                            
+  		                            width: 100,                          
   		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
   		                            columns: [ 
   		                                       	{
   				                                    field: "AM_PRCCLFT_B",
   				                                    title: "구입가",
-  				                                    width: 100,
+  				  		                            width: 100,
   							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
   				                                }
   			                                ]
@@ -396,7 +396,7 @@
   		                                       	{
   				                                    field: "CD_ITEMKIND",
   				                                    title: "상품구분",
-  				                                    width: 100,
+  				  		                            width: 100,
   							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
   				                                }
   			                                ]
@@ -410,7 +410,7 @@
   		                                       	{
   				                                    field: "YN_ADULCTFC",
   				                                    title: "성인인증",
-  				                                    width: 100,
+  				  		                            width: 100,
   							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
   				                                }
   			                                ]
@@ -424,7 +424,7 @@
   		                                       	{
   				                                    field: "SF_DI",
   				                                    title: "상세이미지",
-  				                                    width: 100,
+  				  		                            width: 100,
   							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
   				                                }
   			                                ]
@@ -438,7 +438,7 @@
   		                                       	{
   				                                    field: "CD_OPTTP",
   				                                    title: "옵션",
-  				                                    width: 100,
+  				  		                            width: 100,
   							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
   				                                }
   			                                ]
@@ -452,7 +452,7 @@
   		                                       	{
   				                                    field: "CD_ITEMKIND",
   				                                    title: "상품종류",
-  				                                    width: 100,
+  				  		                            width: 100,
   							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
   				                                }
   			                                ]
@@ -466,7 +466,7 @@
   		                                       	{
   				                                    field: "CD_ITEMSTAT",
   				                                    title: "상품상태",
-  				                                    width: 100,
+  				  		                            width: 100,
   							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
   				                                }
   			                                ]
@@ -480,7 +480,7 @@
   		                                       	{
   				                                    field: "DTS_VLD",
   				                                    title: "유효일시",
-  				                                    width: 100,
+  				  		                            width: 100,
   							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
   				                                }
   			                                ]
@@ -496,7 +496,7 @@
                     	resizable: true,
                     	rowTemplate: kendo.template($.trim($("#bss_template").html())),
                     	altRowTemplate: kendo.template($.trim($("#bss_alt_template").html())),
-                    	height: 658      
+                    	height: 615      
                     	//모델과 그리드 셀을 제대로 연동 안시키면 수정 팝업 연 후 닫을 때 로우가 사라짐(즉 크레에이트인지 에딧인지 구분을 못함)
                     	//id는 유니크한 모델값으로 해야함 안그러면 cancel 시에 row grid가 중복 되는 현상이 발생
         		};

@@ -104,9 +104,9 @@
         </div>
                 
         <!-- 승인 리스트 -->          
-		<div class="content-area-container col-xs-12" style="padding:0px 0px 0px 0px;">		
-	        <kendo-grid id="divBssVO" options="gridBssVO">
-	        </kendo-grid>	            
+		<div class="content-area-container col-xs-12" style="padding:0px 0px 0px 0px;">	
+			<div id="divBssVO" kendo-grid="gridBssVO" options="gridBssVO">
+	        </div>	        
         </div>
     </div>
 </div>
@@ -172,7 +172,7 @@
 							   # }else{ }	# 
 			</div>
      	</td>
-		<td class="ta-l" style="padding:0">
+		<td class="ta-c" style="padding:0">
           	<div class="custom-style"> 
 							   # if(CD_TAXCLFT !== "" && CD_TAXCLFT !== null && CD_TAXCLFT !== "undefined"){ #	
 							   #: CD_TAXCLFT #
@@ -232,21 +232,21 @@
 							# }else{ }	 	  #
 			</div>
       	</td> 
-		<td class="ta-l" style="padding:0">
-          	<div class="custom-style">
+		<td style="padding:0">
+          	<div class="ta-l custom-style">
 						    # if(NM_BRD !== "" && NM_BRD !== null && NM_BRD !== "undefined"){ #
 							#: NM_BRD #
 							# }else{ #
 							#: "-"   #
 							# }	 	 #
 			</div>
-			<div class="custom-style">
+			<div class="ta-c custom-style">
 							# if(CD_ITEMSTAT !== "" && CD_ITEMSTAT !== null && CD_ITEMSTAT !== "undefined"){ #	
 							#: CD_ITEMSTAT # 
 							# }else{ }	 	 #
 			</div>
       	</td>
-		<td class="ta-l" style="padding:0">
+		<td class="ta-c" style="padding:0">
           	<div class="custom-style">
 							# if(DTS_INSERT !== "" && DTS_INSERT !== null && DTS_INSERT !== "undefined"){ #	
 							#: DTS_INSERT # 
@@ -384,21 +384,21 @@
 							# }else{ }	 	  #
 			</div>
       	</td> 
-		<td class="ta-l" style="padding:0">
-          	<div class="custom-style">
+		<td style="padding:0">
+          	<div class="ta-l custom-style">
 						    # if(NM_BRD !== "" && NM_BRD !== null && NM_BRD !== "undefined"){ #
 							#: NM_BRD #
 							# }else{ #
 							#: "-"   #
 							# }	 	 #
 			</div>
-			<div class="custom-style">
+			<div class="ta-c custom-style">
 							# if(CD_ITEMSTAT !== "" && CD_ITEMSTAT !== null && CD_ITEMSTAT !== "undefined"){ #	
 							#: CD_ITEMSTAT # 
 							# }else{ }	 	 #
 			</div>
       	</td>
-		<td class="ta-l" style="padding:0">
+		<td class="ta-c" style="padding:0">
           	<div class="custom-style">
 							# if(DTS_INSERT !== "" && DTS_INSERT !== null && DTS_INSERT !== "undefined"){ #	
 							#: DTS_INSERT # 

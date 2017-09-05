@@ -413,7 +413,7 @@
 								{
 								   field: "ROW_CHK",
 								   title: "선택",
-								   width: 35,
+								   width: 40,
 								   headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}
 							    },    
                		            {
