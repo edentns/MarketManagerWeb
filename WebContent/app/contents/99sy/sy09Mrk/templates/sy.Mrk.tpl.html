@@ -37,12 +37,6 @@
                         <tr>
                         	<th>연동기간</th>
                         	<td colspan="5">
-                        		<!-- <input kendo-date-picker ng-model="dateVO.dateString1" k-ng-model="dateVO.dateObject1" k-options="dateOptions" style="width:27%;"/>
-                        		&nbsp;&nbsp;&nbsp;~&nbsp;&nbsp;&nbsp;
-                        		<input kendo-date-picker ng-model="dateVO.dateString2" k-ng-model="dateVO.dateObject2" k-options="dateOptions" style="width:27%;"/>
-                        		<kendo-button type="button" title="1일" data-ng-click="">1일</kendo-button>
-                            	<kendo-button type="button" title="1주일" data-ng-click="">1주일</kendo-button>
-                            	<kendo-button type="button" title="1개월" data-ng-click="">1개월</kendo-button> -->
                             	<div class="frm-group" data-date-search-group="dateVO.datesetting"></div>
                         	<td>
                         </tr>
@@ -50,14 +44,14 @@
                     </table>                    
                     <div class="btn-group1 mt-10">
                         <kendo-button type="submit "style="width:70px;" class="k-primary" title="검색" data-ng-click="dateVO.doInquiry()">검색</kendo-button>
-                        <kendo-button type="botton" style="width:70px;" class="" title="초기화" data-ng-click="dateVO.doInit()">초기화</kendo-button>
+                        <kendo-button type="botton" style="width:70px;" class="" title="초기화" data-ng-click="dateVO.reset()">초기화</kendo-button>
                     </div>
                 </form>
             </div>
         </div>
         <div class="content-area-container col-xs-12" style="padding:0px 0px 0px 0px; margin-top:-5px;">
-	    	<div kendo-grid="mrkKg" options="gridMrkVO">
-		    </div> 
+	    	<kendo-grid id="mrkKg" options="gridMrkVO">
+		    </kendo-grid> 
 	    </div>    
     </div>
 </div>

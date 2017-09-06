@@ -192,7 +192,7 @@ input.box-control {background-color: #fff; border: 1px solid #dfdfdf; border-top
 .form-type1 tbody td input[type="checkbox"]+label {margin-left: 4px;}
 .form-type1 tbody td label+input[type="checkbox"] {margin-left: 12px;}
 .form-type1 tbody td label+input[type="radio"], .tbl-type1 tbody td label+input[type="radio"], .search-type1 tbody td label+input[type="radio"] {margin-left: 12px;}
-.form-type1 tbody td input[type="radio"]+label, .tbl-type1 tbody td input[type="radio"]+label, .search-type1 tbody td input[type="radio"]+label {margin-left: 4px; height: 20px; vertical-align: -4px;}
+.form-type1 tbody td input[type="radio"]+label, .tbl-type1 tbody td input[type="radio"]+label, .search-type1 tbody td input[type="radio"]+label {margin-left: 4px; height: 20px; vertical-align: -2px; margin-right: 10px;}
 .form-required {margin-left: 8px;color: red;	vertical-align: middle;}
 
 .form-type1 .table th, .form-type1 .table td {
@@ -506,7 +506,7 @@ form[name="businessForm"]:after {content: ''; display: block; clear: both;}
 .form-control {
 	display    : inline-block;
 	padding  : 2px 4px;
-	font-size : 11px;
+	font-size : 12px;
 	border    : 1px solid #e5e6e7;
 	background     : #fff none;
 	-webkit-border-radius : 1px;
@@ -546,7 +546,7 @@ form[name="businessForm"]:after {content: ''; display: block; clear: both;}
 	text-overflow: ellipsis; 
 	white-space: nowrap; 
 	overflow:hidden;
-	padding: 2px 1px 0 2px;
+	padding: 2px 10px 0 10px;
 }
 .k-grid-content > table > tbody > tr > td > div.custom-style-checkbox{
 	position: relative;

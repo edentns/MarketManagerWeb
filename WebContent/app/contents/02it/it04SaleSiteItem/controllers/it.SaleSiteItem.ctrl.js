@@ -73,12 +73,25 @@
 	            
 	            //초기화버튼
 	            saleItemDataVO.init = function(){
-	            	$window.location.reload();
+	            	saleItemDataVO.taxClftList.bReset   = true;
+	            	saleItemDataVO.iStatList.bReset   = true;
+	            	saleItemDataVO.cmrkList.bReset   = true;
+	            	saleItemDataVO.itemCtgrList2 = "";
+	            	saleItemDataVO.itemCtgrList3 = "";
+	            	saleItemDataVO.itemCtgrList1   = resData.itCtgrList;
+	            	saleItemDataVO.selectedCtgr1 = {ID_CTGR : "", NM_CTGR: ""};
+	            	saleItemDataVO.selectedCtgr2 = {ID_CTGR : "", NM_CTGR: ""};
+	            	saleItemDataVO.selectedCtgr3 = {ID_CTGR : "", NM_CTGR: ""};
+	            	
+	            	saleItemDataVO.signItem.value = "";
+	            	saleItemDataVO.nmItem.value   = "";
+	            	
+	            	saleItemDataVO.datesetting.selected = "current";
 	            };	
 
 	            saleItemDataVO.isOpen = function (val) {
 	            	if(val) {
-	            		$scope.gridSaleVO.wrapper.height(657);
+	            		$scope.gridSaleVO.wrapper.height(656);
 	            		$scope.gridSaleVO.resize();
 	            		gridSaleVO.dataSource.pageSize(20);
 	            	}
@@ -131,8 +144,7 @@
                     					L_CD_ITEMCTGR : saleItemDataVO.iCtgrId
                                     };
                     				UtilSvc.getList(param).then(function (res) {
-                						e.success(res.data.results[0]);
-                						gridSaleVO.dataSource.page(1);  // 페이지 인덱스 초기화              
+                						e.success(res.data.results[0]);       
                 					});
                     			},   		
                     			parameterMap: function(e, operation) {
@@ -192,7 +204,7 @@
     															nullable: false
     						    	    				   },
     						    	    AM_ITEMPRC: 	   {
-    															type: "string", 
+    															type: "number", 
     															editable: false, 
     															nullable: false
     						    	    				   },
@@ -319,7 +331,8 @@
                     	},	
                     	resizable: true,
                     	rowTemplate: kendo.template($.trim($("#sale_template").html())),
-                    	height: 657      
+                    	altRowTemplate: kendo.template($.trim($("#alt_sale_template").html())),
+                    	height: 656      
                     	//모델과 그리드 셀을 제대로 연동 안시키면 수정 팝업 연 후 닫을 때 로우가 사라짐(즉 크레에이트인지 에딧인지 구분을 못함)
                     	//id는 유니크한 모델값으로 해야함 안그러면 cancel 시에 row grid가 중복 되는 현상이 발생
         		};

@@ -71,7 +71,7 @@
 		        		RT_TAX        : 10,
 		        		S_ITEMPRC     : 0,
 		        		CD_PCSUNIT    : "001",
-		        		QT_MINPCS     : 0,
+		        		QT_MINPCS     : 1,
 		        		YN_ADULCTFC   : "Y",
 		        		DC_PUREWD     : "",
 		        		
@@ -118,6 +118,7 @@
 	        			CD_AT:"004",
 	        			limitCnt: 1,
 	        			bImage: true,
+	        			bDisabled: !page.isWriteable(),
 	        			imgWidth: '0px',
 	        			imgHeight: '0px'
 	        		},
@@ -125,6 +126,7 @@
 	        			CD_AT:"007",
 	        			limitCnt: 1,
 	        			bImage: true,
+	        			bDisabled: !page.isWriteable(),
 	        			imgWidth: '0px',
 	        			imgHeight: '0px'
 	        		},
@@ -132,6 +134,7 @@
 	        			CD_AT:"005",
 	        			limitCnt: 10,
 	        			bImage: true,
+	        			bDisabled: !page.isWriteable(),
 	        			imgWidth: '0px',
 	        			imgHeight: '0px',
 	        			currentDataList:[]
@@ -140,6 +143,7 @@
 	        			CD_AT:"006",
 	        			limitCnt: 10,
 	        			bImage: true,
+	        			bDisabled: !page.isWriteable(),
 	        			imgWidth: '0px',
 	        			imgHeight: '0px',
 	        			currentDataList:[]
@@ -176,6 +180,12 @@
 	            					UtilSvc.getList(param).then(function (res) {
 	            						e.success(res.data.results[0]);
 	            						bssInfoDataVO.NM_COM = res.data.results[1][0].NM_C;
+	            						if(!page.isWriteable()){
+	            	    					var grid = $("#gridOpt"+bssInfoDataVO.param.CD_OPTTP).data("kendoGrid");
+	            	    					grid.setOptions({editable : false});   
+	            	    					grid.hideColumn(5);
+	            	    					$("#gridOpt"+bssInfoDataVO.param.CD_OPTTP+" .k-grid-toolbar").hide();
+	            	    				}
 	            					});
 	                			},
 	                			create: function(e) {
@@ -301,6 +311,12 @@
                 					};
 	            					UtilSvc.getList(param).then(function (res) {
 	            						e.success(res.data.results[0]);
+	            						if(!page.isWriteable()){
+	            							var grid = $("#gridOpt"+bssInfoDataVO.param.CD_OPTTP).data("kendoGrid");
+	            	    					grid.setOptions({editable : false});   
+	            	    					grid.hideColumn(7);
+	            	    					$("#gridOpt"+bssInfoDataVO.param.CD_OPTTP+" .k-grid-toolbar").hide();
+	            	    				}
 	            					});
 	                			},
 	                			create: function(e) {
@@ -630,7 +646,7 @@
 	            	}
 	            };
 	            
-	            // 중복환인
+	            // 중복확인
 	            bssInfoDataVO.duplCheck = function(){
 	            	var self = this;
 	            	
@@ -1033,6 +1049,11 @@
                     // 판매가
                     if (!(data.S_ITEMPRC)) {
 	                    return edt.invalidFocus("S_ITEMPRC", "[필수] 판매가를 입력해주세요.");
+                    }
+                    
+                    // 최소구매수량
+                    if (!(data.QT_MINPCS) || data.QT_MINPCS == 0 ) {
+	                    return edt.invalidFocus("QT_MINPCS", "[형식] 최소구매수량은 0 보다 커야합니다.");
                     }
                     
                     // --------- 제조 정보

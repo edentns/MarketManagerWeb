@@ -62,13 +62,12 @@
 	            noticeDataVO.inIt = function(){
 	            	var me  = this;
                 	me.contentText.value = "";
-                	me.noticeCdModel = "*";
+                	me.noticeCdVO.bReset = true;
                 	
-                	me.datesetting.selected = "1Week";
+                	me.datesetting.selected = "current";
                 	me.dataTotal = 0;
                 	me.resetAtGrd = $scope.nkg;
                 	me.resetAtGrd.dataSource.data([]);
-                	
 	            };
 
 	            noticeDataVO.isOpen = function (val) {
@@ -83,20 +82,20 @@
 	            		gridNoticeVO.dataSource.pageSize(24);
 	            	}
 	            };
-	              
+	            
 	            //저장 후 조회
 	            noticeDataVO.afterSaveQuery = function(param){
 	            	var me = this;
 	            	
             		me.writeText.value = param.NO_WRITE;
 	            	me.noticeCdModel = param.CD_NOTICE;
-	            		            	
+
 	            	$scope.nkg.dataSource.read();
 	            };	
 	            
 	            $("#divGrd").delegate("tbody>tr", "dblclick", function(){
-	            	var grid = $("#divGrd").data("kendoGrid");
 	            	$("#divGrd").data("kendoGrid").editRow($(this));
+	            	$($("#editor").data().kendoEditor.body).attr('contenteditable',false);
 	            });
 	            
                 var gridNoticeVO = $scope.gridNoticeVO = {
@@ -241,8 +240,9 @@
                     		var self = this;
                     		var htmlcode = "";
                     		var param = {
-                                	procedureParam: "USP_SY_14NOTICEFILES01_GET&L_CD_REF1@s",    
-                                	L_CD_REF1: e.model.NO_NOTICE,                   };
+                                	procedureParam: "USP_SY_14NOTICEFILES01_GET&L_CD_REF1@s",
+                                	L_CD_REF1: e.model.NO_NOTICE
+                                };
             					UtilSvc.getList(param).then(function (res) {
             						self.currentFileList = res.data.results[0];
             						angular.forEach(self.currentFileList, function (data) {
@@ -253,10 +253,8 @@
 						},
                     	resizable: true,
                     	rowTemplate: kendo.template($.trim($("#ma_notice_template").html())),
-                    	height: 657                    	
+                    	height: 657
         		};
-                
-                
                 
                 function getCheckedNodes(nodes, obj) {
                     var node, childCheckedNodes;

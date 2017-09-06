@@ -21,24 +21,18 @@
 				 */
 				loginVO.initLoad = function () {
 					var self = this,
-						recentLoginInfo = $window.localStorage.getItem("recentLoginInfo"), // 기억한 로그인 정보
-						recentUrl       = $window.localStorage.getItem("recentUrl");
+						recentLoginInfo = $window.localStorage.getItem("recentLoginInfo"); // 기억한 로그인 정보
 					
 					if (recentLoginInfo) {
 						recentLoginInfo    = JSON.parse(recentLoginInfo);
 						self.info.bsCd     = recentLoginInfo.bsCd;
 						self.info.user 	   = recentLoginInfo.user;
-						self.info.password = recentLoginInfo.password;
 						self.isRegisterId  = true;
-
-						if (recentUrl) {
-							recentUrl          = JSON.parse(recentUrl);
-							self.url           = recentUrl.href;
-						}
 					}
 
 					$timeout(function () {
-                        edt.id("bsCdId").focus();
+						if(recentLoginInfo) edt.id("passWord").focus();
+						else                edt.id("bsCdId").focus();
                     }, 500);
 				};
 
@@ -52,7 +46,7 @@
 					$rootScope.$broadcast("event:autoLoader", false);
 					LoginSvc.login(info).then(function (res) {
 						if (self.isRegisterId) {
-							$window.localStorage.setItem("recentLoginInfo", JSON.stringify({bsCd: info.bsCd, user: info.user, password: info.password}));
+							$window.localStorage.setItem("recentLoginInfo", JSON.stringify({bsCd: info.bsCd, user: info.user}));
 						}
 						else {
 				            $window.localStorage.removeItem("recentLoginInfo");
@@ -64,12 +58,7 @@
 						$rootScope.$emit("event:setMenu", MenuSvc.setMenu(res.data.MENU_LIST).getMenu());
 						$rootScope.$emit("event:autoLoader", true);
 						
-						if (self.isRegisterId && self.url) {
-							$state.go(self.url);
-						}
-						else {
-							$state.go(MenuSvc.getDefaultUrl(), { menu: true, ids: null });
-						}
+						$state.go(MenuSvc.getDefaultUrl(), { menu: true, ids: null });
 					});
 				};
 

@@ -177,6 +177,12 @@
 	            					UtilSvc.getList(param).then(function (res) {
 	            						e.success(res.data.results[0]);
 	            						saleInfoDataVO.NM_COM = res.data.results[1][0].NM_C;
+	            						if(!page.isWriteable()){
+	            	    					var grid = $("#gridOpt"+bssInfoDataVO.param.CD_OPTTP).data("kendoGrid");
+	            	    					grid.setOptions({editable : false});   
+	            	    					grid.hideColumn(5);
+	            	    					$("#gridOpt"+bssInfoDataVO.param.CD_OPTTP+" .k-grid-toolbar").hide();
+	            	    				}
 	            					});
 	                			},
 	                			create: function(e) {
@@ -302,6 +308,12 @@
                 					};
 	            					UtilSvc.getList(param).then(function (res) {
 	            						e.success(res.data.results[0]);
+	            						if(!page.isWriteable()){
+	            							var grid = $("#gridOpt"+bssInfoDataVO.param.CD_OPTTP).data("kendoGrid");
+	            	    					grid.setOptions({editable : false});   
+	            	    					grid.hideColumn(7);
+	            	    					$("#gridOpt"+bssInfoDataVO.param.CD_OPTTP+" .k-grid-toolbar").hide();
+	            	    				}
 	            					});
 	                			},
 	                			create: function(e) {

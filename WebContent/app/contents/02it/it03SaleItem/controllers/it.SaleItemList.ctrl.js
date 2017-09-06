@@ -34,10 +34,14 @@
                         	deleteItem.push(data.CD_ITEM);
                         }
                     });
-                	if(confirm('정말로 삭제하시겠습니까?')){
-                		itBssItemSvc.deleteBssItem(deleteItem).then(function(res) {
-            				$scope.gridSaleVO.dataSource.read();
-            			});  
+                	if(deleteItem.length == 0){
+                		alert("삭제할 상품을 선택해주세요.");
+                	}else{
+                		if(confirm('정말로 삭제하시겠습니까?')){
+                    		itBssItemSvc.deleteBssItem(deleteItem).then(function(res) {
+                				$scope.gridSaleVO.dataSource.read();
+                			});  
+                    	}
                 	}
 				};
                 
@@ -80,6 +84,12 @@
 	            	saleItemDataVO.iKindList   = resData.iKindCodeList;
 	            	saleItemDataVO.iStatList   = resData.iStatCodeList;
 	            	saleItemDataVO.cmrkList    = resData.cmrkList;
+	            	
+	            	$timeout(function() {
+	            		if(!page.isWriteable()){
+	    					$("#divSaleVO .k-grid-toolbar").hide();
+	    				}
+        			});
 	            };
 	            
 	            //조회
@@ -89,27 +99,16 @@
 	            
 	            //초기화버튼
 	            saleItemDataVO.init = function(){
-	            	$window.location.reload();
-	            	/*var self = this;
-	            	$q.all([
-                            SyCodeSvc.getSubcodeList({cd: "SY_000007", search: "all"}).then(function (result) {
-                                return result.data;
-                            }),
-                            SyCodeSvc.getSubcodeList({cd: "SY_000006", search: "all"}).then(function (result) {
-                                return result.data;
-                            }),
-                            SyCodeSvc.getSubcodeList({cd: "IT_000005", search: "all"}).then(function (result) {
-                                return result.data;
-                            }),
-                            SyCodeSvc.getSubcodeList({cd: "IT_000002", search: "all"}).then(function (result) {
-                                return result.data;
-                            })
-                        ]).then(function (result) {
-                        	self.taxCodeList   = result[0];
-                        	self.iClftCodeList = result[1];
-                        	self.iKindCodeList = result[2];
-                        	self.iStatCodeList = result[3];
-                        });*/
+	            	saleItemDataVO.adulYnList.bReset   = true;
+	            	saleItemDataVO.taxClftList.bReset  = true;
+	            	saleItemDataVO.iClftList.bReset    = true;
+	            	saleItemDataVO.iKindList.bReset    = true;
+	            	saleItemDataVO.iStatList.bReset    = true;
+	            	saleItemDataVO.cmrkList.bReset     = true;
+	            	
+	            	saleItemDataVO.signItem.value = "";
+	            	saleItemDataVO.nmItem.value   = "";
+	            	saleItemDataVO.nmMnfr.value   = "";
 	            };	
 
 	            saleItemDataVO.isOpen = function (val) {
@@ -157,8 +156,7 @@
                     					I_NO_MRK      : saleItemDataVO.cmrkIds
                                     };
                     				UtilSvc.getList(param).then(function (res) {
-                						e.success(res.data.results[0]);  
-                						gridSaleVO.dataSource.page(1);  // 페이지 인덱스 초기화              
+                						e.success(res.data.results[0]);       
                 					});
                     			},   		
                     			parameterMap: function(e, operation) {
@@ -208,8 +206,8 @@
     															editable: false, 
     															nullable: false
     						    	    				   },
-    						    	    CD_PRCCLFT_S: 	   {
-    															type: "string", 
+    						    	    AM_PRCCLFT_S: 	   {
+    															type: "number", 
     															editable: false, 
     															nullable: false
     						    	    				   },						    	    				   
@@ -273,8 +271,8 @@
     															editable: false, 
     															nullable: false
                     				    				   },	
-                    				    CD_PRCCLFT_B: 	   {
-    				                    				    	type: "string", 
+                    				    AM_PRCCLFT_B: 	   {
+    				                    				    	type: "number", 
     															editable: false, 
     															nullable: false
                     				    				   },	
@@ -333,7 +331,7 @@
                   	            {
   			                        field: "ROW_CHK",
   			                        title: "<input class='k-checkbox' type='checkbox' id='grd_chk_master' ng-click='onSaleGrdCkboxAllClick($event)'><label class='k-checkbox-label k-no-text' for='grd_chk_master' style='margin-bottom:0;'>​</label>",
-			                        width: "30px",
+			                        width: "40px",
   			                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px; vertical-align:middle;"},
   			                        selectable: true
                   	            },                        
@@ -366,13 +364,13 @@
   			                                ]
   		                        },                        
   		                        {
-  		                        	field: "CD_PRCCLFT_S",	
+  		                        	field: "AM_PRCCLFT_S",	
   		                            title: "판매가",
   		                            width: 100,		                            
   		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
   		                            columns: [ 
   		                                       	{
-  				                                    field: "CD_PRCCLFT_B",
+  				                                    field: "AM_PRCCLFT_B",
   				                                    title: "구입가",
   				                                    width: 100,
   							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
@@ -562,7 +560,7 @@
 	                	row.find(".k-checkbox").prop( "checked", false );
 	                };
                 };
-                
+                /*
                 $scope.onCsGridEditClick = function(){            	
                 	var grd = $scope.cskg,
 	            		chked = grd.element.find("input:checked"),
@@ -577,7 +575,7 @@
                 		//alert("답변 하실 데이터를 선택해 주세요.");
                 		$scope.showPopup("답변 하실 데이터를 선택해 주세요.");
                 	}
-                };	
+                };	*/
                 
                 //alert 경고
                 $scope.notf1Options = {

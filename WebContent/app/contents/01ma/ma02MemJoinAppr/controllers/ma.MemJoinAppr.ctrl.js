@@ -86,14 +86,14 @@
 
 	            joinerDataVO.isOpen = function (val) {
 	            	if(val) {
-	            		$scope.kg.wrapper.height(657);
+	            		$scope.kg.wrapper.height(656);
 	            		$scope.kg.resize();
-	            		gridJoinerMemVO.dataSource.pageSize(20);
+	            		if(joinerDataVO.param !== "") gridJoinerMemVO.dataSource.pageSize(20);
 	            	}
 	            	else {
 	            		$scope.kg.wrapper.height(798);
 	            		$scope.kg.resize();
-	            		gridJoinerMemVO.dataSource.pageSize(24);
+	            		if(joinerDataVO.param !== "") gridJoinerMemVO.dataSource.pageSize(24);
 	            	}
 	            };
 	            
@@ -219,25 +219,25 @@
                     		},
                     	}),
                     	navigatable: true, //키보드로 그리드 셀 이동 가능
-                    	toolbar:[{template: '<kendo-button type="botton" title="가입승인" data-ng-click="onGirdClick()">가입승인</kendo-button>'}],
+                    	toolbar:[{template: '<kendo-button type="botton" title="가입승인" data-ng-disabled="!page.isWriteable()" data-ng-click="onGirdClick()">가입승인</kendo-button>'}],
                     	/*selectable: "multiple, row",*/
                     	columns: [
 								{
 								   field: "",
 								   title: "",
-								   width: 35,
+								   width: 40,
 								   headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}								   
 							    },    
                		            {
 								   field: "ROW_NUM",
 								   title: "No",
-								   width: 30,
+								   width: 50,
 								   headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"},
                		            },
             		            {
                		        	   field: "NO_C_NM_C",
                		        	   title: "회사코드-사업자명",
-               		        	   width: 100,
+               		        	   width: 150,
                		        	   headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}
             		            },
             		            {
@@ -249,19 +249,19 @@
 	            		        {
            		        	       field: "NO_BSNSRGTT",
            		        	       title: "사업자번호",
-           		        	       width: 80,
+           		        	       width: 110,
            		        	       headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}
            		        	    },
             		            {
             		        	   field: "NO_COMMSALEREG",
             		               title: "통신판매신고번호",
-            		               width: 80,
+            		               width: 110,
             		               headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}
             		            },
             		            {
             		        	   field: "DC_ID",
             		               title: "아이디",
-            		               width: 70,
+            		               width: 120,
             		               headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}
             		            },
             		            {
@@ -273,19 +273,18 @@
             		            {
             		        	   field: "NO_PHNE",
             		               title: "전화번호",
-            		               width: 80,
+            		               width: 100,
             		               headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
             		            },
             		            {
             		        	   field: "DC_NEWADDR_DC_OLDADDR",
             		        	   title: "주소1",
-            		        	   width: 50,
             		        	   headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
            		        	    },          		           
            		        	    {
 	         		        	   field: "DC_REPREMI",
 	         		        	   title: "이메일",
-	         		        	   width: 140,
+	         		        	   width: 200,
 	         		        	   headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
 	        		            }, 
 	        		            {
@@ -297,54 +296,32 @@
 		    		        	{
 	         		        	   field: "CD_JOINITEM",
 	         		        	   title: "가입상품",
-	         		        	   width: 50,
+	         		        	   width: 70,
 	         		        	   headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
 	        		        	}, 
         		        	    {
              		        	   field: "DTS_JOIN",
              		        	   title: "가입일",
-             		        	   width: 80,
+             		        	   width: 120,
              		        	   headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
             		        	}, 
         		        	    {
              		        	   field: "DTS_JOINREQ",
              		        	   title: "가입요청일시",
-             		        	   width: 80,
+             		        	   width: 120,
              		        	   headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
             		        	}
-                    	],
-                    	dataBound: function(e) {
-                           /* var rows = this.items();
-                            $(rows).each(function () {
-                                var index = $(this).index() + 1,
-                                    rowLabel = $(this).find(".seq"),
-                                	grid = $scope.kg,
-                                	dataItem = grid.dataItem($(this));
-                                
-                                //로우 카운트 표시
-                                $(rowLabel).html(index);
-                                dataItem.ROW_NUM = index;
-                            });  */                          
-                        },                        
+                    	],                       
                         collapse: function(e) {
                             this.cancelRow();
                         },         	
                     	editable: {
                     	    confirmation: "선택된 회원을 승인하시겠습니까?",
                     	},
-                    	//그리드 행 선택시 클릭 효과
-                    	/*change: function(e) { 
-                    	    var selectedRows = this.select();
-                    	    var selectedDataItems = [];
-                    	    for (var i = 0; i < selectedRows.length; i++) {
-                    	      var dataItem = this.dataItem(selectedRows[i]);
-                    	      selectedDataItems.push(dataItem);
-                    	    }
-                    	    // selectedDataItems contains all selected data items
-                    	},*/
                     	resizable: true,
                     	rowTemplate: kendo.template($.trim($("#template").html())),
-                    	height: 590
+                    	altRowTemplate: kendo.template($.trim($("#altTemplate").html())),
+                    	height: 656
         		};    
                 
                 $scope.checkedIds = [];

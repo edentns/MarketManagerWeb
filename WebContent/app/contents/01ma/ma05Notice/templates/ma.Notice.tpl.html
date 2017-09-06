@@ -84,9 +84,11 @@
         </div>
                 
         <!-- 승인 리스트 -->          
-		<div class="content-area-container col-xs-12" style="padding:0px 0px 0px 0px; margin-top:-5px;">				
-	        <div id="divGrd" kendo-grid="nkg" options="gridNoticeVO">
-	        </div>	            
+		<div class="content-area-container col-xs-12" style="padding:0px 0px 0px 0px; margin-top:-5px;">		
+			<kendo-tooltip options="noticeDataVO.tooltipOptions">		
+		        <div id="divGrd" kendo-grid="nkg" options="gridNoticeVO">
+		        </div>	            
+		    </kendo-tooltip>
         </div>
     </div>
 </div>
@@ -139,7 +141,7 @@
 				# } 					#
 			</span>
         </td>
-		<td class="ta-c">
+		<td class="ta-l">
             <span class="ells">
 				# if(NO_C !== ""){ 		# 
 				#: NO_C 				# 
@@ -153,42 +155,110 @@
                 # } 					#
 			</span>
         </td>
-		<td class="ta-c">
+		<td class="ta-l">
             <span class="ells"># if(NM_SUBJECT !== ""){ #
                                #: NM_SUBJECT # 
                                # } #
 			</span>
         </td>
-		<td class="ta-c">
-            <span class="ells"># if(DC_CONTENT !== ""){ #
+		<td class="ta-l">
+            <span class="ells"># if(SY_FILES === "있음") { #
+							      <img src="/assets/img/common/file.png"/>
+                               # } #
+                               # if(DC_CONTENT !== ""){ #
 							   #: DC_CONTENT #
 							   #} #
 			</span>
         </td>
-		<td class="ta-l">
+		<td class="ta-c">
             <span class="ells"># if(DTS_INSERT !== ""){ #
 							   #: DTS_INSERT #
       						   # } #
 			</span>
         </td>
-		<td class="ta-l">
+		<td class="ta-c">
             <span class="ells"># if(NO_WRITE !== ""){ #
 					    	   #: NO_WRITE #
  							   # } #
 			</span>
         </td>
-		<td class="ta-c">
+		<td class="ta-r">
             <span class="ells"># if(SQ_NOTICE !== ""){ #
 							   #: SQ_NOTICE #
 							   # } #
 			</span>
         </td>
 		<td class="ta-l">
-            <span class="ells"># if(SY_FILES !== ""){ #
-							   #: SY_FILES #
-						       # } #
+            <span class="ells">
+				<a class="k-button k-button-icontext k-grid-edit" href="\#">
+                	<span class="k-icon k-edit"></span>수정
+            	</a>
 			</span>
         </td> 
+	</tr>
+</script>
+
+<!-- 공지사항 조회 그리드 -->
+<script id="alt_ma_notice_template" type="text/x-kendo-template">		
+     <tr class="k-alt" data-uid="#= uid #">
+        <td class="ta-c">            
+			<input class='k-checkbox' data-role='checkbox' type='checkbox' ng-click='onNoticeGrdClick($event)' id='#= uid #'>
+			<label class='k-checkbox-label k-no-text' for='#= uid #'></label>
+        </td>
+		<td class="ta-r">
+            <span class="seq ells">
+				# if(ROW_NUM !== ""){ 	# 
+				#: ROW_NUM 				# 
+				# } 					#
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells">
+				# if(NO_C !== ""){ 		# 
+				#: NO_C 				# 
+				# } 					#
+			</span>
+        </td>
+		<td class="ta-c">
+            <span class="ells cd-notice">
+				# if(CD_NOTICE !== ""){ #
+				<co04-cd-to-nm cd="#:CD_NOTICE#" nm-box="noticeDataVO.noticeCdVO">                               
+                # } 					#
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells"># if(NM_SUBJECT !== ""){ #
+                               #: NM_SUBJECT # 
+                               # } #
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells"># if(SY_FILES === "있음") { #
+							      <img src="/assets/img/common/file.png"/>
+                               # } #
+                               # if(DC_CONTENT !== ""){ #
+							   #: DC_CONTENT #
+							   #} #
+			</span>
+        </td>
+		<td class="ta-c">
+            <span class="ells"># if(DTS_INSERT !== ""){ #
+							   #: DTS_INSERT #
+      						   # } #
+			</span>
+        </td>
+		<td class="ta-c">
+            <span class="ells"># if(NO_WRITE !== ""){ #
+					    	   #: NO_WRITE #
+ 							   # } #
+			</span>
+        </td>
+		<td class="ta-r">
+            <span class="ells"># if(SQ_NOTICE !== ""){ #
+							   #: SQ_NOTICE #
+							   # } #
+			</span>
+        </td>
 		<td class="ta-l">
             <span class="ells">
 				<a class="k-button k-button-icontext k-grid-edit" href="\#">

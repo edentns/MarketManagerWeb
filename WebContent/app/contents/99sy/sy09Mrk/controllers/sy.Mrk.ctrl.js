@@ -46,7 +46,7 @@
 	        		datesetting : {
 	        			dateType   : 'market',
 						buttonList : ['current', '1Day', '1Week', '1Month'],
-						selected   : '1Month',
+						selected   : '1Day',
 						period : {
 							start : angular.copy(today),
 							end   : angular.copy(today)
@@ -60,6 +60,20 @@
                     	};
 					dateVO.getSubCodeList( {cd: "SY_000017", search: "all"} );
 					dateVO.getSubCodeList( param );
+					$timeout(function() {
+						if(!page.isWriteable()){
+							var grid = $("#mrkKg").data("kendoGrid");
+	    					grid.setOptions({editable : false});
+	    					grid.hideColumn(13);
+							$("#mrkKg .k-grid-toolbar").hide();
+						}
+        			});
+				};
+				
+				dateVO.reset = function() {
+					dateVO.MrkCodeList.bReset = true;
+					dateVO.ItlStatCodeList.bReset = true;
+					dateVO.datesetting.selected = "1Day";
 				};
 
 				dateVO.isOpen = function (val) {

@@ -69,7 +69,17 @@
 	            		if(bLoading) {
 		                	angular.forEach($scope.it01ItemCfctGridVO, function (it01ItemCfctLocalGridVO, iIndex) {
 		                		it01ItemCfctLocalGridVO = $scope.it01ItemCfctGridVO.addCommonGridVO(it01ItemCfctLocalGridVO, iIndex);
+		                		$timeout(function() {
+			                		if(!page.isWriteable()){
+			                			var grid = $("#grid"+iIndex).data("kendoGrid");
+            	    					/*grid.setOptions({editable : false}); */  
+            	    					grid.hideColumn(2);
+				    					$("#grid"+iIndex+" .k-grid-toolbar").hide();
+				    					
+				    				}
+		                		});
 		                    });
+		                	
 	            		}
 	    	            
 	            		self.doInquiry();
@@ -275,7 +285,8 @@
 	            			{
 	              			field: "NM_CTGR",
 	              			title: localSelf.boxTitle, 
-	              			width: 100, 
+	              			width: 350,
+	              			maxwidth: 400, 
 							cellClass: "ta-c",
 							headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"},
 							template: "<div class='cell' id='"+localSelf.iIndex+"'>#=NM_CTGR#</div>"
@@ -297,16 +308,18 @@
 		                                $scope.it01ItemCfctVO.gridNum = this.options.iIndex;
 		                            }
 	                            }
-	                            
 	                        }
-	                    } ],width:19}
+	                    } ],minwidth:10}
             		];
 	            	localSelf.edit = function(e) {
 	            		var self = this
 	            	      , iIndex = self.options.iIndex+1;
 	            		//console.log("edit ["+self.options.iIndex+"], hasChanges ["+$("#grid"+0).data("kendoGrid").dataSource.hasChanges()+"]");
 	            		//console.log("edit gridNum ["+$scope.it01ItemCfctVO.gridNum+"]");
-	            		
+	            		if(!page.isWriteable()){
+	            			var grid = $("#grid"+self.options.iIndex).data("kendoGrid");
+	            			grid.closeCell();
+	            		}
 	            		if($scope.it01ItemCfctVO.gridNum != '999') {
 		            		if(self.options.iIndex !== $scope.it01ItemCfctVO.gridNum) {
 		            			if($("#grid"+$scope.it01ItemCfctVO.gridNum).data("kendoGrid").dataSource.hasChanges()) {

@@ -15,7 +15,7 @@
 				</div>
 				<div class="form-group" style="height: auto; line-height: normal;">
 					<label class="control-label" style="padding:5px; width:90px;"><code>*</code>비밀번호</label>
-					<input class="form-control" type="password" title="PW입력" placeholder="PASSWORD를 입력해주세요." data-ng-model="loginVO.info.password" required>
+					<input class="form-control" id="passWord" type="password" title="PW입력" placeholder="PASSWORD를 입력해주세요." data-ng-model="loginVO.info.password" required>
 				</div>
 				<div class="ta-c">
 					<button type="submit" class="btn btn-primary" style="width:100px;"title="Sign in" data-ng-click="loginVO.doLogin()" data-ng-disabled="loginForm.$invalid">로그인</button>

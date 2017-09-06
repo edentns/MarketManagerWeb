@@ -30,13 +30,16 @@
                         	deleteItem.push(data.CD_ITEM);
                         }
                     });
-                	if(confirm('정말로 삭제하시겠습니까?')){
-                		itBssItemSvc.deleteBssItem(deleteItem).then(function(res) {
-            				$scope.gridBssVO.dataSource.read();
-            			});  
+                	if(deleteItem.length == 0){
+                		alert("삭제할 상품을 선택해주세요.");
+                	}else{
+                		if(confirm('정말로 삭제하시겠습니까?')){
+                    		itBssItemSvc.deleteBssItem(deleteItem).then(function(res) {
+                				$scope.gridBssVO.dataSource.read();
+                			});  
+                    	}
                 	}
 				};
-                
 	            	            
 	            var bssItemDataVO = $scope.bssItemDataVO = {
 	            	boxTitle : "검색",
@@ -45,9 +48,22 @@
 	        			name: "NM_DEF",
 	        			maxNames: 2
 	        		},
-	        		signItem : { value: "" , focus: false },
-	        		nmItem   : { value: "" , focus: false },
-	        		nmMnfr   : { value: "" , focus: false },
+	        		datesetting : {
+	        			dateType   : 'market',
+						buttonList : ['current', '1Day', '1Week', '1Month'],
+						selected   : 'current',
+						period : {
+							start : angular.copy(today),
+							end   : angular.copy(today)
+						}
+	        		},
+	        		dateOption    : [{CD_DEF : "001" , NM_DEF : "등록일시"},
+	        		                 {CD_DEF : "002" , NM_DEF : "유효일시"}
+	        						],
+	        		selectedDateOption : "001",
+	        		signItem      : { value: "" , focus: false },
+	        		nmItem        : { value: "" , focus: false },
+	        		nmMnfr        : { value: "" , focus: false },
 	        		adulYnList    : [],
 	        		adulYnIds     : "*",
 	        		taxClftList   : [],
@@ -68,6 +84,15 @@
 	            	bssItemDataVO.iClftList   = resData.iClftCodeList;
 	            	bssItemDataVO.iKindList   = resData.iKindCodeList;
 	            	bssItemDataVO.iStatList   = resData.iStatCodeList;
+	            	
+	            	bssItemDataVO.signItem.value = "";
+	            	bssItemDataVO.nmItem.value   = "";
+	            	bssItemDataVO.nmMnfr.value   = "";
+	            	$timeout(function() {
+	            		if(!page.isWriteable()){
+	    					$("#divBssVO .k-grid-toolbar").hide();
+	    				}
+        			});
 	            };
 	            
 	            //조회
@@ -77,32 +102,15 @@
 	            
 	            //초기화버튼
 	            bssItemDataVO.init = function(){
-	            	$window.location.reload();
-	            	/*var self = this;
-	            	$q.all([
-                            SyCodeSvc.getSubcodeList({cd: "SY_000007", search: "all"}).then(function (result) {
-                                return result.data;
-                            }),
-                            SyCodeSvc.getSubcodeList({cd: "SY_000006", search: "all"}).then(function (result) {
-                                return result.data;
-                            }),
-                            SyCodeSvc.getSubcodeList({cd: "IT_000005", search: "all"}).then(function (result) {
-                                return result.data;
-                            }),
-                            SyCodeSvc.getSubcodeList({cd: "IT_000002", search: "all"}).then(function (result) {
-                                return result.data;
-                            })
-                        ]).then(function (result) {
-                        	self.taxCodeList   = result[0];
-                        	self.iClftCodeList = result[1];
-                        	self.iKindCodeList = result[2];
-                        	self.iStatCodeList = result[3];
-                        });*/
+	            	bssItemDataVO.taxClftList.bReset = true;
+	            	bssItemDataVO.iClftList.bReset = true;
+	            	bssItemDataVO.iKindList.bReset = true;
+	            	bssItemDataVO.iStatList.bReset = true;
 	            };
 	            
 	            bssItemDataVO.isOpen = function (val) {
 	            	if(val) {
-	            		$scope.gridBssVO.wrapper.height(658);
+	            		$scope.gridBssVO.wrapper.height(615);
 	            		$scope.gridBssVO.resize();
 	            		gridBssVO.dataSource.pageSize(9);
 	            	}
@@ -131,8 +139,8 @@
                             commands: {
                                 update: "저장",
                                 canceledit: "닫기"
-                            }
-                            ,noRecords: "검색된 데이터가 없습니다."
+                            },
+                            noRecords: "검색된 데이터가 없습니다."
                         },
                     	boxTitle : "기본상품 리스트",
                     	sortable: false,                    	
@@ -145,7 +153,7 @@
                     			read: function(e) {
                     				var me = this,
                     					param = {
-                    					procedureParam:"USP_IT_02BSSITEM01_GET&I_CD_CLFT@s|I_NM_ITEM@s|I_NM_MNFR@s|I_YN_ADULCTFC@s|I_CD_TAXCLFT@s|I_CD_ITEMCLFT@s|I_CD_ITEMKIND@s|I_CD_ITEMSTAT@s",
+                    					procedureParam:"USP_IT_02BSSITEM01_GET&I_CD_CLFT@s|I_NM_ITEM@s|I_NM_MNFR@s|I_YN_ADULCTFC@s|I_CD_TAXCLFT@s|I_CD_ITEMCLFT@s|I_CD_ITEMKIND@s|I_CD_ITEMSTAT@s|I_DATEOPT@s|DATE_FROM@s|DATE_TO@s",
                     					I_CD_CLFT :	bssItemDataVO.signItem.value,
                     					I_NM_ITEM : bssItemDataVO.nmItem.value,
                     		        	I_NM_MNFR :	bssItemDataVO.nmMnfr.value,
@@ -153,12 +161,13 @@
                     					I_CD_TAXCLFT  : bssItemDataVO.taxClftIds,
                     					I_CD_ITEMCLFT : bssItemDataVO.iClftIds,
                     					I_CD_ITEMKIND : bssItemDataVO.iKindIds,
-                    					I_CD_ITEMSTAT : bssItemDataVO.iStatIds
+                    					I_CD_ITEMSTAT : bssItemDataVO.iStatIds,
+                    					I_DATEOPT     : bssItemDataVO.selectedDateOption,
+                    					DATE_FROM     : new Date(bssItemDataVO.datesetting.period.start.y, bssItemDataVO.datesetting.period.start.m-1, bssItemDataVO.datesetting.period.start.d, "00", "00", "00").dateFormat("YmdHis"),
+                                    	DATE_TO       : new Date(bssItemDataVO.datesetting.period.end.y, bssItemDataVO.datesetting.period.end.m-1, bssItemDataVO.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis"),
                                     };
-                    				console.log("1111");
                     				UtilSvc.getList(param).then(function (res) {
-                						e.success(res.data.results[0]);  
-                						gridBssVO.dataSource.page(1);  // 페이지 인덱스 초기화              
+                						e.success(res.data.results[0]);
                 					});
                     			},                    			
                     			update: function(e) {
@@ -181,7 +190,7 @@
                     			bssItemDataVO.dataTotal = data.length;
                     			//console.log("변화된 데이터 => ",data.length);
                     		},
-                    		pageSize: 3,
+                    		pageSize: 9,
                     		batch: true,
                     		schema: {
                     			model: {
@@ -217,8 +226,8 @@
     															editable: false, 
     															nullable: false
     						    	    				   },
-    						    	    CD_PRCCLFT_S: 	   {
-    															type: "string", 
+    						    	    AM_PRCCLFT_S: 	   {
+    															type: "number", 
     															editable: false, 
     															nullable: false
     						    	    				   },						    	    				   
@@ -282,8 +291,8 @@
     															editable: false, 
     															nullable: false
                     				    				   },	
-                    				    CD_PRCCLFT_B: 	   {
-    				                    				    	type: "string", 
+                    				    AM_PRCCLFT_B: 	   {
+    				                    				    	type: "number", 
     															editable: false, 
     															nullable: false
                     				    				   },	
@@ -332,20 +341,20 @@
                   	            {
   			                        field: "ROW_CHK",
   			                        title: "<input class='k-checkbox' type='checkbox' id='grd_chk_master' ng-click='onBssGrdCkboxAllClick($event)'><label class='k-checkbox-label k-no-text' for='grd_chk_master' style='margin-bottom:0;'>​</label>",
-			                        width: "30px",
+			                        width: "40px",
   			                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px; vertical-align:middle;"},
   			                        selectable: true
                   	            },                        
   		                        {	
                   	            	field: "CD_SIGNITEM",
   		                            title: "상품코드",
-  		                            width: "100px",
+  		                            width: 100,
   		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
   		                            columns: [ 
   		                                       	{
   				                                    field: "CD_ITEMCLFT",
   				                                    title: "상품분류",
-  				                                    width: 100,
+  				  		                            width: 100,
   							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
   				                                }
   			                                 ]
@@ -359,21 +368,21 @@
   		                                       	{
   				                                    field: "DC_ITEMABBR",
   				                                    title: "상품약어",
-  				                                    width: 100,
+  				  		                            width: 100,
   							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
   				                                }
   			                                ]
   		                        },                        
-  		                      {
-  		                        	field: "CD_PRCCLFT_S",	
+  		                        {
+  		                        	field: "AM_PRCCLFT_S",	
   		                            title: "판매가",
-  		                            width: 100,		                            
+  		                            width: 100,                          
   		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
   		                            columns: [ 
   		                                       	{
-  				                                    field: "CD_PRCCLFT_B",
+  				                                    field: "AM_PRCCLFT_B",
   				                                    title: "구입가",
-  				                                    width: 100,
+  				  		                            width: 100,
   							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
   				                                }
   			                                ]
@@ -387,7 +396,7 @@
   		                                       	{
   				                                    field: "CD_ITEMKIND",
   				                                    title: "상품구분",
-  				                                    width: 100,
+  				  		                            width: 100,
   							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
   				                                }
   			                                ]
@@ -401,7 +410,7 @@
   		                                       	{
   				                                    field: "YN_ADULCTFC",
   				                                    title: "성인인증",
-  				                                    width: 100,
+  				  		                            width: 100,
   							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
   				                                }
   			                                ]
@@ -415,7 +424,7 @@
   		                                       	{
   				                                    field: "SF_DI",
   				                                    title: "상세이미지",
-  				                                    width: 100,
+  				  		                            width: 100,
   							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
   				                                }
   			                                ]
@@ -429,7 +438,7 @@
   		                                       	{
   				                                    field: "CD_OPTTP",
   				                                    title: "옵션",
-  				                                    width: 100,
+  				  		                            width: 100,
   							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
   				                                }
   			                                ]
@@ -443,12 +452,12 @@
   		                                       	{
   				                                    field: "CD_ITEMKIND",
   				                                    title: "상품종류",
-  				                                    width: 100,
+  				  		                            width: 100,
   							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
   				                                }
   			                                ]
   		                        } ,  
-  		                      {
+  		                        {
   		                        	field: "NM_BRD",
   		                            title: "브랜드",
   		                            width: 100,
@@ -457,7 +466,7 @@
   		                                       	{
   				                                    field: "CD_ITEMSTAT",
   				                                    title: "상품상태",
-  				                                    width: 100,
+  				  		                            width: 100,
   							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
   				                                }
   			                                ]
@@ -471,31 +480,23 @@
   		                                       	{
   				                                    field: "DTS_VLD",
   				                                    title: "유효일시",
-  				                                    width: 100,
+  				  		                            width: 100,
   							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
   				                                }
   			                                ]
   		                        }
-                      ],
+                        ],
                     	dataBound: function(e) {
                             this.expandRow(this.tbody.find("tr.k-master-row").first());// 마스터 테이블을 확장하므로 세부행을 볼 수 있음                                                  
                         },
                         /*selectable: "row",*/
                         collapse: function(e) {
                             this.cancelRow();
-                        },         	
-                    	editable: {
-                    		mode: "popup",
-                    		window : {
-                    	        title: ""
-                    	    },
-                    		template: kendo.template($.trim($("#cs_popup_template").html())),
-                    		confirmation: false
-                    	},	
+                        },
                     	resizable: true,
                     	rowTemplate: kendo.template($.trim($("#bss_template").html())),
                     	altRowTemplate: kendo.template($.trim($("#bss_alt_template").html())),
-                    	height: 658      
+                    	height: 615      
                     	//모델과 그리드 셀을 제대로 연동 안시키면 수정 팝업 연 후 닫을 때 로우가 사라짐(즉 크레에이트인지 에딧인지 구분을 못함)
                     	//id는 유니크한 모델값으로 해야함 안그러면 cancel 시에 row grid가 중복 되는 현상이 발생
         		};

@@ -29,6 +29,9 @@
 		                                 <input type="text" class="form-control wid-x4" id="userNM_C" name="userNM_C" title="회사명 입력"
 		                                        maxlength="50" data-ng-model="syCinfoVO.param.NM_C" data-eden-type="kor">
 		                             </span>
+		                             <sapn data-ng-if="!page.isWriteable()">
+		                             	{{syCinfoVO.param.NM_C}}
+		                             </sapn>
 		                         </td>
 		                         <th>대표자명<span class="form-required">* </span></th>
 		                         <td>
@@ -36,17 +39,25 @@
 		                                 <input type="text" class="form-control wid-x4" id="userNM_RPSTT" name="userNM_RPSTT" title="대표자명 입력"
 		                                        maxlength="50" data-ng-model="syCinfoVO.param.NM_RPSTT">
 		                             </span>
+		                             <sapn data-ng-if="!page.isWriteable()">
+		                             	{{syCinfoVO.param.NM_RPSTT}}
+		                             </sapn>
 		                         </td>
 		                     </tr>
-		                     <tr data-ng-if="page.isWriteable()">
+		                     <tr>
 		                         <th>사업자구분<span class="form-required">* </span></th>
 		                         <td>
-		                         	<div data-ng-repeat = "list in syCinfoVO.bsnCodeList" style="float: left; margin-right: 7px;">
-		                         		<input type="radio" name="bsnRadio" data-ng-model="syCinfoVO.param.CD_BSNSCLFT" value="{{list.CD_DEF}}">
-		                         		<label >
-		                         			{{list.NM_DEF}}
-		                         		</label>
-		                         	</div>
+		                         	<span data-ng-if="page.isWriteable()">
+			                         	<div data-ng-repeat = "list in syCinfoVO.bsnCodeList" style="float: left; margin-right: 7px;">
+			                         		<input type="radio" name="bsnRadio" data-ng-model="syCinfoVO.param.CD_BSNSCLFT" value="{{list.CD_DEF}}">
+			                         		<label>
+			                         			{{list.NM_DEF}}
+			                         		</label>
+			                         	</div>
+		                         	</span>
+		                         	<span data-ng-if="!page.isWriteable()">
+		                         		{{syCinfoVO.param.NM_BSNSCLFT}}
+		                         	</span>
 		                         </td>
 		                         <th>사업자등록번호<span class="form-required">* </span></th>
 		                         <td>
@@ -54,22 +65,38 @@
 			                                 <input type="text" class="form-control wid-x6" id="userNO_BSNSTGTT" name="userNO_BSNSTGTT" title="사업자등록번호 입력"
 			                                        placeholder="'012-34-56789' 포멧으로 입력해주세요." maxlength="13" data-ng-model="syCinfoVO.param.NO_BSNSRGTT">
 			                         </span>
+			                         <span data-ng-if="!page.isWriteable()">
+			                         	{{syCinfoVO.param.NO_BSNSRGTT}}
+			                         </span>
 		                         </td>
 		                     </tr>
-		                     <tr data-ng-if="page.isWriteable()">
+		                     <tr>
 		                         <th>통신판매신고번호<span class="form-required">* </span></th>
 		                         <td>
-		                             <input type="radio" name="comRaBtn" data-ng-change="syCinfoVO.CommsaleChange()" 
-		                             data-ng-model="syCinfoVO.param.YN_COMMSALEREG" value="Y"><label>신고</label>&nbsp&nbsp
-		                             <input type="text" class="form-control wid-x6" id="userNO_COMMSALEREG" name="userNO_COMMSALEREG" title="사업자등록번호 입력"
-			                                maxlength="20" data-ng-model="syCinfoVO.param.NO_COMMSALEREG" readonly="true">
-		                         	 <input type="radio" name="comRaBtn" data-ng-change="syCinfoVO.CommsaleChange()" 
-		                         	 data-ng-model="syCinfoVO.param.YN_COMMSALEREG" value="N"><label>미신고</label>
+		                         	 <span data-ng-if="page.isWriteable()">
+			                             <input type="radio" name="comRaBtn" data-ng-change="syCinfoVO.CommsaleChange()" 
+			                             data-ng-model="syCinfoVO.param.YN_COMMSALEREG" value="Y"><label>신고</label>&nbsp&nbsp
+			                             <input type="text" class="form-control wid-x6" id="userNO_COMMSALEREG" name="userNO_COMMSALEREG" title="사업자등록번호 입력"
+				                                maxlength="20" data-ng-model="syCinfoVO.param.NO_COMMSALEREG" readonly="true">
+			                         	 <input type="radio" name="comRaBtn" data-ng-change="syCinfoVO.CommsaleChange()" 
+			                         	 data-ng-model="syCinfoVO.param.YN_COMMSALEREG" value="N"><label>미신고</label>
+		                         	 </span>
+		                         	 <span data-ng-if="!page.isWriteable() && syCinfoVO.param.YN_COMMSALEREG == 'Y'">
+		                         	 	{{syCinfoVO.param.NO_COMMSALEREG}}
+		                         	 </span>
+		                         	 <span data-ng-if="!page.isWriteable() && syCinfoVO.param.YN_COMMSALEREG == 'N'">
+		                         	 	미신고
+		                         	 </span>
 		                         </td>
 		                         <th>법인등록번호</th>
 		                         <td>
-		                             <input type="text" class="form-control wid-x6" id="userNO_CORPRGTT" name="userNO_CORPRGTT" title="법인등록번호 입력"
-			                                maxlength="14" data-ng-model="syCinfoVO.param.NO_CORPRGTT">
+		                         	<span data-ng-if="page.isWriteable()">
+			                            <input type="text" class="form-control wid-x6" id="userNO_CORPRGTT" name="userNO_CORPRGTT" title="법인등록번호 입력"
+				                                maxlength="14" data-ng-model="syCinfoVO.param.NO_CORPRGTT">
+		                         	</span>
+		                         	<span data-ng-if="!page.isWriteable()">
+		                         		{{syCinfoVO.param.NO_CORPRGTT}}
+		                         	</span>
 		                         </td>
 		                     </tr>
 		                     <tr>
@@ -80,6 +107,9 @@
 		                                        maxlength="50"
 		                                        data-ng-model="syCinfoVO.param.NM_BSCDT" data-eden-type="kor">
 		                             </span>
+		                             <span data-ng-if="!page.isWriteable()">
+		                             	{{syCinfoVO.param.NM_BSCDT}}
+		                             </span>
 		                         </td>
 		                         <th>업종</th>
 		                         <td>
@@ -88,33 +118,46 @@
 		                                        maxlength="50"
 		                                        data-ng-model="syCinfoVO.param.NM_TYBU" data-eden-type="kor">
 		                             </span>
+		                             <span data-ng-if="!page.isWriteable()">
+		                             	{{syCinfoVO.param.NM_TYBU}}
+		                             </span>
 		                         </td>
 		                     </tr>
 		                     <tr>
 		                         <th>회사주소</th>
 		                         <td>
 				            		<input readonly="readonly" type="text" name="" class="postcodify_postcode5 form-control wid-x4" value="" data-ng-model="syCinfoVO.param.NO_POST"/>
-				            		<button data-ng-click="syCinfoVO.goPopup('com')">검색</button><br />
+				            		<button data-ng-click="syCinfoVO.goPopup('com')" data-ng-if="page.isWriteable()">검색</button><br />
 				            		<input type="hidden" class="" data-ng-model="syCinfoVO.param.DC_OLDADDR">
 				            		<input readonly="readonly" type="text" name="" class="postcodify_address form-control wid-x6" value="" data-ng-model="syCinfoVO.param.DC_NEWADDR"/><br />
 									<input readonly="readonly" type="text" name="" class="postcodify_details form-control wid-x6" value="" data-ng-model="syCinfoVO.param.DC_DETADDR"/><br />
 		                         </td>
 		                         <th>국내/해외배송</th>
 		                         <td>
+		                         	<span data-ng-if="page.isWriteable()">
 		                         	<div data-ng-repeat = "list in syCinfoVO.dmstCodeList" style="float: left; margin-right: 7px;">
 		                         		<input type="radio" name="dmstRadio" data-ng-model="syCinfoVO.param.CD_DMSTFECTSHP" value="{{list.CD_DEF}}">
 		                         		<label >
 		                         			{{list.NM_DEF}}
 		                         		</label>
 		                         	</div>
+		                         	</span>
+		                         	<span>
+		                         		{{syCinfoVO.param.NM_DMSTFECTSHP}}
+		                         	</span>
 		                         </td>
 		                     </tr>
 		                     <tr>
 		                         <th>전화번호</th>
 		                         <td>
+		                         	<span data-ng-if="page.isWriteable()">
 		                            <input type="text" class="form-control wid-x6" id="userNO_PHNE" title="전화번호 입력"
 		                                        maxlength="13" placeholder="'012-3456-7890' 포멧으로 입력해주세요."
 		                                        data-ng-model="syCinfoVO.param.NO_PHNE"> 
+		                            </span>
+		                            <span data-ng-if="!page.isWriteable()">
+		                            	{{syCinfoVO.param.NO_PHNE}}
+		                            </span>
 		                         </td>
 		                         <th>팩스번호</th>
 		                         <td>
@@ -123,6 +166,9 @@
 		                                 title="팩스번호 입력" data-ng-model="syCinfoVO.param.NO_FAX" maxlength="13"
 		                                 placeholder="'012-3456-7890' 포멧으로 입력해주세요.">
 		                             </span>
+		                             <span data-ng-if="!page.isWriteable()">
+		                            	{{syCinfoVO.param.NO_FAX}}
+		                            </span>
 		                         </td>
 		                     </tr>
 		                     <tr>
@@ -149,6 +195,9 @@
 		                                 <input type="text" class="form-control wid-x6" id="userDC_HOPAURL" 
 		                                 title="홈페이지URL 입력" data-ng-model="syCinfoVO.param.DC_HOPAURL" maxlength="100">
 		                             </span>
+		                             <span data-ng-if="!page.isWriteable()">
+		                            	{{syCinfoVO.param.DC_HOPAURL}}
+		                            </span>
 		                         </td>
 		                     </tr>
 		                     <tr data-ng-if="page.isWriteable()">
@@ -191,9 +240,14 @@
 		                     <tr>
 		                         <th>A/S전화번호</th>
 		                         <td>
-		                            <input type="text" class="form-control wid-x6" id="userNO_ASPHNE" title="AS전화번호 입력"
-		                                        maxlength="13" placeholder="'012-3456-7890' 포멧으로 입력해주세요."
-		                                        data-ng-model="syCinfoVO.param.NO_ASPHNE"> 
+		                         	<span data-ng-if="page.isWriteable()">
+			                            <input type="text" class="form-control wid-x6" id="userNO_ASPHNE" title="AS전화번호 입력"
+			                                        maxlength="13" placeholder="'012-3456-7890' 포멧으로 입력해주세요."
+			                                        data-ng-model="syCinfoVO.param.NO_ASPHNE"> 
+		                            </span>
+		                            <span data-ng-if="!page.isWriteable()">
+		                            	{{syCinfoVO.param.NO_ASPHNE}}
+		                            </span>
 		                         </td>
 		                    
 		                         <th>A/S안내</th>
@@ -205,6 +259,9 @@
 	                                    <option value="">A/S안내선택</option>
 	                                    </select>
 		                             </span>
+		                             <span data-ng-if="!page.isWriteable()">
+		                            	{{syCinfoVO.param.NM_AS}}
+		                            </span>
 		                         </td>
 		                     </tr>
 		                     </tbody>
@@ -243,23 +300,27 @@
                         <tr>
                         	<th>창고명</th>
                             <td>
+                            <span data-ng-if="page.isWriteable()">
                             	<input type="text" class="form-control wid-x6" id="userNM_WAHO" title="창고명 입력"
                                         maxlength="50" data-ng-model="syCinfoVO.wParam.NM_WAHO" data-eden-type="kor"> 
+                            </span>
                             </td>
                         	<th>택배사</th>
                         	<td>
+                        	<span data-ng-if="page.isWriteable()">
                        			<select id="userCD_PARS" class="form-control wid-x2" title="택배사선택" 
                                    data-ng-options="pars.CD_DEF as pars.NM_DEF for pars in syCinfoVO.parsCodeList" 
                                    data-ng-model="syCinfoVO.wParam.CD_PARS">
                                    <option value="">택배사선택</option>
                                 </select>
+                            </span>
                         	</td>
                         </tr>
                         <tr>
                         	<th>창고주소</th>
                         	<td>
 			            		<input readonly="readonly" type="text" id="userW_NO_POST" class="W_postcodify_postcode5 form-control wid-x4" value="" data-ng-model="syCinfoVO.wParam.NO_POST" />
-			            		<button data-ng-click="syCinfoVO.goPopup('waho')">검색</button><br />
+			            		<button data-ng-click="syCinfoVO.goPopup('waho')" data-ng-if="page.isWriteable()">검색</button><br />
 			            		<input type="hidden" class="" data-ng-model="syCinfoVO.wParam.DC_OLDADDR">
 			            		<input readonly="readonly" type="text" id="userW_DC_NEWADDR" class="form-control wid-x6" value="" data-ng-model="syCinfoVO.wParam.DC_NEWADDR" /><br />
 								<input readonly="readonly" type="text" id="userW_DC_DETADDR" class="W_postcodify_details form-control wid-x6" value="" data-ng-model="syCinfoVO.wParam.DC_DETADDR" /><br />

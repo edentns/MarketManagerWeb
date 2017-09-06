@@ -41,6 +41,7 @@
 	        			bImage: true,
 	        			imgWidth: '211px',
 	        			imgHeight: '100px',
+	        			bDisabled: true,
 	        			currentData:{
 	        				CD_AT: "999",
 	        				CD_REF1: "SYEM00000001",
@@ -84,6 +85,7 @@
 	        		file997VO: {
 	        			CD_AT:'997',
 	        			limitCnt: 10,
+	        			bDisabled: true,
 	        			currentDataList:[{
 	        				CD_AT: "997",
 	        				CD_REF1: "SYEM00000001",

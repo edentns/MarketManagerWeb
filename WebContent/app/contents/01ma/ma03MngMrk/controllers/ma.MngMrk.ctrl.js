@@ -58,8 +58,6 @@
               	    },
               	    param: ""
 	            };
-	            	            
-	            kendo.culture("ko-KR");    
 		        
 	            //검색
 	            mngMrkDateVO.doInquiry = function () {
@@ -115,6 +113,11 @@
                 	me.resetAtGrd.dataSource.data([]);
                 };
 
+                function stopEvent(e) {
+                	e.preventDefault();
+                	e.stopPropagation();
+                }
+                
                 mngMrkDateVO.isOpen = function (val) {
 	            	if(val) {
 	            		$scope.kg.wrapper.height(657);
@@ -155,6 +158,13 @@
                 					UtilSvc.getList(mngMrkDateVO.param).then(function (res) {
                 						mngMrkDateVO.dataTotal = res.data.results[0].length;                						
                 						e.success(res.data.results[0]);
+
+                	    				setTimeout(function () {
+                	                       	if(!page.isWriteable()) {
+                	               				$(".k-grid-delete").addClass("k-state-disabled");
+                	               				$(".k-grid-delete").click(stopEvent);
+                	               			}
+                	                    });
                 					});
                     			},
     	                		create: function(e) {
@@ -162,6 +172,7 @@
     	                			var param = {
                                     	data: e.data.models
                                     };
+    	                			
     	                			if(!isValid(param)) { return false; };
     	                			MaMngMrkSvc.mngmrkInsert(param).then(function(res) {
     	                				defer.resolve();
@@ -175,6 +186,7 @@
     	                			var param = {
                                     	data: e.data.models
                                     };
+    	                			
     	                			if(!isValid(param)) { return };
     	                			MaMngMrkSvc.mngmrkUpdate(param).then(function(res) {
     	                				defer.resolve();
@@ -183,7 +195,7 @@
     	                			});
     	                			return defer.promise;
                     			},
-                    			destroy: function(e) {
+                    			destroy: function(e) {    	                			
                     				var defer = $q.defer();
     	                			var param = {
     	                				data: e.data.models	
@@ -324,23 +336,25 @@
                     		'<a class="k-button" onclick="save" style = "float:right;">저장</a>'+
                     		'<a class="k-button" onclick="cancel" style = "float:right;">취소</a>'}],
                     		*/
-                    		["create", "save", "cancel"]
-                       ,columns: [
+                    		["create", "save", "cancel"],
+                        columns: [
                		           {
 								   field: "ROW_NUM"
 								  ,title: "순서"
 								  ,width: 50
 								  ,headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}
+               		              ,attributes: {class:"ta-r"}
                		           },
             		           {
                		        	   field: "NM_MRK"
-               		        	  ,title: "<code>*</code>마켓명"
+               		        	  ,title: "<span class='form-required'>* </span>마켓명"
                		        	  ,width: 200
                		        	  ,headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}
+            		              ,attributes: {class:"ta-l"}
             		           },
             		           {
                		        	   field: "CD_ITLWAY"
-               		        	  ,title: "<code>*</code>연동방법"
+               		        	  ,title: "<span class='form-required'>* </span>연동방법"
                		        	  ,width: 100
                		        	  ,headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}
 	            		       	  ,editor: 
@@ -395,14 +409,15 @@
             		           },
             		           {
             		        	  field: "DC_MRKID"
-            		             ,title: "<code>*</code>관리자ID"
+            		             ,title: "<span class='form-required'>* </span>관리자ID"
             		             ,width: 100
             		             ,headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}
+         		                 ,attributes: {class:"ta-l"}
             		           },
             		           {
             		        	  field: "NEW_DC_PWD"
-            		             ,title: "<code>*</code>비밀번호"
-            		             ,width: 100
+            		             ,title: "<span class='form-required'>* </span>비밀번호"
+            		             ,width: 150
             		             ,headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
             		           	 ,editor: function (container, options) {
             		                 $('<input type="password" class="k-textbox" name="' + options.field + '"/>').appendTo(container);
@@ -416,6 +431,7 @@
 	          		           		 }
 	          		           		 return returnPWDMsg;
             		           	 }
+           		                 ,attributes: {class:"ta-l"}
             		           },
             		           {
             		        	  field: "NEW_API_KEY"
@@ -434,15 +450,18 @@
 	          		           		 }
 	          		           		 return returnAPIMsg;
 	          		           	 }
+           		                 ,attributes: {class:"ta-l"}
             		           },
             		           {
             		        	  field: "DC_SALEMNGURL"
             		        	 ,title: "판매관리URL"
-            		        	 ,width: 200
+            		        	 ,width: 250
             		        	 ,headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
+         		                 ,attributes: {class:"ta-l"}
            		        	   },          		           
             		           {
-           		        	      command: [ "destroy" ]
+           		        		  command: ["destroy"]
+         		                  ,attributes: {class:"ta-l"}
            		        	   }
                     	],
                         collapse: function(e) {
@@ -450,9 +469,20 @@
                             this.cancelRow();
                         },         	
                     	editable: {
-                    	    confirmation: "삭제 하시겠습니까?",
+                    	    confirmation: !page.isWriteable()?false:"삭제 하시겠습니까?",
                     	},
                     	height: 657
-        		};        
+        		};
+
+                setTimeout(function () {
+                	if(!page.isWriteable()) {
+        				$(".k-grid-add").addClass("k-state-disabled");
+        				$(".k-grid-save-changes").addClass("k-state-disabled");
+        				$(".k-grid-cancel-changes").addClass("k-state-disabled");
+        				$(".k-grid-add").click(stopEvent);
+        				$(".k-grid-save-changes").click(stopEvent);
+        				$(".k-grid-cancel-changes").click(stopEvent);
+        			}
+                });
             }]);
 }());

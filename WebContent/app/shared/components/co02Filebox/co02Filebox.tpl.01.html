@@ -1,12 +1,12 @@
 <div>
 	<input type='file' ng-attr-id='{{filevo.fileId}}' style='display: none;' nv-file-select uploader='filevo.uploader'>
 	<input type='text' class='form-control' readonly='readonly' data-ng-click='filevo.fileDownload()' style='min-width:190px; max-width:50%; padding-left:2px; padding-right:2px; margin-right:2px;' data-ng-model='filevo.fileName'>
-	<button type='button' class='btn btn-primary' style='margin-right:2px;' title='파일선택' data-ng-click='filevo.fileClick()'>파일선택</button>
-	<button type="button" class="btn btn-danger btn-xs" data-ng-click="filevo.fileDelete()" data-ng-disabled='filevo.delBtnDisabled'>
+	<button type='button' class='btn btn-primary' style='margin-right:2px;' title='파일선택' data-ng-click='filevo.fileClick()' data-ng-disabled='filevo.bDisabled'>파일선택</button>
+	<button type="button" class="btn btn-danger btn-xs" data-ng-click="filevo.fileDelete()" data-ng-disabled='filevo.bDisabled || filevo.delBtnDisabled'>
         <span class="glyphicon glyphicon-trash"></span> 삭제
     </button>
 	<!-- button type='button' class='btn btn-primary' style='margin-right:2px;' title='삭제' data-ng-click='filevo.fileDelete()' data-ng-disabled='filevo.delBtnDisabled'>삭제</button -->
-	<button type='button' class='btn btn-primary' style='margin-right:2px;' title='취소' data-ng-click='filevo.fileInit()' data-ng-disabled='!filevo.dirty'>취소</button>
+	<button type='button' class='btn btn-primary' style='margin-right:2px;' title='취소' data-ng-click='filevo.fileInit()' data-ng-disabled='filevo.bDisabled || !filevo.dirty'>취소</button>
 </div>
 <div data-ng-if="filevo.bImage && filevo.imgSrc != '//:0' && filevo.imgSrc != ''" style='margin-top:2px; width:{{filevo.imgWidth}}; height:{{filevo.imgHeight}};'>
 	<img data-ng-src='{{filevo.imgSrc}}' width="{{filevo.imgWidth}}" height="{{filevo.imgHeight}}"/> 

@@ -89,7 +89,7 @@
 		<td class="ta-r">
             <span class="seq ells">#= ROW_NUM #</span>
         </td>
-		<td class="ta-c">
+		<td class="ta-l">
             <span class="ells">#= NO_C # - #= NM_C #</span>
         </td>
 		<td class="ta-c">
@@ -104,7 +104,7 @@
 		<td class="ta-l">
             <span class="ells">#= DC_ID #</span>
         </td>
-		<td class="ta-l">
+		<td class="ta-c">
             <span class="ells">#= NM_EMP #</span>
         </td>
 		<td class="ta-c">
@@ -116,14 +116,14 @@
 		<td class="ta-l">
             <span class="ells">#= DC_REPREMI #</span>
         </td> 
-		<td class="ta-l">
+		<td class="ta-c">
             <span class="ells">
 				#if(CD_JOINYN){ #
 				<co04-cd-to-nm cd="#:CD_JOINYN#" nm-box="joinerDataVO.StatusDtOptionVO">
 				#}#
 			</span>
         </td> 
-		<td class="ta-l">
+		<td class="ta-c">
             <span class="ells">
 				#if(CD_JOINITEM){ #
 				<co04-cd-to-nm cd="#:CD_JOINITEM#" nm-box="joinerDataVO.ProcNameDtOptionVO">
@@ -138,7 +138,68 @@
         </td> 
     </tr>
 </script>
-
+<script id="altTemplate" type="text/x-kendo-template">
+	<tr class="k-alt" data-uid="#= uid #">
+		<td class="ta-c">        
+			# if(CD_JOINYN === '003'){	#
+					
+			# }else{					#
+				<input class='k-checkbox' data-role='checkbox' type='checkbox' ng-click='onClick($event)' id='#= uid #'>
+				<label class='k-checkbox-label k-no-text' for='#= uid #'></label>
+			# }							#		
+        </td>
+		<td class="ta-r">
+            <span class="seq ells">#= ROW_NUM #</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells">#= NO_C # - #= NM_C #</span>
+        </td>
+		<td class="ta-c">
+            <span class="ells">#= NM_RPSTT #</span>
+        </td>
+		<td class="ta-c">
+            <span class="ells">#= NO_BSNSRGTT #</span>
+        </td>
+		<td class="ta-c">
+            <span class="ells">#= NO_COMMSALEREG #</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells">#= DC_ID #</span>
+        </td>
+		<td class="ta-c">
+            <span class="ells">#= NM_EMP #</span>
+        </td>
+		<td class="ta-c">
+            <span class="ells">#= NO_PHNE #</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells">#= DC_NEWADDR_DC_OLDADDR #</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells">#= DC_REPREMI #</span>
+        </td> 
+		<td class="ta-c">
+            <span class="ells">
+				#if(CD_JOINYN){ #
+				<co04-cd-to-nm cd="#:CD_JOINYN#" nm-box="joinerDataVO.StatusDtOptionVO">
+				#}#
+			</span>
+        </td> 
+		<td class="ta-c">
+            <span class="ells">
+				#if(CD_JOINITEM){ #
+				<co04-cd-to-nm cd="#:CD_JOINITEM#" nm-box="joinerDataVO.ProcNameDtOptionVO">
+				#}#	
+			</span>
+        </td> 
+		<td class="ta-c">
+            <span class="ells">#= DTS_JOIN #</span>
+        </td> 
+		<td class="ta-c">
+            <span class="ells">#= DTS_JOINREQ #</span>
+        </td> 
+    </tr>
+</script>
 <style>
 .betweenDiv{
 	width:13%;
