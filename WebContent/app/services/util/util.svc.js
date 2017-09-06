@@ -899,7 +899,7 @@
 
 				return $http({
 					method	: "GET",
-					url		: APP_CONFIG.domain + "/code/common/"+param.lnomngcdhd+"/"+param.lcdcls
+					url		: APP_CONFIG.domain + "/code/common/"+param.lnomngcdhd+"/"+param.lcdcls+"/"+param.mid 
 				}).success(function (data, status, headers, config) {
 					
 				}).error(function (data, status, headers, config) {

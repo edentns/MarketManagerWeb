@@ -22,15 +22,15 @@
                                 "<li><a data-ng-click='selectAll();'><span class='glyphicon glyphicon-ok green' aria-hidden='true'></span><font style='text-align:left; font-family: initial; font-size: 11px; color:#606060'> 전체선택</font></a></li>" +
                                 "<li><a data-ng-click='deselectAll();'><span class='glyphicon glyphicon-remove red' aria-hidden='true'></span><font style='text-align:left; font-family: initial; font-size: 11px; color:#606060'> 전체해제</font></a></li>" +
                                 "<li class='divider' style='margin:3px 0;'></li>" +
-                                "<li data-ng-repeat='option in options'>"+
-                                	"<a data-ng-click='toggleSelectItem(option)'>"+
+                                "<li data-ng-repeat='option in options' class='nm-list'>"+
+                                	"<a data-ng-click='toggleSelectItem(option, $event)'>"+
                                 		"<span data-ng-class='getClassName(option)' aria-hidden='true'></span><font style='text-align:left; font-family: initial; font-size: 11px; color:#606060'> {{option[co01McboxVO.name]}}</font>" +
                                 	"</a>" +
                                 "</li>" +
                             "</ul>" +
                         "</div>",
 
-                controller:['$scope', function ($scope) {
+                controller:['$scope', '$element' , function ($scope, $ele) {
                 	var co01McboxVO = $scope.co01McboxVO = {
     	        		selectNames:"전체",
     	        		maxNames: 3,
@@ -49,6 +49,21 @@
                     		if($scope.setting.name    ) co01McboxVO.name     = $scope.setting.name;
                     	}
                 	};
+                	
+                	$scope.$watch('options.setSelectNames', function (newValue) {
+                		try{
+                			if(newValue) {
+                    			angular.forEach(newValue, function (item, index) { 
+                    				$timeout(function(){
+                    					$ele.find(".dropdown-menu > .nm-list:eq("+item+") > a").triggerHandler("click");
+                    				},0); 
+                                });
+                    		}
+                		}catch(e){
+                			console.log(e);
+                			return;
+                		}                		
+				    });
 
                 	$scope.$watch('options.bReset', function (newValue, oldValue) {
                 		if(newValue) {
@@ -114,11 +129,12 @@
                         self.co01McboxVO.selectNames = "";
                     };
 
-                    $scope.toggleSelectItem = function (option) {
+                    $scope.toggleSelectItem = function (option, e) {
                     	var self = this,
                     		loItem = {},
-                        	intIndex = -1;
-                    	
+                        	intIndex = -1,
+                        	liIndex = $ele.find(".dropdown-menu > .nm-list").index(e.target.closest("li"));
+                    	                    	
                         angular.forEach(self.co01McboxVO.arrayModel, function (item, index) {
                             if (item[self.co01McboxVO.id] == option[self.co01McboxVO.id]) {
                                 intIndex = index;
@@ -145,16 +161,20 @@
 	                        	if(index === 0) {
 	                        		$scope.model                 = item[self.co01McboxVO.id];
 	                        		self.co01McboxVO.selectNames = item[self.co01McboxVO.name];
-	                        	}
-	                        	else if(index >= self.co01McboxVO.maxNames) {
+	                        	}else if(index >= self.co01McboxVO.maxNames) {
 	                        		if(index == self.co01McboxVO.maxNames) self.co01McboxVO.selectNames = self.co01McboxVO.selectNames + "...";
 	                        		$scope.model = $scope.model + "^" +  item[self.co01McboxVO.id];
-		                        }
-	                        	else {
+		                        }else {
 	                        		self.co01McboxVO.selectNames = self.co01McboxVO.selectNames + ", " +  item[self.co01McboxVO.name];
 	                        		$scope.model = $scope.model + "^" +  item[self.co01McboxVO.id];
 	                        	}
-	                        });
+	                        });	                        
+	                        if($scope.options.allSelectNames){
+	                        	$scope.options.allSelectNames.push(liIndex);
+	                        }else{
+	                        	$scope.options.allSelectNames = [];
+	                        	$scope.options.allSelectNames[0] = liIndex;
+	                        };
                         }
                     };
 
@@ -172,6 +192,6 @@
                     
                     $scope.initLoad();
                 }]
-            }
+            };
         }]);
 }());

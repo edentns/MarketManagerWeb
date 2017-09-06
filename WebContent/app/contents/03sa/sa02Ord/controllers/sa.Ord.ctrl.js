@@ -7,61 +7,60 @@
      * 상품분류관리
      */
     angular.module("sa.Ord.controller")
-        .controller("sa.OrdCtrl", ["$scope", "$state", "$http", "$q", "$log", "sa.OrdSvc", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "MenuSvc", "Util03saSvc", "APP_SA_MODEL", 
-            function ($scope, $state, $http, $q, $log, saOrdSvc, APP_CODE, $timeout, resData, Page, UtilSvc, MenuSvc, Util03saSvc, APP_SA_MODEL) {
+        .controller("sa.OrdCtrl", ["$scope", "$cookieStore", "$state", "$http", "$q", "$log", "sa.OrdSvc", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "MenuSvc", "Util03saSvc", "APP_SA_MODEL", 
+            function ($scope, $cookieStore, $state, $http, $q, $log, saOrdSvc, APP_CODE, $timeout, resData, Page, UtilSvc, MenuSvc, Util03saSvc, APP_SA_MODEL) {
 	            var page  = $scope.page = new Page({ auth: resData.access }),
-		            today = edt.getToday();
+		            today = edt.getToday(),
+		            menuId = MenuSvc.getNO_M($state.current.name);
 	            
-	            //마켓명 드랍 박스 실행	
-	            var mrkName = (function(){
-        			UtilSvc.csMrkList().then(function (res) {
-        				if(res.data.length >= 1){
-        					ordDataVO.ordMrkNameOp = res.data;
-        				}
-        			});		
-	            }());
-	            
-	            //주문상태 드랍 박스 실행	
-	            var orderStatus = (function(){
-    				var param = {
-    					lnomngcdhd: "SYCH00048",
-    					lcdcls: "SA_000007"
-    				};
-        			UtilSvc.getCommonCodeList(param).then(function (res) {
-        				if(res.data.length >= 1){
-        					ordDataVO.ordStatusOp = res.data;
-        				}
-        			});
-	            }());
-	            
-	            //기간 상태 드랍 박스 실행	
-	            var betweenDate = (function(){
-    				var param = {
-    					lnomngcdhd: "SYCH00055",
-    					lcdcls: "SA_000014"
-    				};
-        			UtilSvc.getCommonCodeList(param).then(function (res) {
-        				if(res.data.length >= 1){
-        					ordDataVO.betweenDateOptionOp = res.data;
-        					ordDataVO.betweenDateOptionMo = res.data[0].CD_DEF; //처음 로딩 때 초기 인덱스를 위하여
-        				}
-        			});
-	            }());
-	            
-	            //취소 사유 코드 드랍 박스 실행	
-	            var cancelReasonCode = (function(){
-    				var param = {
-    					lnomngcdhd: "SYCH00056",
-    					lcdcls: "SA_000015"
-    				};
-        			UtilSvc.getCommonCodeList(param).then(function (res) {
-        				if(res.data.length >= 1){
-        					ordDataVO.cancelCodeOp.dataSource = res.data;
-        				}
-        			});
-	            }());
-	            
-                var grdField =  {
+	            var ordInitDataBinding = {
+    	            //마켓명 드랍 박스 실행	
+    	            mrkName : (function(){
+            			UtilSvc.csMrkList().then(function (res) {
+            				if(res.data.length >= 1){
+            					ordDataVO.ordMrkNameOp = res.data;
+            				}
+            			});		
+    	            }()),
+    	            orderStatus : (function(){
+        				var param = {
+        					lnomngcdhd: "SYCH00048",
+        					lcdcls: "SA_000007",
+        					mid: menuId
+        				};
+            			UtilSvc.getCommonCodeList(param).then(function (res) {
+            				if(res.data.length >= 1){
+            					ordDataVO.ordStatusOp = res.data;
+            				}
+            			});
+    	            }()),
+    	            betweenDate : (function(){
+        				var param = {
+        					lnomngcdhd: "SYCH00055",
+        					lcdcls: "SA_000014"
+        				};
+            			UtilSvc.getCommonCodeList(param).then(function (res) {
+            				if(res.data.length >= 1){
+            					ordDataVO.betweenDateOptionOp = res.data;
+            					ordDataVO.betweenDateOptionMo = res.data[0].CD_DEF; //처음 로딩 때 초기 인덱스를 위하여
+            				}
+            			});
+    	            }()),
+    	            //취소 사유 코드 드랍 박스 실행	
+    	            cancelReasonCode : (function(){
+        				var param = {
+        					lnomngcdhd: "SYCH00056",
+        					lcdcls: "SA_000015"
+        				};
+            			UtilSvc.getCommonCodeList(param).then(function (res) {
+            				if(res.data.length >= 1){
+            					ordDataVO.cancelCodeOp.dataSource = res.data;
+            				}
+            			});
+    	            }())
+	            },
+	            	            
+	            grdField =  {
                     ROW_CHK       : { type: APP_SA_MODEL.ROW_CHK.type        , editable: true , nullable: false },
                     NO_ORD        : { type: APP_SA_MODEL.NO_ORD.type         , editable: false, nullable: false },
                     NO_APVL       : { type: APP_SA_MODEL.NO_APVL.type        , editable: false, nullable: false },
@@ -127,34 +126,31 @@
 				                                  }
 				                        }
                                     }
-                };
-
-                APP_SA_MODEL.CD_ORDSTAT.fNm = "ordDataVO.ordStatusOp";
+                },
                 
-                var grdCol = [[APP_SA_MODEL.ROW_CHK],
+                grdCol = [[APP_SA_MODEL.ROW_CHK],
                               [APP_SA_MODEL.NO_ORD       , [APP_SA_MODEL.NO_APVL, APP_SA_MODEL.NO_MRKORD]],
-                              [APP_SA_MODEL.NM_MRK       , APP_SA_MODEL.NO_MRKORD     ],
-                              [APP_SA_MODEL.NO_MRKITEM   , APP_SA_MODEL.NO_MRKREGITEM ],
-                              [APP_SA_MODEL.NM_MRKITEM   , APP_SA_MODEL.NM_MRKOPT     ], 
-                              
-                              [APP_SA_MODEL.AM_ORDSALEPRC, APP_SA_MODEL.AM_CMS		  ],                              
+                              [APP_SA_MODEL.NM_MRK       , APP_SA_MODEL.NO_MRKORD      ],
+                              [APP_SA_MODEL.NO_MRKITEM   , APP_SA_MODEL.NO_MRKREGITEM  ],
+                              [APP_SA_MODEL.NM_MRKITEM   , APP_SA_MODEL.NM_MRKOPT      ],                               
+                              [APP_SA_MODEL.AM_ORDSALEPRC, APP_SA_MODEL.AM_CMS		   ],                              
                               [APP_SA_MODEL.AM_SHPCOST	 , APP_SA_MODEL.AM_CUSTOM_SALES],                              
-                              [APP_SA_MODEL.AM_ITEMPRC	 , APP_SA_MODEL.QT_ORD		  ],
-                              
-                              [APP_SA_MODEL.NM_PCHR      , APP_SA_MODEL.NM_CONS       ],
-                              [APP_SA_MODEL.NO_PCHRPHNE  , APP_SA_MODEL.NO_CONSHDPH   ],
-                              [APP_SA_MODEL.DC_PCHREMI   , APP_SA_MODEL.DC_CONSNEWADDR],
-                              [APP_SA_MODEL.DC_PCHRREQCTT, APP_SA_MODEL.AM_PCHSPRC    ],
-                              [APP_SA_MODEL.CD_ORDSTAT   , APP_SA_MODEL.DC_SHPWAY     ],
-                              [APP_SA_MODEL.DTS_ORD      , APP_SA_MODEL.DTS_APVL      ],
-                              [APP_SA_MODEL.DTS_ORDDTRM  , APP_SA_MODEL.YN_CONN       ] 
+                              [APP_SA_MODEL.AM_ITEMPRC	 , APP_SA_MODEL.QT_ORD		   ],                              
+                              [APP_SA_MODEL.NM_PCHR      , APP_SA_MODEL.NM_CONS        ],
+                              [APP_SA_MODEL.NO_PCHRPHNE  , APP_SA_MODEL.NO_CONSHDPH    ],
+                              [APP_SA_MODEL.DC_PCHREMI   , APP_SA_MODEL.DC_CONSNEWADDR ],
+                              [APP_SA_MODEL.DC_PCHRREQCTT, APP_SA_MODEL.AM_PCHSPRC     ],
+                              [APP_SA_MODEL.CD_ORDSTAT   , APP_SA_MODEL.DC_SHPWAY      ],
+                              [APP_SA_MODEL.DTS_ORD      , APP_SA_MODEL.DTS_APVL       ],
+                              [APP_SA_MODEL.DTS_ORDDTRM  , APP_SA_MODEL.YN_CONN        ] 
                              ],
                     grdDetOption      = {},
                     grdRowTemplate    = "<tr data-uid=\"#= uid #\" ng-dblclick=\"grdDblClickGo('#: NO_ORD #','#: NO_MRKORD #',$event)\">\n",
                     grdAltRowTemplate = "<tr class=\"k-alt\" data-uid=\"#= uid #\" ng-dblclick=\"grdDblClickGo('#: NO_ORD #','#: NO_MRKORD #',$event)\">\n",
                     grdCheckOption    = {clickNm:"onOrdGrdCkboxClick",
                 		                 allClickNm:"onOrdGrdCkboxAllClick"};
-                
+
+                APP_SA_MODEL.CD_ORDSTAT.fNm = "ordDataVO.ordStatusOp";
                 grdDetOption       = UtilSvc.gridDetOption(grdCheckOption, grdCol);
                 grdRowTemplate     = grdRowTemplate    + grdDetOption.gridContentTemplate;
                 grdAltRowTemplate  = grdAltRowTemplate + grdDetOption.gridContentTemplate;
@@ -194,27 +190,31 @@
 	        		cancelCodeMo : "",
 	        		dataTotal : 0,
 	        		resetAtGrd :"",
-	        		param : ""
+	        		param: ""
 		        };	           
 	            
 	            //조회
             	ordDataVO.inQuiry = function(){
 	            	var me = this;
-	            	me.param = {	  
-    				    NM_MRKITEM : ordDataVO.procName.value,
-					    NM_MRK : ordDataVO.ordMrkNameMo, 
-					    CD_ORDSTAT : ordDataVO.ordStatusMo,
-					    NO_MRKORD : ordDataVO.orderNo.value,      
-					    NM_PCHR : ordDataVO.buyerName.value,
-					    NO_ORDDTRM : ordDataVO.admin.value,  
-					    DTS_CHK : ordDataVO.betweenDateOptionMo,  
-					    DTS_FROM : new Date(ordDataVO.datesetting.period.start.y, ordDataVO.datesetting.period.start.m-1, ordDataVO.datesetting.period.start.d, "00", "00", "00").dateFormat("YmdHis"),           
-					    DTS_TO : new Date(ordDataVO.datesetting.period.end.y, ordDataVO.datesetting.period.end.m-1, ordDataVO.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis"),				    
-                    };   
+	            	me.param = {
+    				    NM_MRKITEM : me.procName.value.trim(),
+					    NM_MRK : me.ordMrkNameMo.trim(),
+					    NM_MRK_SELCT_INDEX : me.ordMrkNameOp.allSelectNames,
+					    CD_ORDSTAT : me.ordStatusMo.trim(),
+					    NM_ORDSTAT_SELCT_INDEX : me.ordStatusOp.allSelectNames,
+					    NO_MRKORD : me.orderNo.value.trim(),      
+					    NM_PCHR : me.buyerName.value.trim(),
+					    NO_ORDDTRM : me.admin.value.trim(),  
+					    DTS_CHK : me.betweenDateOptionMo.trim(),  
+					    DTS_FROM : new Date(me.datesetting.period.start.y, me.datesetting.period.start.m-1, me.datesetting.period.start.d, "00", "00", "00").dateFormat("YmdHis"),           
+					    DTS_TO : new Date(me.datesetting.period.end.y, me.datesetting.period.end.m-1, me.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis"),
+					    DTS_SELECTED : me.datesetting.selected					    
+                    };
     				if(Util03saSvc.readValidation(me.param)){
     					$scope.ordkg.dataSource.read();
-    				};	            	
-	            };	            
+    				};
+    				$cookieStore.put("ordSerchParam",me.param);
+	            };
 	            
 	            //초기화버튼
 	            ordDataVO.inIt = function(){
@@ -232,25 +232,56 @@
                 	},0);                	
                 	        			
                 	me.ordStatusOp.bReset = true;
-                	me.ordMrkNameOp.bReset = true;  
-		        	                	                	
-                	angular.element($("#grd_chk_master")).prop("checked",false);
+                	me.ordMrkNameOp.bReset = true;
+                	                	
+                	angular.element($(".k-checkbox:eq(0)")).prop("checked",false);
                 	me.dataTotal = 0;
                 	me.resetAtGrd = $scope.ordkg;
                 	me.resetAtGrd.dataSource.data([]);	            		            	
 	            };
+	            
+	            //쿠키를 이용한 조회 저장 기능
+	            ordDataVO.cookieSearchPlay = function(){
+            		var getParam = $cookieStore.get("ordSerchParam"), me = this;
+            			            	
+            		if($cookieStore.get("moveOrdInfo") && Util03saSvc.readValidation(getParam)){            			
+            			me.datesetting.selected = getParam.DTS_SELECTED;            			
+ 					    me.param = getParam;
+ 					    
+            			$timeout(function(){
+            				me.ordMrkNameMo = getParam.NM_MRK; 
+            				me.ordMrkNameOp.setSelectNames = getParam.NM_MRK_SELCT_INDEX;
+                			me.ordStatusMo = getParam.CD_ORDSTAT;
+                			me.ordStatusOp.setSelectNames = getParam.NM_ORDSTAT_SELCT_INDEX;
+                			                			
+            				me.procName.value = getParam.NM_MRKITEM;
+	            			me.orderNo.value = getParam.NO_MRKORD;
+	            			me.buyerName.value = getParam.NM_PCHR;
+	            			me.admin.value = getParam.NO_ORDDTRM; 
+            				me.betweenDateOptionMo = getParam.DTS_CHK;
+            				
+            				me.datesetting.period.start.y = getParam.DTS_FROM.substring(0,4);
+                			me.datesetting.period.start.m = getParam.DTS_FROM.substring(4,6);
+                			me.datesetting.period.start.d = getParam.DTS_FROM.substring(6,8); 					    
+                			me.datesetting.period.end.y = getParam.DTS_TO.substring(0,4);
+     					   	me.datesetting.period.end.m = getParam.DTS_TO.substring(4,6); 
+     					   	me.datesetting.period.end.d = getParam.DTS_TO.substring(6,8);
+            				$scope.ordkg.dataSource.read();
+        					$cookieStore.put("moveOrdInfo",false);
+						}, 0);
+            		};
+		        };
 
 	            ordDataVO.isOpen = function (val) {
 	            	if(val) {
 	            		$scope.ordkg.wrapper.height(616);
 	            		$scope.ordkg.resize();
 	            		grdOrdVO.dataSource.pageSize(9);
-	            	}
-	            	else {
+	            	}else {
 	            		$scope.ordkg.wrapper.height(798);
 	            		$scope.ordkg.resize();
 	            		grdOrdVO.dataSource.pageSize(12);
-	            	}
+	            	};
 	            };
                 
 		        //주문 검색 그리드
@@ -287,7 +318,7 @@
                     			});
                 			},
                 			update: function(e){
-                				if(confirm("주문 취소 하시겠습니까?")){                					
+                				if(confirm("주문 취소 하시겠습니까?")){
                 					var defer = $q.defer(),
 	                			 	param = e.data.models[0];
                 				
@@ -363,7 +394,7 @@
                 	//id는 유니크한 모델값으로 해야함 안그러면 cancel 시에 row grid가 중복 되는 현상이 발생
                 	//rowTemplate을 사용한 colunm은 lock을 사용할 수 없음	                    	
 	        	};
-	            
+	            	            
 	            UtilSvc.gridtooltipOptions.filter = "td div";
 	            grdOrdVO.tooltipOptions = UtilSvc.gridtooltipOptions;
 		        
@@ -383,8 +414,8 @@
 	                for(i; i<grid.dataSource.data().length; i+=1){
 	                	if(!grid.dataSource.data()[i].ROW_CHK){
 	                		allChecked = false;
-	                	}
-	                }
+	                	};
+	                };
 	                
 	                angular.element($(".k-checkbox:eq(0)")).prop("checked",allChecked);
 	                
@@ -475,9 +506,9 @@
 		                		}
 		                	};
 	                	});
-	                }
-                });
-                          
+	                };
+                });                         
+                
                 $scope.grdDblClickGo = function(noOrd, noMrkord, ev){
                 	var getCurrentCell = "";
 		       		
@@ -487,8 +518,11 @@
 		       		if(getCurrentCell.find(".k-checkbox").length){
 		       			return;
 		       		}
+		       		$cookieStore.put("moveOrdInfo",true);
                 	$state.go("app.saOrd", { kind: "", menu: null, noOrd : noOrd, noMrkord: noMrkord});
                 };
+                
+                $scope.ordDataVO.cookieSearchPlay();
                 
                 //alert 경고
                 $scope.notf1Options = {

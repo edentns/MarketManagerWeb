@@ -7,10 +7,11 @@
      * 상품분류관리
      */
     angular.module("sa.ShpIng.controller")
-        .controller("sa.ShpIngCtrl", ["$scope", "$http", "$q", "$log", "sa.ShpIngSvc", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "MenuSvc", "sa.OrdCclSvc", "Util03saSvc", "APP_SA_MODEL", 
-            function ($scope, $http, $q, $log, saShpIngSvc, APP_CODE, $timeout, resData, Page, UtilSvc, MenuSvc, saOrdCclSvc, Util03saSvc, APP_SA_MODEL) {
+        .controller("sa.ShpIngCtrl", ["$scope", "$state","$http", "$q", "$log", "sa.ShpIngSvc", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "MenuSvc", "sa.OrdCclSvc", "Util03saSvc", "APP_SA_MODEL", 
+            function ($scope, $state, $http, $q, $log, saShpIngSvc, APP_CODE, $timeout, resData, Page, UtilSvc, MenuSvc, saOrdCclSvc, Util03saSvc, APP_SA_MODEL) {
 	            var page  = $scope.page = new Page({ auth: resData.access }),
-		            today = edt.getToday();
+		            today = edt.getToday(),
+		            menuId = MenuSvc.getNO_M($state.current.name);
 	            
 	            //마켓명 드랍 박스 실행	
 	            var mrkName = (function(){
@@ -25,7 +26,8 @@
 	            var orderStatus = (function(){
     				var param = {
     					lnomngcdhd: "SYCH00048",
-    					lcdcls: "SA_000007"
+    					lcdcls: "SA_000007",
+    					mid: menuId
     				};
         			UtilSvc.getCommonCodeList(param).then(function (res) {
         				if(res.data.length >= 1){
@@ -363,23 +365,6 @@
                 	dataSource: new kendo.data.DataSource({
                 		transport: {
                 			read: function(e) {
-                				/*var param = {
-                				    NM_MRKITEM : shippingDataVO.procName.value,
-            					    NO_MRK : shippingDataVO.ordMrkNameMo, 
-            					    CD_ORDSTAT : shippingDataVO.ordStatusMo,
-            					    NO_MRKORD : shippingDataVO.orderNo.value,      
-            					    NM_PCHR : shippingDataVO.buyerName.value,
-            					    DTS_CHK : shippingDataVO.betweenDateOptionMo,  
-            					    DTS_FROM : new Date(shippingDataVO.datesetting.period.start.y, shippingDataVO.datesetting.period.start.m-1, shippingDataVO.datesetting.period.start.d, "00", "00", "00").dateFormat("YmdHis"),           
-            					    DTS_TO : new Date(shippingDataVO.datesetting.period.end.y, shippingDataVO.datesetting.period.end.m-1, shippingDataVO.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis")
-                                };   
-                				if(Util03saSvc.readValidation(param)){
-                					saShpIngSvc.orderList(param).then(function (res) {
-	            						e.success(res.data);			                   				                    					
-                					});                					
-                				}else{
-                					e.error();
-                				};*/
                 				saShpIngSvc.orderList(shippingDataVO.param).then(function (res) {
             						e.success(res.data);			                   				                    					
             					});  
@@ -436,9 +421,8 @@
                         						}else{
                         							//alert("주문취소를 실패하였습니다.");
                         							e.error();
-                        						}
-                        					});                         					
-                        					
+                        						};
+                        					});   
         		                			return defer.promise;
                 						}  
                 						break;
@@ -457,7 +441,7 @@
                 		change: function(e){
                 			var data = this.data();
                 			shippingDataVO.dataTotal = data.length;
-                			angular.element($(".k-checkbox:eq(0)")).prop("checked",false);
+                			//angular.element($(".k-checkbox:eq(0)")).prop("checked",false);
                 		},                		
                 		pageSize: 9,
                 		batch: true,
@@ -493,7 +477,7 @@
 	                	}
 	                }*/
 	                
-	                angular.element($(".k-checkbox:eq(0)")).prop("checked",allChecked);
+	                //angular.element($(".k-checkbox:eq(0)")).prop("checked",allChecked);
 	                
 	                if(checked){
 	                	row.addClass("k-state-selected");
@@ -549,19 +533,16 @@
 	                				if(whereIn.indexOf(dataItem.CD_ORDSTAT) <= -1){
 	            						alert("배송지연을 등록할 수 있는 주문상태가 아닙니다.");
 	            						break;
-	            					};
-	                				
+	            					};	                				
 	                				if(dataItem.DC_SHPDLYRSN){
 	                					if(confirm("이미 배송지연사유를 등록 하셨습니다. 수정하시겠습니까?!")){
 	                						
 	                					}else{
 	                						break;
 	                					}
-	                				};	            					
-	            					
+	                				};	           			
             						shippingDataVO.updateChange = "001";
-	    	                		grd.editRow(chked.closest("tr"));
-	    	                		
+	    	                		grd.editRow(chked.closest("tr"));	    	                		
 	                				break;	
 	                			}
 	                			case 0 : {

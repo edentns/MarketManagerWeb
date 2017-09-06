@@ -316,24 +316,6 @@
                 	dataSource: new kendo.data.DataSource({
                 		transport: {
                 			read: function(e) {
-                				/*var param = {	  
-                				    NM_MRKITEM : ordCancelManagementDataVO.procName.value,
-            					    NM_MRK : ordCancelManagementDataVO.ordMrkNameMo, 
-            					    CD_ORDSTAT : ordCancelManagementDataVO.ordStatusMo,
-            					    NO_MRKORD : ordCancelManagementDataVO.orderNo.value,      
-            					    NM_CONS : ordCancelManagementDataVO.buyerName.value,
-            					    CD_CCLSTAT : ordCancelManagementDataVO.cancelStatusMo,
-            					    DTS_CHK : ordCancelManagementDataVO.betweenDateOptionMo,  
-            					    DTS_FROM : new Date(ordCancelManagementDataVO.datesetting.period.start.y, ordCancelManagementDataVO.datesetting.period.start.m-1, ordCancelManagementDataVO.datesetting.period.start.d, "00", "00", "00").dateFormat("YmdHis"),           
-            					    DTS_TO : new Date(ordCancelManagementDataVO.datesetting.period.end.y, ordCancelManagementDataVO.datesetting.period.end.m-1, ordCancelManagementDataVO.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis")
-                                }; 
-                				if(Util03saSvc.readValidation(param)){
-                					saOrdCclSvc.ocmList(param).then(function (res) {
-                    					e.success(res.data);                    					
-                        			});
-                				}else{
-                					e.error();
-                				};*/
                 				saOrdCclSvc.ocmList(ordCancelManagementDataVO.param).then(function (res) {
                 					e.success(res.data);                    					
                     			});
@@ -468,8 +450,8 @@
 	                if (widget === grd){ 
 	                	//주문취소 팝업 가져오기
 	                	widget.element.find(".k-grid-edit").on("click", function(e){
-	                		var	chked = grd.element.find("input:checked"),
-		            			chkedLeng = grd.element.find("input:checked").length,
+	                		var	chked = grd.element.find("input:checked").filter(".k-checkbox:not(input:eq(0))"),
+		            			chkedLeng = grd.element.find("input:checked").filter(".k-checkbox:not(input:eq(0))").length,
 		            			param = '';
 	                		
 	                		param = grd.dataSource.data().filter(function(ele){

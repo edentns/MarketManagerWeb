@@ -365,7 +365,9 @@
             						e.success(res.data);			                   				                    					
             					});
                 			},
-                			update: function(e){                				
+                			update: function(e){                	
+                				var whereIn = ['004','005'];
+                				
                 				switch(tkbkDataVO.updateChange){
                 					case '001' : {
                 						if(confirm("반품상품접수를 하시겠습니까?")){
@@ -397,10 +399,10 @@
                 						if(confirm("선택하신 주문을 반품 거부하시겠습니까?")){
                 							var defer = $q.defer(),	
                 								param = e.data.models.filter(function(ele){
-                									return (ele.ROW_CHK === true && ele.CD_TKBKSTAT === "001" && (ele.NO_ORD) && ele.NO_ORD !== "" && ele.CD_ORDSTAT === '005');
+                									return (ele.ROW_CHK === true && ele.CD_TKBKSTAT === "001" && (ele.NO_ORD) && ele.NO_ORD !== "" && whereIn.indexOf(ele.CD_ORDSTAT) > -1);
                 								});                             					
                         					if(param.length !== 1){
-                        						alert("배송완료 된 반품요청 주문만 거부 처리 할 수 있습니다.");
+                        						alert("배송처리 된 반품요청 주문만 거부 처리 할 수 있습니다.");
                         						return;
                         					};  
                         					saTkbkReqSvc.tkbkReject(param[0]).then(function (res) {
@@ -421,12 +423,12 @@
                 					}
                 					case '003' : {
                 						if(confirm("선택하신 주문을 반품 승인하시겠습니까?")){
-                							var defer = $q.defer()
+                							var defer = $q.defer(),
                 								param = e.data.models.filter(function(ele){
-                									return (ele.ROW_CHK === true && ele.CD_TKBKSTAT === "001" && (ele.NO_ORD) && ele.NO_ORD !== "" && ele.CD_ORDSTAT === '005');
+                									return (ele.ROW_CHK === true && ele.CD_TKBKSTAT === "001" && (ele.NO_ORD) && ele.NO_ORD !== "" && whereIn.indexOf(ele.CD_ORDSTAT) > -1);
                 								});                 							
                 							if(e.data.models.length !== param.length){
-                								alert("배송완료 된 반품요청 주문만 승인 처리 할 수 있습니다.");
+                								alert("배송처리 된 반품요청 주문만 승인 처리 할 수 있습니다.");
                         						return;
                 							};
                 							saTkbkReqSvc.tkbkConfirm(param).then(function (res) {
@@ -447,9 +449,9 @@
                 					case '004' : {
                 						if(confirm("선택하신 주문을 전송하시겠습니까?")){
                 							var defer = $q.defer(),
-                								whereIn = ["002","003","004"],
+                								selfwhereIn = ["002","003","004"],
                 								param = e.data.models.filter(function(ele){
-                									return (ele.ROW_CHK === true && whereIn.indexOf(ele.CD_TKBKSTAT) !== -1 && (ele.requesteNo !== ele.NO_TKBKREQ && ele.mall_no !== ele.NO_MRK));
+                									return (ele.ROW_CHK === true && selfwhereIn.indexOf(ele.CD_TKBKSTAT) !== -1 && (ele.requesteNo !== ele.NO_TKBKREQ && ele.mall_no !== ele.NO_MRK));
                 								});
                 							
                 							if(e.data.models.length !== param.length){

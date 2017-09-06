@@ -367,28 +367,13 @@
                 	dataSource: new kendo.data.DataSource({
                 		transport: {
                 			read: function(e) {
-                				/*var param = {
-                				    NM_MRKITEM : echgDataVO.procName.value,
-            					    NO_MRK : echgDataVO.ordMrkNameMo, 
-            					    CD_ORDSTAT : echgDataVO.ordStatusMo,
-            					    NO_MRKORD : echgDataVO.orderNo.value,      
-            					    NM_PCHR : echgDataVO.buyerName.value,
-            					    DTS_CHK : echgDataVO.betweenDateOptionMo,  
-            					    DTS_FROM : new Date(echgDataVO.datesetting.period.start.y, echgDataVO.datesetting.period.start.m-1, echgDataVO.datesetting.period.start.d, "00", "00", "00").dateFormat("YmdHis"),           
-            					    DTS_TO : new Date(echgDataVO.datesetting.period.end.y, echgDataVO.datesetting.period.end.m-1, echgDataVO.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis")
-                                };                   				
-                				if(Util03saSvc.readValidation(param)){
-                					saEchgReqSvc.orderList(param).then(function (res) {         						
-	            						e.success(res.data);			                   				                    					
-                					});                					
-                				}else{
-                					e.error();
-                				};*/
                 				saEchgReqSvc.orderList(echgDataVO.param).then(function (res) {         						
             						e.success(res.data);			                   				                    					
-            					})
+            					});
                 			},
-                			update: function(e){                				
+                			update: function(e){         
+                				var whereIn = ['004','005'];
+                				
                 				switch(echgDataVO.updateChange){
                 					case '001' : {
                 						if(confirm("교환상품을 접수 하시겠습니까?")){
@@ -420,10 +405,10 @@
                 						if(confirm("선택하신 주문을 교환 거부하시겠습니까?")){
                 							var defer = $q.defer(),	
                 								param = e.data.models.filter(function(ele){
-                									return (ele.ROW_CHK === true && ele.CD_ORDSTAT === "005" && ele.CD_ECHGSTAT === "001" && (ele.NO_ORD) && ele.NO_ORD !== "");
+                									return (ele.ROW_CHK === true && whereIn.indexOf(ele.CD_ORDSTAT) > -1 && ele.CD_ECHGSTAT === "001" && (ele.NO_ORD) && ele.NO_ORD !== "");
                 								});                             					
                         					if(param.length !== 1){
-                        						alert("배송이 완료되고, 교환 요청된 주문만 거부 처리 할 수 있습니다.");
+                        						alert("배송처리 된 교환 요청 주문만 거부 처리 할 수 있습니다.");
                         						return;
                         					};                        					
                         					saEchgReqSvc.echgReject(param[0]).then(function (res) {
@@ -445,11 +430,11 @@
                 						if(confirm("선택하신 주문을 교환 승인하시겠습니까?")){
                 							var defer = $q.defer(),
                 								param = e.data.models.filter(function(ele){
-                									return (ele.ROW_CHK === true && ele.CD_ORDSTAT === "005" && ele.CD_ECHGSTAT === "001" && (ele.NO_ORD) && ele.NO_ORD !== "");
+                									return (ele.ROW_CHK === true && whereIn.indexOf(ele.CD_ORDSTAT) > -1 && ele.CD_ECHGSTAT === "001" && (ele.NO_ORD) && ele.NO_ORD !== "");
                 								}); 
                 							
                 							if(e.data.models.length !== param.length){
-                								alert("배송이 완료되고, 교환요청 된 주문만 승인 처리 할 수 있습니다.");
+                								alert("배송처리 된 교환요청 주문만 승인 처리 할 수 있습니다.");
                         						return;
                 							};
                 							saEchgReqSvc.echgConfirm(param).then(function (res) {
