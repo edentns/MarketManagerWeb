@@ -57,7 +57,7 @@
 
                     <div class="btn-group1 mt-10">
                         <kendo-button type="submit" class="k-primary" title="검색" data-ng-click="syUserVO.doInquiry()" style="width:70px;">검색</kendo-button>
-                        <kendo-button type="botton" title="초기화" data-ng-click="syUserVO.init()" style="width:70px;">초기화</kendo-button>
+                        <kendo-button type="botton" title="초기화" data-ng-click="syUserVO.reset()" style="width:70px;">초기화</kendo-button>
                     </div>
                 </form>
             </div>
@@ -67,8 +67,8 @@
     <!-- 유저 리스트 -->
     <div class="row">
         <div class="content-area-container col-xs-12" style="padding:0px 0px 0px 0px;">
-            <div id="userkg" kendo-grid="userkg" options="gridUserVO">
-		    </div>	
+            <kendo-grid id="userkg" options="gridUserVO">
+		    </kendo-grid>	
         </div>
     </div>
     <!--/ 유저 리스트 END -->

@@ -6,8 +6,8 @@
      * @name sy.User.controller : sy.UserListCtrl
      */
     angular.module("sy.User.controller")
-        .controller("sy.UserListCtrl", ["$state", "$scope", "ngTableParams", "$sce", "$filter", "sy.UserListSvc", "sy.CodeSvc", "APP_CODE", "sy.DeptSvc", "resData", "Page", "UtilSvc",
-            function ($state, $scope, ngTableParams, $sce, $filter, UserListSvc, SyCodeSvc, APP_CODE, SyDepartSvc, resData, Page, UtilSvc) {
+        .controller("sy.UserListCtrl", ["$state", "$scope", "ngTableParams", "$timeout", "$sce", "$filter", "sy.UserListSvc", "sy.CodeSvc", "APP_CODE", "sy.DeptSvc", "resData", "Page", "UtilSvc",
+            function ($state, $scope, ngTableParams, $timeout, $sce, $filter, UserListSvc, SyCodeSvc, APP_CODE, SyDepartSvc, resData, Page, UtilSvc) {
 	            var page  = $scope.page = new Page({ auth: resData.access }),
 		            today = edt.getToday();
 	            
@@ -84,9 +84,23 @@
                     vo.searchName = "";
                     
                     vo.doInquiry(1);
+                    
+                    $timeout(function() {
+						if(!page.isWriteable()){
+							$("#userkg .k-grid-toolbar").hide();
+						}
+        			});
                 };
+                
+                vo.reset = function() {
+                	vo.departCodeList.bReset = true;
+                	vo.rankCodeList.bReset = true;
+                    vo.empStatList.bReset = true;
+                    vo.atrtCodeList.bReset = true;
+                    vo.searchName = "";
+				};
 
-                vo.isOpen = function (val) {
+                /*vo.isOpen = function (val) {
 	            	if(val) {
 	            		$scope.userkg.wrapper.height(658);
 	            		$scope.userkg.resize();
@@ -97,7 +111,7 @@
 	            		$scope.userkg.resize();
 	            		grdUserVO.dataSource.pageSize(24);
 	            	}
-	            };
+	            };*/
 
 //                vo.doReload = function (data) {// 테이블 데이터를 갱신하다.
 //                    vo.tbl.tableParams.settings({data: data});
@@ -159,9 +173,9 @@
                 };
 
                 $("#userkg").delegate("tbody>tr", "dblclick", function(e, a){
-                	var grid = $scope.userkg,
-                	    selectedRow = grid.select(),
-                	    dataItem = grid.dataItem(selectedRow);
+                	var grid = $("#userkg").data("kendoGrid");
+                	var selectedRow = grid.select();
+                	var dataItem = grid.dataItem(selectedRow);
                 	
                 	$state.go('app.syUser', { kind: 'detail', menu: null, ids: dataItem.NO_EMP });
                 });

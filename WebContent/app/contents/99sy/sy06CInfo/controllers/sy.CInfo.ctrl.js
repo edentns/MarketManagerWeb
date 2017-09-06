@@ -81,6 +81,7 @@
 	                    fileBsnsVO: {
 		        			CD_AT:"002",
 		        			limitCnt: 1,
+		        			bDisabled: !page.isWriteable(),
 		        			currentData:{
 		        				CD_AT: "",
 		        				CD_REF1: "",
@@ -102,6 +103,7 @@
 		        		fileCommVO: {
 		        			CD_AT:"003",
 		        			limitCnt: 1,
+		        			bDisabled: !page.isWriteable(),
 		        			currentData:{
 		        				CD_AT: "",
 		        				CD_REF1: "",
@@ -169,6 +171,13 @@
 		                            vo.param.email = {email1: "", email2: ""};
 		                        }
 		                        vo.CommsaleChange();
+		                        
+		                        if(!page.isWriteable()){
+        	    					var grid = $("#grid").data("kendoGrid");
+        	    					grid.setOptions({editable : false});   
+        	    					grid.hideColumn(8);
+        	    					$("#grid .k-grid-toolbar").hide();
+        	    				}
 		                    });
 	                	
 	                };
