@@ -41,9 +41,8 @@
 	        		},
                     searchText: {value: "", focus: false},				    //검색어
              	    methodDataCode : "",			//연동방법
-             	    statusDataCode : "",			//연동상태 	
              	    methodDataSource : resData.methodDataSource,
-             	    statusDataSoruce : resData.statusDataSoruce,
+             	    itlDataSource : [{CD_DEF:'001',NM_DEF:'미연동'}, {CD_DEF:'002',NM_DEF:'연동중'}],
              	    dataTotal : 0,
              	    resetAtGrd : "",
              	    methodDataSetting: {
@@ -63,17 +62,15 @@
 	            mngMrkDateVO.doInquiry = function () {
 		        	var me  = this;                	
                 	me.param = {
-                    	procedureParam: "MarketManager.USP_MA_03SEARCH01_GET&NO_M@s|MA_NM_MRK@s|MA_CD_ITLWY@s|MA_ITLSTAT@s|MA_DT_START@s|MA_DT_END@s",
+                    	procedureParam: "MarketManager.USP_MA_03SEARCH01_GET&NO_M@s|MA_NM_MRK@s|MA_CD_ITLWY@s|MA_DT_START@s|MA_DT_END@s",
                     	NO_M: menuId,
                     	MA_NM_MRK: mngMrkDateVO.searchText.value,
                     	MA_CD_ITLWY: mngMrkDateVO.methodDataCode,
-                    	MA_ITLSTAT: mngMrkDateVO.statusDataCode,
                     	MA_DT_START: new Date(mngMrkDateVO.datesetting.period.start.y, mngMrkDateVO.datesetting.period.start.m-1, mngMrkDateVO.datesetting.period.start.d).dateFormat("Ymd"),
                     	MA_DT_END: new Date(mngMrkDateVO.datesetting.period.end.y, mngMrkDateVO.datesetting.period.end.m-1, mngMrkDateVO.datesetting.period.end.d).dateFormat("Ymd")
                     };  	               	
 
 	            	if(me.methodDataCode === ""){alert("연동방법을 입력해 주세요."); return false;};
-                	if(me.statusDataCode === ""){alert("연동상태를 입력해 주세요."); return false;};
                 	if(me.param.MA_DT_START > me.param.MA_DT_END){alert("기간을 올바르게 입력해 주세요."); return false;};
                 	
                 	$scope.gridMngMrkUserVO.dataSource.data([]);
@@ -88,8 +85,6 @@
                 		if (!checkReturn) return;
                         if (obj.NM_MRK === null || obj.NM_MRK === "") {alert("마켓명을 설정해 주세요"); checkReturn = false;}
                         else if(obj.CD_ITLWAY === null || obj.CD_ITLWAY === ""){alert("연동방법을 설정해 주세요"); checkReturn = false;}
-                        else if(obj.DC_MRKID === null || obj.DC_MRKID === ""){alert("관리자ID를 설정해 주세요"); checkReturn = false;}
-                        else if((obj.NEW_DC_PWD === null || obj.NEW_DC_PWD === "") && (obj.DC_PWD === null || obj.DC_PWD === "")){alert("비밀번호를 설정해 주세요"); checkReturn = false;};
                     });
                 	return checkReturn;
                 };           
@@ -98,7 +93,6 @@
 	            mngMrkDateVO.init = function(){
                 	var me  = this;
                 	me.methodDataCode = "";
-                	me.statusDataCode = "";
                 	me.searchText.value = "";
                 	
                 	$timeout(function(){
@@ -107,7 +101,6 @@
                 	},0);                	
                 	        			
                 	me.methodDataSource = angular.copy(me.methodDataSource);
-                	me.statusDataSoruce = angular.copy(me.statusDataSoruce);
                 	
                 	me.resetAtGrd = $scope.gridMngMrkUserVO;
                 	me.resetAtGrd.dataSource.data([]);
@@ -251,67 +244,8 @@
                     								   editable: false
                     						     },
                     					CD_ITLSTAT: {
-				        							  editable: false
-                    							},                    					
-                    					DC_MRKID: {
-                    								   type: "string"
-                    							      ,validation: {
-                    							    	  dc_mrkidvalidation: function (input) {
-                                                            if (input.is("[name='DC_MRKID']") && input.val() != "") {
-                                                            	input.attr("data-dc_mrkidvalidation-msg", "관리자 아이디를 50자 이하로 설정하세요.");
-                                                                return input.val().length <= 50;
-                                                            }
-                                                            if (input.is("[name='DC_MRKID']") && input.val() === "") {
-                                                            	input.attr("data-dc_mrkidvalidation-msg", "관리자 아이디를 입력해 주세요.");
-                                                                return false;
-                                                            }
-                                                           return true;
-                    								   	 }
-                    							      }
-                    							      ,editable: true
-                    							      ,nullable: false
-                    							 },
-                    					DC_PWD: {
-                    								   type: "string"                    							    
-                    							      ,editable: false
-                    							      ,nullable: true
-                    							  },
-                    					NEW_DC_PWD: {
-                    								   type: "string"
-            									      ,validation: {
-            									    	  new_dc_pwdvalidation: function (input) {
-                                                            if (input.is("[name='NEW_DC_PWD']") && input.val() != "") {
-                                                            	var regex = /\s/g;
-                                                            	input.attr("data-new_dc_pwdvalidation-msg", "비밀번호를 50자 이하로 설정하거나, 공백을 제거하고 설정해 주세요.");
-                                                                return regex.test(input.val()) === true || input.val().length > 50 ? false : true;
-                                                            }
-                                                            return true;
-            									    	  }
-            									       }
-                    							  	  ,editable: true
-                    							  	  ,nullable: true
-                    							  },		  
-                    					API_KEY: {
-                    							       type: "string" 
-                    							  	  ,editable: false
-                    						          ,nullable: true
-                    						     },
-                    				    NEW_API_KEY: {
-                    				    			   type: "string"
-                    				    			  ,defaultValue: ""
-			                    				      ,validation: {
-			  									    	  new_api_keydvalidation: function (input) {
-			                                                  if (input.is("[name='NEW_API_KEY']") && input.val() != "") {
-			                                                	  var regex = /\s/g;
-			                                                	  input.attr("data-new_api_keydvalidation-msg", "API KEY를 50자 이하로 설정하거나, 공백을 제거하고 설정해 주세요.");			                                                	  
-	                                                              return regex.test(input.val()) === true || input.val().length > 50 ? false : true;
-			                                                  }			                                                  
-			                                                 return true;
-			  									    	  }
-			  									       }
-			          							  	  ,editable: true
-			          							  	  ,nullable: true
-                    				    		},
+				        							  editable: true
+                    							}, 
                     					DC_SALEMNGURL: {
                     							       type: "string"
                 							          ,validation: {                								   
@@ -324,8 +258,11 @@
 		                								  }
 		                							   }	
                     							      ,editable: true
-                    							      ,nullable: true
-                    						     } 
+                    							      ,nullable: false
+                    						     } ,
+                             			DTS_INSERT:{
+                             				editable: false
+                 						}
                     				}
                     			}
                     		},
@@ -393,72 +330,45 @@
            		        	   },
             		           {
             		        	  field: "CD_ITLSTAT"
-            		             ,title: "연동상태코드"
+            		             ,title: "연동상태"
             		             ,width: 100
             		             ,headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}	
+           		        	     ,editor: 
+	            		       		  function (container, options) {
+		            		       		$('<input name='+ options.field +' data-bind="value:' + options.field + '" />')
+		            		    		.appendTo(container)
+		            		    		.kendoDropDownList({
+		            		    			autoBind: true,
+		            		    			dataTextField: "NM_DEF",
+		                                    dataValueField: "CD_DEF",
+		            		    			dataSource: mngMrkDateVO.itlDataSource,
+		            		    			valuePrimitive: true
+		            		    		});
+	            		       	   	  }	         
 	           		        	 ,template: function(e){	       
 	           		        		 var nmd = "";//e.CD_ITLSTAT; 
-	           		        		 var grdData = mngMrkDateVO.statusDataSoruce;
-	            		       		 	for(var i = 0, leng = grdData.length; i<leng; i++){
-	            		       			  if(grdData[i].CD_DEF === e.CD_ITLSTAT && e.CD_ITLSTAT != ""){	            		       				 
-	            		       				  nmd = grdData[i].NM_DEF;	            		       				  
-	            		       			  }
-	            		       		    }
+	           		        		 var grdData = mngMrkDateVO.itlDataSource;
+            		       		 	 for(var i = 0, leng = grdData.length; i<leng; i++){
+            		       			 	if(grdData[i].CD_DEF === e.CD_ITLSTAT && e.CD_ITLSTAT != ""){	            		       				 
+            		       					nmd = grdData[i].NM_DEF;	            		       				  
+            		       			 	}
+            		       		     }
 	           		        		 return nmd;
 		                         }
             		           },
             		           {
-            		        	  field: "DC_MRKID"
-            		             ,title: "<span class='form-required'>* </span>관리자ID"
-            		             ,width: 100
-            		             ,headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}
-         		                 ,attributes: {class:"ta-l"}
-            		           },
-            		           {
-            		        	  field: "NEW_DC_PWD"
-            		             ,title: "<span class='form-required'>* </span>비밀번호"
-            		             ,width: 150
-            		             ,headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
-            		           	 ,editor: function (container, options) {
-            		                 $('<input type="password" class="k-textbox" name="' + options.field + '"/>').appendTo(container);
-            	                 }
-            		           	 ,template: function(e){
-            		           		 var returnPWDMsg = "";
-            		           		 if(e.NEW_DC_PWD === "" || e.NEW_DC_PWD === null && e.DC_PWD != ""){
-            		           			 if(e.DC_PWD_LEN != null) returnPWDMsg = Array(e.DC_PWD_LEN + 1).join("*");
-	          		           		 }else if(e.NEW_DC_PWD != "" && e.NEW_DC_PWD  != null){
-	          		           			 returnPWDMsg = Array(e.NEW_DC_PWD.length + 1).join("*");
-	          		           		 }
-	          		           		 return returnPWDMsg;
-            		           	 }
-           		                 ,attributes: {class:"ta-l"}
-            		           },
-            		           {
-            		        	  field: "NEW_API_KEY"
-            		             ,title: "API_KEY"
-            		             ,width: 150
-            		             ,headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
-	            		         ,editor: function (container, options) {
-	          		                 $('<input type="password" class="k-textbox" name="' + options.field + '"/>').appendTo(container);
-	          	                 }
-	          		           	 ,template: function(e){  
-	          		           		 var returnAPIMsg = "";
-	          		           		 if(e.NEW_API_KEY === "" || e.NEW_API_KEY === null && e.API_KEY != ""){
-	          		           			 if(e.API_KEY_LEN != null) returnAPIMsg = Array(e.API_KEY_LEN + 1).join("*");
-	          		           		 }else if(e.NEW_API_KEY != "" && e.NEW_API_KEY != null){
-	          		           			 returnAPIMsg = Array(e.NEW_API_KEY.length + 1).join("*");
-	          		           		 }
-	          		           		 return returnAPIMsg;
-	          		           	 }
-           		                 ,attributes: {class:"ta-l"}
-            		           },
-            		           {
             		        	  field: "DC_SALEMNGURL"
-            		        	 ,title: "판매관리URL"
+            		        	 ,title: "<span class='form-required'>* </span>판매관리URL"
             		        	 ,width: 250
             		        	 ,headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
          		                 ,attributes: {class:"ta-l"}
-           		        	   },          		           
+           		        	   },
+	            		       {
+         		        	      field: "DTS_INSERT"
+         		        	     ,title: "등록일자"
+         		        	     ,width: 100
+         		        	     ,headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}
+         		               },          		           
             		           {
            		        		  command: ["destroy"]
          		                  ,attributes: {class:"ta-l"}

@@ -28,15 +28,7 @@
             					};
             					UtilSvc.getList(param).then(function (res) {
             						resData.methodDataSource = res.data.results[0];
-            						var param = {
-                						procedureParam:strPcdParam,
-                						L_NO_MNGCDHD:"SYCH00017",
-                						L_CD_CLS:"SY_000017"
-                					};
-            						UtilSvc.getList(param).then(function (res) {
-                						resData.statusDataSoruce = res.data.results[0];
-                						defer.resolve(resData);
-                					});
+            						defer.resolve(resData);
             					});
                             });
 

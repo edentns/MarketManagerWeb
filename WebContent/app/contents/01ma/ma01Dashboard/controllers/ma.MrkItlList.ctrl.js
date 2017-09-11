@@ -47,18 +47,19 @@
         			UtilSvc.getList(param).then(function (res) {
         				if(isChart) {
         					res.data.results[1].forEach(function (data) {
-        						data.YN_DEL = data.YN_DEL==="true"?true:false;
+        						data.CD_ITLSTAT = data.CD_ITLSTAT==="002"?true:false;
         					});
         					target.dataSource = res.data.results[1];
         				}
-	        			else		target.dataSource.data(res.data.results[0]);
+	        			else		
+	        				target.dataSource.data(res.data.results[0]);
         			});        			
 	            }
 	        };
 	
 	        mrkItlList.table = {
 	            search  : {
-	                period      : angular.extend({ type: 'year' }, angular.copy(period))
+	                period      : angular.extend({ type: 'current' }, angular.copy(period))
 	            },
 	            data    : {},
 	            messages: {
@@ -79,34 +80,34 @@
     						fields: {
     							NO_MNGMRK : {type:"string"},
     							NM_MRK    : {type:"string"},
-    							YN_DEL    : {type:"string"}
+    							CD_ITLSTAT: {type:"string"}
     						}
     					}
     				}
     			}),
     			columns: [
-            		{field: "NO_MNGMRK", width: 100, attributes: grid_con_center, title: "마켓번호", headerAttributes: grid_header},
-          			{field: "NM_MRK"   , width: 100, attributes: grid_con_left  , title: "마켓명" , headerAttributes: grid_header},
-          			{field: "YN_DEL"   , width: 100, attributes: grid_con_center, title: "사용여부"  , headerAttributes: grid_header}
+            		{field: "NO_MNGMRK" , width: 100, attributes: grid_con_center, title: "마켓번호", headerAttributes: grid_header},
+          			{field: "NM_MRK"    , width: 100, attributes: grid_con_left  , title: "마켓명" , headerAttributes: grid_header},
+          			{field: "CD_ITLSTAT", width: 100, attributes: grid_con_center, title: "사용여부", headerAttributes: grid_header}
           		],
           		resizable: true
 	        };
 	
 	        mrkItlList.chart = {
 	            search: {
-	                period   : angular.extend({ type: 'year' }, angular.copy(period)),
-	                changeMngMrk: function(e, NO_MNGMRK, YN_DEL) {
+	                period   : angular.extend({ type: 'current' }, angular.copy(period)),
+	                changeMngMrk: function(e, NO_MNGMRK, CD_ITLSTAT) {
 	                	
 	                	//console.log(e, "  데이터 --> [",NO_MNGMRK,"], [",YN_DEL,"];");
 	                	if(confirm("상태를 변경 하시겠습니까?")){
-		                	MaDashboardSvc.updateMngMrk(NO_MNGMRK, (e.checked)?'N':'Y').then(function (result) {
+		                	MaDashboardSvc.updateMngMrk(NO_MNGMRK, (e.checked)?'002':'001').then(function (result) {
 								alert("변경완료하였습니다.");
 		                	});
 	                	}
 	                	else {
 	                		mrkItlList.chart.dataSource.forEach(function (data) {
 	                			if(data.NO_MNGMRK === NO_MNGMRK) {
-	                				data.YN_DEL = !e.checked;
+	                				data.CD_ITLSTAT = !e.checked;
 	                			}
         					}); 
 	                	}
