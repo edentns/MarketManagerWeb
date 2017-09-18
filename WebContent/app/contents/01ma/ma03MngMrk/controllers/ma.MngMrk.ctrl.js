@@ -379,7 +379,7 @@
                             this.cancelRow();
                         },         	
                     	editable: {
-                    	    confirmation: !page.isWriteable()?false:"삭제 하시겠습니까?",
+                    	    confirmation: !page.isWriteable()?false:"삭제하시겠습니까?\n삭제 후 저장버튼을 클릭하셔야 삭제 됩니다."
                     	},
                     	height: 657
         		};

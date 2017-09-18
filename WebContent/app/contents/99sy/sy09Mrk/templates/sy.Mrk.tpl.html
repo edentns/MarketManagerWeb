@@ -20,6 +20,8 @@
                             <col style="width: 15%;">
                             <col style="width: 10%;">
                             <col style="width: 15%;">
+                            <col style="width: 10%;">
+                            <col style="width: 15%;">
                         </colgroup>
                         <tbody>
                         <tr>
@@ -33,10 +35,12 @@
                             </td>
                             <th></th>
                             <td></td>
+                            <th></th>
+                            <td></td>
                         </tr>
                         <tr>
                         	<th>연동기간</th>
-                        	<td colspan="5">
+                        	<td colspan="7">
                             	<div class="frm-group" data-date-search-group="dateVO.datesetting"></div>
                         	<td>
                         </tr>
@@ -50,8 +54,8 @@
             </div>
         </div>
         <div class="content-area-container col-xs-12" style="padding:0px 0px 0px 0px; margin-top:-5px;">
-	    	<kendo-grid id="mrkKg" options="gridMrkVO">
-		    </kendo-grid> 
+            <div id="mrkKg" kendo-grid="mrkKg" options="gridMrkVO">
+		    </div>
 	    </div>    
     </div>
 </div>
