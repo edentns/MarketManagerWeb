@@ -60,8 +60,7 @@
 					    gridContentTemplate = gridContentTemplate + "# }else{ }#\n";
 					}
 					gridContentTemplate = gridContentTemplate + "</div>\n";
-	        	}
-	        	else {
+	        	}else {
 	        		gridContentTemplate = gridContentTemplate + "<div class=\"custom-style ";
 				
 	        		if(gridColVal.textAlign === "center"){
@@ -73,17 +72,17 @@
 					}
 					
 					gridContentTemplate = gridContentTemplate + "\">\n";
-					gridContentTemplate = gridContentTemplate + "# if("+gridColVal.field+"){ #\n";
 					
 					if(gridColVal.field.indexOf("AM") === 0) {
-						gridContentTemplate = gridContentTemplate + "#= kendo.toString("+gridColVal.field+",'C0', 'ko-KR') #\n";
+						gridContentTemplate = gridContentTemplate + "# if("+gridColVal.field+"){ #\n #= kendo.toString("+gridColVal.field+",'C0', 'ko-KR') #\n #}#";
 					}else if(gridColVal.field.indexOf("CD") === 0 && gridColVal.fNm !== "" && gridColVal.fNm !== undefined) {
-						gridContentTemplate = gridContentTemplate + "<co04-cd-to-nm cd=\"#:"+gridColVal.field+"#\" nm-box=\""+gridColVal.fNm+"\">\n";
+						gridContentTemplate = gridContentTemplate + "# if("+gridColVal.field+"){ #\n <co04-cd-to-nm cd=\"#:"+gridColVal.field+"#\" nm-box=\""+gridColVal.fNm+"\">\n #}#";
+					}else if(gridColVal.field.indexOf("YN_CONN") === 0) {
+						gridContentTemplate = gridContentTemplate + "# if("+gridColVal.field+" !== 'N'){#\n Y\n #}else{#\n N\n#}#";
 					}else {
-						gridContentTemplate = gridContentTemplate + "#: "+gridColVal.field+" #\n";
-					}
-					
-				    gridContentTemplate = gridContentTemplate + "# }else{ }#\n</div>\n";
+						gridContentTemplate = gridContentTemplate + "# if("+gridColVal.field+"){ #\n #: "+gridColVal.field+" #\n #}#";
+					}					
+				    gridContentTemplate = gridContentTemplate + "\n</div>\n";
 	        	}
 			    return gridContentTemplate;
             };
@@ -899,7 +898,7 @@
 
 				return $http({
 					method	: "GET",
-					url		: APP_CONFIG.domain + "/code/common/"+param.lnomngcdhd+"/"+param.lcdcls+"/"+param.mid 
+					url		: APP_CONFIG.domain + "/code/common/"+param.lnomngcdhd+"/"+param.lcdcls+"/"+param.mid+"/"+param.customnoc 
 				}).success(function (data, status, headers, config) {
 					
 				}).error(function (data, status, headers, config) {

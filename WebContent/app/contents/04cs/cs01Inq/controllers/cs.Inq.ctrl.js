@@ -13,7 +13,7 @@
 		            today = edt.getToday();
 	            
 	            //문의 구분 드랍 박스 실행	
-	            var connSetting = (function(){
+	            /*var connSetting = (function(){
     				var param = {
     					procedureParam: "MarketManager.USP_SY_10CODE02_GET&lnomngcdhd@s|lcdcls@s",
     					lnomngcdhd: "SYCH00070",
@@ -24,7 +24,7 @@
         					csDataVO.csQuestionCodeOp = res.data.results[0];
         				}
         			});		
-	            }());
+	            }());*/
 
 	            //주문 상태 드랍 박스 실행	
 	            var connSetting2 = (function(){
@@ -38,17 +38,17 @@
         					csDataVO.csStatusOp = res.data.results[0];
         				}
         			});		
-	            }());
-
-	            //마켓명 드랍 박스 실행	
-	            var connSetting3 = (function(){
-	            	csInqSvc.csMrkList().then(function (res) {
-        				if(res.data.length >= 1){
-        					csDataVO.csMrkNameOp = res.data;
-        				}
-        			});		
-	            }());
-	            	            
+	            	}()),
+	            	
+	            	//마켓명 드랍 박스 실행		            	
+		            connSetting3 = (function(){
+		            	csInqSvc.csMrkList().then(function (res) {
+	        				if(res.data.length >= 1){
+	        					csDataVO.csMrkNameOp = res.data;
+	        				}
+	        			});		
+		            }());
+	            
 	            var csDataVO = $scope.csDataVO = {
 	            	boxTitle : "C/S 관리",
 	            	setting : {
@@ -72,24 +72,26 @@
 	        		csMrkNameMo : "*",
 	        		csStatusOp : [],
 	        		csStatusMo : "*",
-	        		csQuestionCodeOp : [],
-	        		csQuestionCodeMo : "*",
+	        		//csQuestionCodeOp : [],
+	        		csQuestionCodeMo : { value: "" , focus: false },
 	        		dataTotal : 0,
 	        		resetAtGrd:"",
-	        		param : ""
+	        		param : "",
+	        		popupDisAble: "k-textbox"
 	            };	            
+	            
 	            //조회
 	            csDataVO.inQuiry = function(){	
 	            	var me = this;
 	            	me.param = {
-    					I_NO_MRK: csDataVO.csMrkNameMo,
-    					I_NM_MRKITEM: csDataVO.procName.value,                                    	
-    					I_CD_INQSTAT: csDataVO.csStatusMo,
-    					I_CD_INQCLFT: csDataVO.csQuestionCodeMo,
-    					I_NM_INQ: csDataVO.buyerName.value,
-    					I_NO_MRKORD: csDataVO.orderNo.value,
-    					I_DTS_INQREG_F: new Date(csDataVO.datesetting.period.start.y, csDataVO.datesetting.period.start.m-1, csDataVO.datesetting.period.start.d, "00", "00", "00").dateFormat("YmdHis"),
-    					I_DTS_INQREG_T: new Date(csDataVO.datesetting.period.end.y, csDataVO.datesetting.period.end.m-1, csDataVO.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis")
+    					I_NO_MRK: me.csMrkNameMo,
+    					I_NM_MRKITEM: me.procName.value.trim(),                                    	
+    					I_CD_INQSTAT: me.csStatusMo,
+    					I_NM_INQCLFT: me.csQuestionCodeMo.value.trim(),
+    					I_NM_INQ: me.buyerName.value.trim(),
+    					I_NO_MRKORD: me.orderNo.value.trim(),
+    					I_DTS_INQREG_F: new Date(me.datesetting.period.start.y, me.datesetting.period.start.m-1, me.datesetting.period.start.d).dateFormat("Ymd"),
+    					I_DTS_INQREG_T: new Date(me.datesetting.period.end.y, me.datesetting.period.end.m-1, me.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis")
                     };   
     				if($scope.readValidation(csDataVO.param)){
     					$scope.cskg.dataSource.data([]);
@@ -97,6 +99,7 @@
     	            	//$scope.cskg.dataSource.read();
     				};	            	
 	            };	            
+	            
 	            //초기화버튼
 	            csDataVO.inIt = function(){
 	            	var me  = this;
@@ -112,7 +115,7 @@
                 	        			
                 	me.csMrkNameOp.bReset = true;
                 	me.csStatusOp.bReset = true;     
-                	me.csQuestionCodeOp.bReset = true;
+                	//me.csQuestionCodeOp.bReset = true;
                 	
                 	me.dataTotal = 0;
                 	me.resetAtGrd = $scope.cskg;
@@ -130,17 +133,15 @@
 	            		$scope.cskg.resize();
 	            		if(csDataVO.param !== "") gridCsVO.dataSource.pageSize(25);
 	            	}
-	            };
+	            };	            
 	            
 	            //popup insert & update Validation
 	            $scope.readValidation = function(idx){
-	            	var result = true;
-	            	
+	            	var result = true;	            	
             		if(idx.I_NO_MRK === null || idx.I_NO_MRK === ""){ $scope.showPopup("마켓명을 입력해 주세요."); result = false; return; };
             		if(idx.I_CD_INQSTAT === null || idx.I_CD_INQSTAT === ""){ $scope.showPopup("상태값을 입력해 주세요."); result = false; return;};
-            		if(idx.I_CD_INQCLFT === null || idx.I_CD_INQCLFT === ""){ $scope.showPopup("문의 구분을 입력해 주세요."); result = false; return;};
-            		if(idx.I_DTS_INQREG_F > idx.I_DTS_INQREG_T){ $scope.showPopup("문의일자를 올바르게 입력해 주세요."); result = false; return;};
-            		
+            		//if(idx.I_NM_INQCLFT === null || idx.I_NM_INQCLFT === ""){ $scope.showPopup("문의 구분을 입력해 주세요."); result = false; return;};
+            		if(idx.I_DTS_INQREG_F > idx.I_DTS_INQREG_T){ $scope.showPopup("문의일자를 올바르게 입력해 주세요."); result = false; return;};            		
 	            	return result;
 	            };	               
 	            //cs 검색 그리드
@@ -163,26 +164,17 @@
                     	dataSource: new kendo.data.DataSource({
                     		transport: {
                     			read: function(e) {
-                    				/*var param = {
-                    					I_NO_MRK: csDataVO.csMrkNameMo,
-                    					I_NM_MRKITEM: csDataVO.procName.value,                                    	
-                    					I_CD_INQSTAT: csDataVO.csStatusMo,
-                    					I_CD_INQCLFT: csDataVO.csQuestionCodeMo,
-                    					I_NM_INQ: csDataVO.buyerName.value,
-                    					I_NO_MRKORD: csDataVO.orderNo.value,
-                    					I_DTS_INQREG_F: new Date(csDataVO.datesetting.period.start.y, csDataVO.datesetting.period.start.m-1, csDataVO.datesetting.period.start.d, "00", "00", "00").dateFormat("YmdHis"),
-                    					I_DTS_INQREG_T: new Date(csDataVO.datesetting.period.end.y, csDataVO.datesetting.period.end.m-1, csDataVO.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis")
-                                    };   
-                    				if(!$scope.readValidation(param)){
-                    					e.error();
-                    				}*/
                     				csInqSvc.csList(csDataVO.param).then(function (res) {      						
                 						e.success(res.data);
                 					});
                     			},                    			
                     			update: function(e) {
                     				var defer = $q.defer(),
-    	                			 	param = e.data.models[0];                    				
+    	                			 	param = e.data.models[0];       
+                    				if(param.CD_INQSTAT === "002"){
+                    					$scope.showPopup("이미 답변이 등록되어 있습니다.");
+                    					return false;
+                    				};
                     				csInqSvc.csUpdate(param).then(function(res) {
     	                				defer.resolve();
     	                				$scope.cskg.dataSource.read();
@@ -263,7 +255,7 @@
 	                       										editable: false,
 																nullable: false
                        									   },
-                       					CD_INQCLFT: 	   {	type: "string", 
+                       					NM_INQCLFT: 	   {	type: "string", 
                     											editable: false,
                     											nullable: false
                     									   },                    					
@@ -348,7 +340,7 @@
             		               headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},           		               
             		            },
             		            {
-            		        	   field: "CD_INQCLFT",
+            		        	   field: "NM_INQCLFT",
             		        	   title: "문의구분",
             		        	   width: 80,
             		        	   headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
@@ -387,6 +379,15 @@
                     		template: kendo.template($.trim($("#cs_popup_template").html())),
                     		confirmation: false
                     	},	
+                    	edit: function(e){
+                    		if(e.model.CD_INQSTAT === "002"){
+                    			csDataVO.popupDisAble = "k-textbox k-state-disabled";
+                        		e.container.find(".k-grid-update").hide();  
+                        		e.container.find(".k-edit-buttons").prepend("<p style='text-align:right;'><code>*</code>이미 답변이 등록되어 있습니다.</p>");                      		
+                    		}else{
+                    			csDataVO.popupDisAble = "k-textbox";                    			
+                    		};          
+                    	},
                     	resizable: true,
                     	rowTemplate: kendo.template($.trim($("#cs_template").html())),      
                     	height: 616       
@@ -448,8 +449,8 @@
                         // notification popup will scroll together with the other content
                         pinned: false,
                         // the first notification popup will appear 30px from the viewport's top and right edge
-                        top: 30,
-                        left: 30,
+                        bottom: 0,
+                        right: 0,
                         height: 300,
                         width: 250
                     },	

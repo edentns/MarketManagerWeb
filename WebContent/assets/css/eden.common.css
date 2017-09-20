@@ -526,9 +526,6 @@ form[name="businessForm"]:after {content: ''; display: block; clear: both;}
 
 .breadcrumb i {vertical-align: -2px;}
 
-
-
-
 .left-panel {
 	float: left !important;
 }
@@ -554,4 +551,14 @@ form[name="businessForm"]:after {content: ''; display: block; clear: both;}
 } 
 .k-grid-content > table > tbody > tr > td > div.custom-style:nth-child(odd){
 	border-bottom: solid 1px #bbdceb;	
+}
+.ells{
+	text-overflow: ellipsis; 
+	white-space: nowrap; 
+	overflow:hidden;
+}
+/* 팝업 그리드의 제목 */
+.signal{    
+    width: 99%;
+    margin: 5px;
 }

@@ -133,7 +133,7 @@
                     	var self = this,
                     		loItem = {},
                         	intIndex = -1,
-                        	liIndex = $ele.find(".dropdown-menu > .nm-list").index(e.target.closest("li"));
+                        	liIndex = $ele.find(".dropdown-menu > .nm-list").index(e.target.parentElement);
                     	                    	
                         angular.forEach(self.co01McboxVO.arrayModel, function (item, index) {
                             if (item[self.co01McboxVO.id] == option[self.co01McboxVO.id]) {

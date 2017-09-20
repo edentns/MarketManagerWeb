@@ -3,7 +3,7 @@
         <div id="app-content-header">
             <ol class="breadcrumb">
                 <li><a href="#99sy/syDashboard"><i class="fa fa-home fa-2x"></i></a></li>
-                <li><a href="#03sa/saTkbkReq"> 주문·배송 / 배송 / 반품요청 </a></li>
+                <li><a href="#03sa/saTkbkReq"> 주문·배송 / 취소·반품·교환 / 반품처리 </a></li>
             </ol>
         </div>
     </div>
@@ -65,8 +65,14 @@
                             			type="text" 
                             			class="form-control" style="width:100%;"/>
                             </td>
-                            <th></th>
-                            <td></td>
+                            <th>반품상태</th>
+                            <td>
+                            	<select ng-model="tkbkDataVO.betweenDateOptionMo"
+        								ng-options="option.CD_DEF as option.NM_DEF for option in tkbkDataVO.betweenDateOptionOp"
+        								class="form-control"
+        								style="width: 100%">
+        						</select>	
+        					</td>
                             <th></th>
                             <td></td>
                             <th></th>

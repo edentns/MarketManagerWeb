@@ -12,9 +12,8 @@
 	            var page  = $scope.page = new Page({ auth: resData.access }),
 		            today = edt.getToday();
 	            
-	            var searchBox = {
             		//마켓명 드랍 박스 실행	
-            		mrkName : (function(){
+            	var	mrkName = (function(){
             			UtilSvc.csMrkList().then(function (res) {
             				if(res.data.length >= 1){
             					tkbkDataVO.ordMrkNameOp = res.data;
@@ -22,7 +21,7 @@
             			});
     	            }()),	
     	            //주문상태 드랍 박스 실행
-    	            orderStatus : (function(){
+    	            orderStatus = (function(){
         				var param = {
         					lnomngcdhd: "SYCH00048",
         					lcdcls: "SA_000007"
@@ -34,7 +33,7 @@
             			});
     	            }()),
     	            //기간 상태 드랍 박스 실행
-    	            betweenDate : (function(){
+    	            betweenDate = (function(){
         				var param = {
         					lnomngcdhd: "SYCH00064",
         					lcdcls: "SA_000023"
@@ -47,7 +46,7 @@
             			});
     	            }()),
     	            //반품 사유 코드
-    	            cdTkbkrsn : (function(){
+    	            cdTkbkrsn = (function(){
         				var param = {
         					lnomngcdhd: "SYCH00050",
         					lcdcls: "SA_000009"
@@ -59,7 +58,7 @@
             			});
     	            }()),
     	            //반품 거부 코드
-    	            cdTkbkrjt : (function(){
+    	            cdTkbkrjt = (function(){
         				var param = {
         					lnomngcdhd: "SYCH00065",
         					lcdcls: "SA_000024"
@@ -71,7 +70,7 @@
             			});
     	            }()),
     	            //반품 상태 코드
-    	            cdTkbkstat : (function(){
+    	            cdTkbkstat = (function(){
         				var param = {
         					lnomngcdhd: "SYCH00066",
         					lcdcls: "SA_000025"
@@ -81,8 +80,7 @@
             					tkbkDataVO.cdTkbkstat = res.data;
             				}
             			});
-    	            }())
-	            };   
+    	            }());
 
 	            var grdField =  {
                     ROW_CHK       : { type: APP_SA_MODEL.ROW_CHK.type        , editable: true , nullable: false },
@@ -170,7 +168,7 @@
                 APP_SA_MODEL.CD_TKBKSTAT.fNm = "tkbkDataVO.cdTkbkstat";
                 
                 var grdCol = [[APP_SA_MODEL.ROW_CHK],
-                              [APP_SA_MODEL.NO_ORD           , APP_SA_MODEL.NO_APVL       ],
+                              [APP_SA_MODEL.NO_ORD           ,[APP_SA_MODEL.NO_APVL, APP_SA_MODEL.NO_MRKORD]],
                               [APP_SA_MODEL.NM_MRK           , APP_SA_MODEL.NO_MRKORD     ],
                               [APP_SA_MODEL.NO_MRKITEM       , APP_SA_MODEL.NO_MRKREGITEM ],
                               [[APP_SA_MODEL.NM_MRKITEM, APP_SA_MODEL.NM_MRKOPT], APP_SA_MODEL.mall_no],
@@ -180,8 +178,8 @@
                               [APP_SA_MODEL.DC_PCHREMI       , APP_SA_MODEL.NM_CONS       ],
                               [APP_SA_MODEL.CD_TKBKRSN       , APP_SA_MODEL.DC_CONSNEWADDR],
                               [APP_SA_MODEL.CD_ORDSTAT       , APP_SA_MODEL.DC_SHPWAY     ],
-                              [APP_SA_MODEL.DTS_ORD          , APP_SA_MODEL.DTS_CCLREQ    ],
-                              [APP_SA_MODEL.DTS_TKBKREQ      , APP_SA_MODEL.NO_INSERT     ],
+                              [APP_SA_MODEL.DTS_ORD          , APP_SA_MODEL.DTS_TKBKREQ   ],
+                              [APP_SA_MODEL.DTS_TKBKAPPRRJT  , APP_SA_MODEL.NO_INSERT     ],
                               [APP_SA_MODEL.DTS_TKBKCPLT_VIEW, APP_SA_MODEL.NO_TKBKCPLT   ],
                               [APP_SA_MODEL.YN_CONN          , APP_SA_MODEL.CD_TKBKSTAT   ]
                              ],

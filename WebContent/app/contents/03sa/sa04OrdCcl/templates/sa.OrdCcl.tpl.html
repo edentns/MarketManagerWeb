@@ -3,7 +3,7 @@
         <div id="app-content-header">
             <ol class="breadcrumb">
                 <li><a href="#99sy/syDashboard"><i class="fa fa-home fa-2x"></i></a></li>
-                <li><a href="#03sa/saOrdCcl"> 주문·배송 / 주문 / 주문취소</a></li>
+                <li><a href="#03sa/saOrdCcl">주문·배송 / 취소·반품·교환 / 취소처리</a></li>
             </ol>
         </div>
     </div>
@@ -110,14 +110,14 @@
 <script id="ocm_popup_template" type="text/x-kendo-template">
 	<div class="not_pop_title"><h4>주문 취소 거부 입력</h4></div>
 
-	<table class="table signal">
+	<table class="table signal" data-uid="#= uid #">
 		<colgroup>
       		<col style="width: 14%;">
       		<col style="width: 30%;">
       		<col style="width: 14%;">
       		<col style="width: 30%;">
     	</colgroup>
-    	<tbody data-uid="#= uid #">	
+    	<tbody>	
 			<tr class="border-bottom-line border-top-line">	
 				<td class="active border-right-line">
 					마켓
@@ -199,8 +199,8 @@
 				<td>
 					<select kendo-drop-down-list
                		 	k-options="ordCancelManagementDataVO.cancelCodeOp"
-						name="CD_CCLRSN"
-						data-bind="value: CD_CCLRSN"
+						name="CD_CCLHRNKRSN"
+						data-bind="value: CD_CCLHRNKRSN"
                 		style="width: 100%">
 					</select>
 				</td>
@@ -213,19 +213,17 @@
 					주문취소사유
 				</td>
 				<td colspan="3">			
-					<textarea class="k-textbox k-state-disabled" name="DC_CCLRSNCTT" data-bind="value: DC_CCLRSNCTT" disabled="disabled" style="width:100%; height:100px; overflow-y: scroll;"></textarea>
+					<textarea class="k-textbox k-state-disabled" name="NM_CCLHRNKRSN" data-bind="value: NM_CCLHRNKRSN" disabled="disabled" style="width:100%; height:100px; overflow-y: scroll;"></textarea>
 				</td> 
 			</tr>
-
 			<tr class="border-bottom-line">
 				<td class="active border-right-line">
-					<code>*</code>취소거부코드
+					<code>*</code>취소거부 구분<br/>	
 				</td>
 				<td>
-					<select kendo-drop-down-list
-               		 	k-options="ordCancelManagementDataVO.cancelRejectCodeOp"
-						name="CD_CCLRJT"
-						data-bind="value: CD_CCLRJT"
+					<select 
+						name="cancel_reject_code"
+						data-bind="value: cancel_reject_code"
                 		style="width: 100%">
 					</select>
 				</td>
@@ -233,12 +231,47 @@
 				</td> 
 			</tr>
 
-			<tr class="border-bottom-line">
+			<tr class="border-bottom-line" data-ng-if="ngIfdata(ordCancelManagementDataVO.cancelRjCdEq)">
 				<td class="active border-right-line">
-					<code>*</code>취소거부사유
+					<code>*</code>택배사<br/>
+				</td>
+				<td>
+					<select
+						name="CD_PARS"
+						data-bind="value: CD_PARS"
+                		style="width: 100%">
+					</select>
+				</td>
+				<td colspan="2">
+				</td>
+			</tr>
+			<tr class="border-bottom-line" data-ng-if="ngIfdata(ordCancelManagementDataVO.cancelRjCdEq)">
+				<td class="active border-right-line">
+					<code>*</code>송장번호<br/>
 				</td>
 				<td colspan="3">			
-					<textarea class="k-textbox" name="DC_CCLRJTCTT" data-bind="value: DC_CCLRJTCTT" style="width:100%; height:100px; overflow-y: scroll;"></textarea>
+					<textarea class="k-textbox" name="NO_INVO" data-bind="value: NO_INVO" rows="3" style="width:100%; overflow-y: scroll;"></textarea>
+				</td> 
+			</tr>	
+			<tr class="border-bottom-line" data-ng-if="ngIfdata(ordCancelManagementDataVO.cancelRjCdEqCtt)">
+				<td class="active border-right-line">
+					<code>*</code>취소거부 상세 사유<br/>
+				</td>
+				<td colspan="3">
+					<textarea class="k-textbox" name="DC_CCLRJTCTT" data-bind="value: DC_CCLRJTCTT" rows="5" style="width:100%; overflow-y: scroll;"></textarea>
+				</td> 
+			</tr>
+			<tr class="border-bottom-line" data-ng-if="ngIfdata(ordCancelManagementDataVO.cancelRjCdEqDate)">
+				<td class="active border-right-line">
+					<code>*</code>접수일자<br/>
+				</td>
+				<td colspan="3" class="ta-l">
+					<input kendo-date-picker		
+						 id="DTS_RECER"
+			 			name="DTS_RECER"
+			 			k-options="ordCancelManagementDataVO.dateOptions"
+             			data-bind="value: DTS_RECER"
+             			style="width: 50%;" />
 				</td> 
 			</tr>
 		</tbody>
@@ -248,14 +281,12 @@
 <!-- 주문 조회 그리드 툴바 템플릿 -->
 <script id="ocm-toolbar-template" type="text/x-kendo-template">
 	<a class="k-button k-button-icontext k-grid-cclinfo ccl-confirm"><span class="k-icon k-i-update"></span>취소 승인</a>
-	<a class="k-button k-button-icontext k-grid-edit"><span class="k-icon k-i-cancel"></span>취소 거부</a>        
-	<a class="k-button k-button-icontext k-grid-openccl"><span class="k-icon k-i"></span>취소정보 가져오기</a>
-	<a class="k-button k-button-icontext k-grid-cclinfo ccl-send"><span class="k-icon k-i-redo"></span>취소결과 전송</a>  
+	<a class="k-button k-button-icontext k-grid-edit"><span class="k-icon k-i-cancel"></span>취소 거부</a> 
 </script>
 
 <style>
 .k-edit-form-container{
-    width: 900px;
+    width: 700px;
 }
 .k-popup-edit-form .k-edit-label{
     width: 20%;

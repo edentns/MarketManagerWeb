@@ -46,9 +46,13 @@
         						</co01-mcbox>        						
                             </td>   
                             <th>문의구분</th>
-                            <td>     
-					            <co01-mcbox id="cs-code" title="문의구분" model="csDataVO.csQuestionCodeMo" options="csDataVO.csQuestionCodeOp" setting="csDataVO.setting"  style="width:100%;">
-        						</co01-mcbox> 
+                            <td>    
+                            	<input data-ng-model="csDataVO.csQuestionCodeMo.value"
+                            			focus="csDataVO.csQuestionCodeMo.focus"
+                            			title="문의구분"
+                            			data-eden-type="kor" 
+                            			type="text" 
+                            			class="form-control" style="width:100%;"/>	
                             </td>         
                         </tr>
                         <tr>
@@ -165,9 +169,10 @@
 			</span>
         </td> 
 		<td class="ta-c">
-            <span class="ells"># if(CD_INQCLFT){ #
-							   <co04-cd-to-nm cd="#:CD_INQCLFT#" nm-box="csDataVO.csQuestionCodeOp">
-      						   # }else{} #
+            <span class="ells">
+				# if(NM_INQCLFT){ #
+				#:	NM_INQCLFT	  #	
+      			# } 			  #
 			</span>
         </td>
 		<td class="ta-l">
@@ -194,7 +199,7 @@
 <!-- cs 답변등록 팝업 그리드 -->
 <script id="cs_popup_template" type="text/x-kendo-template">
 <div class="not_pop_title"><h3><span class="k-icon k-edit"></span>문의 답변 등록</h3></div>
-<table class="signal">
+<table class="table signal">
 	<colgroup>
       <col style="width: 14%;">
       <col style="width: 30%;">
@@ -203,7 +208,7 @@
     </colgroup>
     <tbody data-uid="#= uid #">	
 	<tr class="border-bottom-line border-top-line">	
-		<td class="border-right-line">
+		<td class="active border-right-line">
 			마켓
 		</td>
 		<td class="border-right-line">
@@ -211,7 +216,7 @@
 			#: NM_MRK #
 			#}#
 		</td>
-		<td class="border-right-line">
+		<td class="active border-right-line">
 			주문번호
 		</td>
 		<td class="border-right-line">
@@ -221,7 +226,7 @@
 		</td>
 	</tr>
 	<tr class="border-bottom-line">
-		<td class="border-right-line">
+		<td class="active border-right-line">
 			상품코드
 		</td>
 		<td class="border-right-line" colspan="3">
@@ -231,7 +236,7 @@
 		</td>
 	</tr>
 	<tr class="border-bottom-line">
-		<td class="border-right-line">
+		<td class="active border-right-line">
 			상품명/옵션
 		</td>
 		<td class="border-right-line" colspan="3">
@@ -241,7 +246,7 @@
 		</td>
 	</tr>
 	<tr class="border-bottom-line">
-		<td class="border-right-line">
+		<td class="active border-right-line">
 			문의자
 		</td>
 		<td class="border-right-line">
@@ -249,7 +254,7 @@
 			#: NM_INQ #
 			#}#	
 		</td>
-		<td class="border-right-line">
+		<td class="active border-right-line">
 			문의일시
 		</td>
 		<td class="border-right-line">
@@ -259,21 +264,31 @@
 		</td>
 	</tr>
 	<tr class="border-bottom-line">
-		<td class="border-right-line">
+		<td class="active border-right-line">
 			문의구분
 		</td>
-		<td colspan="3">
-			#if(CD_INQCLFT){ #
-			<co04-cd-to-nm cd="#:CD_INQCLFT#" nm-box="csDataVO.csQuestionCodeOp">
-			#}#
+		<td class="border-right-line">
+			#if(NM_INQCLFT){ #
+			#: NM_INQCLFT 	 #
+			#}				 #
 		</td> 
+		<td class="active border-right-line">
+		
+		</td>
+		<td class="border-right-line">
+					
+		</td>
 	</tr>
 	<tr class="border-bottom-line">
-		<td class="border-right-line">
+		<td class="active border-right-line">
 			답변내용
 		</td>
-		<td colspan="3">			
-			<textarea class="k-textbox" name="DC_ANSCTT" data-bind="value: DC_ANSCTT" style="width:100%; height:150px;"></textarea>
+		<td class="border-right-line" colspan="3">	
+			<textarea name="DC_ANSCTT" 
+					data-bind="value: DC_ANSCTT" 
+					ng-class="csDataVO.popupDisAble"
+					ng-disabled="#: CD_INQSTAT # == '002'" 
+					style="width:100%; height:150px;"></textarea>
 		</td> 
 	</tr>
 	</tbody>
@@ -282,10 +297,10 @@
 
 <!-- 그리드 툴바 템플릿 -->
 <script id="cs-toolbar-template" type="text/x-kendo-template">
-	<button class="k-button k-button-icontext k-grid-edit" ng-click="onCsGridEditClick()"><span class="k-icon k-edit"></span>답변등록</button>    
-    <a class="k-button k-button-icontext k-grid-info" ng-click="onOpen()"><span class="k-icon k-i-info"></span>문의정보 가오기</a>
-	<a class="k-button k-button-icontext k-grid-send" ng-click="onSend()"><span class="k-icon k-i-send"></span>답변 전송하기</a>
+	<button class="k-button k-button-icontext k-grid-edit" ng-click="onCsGridEditClick()"><span class="k-icon k-edit"></span>답변등록</button>
 </script>
+
+<!-- <a class="k-button k-button-icontext k-grid-info" ng-click="onOpen()"><span class="k-icon k-i-info"></span>문의정보 가오기</a> -->
 
 <!-- 검색시 유효성 검사 경고창 -->
 <script id="notificationTemplate" type="text/x-kendo-template">
@@ -311,10 +326,6 @@
 .k-popup-edit-form .k-edit-field > .k-textbox,
 .k-popup-edit-form .k-edit-field > .k-widget:not(.k-tooltip){
     width: 98%;
-}
-.signal{    
-    width: 99%;
-    margin: 5px;
 }
 .border-right-line{    
 	border-right: 1px solid #eee;    
@@ -372,10 +383,5 @@
 	display:inline-block; 
 	vertical-align:middle; 
 	text-align:right;
-}
-.ells{
-	text-overflow: ellipsis; 
-	white-space: nowrap; 
-	overflow:hidden;
 }
 </style>

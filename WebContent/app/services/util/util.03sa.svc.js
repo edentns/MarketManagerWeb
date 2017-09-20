@@ -8,8 +8,8 @@
 	 */
 	angular.module('edtApp.common.service').service('Util03saSvc', ['$rootScope', '$state', '$window', '$http', 'APP_CONFIG', 'MenuSvc',
 		function ($rootScope, $state, $window, $http, APP_CONFIG, MenuSvc) {
-			var user = $rootScope.webApp.user,
-				menu = $rootScope.webApp.menu;
+			/*var user = $rootScope.webApp.user,
+				menu = $rootScope.webApp.menu;*/
 						
 			//popup insert & update Validation
             this.readValidation = function(idx){
