@@ -35,12 +35,12 @@
 				 * @param {{bsCd:string, user:string, password:string}} userDataSet
 				 * @returns {*}
 				 */
-				updateMngMrk : function (noMngMrk, ynDel) {
+				updateMngMrk : function (noMngMrk, cdItlStat) {
 					return $http({
 						method	: "POST",
 						url		: APP_CONFIG.domain +"/updateMngMrk",
 						headers	: { "Content-Type": "application/x-www-form-urlencoded; text/plain; */*; charset=utf-8" },
-						data    : $.param({NO_MNGMRK:noMngMrk, YN_DEL:ynDel})
+						data    : $.param({NO_MNGMRK:noMngMrk, CD_ITLSTAT:cdItlStat})
 					});
 				}
             };
