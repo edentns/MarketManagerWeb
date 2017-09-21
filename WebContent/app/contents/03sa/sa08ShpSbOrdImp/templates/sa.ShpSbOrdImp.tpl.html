@@ -3,9 +3,274 @@
         <div id="app-content-header">
             <ol class="breadcrumb">
                 <li><a href="#99sy/syDashboard"><i class="fa fa-home fa-2x"></i></a></li>
-                <li><a href="#03sa/saShpSbOrdImp">주문·배송 / 주문  / 배송준비 Import</a></li>
+                <li><a href="#03sa/saShpStdbyOrd">주문·배송 / 주문 / 배송준비 &nbsp;Import</a></li>
             </ol>
         </div>
     </div>
-    
+
+    <div class="row">
+        <!-- 검색 -->
+<!--         <div class="content-area-container col-xs-12" style="margin:0px 0px -5px 0px;"> -->
+<!--         	<div data-content-box-layer data-box-title="shpbyordDataVO.boxTitle" data-is-open="shpbyordDataVO.isOpen(val)"> -->
+<!--                 <form class="search-type1" id="myForm"> -->
+<!--                 	<table> -->
+<!--                         <colgroup> -->
+<!--                             <col style="width: 10%;"> -->
+<!--                             <col style="width: 33%;"> -->
+<!--                             <col style="width: 10%;"> -->
+<!--                             <col style="width: 33%;"> -->
+<!--                             <col style="width: 10%;"> -->
+<!--                             <col style="width: 33%;"> -->
+<!--                         </colgroup> -->
+<!--                         <tbody> -->
+<!--                         <tr> -->
+<!--                             <th>마켓명</th> -->
+<!--                             <td> -->
+<!--                             	<co01-mcbox title="마켓명" model="shpbyordDataVO.ordMrkNameMo" options="shpbyordDataVO.ordMrkNameOp" setting="shpbyordDataVO.setting" style="width:100%;"> -->
+<!--         						</co01-mcbox>  -->
+<!--                             </td> -->
+<!--                             <th>상품명</th> -->
+<!--                             <td> -->
+<!--                             	<input data-ng-model="shpbyordDataVO.procName.value" -->
+<!--                             			focus="shpbyordDataVO.procName.focus" -->
+<!--                             			title="상품명" -->
+<!--                             			data-eden-type="kor"  -->
+<!--                             			type="text"  -->
+<!--                             			class="form-control" style="width:100%;"/> -->
+<!--                             </td>		 -->
+<!-- 							<th>구매자/수취인</th> -->
+<!--                             <td>                            	              	 -->
+<!--                             	<input data-ng-model="shpbyordDataVO.buyerName.value" -->
+<!--                             			focus="shpbyordDataVO.buyerName.focus" -->
+<!--                             			title="구매자/수취인" -->
+<!--                             			data-eden-type="kor"  -->
+<!--                             			type="text"  -->
+<!--                             			class="form-control" style="width:100%;"/> -->
+<!--                             </td> -->
+<!--                         </tr> -->
+<!--                         </tbody> -->
+<!--                     </table>         		      -->
+<!--                     <div class="btn-group1 mt-10"> -->
+<!--                         <kendo-button type="submit" class="k-primary" title="검색" data-ng-click="shpbyordDataVO.inQuiry()" style="width:70px;">검색</kendo-button> -->
+<!--                         <kendo-button type="botton" title="초기화" data-ng-click="shpbyordDataVO.inIt()" style="width:70px;">초기화</kendo-button> -->
+<!--                     </div> -->
+<!--                 </form> -->
+<!--             </div> -->
+<!--         </div> -->
+        
+        <!-- 주문 목록 -->          
+		<div class="content-area-container col-xs-12" style="padding:0px 0px 0px 0px;">				
+	        <div id="divShpbyordGrd" kendo-grid="shpbyordkg" options="grdShpbyordVO">
+	        </div>	            
+        </div>
+    </div>
 </div>
+
+<!-- 주문 조회 그리드 툴바 템플릿 -->
+<script id="shpbyord-toolbar-template" type="text/x-kendo-template">
+	<!-- <a class="k-button k-button-icontext k-grid-save1"><span class="k-icon"></span>배송지연</a> -->
+	<!-- <a class="k-button k-button-icontext k-grid-save2"><span class="k-icon k-i-close"></span>주문취소</a> -->  
+	<div class="row">   
+		<div class="col-xs-4" style="padding:0px;">   
+			<div style="margin-left:15px;">
+				<!-- <a class="k-button k-button-icontext k-grid-no-out"><span class="k-icon k-i-update"></span>저장</a> -->
+				<!-- <a class="k-button k-button-icontext k-grid-delivery-info-send"><span class="k-icon k-i-redo"></span>배송정보전송</a> -->
+				<a class="k-button k-button-icontext k-grid-delivery-info"><span class="k-icon k-i-add"></span>배송정보등록</a>        
+				<a class="k-button k-button-icontext k-grid-excel"><span class="k-icon k-i-excel"></span>Excel로딩</a>
+			</div>
+		</div>
+		<div class="col-xs-8" style="padding:0px;">
+			<div style="margin-right:35px;">    
+				<p class="text-right" style="margin:0px;">총  <strong>{{shpbyordDataVO.dataTotal}}</strong> 건이 검색</p>
+			</div>
+		</div>
+	</div>
+</script>
+
+<!-- 주문 조회 그리드 -->
+<script id="shpbyord-template" type="text/x-kendo-template">
+  	<tr data-uid="#= uid #" ng-dblclick="grdDblClickGo('#: NO_ORD #','#: NO_MRKORD #')">
+		<td class="ta-c">
+        	<input class='k-checkbox' data-role='checkbox' type='checkbox' ng-click="onOrdGrdCkboxClick($event)" id="#= uid #_alt">
+			<label class='k-checkbox-label k-no-text' for="#= uid #_alt"></label>
+      	</td>
+		<!-- 관리번호 -->
+		<td class="ta-l">
+				# if(NO_ORD){ # 
+				#: NO_ORD 	# 
+				# }	#
+      	</td>
+		<!-- 마켓명 -->
+		<td class="ta-l">
+				# if(NM_MRK){ #
+                #: NM_MRK  	# 
+		        # } 	#
+		</td>
+		<!-- 결제번호 -->	
+		<td class="ta-l">
+				# if(NO_APVL){ # 
+				#: NO_APVL 	 # 
+				# }#
+      	</td>	
+		<!-- 주문번호 -->			
+		<td class="ta-l">
+				# if(NO_MRKORD){  # 
+				#: NO_MRKORD 	  # 
+				# }		#
+      	</td>
+		<!-- 마켓상품번호 -->	
+		<td class="ta-l">
+				# if(NO_MRKITEM){ #
+          	    #: NO_MRKITEM # 
+                # }   #			
+		</td>	
+		<!-- 상품명 / 옵션(상품구성) NM_MRKOPT / 주문 수량-->
+		<td class="ta-l">
+				# if(NM_MRKITEM){ #
+				#: NM_MRKITEM #
+				# } #
+				# if(NM_MRKOPT){ #	
+				&nbsp;(#: NM_MRKOPT #)
+				# }	# 	
+				# if(QT_ORD){ 	#
+				&nbsp;/&nbsp;#: QT_ORD # 개 
+				# } 	#
+		</td>
+		<!-- 주문일시 -->
+		<td class="ta-l">	
+				# if(DTS_ORD){ # 
+				#: DTS_ORD 	 # 
+				# }else{ }  #  
+      	</td>
+		<!-- 택배사 -->
+		<td class="ta-l">		
+		</td>
+		<!-- 송장번호 -->
+		<td class="ta-l">		
+				# if(NO_INVO){ #
+				<span>#: NO_INVO #</span>
+				# } #						
+      	</td>
+		<!-- 구매자 (수취인 /NM_CONS) -->
+		<td class="ta-c">
+				# if(NM_PCHR){ #
+				#: NM_PCHR 	   #
+				# }	   # 
+				# if(NM_CONS){ #
+				(#: NM_CONS #)
+				# } #
+		</td>
+		<!-- 휴대전화 (전화번호  / NO_PCHRPHNE) -->
+		<td class="ta-l">
+				# if(NO_CONSHDPH){ #
+				#: NO_CONSHDPH # 
+				# }	 #	
+				# if(NO_PCHRPHNE){ #					  
+				(#: NO_PCHRPHNE #)		
+				# }	 #			
+		</td>
+		<!-- 주소1 (주소2 /DC_CONSOLDADDR) -->
+		<td class="ta-l">
+				# if(DC_CONSNEWADDR){ #
+				#: DC_CONSNEWADDR 	  # 
+				# }	 	      #
+				# if(DC_CONSOLDADDR){ #	
+				(#: DC_CONSOLDADDR   #) 
+				# }          #		
+      	</td> 	
+		<!-- 상품번호 -->	
+		<td class="ta-l">
+				# if(NO_MRKREGITEM){ #
+				#: NO_MRKREGITEM # 
+				# }   #
+      	</td>	
+		<!-- 판매가 -->	
+		<td class="ta-r">
+				# if(AM_ORDSALEPRC){ #
+				#= kendo.toString(AM_ORDSALEPRC,'C0', 'ko-KR') #
+    			# }else{ #
+				   0
+				#}#
+		</td>
+		<!-- 주문상태-->
+		<td class="ta-l">
+				# if(CD_ORDSTAT){ #
+				<co04-cd-to-nm cd="#:CD_ORDSTAT#" nm-box="shpbyordDataVO.ordStatusOp">
+				# }	   #
+		</td>
+		<!-- 배송방법 -->
+		<td class="ta-l">	
+				# if(DC_SHPWAY){ #  
+				#: DC_SHPWAY # 
+				# }	 #
+      	</td>
+		<!-- 주문확정일시 -->
+		<td class="ta-c">
+				# if(DTS_APVL){ #
+				#: DTS_APVL 	#
+				# }		#				
+		</td>		
+	</tr>			
+</script>
+
+<style>
+.k-edit-form-container{
+    width: 900px;
+}
+.k-popup-edit-form .k-edit-label{
+    width: 20%;
+    text-align: left;
+}
+.k-popup-edit-form .k-edit-field{
+    width: 70%;
+}
+.k-popup-edit-form .k-edit-field > .k-textbox,
+.k-popup-edit-form .k-edit-field > .k-widget:not(.k-tooltip){
+    width: 98%;
+}
+.border-right-line{    
+	border-right: 1px solid #eee;    
+}
+.border-top-line{	
+	border-top: 1px solid #eee;
+}
+.border-bottom-line{	
+	border-bottom: 1px solid #eee;
+}
+#divShpbyordGrd table{
+    min-width: 1300px;
+}
+.k-grid table tr td div.k-state-focused-custom
+{
+	background: #f99;
+	color: #fff; 
+}
+.k-grid td{
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.k-grid-content > table > tbody > tr > td{
+	text-align: left;
+}
+.k-grid-content > table > tbody > tr > td:nth-child(1) {
+	text-align: center;
+}
+.k-grid-content > table > tbody > tr > td:nth-child(8) {
+	text-align: center;
+}
+.k-grid-content > table > tbody > tr > td:nth-child(13) {
+	text-align: center;
+}
+.k-grid-content > table > tbody > tr > td:nth-child(15) {
+	text-align: center;
+}
+.k-grid-content > table > tbody > tr > td:nth-child(16) {
+	text-align: right;
+}
+.k-grid-content > table > tbody > tr > td:nth-child(17) {
+	text-align: right;
+}
+.k-grid-content > table > tbody > tr > td:nth-child(21) {
+	text-align: center;
+}
+</style>
