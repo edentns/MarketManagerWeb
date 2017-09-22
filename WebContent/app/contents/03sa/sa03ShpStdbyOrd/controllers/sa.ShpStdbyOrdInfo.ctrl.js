@@ -8,8 +8,8 @@
      */
     		
     angular.module("sa.ShpStdbyOrd.controller")
-        .controller("sa.ShpStdbyOrdInfoCtrl", ["$stateParams", "$scope", "$state", "$http", "$q", "$log", "sa.ShpStdbyOrdSvc", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "MenuSvc",
-            function ($stateParams, $scope, $state, $http, $q, $log, ShpStdbyOrdSvc, APP_CODE, $timeout, resData, Page, UtilSvc, MenuSvc) {	            
+        .controller("sa.ShpStdbyOrdInfoCtrl", ["$stateParams", "$scope", "$state", "$http", "$q", "$log", "sa.ShpStdbyOrdSvc", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "MenuSvc", "sa.OrdSvc",
+            function ($stateParams, $scope, $state, $http, $q, $log, ShpStdbyOrdSvc, APP_CODE, $timeout, resData, Page, UtilSvc, MenuSvc, saOrdSvc) {	            
         	    		
 	            //주문상태 드랍 박스 실행	
 	            var orderStatus = (function(){
@@ -75,7 +75,11 @@
 	        		procInfo : { boxTitle : "제품 정보" },
 	        		buyerInfo : { boxTitle : "구매자 정보" },
 	        		receiveInfo : { boxTitle : "수령인 정보" },
-	        		deliveryInfo : { boxTitle : "배송 정보" }
+	        		deliveryInfo : { boxTitle : "배송 정보" },
+	        		inputs: {
+	        			CD_CCLRSN : "001",
+	        			DC_CCLRSNCTT : ""
+	        		}
 		        };
 	            	            	            
 	            ordInfoDataVO.getInitializeOrdInfoProc = function(){
@@ -133,10 +137,10 @@
 	            		angular.element("input[name=NO_INVO]").focus();
 	            	    return false;
 	            	}
-	            	if(this.ds.CD_ORDSTAT !== stat){
+	            	/*if(this.ds.CD_ORDSTAT !== stat){
 	            		alert('주문 상태를 확인 후 등록을 해주세요.');
 	            	    return false;
-	            	}	            	
+	            	}*/	            	
 	            	if(!this.ds.NO_APVL){
             			alert('마켓 결제번호가 있는 주문만 전송 가능합니다.');
             			return false;
@@ -193,6 +197,56 @@
 	        			return defer.promise;
 	            	}
 	            };
+	            
+	            ordInfoDataVO.ordCancelPopOptions = {
+			        	actions: [ "Minimize", "Maximize", "Close"],
+		            	height : "500",
+		            	visible : false,
+		            	modal : true,
+		            	title : "",
+		            	content : {
+		            		template : kendo.template($.trim($("#ordinfo_popup_template").html()))
+		            	}
+			        };
+			        //pop up open
+			        ordInfoDataVO.ordCancelPopOptionsOpen = function(){
+			        	var win = $scope.win;
+			        	
+			        	win.center();
+		            	win.open();
+		            };
+		            //pop up close
+		            ordInfoDataVO.ordCancelPopOptionsClose = function(){
+			        	var win = $scope.win;
+			        			        	
+			        	win.close();
+			        	
+			        	this.inputs.cancel_reason_code = "";
+			        	this.inputs.cancel_reason_text = "";
+			        	$("span.k-tooltip-validation").hide();
+		            };
+		            //주문취소
+		            ordInfoDataVO.doOrdCancel = function(){
+		            	if(this.inputs.CD_CCLRSN === ""){
+		            		alert("주문취소 코드를 선택해주세요.");
+		            		return;
+		            	}
+		            	if(this.inputs.DC_CCLRSNCTT === "" || this.inputs.DC_CCLRSNCTT.length > 10){ 
+		            		alert("주문취소 사유를 확인해주세요.");
+		            	    return;
+		            	}
+		            	if(confirm("현재 주문을 취소 하시겠습니까?")){
+		            		var defer = $q.defer(),
+	        			 		param = $.extend(ordInfoDataVO.inputs, ordInfoDataVO.ds);
+	    				
+	        				saOrdSvc.orderCancel(param).then(function (res) {
+	            				defer.resolve();            				
+	            				ordInfoDataVO.ordCancelPopOptionsClose();
+	            				location.reload();
+	            			});
+	            			return defer.promise;
+		            	}
+		            };
 	            
 	            //주문상태에 따라서 버튼 숨김 유무
 	            /*ordInfoDataVO.buttonHidden = function(code){

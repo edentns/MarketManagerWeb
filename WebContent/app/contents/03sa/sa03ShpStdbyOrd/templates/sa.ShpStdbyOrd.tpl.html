@@ -105,15 +105,12 @@
 
 <!-- 주문 조회 그리드 툴바 템플릿 -->
 <script id="shpbyord-toolbar-template" type="text/x-kendo-template">
-	<!-- <a class="k-button k-button-icontext k-grid-save1"><span class="k-icon"></span>배송지연</a> -->
-	<!-- <a class="k-button k-button-icontext k-grid-save2"><span class="k-icon k-i-close"></span>주문취소</a> -->  
 	<div class="row">   
 		<div class="col-xs-4" style="padding:0px;">   
 			<div style="margin-left:15px;">
-				<a class="k-button k-button-icontext k-grid-no-out"><span class="k-icon k-i-update"></span>송장출력</a>
-				<a class="k-button k-button-icontext k-grid-delivery-info"><span class="k-icon k-i-add"></span>배송정보등록</a>        
-				<a class="k-button k-button-icontext k-grid-delivery-info-send"><span class="k-icon k-i-redo"></span>배송정보전송</a>
-				<a class="k-button k-button-icontext k-grid-excel"><span class="k-icon k-i-excel"></span>Excel다운로드</a>
+				<a class="k-button k-button-icontext k-grid-delivery-info" ng-click = "grdShpbyordVO.deliveryInfo()"><span class="k-icon k-i-add"></span>배송정보등록</a>
+				<a class="k-button k-button-icontext k-grid-edit" ng-click = "grdShpbyordVO.ordCancel()"><span class="k-icon k-i-close"></span>주문취소</a>       
+				<a class="k-button k-button-icontext" ng-click = "grdShpbyordVO.exportExcel()"><span class="k-icon k-i-excel"></span>Excel다운로드</a>
 			</div>
 		</div>
 		<div class="col-xs-8" style="padding:0px;">
@@ -126,7 +123,7 @@
 
 <!-- 주문 조회 그리드 -->
 <script id="shpbyord-template" type="text/x-kendo-template">
-  	<tr data-uid="#= uid #" ng-dblclick="grdDblClickGo('#: NO_ORD #','#: NO_MRKORD #')">
+  	<tr data-uid="#= uid #">
 		<td class="ta-c">
         	<input class='k-checkbox' data-role='checkbox' type='checkbox' ng-click="onOrdGrdCkboxClick($event)" id="#= uid #_alt">
 			<label class='k-checkbox-label k-no-text' for="#= uid #_alt"></label>
@@ -276,6 +273,114 @@
 	</tr>			
 </script>
 
+<!-- 주문 취소 팝업 -->
+<script id="ord_popup_template" type="text/x-kendo-template">
+<div class="not_pop_title"><h4>주문 취소 입력</h4></div>
+<table class="table signal">
+	<colgroup>
+      <col style="width: 14%;">
+      <col style="width: 30%;">
+      <col style="width: 14%;">
+      <col style="width: 30%;">
+    </colgroup>
+    <tbody data-uid="#= uid #">	
+	<tr class="border-bottom-line border-top-line">	
+		<td class="active border-right-line">
+			마켓
+		</td>
+		<td class="border-right-line">
+			#if(NM_MRK){ #
+			#: NM_MRK #
+			#}#
+		</td>
+		<td class="active border-right-line">
+			주문번호
+		</td>
+		<td>
+			#if(NO_MRKORD){ #
+			#: NO_MRKORD #
+			#}#
+		</td>
+	</tr>
+	<tr class="border-bottom-line">
+		<td class="active border-right-line">
+			상품코드
+		</td>
+		<td colspan="3">
+			#if(NO_MRKITEM){ #
+			#: NO_MRKITEM #
+			#}#	
+		</td>
+	</tr>
+	<tr class="border-bottom-line">
+		<td class="active border-right-line">
+			상품명
+		</td>
+		<td colspan="3">
+			#if(NM_MRKITEM){ #
+			#: NM_MRKITEM #
+			#}#
+		</td>
+	</tr>
+	<tr class="border-bottom-line">
+		<td class="active border-right-line">
+			구매자
+		</td>
+		<td class="border-right-line">
+			#if(NM_PCHR){ #
+			#: NM_PCHR #
+			#}#	
+		</td>
+		<td class="active border-right-line">
+			배송방법
+		</td>
+		<td>
+			#if(DC_SHPWAY){ #
+			#: DC_SHPWAY #
+			#}#			
+		</td>
+	</tr>
+	<tr class="border-bottom-line">
+		<td class="active border-right-line">
+			구매수량
+		</td>
+		<td class="ta-r">
+			#if(QT_ORD){ #
+			#: QT_ORD #
+			#}#
+
+		<td class="active border-right-line">
+		</td>
+		<td>
+		</td>
+	</tr>
+	<tr class="border-bottom-line">
+		<td class="active border-right-line">
+			<code>*</code>취소사유코드
+		</td>
+		<td>
+			<select kendo-drop-down-list
+                k-options="shpbyordDataVO.cancelCodeOp"
+				name="CD_CCLRSN"
+				data-bind="value: CD_CCLRSN"
+                style="width: 100%">
+			</select>
+		</td>
+		<td colspan="2">
+		</td> 
+	</tr>
+	<tr class="border-bottom-line">
+		<td class="active border-right-line">
+			<code>*</code>주문취소사유
+		</td>
+		<td colspan="3">			
+			<textarea class="k-textbox" name="DC_CCLRSNCTT" data-bind="value: DC_CCLRSNCTT" style="width:100%; height:150px;"></textarea>
+		</td> 
+	</tr>
+	</tbody>
+</table>
+</script>
+
 <style>
 .k-edit-form-container{
     width: 900px;
@@ -335,5 +440,26 @@
 }
 .k-grid-content > table > tbody > tr > td:nth-child(21) {
 	text-align: center;
+}
+.k-popup-edit-form .k-edit-label{
+    width: 20%;
+    text-align: left;
+}
+.k-popup-edit-form .k-edit-field{
+    width: 70%;
+}
+.k-popup-edit-form .k-edit-field > .k-textbox,
+.k-popup-edit-form .k-edit-field > .k-widget:not(.k-tooltip){
+    width: 98%;
+}
+.div-rows{
+	border-bottom: solid 1px #bbdceb;	
+}
+.not_pop_title{
+	padding: 10px;
+}
+.signal{    
+    width: 99%;
+    margin: 5px;
 }
 </style>

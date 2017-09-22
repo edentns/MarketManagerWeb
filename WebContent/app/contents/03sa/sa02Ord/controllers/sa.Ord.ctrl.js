@@ -99,6 +99,8 @@
                     AM_CUSTOM_SALES      : { type: APP_SA_MODEL.AM_CUSTOM_SALES.type        , editable: false, nullable: false },
                    // NO_MRKITEMORD        : { type: APP_SA_MODEL.NO_MRKITEMORD.type          , editable: false, nullable: false },
                     
+                    DC_SHPCOSTSTAT: { type: "string" , editable: false, nullable: false },
+                    
                     AM_SHPCOST    : { type: APP_SA_MODEL.AM_SHPCOST.type     , editable: false, nullable: false },
                     CD_CCLRSN     : { type: APP_SA_MODEL.CD_CCLRSN.type      , 
 				                        validation: {
@@ -142,7 +144,8 @@
                               [APP_SA_MODEL.DC_PCHRREQCTT, APP_SA_MODEL.AM_PCHSPRC     ],
                               [APP_SA_MODEL.CD_ORDSTAT   , APP_SA_MODEL.DC_SHPWAY      ],
                               [APP_SA_MODEL.DTS_ORD      , APP_SA_MODEL.DTS_APVL       ],
-                              [APP_SA_MODEL.DTS_ORDDTRM  , APP_SA_MODEL.YN_CONN        ] 
+                              [APP_SA_MODEL.DTS_ORDDTRM  , APP_SA_MODEL.YN_CONN        ],
+                              [{field: "DC_SHPCOSTSTAT", title: "",hidden: true}]
                              ],
                     grdDetOption      = {},
                     grdRowTemplate    = "<tr data-uid=\"#= uid #\" ng-dblclick=\"grdDblClickGo('#: NO_ORD #','#: NO_MRKORD #',$event)\">\n",
@@ -463,9 +466,22 @@
 	                	//주문취소 팝업 가져오기
 	                	widget.element.find(".k-grid-edit").on("click", function(e){
 	                		var	chked = grd.element.find(".k-grid-content input:checked"),
-		            			chkedLeng = grd.element.find(".k-grid-content input:checked").length;
-	                    		                    
+		            			chkedLeng = grd.element.find(".k-grid-content input:checked").length,
+		            			element = $(event.currentTarget),
+			                	checked = element.is(':checked'),
+			                	row = element.parents("div").find(".k-grid-content input:checked"),
+			                	grid = $scope.ordkg,
+			                	dataItem = grid.dataItems(row),
+			                	dbLength = dataItem.length;
+	                		
+	                		/*var selected = grid.dataItem(grid.select()).NO_MRK;*/
 		                    if(chkedLeng === 1){
+		                    	for(var i = 0 ; i < dataItem.length; i++){
+		                    		if(dataItem[i].ROW_CHK  && dataItem[i].NO_MRK == "SYMR170101_00004"){   // 쿠팡 - 주문취소 막음 (?)
+		                    		alert("쿠팡의 상품은 주문취소가 어렵습니다.");
+		                    		return;
+		                    		}
+		                    	}
 		                		grd.editRow(chked.closest('tr'));
 		                	}else if(chkedLeng > 1){
 		                		alert("취소할 주문을 1개만 선택해 주세요!");

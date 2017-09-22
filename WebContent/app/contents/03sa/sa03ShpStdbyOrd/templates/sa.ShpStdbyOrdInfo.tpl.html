@@ -256,16 +256,157 @@
     </div>
    	   	
 	<div class="btn-group1 mt-20 mb-20">
-		<kendo-button type="button" ng-click="ordInfoDataVO.shpOutPrint()" style="width:120px;" ng-if="ordInfoDataVO.ds.CD_ORDSTAT < '003'"><span class="k-icon k-i-update"></span>송장출력</kendo-button>
-		<kendo-button type="submit" ng-click="ordInfoDataVO.shpInfoReg()" style="width:120px;" ng-if="ordInfoDataVO.ds.CD_ORDSTAT < '004'"><span class="k-icon k-i-add"></span>배송정보등록</kendo-button>	        
-		<kendo-button type="submit" ng-click="ordInfoDataVO.shpInfoSend()" style="width:120px;" ng-if="ordInfoDataVO.ds.CD_ORDSTAT < '005' && ordInfoDataVO.ds.INVO_YN !== ordInfoDataVO.ds.NO_ORD"><span class="k-icon k-i-redo"></span>배송정보전송</kendo-button>
+		<kendo-button type="submit" ng-click="ordInfoDataVO.shpInfoReg()" style="width:100px;" ><span class="k-icon k-i-add"></span>배송정보등록</kendo-button>
+		<kendo-button type="button" ng-click="ordInfoDataVO.ordCancelPopOptionsOpen()" style="width:100px;"><span class="k-icon k-i-close"></span>주문취소</kendo-button>
 		<kendo-button type="button" ng-click="ordInfoDataVO.goBack()" style="width:80px;">목록</kendo-button>   
 	</div>
 	
 	</form>  
 </div>
 
+<!-- 주문 취소 팝업 div-->
+<div kendo-window="win" k-options = "ordInfoDataVO.ordCancelPopOptions"></div> 
+            
+<!-- 주문 취소 팝업 template -->
+<script id="ordinfo_popup_template" type="text/x-kendo-template">
+<form id="ordercancel_form" kendo-validator="validator" ng-submit="validate($event)" k-options="myValidatorOptions">
+<div class="k-edit-form-container">
+<div class="not_pop_title"><h4>주문 취소 입력</h4></div>
+<table class="signal">
+	<colgroup>
+      <col style="width: 14%;">
+      <col style="width: 30%;">
+      <col style="width: 14%;">
+      <col style="width: 30%;">
+    </colgroup>
+    <tbody>	
+	<tr class="border-bottom-line border-top-line">	
+		<td class="border-right-line">
+			마켓
+		</td>
+		<td class="border-right-line">
+			{{ordInfoDataVO.ds.NM_MRK}}
+		</td>
+		<td class="border-right-line">
+			주문번호
+		</td>
+		<td>
+			{{ordInfoDataVO.ds.NO_MRKORD}}
+		</td>
+	</tr>
+	<tr class="border-bottom-line">
+		<td class="border-right-line">
+			상품코드
+		</td>
+		<td colspan="3">
+			{{ordInfoDataVO.ds.CD_MRKSSPL}}
+		</td>
+	</tr>
+	<tr class="border-bottom-line">
+		<td class="border-right-line">
+			상품명
+		</td>
+		<td colspan="3">
+			{{ordInfoDataVO.ds.NM_MRKITEM}}
+		</td>
+	</tr>
+	<tr class="border-bottom-line">
+		<td class="border-right-line">
+			구매자
+		</td>
+		<td class="border-right-line">
+			{{ordInfoDataVO.ds.NM_PCHR}}
+		</td>
+		<td class="border-right-line">
+			배송방법
+		</td>
+		<td>	
+			{{ordInfoDataVO.ds.DC_SHPWAY}}
+		</td>
+	</tr>
+	<tr class="border-bottom-line">
+		<td class="border-right-line">
+			구매수량
+		</td>
+		<td colspan="3">
+			{{ordInfoDataVO.ds.QT_ORD}}
+		</td> 
+	</tr>
+	<tr class="border-bottom-line">
+		<td class="border-right-line">
+			<code>*</code>취소사유코드
+		</td>
+		<td>
+			<span ng-if="ordInfoDataVO.cancelCodeOptions.dataSource">
+				<select kendo-drop-down-list
+					name="CD_CCLRSN"
+            		k-options = "ordInfoDataVO.cancelCodeOptions"
+					k-ng-model="ordInfoDataVO.inputs.CD_CCLRSN"				
+					data-required-msg="취소 사유코드를 입력해 주세요."
+					required
+                    style="width: 100%;">
+				</select>	
+			</span>
+		</td>
+		<td colspan="2">
+		</td> 
+	</tr>
+	<tr class="border-bottom-line">
+		<td class="border-right-line">
+			<code>*</code>주문취소사유
+		</td>
+		<td colspan="3">			
+			<textarea class="k-textbox" 
+					  name="DC_CCLRSNCTT" 
+			 		  data-ng-model="ordInfoDataVO.inputs.DC_CCLRSNCTT"
+					  data-required-msg="주문취소사유를 입력해 주세요."
+					  data-lengthy-msg="주문취소사유를 1000자 이내로 입력해 주세요."
+					  lengthy
+					  required
+					  style="width:100%; height:150px;"></textarea>
+		</td> 
+	</tr>
+	</tbody>
+</table>
+<div class="k-edit-buttons k-state-default">
+	<kendo-button type="submit" class="k-primary" ng-click="ordInfoDataVO.doOrdCancel()"><span class="k-icon k-i-update"></span>저장</kendo-button>
+	<kendo-button type="button" ng-click="ordInfoDataVO.ordCancelPopOptionsClose()"><span class="k-icon k-i-cancel"></span>닫기</kendo-button>        
+</div>	
+</div>
+</form>
+</script>     
+
 <style>
+.k-edit-form-container{
+    width: 920px;
+}
+.k-popup-edit-form .k-edit-label{
+    width: 20%;
+    text-align: left;
+}
+.k-popup-edit-form .k-edit-field{
+    width: 70%;
+}
+.k-popup-edit-form .k-edit-field > .k-textbox,
+.k-popup-edit-form .k-edit-field > .k-widget:not(.k-tooltip){
+    width: 98%;
+}
+.not_pop_title{
+	padding: 10px;
+}
+.signal{    
+    width: 99%;
+    margin: 5px;
+}
+.border-right-line{    
+	border-right: 1px solid #eee;    
+}
+.border-top-line{	
+	border-top: 1px solid #eee;
+}
+.border-bottom-line{	
+	border-bottom: 1px solid #eee;
+}
 span.k-widget.k-tooltip-validation{
 	position: absolute;
 	margin: 3px;
