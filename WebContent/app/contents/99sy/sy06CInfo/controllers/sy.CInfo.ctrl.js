@@ -146,9 +146,9 @@
 		                        SyCodeSvc.getSubcodeList({cd: "SY_000013", search: "all"}).then(function (result) { //창고구분
 		                            return result.data;
 		                        }),
-		                        SyCodeSvc.getSubcodeList({cd: "SY_000022", search: "all"}).then(function (result) { //택배사
+		                        /*SyCodeSvc.getSubcodeList({cd: "SY_000022", search: "all"}).then(function (result) { //택배사
 		                            return result.data;
-		                        }),
+		                        }),*/
 		                        UtilSvc.getList(param).then(function (result) {  //해당 회사
 		                            return result.data.results[0][0];
 		                        })
@@ -158,8 +158,8 @@
 		                        vo.dmstCodeList		= result[2];
 		                        vo.asCodeList       = result[3];
 		                        vo.wahoCodeList		= result[4];
-		                        vo.parsCodeList		= result[5];
-		                        vo.param 			= result[6];
+		                        /*vo.parsCodeList		= result[5];*/
+		                        vo.param 			= result[5];
 		                        
 		                        if (vo.param.DC_REPREMI) {
 			                        var split = vo.param.DC_REPREMI.split("@");

@@ -28,6 +28,23 @@
 					});
 				},
 				
+				/*배송정보 수정*/
+				edit : function (param) {					
+					return $http({
+						method	: "POST",
+						url		: APP_CONFIG.domain +"/shipping/edit",
+						data 	: param
+					}).success(function (data, status, headers, config) {
+						/*if(data === "success"){
+							alert("배송지연을 등록 하였습니다.");
+						}else{
+							alert("배송지연을 등록하는데 실패 하였습니다.");
+						}*/
+					}).error(function (data, status, headers, config) {
+						alert("시스템 오류 관리자에게 문의 하세요.");
+					});
+				},
+				
 				/**
 				 * 주문 목록 
 				 */

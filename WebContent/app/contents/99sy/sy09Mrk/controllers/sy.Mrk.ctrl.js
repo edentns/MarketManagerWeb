@@ -415,9 +415,18 @@
                 
                 function checkCon(e) {
                 	e.preventDefault();
+                	var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
                 	
-                	var i = 1;
-                	i = i + 1;
+                	var param = {
+                    	NO_MNGMRK: dataItem.NO_MNGMRK,
+                    	DC_MRKID: dataItem.DC_MRKID
+                    };
+                	
+                	syMrkSvc.conMrk(param).then(function(res) {
+        				//defer.resolve();
+        				alert( res.data );
+        				$scope.kg.dataSource.read();
+        			});
                 };
 
                 dateVO.doInit();

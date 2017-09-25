@@ -3,9 +3,56 @@
         <div id="app-content-header">
             <ol class="breadcrumb">
                 <li><a href="#99sy/syDashboard"><i class="fa fa-home fa-2x"></i></a></li>
-                <li><a href="#99sy/syPars">택배사관리</a></li>
+                <li><a href="#99sy/syPars">시스템 / 택배사관리</a></li>
             </ol>
         </div>
     </div>
     
+    <!-- 택배사 CONTENT Layer -->
+    <div class="row">
+        <!-- 마켓분류 Layer -->
+        <div class="content-area-container col-xs-12" >
+            <div data-content-box-layer data-box-title="syParsVO.boxTitle">
+                <form class="box-content-search">
+					<select kendo-drop-down-list k-options="syParsVO.mngMrkDs" k-ng-model="syParsVO.mngMrkMd" style="width:100%;"></select>
+					<div class="btn-group1 mt-10">
+           				 <kendo-button type="submit" class="customer_submit" title="검색" data-ng-click="syParsVO.search()" style="width:70px;" >검색</kendo-button>
+           				 <kendo-button type="button" class="customer_button" title="초기화" data-ng-click="syParsVO.inIt()" style="width:70px;" >초기화</kendo-button>
+       			 	</div>
+                </form>         	  
+            </div>
+        </div>
+        <!--/ 택배사 Layer END -->
+        
+        <!-- 발송 & 재발송 & 회수 Layer -->
+        <div class="content-area-container col-xs-4">
+            <div class="content-box-row">
+            	<div data-content-box-layer data-box-title="gridCusCodeVO.boxTitle">
+	                <kendo-grid options="gridCusCodeVO" id="gridCusCodeVO">
+	                </kendo-grid>
+	                <select kendo-drop-down-list k-options="syParsVO.mngMrkDs" k-ng-model="syParsVO.mngMrkMd" style="width:100%;"></select>
+           		 </div>
+            </div>     
+        </div>
+
+        <div class="content-area-container col-xs-4">
+            <div class="content-box-row">
+            	<div data-content-box-layer data-box-title="gridCusCodeVO.boxTitle">
+	                <kendo-grid options="gridCusCodeVO" id="gridCusCodeVO">
+	                </kendo-grid>
+           		 </div>
+            </div>      
+        </div>
+            
+        <div class="content-area-container col-xs-4">
+            <div class="content-box-row">
+            	<div data-content-box-layer data-box-title="gridCusCodeVO.boxTitle">
+	                <kendo-grid options="gridCusCodeVO" id="gridCusCodeVO">
+	                </kendo-grid>
+           		 </div>
+            </div>        
+        </div>
+     
+    </div>
+ 
 </div>

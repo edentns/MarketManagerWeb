@@ -158,6 +158,9 @@
 	            
 	            //주문상태에 따라서 버튼 숨김 유무
 	            ordInfoDataVO.buttonHidden = function(code){
+	            	if(code == '006' && this.ds.NO_MRK == 'SYMR170101_00004'){
+	            		return false;
+	            	}
 	            	if(this.ds.CD_ORDSTAT < code){
 	            		return true;
 	            	}

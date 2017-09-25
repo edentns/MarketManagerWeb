@@ -107,11 +107,8 @@
 
 <!-- 주문 취소 팝업 -->
 <script id="shipping_popup_template" type="text/x-kendo-template">
-<div class="not_pop_title" ng-if="shippingDataVO.updateChange === '001'">
-	<h4>배송지연</h4>
-</div>
-<div class="not_pop_title" ng-if="shippingDataVO.updateChange === '002'">
-	<h4>주문취소</h4>
+<div class="not_pop_title">
+	<h4>배송정보 수정</h4>
 </div>
 <table class="table signal">
 	<colgroup>
@@ -191,53 +188,33 @@
 		<td>
 		</td>
 	</tr>	
-	<tr class="border-bottom-line" ng-if="shippingDataVO.updateChange === '001'">
+	<tr class="border-bottom-line">
 		<td class="active border-right-line">
-			<code>*</code>배송지연코드
+			<code>*</code>택배사
 		</td>
 		<td>
 			<select kendo-drop-down-list
-				id="CD_SHPDLY"
-				k-options="shippingDataVO.delayCodeOp"
-				name="CD_SHPDLY"
-				data-bind="value: CD_SHPDLY"
+				id="CD_PARS"
+				k-options="shippingDataVO.parsCodeOptions"
+				name="CD_PARS"
+				data-bind="value: CD_PARS"
                 style="width: 100%">
 			</select>	
 		</td>
 		<td colspan="2">
 		</td> 
 	</tr>
-	<tr class="border-bottom-line" ng-if="shippingDataVO.updateChange === '001'">
+	<tr class="border-bottom-line">
 		<td class="active border-right-line">
-			<code>*</code>배송지연사유
+			<code>*</code>송장번호
 		</td>
-		<td colspan="3">			
-			<textarea class="k-textbox" name="DC_SHPDLYRSN" data-bind="value: DC_SHPDLYRSN" style="width:100%; height:150px;"></textarea>
-		</td> 
-	</tr>	
-	<tr class="border-bottom-line" ng-if="shippingDataVO.updateChange === '002'">
-		<td class="active border-right-line">
-			<code>*</code>취소사유코드
-		</td>
-		<td>
-			<select kendo-drop-down-list 
-				id="CD_CCLRSN"
-				k-options="shippingDataVO.cancelCodeOp"
-				name="CD_CCLRSN"
-				data-bind="value: CD_CCLRSN"
-                style="width: 100%">
-			</select>
-		</td>
-		<td colspan="2">
-		</td> 
-	</tr>
-	<tr class="border-bottom-line" ng-if="shippingDataVO.updateChange === '002'">
-		<td class="active border-right-line">
-			<code>*</code>주문취소사유
-		</td>
-		<td colspan="3">			
-			<textarea class="k-textbox" name="DC_CCLRSNCTT" data-bind="value: DC_CCLRSNCTT" style="width:100%; height:150px;"></textarea>
-		</td> 
+		<td colspan="3">
+          <input type="text" 
+             name="NO_INVO" 
+             data-bind="value: NO_INVO"
+             class="k-textbox"
+             style="width: 50%;float:left" 
+        </td> 
 	</tr>
 	</tbody>
 </table>
@@ -245,9 +222,7 @@
 
 <!-- 주문 조회 그리드 툴바 템플릿 -->
 <script id="shipping_toolbar_template" type="text/x-kendo-template">
-	<a class="k-button k-button-icontext k-grid-delay"><span class="k-icon k-i"></span>배송지연</a>
-	<a class="k-button k-button-icontext k-grid-ocl"><span class="k-icon k-i"></span>주문 취소</a>        
-	<a class="k-button k-button-icontext k-grid-open-finished"><span class="k-icon k-i"></span>배송완료 가져오기</a>
+	<a class="k-button k-button-icontext k-grid-edit"><span class="k-icon k-i"></span>배송정보 수정</a>
 </script>
 
 <style>

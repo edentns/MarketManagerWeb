@@ -16,8 +16,16 @@
                         url		 : APP_CONFIG.domain +"/sy09Mrk/"+CUD,
                         data     : aParam
                     });
-                }
-                
+                },
+
+	        	conMrk : function ( aParam ) {
+	                return $http({
+	                    method   : "POST",
+	                    url		 : APP_CONFIG.domain +"/sy09MrkCons",
+						headers	: { "Content-Type": "application/x-www-form-urlencoded; text/plain; */*; charset=utf-8" },
+	                    data     : $.param(aParam)
+	                });
+	            }
             };
         }]);
 }());
