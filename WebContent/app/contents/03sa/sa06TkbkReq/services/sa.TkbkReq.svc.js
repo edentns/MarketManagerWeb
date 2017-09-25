@@ -33,7 +33,7 @@
 				 */
             	tkbkConfirm : function (param) {					
 					return $http({
-						method	: "PUT",
+						method	: "POST",
 						url		: APP_CONFIG.domain +"/tkbk/confirm",
 						data	: param 
 					}).success(function (data, status, headers, config) {
@@ -71,27 +71,8 @@
 				 */
             	tkbkCompleted : function (param) {					
 					return $http({
-						method	: "PUT",
-						url		: APP_CONFIG.domain +"/tkbk/completed",
-						data	: param 
-					}).success(function (data, status, headers, config) {
-						if(data !== ""){
-							
-						}else{
-							alert("실패 하였습니다.");
-						}
-					}).error(function (data, status, headers, config) {
-						alert("시스템 오류 관리자에게 문의 하세요.");
-					});
-				},
-				
-				/**
-				 * 반품 전송
-				 */
-				tkbkInterfacesend : function (param) {					
-					return $http({
 						method	: "POST",
-						url		: APP_CONFIG.domain +"/tkbk/interfacesend",
+						url		: APP_CONFIG.domain +"/tkbk/completed",
 						data	: param 
 					}).success(function (data, status, headers, config) {
 						if(data !== ""){

@@ -69,6 +69,18 @@
             				}
             			});
     	            }()),
+    	            //지마켓 보류 사유 코드
+    	            gHoldCode = (function(){
+        				var param = {
+        					lnomngcdhd: "SYCH00074",
+        					lcdcls: "SA_000029"
+        				};
+            			UtilSvc.getCommonCodeList(param).then(function (res) {
+            				if(res.data.length >= 1){
+            					tkbkDataVO.gHoldCode = res.data;
+            				}
+            			});
+    	            }()),
     	            //반품 상태 코드
     	            cdTkbkstat = (function(){
         				var param = {
@@ -83,84 +95,185 @@
     	            }());
 
 	            var grdField =  {
-                    ROW_CHK       : { type: APP_SA_MODEL.ROW_CHK.type        , editable: true , nullable: false },
-                    NO_ORD        : { type: APP_SA_MODEL.NO_ORD.type         , editable: false, nullable: false },
-                    NO_APVL       : { type: APP_SA_MODEL.NO_APVL.type        , editable: false, nullable: false },
-                    NM_MRK        : { type: APP_SA_MODEL.NM_MRK.type         , editable: false, nullable: false },
-                    NO_MRKORD     : { type: APP_SA_MODEL.NO_MRKORD.type      , editable: false, nullable: false },
-                    
-                    NO_MRKITEM    : { type: APP_SA_MODEL.NO_MRKITEM.type     , defaultValue: "", nullable: false},
-                    NO_MRKREGITEM : { type: APP_SA_MODEL.NO_MRKREGITEM.type  , editable: false, nullable: false },
-                    NM_MRKITEM    : { type: APP_SA_MODEL.NM_MRKITEM.type     , editable: true , nullable: false },
-                    NM_MRKOPT     : { type: APP_SA_MODEL.NM_MRKOPT.type      , editable: false, nullable: false },
-                    
-                    AM_ORDSALEPRC : { type: APP_SA_MODEL.AM_ORDSALEPRC.type  , editable: false, nullable: false },
-                    NM_PCHR       : { type: APP_SA_MODEL.NM_PCHR.type        , editable: true , nullable: false },
-                    NM_CONS       : { type: APP_SA_MODEL.NM_CONS.type        , editable: false, nullable: false },
-                    NO_PCHRPHNE   : { type: APP_SA_MODEL.NO_PCHRPHNE.type    , editable: false, nullable: false },
-                    
-                    DC_PCHREMI    : { type: APP_SA_MODEL.DC_PCHREMI.type     , editable: false, nullable: false },
-                    DC_CONSNEWADDR: { type: APP_SA_MODEL.DC_CONSNEWADDR.type , editable: false, nullable: false },
-                    DC_PCHRREQCTT : { type: APP_SA_MODEL.DC_PCHRREQCTT.type  , editable: false, nullable: false },
-                    
-                    CD_ORDSTAT    : { type: APP_SA_MODEL.CD_ORDSTAT.type     , editable: false, nullable: false },
-                    DC_SHPWAY     : { type: APP_SA_MODEL.DC_SHPWAY.type      , editable: false, nullable: false },
-                    DTS_ORD       : { type: APP_SA_MODEL.DTS_ORD.type        , editable: false, nullable: false },
-                    QT_ORD        : { type: APP_SA_MODEL.QT_ORD.type         , editable: false, nullable: false },
-                    
-                    DTS_TKBKREQ   : { type: APP_SA_MODEL.DTS_TKBKREQ.type    , editable: false, nullable: false },
-                    NO_UPDATE     : { type: APP_SA_MODEL.NO_UPDATE.type      , editable: false, nullable: false },
-                    YN_CONN       : { type: APP_SA_MODEL.YN_CONN.type        , editable: false, nullable: false },
-                    
-                    DTS_CCLREQ    : { type: APP_SA_MODEL.DTS_CCLREQ.type     , editable: false, nullable: false },
-                    CD_TKBKRSN    : { type: APP_SA_MODEL.CD_TKBKRSN.type     , editable: false, nullable: false },
-                    DC_APVLWAY    : { type: APP_SA_MODEL.DC_APVLWAY.type     , editable: false, nullable: false },
-                    DTS_TKBKCPLT  : { type: APP_SA_MODEL.DTS_TKBKCPLT.type   , editable: true , nullable: false,
-				                    	validation: {
-											dts_tkbkcpltvalidation: function (input) {
-												if (input.is("[data-role=datetimepicker]")) {
-													input.attr("data-dts_tkbkcpltvalidation-msg", "반납상품접수일자를 정확히 입력해 주세요.");			                                                        	
-												    return input.data("kendoDateTimePicker").value();
-												};
-												return true;
-											}
-										}
-                    	            },
-                    DTS_TKBKCPLT_VIEW : { type: APP_SA_MODEL.DTS_TKBKCPLT_VIEW.type, editable: false, nullable: false },
-                    NO_TKBKCPLT   : { type: APP_SA_MODEL.NO_TKBKCPLT.type    , editable: false, nullable: false },
-                    QT_TKBK       : { type: APP_SA_MODEL.QT_TKBK.type        , editable: false, nullable: false },
-                    NO_INSERT     : { type: APP_SA_MODEL.NO_INSERT.type      , editable: false, nullable: false },
-                    CD_TKBKSTAT   : { type: APP_SA_MODEL.CD_TKBKSTAT.type    , editable: false, nullable: false },
-                    NO_TKBKREQ    : { type: APP_SA_MODEL.NO_TKBKREQ.type     , editable: false, nullable: false },
-                    NO_MRK        : { type: APP_SA_MODEL.NO_MRK.type         , editable: false, nullable: false },
-                    requesteNo    : { type: APP_SA_MODEL.requesteNo.type     , editable: false, nullable: false },
-                    mall_no       : { type: APP_SA_MODEL.mall_no.type        , editable: false, nullable: false },
-                    DC_TKBKRJTCTT : { type: APP_SA_MODEL.DC_TKBKRJTCTT.type  , editable: true , nullable: false,
-				                    	validation: {
-											dc_tkbkrjtcttvalidation: function (input) {
-												if (input.is("[name='DC_TKBKRJTCTT']") && input.val() === "") {
-													input.attr("data-dc_tkbkrjtcttvalidation-msg", "반품거부사유를 입력해 주세요.");
-												    return false;
-												};
-												if (input.is("[name='DC_TKBKRJTCTT']") && input.val() !== "" && input.val().length > 1000) {
-													input.attr("data-dc_tkbkrjtcttvalidation-msg", "반품거부사유를 1000자 이내로 입력해 주세요.");
-												    return false;
-												};
-												return true;
-											}
-										} 
-                    	            },
-                    CD_TKBKRJT    : { type: APP_SA_MODEL.DC_TKBKRJTCTT.type  , editable: true , nullable: false,
-				                    	validation: {
-											cd_tkbkrjtvalidation: function (input) {
-												if (input.is("[name='CD_TKBKRJT']") && input.val() === "") {
-													input.attr("data-cd_tkbkrjtvalidation-msg", "반품거부코드를 입력해 주세요.");
-												    return false;
-												};
-												return true;
-											}
-										}
-                                    }
+                    ROW_CHK       		: { type: APP_SA_MODEL.ROW_CHK.type        		, editable: true , nullable: false },
+                    NO_ORD        		: { type: APP_SA_MODEL.NO_ORD.type         		, editable: false, nullable: false },
+                    NO_APVL       		: { type: APP_SA_MODEL.NO_APVL.type        		, editable: false, nullable: false },
+                    NM_MRK        		: { type: APP_SA_MODEL.NM_MRK.type         		, editable: false, nullable: false },
+                    NO_MRKORD     		: { type: APP_SA_MODEL.NO_MRKORD.type      		, editable: false, nullable: false },                    
+                    NO_MRKITEM    		: { type: APP_SA_MODEL.NO_MRKITEM.type     		, editable: false, nullable: false},
+                    NO_MRKREGITEM 		: { type: APP_SA_MODEL.NO_MRKREGITEM.type  		, editable: false, nullable: false },
+                    NM_MRKITEM    		: { type: APP_SA_MODEL.NM_MRKITEM.type     		, editable: true , nullable: false },
+                    NM_MRKOPT     		: { type: APP_SA_MODEL.NM_MRKOPT.type      		, editable: false, nullable: false },                    
+                    AM_ORDSALEPRC 		: { type: APP_SA_MODEL.AM_ORDSALEPRC.type  		, editable: false, nullable: false },
+                    NM_PCHR       		: { type: APP_SA_MODEL.NM_PCHR.type        		, editable: true , nullable: false },
+                    NM_CONS       		: { type: APP_SA_MODEL.NM_CONS.type        		, editable: false, nullable: false },
+                    NO_PCHRPHNE   		: { type: APP_SA_MODEL.NO_PCHRPHNE.type    		, editable: false, nullable: false },                    
+                    DC_PCHREMI    		: { type: APP_SA_MODEL.DC_PCHREMI.type     		, editable: false, nullable: false },
+                    DC_CONSNEWADDR		: { type: APP_SA_MODEL.DC_CONSNEWADDR.type 		, editable: false, nullable: false },
+                    DC_PCHRREQCTT 		: { type: APP_SA_MODEL.DC_PCHRREQCTT.type 		, editable: false, nullable: false },                    
+                    CD_ORDSTAT    		: { type: APP_SA_MODEL.CD_ORDSTAT.type     		, editable: false, nullable: false },
+                    DC_SHPWAY     		: { type: APP_SA_MODEL.DC_SHPWAY.type      		, editable: false, nullable: false },
+                    DTS_ORD       		: { type: APP_SA_MODEL.DTS_ORD.type        		, editable: false, nullable: false },
+                    QT_ORD        		: { type: APP_SA_MODEL.QT_ORD.type         		, editable: false, nullable: false },                    
+                    DTS_TKBKREQ   		: { type: APP_SA_MODEL.DTS_TKBKREQ.type    		, editable: false, nullable: false },
+                    NO_UPDATE     		: { type: APP_SA_MODEL.NO_UPDATE.type      		, editable: false, nullable: false },
+                    YN_CONN       		: { type: APP_SA_MODEL.YN_CONN.type        		, editable: false, nullable: false },                    
+                    DTS_CCLREQ    		: { type: APP_SA_MODEL.DTS_CCLREQ.type     		, editable: false, nullable: false },
+                    CD_TKBKRSN    		: { type: APP_SA_MODEL.CD_TKBKRSN.type     		, editable: false, nullable: false },
+                    DC_APVLWAY    	  	: { type: APP_SA_MODEL.DC_APVLWAY.type     		, editable: false, nullable: false },        
+                    NO_TKBKCPLT   		: { type: APP_SA_MODEL.NO_TKBKCPLT.type    		, editable: false, nullable: false },
+                    QT_TKBK       		: { type: APP_SA_MODEL.QT_TKBK.type        		, editable: false, nullable: false },
+                    NO_INSERT     		: { type: APP_SA_MODEL.NO_INSERT.type      		, editable: false, nullable: false },
+                    CD_TKBKSTAT   		: { type: APP_SA_MODEL.CD_TKBKSTAT.type    		, editable: false, nullable: false },
+                    NO_TKBKREQ    		: { type: APP_SA_MODEL.NO_TKBKREQ.type     		, editable: false, nullable: false },
+                    NO_MRK        		: { type: APP_SA_MODEL.NO_MRK.type         		, editable: false, nullable: false },
+                    DTS_TKBKAPPRRJT 	: { type: APP_SA_MODEL.DTS_TKBKAPPRRJT.type		, editable: false, nullable: false },
+                    CODE			 	: { type: APP_SA_MODEL.DTS_TKBKAPPRRJT.type		, editable: false, nullable: false },
+                    NO_MNGMRK		 	: { type: APP_SA_MODEL.DTS_TKBKAPPRRJT.type		, editable: false, nullable: false },   
+				    NOW_YN		 		: { type: "boolean"								, editable: true,  nullable: false },
+				    RECEIVE_SET  		: {
+							                   	 type: "string"
+							                   	,editable: true
+							                   	,nullable: false
+							                   	,validation: {
+							                   		receive_setvalidation: function (input) {
+							                   			if(tkbkDataVO.gCode.indexOf(tkbkDataVO.marketDivisionCode) > -1){
+															if (input.is("[name=RECEIVE_SET]") && input.attr("required")) {			
+																input.attr("data-receive_setvalidation-msg", "반품상품접수 여부를 선택해 주세요.");
+																manualDataBind(input, "RECEIVE_SET");															
+																return $("#receive-group").find("[type=radio]").is(":checked");															
+											                };
+							                   			};
+														return true;
+													}
+												}
+							              },
+                    DTS_TKBKCPLT  		: {
+						                    	 type: APP_SA_MODEL.DTS_TKBKCPLT.type   
+						                    	,editable: true 
+						                    	,nullable: false
+						                    	,validation: {
+													dts_tkbkcpltvalidation: function (input) {
+														if (input.is("[data-role=datetimepicker]")) {
+															input.attr("data-dts_tkbkcpltvalidation-msg", "반납상품접수일자를 정확히 입력해 주세요.");			                                                        	
+														    return input.data("kendoDateTimePicker").value();
+														};
+														return true;
+													}
+												}
+					    	              },
+                    DC_TKBKRJTCTT 		: { 
+						                    	 type: APP_SA_MODEL.DC_TKBKRJTCTT.type  
+						                    	,editable: true 
+						                    	,nullable: false
+						                    	,validation: {
+													dc_tkbkrjtcttvalidation: function (input) {
+														if (input.is("[name='DC_TKBKRJTCTT']") && input.val() === "") {
+															input.attr("data-dc_tkbkrjtcttvalidation-msg", "반품거부사유를 입력해 주세요.");
+														    return false;
+														};
+														if (input.is("[name='DC_TKBKRJTCTT']") && input.val() !== "" && input.val().length > 1000) {
+															input.attr("data-dc_tkbkrjtcttvalidation-msg", "반품거부사유를 1000자 이내로 입력해 주세요.");
+														    return false;
+														};
+														return true;
+													}
+												} 
+					    	              },
+                    CD_TKBKRJT   		: { 
+						                    	 type: "string"
+						                    	,editable: true 
+						                    	,nullable: false
+						                    	,validation: {
+														cd_tkbkrjtvalidation: function (input) {
+															if (input.is("[name='CD_TKBKRJT']") && input.val() === "") {
+																input.attr("data-cd_tkbkrjtvalidation-msg", "반품거부코드를 입력해 주세요.");
+															    return false;
+															};
+															return true;
+														}
+													}
+				                   		  },             		  
+				    CD_PARS				: {
+						                    	type: "array"  
+							     			   ,editable: true
+							     			   ,nullable: false
+							                   ,validation: {
+							                	   cd_parsvalidation: function (input) {
+							                		   if(tkbkDataVO.sCode.indexOf(tkbkDataVO.marketDivisionCode) > -1){
+													    	if (input.is("[name='CD_PARS']") && input.val() === "") {
+							                                	input.attr("data-cd_parsvalidation-msg", "택배사를 입력해 주세요.");
+							                                    return false;
+							                                }
+													    	/*if(input.is("[name='CD_PARS']") && input.val() != ""){					    		
+													    		manualDataBind(input, "CD_PARS");
+													    	};*/
+							                		   };
+							                		   return true;
+											    	}
+												}
+	                    				  },	
+	                NO_INVO				: {
+						                    	type: APP_SA_MODEL.NO_INVO.type  
+								     		   ,editable: true
+								     		   ,nullable: false
+								               ,validation: {
+								            	   no_invovalidation: function (input) {
+								            		   if(tkbkDataVO.sCode.indexOf(tkbkDataVO.marketDivisionCode) > -1){
+													    	if (input.is("[name='NO_INVO']") && input.val() === "" ) {
+							                                	input.attr("data-no_invovalidation-msg", "송장번호를 입력해 주세요.");
+							                                    return false;
+							                                };
+													    	if(input.is("[name='NO_INVO']") && input.val().length > 100){
+													    		input.attr("data-no_invovalidation-msg", "송장번호룰 100자 이내로 입력해 주세요.");
+							                                    return false;
+													    	};
+													    	/*if(input.is("[name='NO_INVO']") && input.val().length <= 100 && input.val() != ""){										    		
+													    		manualDataBind(input, "NO_INVO");
+													    	};*/
+								            		   };
+												    	return true;
+											    	}
+								               }
+	                    				  },
+	                CD_HOLD				: {
+							                	type: "array"  
+									     	   ,editable: true
+									     	   ,nullable: false
+									           ,validation: {
+									        	   cd_holdvalidation: function (input) {
+									        		   if(tkbkDataVO.gCode.indexOf(tkbkDataVO.marketDivisionCode) > -1){
+									        			   if (input.is("[name='CD_HOLD']") && input.val() === "" && tkbkDataVO.receiveCheckCode === 'N') {
+							                                	input.attr("data-cd_holdvalidation-msg", "보류사유를 입력해 주세요.");
+							                                    return false;
+							                                };
+													    	/*if(input.is("[name='CD_HOLD']") && input.val() != ""){										    		
+													    		manualDataBind(input, "CD_HOLD");
+													    	};*/
+									        		   };
+									        		   return true;
+											    	}
+								               }
+	               						  },
+	                CD_HOLD_FEE			: {
+							                	type: "number"  
+								     		   ,editable: true
+								     		   ,nullable: false
+								               ,validation: {
+								            	   cd_hold_feevalidation: function (input) {
+								            		   if(tkbkDataVO.gCode.indexOf(tkbkDataVO.marketDivisionCode) > -1){
+								            			   if (input.is("[name='CD_HOLD_FEE']") && (!input.val() || input.val()) < 1 && tkbkDataVO.etcCostCode === 'Y') {
+							                                	input.attr("data-cd_hold_feevalidation-msg", "반품비를 입력해 주세요.");
+							                                    return false;
+							                               };
+													      /* if(input.is("[name='CD_HOLD_FEE']") && input.val() != 0 && input.val()){										    		
+													    		manualDataBind(input, "CD_HOLD_FEE");
+													       };*/
+								            		   };
+												    	return true;
+											    	}
+								               }
+	               						  }     				 
                 };
 
                 APP_SA_MODEL.CD_TKBKRSN.fNm  = "tkbkDataVO.cdTkbkrsnOp.dataSource";
@@ -171,7 +284,7 @@
                               [APP_SA_MODEL.NO_ORD           ,[APP_SA_MODEL.NO_APVL, APP_SA_MODEL.NO_MRKORD]],
                               [APP_SA_MODEL.NM_MRK           , APP_SA_MODEL.NO_MRKORD     ],
                               [APP_SA_MODEL.NO_MRKITEM       , APP_SA_MODEL.NO_MRKREGITEM ],
-                              [[APP_SA_MODEL.NM_MRKITEM, APP_SA_MODEL.NM_MRKOPT], APP_SA_MODEL.mall_no],
+                              [APP_SA_MODEL.NM_MRKITEM		 , APP_SA_MODEL.NM_MRKOPT	  ],
                               [APP_SA_MODEL.QT_ORD           , APP_SA_MODEL.QT_TKBK       ],
                               [APP_SA_MODEL.NM_PCHR          , APP_SA_MODEL.AM_ORDSALEPRC ],
                               [APP_SA_MODEL.NO_PCHRPHNE      , APP_SA_MODEL.DC_APVLWAY    ],
@@ -180,7 +293,7 @@
                               [APP_SA_MODEL.CD_ORDSTAT       , APP_SA_MODEL.DC_SHPWAY     ],
                               [APP_SA_MODEL.DTS_ORD          , APP_SA_MODEL.DTS_TKBKREQ   ],
                               [APP_SA_MODEL.DTS_TKBKAPPRRJT  , APP_SA_MODEL.NO_INSERT     ],
-                              [APP_SA_MODEL.DTS_TKBKCPLT_VIEW, APP_SA_MODEL.NO_TKBKCPLT   ],
+                              [APP_SA_MODEL.DTS_TKBKCPLT	 , APP_SA_MODEL.NO_TKBKCPLT   ],
                               [APP_SA_MODEL.YN_CONN          , APP_SA_MODEL.CD_TKBKSTAT   ]
                              ],
                     grdDetOption      = {},
@@ -219,6 +332,7 @@
 	        		betweenDateOptionOp : [],
 	        		betweenDateOptionMo : "",
 	        		shipStatusOp : [],
+	        		cdTkbkstatMo : "001",
 	        		cdTkbkstat : [],
 	        		cdTkbkrsnOp: {
 	        			dataSource: [],
@@ -244,15 +358,84 @@
         	                    effects: "fadeIn zoom:in",
         	                    duration: 300
         	                }
-        	            },
+        	            }
 	        		},
 	        		userInfo : JSON.parse($window.localStorage.getItem("USER")).NM_EMP,
 	        		updateChange : "",
 	        		dataTotal : 0,
 	        		resetAtGrd : "",
-	        		param : ""
+	        		param : "",
+	        		shipList : "",
+	        		gCode : ['170104','170102'],
+	        		eCode : ['170106'],
+	        		sCode : ['170103'],
+	        		cCode : ['170902'],
+	        		etcCostName : "",
+	        		etcCostCode : "",
+	        		gHoldCode : "",
+	        		receiveCheckCode : 'Y',
+	        		marketDivisionCode : ""
 	            };   
-		            
+	            
+		        //팝업에 입력창들이 NG-IF 인하여 데이터 바인딩이 안되서 수동으로 데이터 바인딩을 함
+	            var manualDataBind = function(input, target){
+	            	var getUid = input.parents("table").attr("data-uid"),
+	            	    grid = $scope.tkbkkg,
+	            	    viewToRow = $("[data-uid='" + getUid + "']", grid.table),
+	            	    dataItem = grid.dataItem(viewToRow);				                	    
+	            	
+	            	if(target === "CD_PARS" || target === "CD_HOLD"){
+	            		var i, chosenPureData = input.data().handler.dataSource.data();
+	            		for(i=0; i<chosenPureData.length; i++){
+	            			if(chosenPureData[i]["CD_DEF"] === input.val()){
+	            				dataItem[target] = chosenPureData[i];
+	            			}
+	            		};
+	            	}else if(target === "NOW_YN"){
+	            		dataItem[target] = input.is(":checked");	            		
+	            	}else if(target === "RECEIVE_SET"){
+	            		dataItem[target] = $("#receive-group").find("[type=radio]:checked").val();
+	            	}else{
+	            		dataItem[target] = input.val();
+	            	};
+	            },	            
+	            ngIfdata = $scope.ngIfdata = function(input, eqInput){
+	            	tkbkDataVO.marketDivisionCode = eqInput;
+	            	return input.indexOf(eqInput) > -1;
+	            },	            
+	            receiveCheckClickEvent = $scope.receiveCheckClickEvent = function(e){
+	            	var element = $(e.currentTarget),
+                		checked = element.val();
+	            	
+	            	if(checked === 'N'){
+	            		tkbkDataVO.receiveCheckCode = checked;
+	            	}else{
+	            		tkbkDataVO.ngIfinIt();
+	            		
+                		var ddl = element.parents("table").find("select[name=CD_HOLD]").data("kendoDropDownList"),
+                			nutxt = element.parents("table").find("input[name=CD_HOLD_FEE]").data("kendoNumericTextBox");
+                		
+                		ddl.select(0);
+                		ddl.trigger("change");
+                		ddl.select(0);
+                		
+        				nutxt.value(0);
+        				nutxt.trigger("change");
+        				nutxt.value(0);
+	            	};	            	
+	            },	            
+	            nowYnCheckClickEvent = $scope.nowYnCheckClickEvent = function(e){
+	                var element = $(e.currentTarget),
+	                	checked = element.is(':checked'),
+	                	getUid = element.parents("table").attr("data-uid"),
+	                	grid = $scope.tkbkkg,
+	                	viewToRow = $("[data-uid='" + getUid + "']", grid.table),
+	                	dataItem = grid.dataItem(viewToRow);	       
+	                	
+	                dataItem.NOW_YN = checked;
+	                dataItem.dirty = checked;
+                };
+	            
 	            //조회
 	            tkbkDataVO.inQuiry = function(){
 	            	var self = this;
@@ -260,10 +443,11 @@
     				    NM_MRKITEM : tkbkDataVO.procName.value,
 					    NO_MRK : tkbkDataVO.ordMrkNameMo, 
 					    CD_ORDSTAT : tkbkDataVO.ordStatusMo,
+					    CD_TKBKSTAT : tkbkDataVO.cdTkbkstatMo,
 					    NO_MRKORD : tkbkDataVO.orderNo.value,      
 					    NM_PCHR : tkbkDataVO.buyerName.value,
 					    DTS_CHK : tkbkDataVO.betweenDateOptionMo,  
-					    DTS_FROM : new Date(tkbkDataVO.datesetting.period.start.y, tkbkDataVO.datesetting.period.start.m-1, tkbkDataVO.datesetting.period.start.d, "00", "00", "00").dateFormat("YmdHis"),           
+					    DTS_FROM : new Date(tkbkDataVO.datesetting.period.start.y, tkbkDataVO.datesetting.period.start.m-1, tkbkDataVO.datesetting.period.start.d).dateFormat("YmdHis"),           
 					    DTS_TO : new Date(tkbkDataVO.datesetting.period.end.y, tkbkDataVO.datesetting.period.end.m-1, tkbkDataVO.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis")
                     };	            	
     				if(Util03saSvc.readValidation(self.param)){
@@ -273,7 +457,7 @@
 	            };
 		            
 	            //초기화버튼
-	            tkbkDataVO.inIt = function(){      	
+	            tkbkDataVO.inIt = function(){
             		var me  = this;
                 	
 	            	me.procName.value = "";
@@ -293,6 +477,17 @@
                 	me.dataTotal = 0;
                 	me.resetAtGrd = $scope.tkbkkg;
                 	me.resetAtGrd.dataSource.data([]);
+                	
+                	me.ngIfinIt();
+	            };	
+	            
+	            //ng if 초기화버튼
+	            tkbkDataVO.ngIfinIt = function(){
+            		var me  = this;
+            		
+                	me.etcCostCode = "";                	
+                	me.etcCostName = "";
+                	me.receiveCheckCode = 'Y';                	
 	            };	
 		                  
 	            tkbkDataVO.isOpen = function (val) {
@@ -338,16 +533,81 @@
                 		template: kendo.template($.trim($("#tkbk_popup_template").html())),
                 		confirmation: false
                     },
-                    edit: function(e){                    	 
-                    	// ng-if가  edit보다 나오는 순서가 늦음어서 timeout 사용
-                    	if(tkbkDataVO.updateChange === "002"){
-		            		$timeout(function(){                			
+                    edit: function(e){     
+                    	var dataVo = $scope.tkbkDataVO,
+                    	    code = e.model.CODE;
+                    	
+                    	// 반품 완료              	
+                    	if(tkbkDataVO.updateChange === "001"){
+                    		
+                    	// 반품 거절
+                    	}else if(tkbkDataVO.updateChange === "002"){
+		            		$timeout(function(){
 		                    	var ddlRjt = e.container.find("select[name=CD_TKBKRJT]").data("kendoDropDownList");                    		          
 		                    	
 		                    	ddlRjt.select(0);
 		                    	ddlRjt.trigger("change");                			
 		                	},50);
-                    	}
+		            		
+		            	// 반품 승인	
+                    	}else if(tkbkDataVO.updateChange === "003"){
+                    		var selector = e.container;
+                    		
+                    		switch(code){
+                    			case '170104':
+                    			case '170102': {
+                    				selector.find("select[name=CD_HOLD]").kendoDropDownList({
+        		            			dataSource : tkbkDataVO.gHoldCode,
+        		                		dataTextField : "NM_DEF",
+        		                		dataValueField : "CD_DEF",
+        		                		optionLabel : "보류사유를 선택해 주세요 ",
+        		                		change : function(e){
+        		                			var nmDef = this.dataItem().NM_DEF,
+        		                			    dcRmk2 = this.dataItem().DC_RMK2;
+	        		                			if(dcRmk2 != 'Y'){
+	    		                    				var nutxt = selector.find("input[name=CD_HOLD_FEE]").data("kendoNumericTextBox");
+	    		                    				nutxt.value(0);
+	    		                    			}
+        		                			$timeout(function(){
+        		                    			tkbkDataVO.etcCostCode = dcRmk2;
+        		                    			tkbkDataVO.etcCostName = nmDef;
+        		                			},0);
+        		                		}
+        		            		});
+                    				break;
+                    			}
+                    			case '170103' : {
+                    				var deliverDS = dataVo.shipList.filter(function(ele){
+    	    	            			return ele.DC_RMK1 === e.model.NO_MRK;
+    	    	            		});	            				
+                    				e.container.find("select[name=CD_PARS]").kendoDropDownList({
+    	    	            			dataSource : deliverDS,
+    	    	                		dataTextField : "NM_DEF",
+    	    	                		dataValueField : "CD_DEF",
+    	    	                		optionLabel : "택배사를 선택해 주세요 ",
+    	    	                		select : function(e){
+    	    	                			var me = this;
+    	    	                			$timeout(function(){
+    	    	                				//console.log(me.selectedIndex);
+    	    	                				//몇번 클릭 하면 change 이벤트가 사라져서 유효성 검사가 저장 누룰때만 됨
+    	    	                				//그래서 경고창 있으면 강제로 없애줌
+    	    	                				if(me.selectedIndex > 0){
+        	    	                				me.element.parents("table").find(".k-invalid-msg").hide();
+        	    	                			}
+    	    	                			},0);
+    	    	                		}
+    	    	            		});
+                    				break;
+                    			}
+                    			default : {
+                    				break;
+                    			}
+                    		}
+                    	}                  	
+                    },
+                    cancel: function(e) {                    	
+                    	tkbkDataVO.ngIfinIt();
+                    	angular.element($(".k-checkbox:eq(0)")).prop("checked",false);
                     },
                 	scrollable: true,
                 	resizable: true,
@@ -358,37 +618,43 @@
                 	toolbar: [{template: kendo.template($.trim($("#tkbk_toolbar_template").html()))}],
                 	dataSource: new kendo.data.DataSource({
                 		transport: {
-                			read: function(e) {                				
-                				saTkbkReqSvc.orderList(tkbkDataVO.param).then(function (res) {                						
-            						e.success(res.data);			                   				                    					
+                			read: function(e) {
+                				var me = tkbkDataVO;
+	                				me.ngIfinIt();
+                				saTkbkReqSvc.orderList(me.param).then(function (res) {   
+                					me.shipList = res.data.queryShipList;
+                					e.success(res.data.queryList);
             					});
                 			},
                 			update: function(e){                	
-                				var whereIn = ['004','005'];
+                				var whereIn = ['004','005'],
+                				    whereInCp = ['002','005'];
                 				
                 				switch(tkbkDataVO.updateChange){
                 					case '001' : {
-                						if(confirm("반품상품접수를 하시겠습니까?")){
+                						if(confirm("반품완료를 하시겠습니까?")){
                         					var defer = $q.defer(),
-        	                			 	    param = e.data.models.filter(function(ele){
-        	                			 	    	ele.DTS_TKBKCPLT = kendo.toString(ele.DTS_TKBKCPLT , "yyyyMMddHHmmss");         	                			 	    	
-        	                			 	    	return (ele.ROW_CHK === true && ele.CD_TKBKSTAT === "002" && (ele.NO_ORD) && ele.NO_ORD !== "") ;
-        	                			 	    });                        					
+        	                			 	    param = e.data.models.filter(function(ele){	                			 	    	         	                			 	    	
+        	                			 	    	return (ele.ROW_CHK === true && whereInCp.indexOf(ele.CD_TKBKSTAT) >= -1 && (ele.NO_ORD) && ele.NO_ORD !== "") ;
+        	                			 	    });	                        						
                         					if(param.length !== 1){
                         						alert("반품승인 된 주문만 접수 처리 할 수 있습니다.");
                         						return;
-                        					};     
+                        					};
+                        					
+                        					param[0].DTS_TKBKCPLT = kendo.toString(new Date(param[0].DTS_TKBKCPLT), "yyyyMMddHHmmss");                                			
+                        					
                         					saTkbkReqSvc.tkbkCompleted(param[0]).then(function (res) {
                         						defer.resolve();
                         						if(res.data === "success"){
-                        							alert("반품상품접수를  완료 하였습니다.");
+                        							alert("반품완료 되었습니다.");
                         							//tkbkDataVO.ordStatusMo = (tkbkDataVO.ordStatusMo === '*') ? tkbkDataVO.ordStatusMo : tkbkDataVO.ordStatusMo + "^007";
             	            						$scope.tkbkkg.dataSource.read();
                         						}else{
-                        							alert("반품상품접수를 실패하였습니다.");
+                        							alert("반품완료가 실패하였습니다.");
                         							e.error();
                         						}
-                        					});                         					
+                        					});
         		                			return defer.promise;
                     	            	}
                 						break;
@@ -407,20 +673,18 @@
                         						defer.resolve();
                         						if(res.data === "success"){
                         							alert("반품거부 하였습니다.");
-                        							//tkbkDataVO.ordStatusMo = (tkbkDataVO.ordStatusMo === '*') ? tkbkDataVO.ordStatusMo : tkbkDataVO.ordStatusMo + "^005";
             	            						$scope.tkbkkg.dataSource.read();
                         						}else{
                         							alert("반품거부를 실패하였습니다.");
                         							e.error();
                         						}
-                        					});                         					
-                        					
+                        					}); 
         		                			return defer.promise;
                 						}  
                 						break;
                 					}
                 					case '003' : {
-                						if(confirm("선택하신 주문을 반품 승인하시겠습니까?")){
+                						if(confirm("선택하신 주문을 처리하시겠습니까?")){
                 							var defer = $q.defer(),
                 								param = e.data.models.filter(function(ele){
                 									return (ele.ROW_CHK === true && ele.CD_TKBKSTAT === "001" && (ele.NO_ORD) && ele.NO_ORD !== "" && whereIn.indexOf(ele.CD_ORDSTAT) > -1);
@@ -429,46 +693,19 @@
                 								alert("배송처리 된 반품요청 주문만 승인 처리 할 수 있습니다.");
                         						return;
                 							};
-                							saTkbkReqSvc.tkbkConfirm(param).then(function (res) {
+                							//console.log(param[0]);
+                							saTkbkReqSvc.tkbkConfirm(param[0]).then(function (res) {
                         						defer.resolve();
                         						if(res.data === "success"){
-                        							alert("반품승인 하였습니다.");                        							
-                        							//tkbkDataVO.ordStatusMo = (tkbkDataVO.ordStatusMo === '*') ? tkbkDataVO.ordStatusMo : tkbkDataVO.ordStatusMo + "^007";
+                        							alert("반품처리 하였습니다.");
             	            						$scope.tkbkkg.dataSource.read();
                         						}else{
-                        							alert("반품승인을 실패하였습니다.");
+                        							alert("반품처리를 실패하였습니다.");
                         							e.error();
                         						}
-                        					});  
+                        					}); 
                 							return defer.promise;
                 						};	
-                						break;
-                					}
-                					case '004' : {
-                						if(confirm("선택하신 주문을 전송하시겠습니까?")){
-                							var defer = $q.defer(),
-                								selfwhereIn = ["002","003","004"],
-                								param = e.data.models.filter(function(ele){
-                									return (ele.ROW_CHK === true && selfwhereIn.indexOf(ele.CD_TKBKSTAT) !== -1 && (ele.requesteNo !== ele.NO_TKBKREQ && ele.mall_no !== ele.NO_MRK));
-                								});
-                							
-                							if(e.data.models.length !== param.length){
-                								alert("반품상태가 올바르지 않거나, 이미 전송된 반품건이 있습니다.");
-                        						return;
-                							};
-                							saTkbkReqSvc.tkbkInterfacesend(param).then(function (res) {
-                        						defer.resolve();
-                        						if(res.data === "success"){
-                        							alert("반품결과가 전송되었습니다.");                        				
-                        							//tkbkDataVO.ordStatusMo = (tkbkDataVO.ordStatusMo === '*') ? tkbkDataVO.ordStatusMo : tkbkDataVO.ordStatusMo + "^007";                        							
-            	            						$scope.tkbkkg.dataSource.read();
-                        						}else{
-                        							alert("반품결과 전송이 실패하였습니다.");
-                        							e.error();
-                        						}
-                        					});  
-                							return defer.promise;
-                						};
                 						break;
                 					}
                 					default : {
@@ -544,13 +781,11 @@
 	                	alert("전체 선택 할 데이터가 없습니다.");
 	                	angular.element($(".k-checkbox:eq(0)")).prop("checked",false);
 	                	return;
-	                };   
-	                
+	                };   	                
 	                for(i; i<dbLength; i += 1){
 	                	dataItem[i].ROW_CHK = checked;
 	                	dataItem[i].dirty = checked;
-	                };
-	                
+	                };	                
 	                if(checked){
 	                	row.addClass("k-state-selected");
 	                	row.find(".k-checkbox").prop( "checked", true );
@@ -564,79 +799,86 @@
                 	var grd = $scope.tkbkkg;
                 	
 	                if (widget === grd){
-	                	//반품접수
+	                	//반품완료
 	                	widget.element.find(".k-grid-tkbk-accept").on("click", function(e){
 	                		var	chked = grd.element.find(".k-grid-content input:checked"),
-	                			grdItem = grd.dataItem(chked.closest("tr")),
-		            			chkedLeng = grd.element.find(".k-grid-content input:checked").length;
-	                    		                    
-		                    if(chkedLeng === 1){
-		                    	if(grdItem.CD_TKBKSTAT === "002"){
-		                    		if(!(grdItem.DTS_TKBKCPLT)){
-		                				//grdItem.DTS_TKBKCPLT = kendo.toString(new Date(), "yyyyMMddHHmmss");
-		                    			grdItem.DTS_TKBKCPLT = kendo.toString(new Date());
-		                			};		                			
-		                			grd.options.editable.window.width = "550px";
-		                			tkbkDataVO.updateChange = "001";
-		                			grd.editRow(chked.closest("tr"));
-	                			}else{
-	                				alert("반품승인 된 주문만 접수 처리 할 수 있습니다.");	
-	                				return;
-	                			};			                    	
-		                	}else{
-		                		alert("한 건의 주문을 선택해 주세요");
-		                	}
+            			    	grdItem = grd.dataItem(chked.closest("tr")),
+            			    	chkedLeng = grd.element.find(".k-grid-content input:checked").length;
+	                		
+	                		if(chkedLeng < 1){
+                				alert("주문을 선택해 주세요.");
+                				return false;
+                			};
+                			if(chkedLeng > 1){
+                				alert("한 건의 주문을 선택해 주세요");
+                				return false;
+                			};
+                			if(['002','005'].indexOf(grdItem.CD_TKBKSTAT) < 0){
+                				alert("반품처리 된 주문만 완료 처리 할 수 있습니다.");
+                				return false;
+                			};                			
+                			grdItem.DTS_TKBKCPLT = new Date();
+                			grd.options.editable.window.width = "550px";
+                			tkbkDataVO.updateChange = "001";
+                			grd.editRow(chked.closest("tr"));	                			
 	                	}); 
 	                	
 	                	//반품거부
-	                	widget.element.find(".k-grid-tkbk-reject").on("click", function(e){
+	                	widget.element.find(".k-grid-tkbk-reject").on("click", function(e){	    
 	                		var	chked = grd.element.find(".k-grid-content input:checked"),
-	                			grdItem = grd.dataItem(chked.closest("tr")),	
-		            			chkedLeng = grd.element.find(".k-grid-content input:checked").length;
-	                    		                    
-		                    if(chkedLeng === 1){
-		                    	if(grdItem.CD_TKBKSTAT === "001"){
-		                    		grd.options.editable.window.width = "900px";
-		                			tkbkDataVO.updateChange = "002";
-		                			grd.editRow(chked.closest("tr"));
-	                			}else{
-	                				alert("반품요청 된 주문만 거부 처리 할 수 있습니다.");
-	                				return;
-	                			}
-		                	}else{
-		                		alert("한 건의 주문을 선택해 주세요");
-		                	}
+            			        grdItem = grd.dataItem(chked.closest("tr")),
+            			        chkedLeng = grd.element.find(".k-grid-content input:checked").length,
+            			        localMarketDivisionCode = grdItem.CODE;
+	                		
+	                		if(chkedLeng < 1){
+                				alert("주문을 선택해 주세요.");	
+                				return false;
+                			};
+                			if(chkedLeng > 1){
+                				alert("한 건의 주문을 선택해 주세요");	
+                				return false;
+                			};
+                			if(grdItem.CD_TKBKSTAT !== "001"){
+                				alert("반품요청 된 주문만 거부 처리 할 수 있습니다.");
+                				return false;
+                			};
+                			if(tkbkDataVO.gCode.indexOf(localMarketDivisionCode) > -1){
+                				alert("지마켓,옥션은 거부 기능을 사용할 수 없습니다.");
+                				return false;
+                			};
+                			if(tkbkDataVO.cCode.indexOf(localMarketDivisionCode) > -1){
+                				alert("쿠팡은 거부 기능을 사용할 수 없습니다.");
+                				return false;
+                			};
+                    		grd.options.editable.window.width = "800px";
+                			tkbkDataVO.updateChange = "002";
+                			grd.editRow(chked.closest("tr"));	                			
 	                	}); 
 	                	
-	                	//반품승인
-	                	widget.element.find(".k-grid-tkbk-confirm").on("click", function(e){  
-	                		var chkedLeng = grd.element.find(".k-grid-content input:checked").length;
+	                	//반품처리
+	                	widget.element.find(".k-grid-tkbk-confirm").on("click", function(e){	
+	                		var	chked = grd.element.find(".k-grid-content input:checked"),
+            			    grdItem = grd.dataItem(chked.closest("tr")),
+            			    chkedLeng = grd.element.find(".k-grid-content input:checked").length;
 	                		
 	                		if(chkedLeng < 1){
                 				alert("주문을 선택해 주세요.");	
-                				return;
+                				return false;
                 			};
+                			if(chkedLeng > 1){
+                				alert("한 건의 주문을 선택해 주세요");	
+                				return false;
+                			};
+                			if(grdItem.CD_TKBKSTAT !== "001"){
+                				alert("반품요청 된 주문만 처리 할 수 있습니다.");
+                				return false;
+                			}
+                			grd.options.editable.window.width = "800px";
 	                		tkbkDataVO.updateChange = "003";
-	                		grd.saveChanges();
-	                	});
-	                	
-	                	//반품요청 결과전송
-	                	widget.element.find(".k-grid-tkbk-send").on("click", function(e){
-	                		var chkedLeng = grd.element.find(".k-grid-content input:checked").length;
-	                		
-	                		if(chkedLeng < 1){
-                				alert("주문을 선택해 주세요.");	
-                				return;
-                			};
-	                		tkbkDataVO.updateChange = "004";
-	                		grd.saveChanges();
-	                	});
-	                	
-	                	//반품요청 가져오기 
-	                	widget.element.find(".k-grid-tkbk-open").on("click", function(e){
-	                		alert("반품요청 가져오기는 [공사중]입니다.");
-	                	});
+	                		grd.editRow(chked.closest("tr"));
+	                	});	                	
 	                }
                 });
+	            
             }]);
 }());

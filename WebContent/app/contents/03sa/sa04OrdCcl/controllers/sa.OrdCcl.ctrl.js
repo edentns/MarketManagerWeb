@@ -93,7 +93,7 @@
                     
                     NO_MRK        : { type: APP_SA_MODEL.NO_MRK.type         , editable: false, nullable: false },
                     NO_MNGMRK	  : { type: APP_SA_MODEL.NO_MNGMRK.type      , editable: false, nullable: false },	
-                    NO_MRKITEM    : { type: APP_SA_MODEL.NO_MRKITEM.type     , defaultValue: "", nullable: false},
+                    NO_MRKITEM    : { type: APP_SA_MODEL.NO_MRKITEM.type     , editable: false, nullable: false},
                     NO_MRKREGITEM : { type: APP_SA_MODEL.NO_MRKREGITEM.type  , editable: false, nullable: false },
                     NM_MRKITEM    : { type: APP_SA_MODEL.NM_MRKITEM.type     , editable: true , nullable: false },
                     NM_MRKOPT     : { type: APP_SA_MODEL.NM_MRKOPT.type      , editable: false, nullable: false },
@@ -502,7 +502,7 @@
                 			rejectCodeDS = "";
                 		                		
                 		inputDataSource = dataVo.shipList.filter(function(ele){
-                			return ele.DC_RMK1 === e.model.NO_MNGMRK;
+                			return ele.DC_RMK1 === e.model.NO_MRK;
                 		});
                 		
                 		rejectCodeDS = dataVo.cancelRejectCodeOp.filter(function(ele){
@@ -534,6 +534,7 @@
                 	},
                 	cancel: function(e) {
                 		$scope.ordCancelManagementDataVO.cancelRjCd = "";
+                		angular.element($(".k-checkbox:eq(0)")).prop("checked",false);
                 	},
                 	resizable: true,
                 	rowTemplate: kendo.template($.trim(grdRowTemplate)),

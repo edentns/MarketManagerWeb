@@ -129,7 +129,7 @@
         
         CD_TKBKRSN    : { field: "CD_TKBKRSN"    , type: "string" , width: "100px", textAlign: "center", title: "반품사유"},
         DTS_TKBKREQ   : { field: "DTS_TKBKREQ"   , type: "string" , width: "100px", textAlign: "center", title: "반품요청일시"},
-       DTS_TKBKAPPRRJT: { field: "DTS_TKBKAPPRRJT"   , type: "string" , width: "100px", textAlign: "center", title: "반품요청처리일시"},
+        DTS_TKBKAPPRRJT: { field: "DTS_TKBKAPPRRJT"   , type: "string" , width: "100px", textAlign: "center", title: "반품요청처리일시"},
         DTS_TKBKCPLT  : { field: "DTS_TKBKCPLT"  , type: "string" , width: "100px", textAlign: "center", title: ""},
         NO_TKBKCPLT   : { field: "NO_TKBKCPLT"   , type: "string" , width: "100px", textAlign: "center", title: "반납상품접수확인자"},
         QT_TKBK       : { field: "QT_TKBK"       , type: "string" , width: "100px", textAlign: "right" , title: "반품수량"},
@@ -142,7 +142,7 @@
         
         DC_TKBKRJTCTT : { field: "DC_TKBKRJTCTT" , type: "string" , width: "100px", textAlign: "center", title: ""},
         CD_TKBKRJT    : { field: "CD_TKBKRJT"    , type: "string" , width: "100px", textAlign: "center", title: ""},
-        DTS_TKBKCPLT_VIEW : { field: "DTS_TKBKCPLT_VIEW", type: "string" , width: "100px", textAlign: "center", title: "반납상품접수일자"},
+        DTS_TKBKCPLT  : { field: "DTS_TKBKCPLT"	 , type: "string" , width: "100px", textAlign: "center", title: "반납상품접수일자"},
         
         QT_ECHG       : { field: "QT_ECHG"       , type: "string" , width: "100px", textAlign: "right" , title: "교환 요청 수량"},
         NO_CONSPHNE   : { field: "NO_CONSPHNE"   , type: "string" , width: "100px", textAlign: "center", title: "수취인 전화번호"},

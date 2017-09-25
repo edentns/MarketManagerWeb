@@ -67,8 +67,8 @@
                             </td>
                             <th>반품상태</th>
                             <td>
-                            	<select ng-model="tkbkDataVO.betweenDateOptionMo"
-        								ng-options="option.CD_DEF as option.NM_DEF for option in tkbkDataVO.betweenDateOptionOp"
+                            	<select ng-model="tkbkDataVO.cdTkbkstatMo"
+        								ng-options="option.CD_DEF as option.NM_DEF for option in tkbkDataVO.cdTkbkstat"
         								class="form-control"
         								style="width: 100%">
         						</select>	
@@ -114,19 +114,22 @@
 <!-- 주문 취소 팝업 -->
 <script id="tkbk_popup_template" type="text/x-kendo-template">
 <div class="not_pop_title" ng-if="tkbkDataVO.updateChange === '001'">
-	<h4>반품상품접수 입력</h4>
+	<h4>반품완료 입력</h4>
 </div>
 <div class="not_pop_title" ng-if="tkbkDataVO.updateChange === '002'">
 	<h4>반품거부 입력</h4>
 </div>
-<table class="table signal">
+<div class="not_pop_title" ng-if="tkbkDataVO.updateChange === '003'">
+	<h4>반품처리 입력</h4>
+</div>
+<table class="table signal" data-uid="#= uid #">
 	<colgroup>
       <col style="width: 14%;">
       <col style="width: 30%;">
       <col style="width: 14%;">
       <col style="width: 30%;">
     </colgroup>
-    <tbody data-uid="#= uid #">	
+    <tbody>	
 	<tr class="border-bottom-line border-top-line">	
 		<td class="active border-right-line">
 			마켓
@@ -195,88 +198,169 @@
 		</td>
 		<td>
 		</td>
-	</tr>	
-	<tr class="border-bottom-line" ng-if="tkbkDataVO.updateChange === '001'">
-		<td class="active border-right-line">
-			접수자
-		</td>
-		<td>
-			{{tkbkDataVO.userInfo}}
-		</td>
-		<td colspan="2">
-		</td> 
-	</tr>
-	<tr class="border-bottom-line" ng-if="tkbkDataVO.updateChange === '001'">
-		<td class="active border-right-line">
-			<code>*</code>접수일자
-		</td>
-		<td colspan="3">
-			<input kendo-date-time-picker				
-			 id="DTS_TKBKCPLT"
-			 name="DTS_TKBKCPLT"
-			 k-options="tkbkDataVO.dateOptions"
-             data-bind="value: DTS_TKBKCPLT"
-             style="width: 50%;" />
-		</td> 
-	</tr>	
-	<tr class="border-bottom-line" ng-if="tkbkDataVO.updateChange === '002'">
-		<td class="active border-right-line">
-			반품사유코드
-		</td>
-		<td>
-			<select kendo-drop-down-list 
-				k-options="tkbkDataVO.cdTkbkrsnOp"
-				name="CD_TKBKRSN"
-				data-bind="value: CD_TKBKRSN"
-                style="width: 100%">
-			</select>
-		</td>
-		<td colspan="2">
-		</td> 
-	</tr>
-	<tr class="border-bottom-line" ng-if="tkbkDataVO.updateChange === '002'">
-		<td class="active border-right-line">
-			반품사유
-		</td>
-		<td colspan="3">			
-			<textarea class="k-textbox k-state-disabled" name="DC_TKBKRSNCTT" data-bind="value: DC_TKBKRSNCTT" disabled="disabled" style="width:100%; height:150px; overflow-y: scroll;"></textarea>
-		</td> 
-	</tr>
-	<tr class="border-bottom-line" ng-if="tkbkDataVO.updateChange === '002'">
-		<td class="active border-right-line">
-			<code>*</code>반품거부코드
-		</td>
-		<td>
-			<select kendo-drop-down-list 
-				id="CD_TKBKRJT"
-				k-options="tkbkDataVO.cdTkbkrjtOp"
-				name="CD_TKBKRJT"
-				data-bind="value: CD_TKBKRJT"
-                style="width: 100%">
-			</select>
-		</td>
-		<td colspan="2">
-		</td> 
-	</tr>
-	<tr class="border-bottom-line" ng-if="tkbkDataVO.updateChange === '002'">
-		<td class="active border-right-line">
-			<code>*</code>반품거부사유
-		</td>
-		<td colspan="3">			
-			<textarea class="k-textbox" name="DC_TKBKRJTCTT" data-bind="value: DC_TKBKRJTCTT" style="width:100%; height:150px; overflow-y: scroll;"></textarea>
-		</td> 
-	</tr>
+	</tr>		
+		
+		<tr class="border-bottom-line" data-ng-if="tkbkDataVO.updateChange === '001'">
+			<td class="active border-right-line">
+				접수자
+			</td>
+			<td>
+				{{tkbkDataVO.userInfo}}
+			</td>
+			<td colspan="2">
+			</td> 
+		</tr>
+		<tr class="border-bottom-line" data-ng-if="tkbkDataVO.updateChange === '001'">
+			<td class="active border-right-line">
+				<code>*</code>접수일자
+			</td>
+			<td class="ta-l" colspan="3">
+				<input kendo-date-time-picker				
+			 		id="DTS_TKBKCPLT"
+			 		name="DTS_TKBKCPLT"
+			 		k-options="tkbkDataVO.dateOptions"
+             		data-bind="value: DTS_TKBKCPLT"
+             		style="width: 50%;" />
+			</td> 
+		</tr>
+	
+		<tr class="border-bottom-line" data-ng-if="['002','003'].indexOf(tkbkDataVO.updateChange) > -1">
+			<td class="active border-right-line">
+				반품사유코드
+			</td>
+			<td>
+				<select kendo-drop-down-list 
+					k-options="tkbkDataVO.cdTkbkrsnOp"
+					name="CD_TKBKHRNKRSN"
+					data-bind="value: CD_TKBKHRNKRSN"
+                	style="width: 100%">
+				</select>
+			</td>
+			<td colspan="2">
+			</td> 
+		</tr>
+		<tr class="border-bottom-line" data-ng-if="['002','003'].indexOf(tkbkDataVO.updateChange) > -1">
+			<td class="active border-right-line">
+				반품사유
+			</td>
+			<td colspan="3">			
+				<textarea class="k-textbox k-state-disabled" name="NM_TKBKHRNKRSN" data-bind="value: NM_TKBKHRNKRSN" disabled="disabled" style="width:100%; height:150px; overflow-y: scroll;"></textarea>
+			</td> 
+		</tr>
+
+		<tr class="border-bottom-line" data-ng-if="tkbkDataVO.updateChange === '002'">
+			<td class="active border-right-line">
+				<code>*</code>반품거부코드
+			</td>
+			<td>
+				<select kendo-drop-down-list 
+					id="CD_TKBKRJT"
+					k-options="tkbkDataVO.cdTkbkrjtOp"
+					name="CD_TKBKRJT"
+					data-bind="value: CD_TKBKRJT"
+                	style="width: 100%">
+				</select>
+			</td>
+			<td colspan="2">
+			</td> 
+		</tr>
+		<tr class="border-bottom-line" data-ng-if="tkbkDataVO.updateChange === '002'">
+			<td class="active border-right-line">
+				<code>*</code>반품거부사유
+			</td>
+			<td colspan="3">			
+				<textarea class="k-textbox" name="DC_TKBKRJTCTT" data-bind="value: DC_TKBKRJTCTT" style="width:100%; height:150px; overflow-y: scroll;"></textarea>
+			</td> 
+		</tr>	
+
+		<tr class="border-bottom-line" data-ng-if="tkbkDataVO.updateChange === '003' && ngIfdata(tkbkDataVO.gCode, '#: CODE #')">
+			<td class="active border-right-line">
+				<code>*</code>반품상품을<br/>받으셨습니까?
+			</td>
+			<td class="border-right-line ta-l" colspan="3">
+				<ul id="receive-group">
+					<li style="float:left; margin-right: 5px;">
+              			<input type="radio" name="RECEIVE_SET" id="receive-y" class="k-radio" checked="checked" required data-bind="checked: RECEIVE_SET" data-type="string" value="Y" data-ng-click="receiveCheckClickEvent($event)">
+              			<label class="k-radio-label" for="receive-y">접수 </label>
+					</li>
+          			<li style="float:left">
+              			<input type="radio" name="RECEIVE_SET" id="receive-n" class="k-radio" required data-bind="checked: RECEIVE_SET" data-type="string" value="N" data-ng-click="receiveCheckClickEvent($event)">
+              			<label class="k-radio-label" for="receive-n">미접수</label>
+					</li>
+				</ul>
+			</td>					
+		</tr>
+		<tr class="border-bottom-line" data-ng-show="tkbkDataVO.receiveCheckCode === 'N'">
+			<td class="active border-right-line">
+				<code>*</code>보류사유 
+			</td>
+			<td class="border-right-line ta-l">
+				<select
+					name="CD_HOLD"
+					data-bind="value: CD_HOLD"
+               		style="width: 100%">
+				</select>		
+			</td>
+			<td class="active border-right-line">
+				<span data-ng-show="tkbkDataVO.updateChange === '003' && tkbkDataVO.etcCostCode === 'Y' && ngIfdata(tkbkDataVO.gCode, '#: CODE #')">
+					<code>*</code>{{tkbkDataVO.etcCostName}}
+				</span> 
+			</td>
+			<td class="border-right-line">
+				<div data-ng-show="tkbkDataVO.updateChange === '003' && tkbkDataVO.etcCostCode === 'Y' && ngIfdata(tkbkDataVO.gCode, '#: CODE #')">
+					<input name="CD_HOLD_FEE" data-bind="value: CD_HOLD_FEE" kendo-numeric-text-box k-min="0" k-max="1000000000" style="width: 100%;" />
+				</div>
+			</td>
+		</tr>		
+
+
+
+		<tr class="border-bottom-line" data-ng-if="tkbkDataVO.updateChange === '003' && ngIfdata(tkbkDataVO.cCode, '#: CODE #')">
+			<td class="active border-right-line">
+				<code>*</code>환불동시 진행여부
+			</td>
+			<td class="ta-l">	
+				<input name="NOW_YN" type="checkbox" id="eq2" class="k-checkbox" data-ng-click="nowYnCheckClickEvent($event)">
+          		<label class='k-checkbox-label k-no-text' for="eq2"></label>
+			</td>
+			<td colspan="2">
+			</td>
+		</tr>
+
+
+
+		<tr class="border-bottom-line" data-ng-show="tkbkDataVO.updateChange === '003' && ngIfdata(tkbkDataVO.sCode, '#: CODE #')">
+			<td class="active border-right-line">
+				<code>*</code>택배사<br/>
+			</td>
+			<td>
+				<select
+					name="CD_PARS"
+					data-bind="value: CD_PARS"
+               		style="width: 100%">
+				</select>
+			</td>
+			<td colspan="2">
+			</td>
+		</tr>
+		<tr class="border-bottom-line" data-ng-show="tkbkDataVO.updateChange === '003' && ngIfdata(tkbkDataVO.sCode, '#: CODE #')">
+			<td class="active border-right-line">
+				<code>*</code>송장번호
+			</td>
+			<td colspan="3">			
+				<textarea class="k-textbox" name="NO_INVO" data-bind="value: NO_INVO" rows="2" style="width:100%; overflow-y: scroll;"></textarea>
+			</td> 
+		</tr>
+
 	</tbody>
 </table>
 </script>
 
 <!-- 주문 조회 그리드 툴바 템플릿 -->
 <script id="tkbk_toolbar_template" type="text/x-kendo-template">
-	<a class="k-button k-button-icontext k-grid-tkbk-confirm"><span class="k-icon k-i"></span>반품승인</a>
+	<a class="k-button k-button-icontext k-grid-tkbk-confirm"><span class="k-icon k-i"></span>반품처리</a>
 	<a class="k-button k-button-icontext k-grid-tkbk-reject"><span class="k-icon k-i"></span>반품거부</a>
-	<a class="k-button k-button-icontext k-grid-tkbk-accept"><span class="k-icon k-i"></span>반품상품접수</a>            
-	<a class="k-button k-button-icontext k-grid-tkbk-open"><span class="k-icon k-i"></span>반품요청 가져오기</a>
-	<a class="k-button k-button-icontext k-grid-tkbk-send"><span class="k-icon k-i"></span>반품요청 결과전송</a>
+	<a class="k-button k-button-icontext k-grid-tkbk-accept"><span class="k-icon k-i"></span>반품완료</a> 
 </script>
 
 <style>
