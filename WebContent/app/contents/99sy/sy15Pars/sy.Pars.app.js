@@ -19,16 +19,12 @@
                                 resData = {};
 
                             AuthSvc.isAccess().then(function (result) {
-                                resData.access = result[0];
-                                var param = {
-            						procedureParam:"USP_SY_15PARS01_GET"
-            					};
-            					UtilSvc.getList(param).then(function (res) {
-            						resData.mngMrkData = res.data.results[0];
+                            	resData.access = result[0];
+                            	UtilSvc.csMrkList().then(function (res) {
+            						resData.csMrkDataSource = res.data;
             						defer.resolve(resData);
-            					});
+	                			});
                             });
-
                             return defer.promise;
                         }]
                     }
