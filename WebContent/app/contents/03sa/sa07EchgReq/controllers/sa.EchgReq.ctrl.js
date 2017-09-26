@@ -7,8 +7,8 @@
      * 상품분류관리
      */
     angular.module("sa.EchgReq.controller")
-        .controller("sa.EchgReqCtrl", ["$scope", "$http", "$q", "$log", "sa.EchgReqSvc", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "MenuSvc", "$window",  "Util03saSvc", "APP_SA_MODEL", "APP_FIELD_TYPE",   
-            function ($scope, $http, $q, $log, saEchgReqSvc, APP_CODE, $timeout, resData, Page, UtilSvc, MenuSvc, $window, Util03saSvc, APP_SA_MODEL, APP_FIELD_TYPE) {
+        .controller("sa.EchgReqCtrl", ["$scope", "$http", "$q", "$log", "sa.EchgReqSvc", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "MenuSvc", "$window",  "Util03saSvc", "APP_SA_MODEL",   
+            function ($scope, $http, $q, $log, saEchgReqSvc, APP_CODE, $timeout, resData, Page, UtilSvc, MenuSvc, $window, Util03saSvc, APP_SA_MODEL) {
 	            var page  = $scope.page = new Page({ auth: resData.access }),
 		            today = edt.getToday();
 	            
@@ -89,7 +89,7 @@
 		            }());
 
 	            var grdField =  {
-                    ROW_CHK       	: { type: "bolean"  , editable: true , nullable: false },
+                    ROW_CHK       	: { type: "bolean"    , editable: true , nullable: false },
                     NO_ORD        	: { type: "string"    , editable: false, nullable: false },
                     NO_APVL       	: { type: "string"    , editable: false, nullable: false },
                     NM_MRK        	: { type: "string"    , editable: false, nullable: false },
@@ -112,19 +112,17 @@
                     DTS_ORD       	: { type: "string"    , editable: false, nullable: false },                    
                     DTS_ECHGREQ   	: { type: "string"    , editable: false, nullable: false },
                     DT_SND        	: { type: "string"    , editable: false, nullable: false },
-                    NO_INVO       	: { type: "string"    , editable: false, nullable: false },
                     DTS_ECHGAPPRRJT : { type: "string"    , editable: false, nullable: false },
-                    NO_ECHGCPLT   	: { type: "string"	   , editable: false, nullable: false },                    
+                    NO_ECHGCPLT   	: { type: "string"	  , editable: false, nullable: false },                    
                     YN_CONN       	: { type: "string"    , editable: false, nullable: false },
                     CD_ECHGSTAT   	: { type: "string"    , editable: false, nullable: false },
                     NO_ECHGREQ    	: { type: "string"    , editable: false, nullable: false },
                     CD_ECHGRSN    	: { type: "string"    , editable: false, nullable: false },
                     DC_ECHGRSNCTT 	: { type: "string"    , editable: false, nullable: false },
                     NO_MRK        	: { type: "string"    , editable: false, nullable: false },
-                    CODE		  	: { type: "string"	   , editable: false, nullable: false },
-                    NO_MNGMRK	  	: { type: "string"	   , editable: false, nullable: false },  
-                    NO_RECE       	: { type: "string"    , editable: false, nullable: false },
-                    CD_ECHGRJTRSN 	: { 
+                    CODE		  	: { type: "string"	  , editable: false, nullable: false },
+                    NO_MNGMRK	  	: { type: "string"	  , editable: false, nullable: false },  
+                    CD_ECHGRJTRSN 	: {
                     					 type: "string"    
                     					,editable: true
                     					,nullable: false
@@ -138,7 +136,7 @@
 											}
 										}
                     	              },
-                    DC_ECHGRJTCTT 	: {  
+                    DC_ECHGRJTCTT 	: {
                     					 type: "string"  
                     					,editable: true 
                     					,nullable: false
@@ -205,7 +203,7 @@
 						            		   	return true;
 						            	   	}
 						               	 }
-                				       },
+                				       }
                 	};
 
                 APP_SA_MODEL.CD_ECHGSTAT.fNm = "echgDataVO.echgStatusOp";
