@@ -147,7 +147,6 @@
                     
                     QT_ORD        : { type: APP_SA_MODEL.QT_ORD.type         , editable: false, nullable: false },
                     CD_SHPSTAT    : { type: APP_SA_MODEL.CD_SHPSTAT.type     , editable: false, nullable: false },
-                    CD_PARS       : { type: APP_SA_MODEL.CD_PARS.type        , editable: false, nullable: false },
                     CD_PARS       : { type: APP_SA_MODEL.CD_PARS.type        , editable: true , nullable: false,
 				                    	validation: {
 											cd_parsvalidation: function (input) {
