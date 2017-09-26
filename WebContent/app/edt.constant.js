@@ -64,6 +64,7 @@
 		INDIVIDUAL  : 'individual'  // 나
 	});
 	
+	
 	edtApp.constant('APP_SA_MODEL', {
 		ROW_CHK       : { field: "ROW_CHK"       , type: "boolean", width: "30px" , textAlign: "center", title: "선<br/>택"},
 	    NO_ORD        : { field: "NO_ORD"        , type: "string" , width: "100px", textAlign: "center", title: "관리번호"},                                        
@@ -130,7 +131,6 @@
         CD_TKBKRSN    : { field: "CD_TKBKRSN"    , type: "string" , width: "100px", textAlign: "center", title: "반품사유"},
         DTS_TKBKREQ   : { field: "DTS_TKBKREQ"   , type: "string" , width: "100px", textAlign: "center", title: "반품요청일시"},
         DTS_TKBKAPPRRJT: { field: "DTS_TKBKAPPRRJT"   , type: "string" , width: "100px", textAlign: "center", title: "반품요청처리일시"},
-        DTS_TKBKCPLT  : { field: "DTS_TKBKCPLT"  , type: "string" , width: "100px", textAlign: "center", title: ""},
         NO_TKBKCPLT   : { field: "NO_TKBKCPLT"   , type: "string" , width: "100px", textAlign: "center", title: "반납상품접수확인자"},
         QT_TKBK       : { field: "QT_TKBK"       , type: "string" , width: "100px", textAlign: "right" , title: "반품수량"},
         
