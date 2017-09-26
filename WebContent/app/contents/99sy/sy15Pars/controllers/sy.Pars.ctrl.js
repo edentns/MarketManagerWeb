@@ -48,65 +48,7 @@
 			                    });
 			                	
 		            		}
-		            	},
-						
-						add : function(e) {   // 추가 버튼
-							var self = this;
-							var grid = $("#grid"+e).data("kendoGrid");
-							if(gridCheck(e)){
-								$scope.it01ItemCfctVO.gridNum = e;
-		                    	grid.addRow();
-							}
-						},
-						
-						cancel: function(e) {   // 취소 버튼
-							var self = this;
-							var grid = $("#grid"+e).data("kendoGrid");
-							if(gridCheck(e)){
-								grid.cancelChanges();
-			                	$scope.it01ItemCfctVO.gridNum="999";
-			                	var selected = "",
-			                		nextIndex = "";
-			                		
-			                	if(e == 0){
-			                		selected = grid.dataItem(grid.select()).ID_CTGR;
-			                		nextIndex = e+1;
-			                	}else{
-			                		var grid = $("#grid"+(e-1)).data("kendoGrid");
-			                		selected = grid.dataItem(grid.select()).ID_CTGR;
-			                		nextIndex = e;
-			                	}
-						    	
-					        	if($scope.sy15ParsGridVO.length > nextIndex) {
-					            	$scope.sy15ParsGridVO.doGetList(selected
-					        			, nextIndex
-					        			, function(res){
-					    					//alert("조회 성공하였습니다.");
-					        			}
-					        		);
-						    	};
-							}
-						},
-						
-						save: function(e) {   // 저장 버튼
-							var self = this;
-							var grid = $("#grid"+e).data("kendoGrid");
-	                		if(gridCheck(e)){
-		                	    if (confirm("저장 하시겠습니까?")) {
-		                	    	grid.dataSource.sync();
-		                	    	alert("저장이 완료되었습니다");
-		                	    	$scope.it01ItemCfctVO.gridNum="999";
-		                	    	
-		                	    	self.doInquiry();
-				                	/*$scope.it01ItemCfctGridVO.doGetList(grid.dataSource._data[0].ID_CTGR
-					        			, grid.options.iIndex + 1
-					        			, function(res){
-					    					//alert("조회 성공하였습니다.");
-					        			}
-					        		);*/
-		                	    }
-	                		}
-						}
+		            	}
 		            };
 	            
 	            //검색
@@ -146,6 +88,17 @@
 	            //초기화버튼
 	            sy15ParsVO.inIt = function(){
 	            	var self = this;
+	            	var gridCheck = false;
+	            	for( var i = 0; i < 3 ; i++ ){
+	            		var grid = $("#grid"+i).data("kendoGrid").dataSource;
+	            		if( grid.hasChanges() ){
+	            			if(confirm('수정된 사항이 있습니다.\n초기화 하시겠습니까?')){
+	            				grid.cancelChanges();
+	            			}else{
+	            				return;
+	            			}
+	            		}
+	            	}
 	            	mrkName.mngMrkMd = resData.csMrkDataSource[0].CD_DEF;
 	            	self.search();
 	            };
@@ -330,73 +283,6 @@
 		            				self._data[0].DC_RMK3 = "003";
 		            			}
 		            		}
-		            		/*var self = this
-		            	      , iIndex = self.options.iIndex+1;
-		            		//console.log("edit ["+self.options.iIndex+"], hasChanges ["+$("#grid"+0).data("kendoGrid").dataSource.hasChanges()+"]");
-		            		//console.log("edit gridNum ["+$scope.it01ItemCfctVO.gridNum+"]");
-		            		if(!page.isWriteable()){
-		            			var grid = $("#grid"+self.options.iIndex).data("kendoGrid");
-		            			grid.closeCell();
-		            		}
-		            		if($scope.it01ItemCfctVO.gridNum != '999') {
-			            		if(self.options.iIndex !== $scope.it01ItemCfctVO.gridNum) {
-			            			if($("#grid"+$scope.it01ItemCfctVO.gridNum).data("kendoGrid").dataSource.hasChanges()) {
-				            			$("#grid"+$scope.it01ItemCfctVO.gridNum).data("kendoGrid").table.focus();
-				            			if(confirm('다른그리드에 수정된 사항이 있습니다.\n저장하시겠습니까?')){
-				            				$("#grid"+$scope.it01ItemCfctVO.gridNum).data("kendoGrid").dataSource.sync();
-				            			}else{
-				            				return;
-				            			}
-				            		}
-			            			else {
-			            				$scope.it01ItemCfctVO.gridNum = self.options.iIndex;
-			            			}
-			            		}
-		            		}
-		            		else {
-		            			$scope.it01ItemCfctVO.gridNum = self.options.iIndex;
-		            		}
-		            		
-		            		if(e.container["0"].id == ""){
-		            			if(e.sender.options.iIndex > 0){
-		            				var grid = $("#grid"+(iIndex-2)).data("kendoGrid");
-		            				var selectedItem = grid.dataItem(grid.select());
-		            				var ID_HRNKCTGR = selectedItem.ID_CTGR;
-		            				e.model.set("ID_HRNKCTGR", ID_HRNKCTGR);
-		            			}
-		            		}
-		            		// 추가버튼 클릭시 실행
-		            		for(;sy15ParsGridVO.length > iIndex; iIndex++) {
-		            			sy15ParsGridVO[iIndex].dataSource.data([]);
-	    					}
-		            		
-		            		// 다른 그리드 조회
-		            		var selected = $.map(this.select(), function(item) {
-					    		var innerValue = new Array();
-					    		innerValue[0]=item.childNodes[0].innerText;
-					    		innerValue[1]=item.childNodes[1].innerText;
-					    		return innerValue;
-					        }),
-					        nextIndex = self.options.iIndex+1;
-					    	
-					        if(!selected[0] == ""){  //추가된 row인지 판별
-					        	if($scope.sy15ParsGridVO.length > nextIndex) {
-					            	$scope.sy15ParsGridVO.doGetList(selected[0]
-					        			, nextIndex
-					        			, function(res){
-					    					//alert("조회 성공하였습니다.");
-					        			}
-					        		);
-						    	}
-					        };*/
-	                	}; 
-		            	/*localSelf.dataBound = function(e) {
-		            		var self = this;
-		            		if(e.sender.dataSource._data[0] && e.sender.dataSource._data[0].ID_CTGR == "") {
-		            			return;
-		            		}
-		            		e.sender.select("tr:eq(0)");
-	                	};*/
 	                	
 	                	return localSelf;
 		            };
