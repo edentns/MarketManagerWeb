@@ -41,13 +41,13 @@
 	            		self.mngMrkDs.dataSource.data = resData.mngMrkData;
 	            		self.mngMrkMd                 = resData.mngMrkData[0].NO_MNGMRK;
 
-//	            		if(bLoading) {
-//		                	angular.forEach($scope.ma04MrkOptGridVO, function (ma04MrkOptLocalGridVO, iIndex) {
-//		                		ma04MrkOptLocalGridVO = $scope.ma04MrkOptGridVO.addCommonGridVO(ma04MrkOptLocalGridVO, iIndex);
-//		                    });
-//	            		}
-//	    	            
-//	            		self.doInquiry();
+	            		if(bLoading) {
+		                	angular.forEach($scope.ma04MrkOptGridVO, function (ma04MrkOptLocalGridVO, iIndex) {
+		                		ma04MrkOptLocalGridVO = $scope.ma04MrkOptGridVO.addCommonGridVO(ma04MrkOptLocalGridVO, iIndex);
+		                    });
+	            		}
+	    	            
+	            		self.doInquiry();
 	            	}
 	            };
 	            

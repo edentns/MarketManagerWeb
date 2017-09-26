@@ -8,51 +8,39 @@
         </div>
     </div>
     
-    <!-- 택배사 CONTENT Layer -->
     <div class="row">
         <!-- 마켓분류 Layer -->
         <div class="content-area-container col-xs-12" >
-            <div data-content-box-layer data-box-title="syParsVO.boxTitle">
+            <div data-content-box-layer data-box-title="mrkName.boxTitle">
                 <form class="box-content-search">
-					<select kendo-drop-down-list k-options="syParsVO.mngMrkDs" k-ng-model="syParsVO.mngMrkMd" style="width:100%;"></select>
+					<select kendo-drop-down-list k-options="mrkName.mngMrkDs" k-ng-model="mrkName.mngMrkMd" style="width:20%;"></select>
 					<div class="btn-group1 mt-10">
-           				 <kendo-button type="submit" class="customer_submit" title="검색" data-ng-click="syParsVO.search()" style="width:70px;" >검색</kendo-button>
-           				 <kendo-button type="button" class="customer_button" title="초기화" data-ng-click="syParsVO.inIt()" style="width:70px;" >초기화</kendo-button>
+           				 <kendo-button type="submit" class="customer_submit" title="검색" data-ng-click="sy15ParsVO.search()" style="width:70px;" >검색</kendo-button>
+           				 <kendo-button type="button" class="customer_button" title="초기화" data-ng-click="sy15ParsVO.inIt()" style="width:70px;" >초기화</kendo-button>
        			 	</div>
                 </form>         	  
             </div>
         </div>
-        <!--/ 택배사 Layer END -->
         
-        <!-- 발송 & 재발송 & 회수 Layer -->
-        <div class="content-area-container col-xs-4">
-            <div class="content-box-row">
-            	<div data-content-box-layer data-box-title="gridCusCodeVO.boxTitle">
-	                <kendo-grid options="gridCusCodeVO" id="gridCusCodeVO">
+        <div class="content-area-container col-xs-12" style="padding:0px 0px 0px 0px;">
+			<div class="content-area-container col-xs-4">
+				<div data-content-box-layer data-box-title="sy15ParsGridVO[0].boxTitle">
+	                <kendo-grid options="sy15ParsGridVO[0]" id="grid0">
 	                </kendo-grid>
-	                <select kendo-drop-down-list k-options="syParsVO.mngMrkDs" k-ng-model="syParsVO.mngMrkMd" style="width:100%;"></select>
-           		 </div>
-            </div>     
-        </div>
-
-        <div class="content-area-container col-xs-4">
-            <div class="content-box-row">
-            	<div data-content-box-layer data-box-title="gridCusCodeVO.boxTitle">
-	                <kendo-grid options="gridCusCodeVO" id="gridCusCodeVO">
+                </div>
+			</div>
+			<div class="content-area-container col-xs-4">
+				<div data-content-box-layer data-box-title="sy15ParsGridVO[1].boxTitle">
+	                <kendo-grid options="sy15ParsGridVO[1]" id="grid1">
 	                </kendo-grid>
-           		 </div>
-            </div>      
-        </div>
-            
-        <div class="content-area-container col-xs-4">
-            <div class="content-box-row">
-            	<div data-content-box-layer data-box-title="gridCusCodeVO.boxTitle">
-	                <kendo-grid options="gridCusCodeVO" id="gridCusCodeVO">
+                </div>
+			</div>
+			<div class="content-area-container col-xs-4">
+				<div data-content-box-layer data-box-title="sy15ParsGridVO[2].boxTitle">
+	                <kendo-grid options="sy15ParsGridVO[2]" id="grid2">
 	                </kendo-grid>
-           		 </div>
-            </div>        
+                </div>
+			</div>
         </div>
-     
-    </div>
  
 </div>

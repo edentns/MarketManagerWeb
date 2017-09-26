@@ -9,16 +9,15 @@
     angular.module("sy.Pars.service")
         .factory("sy.ParsSvc", ["APP_CONFIG", "$http", function (APP_CONFIG, $http) {
             return {
-            	/**
-                 * 마켓정보를 가져온다.
-                 * @returns {*}
-                 */
-                getMarketNameList: function () {
+            	
+            	savePars : function ( aParam, CUD ) {
                     return $http({
-                        method  : "GET",
-                        url		: APP_CONFIG.domain +"/sy15Pars"
+                        method   : "POST",
+                        url		 : APP_CONFIG.domain +"/sy15Pars/"+CUD,
+                        data     : aParam
                     });
                 }
+           
             };
         }]);
 }());
