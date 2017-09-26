@@ -361,7 +361,7 @@
             		        	 ,title: "<span class='form-required'>* </span>판매관리URL"
             		        	 ,width: 250
             		        	 ,headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
-         		                 ,attributes: {class:"ta-l"}
+         		                 ,attributes: {class:"ta-l", style:"text-overflow: ellipsis; white-space: nowrap; overflow:hidden;"}
            		        	   },
 	            		       {
          		        	      field: "DTS_INSERT"
