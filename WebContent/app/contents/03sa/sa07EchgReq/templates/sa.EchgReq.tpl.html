@@ -65,8 +65,14 @@
                             			type="text" 
                             			class="form-control" style="width:100%;"/>
                             </td>
-                            <th></th>
-                            <td></td>
+                            <th>교환상태</th>
+                            <td>
+                            	<select ng-model="echgDataVO.echgStatusMo"
+        								ng-options="option.CD_DEF as option.NM_DEF for option in echgDataVO.echgStatusOp"
+        								class="form-control"
+        								style="width: 100%">
+        						</select>	
+        					</td>
                             <th></th>
                             <td></td>
                             <th></th>
@@ -194,31 +200,7 @@
 			#}#
 		</td>
 	</tr>	
-	<tr class="border-bottom-line" ng-if="echgDataVO.updateChange === '001'">
-		<td class="active border-right-line">
-			접수자
-		</td>
-		<td>
-			{{echgDataVO.userInfo}}
-		</td>
-		<td colspan="2">
-		</td> 
-	</tr>
-	<tr class="border-bottom-line" ng-if="echgDataVO.updateChange === '001'">
-		<td class="active border-right-line">
-			<code>*</code>접수일자
-		</td>
-		<td colspan="3">
-			<input kendo-date-time-picker				
-			 id="DTS_RECER"
-			 name="DTS_RECER"
-			 k-options="echgDataVO.dateOptions"
-             data-bind="value: DTS_RECER"
-             style="width: 50%;" />
-		</td> 
-	</tr>	
-
-	<tr class="border-bottom-line" ng-if="echgDataVO.updateChange === '002'">
+	<tr class="border-bottom-line">
 		<td class="active border-right-line">
 			교환사유코드
 		</td>
@@ -233,7 +215,7 @@
 		<td colspan="2">
 		</td> 
 	</tr>
-	<tr class="border-bottom-line" ng-if="echgDataVO.updateChange === '002'">
+	<tr class="border-bottom-line">
 		<td class="active border-right-line">
 			교환요청내용
 		</td>
@@ -241,7 +223,51 @@
 			<textarea class="k-textbox k-state-disabled" name="DC_ECHGRSNCTT" data-bind="value: DC_ECHGRSNCTT" disabled="disabled" style="width:100%; height:150px; overflow-y: scroll;"></textarea>
 		</td> 
 	</tr>
-	<tr class="border-bottom-line" ng-if="echgDataVO.updateChange === '002'">
+		
+	<tr class="border-bottom-line" data-ng-show="echgDataVO.ngIfdata(echgDataVO.procShowCode, echgDataVO.procShowMrkCode, '#: CODE #')">
+		<td class="active border-right-line">
+			<code>*</code>택배사<br/>
+		</td>
+		<td>
+			<select
+				name="CD_PARS"
+				data-bind="value: CD_PARS"
+             	style="width: 100%">
+			</select>
+		</td>
+		<td colspan="2">
+		</td>
+	</tr>
+	<tr class="border-bottom-line" data-ng-show="echgDataVO.ngIfdata(echgDataVO.procShowCode, echgDataVO.procShowMrkCode, '#: CODE #')">
+		<td class="active border-right-line">
+			<code>*</code>송장번호
+		</td>
+		<td colspan="3">			
+			<textarea class="k-textbox" name="NO_INVO" data-bind="value: NO_INVO" rows="2" style="width:100%; overflow-y: scroll;"></textarea>
+		</td> 
+	</tr>
+
+	<tr class="border-bottom-line" data-ng-show="echgDataVO.ngIfdata(echgDataVO.rejectShowCode, echgDataVO.completeShowMrkCode, '#: CODE #')">
+		<td class="active border-right-line">
+			접수자
+		</td>
+		<td>
+			{{echgDataVO.userInfo}}
+		</td>
+		<td class="active border-right-line">
+			<code>*</code>접수일자
+		</td>
+		<td class="ta-c">
+			<input kendo-date-time-picker				
+			 id="DTS_RECER"
+			 name="DTS_RECER"
+			 k-options="echgDataVO.dateOptions"
+             data-bind="value: DTS_RECER"
+             style="width: 100%;" />
+		</td>  
+	</tr>
+	
+	<tr class="border-bottom-line" data-ng-show="echgDataVO.ngIfdata(echgDataVO.rejectShowCode, echgDataVO.rejectShowMrkCode, '#: CODE #')">
 		<td class="active border-right-line">
 			<code>*</code>교환요청 거부코드
 		</td>
@@ -257,7 +283,7 @@
 		<td colspan="2">
 		</td> 
 	</tr>
-	<tr class="border-bottom-line" ng-if="echgDataVO.updateChange === '002'">
+	<tr class="border-bottom-line" data-ng-show="echgDataVO.ngIfdata(echgDataVO.rejectShowCode, echgDataVO.rejectShowMrkCode, '#: CODE #')">
 		<td class="active border-right-line">
 			<code>*</code>교환요청 거부사유
 		</td>
@@ -271,10 +297,9 @@
 
 <!-- 교환 요청 그리드 툴바 템플릿 -->
 <script id="echg_toolbar_template" type="text/x-kendo-template">
-	<a class="k-button k-button-icontext k-grid-echg-confirm"><span class="k-icon k-i"></span>교환승인</a>
-	<a class="k-button k-button-icontext k-grid-echg-reject"><span class="k-icon k-i"></span>교환거부</a>
-	<a class="k-button k-button-icontext k-grid-echg-accept"><span class="k-icon k-i"></span>교환상품접수</a>            
-	<a class="k-button k-button-icontext k-grid-echg-open"><span class="k-icon k-i"></span>취소/반품정보 가져오기</a>
+	<a class="k-button k-button-icontext k-grid-echg confirm"><span class="k-icon k-i-custom"></span>교환처리</a>
+	<a class="k-button k-button-icontext k-grid-echg reject"><span class="k-icon k-i-cancel"></span>교환거부</a>
+	<a class="k-button k-button-icontext k-grid-echg complete"><span class="k-icon k-i-update"></span>교환완료</a>
 </script>
 
 <style>
