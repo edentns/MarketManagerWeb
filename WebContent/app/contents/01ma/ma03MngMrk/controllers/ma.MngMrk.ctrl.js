@@ -74,8 +74,8 @@
                 	if(me.param.MA_DT_START > me.param.MA_DT_END){alert("기간을 올바르게 입력해 주세요."); return false;};
                 	
                 	$scope.gridMngMrkUserVO.dataSource.data([]);
-    				$scope.gridMngMrkUserVO.dataSource.page(1);
-	            	//gridMngMrkUserVO.dataSource.read();
+                	//$scope.gridMngMrkUserVO.dataSource.page(1);
+                	$scope.gridMngMrkUserVO.dataSource.read();
                 };
                 
                 //새로 저장시 유효성 검사 (수정 할 땐 비밀번호를 따로 입력할 필요할 없어서 required 하지 않아서 저장시 따로 함수를 만듦 kendo로는  editable true 일때만 됨)
@@ -85,6 +85,8 @@
                 		if (!checkReturn) return;
                         if (obj.NM_MRK === null || obj.NM_MRK === "") {alert("마켓명을 설정해 주세요"); checkReturn = false;}
                         else if(obj.CD_ITLWAY === null || obj.CD_ITLWAY === ""){alert("연동방법을 설정해 주세요"); checkReturn = false;}
+                        else if(obj.CD_ITLSTAT === null || obj.CD_ITLSTAT === ""){alert("연동상태를 설정해 주세요"); checkReturn = false;}
+                        else if(obj.DC_SALEMNGURL === null || obj.DC_SALEMNGURL === ""){alert("판매관리URL을 설정해 주세요"); checkReturn = false;}
                     });
                 	return checkReturn;
                 };           
@@ -330,7 +332,7 @@
            		        	   },
             		           {
             		        	  field: "CD_ITLSTAT"
-            		             ,title: "연동상태"
+            		             ,title: "<span class='form-required'>* </span>연동상태"
             		             ,width: 100
             		             ,headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}	
            		        	     ,editor: 
