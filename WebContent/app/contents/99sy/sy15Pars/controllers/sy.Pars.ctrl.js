@@ -283,6 +283,7 @@
 		            				self._data[0].DC_RMK3 = "003";
 		            			}
 		            		}
+	                	};
 	                	
 	                	return localSelf;
 		            };
