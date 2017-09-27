@@ -371,7 +371,7 @@
        	   	   				{field: "DTS_INSERT", title: "등록일자", width: 80, headerAttributes: gridHeaderAttributes},
        	   	   				{field: "DTS_UPDATE", title: "수정일자", width: 80, headerAttributes: gridHeaderAttributes},
        	   	   				{field: "NM_UPDATE",  title: "수정자" , width: 80, headerAttributes: gridHeaderAttributes},
-        		            {command: [{text:"연동체크", click: checkCon }, "destroy"], attributes:{class:"ta-l"}},
+        		            {command: ["destroy"], attributes:{class:"ta-l"}},
                 	],
                     collapse: function(e) {
                         // console.log(e.sender);

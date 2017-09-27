@@ -262,8 +262,8 @@
 		              		},
 		              		{command: [ {
 		                        name: "삭제", imageClass: "k-icon k-i-close", click: function (e) {  //삭제 버튼
-		                            e.preventDefault();
-	                            	if (confirm('정말 삭제 하시겠습니까?')) { // 빈거 지울때 안내메시지 바꾸려면
+		                            e.preventDefault();		                            
+	                            	if (confirm('삭제 하시겠습니까?\n삭제 후 저장버튼을 클릭하셔야 삭제 됩니다.')) { // 빈거 지울때 안내메시지 바꾸려면
 		                                var dataSource = $("#"+e.delegateTarget.id).data("kendoGrid").dataSource,
 		                                	dataItem = this.dataItem($(e.target).closest("tr"));
 		                                dataSource.remove(dataItem);
