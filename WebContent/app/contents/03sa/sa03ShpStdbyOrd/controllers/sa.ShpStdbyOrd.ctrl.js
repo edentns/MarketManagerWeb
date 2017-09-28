@@ -434,7 +434,7 @@
                 	navigatable: true, //키보드로 그리드 셀 이동 가능
                 	toolbar: [{template: kendo.template($.trim($("#shpbyord-toolbar-template").html()))}],
                 	excel: {
-                		fileName: "배송대기.xls"
+                		fileName: "배송대기.xlsx"
                 	},
                 	dataSource: new kendo.data.DataSource({
                 		transport: {
