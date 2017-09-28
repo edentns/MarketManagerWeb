@@ -416,11 +416,12 @@
             				alert("그리드에 데이터가 없습니다.");
             			}else{
             				var getParam = $cookieStore.get("shpStdbyOrdSerchParam");
-            				getParam.gridInfo       = [grdShpbyordVO.columns,[{field:"NM_MRK",title:"마켓명"},{field:"CD_DEF",title:"택배사코드"},{field:"NM_DEF",title:"택배사명"},{field:"NM_SHPCLFT",title:"택배사구분"}]];
+            				var colVo = angular.copy(grdShpbyordVO.columns);
+            				colVo.splice(0,1);
+            				getParam.gridInfo       = [colVo,[{field:"NM_MRK",title:"마켓명"},{field:"CD_DEF",title:"택배사코드"},{field:"NM_DEF",title:"택배사명"},{field:"NM_SHPCLFT",title:"택배사구분"}]];
             				getParam.procedureParam = grdShpbyordVO.excelVO.procedureParam;
             				getParam.gridTitle      = grdShpbyordVO.excelVO.gridTitle;   
             				getParam.downfilename   = grdShpbyordVO.excel.fileName;
-            				//getParam.downfilename   = "배.xls";
             				UtilSvc.getExcelDownload(getParam).then(function(result) {
     						});
             			}
