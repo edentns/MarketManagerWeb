@@ -439,7 +439,7 @@
 				 * excel 파일을 다운로드한다.
 				 * @param {string} psFineName
 				 */
-				excel: function (psFineName) {
+				excel: function (psFineName, downFilename) {
 					var elem = edt.id('excelDownload'),
 						hiddenA;
 
@@ -447,7 +447,7 @@
 					else { hiddenA = document.createElement('a'); }
 					hiddenA.setAttribute('id', 'excelDownload');
 					hiddenA.setAttribute('class', 'throw');
-					hiddenA.setAttribute('href', APP_CONFIG.domain +'/excelDown?fileName='+ psFineName);
+					hiddenA.setAttribute('href', APP_CONFIG.domain +'/ut03Excel?filename='+ psFineName+'&downfilename='+decodeURIComponent(downFilename));
 					document.body.appendChild(hiddenA);
 
 					hiddenA.click();
@@ -822,7 +822,7 @@
 					url		: APP_CONFIG.domain + "/ut03Excel/",
 					data	: param
 				}).success(function (data, status, headers, config) {
-					self.download.excel(data);
+					self.download.excel(data, param.downfilename);
 				}).error(function (data, status, headers, config) {
 					//upload failed
 				});

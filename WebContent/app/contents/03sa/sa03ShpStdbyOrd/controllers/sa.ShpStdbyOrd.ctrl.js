@@ -405,12 +405,25 @@
 	                    	shpbyordDataVO.flag = false;
                     	}
             		},
+            		excelVO: {
+            			gridTitle:["배송대기자료","택배사코드"],
+            			gridInfo:[],
+            			procedureParam:"USP_SA_03SHPSTDBYORD01_GET&NO_MRK@s|NM_MRKITEM@s|CD_ORDSTAT@s|NO_MRKORD@s|NM_PCHR@s|DTS_CHK@s|DTS_FROM@s|DTS_TO@s"
+            		}, 
             		exportExcel: function(e){
             			var grid = $("#divShpbyordGrd").data("kendoGrid");
             			if( !grid.dataSource._total || grid.dataSource._total == 0){
             				alert("그리드에 데이터가 없습니다.");
             			}else{
-            				grid.saveAsExcel();
+            				var getParam = $cookieStore.get("shpStdbyOrdSerchParam");
+            				var colVo = angular.copy(grdShpbyordVO.columns);
+            				colVo.splice(0,1);
+            				getParam.gridInfo       = [colVo,[{field:"NM_MRK",title:"마켓명"},{field:"CD_DEF",title:"택배사코드"},{field:"NM_DEF",title:"택배사명"},{field:"NM_SHPCLFT",title:"택배사구분"}]];
+            				getParam.procedureParam = grdShpbyordVO.excelVO.procedureParam;
+            				getParam.gridTitle      = grdShpbyordVO.excelVO.gridTitle;   
+            				getParam.downfilename   = grdShpbyordVO.excel.fileName;
+            				UtilSvc.getExcelDownload(getParam).then(function(result) {
+    						});
             			}
             		},
                     editable : true,
@@ -788,7 +801,7 @@
                                 },    
                                 {
 		                        	field: "CD_PARS",
-		                            title: "<code>*</code>택배사",
+		                            title: "<span class='form-required'>* </span>택배사",
 		                            width: 100,
 		                            editor: function shipCategoryDropDownEditor(container, options) {	
 		                            	var db = "";
@@ -831,7 +844,7 @@
 		                        },
                                	{
                                     field: "NO_INVO",
-                                    title: "<code>*</code>송장번호",
+                                    title: "<span class='form-required'>* </span>송장번호",
                                     width: 100,
 			                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}                  
 		                        },
