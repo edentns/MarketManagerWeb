@@ -10,21 +10,7 @@
         .controller("cs.InqCtrl", ["$scope", "$http", "$q", "$log", "cs.InqSvc", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "MenuSvc",
             function ($scope, $http, $q, $log, csInqSvc, APP_CODE, $timeout, resData, Page, UtilSvc, MenuSvc) {
 	            var page  = $scope.page = new Page({ auth: resData.access }),
-		            today = edt.getToday();
-	            
-	            //문의 구분 드랍 박스 실행	
-	            var connSetting = (function(){
-    				var param = {
-    					procedureParam: "MarketManager.USP_SY_10CODE02_GET&lnomngcdhd@s|lcdcls@s",
-    					lnomngcdhd: "SYCH00070",
-    					lcdcls: "CS_000003"
-    				};
-        			UtilSvc.getList(param).then(function (res) {
-        				if(res.data.results[0].length >= 1){
-        					csDataVO.csQuestionCodeOp = res.data.results[0];
-        				}
-        			});		
-	            }());
+		            today = edt.getToday();	            
 
 	            //주문 상태 드랍 박스 실행	
 	            var connSetting2 = (function(){
@@ -72,7 +58,6 @@
 	        		csMrkNameMo : "*",
 	        		csStatusOp : [],
 	        		csStatusMo : "*",
-	        		csQuestionCodeOp : [],
 	        		csQuestionCodeMo : { value: "" , focus: false },
 	        		dataTotal : 0,
 	        		resetAtGrd:"",
@@ -140,7 +125,8 @@
 	            	var result = true;	            	
             		if(idx.I_NO_MRK === null || idx.I_NO_MRK === ""){ $scope.showPopup("마켓명을 입력해 주세요."); result = false; return; };
             		if(idx.I_CD_INQSTAT === null || idx.I_CD_INQSTAT === ""){ $scope.showPopup("상태값을 입력해 주세요."); result = false; return;};
-            		if(idx.I_NM_INQCLFT === null || idx.I_NM_INQCLFT === ""){ $scope.showPopup("문의 구분을 입력해 주세요."); result = false; return;};
+            		//LIKE 로 바뀌면서 필수값에서 해제 됨
+            		//if(idx.I_NM_INQCLFT === null || idx.I_NM_INQCLFT === ""){ $scope.showPopup("문의 구분을 입력해 주세요."); result = false; return;};
             		if(idx.I_DTS_INQREG_F > idx.I_DTS_INQREG_T){ $scope.showPopup("문의일자를 올바르게 입력해 주세요."); result = false; return;};            		
 	            	return result;
 	            };	               
