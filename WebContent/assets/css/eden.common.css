@@ -550,7 +550,7 @@ form[name="businessForm"]:after {content: ''; display: block; clear: both;}
     top: -7px;
 } 
 .k-grid-content > table > tbody > tr > td > div.custom-style:nth-child(odd){
-	border-bottom: solid 1px #bbdceb;	
+	border-bottom: dotted 0.5px #bbdceb;	
 }
 .ells{
 	text-overflow: ellipsis; 
@@ -561,4 +561,12 @@ form[name="businessForm"]:after {content: ''; display: block; clear: both;}
 .signal{    
     width: 99%;
     margin: 5px;
+}
+
+.k-grid-header, .k-grouping-header, .k-header {
+	background-color: #398dcc;
+}
+
+.k-grid-header .k-header>.k-link, .k-header, .k-treemap-title {
+    color: white;
 }

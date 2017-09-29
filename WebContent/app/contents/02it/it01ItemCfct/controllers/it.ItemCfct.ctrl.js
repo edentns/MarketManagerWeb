@@ -271,7 +271,7 @@
 	            	};
 	            	localSelf.toolbar = 
                 		[{ template: "<div ng-click='it01ItemCfctVO.add("+localSelf.iIndex+")' class='k-button k-button-icontext'><span class='k-icon k-i-add'></span>추가</div>"},
-                		 { template: "<div ng-click='it01ItemCfctVO.save("+localSelf.iIndex+")' class='k-button k-button-icontext'><span class='k-icon k-i-update'></span>저장</div>"},
+                		 { template: "<div ng-click='it01ItemCfctVO.save("+localSelf.iIndex+")' class='k-button k-button-icontext'><span class='k-icon k-i-check'></span>저장</div>"},
                 		 { template: "<div ng-click='it01ItemCfctVO.cancel("+localSelf.iIndex+")' class='k-button k-button-icontext'><span class='k-icon k-i-cancel'></span>취소</div>"}];
 	            	localSelf.columns  = [
 	              		{
