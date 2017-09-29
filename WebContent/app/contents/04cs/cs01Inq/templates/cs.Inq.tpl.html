@@ -117,80 +117,75 @@
 			<label class='k-checkbox-label k-no-text' for="#= uid #"></label>
         </td>
 		<td class="ta-c">
-            <span class="seq ells">
-								# if(NO_INQ){ # 
-							   	#: NO_INQ # 
-							   	# }else{} #
+            <span class="seq ells"># if(NO_INQ){	# 
+							   	   #: NO_INQ 		# 
+							   	   # } 				#
 			</span>
         </td>
 		<td class="ta-l">
-            <span class="ells">
-								# if(NM_MRK){ #
-                               	#: NM_MRK # 
-                               	# }else{} #
+            <span class="ells"># if(NM_MRK){ 	#
+                               #: NM_MRK 		# 
+                               # }				#
 			</span>
         </td>
 		<td class="ta-c">
-            <span class="ells">
-								# if(DTS_INQREG){ #
-                               	#: DTS_INQREG # 
-                               	# }else{} #
+            <span class="ells"># if(DTS_INQREG){	#
+                               #: DTS_INQREG 		# 
+                               # } 					#
 			</span>
         </td>
 		<td class="ta-c">
-            <span class="ells">
-							   # if(CD_INQSTAT){ #
+            <span class="ells"># if(CD_INQSTAT){ 	#
 							   <co04-cd-to-nm cd="#:CD_INQSTAT#" nm-box="csDataVO.csStatusOp">
-							   #}else{} #
+							   #} #
 			</span>
         </td>
 		<td class="ta-l">
-            <span class="ells"># if(DC_INQTITLE){ #
-							   #: DC_INQTITLE #
-      						   # }else{} #
+            <span class="ells"># if(DC_INQTITLE){ 	#
+							   #: DC_INQTITLE 		#
+      						   # } 					#
 			</span>
         </td>
 		<td class="ta-l">
-            <span class="ells"># if(DC_INQCTT){ #
-					    	   #: DC_INQCTT #
- 							   # }else{} #
+            <span class="ells"># if(DC_INQCTT){ 	#
+					    	   #: DC_INQCTT 		#
+ 							   # } 					#
 			</span>
         </td>
 		<td class="ta-l">
-            <span class="ells"># if(DC_ANSCTT){ #
-							   #: DC_ANSCTT #
-							   # }else{} #
+            <span class="ells"># if(DC_ANSCTT){ 	#
+							   #: DC_ANSCTT 		#
+							   # } 					#
 			</span>
         </td>
 		<td class="ta-c">
-            <span class="ells"># if(DTS_ANSREG){ #
-							   #: DTS_ANSREG #
-						       # }else{} #
+            <span class="ells"># if(DTS_ANSREG){ 	#
+							   #: DTS_ANSREG 		#
+						       # } 					#
 			</span>
         </td> 
 		<td class="ta-c">
-            <span class="ells">
-				# if(NM_INQCLFT){ #
-				#:	NM_INQCLFT	  #	
-      			# } 			  #
+            <span class="ells"># if(NM_INQCLFT){ 	#
+							   <co04-cd-to-nm cd="#:NM_INQCLFT#" nm-box="csDataVO.csQuestionCodeOp">							   		
+      						   # } 			  		#
 			</span>
         </td>
 		<td class="ta-l">
-            <span class="ells"># if(NM_INQ){ #
-					    	   #: NM_INQ #
- 							   # }else{} #
+            <span class="ells"># if(NM_INQ){ 		#
+					    	   #: NM_INQ 			#
+ 							   # } 					#
 			</span>
         </td>
 		<td class="ta-l">
-            <span class="ells"># if(NM_MRKITEM){ #
-							   #: NM_MRKITEM #
-							   # }else{} #
+            <span class="ells"># if(NM_MRKITEM){ 	#
+							   #: NM_MRKITEM 		#
+							   # } 					#
 			</span>
         </td>
 		<td class="ta-l">
-            <span class="ells"># if(NO_MRKORD){ #
-							   #: NO_MRKORD #
-						       # }else{} #
+            <span class="ells"># if(NO_MRKORD){ 	#
+							   #: NO_MRKORD 		#
+						       # } 					#
 			</span>
         </td>
 	</tr>
@@ -212,17 +207,17 @@
 			마켓
 		</td>
 		<td class="border-right-line">
-			#if(NM_MRK){ #
-			#: NM_MRK #
-			#}#
+			#if(NM_MRK){ 	#
+			#: NM_MRK       #
+			#}				#
 		</td>
 		<td class="active border-right-line">
 			주문번호
 		</td>
 		<td class="border-right-line">
 			#if(NO_MRKORD){ #
-			#: NO_MRKORD #
-			#}#
+			#: NO_MRKORD    #
+			#}			    #
 		</td>
 	</tr>
 	<tr class="border-bottom-line">
@@ -231,8 +226,8 @@
 		</td>
 		<td class="border-right-line" colspan="3">
 			#if(CD_MRKITEM){ #
-			#: CD_MRKITEM #
-			#}#	
+			#: CD_MRKITEM    #
+			#}			     #	
 		</td>
 	</tr>
 	<tr class="border-bottom-line">
@@ -241,8 +236,8 @@
 		</td>
 		<td class="border-right-line" colspan="3">
 			#if(NM_MRKITEM){ #
-			#: NM_MRKITEM #
-			#}#
+			#: NM_MRKITEM	 #
+			#}				 #
 		</td>
 	</tr>
 	<tr class="border-bottom-line">
@@ -250,17 +245,17 @@
 			문의자
 		</td>
 		<td class="border-right-line">
-			#if(NM_INQ){ #
-			#: NM_INQ #
-			#}#	
+			#if(NM_INQ){ 	#
+			#: NM_INQ 		#
+			#}				#	
 		</td>
 		<td class="active border-right-line">
 			문의일시
 		</td>
 		<td class="border-right-line">
 			#if(DTS_INQREG){ #
-			#: DTS_INQREG #
-			#}#			
+			#: DTS_INQREG 	 #
+			#}				 #			
 		</td>
 	</tr>
 	<tr class="border-bottom-line">
@@ -269,7 +264,7 @@
 		</td>
 		<td class="border-right-line">
 			#if(NM_INQCLFT){ #
-			#: NM_INQCLFT 	 #
+			<co04-cd-to-nm cd="#:NM_INQCLFT#" nm-box="csDataVO.csQuestionCodeOp">
 			#}				 #
 		</td> 
 		<td class="active border-right-line">

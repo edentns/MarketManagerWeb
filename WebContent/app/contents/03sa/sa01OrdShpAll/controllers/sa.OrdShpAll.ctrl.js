@@ -82,7 +82,7 @@
                 APP_SA_MODEL.CD_ORDSTAT.fNm  = "ordAllDataVO.ordStatusOp";
                 
                 var grdCol = [[{field:"hierarchy"}],
-                              [APP_SA_MODEL.NO_ORD       , APP_SA_MODEL.NO_APVL       ],
+                              [APP_SA_MODEL.NO_ORD       ,[APP_SA_MODEL.NO_APVL, APP_SA_MODEL.NO_MRKORD]],
                               [APP_SA_MODEL.NM_MRK       , APP_SA_MODEL.NO_MRKORD     ],
                               [APP_SA_MODEL.NO_MRKITEM   , APP_SA_MODEL.NO_MRKREGITEM ],
                               [APP_SA_MODEL.NM_MRKITEM   , APP_SA_MODEL.NM_MRKOPT     ],
@@ -253,7 +253,7 @@
                             	title:"비고", 
                             	headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
                            	}
-                            ]
+                          ]
 	                });
                 });    
 	            
@@ -279,15 +279,6 @@
                     collapse: function(e) {
                         this.cancelRow();
                     },
-                    /*editable: {
-                    	mode: "popup",
-                		window : {
-                	        title: ""
-                	    },
-                		template: kendo.template($.trim($("#echg_popup_template").html())),
-                		confirmation: false
-                    },*/
-                    //edit: function(e){},
                 	scrollable: true,
                 	resizable: true,
                 	detailInit: gridDetailOptions,
@@ -305,32 +296,11 @@
                 	toolbar: [{template: kendo.template($.trim($("#ordall_toolbar_template").html()))}],
                 	dataSource: new kendo.data.DataSource({
                 		transport: {
-                			read: function(e) {
-                				/*var param = {
-                				    NM_MRKITEM : ordAllDataVO.procName.value,
-            					    NO_MRK : ordAllDataVO.ordMrkNameMo, 
-            					    CD_ORDSTAT : ordAllDataVO.ordStatusMo,
-            					    NO_MRKORD : ordAllDataVO.orderNo.value,      
-            					    NM_PCHR : ordAllDataVO.buyerName.value,
-            					    DTS_CHK : ordAllDataVO.betweenDateOptionMo,  
-            					    DTS_FROM : new Date(ordAllDataVO.datesetting.period.start.y, ordAllDataVO.datesetting.period.start.m-1, ordAllDataVO.datesetting.period.start.d, "00", "00", "00").dateFormat("YmdHis"),           
-            					    DTS_TO : new Date(ordAllDataVO.datesetting.period.end.y, ordAllDataVO.datesetting.period.end.m-1, ordAllDataVO.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis")
-                                };
-                				if(Util03saSvc.readValidation(param)){
-                					saOrdShpAllSvc.orderList(param).then(function (res) {
-                						e.success(res.data);
-                					});
-                				}else{
-                					e.error();
-                				}*/
-                				
+                			read: function(e) {                				
                 				saOrdShpAllSvc.orderList(ordAllDataVO.param).then(function (res) {
             						e.success(res.data);
             					});
                 			},
-                			/*update: function(e){                				
-                				
-                			},*/
                 			parameterMap: function(e, operation) {
                 				if(operation !== "read" && e.models) {
                 					return {models:kendo.stringify(e.models)};

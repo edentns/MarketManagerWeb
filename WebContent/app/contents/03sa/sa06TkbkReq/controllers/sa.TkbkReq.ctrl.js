@@ -680,7 +680,7 @@
                         						}
                         					}); 
         		                			return defer.promise;
-                						}  
+                						}
                 						break;
                 					}
                 					case '003' : {
@@ -794,89 +794,77 @@
 	                	row.find(".k-checkbox").prop( "checked", false );
 	                };
                 };  
-	            	            
-	            $scope.$on("kendoWidgetCreated", function(event, widget){
-                	var grd = $scope.tkbkkg;
+                
+                var clickEventValidNprocess = function(grd, code, px){
+            		var	chked = grd.element.find(".k-grid-content input:checked"),
+    			    	grdItem = grd.dataItem(chked.closest("tr")),
+    			    	chkedLeng = grd.element.find(".k-grid-content input:checked").length,
+    			    	cdDelivred = ['004','005'],
+    			    	tkbkcd = ['002','005'];
                 	
-	                if (widget === grd){
-	                	//반품완료
-	                	widget.element.find(".k-grid-tkbk-accept").on("click", function(e){
-	                		var	chked = grd.element.find(".k-grid-content input:checked"),
-            			    	grdItem = grd.dataItem(chked.closest("tr")),
-            			    	chkedLeng = grd.element.find(".k-grid-content input:checked").length;
-	                		
-	                		if(chkedLeng < 1){
-                				alert("주문을 선택해 주세요.");
+                	if(chkedLeng != 1){
+        				alert("한 건의 주문을 선택해 주세요");	
+        				return false;
+        			};
+    			
+    				switch(code){
+	                	case '002' : {
+	            			if(tkbkDataVO.gCode.indexOf(grdItem.CODE) > -1){
+	            				alert("지마켓,옥션은 거부 기능을 사용할 수 없습니다.");
+	            				return false;
+	            			};
+	            			if(tkbkDataVO.cCode.indexOf(grdItem.CODE) > -1){
+	            				alert("쿠팡은 거부 기능을 사용할 수 없습니다.");
+	            				return false;
+	            			};   			
+						};
+                		case '003' : {
+                			if(grdItem.CD_TKBKSTAT !== "001" || cdDelivred.indexOf(grdItem.CD_ORDSTAT) < 0){
+                				alert("주문상태를 확인해 주세요.");
                 				return false;
-                			};
-                			if(chkedLeng > 1){
-                				alert("한 건의 주문을 선택해 주세요");
-                				return false;
-                			};
-                			if(['002','005'].indexOf(grdItem.CD_TKBKSTAT) < 0){
+                			}
+                			break;
+                		};
+						case '001' : {
+                			if(tkbkcd.indexOf(grdItem.CD_TKBKSTAT) < 0){
                 				alert("반품처리 된 주문만 완료 처리 할 수 있습니다.");
                 				return false;
-                			};                			
+                			};
                 			grdItem.DTS_TKBKCPLT = new Date();
-                			grd.options.editable.window.width = "550px";
-                			tkbkDataVO.updateChange = "001";
-                			grd.editRow(chked.closest("tr"));	                			
-	                	}); 
+							break;
+						};
+						default : {
+							return false;
+							break;
+						}
+    				};
+
+        			grd.options.editable.window.width = px;
+            		tkbkDataVO.updateChange = code;
+            		grd.editRow(chked.closest("tr"));
+                };
+	            	            
+	            $scope.$on("kendoWidgetCreated", function(event, widget){
+                	var mainGrd = $scope.tkbkkg;
+                	
+	                if (widget === mainGrd){
+	                	//반품처리
+	                	widget.element.find(".k-grid-tkbk-confirm").on("click", function(e){		                		
+	                		clickEventValidNprocess(mainGrd, "003", "800px"); 
+	                		return true;
+	                	});
 	                	
 	                	//반품거부
 	                	widget.element.find(".k-grid-tkbk-reject").on("click", function(e){	    
-	                		var	chked = grd.element.find(".k-grid-content input:checked"),
-            			        grdItem = grd.dataItem(chked.closest("tr")),
-            			        chkedLeng = grd.element.find(".k-grid-content input:checked").length,
-            			        localMarketDivisionCode = grdItem.CODE;
-	                		
-	                		if(chkedLeng < 1){
-                				alert("주문을 선택해 주세요.");	
-                				return false;
-                			};
-                			if(chkedLeng > 1){
-                				alert("한 건의 주문을 선택해 주세요");	
-                				return false;
-                			};
-                			if(grdItem.CD_TKBKSTAT !== "001"){
-                				alert("반품요청 된 주문만 거부 처리 할 수 있습니다.");
-                				return false;
-                			};
-                			if(tkbkDataVO.gCode.indexOf(localMarketDivisionCode) > -1){
-                				alert("지마켓,옥션은 거부 기능을 사용할 수 없습니다.");
-                				return false;
-                			};
-                			if(tkbkDataVO.cCode.indexOf(localMarketDivisionCode) > -1){
-                				alert("쿠팡은 거부 기능을 사용할 수 없습니다.");
-                				return false;
-                			};
-                    		grd.options.editable.window.width = "800px";
-                			tkbkDataVO.updateChange = "002";
-                			grd.editRow(chked.closest("tr"));	                			
-	                	}); 
+	                		clickEventValidNprocess(mainGrd, "002", "800px");
+	                		return true;
+	                	});	           
 	                	
-	                	//반품처리
-	                	widget.element.find(".k-grid-tkbk-confirm").on("click", function(e){	
-	                		var	chked = grd.element.find(".k-grid-content input:checked"),
-            			    grdItem = grd.dataItem(chked.closest("tr")),
-            			    chkedLeng = grd.element.find(".k-grid-content input:checked").length;
-	                		
-	                		if(chkedLeng < 1){
-                				alert("주문을 선택해 주세요.");	
-                				return false;
-                			};
-                			if(chkedLeng > 1){
-                				alert("한 건의 주문을 선택해 주세요");	
-                				return false;
-                			};
-                			if(grdItem.CD_TKBKSTAT !== "001"){
-                				alert("반품요청 된 주문만 처리 할 수 있습니다.");
-                				return false;
-                			}
-                			grd.options.editable.window.width = "800px";
-	                		tkbkDataVO.updateChange = "003";
-	                		grd.editRow(chked.closest("tr"));
-	                	});	                	
+	                	//반품완료
+	                	widget.element.find(".k-grid-tkbk-accept").on("click", function(e){	                		
+                			clickEventValidNprocess(mainGrd, "001", "550px");
+                			return true;
+	                	}); 
 	                }
                 });
 	            

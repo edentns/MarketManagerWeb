@@ -635,15 +635,14 @@
 	            				    param = "";	
 	                		     			
                 			param = grd.dataSource.data().filter(function(ele){
-	                			//return ele.ROW_CHK === true && ele.CD_CCLSTAT === "001" && ele.NM_CCLHRNKRSN !== "" && ele.NM_CCLHRNKRSN !== "";
-	                			return ele.ROW_CHK === true && ele.CD_CCLSTAT === "001";
-	                		});		               			
+	                			return ele.ROW_CHK === true && ele.CD_CCLSTAT === "001"  && ['001','002','003'].indexOf(ele.CD_ORDSTAT) > -1;
+	                		});
                 			if(chkedLeng < 1){
 	                			alert("주문을 한 건 이상 선택해 주세요");
 	                			return;
 	                		};
                 			if(param.length !== chkedLeng){
-                				alert("취소요청 된 주문만 취소승인 처리 할 수 있습니다.");	
+                				alert("주문상태를 확인해주세요.");	
                 				return;
                 			}
                 			//if(confirm("총 "+param.length+"건의 주문을 취소 승인 하시겠습니까?")){

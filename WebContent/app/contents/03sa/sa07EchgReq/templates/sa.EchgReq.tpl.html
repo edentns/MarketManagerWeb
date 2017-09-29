@@ -114,10 +114,13 @@
 <!-- 교환 팝업 -->
 <script id="echg_popup_template" type="text/x-kendo-template">
 <div class="not_pop_title" ng-if="echgDataVO.updateChange === '001'">
-	<h4>교환상품접수 입력</h4>
+	<h4>교환상품접수</h4>
 </div>
 <div class="not_pop_title" ng-if="echgDataVO.updateChange === '002'">
-	<h4>교환거부 입력</h4>
+	<h4>교환거부 </h4>
+</div>
+<div class="not_pop_title" ng-if="echgDataVO.updateChange === '003'">
+	<h4>교환완료 </h4>
 </div>
 <table class="table signal">
 	<colgroup>
@@ -208,7 +211,7 @@
 			<select kendo-drop-down-list 
 				k-options="echgDataVO.cdEchgrsnOp"
 				name="CD_ECHGRSN"
-				data-bind="value: CD_ECHGRSN"
+				data-bind="value: CD_ECHGHRNKRSN"
                 style="width: 100%">
 			</select>
 		</td>
@@ -238,6 +241,7 @@
 		<td colspan="2">
 		</td>
 	</tr>
+
 	<tr class="border-bottom-line" data-ng-show="echgDataVO.ngIfdata(echgDataVO.procShowCode, echgDataVO.procShowMrkCode, '#: CODE #')">
 		<td class="active border-right-line">
 			<code>*</code>송장번호
@@ -246,28 +250,28 @@
 			<textarea class="k-textbox" name="NO_INVO" data-bind="value: NO_INVO" rows="2" style="width:100%; overflow-y: scroll;"></textarea>
 		</td> 
 	</tr>
-
-	<tr class="border-bottom-line" data-ng-show="echgDataVO.ngIfdata(echgDataVO.rejectShowCode, echgDataVO.completeShowMrkCode, '#: CODE #')">
+	
+	<tr class="border-bottom-line" data-ng-show="echgDataVO.ngIfdata(echgDataVO.completeShowCode, echgDataVO.completeShowMrkCode, '#: CODE #')">
 		<td class="active border-right-line">
 			접수자
 		</td>
-		<td>
+		<td class="ta-l">
 			{{echgDataVO.userInfo}}
 		</td>
 		<td class="active border-right-line">
 			<code>*</code>접수일자
 		</td>
-		<td class="ta-c">
+		<td class="ta-l">
 			<input kendo-date-time-picker				
-			 id="DTS_RECER"
-			 name="DTS_RECER"
-			 k-options="echgDataVO.dateOptions"
-             data-bind="value: DTS_RECER"
-             style="width: 100%;" />
-		</td>  
+		 		id="DTS_RECER"
+		 		name="DTS_RECER"
+		 		k-options="echgDataVO.dateOptions"
+           		data-bind="value: DTS_RECER"
+           		style="width: 100%;" />
+		</td> 
 	</tr>
-	
-	<tr class="border-bottom-line" data-ng-show="echgDataVO.ngIfdata(echgDataVO.rejectShowCode, echgDataVO.rejectShowMrkCode, '#: CODE #')">
+
+	<tr class="border-bottom-line" data-ng-show="echgDataVO.ngIfdata(echgDataVO.rejectShowCode, echgDataVO.rejectDivShowMrkCode, '#: CODE #')">
 		<td class="active border-right-line">
 			<code>*</code>교환요청 거부코드
 		</td>
@@ -283,7 +287,7 @@
 		<td colspan="2">
 		</td> 
 	</tr>
-	<tr class="border-bottom-line" data-ng-show="echgDataVO.ngIfdata(echgDataVO.rejectShowCode, echgDataVO.rejectShowMrkCode, '#: CODE #')">
+	<tr class="border-bottom-line" data-ng-show="echgDataVO.ngIfdata(echgDataVO.rejectShowCode, echgDataVO.rejectDetailShowMrkCode, '#: CODE #')">
 		<td class="active border-right-line">
 			<code>*</code>교환요청 거부사유
 		</td>
@@ -291,6 +295,7 @@
 			<textarea class="k-textbox" name="DC_ECHGRJTCTT" data-bind="value: DC_ECHGRJTCTT" style="width:100%; height:150px; overflow-y: scroll;"></textarea>
 		</td> 
 	</tr>
+
 	</tbody>
 </table>
 </script>
