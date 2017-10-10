@@ -601,11 +601,11 @@
 	                
 	                angular.element($(".k-checkbox:eq(0)")).prop("checked",allChecked);
 	                
-	                if(checked){
-	                	row.addClass("k-state-selected");
-	                }else{
-	                	row.removeClass("k-state-selected");
-	                };
+//	                if(checked){
+//	                	row.addClass("k-state-selected");
+//	                }else{
+//	                	row.removeClass("k-state-selected");
+//	                };
                 };
                 
                 //kendo grid 체크박스 all click
