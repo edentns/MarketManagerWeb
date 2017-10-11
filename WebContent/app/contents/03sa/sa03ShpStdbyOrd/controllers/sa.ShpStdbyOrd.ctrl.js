@@ -307,11 +307,11 @@
 	                dataItem.ROW_CHK = checked;
 	                dataItem.dirty = true;
 	                
-	                if(checked){
-	                	row.addClass("k-state-selected");
-	                }else{
-	                	row.removeClass("k-state-selected");
-	                };
+//	                if(checked){
+//	                	row.addClass("k-state-selected");
+//	                }else{
+//	                	row.removeClass("k-state-selected");
+//	                };
                 };   
 	            	            
 		        //검색 그리드
@@ -739,7 +739,13 @@
 			                        width: 50,
 			                        template: "<input class='k-checkbox' data-role='checkbox' type='checkbox' ng-click='onOrdGrdCkboxClick($event)' id='#= uid #_alt'><label class='k-checkbox-label k-no-text' for='#= uid #_alt'></label>",
 			                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}			                          
-                	            },                        
+                	            },    
+                               	{
+                                    field: "NO_MRK",
+                                    title: "관리자마켓번호",
+                                    width: 0,
+                                    hidden: true
+		                        },                    
 		                        {	
                 	            	field: "NO_ORD",
 		                            title: "관리번호",

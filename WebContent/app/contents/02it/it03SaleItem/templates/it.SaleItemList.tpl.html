@@ -169,41 +169,41 @@
 			</div>
 			<div class="custom-style"> 
 							   # if(YN_ADULCTFC == "Y"){ #	
-							   #: "인증" #
+							   #: "대상" #
 							   # }else{  #
-							   #: "비인증" #
+							   #: "비대상" #
                                #}	#  
 			</div>
       	</td>
 		<td class="ta-c" style="padding:0">
           	<div class="custom-style">
 							  # if(SF_M !== "" && SF_M !== null && SF_M !== "undefined"){ #
-				    		  #: "등록" 	#
+				    		  <span class='k-icon k-i-check'></sapn>
 							  # }else{  #
-							  #: "미등록" #
+							  <span class='k-icon k-i-close k-i-x'></sapn>
                               #}	# 
 			</div>
 			<div class="custom-style"> 
 							  # if(SF_DI !== "" && SF_DI !== null && SF_DI !== "undefined"){ #
-							  #: "등록" 	#
+							  <span class='k-icon k-i-check'></sapn>
 							  # }else{  #
-							  #: "미등록" #
+							  <span class='k-icon k-i-close k-i-x'></sapn>
                               #}	# 	
 			</div>
       	</td>
 		<td class="ta-c" style="padding:0">
           	<div class="custom-style"> 
 							  # if(SF_DE !== "" && SF_DE !== null && SF_DE !== "undefined"){ #
-							  #: "등록" 	#
+							  <span class='k-icon k-i-check'></sapn>
 							  # }else{  #
-							  #: "미등록" #
+							  <span class='k-icon k-i-close k-i-x'></sapn>
                               #}	# 						  
 			</div>
 			<div class="custom-style"> 
 							  # if(CD_OPTTP !== "옵션사용안함" ){ #
-							  #: "등록" 	#
+							  <span class='k-icon k-i-check'></sapn>
 							  # }else{  #
-							  #: "미등록" #
+							  <span class='k-icon k-i-close k-i-x'></sapn>
                               #}	# 
 			</div>
       	</td>
@@ -337,41 +337,41 @@
 			</div>
 			<div class="custom-style"> 
 							   # if(YN_ADULCTFC == "Y"){ #	
-							   #: "인증" #
+							   #: "대상" #
 							   # }else{  #
-							   #: "비인증" #
+							   #: "비대상" #
                                #}	#  
 			</div>
       	</td>
 		<td class="ta-c" style="padding:0">
           	<div class="custom-style">
 							  # if(SF_M !== "" && SF_M !== null && SF_M !== "undefined"){ #
-				    		  #: "등록" 	#
+				    		  <span class='k-icon k-i-check'></sapn>
 							  # }else{  #
-							  #: "미등록" #
+							  <span class='k-icon k-i-close k-i-x'></sapn>
                               #}	# 
 			</div>
 			<div class="custom-style"> 
 							  # if(SF_DI !== "" && SF_DI !== null && SF_DI !== "undefined"){ #
-							  #: "등록" 	#
+							  <span class='k-icon k-i-check'></sapn>
 							  # }else{  #
-							  #: "미등록" #
+							  <span class='k-icon k-i-close k-i-x'></sapn>
                               #}	# 	
 			</div>
       	</td>
 		<td class="ta-c" style="padding:0">
           	<div class="custom-style"> 
 							  # if(SF_DE !== "" && SF_DE !== null && SF_DE !== "undefined"){ #
-							  #: "등록" 	#
+							  <span class='k-icon k-i-check'></sapn>
 							  # }else{  #
-							  #: "미등록" #
+							  <span class='k-icon k-i-close k-i-x'></sapn>
                               #}	# 						  
 			</div>
 			<div class="custom-style"> 
 							  # if(CD_OPTTP !== "옵션사용안함" ){ #
-							  #: "등록" 	#
+							  <span class='k-icon k-i-check'></sapn>
 							  # }else{  #
-							  #: "미등록" #
+							  <span class='k-icon k-i-close k-i-x'></sapn>
                               #}	# 
 			</div>
       	</td>
@@ -437,9 +437,9 @@
 </script>
 <!-- 그리드 툴바 템플릿 -->
 <script id="Sale-toolbar-template" type="text/x-kendo-template">
-	<button class="k-button k-button-icontext k-grid-edit" ng-click="saleItemInsert('sale')"><span class="k-icon k-edit"></span>판매등록</button>
-	<button class="k-button k-button-icontext k-grid-edit" ng-click="saleItemInsert('new')"><span class="k-icon k-edit"></span>신규등록</button>    
-    <button class="k-button k-button-icontext k-grid-delete" ng-click="saleItemDelete(this)"><span class="k-icon k-delete"></span>삭제</button>
+	<button class="k-button k-button-icontext k-grid-edit" ng-click="saleItemInsert('sale')"><span class="k-icon k-i-edit"></span>판매등록</button>
+	<button class="k-button k-button-icontext k-grid-edit" ng-click="saleItemInsert('new')"><span class="k-icon k-i-edit"></span>신규등록</button>    
+    <button class="k-button k-button-icontext k-grid-delete" ng-click="saleItemDelete(this)"><span class="k-icon k-i-delete"></span>삭제</button>
 </script>
 
 <!-- 검색시 유효성 검사 경고창 -->

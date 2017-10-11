@@ -262,11 +262,11 @@
 		                dataItem.ROW_CHK = checked;
 		                dataItem.dirty = true;
 		                
-		                if(checked){
-		                	row.addClass("k-state-selected");
-		                }else{
-		                	row.removeClass("k-state-selected");
-		                };
+//		                if(checked){
+//		                	row.addClass("k-state-selected");
+//		                }else{
+//		                	row.removeClass("k-state-selected");
+//		                };
 	                };   
 		            	            
 			        //검색 그리드
