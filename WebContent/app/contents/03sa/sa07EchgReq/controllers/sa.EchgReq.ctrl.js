@@ -7,8 +7,8 @@
      * 상품분류관리
      */
     angular.module("sa.EchgReq.controller")
-        .controller("sa.EchgReqCtrl", ["$scope", "$http", "$q", "$log", "sa.EchgReqSvc", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "MenuSvc", "$window",  "Util03saSvc", "APP_SA_MODEL",   
-            function ($scope, $http, $q, $log, saEchgReqSvc, APP_CODE, $timeout, resData, Page, UtilSvc, MenuSvc, $window, Util03saSvc, APP_SA_MODEL) {
+        .controller("sa.EchgReqCtrl", ["$scope", "$http", "$q", "$log", "sa.EchgReqSvc", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "MenuSvc", "$window",  "Util03saSvc",   
+            function ($scope, $http, $q, $log, saEchgReqSvc, APP_CODE, $timeout, resData, Page, UtilSvc, MenuSvc, $window, Util03saSvc) {
 	            var page  = $scope.page = new Page({ auth: resData.access }),
 		            today = edt.getToday();
 	            
@@ -125,6 +125,10 @@
                     NM_ECHGHRNKRSN	: { type: "string"	  , editable: false, nullable: false },
         			CD_ECHGLRKRSN	: { type: "string"	  , editable: false, nullable: false },
         			NM_ECHGLRKRSN	: { type: "string"	  , editable: false, nullable: false },
+        			CD_PARS			: { type: "string"	  , editable: false, nullable: false },
+        			NO_INVO			: { type: "string"	  , editable: false, nullable: false },
+        			CD_PARS_ECHG	: { type: "string"	  , editable: false, nullable: false },
+        			NO_INVO_ECHG	: { type: "string"	  , editable: false, nullable: false },
                     CD_ECHGRJTRSN 	: {
                     					 type: "string"    
                     					,editable: true
@@ -178,15 +182,15 @@
 											}
 										}
                                       },
-                  	CD_PARS			: {
+                  	CD_PARS_INPUT	: {
 				                    	type: "array"
 					     			   ,editable: true
 					     			   ,nullable: false
 					                   ,validation: {
-					                	   cd_parsvalidation: function (input) {
+					                	   cd_pars_inputvalidation: function (input) {
 					                		   if(echgDataVO.procShowCode.indexOf(echgDataVO.updateChange) > -1){
 											    	if (input.is("[name='CD_PARS']") && input.val() === "") {
-					                                	input.attr("data-cd_parsvalidation-msg", "택배사를 입력해 주세요.");
+					                                	input.attr("data-cd_pars_inputvalidation-msg", "택배사를 입력해 주세요.");
 					                                    return false;
 					                                }
 					                		   };
@@ -194,19 +198,19 @@
 									    	}
 										}
                 				      },
-                	NO_INVO			: {
+                	NO_INVO_INPUT	: {
 				                    	type: "string"
 						     		   ,editable: true
 						     		   ,nullable: false
 						               ,validation: {
-						            	   no_invovalidation: function (input) {
+						            	   no_invo_inputvalidation: function (input) {
 						            		   if(echgDataVO.procShowCode.indexOf(echgDataVO.updateChange) > -1){
 											    	if (input.is("[name='NO_INVO']") && input.val() === "" ) {
-					                                	input.attr("data-no_invovalidation-msg", "송장번호를 입력해 주세요.");
+					                                	input.attr("data-no_invo_inputvalidation-msg", "송장번호를 입력해 주세요.");
 					                                    return false;
 					                                };
 											    	if(input.is("[name='NO_INVO']") && input.val().length > 100){
-											    		input.attr("data-no_invovalidation-msg", "송장번호룰 100자 이내로 입력해 주세요.");
+											    		input.attr("data-no_invo_inputvalidation-msg", "송장번호룰 100자 이내로 입력해 주세요.");
 					                                    return false;
 											    	};
 						            		   	};
@@ -215,37 +219,6 @@
 						               	 }
                 				       }
                 	};
-
-                APP_SA_MODEL.CD_ECHGSTAT.fNm = "echgDataVO.echgStatusOp";
-                APP_SA_MODEL.CD_ORDSTAT.fNm  = "echgDataVO.ordStatusOp";
-                
-                var grdCol = [[APP_SA_MODEL.ROW_CHK],
-                              [APP_SA_MODEL.NO_ORD         ,[APP_SA_MODEL.NO_APVL, APP_SA_MODEL.NO_MRKORD]],
-                              [APP_SA_MODEL.NM_MRK         , APP_SA_MODEL.NO_MRKORD     ],
-                              [APP_SA_MODEL.NO_MRKITEM     , APP_SA_MODEL.NO_MRKREGITEM ],
-                              [APP_SA_MODEL.NM_MRKITEM     , APP_SA_MODEL.NM_MRKOPT		],
-                              [APP_SA_MODEL.QT_ORD         , APP_SA_MODEL.QT_ECHG       ],
-                              [APP_SA_MODEL.NM_PCHR        , APP_SA_MODEL.AM_ORDSALEPRC ],
-                              [APP_SA_MODEL.NO_PCHRPHNE    , APP_SA_MODEL.NM_CONS       ],
-                              [APP_SA_MODEL.DC_PCHREMI 	   , APP_SA_MODEL.NO_CONSPHNE   ],
-                              [APP_SA_MODEL.DC_ECHGRSNCTT  , APP_SA_MODEL.DC_CONSNEWADDR],
-                              [APP_SA_MODEL.CD_ORDSTAT     , APP_SA_MODEL.DC_SHPWAY     ],
-                              [APP_SA_MODEL.DTS_ORD        , APP_SA_MODEL.DTS_ECHGREQ   ],
-                              [APP_SA_MODEL.DT_SND  	   , APP_SA_MODEL.NO_INVO       ],
-                              [APP_SA_MODEL.DTS_ECHGAPPRRJT, APP_SA_MODEL.CD_PARS       ],
-                              [APP_SA_MODEL.NO_ECHGCPLT	   , APP_SA_MODEL.CD_ECHGSTAT   ],
-                              [APP_SA_MODEL.YN_CONN]
-                			  	
-                ],
-                    grdDetOption      = {},
-                    grdRowTemplate    = "<tr data-uid=\"#= uid #\">\n",
-                    grdAltRowTemplate = "<tr class=\"k-alt\" data-uid=\"#= uid #\">\n",
-                    grdCheckOption    = {clickNm:"onOrdGrdCkboxClick",
-                		                 allClickNm:"onOrdGrdCkboxAllClick"};
-                
-                grdDetOption       = UtilSvc.gridDetOption(grdCheckOption, grdCol);
-                grdRowTemplate     = grdRowTemplate    + grdDetOption.gridContentTemplate;
-                grdAltRowTemplate  = grdAltRowTemplate + grdDetOption.gridContentTemplate;
 	            
 	            var echgDataVO = $scope.echgDataVO = {
             		boxTitle : "교환요청",
@@ -420,10 +393,11 @@
                     },
                     edit: function(e){                    	
                     	var cntnr = e.container,
+                    		dsModel = e.model,
                     		cdpars = cntnr.find("select[name=CD_PARS]"),
                     		chosenDS = "";
-                    	
-                    	echgDataVO.curCode = e.model.CODE;
+                    		                     	
+                    	echgDataVO.curCode = dsModel.CODE;
                     	
                     	if(echgDataVO.updateChange === '001'){
                     		chosenDS = echgDataVO.shpList.filter(function(ele){
@@ -455,15 +429,15 @@
                     },
                 	scrollable: true,
                 	resizable: true,
-                	rowTemplate: kendo.template($.trim(grdRowTemplate)),
-                	altRowTemplate: kendo.template($.trim(grdAltRowTemplate)),
+                	rowTemplate: kendo.template($.trim($("#echg_template").html())),
+                	altRowTemplate: kendo.template($.trim($("#echg_alt_template").html())),
                 	height: 616,
                 	navigatable: true, //키보드로 그리드 셀 이동 가능
                 	toolbar: [{template: kendo.template($.trim($("#echg_toolbar_template").html()))}],
                 	dataSource: new kendo.data.DataSource({
                 		transport: {
                 			read: function(e) {
-                				saEchgReqSvc.orderList(echgDataVO.param).then(function (res) {         						
+                				saEchgReqSvc.orderList(echgDataVO.param).then(function (res) {    						
             						e.success(res.data.queryList);			
             						echgDataVO.shpList = res.data.queryShipList;
             					});
@@ -573,8 +547,239 @@
                 				fields: grdField
                 			}
                 		},
-                	}),                	
-                	columns: grdDetOption.gridColumn
+                	}),
+                	columns: [
+              	            {
+		                        field: "ROW_CHK",
+		                        title: "<input class='ROW_CHK k-checkbox' type='checkbox' id='grd_chk_master' ng-click='onOrdGrdCkboxAllClick($event)'><label class='k-checkbox-label k-no-text' for='grd_chk_master' style='margin-bottom:0;'>​</label>",				                        
+		                        width: 30,
+		                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px; vertical-align:middle;"}			                          
+            	            },                        
+	                        {	
+            	            	field: "NO_ORD",
+	                            title: "관리번호",
+	                            width: 100,
+	                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
+	                            columns : [	
+	                                       		{
+													field: "NO_APVL",
+													title: "결제번호 / 상품번호",
+													width: 100,
+													headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
+	                            				}	
+	                                       ]
+	                        },
+	                        {
+	                        	field: "NM_MRK",	
+	                            title: "마켓명",
+	                            width: 100,
+	                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
+	                            columns : [
+											{
+												field: "NO_MRKORD",
+												title: "상풍주문번호",
+												width: 100,
+												headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
+											}	
+                                      ]
+	                        },
+                           	{
+                                field: "NO_MRKITEM",
+                                title: "마켓상품번호",
+                                width: 100,
+		                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
+		                        columns : [
+											{
+												field: "NO_MRKREGITEM",
+												title: "상품번호",
+												width: 100,
+												headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
+											}	
+                                      ]
+                            },		                        
+                           	{
+                                field: "NM_MRKITEM",
+                                title: "상품명",
+                                width: 100,
+		                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
+		                        columns : [
+											{
+												field: "NM_MRKOPT",
+												title: "옵션(상품구성)",
+												width: 100,
+												headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
+											}	
+                                      ]
+                            },                   
+	                        {
+	                        	field: "QT_ORD",
+	                            title: "주문수량",
+	                            width: 100,
+	                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
+	                            columns : [
+											{
+												field: "QT_ECHG",
+												title: "교환 요청 수량",
+												width: 100,
+												headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
+											}	
+										]
+	                        },
+	                        {
+	                        	field: "NM_PCHR",
+	                            title: "구매자",
+	                            width: 100,
+	                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
+	                            columns : [
+											{
+												field: "AM_ORDSALEPRC",
+												title: "판매가",
+												width: 100,
+												headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
+											}
+                                      ]
+	                        },
+                           	{
+                                field: "NO_PCHRPHNE",
+                                title: "전화번호",
+                                width: 110,
+		                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
+		                        columns : [
+											{
+												field: "NM_CONS",
+												title: "수취인",
+												width: 100,
+												headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
+											}	
+                                      ]
+                            },    
+                            {
+	                        	field: "CD_PARS_ECHG",
+	                            title: "반품택배사",
+	                            width: 100,
+	                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
+	                            columns : [
+											{
+												field: "NO_INVO_ECHG",
+												title: "송장번호",
+												width: 100,
+												headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
+											}	
+                                      ]
+	                        },
+                            {
+	                        	field: "DC_PCHREMI",
+	                            title: "이메일",
+	                            width: 100,
+	                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
+	                            columns : [
+											{
+												field: "NO_CONSPHNE",
+												title: "수취인 전화번호",
+												width: 100,
+												headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
+											}	
+                                      ]
+	                        },
+                           	{
+                                field: "DC_ECHGRSNCTT",
+                                title: "교환사유",
+                                width: 100,
+		                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
+		                        columns : [
+											{
+												field: "DC_CONSNEWADDR",
+												title: "수취인주소",
+												width: 100,
+												headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
+											}	
+                                      ]
+	                        },
+	                        {
+	                        	field: "CD_ORDSTAT",
+	                            title: "주문상태",
+	                            width: 100,
+	                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
+	                            columns : [
+											{
+												field: "DC_SHPWAY",
+												title: "배송방법",
+												width: 100,
+												headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
+											}	
+                                      ]
+	                        }, 
+	                        {
+	                        	field: "DTS_ORD",
+	                            title: "주문일시",
+	                            width: 100,
+	                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
+	                            columns : [
+											{
+												field: "DTS_ECHGREQ",
+												title: "교환요청일시",
+												width: 100,
+												headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
+											}	
+                                      ]
+	                        },
+                           	{
+                                field: "DT_SND",
+                                title: "배송일자",
+                                width: 100,
+		                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
+		                        columns : [
+											{
+												field: "DTS_ECHGAPPRRJT",
+												title: "교환상품접수일",
+												width: 100,
+												headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
+											}	
+                                      ]
+                            }, 
+                            {
+                                field: "CD_PARS",
+                                title: "재배송 택배사", 
+                                width: 100,
+		                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
+		                        columns : [
+											{
+												field: "NO_INVO",
+												title: "송장번호",
+												width: 100,
+												headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
+											}	
+                                      ]
+                            },  
+                           	{
+                                field: "NO_ECHGCPLT",
+                                title: "접수확인자",
+                                width: 90,
+		                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
+		                        columns : [
+											{
+												field: "CD_ECHGSTAT",
+												title: "교환상태",
+												width: 100,
+												headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
+											}
+                                     ]
+                            },   
+	                        {
+	                        	field: "YN_CONN",
+	                            title: "연동구분",
+	                            width: 100,
+	                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
+		                        columns : [
+											{
+												field: "",
+												title: "",
+												width: 100,
+												headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
+											}	
+										]
+	                        }
+	                 ]               
 	        	};
 
 	            UtilSvc.gridtooltipOptions.filter = "td div";

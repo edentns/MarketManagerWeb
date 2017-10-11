@@ -157,9 +157,11 @@
         DC_ECHGRJTCTT : { field: "DC_ECHGRJTCTT" , type: "string" , width: "100px", textAlign: "center", title: ""},
         NO_RECE       : { field: "NO_RECE"       , type: "string" , width: "100px", textAlign: "center", title: ""},
         DTS_RECER     : { field: "DTS_RECER"     , type: "string" , width: "100px", textAlign: "center", title: ""},
-        NM_PARS       : { field: "NM_PARS"       , type: "string" , width: "100px", textAlign: "center", title: "택배사"},
-        
+        NM_PARS       : { field: "NM_PARS"       , type: "string" , width: "100px", textAlign: "center", title: "택배사"},        
         DC_CCLRSNCTT  : { field: "DC_CCLRSNCTT"  , type: "string" , width: "100px", textAlign: "center", title: "주문취소사유"},
-        CD_CCLRSN     : { field: "CD_CCLRSN"     , type: "string" , width: "100px", textAlign: "center", title: "주문취소사유코드"}
+        CD_CCLRSN     : { field: "CD_CCLRSN"     , type: "string" , width: "100px", textAlign: "center", title: "주문취소사유코드"},
+        AM_TKBKSHP    : { field: "AM_TKBKSHP"    , type: "number" , width: "100px", textAlign: "right" , title: "반품배송비"},        
+        CD_PARS_TKBK  : { field: "CD_PARS_TKBK"  , type: "string" , width: "100px", textAlign: "center", title: "반품택배사"},
+        NO_INVO_TKBK  : { field: "NO_INVO_TKBK"  , type: "string" , width: "100px", textAlign: "center", title: "반품송장번호"}
 	});
 }());

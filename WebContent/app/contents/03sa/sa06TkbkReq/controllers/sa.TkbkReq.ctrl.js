@@ -117,8 +117,7 @@
                     QT_ORD        		: { type: APP_SA_MODEL.QT_ORD.type         		, editable: false, nullable: false },                    
                     DTS_TKBKREQ   		: { type: APP_SA_MODEL.DTS_TKBKREQ.type    		, editable: false, nullable: false },
                     NO_UPDATE     		: { type: APP_SA_MODEL.NO_UPDATE.type      		, editable: false, nullable: false },
-                    YN_CONN       		: { type: APP_SA_MODEL.YN_CONN.type        		, editable: false, nullable: false },                    
-                    DTS_CCLREQ    		: { type: APP_SA_MODEL.DTS_CCLREQ.type     		, editable: false, nullable: false },
+                    YN_CONN       		: { type: APP_SA_MODEL.YN_CONN.type        		, editable: false, nullable: false },   
                     CD_TKBKRSN    		: { type: APP_SA_MODEL.CD_TKBKRSN.type     		, editable: false, nullable: false },
                     DC_APVLWAY    	  	: { type: APP_SA_MODEL.DC_APVLWAY.type     		, editable: false, nullable: false },        
                     NO_TKBKCPLT   		: { type: APP_SA_MODEL.NO_TKBKCPLT.type    		, editable: false, nullable: false },
@@ -128,8 +127,11 @@
                     NO_TKBKREQ    		: { type: APP_SA_MODEL.NO_TKBKREQ.type     		, editable: false, nullable: false },
                     NO_MRK        		: { type: APP_SA_MODEL.NO_MRK.type         		, editable: false, nullable: false },
                     DTS_TKBKAPPRRJT 	: { type: APP_SA_MODEL.DTS_TKBKAPPRRJT.type		, editable: false, nullable: false },
-                    CODE			 	: { type: APP_SA_MODEL.DTS_TKBKAPPRRJT.type		, editable: false, nullable: false },
-                    NO_MNGMRK		 	: { type: APP_SA_MODEL.DTS_TKBKAPPRRJT.type		, editable: false, nullable: false },   
+                    CODE			 	: { type: "string"								, editable: false, nullable: false },
+                    NO_MNGMRK		 	: { type: "string"								, editable: false, nullable: false },
+                    CD_PARS_TKBK	 	: { type: "string"								, editable: false, nullable: false },
+                    NO_INVO_TKBK	 	: { type: "string"								, editable: false, nullable: false },
+                    AM_TKBKSHP			: { type: "number"								, editable: false, nullable: false },
 				    NOW_YN		 		: { type: "boolean"								, editable: true,  nullable: false },
 				    RECEIVE_SET  		: {
 							                   	 type: "string"
@@ -275,10 +277,82 @@
 								               }
 	               						  }     				 
                 };
+	            
+	            var tkbkDataVO = $scope.tkbkDataVO = {
+	            		boxTitle : "반품요청",
+		            	setting : {
+		        			id: "CD_DEF",
+		        			name: "NM_DEF",
+		        			maxNames: 2
+		        		},
+		            	datesetting : {
+		        			dateType   : 'market',
+							buttonList : ['current', '1Day', '1Week', '1Month'],
+							selected   : '1Week',
+							period : {
+								start : angular.copy(today),
+								end   : angular.copy(today)
+							}
+		        		},
+		        		procName : { value: "" , focus: false },
+		        		buyerName: { value: "" , focus: false },
+		        		orderNo : { value: "" , focus: false },
+		        		ordMrkNameOp : [],
+		        		ordMrkNameMo : "*",
+		        		ordStatusOp : [],
+		        		ordStatusMo : "*",
+		        		betweenDateOptionOp : [],
+		        		betweenDateOptionMo : "",
+		        		shipStatusOp : [],
+		        		cdTkbkstatMo : "001",
+		        		cdTkbkstat : [],
+		        		cdTkbkrsnOp: {
+		        			dataSource: [],
+		        			dataTextField:"NM_DEF",
+		                    dataValueField:"CD_DEF",
+	                        enable: false,
+		                    valuePrimitive: true
+		        		},
+		        		cdTkbkrjtOp:{
+		        			dataSource: [],
+		        			dataTextField:"NM_DEF",
+		                    dataValueField:"CD_DEF",
+		                    valuePrimitive: true
+		        		},
+		        		dateOptions : {										//DATE PICKER
+		        			parseFormats: ["yyyyMMddHHmmss"], 				//이거 없으면 값이 바인딩 안됨
+	        	            animation: {
+	        	                close: {
+	        	                    effects: "fadeOut zoom:out",
+	        	                    duration: 300
+	        	                },
+	        	                open: {
+	        	                    effects: "fadeIn zoom:in",
+	        	                    duration: 300
+	        	                }
+	        	            }
+		        		},
+		        		userInfo : JSON.parse($window.localStorage.getItem("USER")).NM_EMP,
+		        		updateChange : "",
+		        		dataTotal : 0,
+		        		resetAtGrd : "",
+		        		param : "",
+		        		shipList : "",
+		        		gCode : ['170104','170102'],
+		        		eCode : ['170106'],
+		        		sCode : ['170103'],
+		        		cCode : ['170902'],
+		        		etcCostName : "",
+		        		etcCostCode : "",
+		        		gHoldCode : "",
+		        		receiveCheckCode : 'Y',
+		        		marketDivisionCode : ""
+		        };   
 
                 APP_SA_MODEL.CD_TKBKRSN.fNm  = "tkbkDataVO.cdTkbkrsnOp.dataSource";
                 APP_SA_MODEL.CD_ORDSTAT.fNm  = "tkbkDataVO.ordStatusOp";
                 APP_SA_MODEL.CD_TKBKSTAT.fNm = "tkbkDataVO.cdTkbkstat";
+                APP_SA_MODEL.CD_PARS_TKBK.fNm  = "tkbkDataVO.shipList";
                 
                 var grdCol = [[APP_SA_MODEL.ROW_CHK],
                               [APP_SA_MODEL.NO_ORD           ,[APP_SA_MODEL.NO_APVL, APP_SA_MODEL.NO_MRKORD]],
@@ -287,7 +361,8 @@
                               [APP_SA_MODEL.NM_MRKITEM		 , APP_SA_MODEL.NM_MRKOPT	  ],
                               [APP_SA_MODEL.QT_ORD           , APP_SA_MODEL.QT_TKBK       ],
                               [APP_SA_MODEL.NM_PCHR          , APP_SA_MODEL.AM_ORDSALEPRC ],
-                              [APP_SA_MODEL.NO_PCHRPHNE      , APP_SA_MODEL.DC_APVLWAY    ],
+                              [APP_SA_MODEL.NO_PCHRPHNE      , APP_SA_MODEL.AM_TKBKSHP    ],
+                              [APP_SA_MODEL.CD_PARS_TKBK     , APP_SA_MODEL.NO_INVO_TKBK  ],                              
                               [APP_SA_MODEL.DC_PCHREMI       , APP_SA_MODEL.NM_CONS       ],
                               [APP_SA_MODEL.CD_TKBKRSN       , APP_SA_MODEL.DC_CONSNEWADDR],
                               [APP_SA_MODEL.CD_ORDSTAT       , APP_SA_MODEL.DC_SHPWAY     ],
@@ -304,78 +379,7 @@
                 
                 grdDetOption       = UtilSvc.gridDetOption(grdCheckOption, grdCol);
                 grdRowTemplate     = grdRowTemplate    + grdDetOption.gridContentTemplate;
-                grdAltRowTemplate  = grdAltRowTemplate + grdDetOption.gridContentTemplate;
-	            
-	            var tkbkDataVO = $scope.tkbkDataVO = {
-            		boxTitle : "반품요청",
-	            	setting : {
-	        			id: "CD_DEF",
-	        			name: "NM_DEF",
-	        			maxNames: 2
-	        		},
-	            	datesetting : {
-	        			dateType   : 'market',
-						buttonList : ['current', '1Day', '1Week', '1Month'],
-						selected   : '1Week',
-						period : {
-							start : angular.copy(today),
-							end   : angular.copy(today)
-						}
-	        		},
-	        		procName : { value: "" , focus: false },
-	        		buyerName: { value: "" , focus: false },
-	        		orderNo : { value: "" , focus: false },
-	        		ordMrkNameOp : [],
-	        		ordMrkNameMo : "*",
-	        		ordStatusOp : [],
-	        		ordStatusMo : "*",
-	        		betweenDateOptionOp : [],
-	        		betweenDateOptionMo : "",
-	        		shipStatusOp : [],
-	        		cdTkbkstatMo : "001",
-	        		cdTkbkstat : [],
-	        		cdTkbkrsnOp: {
-	        			dataSource: [],
-	        			dataTextField:"NM_DEF",
-	                    dataValueField:"CD_DEF",
-                        enable: false,
-	                    valuePrimitive: true
-	        		},
-	        		cdTkbkrjtOp:{
-	        			dataSource: [],
-	        			dataTextField:"NM_DEF",
-	                    dataValueField:"CD_DEF",
-	                    valuePrimitive: true
-	        		},
-	        		dateOptions : {										//DATE PICKER
-	        			parseFormats: ["yyyyMMddHHmmss"], 				//이거 없으면 값이 바인딩 안됨
-        	            animation: {
-        	                close: {
-        	                    effects: "fadeOut zoom:out",
-        	                    duration: 300
-        	                },
-        	                open: {
-        	                    effects: "fadeIn zoom:in",
-        	                    duration: 300
-        	                }
-        	            }
-	        		},
-	        		userInfo : JSON.parse($window.localStorage.getItem("USER")).NM_EMP,
-	        		updateChange : "",
-	        		dataTotal : 0,
-	        		resetAtGrd : "",
-	        		param : "",
-	        		shipList : "",
-	        		gCode : ['170104','170102'],
-	        		eCode : ['170106'],
-	        		sCode : ['170103'],
-	        		cCode : ['170902'],
-	        		etcCostName : "",
-	        		etcCostCode : "",
-	        		gHoldCode : "",
-	        		receiveCheckCode : 'Y',
-	        		marketDivisionCode : ""
-	            };   
+                grdAltRowTemplate  = grdAltRowTemplate + grdDetOption.gridContentTemplate;	                        
 	            
 		        //팝업에 입력창들이 NG-IF 인하여 데이터 바인딩이 안되서 수동으로 데이터 바인딩을 함
 	            var manualDataBind = function(input, target){
@@ -621,7 +625,7 @@
                 			read: function(e) {
                 				var me = tkbkDataVO;
 	                				me.ngIfinIt();
-                				saTkbkReqSvc.orderList(me.param).then(function (res) {   
+                				saTkbkReqSvc.orderList(me.param).then(function (res) {
                 					me.shipList = res.data.queryShipList;
                 					e.success(res.data.queryList);
             					});
@@ -648,8 +652,7 @@
                         						defer.resolve();
                         						if(res.data === "success"){
                         							alert("반품완료 되었습니다.");
-                        							//tkbkDataVO.ordStatusMo = (tkbkDataVO.ordStatusMo === '*') ? tkbkDataVO.ordStatusMo : tkbkDataVO.ordStatusMo + "^007";
-            	            						$scope.tkbkkg.dataSource.read();
+                        							$scope.tkbkkg.dataSource.read();
                         						}else{
                         							alert("반품완료가 실패하였습니다.");
                         							e.error();
@@ -693,7 +696,6 @@
                 								alert("배송처리 된 반품요청 주문만 승인 처리 할 수 있습니다.");
                         						return;
                 							};
-                							//console.log(param[0]);
                 							saTkbkReqSvc.tkbkConfirm(param[0]).then(function (res) {
                         						defer.resolve();
                         						if(res.data === "success"){
