@@ -65,12 +65,13 @@
 		            	}
 		            	
 		            	angular.forEach(dataItem, function (dataItem) {  // 택배사, 송장번호 없는것 거름
-	                		if(dataItem.CD_PARS == ""){
+	                		if(dataItem.CD_PARS == "" || jQuery.type(dataItem.CD_PARS) === "string"){
 	                			var temp = new Object();
 	                			temp.CD_PARS = "";
 	                			dataItem.CD_PARS = temp;
 	                		}
 	                    });
+		            	
 		            	saShpSbOrdImpSvc.excelExecute(dataItem).then(function (resData) {
 		    				$scope.shpbyordkg.dataSource.data(resData.data.failList);
 		    				alert("요청하신 총 "+resData.data.totalCnt+"건 중 "+resData.data.successCnt+"건 등록완료");
