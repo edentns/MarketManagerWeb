@@ -7,59 +7,9 @@
             </ol>
         </div>
     </div>
-
     <div class="row">
-        <!-- 검색 -->
-<!--         <div class="content-area-container col-xs-12" style="margin:0px 0px -5px 0px;"> -->
-<!--         	<div data-content-box-layer data-box-title="shpbyordDataVO.boxTitle" data-is-open="shpbyordDataVO.isOpen(val)"> -->
-<!--                 <form class="search-type1" id="myForm"> -->
-<!--                 	<table> -->
-<!--                         <colgroup> -->
-<!--                             <col style="width: 10%;"> -->
-<!--                             <col style="width: 33%;"> -->
-<!--                             <col style="width: 10%;"> -->
-<!--                             <col style="width: 33%;"> -->
-<!--                             <col style="width: 10%;"> -->
-<!--                             <col style="width: 33%;"> -->
-<!--                         </colgroup> -->
-<!--                         <tbody> -->
-<!--                         <tr> -->
-<!--                             <th>마켓명</th> -->
-<!--                             <td> -->
-<!--                             	<co01-mcbox title="마켓명" model="shpbyordDataVO.ordMrkNameMo" options="shpbyordDataVO.ordMrkNameOp" setting="shpbyordDataVO.setting" style="width:100%;"> -->
-<!--         						</co01-mcbox>  -->
-<!--                             </td> -->
-<!--                             <th>상품명</th> -->
-<!--                             <td> -->
-<!--                             	<input data-ng-model="shpbyordDataVO.procName.value" -->
-<!--                             			focus="shpbyordDataVO.procName.focus" -->
-<!--                             			title="상품명" -->
-<!--                             			data-eden-type="kor"  -->
-<!--                             			type="text"  -->
-<!--                             			class="form-control" style="width:100%;"/> -->
-<!--                             </td>		 -->
-<!-- 							<th>구매자/수취인</th> -->
-<!--                             <td>                            	              	 -->
-<!--                             	<input data-ng-model="shpbyordDataVO.buyerName.value" -->
-<!--                             			focus="shpbyordDataVO.buyerName.focus" -->
-<!--                             			title="구매자/수취인" -->
-<!--                             			data-eden-type="kor"  -->
-<!--                             			type="text"  -->
-<!--                             			class="form-control" style="width:100%;"/> -->
-<!--                             </td> -->
-<!--                         </tr> -->
-<!--                         </tbody> -->
-<!--                     </table>         		      -->
-<!--                     <div class="btn-group1 mt-10"> -->
-<!--                         <kendo-button type="submit" class="k-primary" title="검색" data-ng-click="shpbyordDataVO.inQuiry()" style="width:70px;">검색</kendo-button> -->
-<!--                         <kendo-button type="botton" title="초기화" data-ng-click="shpbyordDataVO.inIt()" style="width:70px;">초기화</kendo-button> -->
-<!--                     </div> -->
-<!--                 </form> -->
-<!--             </div> -->
-<!--         </div> -->
-        
         <!-- 주문 목록 -->          
-		<div class="content-area-container col-xs-12" style="padding:0px 0px 0px 0px;">				
+		<div class="content-area-container col-xs-12" style="padding:0px 0px 0px 0px;">	
 	        <div id="divShpbyordGrd" kendo-grid="shpbyordkg" options="grdShpbyordVO">
 	        </div>	            
         </div>
@@ -68,15 +18,20 @@
 
 <!-- 주문 조회 그리드 툴바 템플릿 -->
 <script id="shpbyord-toolbar-template" type="text/x-kendo-template">
-	<!-- <a class="k-button k-button-icontext k-grid-save1"><span class="k-icon"></span>배송지연</a> -->
-	<!-- <a class="k-button k-button-icontext k-grid-save2"><span class="k-icon k-i-close"></span>주문취소</a> -->  
 	<div class="row">   
 		<div class="col-xs-4" style="padding:0px;">   
 			<div style="margin-left:15px;">
-				<!-- <a class="k-button k-button-icontext k-grid-no-out"><span class="k-icon k-i-update"></span>저장</a> -->
-				<!-- <a class="k-button k-button-icontext k-grid-delivery-info-send"><span class="k-icon k-i-redo"></span>배송정보전송</a> -->
-				<a class="k-button k-button-icontext k-grid-delivery-info"><span class="k-icon k-i-add"></span>배송정보등록</a>        
-				<a class="k-button k-button-icontext k-grid-excel"><span class="k-icon k-i-excel"></span>Excel로딩</a>
+				<!-- <a class="k-button k-button-icontext k-grid-excel"><span class="k-icon k-i-excel"></span>Excel로딩</a> -->
+				<input name="files" id="files"
+		                   type="file"
+		                   kendo-upload
+		                   k-async="{ saveUrl: 'http://localhost:8080/MarketManagerServer/excelUpload',  autoUpload: true }"
+		                   k-complete="onComplete"
+		                   k-multiple="false"
+		                   k-validation="{allowedExtensions:['.xlsx']}"
+		                   k-localization="{ invalidFileExtension: '엑셀파일이 아닙니다.', select: 'Excel로딩'}"
+		        />
+				<a class="k-button k-button-icontext k-grid-delivery-info" ng-click = "shpbyordDataVO.excelExecute()"><span class="k-icon k-i-add"></span>배송정보등록</a> 
 			</div>
 		</div>
 		<div class="col-xs-8" style="padding:0px;">
@@ -91,7 +46,6 @@
 <script id="shpbyord-template" type="text/x-kendo-template">
   	<tr data-uid="#= uid #" ng-dblclick="grdDblClickGo('#: NO_ORD #','#: NO_MRKORD #')">
 		<td class="ta-c">
-        	<input class='k-checkbox' data-role='checkbox' type='checkbox' ng-click="onOrdGrdCkboxClick($event)" id="#= uid #_alt">
 			<label class='k-checkbox-label k-no-text' for="#= uid #_alt"></label>
       	</td>
 		<!-- 관리번호 -->
