@@ -115,11 +115,7 @@
 	                	},
 	                	dataSource: new kendo.data.DataSource({
 	                		transport: {
-	                			read: function(e) {                				
-	                				saShpSbOrdImpSvc.shpbyordList(shpbyordDataVO.param).then(function (res) {
-	            						shpbyordDataVO.shipCodeTotal = res.data.shpList;
-	            						e.success(res.data.searchList);
-	            					});
+	                			read: function(e) {
 	                			},
 	                			update: function(e){				
 	                			},                			
