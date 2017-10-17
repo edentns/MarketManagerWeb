@@ -25,7 +25,7 @@
 				<input name="files" id="files"
 		                   type="file"
 		                   kendo-upload
-		                   k-async="{ saveUrl: 'http://localhost:8080/MarketManagerServer/excelUpload',  autoUpload: true }"
+		                   k-async="{ saveUrl: '{{shpbyordDataVO.url}}/sa08ShpImp/excelUpload',  autoUpload: true }"
 		                   k-complete="onComplete"
 		                   k-multiple="false"
 		                   k-validation="{allowedExtensions:['.xlsx']}"
