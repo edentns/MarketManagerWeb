@@ -88,16 +88,59 @@
 	            	bssItemDataVO.signItem.value = "";
 	            	bssItemDataVO.nmItem.value   = "";
 	            	bssItemDataVO.nmMnfr.value   = "";
+	            	
 	            	$timeout(function() {
 	            		if(!page.isWriteable()){
 	    					$("#divBssVO .k-grid-toolbar").hide();
 	    				}
+	            		// 이전에 검색조건을 세션에 저장된 것을 가져옴
+	            		var history = UtilSvc.grid.getInquiryParam();
+		            	if(history){
+		            		bssItemDataVO.signItem.value = history.CD_CLFT;	
+		            		bssItemDataVO.nmItem.value = history.NM_ITEM;
+		            		bssItemDataVO.nmMnfr.value = history.NM_MNFR;
+		            		bssItemDataVO.adulYnIds = history.YN_ADULCTFC;
+		            		bssItemDataVO.taxClftIds = history.CD_TAXCLFT;
+		            		bssItemDataVO.iClftIds = history.CD_ITEMCLFT;
+		            		bssItemDataVO.iKindIds = history.CD_ITEMKIND;
+		            		bssItemDataVO.iStatIds = history.CD_ITEMSTAT;
+		            		bssItemDataVO.adulYnList.setSelectNames = history.YN_ADULCTFC_SELCT_INDEX;
+		            		bssItemDataVO.taxClftList.setSelectNames = history.CD_TAXCLFT_SELCT_INDEX;
+		            		bssItemDataVO.iClftList.setSelectNames = history.CD_ITEMCLFT_SELCT_INDEX;
+		            		bssItemDataVO.iKindList.setSelectNames = history.CD_ITEMKIND_SELCT_INDEX;
+		            		bssItemDataVO.iStatList.setSelectNames = history.CD_ITEMSTAT_SELCT_INDEX;
+		            		bssItemDataVO.selectedDateOption = history.DATEOPT;
+		            		bssItemDataVO.datesetting.period.start = history.DATE_FROM;
+		            		bssItemDataVO.datesetting.period.end = history.DATE_TO;
+		            		
+		            		$scope.gridBssVO.dataSource.read();
+		            	}
         			});
 	            };
 	            
 	            //조회
 	            bssItemDataVO.inQuiry = function(){
 	            	$scope.gridBssVO.dataSource.read();
+		            var param = {
+						CD_CLFT :	bssItemDataVO.signItem.value,
+						NM_ITEM : bssItemDataVO.nmItem.value,
+			        	NM_MNFR :	bssItemDataVO.nmMnfr.value,
+			        	YN_ADULCTFC : bssItemDataVO.adulYnIds,
+						CD_TAXCLFT  : bssItemDataVO.taxClftIds,
+						CD_ITEMCLFT : bssItemDataVO.iClftIds,
+						CD_ITEMKIND : bssItemDataVO.iKindIds,
+						CD_ITEMSTAT : bssItemDataVO.iStatIds,
+						YN_ADULCTFC_SELCT_INDEX : bssItemDataVO.adulYnList.allSelectNames,
+						CD_TAXCLFT_SELCT_INDEX  : bssItemDataVO.taxClftList.allSelectNames,
+						CD_ITEMCLFT_SELCT_INDEX : bssItemDataVO.iClftList.allSelectNames,
+						CD_ITEMKIND_SELCT_INDEX : bssItemDataVO.iKindList.allSelectNames,
+						CD_ITEMSTAT_SELCT_INDEX : bssItemDataVO.iStatList.allSelectNames,
+						DATEOPT     : bssItemDataVO.selectedDateOption,
+						DATE_FROM   : bssItemDataVO.datesetting.period.start,
+	                	DATE_TO     : bssItemDataVO.datesetting.period.end
+	                };
+        			// 검색조건 세션스토리지에 임시 저장
+        			UtilSvc.grid.setInquiryParam(param);
 	            };	 
 	            
 	            //초기화버튼
@@ -166,6 +209,7 @@
                     					DATE_FROM     : new Date(bssItemDataVO.datesetting.period.start.y, bssItemDataVO.datesetting.period.start.m-1, bssItemDataVO.datesetting.period.start.d, "00", "00", "00").dateFormat("YmdHis"),
                                     	DATE_TO       : new Date(bssItemDataVO.datesetting.period.end.y, bssItemDataVO.datesetting.period.end.m-1, bssItemDataVO.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis"),
                                     };
+                    				
                     				UtilSvc.getList(param).then(function (res) {
                 						e.success(res.data.results[0]);
                 					});

@@ -53,6 +53,7 @@
                 	$scope.$watch('options.setSelectNames', function (newValue) {
                 		try{
                 			if(newValue) {
+                				$scope.deselectAll();
                     			angular.forEach(newValue, function (item, index) { 
                     				$timeout(function(){
                     					$ele.find(".dropdown-menu > .nm-list:eq("+item+") > a").triggerHandler("click");
@@ -127,6 +128,7 @@
                     	self.co01McboxVO.arrayModel = [];
                         $scope.model = "";
                         self.co01McboxVO.selectNames = "";
+                    	$scope.options.allSelectNames = [];
                     };
 
                     $scope.toggleSelectItem = function (option, e) {
@@ -170,7 +172,10 @@
 	                        	}
 	                        });	                        
 	                        if($scope.options.allSelectNames){
-	                        	$scope.options.allSelectNames.push(liIndex);
+	                            if (intIndex >= 0) 
+	                            	$scope.options.allSelectNames.splice(intIndex, 1);
+	                            else 
+	                            	$scope.options.allSelectNames.push(liIndex);
 	                        }else{
 	                        	$scope.options.allSelectNames = [];
 	                        	$scope.options.allSelectNames[0] = liIndex;

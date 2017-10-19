@@ -578,7 +578,7 @@
 				 * @param {string=} psUrl
 				 */
 				setInquiryParam: function (poJson, psKind, psUrl) {
-					var fixKey = user.NO_C +''+ user.CD,
+					var fixKey = user.NO_C +''+ user.DC_ID,
 						key;
 
 					if (psUrl) {
@@ -590,7 +590,7 @@
 					if (angular.isString(psKind)) {
 						key += psKind;
 					}
-
+					console.log(poJson);
 					$window.sessionStorage.setItem(key, JSON.stringify(poJson));
 				},
 
@@ -600,7 +600,7 @@
 				 * @returns {Object}
 				 */
 				getInquiryParam: function (psKind) {
-					var fixKey = user.NO_C +''+ user.CD,
+					var fixKey = user.NO_C +''+ user.DC_ID,
 						key = fixKey +''+ MenuSvc.getNO_M($state.current.name) +'Inquiry',
 						rtnData;
 
