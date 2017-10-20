@@ -107,15 +107,15 @@
             	columns: [
             	       { field : "CD_DEF_OLD", hidden:true },   
        		           { field : "CD_DEF", title: "구분코드", width: "160" },
-    		           { field : "NM_DEF", title: "구분코드명", width: "160" },
-    		           { field : "DC_RMK1", title: "비고1", width: "100" },
-                       { field : "DC_RMK2", title: "비고2", width: "100" },
-                       { field : "DC_RMK3", title: "비고3", width: "100" },
-                       { field : "DC_RMK4", title: "비고4", width: "100" },
-                       { field : "DC_RMK5", title: "비고5", width: "100" },
-                       { field : "YN_USE", title: "사용여부", width: "120", cellClass: "ta-c", 
+    		           { field : "NM_DEF", title: "구분코드명", width: "170" },
+    		           { field : "DC_RMK1", title: "비고1", width: "90" },
+                       { field : "DC_RMK2", title: "비고2", width: "90" },
+                       { field : "DC_RMK3", title: "비고3", width: "90" },
+                       { field : "DC_RMK4", title: "비고4", width: "90" },
+                       { field : "DC_RMK5", title: "비고5", width: "90" },
+                       { field : "YN_USE", title: "사용여부", width: "100", cellClass: "ta-c", 
                     	   template: '#if (YN_USE == "Y") {# #="사용"# #} else {# #="사용안함"# #} #', editor: categoryDropDownEditor},
-                       { field : "DTS_UPDATE", title: "수정일시", width: "150", cellClass: "ta-c", enableCellEdit: false },
+                       { field : "DTS_UPDATE", title: "수정일시", width: "170", cellClass: "ta-c", enableCellEdit: false },
                        {command: [ "destroy" ]}
             	],
                 collapse: function(e) {

@@ -43,6 +43,10 @@
                 	$scope.initLoad = function () {
                 		var self = this;
                 		
+                		if($scope.options.setSelectNames) {
+                			$scope.options.allSelectNames = $scope.options.setSelectNames;
+                		}
+                		
                 		if($scope.setting) {
                     		if($scope.setting.maxNames) co01McboxVO.maxNames = $scope.setting.maxNames;
                     		if($scope.setting.id      ) co01McboxVO.id       = $scope.setting.id;
@@ -53,6 +57,7 @@
                 	$scope.$watch('options.setSelectNames', function (newValue) {
                 		try{
                 			if(newValue) {
+                				$scope.deselectAll();
                     			angular.forEach(newValue, function (item, index) { 
                     				$timeout(function(){
                     					$ele.find(".dropdown-menu > .nm-list:eq("+item+") > a").triggerHandler("click");
@@ -108,6 +113,7 @@
                     	    
                         $scope.model = "";
                         self.co01McboxVO.arrayModel = [];
+                    	$scope.options.allSelectNames = [];
                         
                         angular.forEach($scope.options, function (item, index) {
                         	var loItem = {};
@@ -115,6 +121,7 @@
                         	loItem[self.co01McboxVO.name] = item[self.co01McboxVO.name];
                         	
                         	self.co01McboxVO.arrayModel.push(loItem);
+                        	$scope.options.allSelectNames.push(index);
                         });
 
                         $scope.model                 = "*";
@@ -127,13 +134,14 @@
                     	self.co01McboxVO.arrayModel = [];
                         $scope.model = "";
                         self.co01McboxVO.selectNames = "";
+                    	$scope.options.allSelectNames = [];
                     };
 
                     $scope.toggleSelectItem = function (option, e) {
                     	var self = this,
                     		loItem = {},
                         	intIndex = -1,
-                        	liIndex = $ele.find(".dropdown-menu > .nm-list").index(e.target.parentElement);
+                        	liIndex = -1;  //선택된 항목의 index
                     	                    	
                         angular.forEach(self.co01McboxVO.arrayModel, function (item, index) {
                             if (item[self.co01McboxVO.id] == option[self.co01McboxVO.id]) {
@@ -168,14 +176,29 @@
 	                        		self.co01McboxVO.selectNames = self.co01McboxVO.selectNames + ", " +  item[self.co01McboxVO.name];
 	                        		$scope.model = $scope.model + "^" +  item[self.co01McboxVO.id];
 	                        	}
-	                        });	                        
-	                        if($scope.options.allSelectNames){
-	                        	$scope.options.allSelectNames.push(liIndex);
-	                        }else{
-	                        	$scope.options.allSelectNames = [];
-	                        	$scope.options.allSelectNames[0] = liIndex;
-	                        };
+	                        });
                         }
+                        
+                        angular.forEach($scope.options, function (item, index) {
+                        	if(item[self.co01McboxVO.id] === option[self.co01McboxVO.id]) {
+                        		liIndex = index;
+                        	}
+                        });
+                        
+                        if($scope.options.allSelectNames){
+                            if (intIndex >= 0) {
+                            	angular.forEach($scope.options.allSelectNames, function (item, index) {
+                            		if(item == liIndex) {
+                            			$scope.options.allSelectNames.splice(index, 1);
+                            		}
+                            	});
+                            }	
+                            else 
+                            	$scope.options.allSelectNames.push(liIndex);
+                        }else{
+                        	$scope.options.allSelectNames = [];
+                        	$scope.options.allSelectNames[0] = liIndex;
+                        };
                     };
 
                     $scope.getClassName = function (option) {

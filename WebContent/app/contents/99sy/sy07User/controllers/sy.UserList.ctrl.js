@@ -247,43 +247,43 @@
 		                        {	
                 	            	field: "NM_EMP",
 		                            title: "성명",
-		                            width: "100px",
+		                            width: "80px",
 		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
 		                        },                        
 		                        {	
                 	            	field: "NM_DEPT",
 		                            title: "부서",
-		                            width: "100px",
+		                            width: "70px",
 		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
 		                        },                        
 		                        {	
                 	            	field: "CD_RANK",
 		                            title: "직급",
-		                            width: "100px",
+		                            width: "60px",
 		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
 		                        },
 		                        {
 		                        	field: "NO_CEPH",	
 		                            title: "휴대폰번호",
-		                            width: 100,
+		                            width: 150,
 		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
 		                        },
 		                        {
 		                        	field: "DC_EMIADDR",	
 		                            title: "E-mail",
-		                            width: 100,
+		                            width: 200,
 		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
 		                        },
 		                        {
 		                        	field: "CD_EMPSTAT",	
 		                            title: "상태",
-		                            width: 100,
+		                            width: 50,
 		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
 		                        },
 		                        {
 		                        	field: "NO_ATRT",	
 		                            title: "권한",
-		                            width: 100,
+		                            width: 50,
 		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
 		                        },
 		                        {

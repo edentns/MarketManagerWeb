@@ -357,7 +357,7 @@
 	                        requestFailed: "요청 ERP 사용자정보를 가져오는 중 오류가 발생하였습니다.",
 	                        retry: "갱신",
 	                        commands: {
-	                        	create:'추가', cancel:'취소'
+	                        	create:'추가', cancel:'취소', destroy:'삭제'
 	                        }
 	                    },
 						edit: function (e) {
@@ -376,7 +376,6 @@
 								vo.wParam.DC_OLDADDR = "";
 								vo.wParam.DC_DETADDR = "";
 								vo.wParam.CD_PARS = "";
-								vo.wParam.NM_WAHO = "";
 								vo.wParam.CD_WAHODFT = "";
 								vo.wParam.NO_POST = "";
 								}
@@ -416,22 +415,16 @@
 	            					});
 	                			},
 	                			create: function(e) {
-	                				var param = [];
-	                				param.push(e.data);
-	                				syCInfoSvc.saveWaho(param, "I").success(function () {
+	                				syCInfoSvc.saveWaho(e.data.models, "I").success(function () {
 		                            });
 	                	        },
 	                			update: function(e) {
-	                				var param = [];
-	                				param.push(e.data);
-	                				syCInfoSvc.saveWaho(param, "U").success(function () {
+	                				syCInfoSvc.saveWaho(e.data.models, "U").success(function () {
 		                            });
 	                			},
 	                			destroy: function(e) {
-	                				var param = [];
-	                				param.push(e.data);
 	                				var defer = $q.defer();
-	                				syCInfoSvc.saveWaho(param, "D").success(function () {
+	                				syCInfoSvc.saveWaho(e.data.models, "D").success(function () {
 	            						defer.resolve();
 	                                });
 	                    			return defer.promise;
@@ -441,8 +434,8 @@
 	                					return {models:kendo.stringify(e.models)};
 	                				}
 	                			}
-	                		},/*
-	                		batch: true,*/
+	                		},
+	                		batch: true,
 	                		schema: {
 	                			model: {
 	                    			id: "NO_WAHO",
@@ -465,15 +458,15 @@
 	                	navigatable: true,
 	                	toolbar: 
 	                		[
-	                         { template: "<input type='button' class='k-button' value='추가' ng-click='gridWahoVO.add()'/>"},
+	                         { template: "<a class='k-button k-button-icontext k-grid-delivery-info' ng-click = 'gridWahoVO.add()'><span class='k-icon k-i-add'></span>추가</a>"},
 	                         "cancel"],
 	                	columns: [
-	                	       {field: "ROW_NUM",   title: "No",      width: 100, template: "<span class='row-number'></span>"},
+	                	       {field: "ROW_NUM",   title: "No",      width: 40, template: "<span class='row-number'></span>"},
 	        		           {field: "NO_WAHO",   title: "번호",     width: 100, hidden:true},
-	        		           {field: "NM_WAHO",   title: "창고명",    width: 150},
-	        		           {field: "DC_NEWADDR",  title: "주소(도로명)", width: 200},
-	        		           {field: "DC_DETADDR",  title: "주소(상세)", width: 150},
-	        		           {field: "CD_PARS",     title: "택배사", width: 150, template: 
+	        		           {field: "NM_WAHO",   title: "창고명",    width: 250},
+	        		           {field: "DC_NEWADDR",  title: "주소(도로명)", width: 300},
+	        		           {field: "DC_DETADDR",  title: "주소(상세)", width: 250},
+	        		           {field: "CD_PARS",     title: "택배사", width: 200, template: 
            		        		'#if (CD_PARS == "001") {# #="우체국택배"# #}' +
    		        	   	        'else if (CD_PARS == "002") {# #="CJ대한통운"# #}'+
         		        	   	'else if (CD_PARS == "003") {# #="롯데택배"# #}'+

@@ -228,7 +228,7 @@
 					   'ng-class="{\'active-parent active\': menu.active}" ' +
 					   'ng-style="{\'padding-left\': menu.depth * 15 +\'px\'}">' +
 						'<div class="{{menu.hasMenu}}" id="{{menu.entity.NO_M}}" p-id="{{menu.entity.ID_M_P}}">' +
-							'{{menu.name}}' +
+							'<i class="fa {{menu.className}}"></i>&nbsp;<span>{{menu.name}}</span>' +
 						'</div>' +	
 					'</a>' +
 				    '<a ng-if="menu._children.length > 0" ' +
@@ -236,8 +236,8 @@
 				       'href="#" ' +
 				       'title="{{menu.name}}" ' +
 				       'ng-class="{\'active-parent\': menu.active}" ' +
-				       'ng-style="{\'padding-left\': menu.depth * 15 +\'px\'}">' +
-				       '{{menu.name}}</a>' +
+				       'ng-style="{\'padding-left\': menu.depth * 6 +\'px\'}">' +
+				       '<i class="fa {{menu.className}}"></i>&nbsp;<span>{{menu.name}}</span></a>' +
 					'<ul ng-if="menu._children.length > 0" menu-node="menu._children" class="dropdown-menu"></ul>' +
 				'</li>'
 			);

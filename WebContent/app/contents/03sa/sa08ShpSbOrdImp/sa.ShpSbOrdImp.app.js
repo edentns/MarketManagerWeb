@@ -14,13 +14,16 @@
                     templateUrl	: "app/contents/03sa/sa08ShpSbOrdImp/templates/sa.ShpSbOrdImp.tpl.html",
                     controller  : "sa.ShpSbOrdImpCtrl",
                     resolve		: {
-                        resData: ["AuthSvc", "$q", function (AuthSvc, $q) {
+                        resData: ["AuthSvc", "$q","sa.ShpSbOrdImpSvc", function (AuthSvc, $q, saShpSbOrdImpSvc) {
                             var defer 	= $q.defer(),
                                 resData = {};
 
                             AuthSvc.isAccess().then(function (result) {
                                 resData.access = result[0];
-                                defer.resolve(resData);
+                                saShpSbOrdImpSvc.shpbyordList().then(function (res) {
+            						resData.parsDataSource = res.data;
+            						defer.resolve(resData);
+	                			});
                             });
 
                             return defer.promise;
