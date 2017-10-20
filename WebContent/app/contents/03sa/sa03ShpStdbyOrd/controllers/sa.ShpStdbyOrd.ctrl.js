@@ -87,8 +87,7 @@
 	        		cancelCodeOp : {
     					dataSource: [],
     					dataTextField: "NM_DEF",
-                        dataValueField: "CD_DEF",
-                    	valuePrimitive: true,
+                        dataValueField: "CD_DEF"
     				},   				
 	        		cancelCodeMo : "",
 	        		shipCodeTotal : "",
@@ -249,11 +248,6 @@
 	    	            			result = false;
 	        						return;
 	    	            		}
-	    	            	/*	if(!tempParam[i].NO_APVL){
-	    	            			alert('마켓 결제번호가 있는 주문만 전송 가능합니다.');
-	    	            			result = false;
-	        						return;
-	    	            		}*/
 	    	            		if(tempParam[i].INVO_YN === tempParam[i].NO_ORD){
 	    	            			alert('이미 전송 주문이 있습니다.');
 	    	            			result = false;
@@ -294,66 +288,47 @@
 	         		$cookieStore.put("moveshpStdbyOrdInfo",true);
 	         		$state.go("app.saShpStdbyOrd", { kind: null, menu: null, noOrd : getData.NO_ORD, noMrkord: getData.NO_MRKORD, noMrk: getData.NO_MRK });
 	            });
-	            
-	            //kendo grid 체크박스 옵션
-                $scope.onOrdGrdCkboxClick = function(e){
-	                var element = $(e.currentTarget);
-	                
-	                var checked = element.is(':checked'),
-	                	row = element.closest("tr"),
-	                	grid = $scope.shpbyordkg,
-	                	dataItem = grid.dataItem(row);    	               
-	                	                
-	                dataItem.ROW_CHK = checked;
-	                dataItem.dirty = true;
-	                
-//	                if(checked){
-//	                	row.addClass("k-state-selected");
-//	                }else{
-//	                	row.removeClass("k-state-selected");
-//	                };
-                };   
-	            	            
+	            	            	            
 		        //검색 그리드
 	            var grdShpbyordVO = $scope.grdShpbyordVO = {
 	            	ordCancel: function() {
-	            		var grd = $scope.shpbyordkg;
-	            		var	chked = grd.element.find(".k-grid-content input:checked"),
-            			chkedLeng = grd.element.find(".k-grid-content input:checked").length,
-            			element = $(event.currentTarget),
-	                	checked = element.is(':checked'),
-	                	row = element.parents("div").find(".k-grid-content input:checked"),
-	                	dataItem = grd.dataItems(row),
-	                	dbLength = dataItem.length;
+	            		var grd = $scope.shpbyordkg,
+	            			chked = grd.element.find(".k-grid-content input:checked"),
+            				chkedLeng = grd.element.find(".k-grid-content input:checked").length,
+            				element = $(event.currentTarget),
+            				row = element.parents("div").find(".k-grid-content input:checked"),
+            				dataItem = grd.dataItems(row);
             		
-            		var grid = $("#divShpbyordGrd").data("kendoGrid"),
-            		    op1 = {editable : {
-                    		mode: "popup",
-                    		window : {
-                    	        title: ""
-                    	    },
-                    		template: kendo.template($.trim($("#ord_popup_template").html())),
-                    		confirmation: false
-                    	}};
-            		
-            		var data = grid._data;
-            	    grid.setOptions(op1);   // 데이터 셋 옵션하면 그리드안에 데이터들이 없어져서 담아놧다가 다시 할당해줌
-            	    $scope.shpbyordkg.dataSource.data(data);
-            		/*var selected = grid.dataItem(grid.select()).NO_MRK;*/
-                    if(chkedLeng === 1){
-                    	for(var i = 0 ; i < dataItem.length; i++){
-                    		if(dataItem[i].ROW_CHK && dataItem[i].NO_MRK == "SYMR170101_00004"){   // 쿠팡 - 주문취소 막음 (?)
-                    			alert("쿠팡의 상품은 주문취소가 어렵습니다.");
-                    			return;
-                    		}
-                    	}
-                    	shpbyordDataVO.flag = true;
-                    	shpbyordDataVO.updateChange = "003";
-                		grd.editRow(chked.closest('tr'));
-                	}else if(chkedLeng > 1){
-                		alert("취소할 주문을 1개만 선택해 주세요!");
-                	}else if(chkedLeng < 1){
-                		alert("취소할 주문을 선택해 주세요!");
+	            		var grid = $("#divShpbyordGrd").data("kendoGrid"),
+	            		    op1 = {
+	            					editable : {
+			                    		mode: "popup",
+			                    		window : {
+			                    	        title: ""
+			                    	    },
+			                    		template: kendo.template($.trim($("#ord_popup_template").html())),
+			                    		confirmation: false
+	            					}
+	            			},
+	                    	data = grid._data;
+	            		
+	            	    grid.setOptions(op1);   // 데이터 셋 옵션하면 그리드안에 데이터들이 없어져서 담아놧다가 다시 할당해줌
+	            	    $scope.shpbyordkg.dataSource.data(data);
+	            		/*var selected = grid.dataItem(grid.select()).NO_MRK;*/
+	                    if(chkedLeng === 1){
+	                    	for(var i = 0 ; i < dataItem.length; i++){
+	                    		if(dataItem[i].ROW_CHK && dataItem[i].NO_MRK == "SYMR170101_00004"){   // 쿠팡 - 주문취소 막음 (?)
+	                    			alert("쿠팡의 상품은 주문취소가 어렵습니다.");
+	                    			return;
+	                    		}
+	                    	}
+	                    	shpbyordDataVO.flag = true;
+	                    	shpbyordDataVO.updateChange = "003";
+	                		grd.editRow(chked.closest('tr'));
+	                	}else if(chkedLeng > 1){
+	                		alert("취소할 주문을 1개만 선택해 주세요!");
+	                	}else if(chkedLeng < 1){
+	                		alert("취소할 주문을 선택해 주세요!");
                 	}},
                 	deliveryInfo : function() {
                 		var grd = $scope.shpbyordkg;
@@ -382,10 +357,9 @@
                     },
                     edit: function(e){
                     	e.container.find("select[name=CD_CCLRSN]").kendoDropDownList({
-                			dataSource : shpbyordDataVO.cancelCodeOp.dataSource,
+                				dataSource : shpbyordDataVO.cancelCodeOp.dataSource,
                     			dataTextField : "NM_DEF",
-	                    		dataValueField : "CD_DEF",
-	                    		valuePrimitive: true
+	                    		dataValueField : "CD_DEF"
                 		});
                     	if(shpbyordDataVO.flag){
                     		var ddl = $("select[name=CD_CCLRSN]").data("kendoDropDownList");
@@ -416,12 +390,12 @@
             				alert("그리드에 데이터가 없습니다.");
             			}else{
             				var getParam = $cookieStore.get("shpStdbyOrdSerchParam");
-            				var colVo = angular.copy(grdShpbyordVO.columns);
+            				var colVo = angular.copy($scope.grdShpbyordVO.columns);
             				colVo.splice(0,1);
             				getParam.gridInfo       = [colVo,[{field:"NM_MRK",title:"마켓명"},{field:"CD_DEF",title:"택배사코드"},{field:"NM_DEF",title:"택배사명"},{field:"NM_SHPCLFT",title:"택배사구분"}]];
-            				getParam.procedureParam = grdShpbyordVO.excelVO.procedureParam;
-            				getParam.gridTitle      = grdShpbyordVO.excelVO.gridTitle;   
-            				getParam.downfilename   = grdShpbyordVO.excel.fileName;
+            				getParam.procedureParam = $scope.grdShpbyordVO.excelVO.procedureParam;
+            				getParam.gridTitle      = $scope.grdShpbyordVO.excelVO.gridTitle;   
+            				getParam.downfilename   = $scope.grdShpbyordVO.excel.fileName;
             				UtilSvc.getExcelDownload(getParam).then(function(result) {
     						});
             			}
@@ -444,7 +418,7 @@
             						e.success(res.data.searchList);	                    					                   				                    					
                     			});
                 			},
-                			update: function(e){
+                			update: function(e){                				
                 				switch(shpbyordDataVO.updateChange){
                 					case '001' : {
                 						if(confirm("송장정보를 출력 하시겠습니까?")){
@@ -466,12 +440,16 @@
                 						break;
                 					}
                 					case '002' : {
+                						var grd = $scope.shpbyordkg;
+                						
                 						if(confirm("배송정보를 등록 하시겠습니까?")){
                         					var defer = $q.defer(),
         	                			 	    param = e.data.models.filter(function(ele){
         	                			 	    	return ele.ROW_CHK === true;
-        	                			 	    });                        					
+        	                			 	    });
+                        					                        					
                         					if(!updateValidation(param, shpbyordDataVO.updateChange)){
+                        						grd.cancelChanges();
                         						return;
                         					}	                					                          					
                         					saShpStdbyOrdSvc.shpInReg(param).then(function (res) {
@@ -481,6 +459,9 @@
         		                				$scope.shpbyordkg.dataSource.read();
         		                			});
         		                			return defer.promise;
+                						}else{
+                							grd.cancelChanges();
+                                			angular.element($("#grd_chk_master")).prop("checked",false);
                 						}  
                 						break;
                 					}
@@ -503,8 +484,7 @@
                 					default : {
                 						break;
                 					}
-                				}                				
-                				              					
+                				}                		
                 			},                			
                 			parameterMap: function(e, operation) {
                 				if(operation !== "read" && e.models) {
@@ -512,9 +492,16 @@
                 				}
                 			}
                 		},
+                		saveChanges: function(e) {
+                			console.log("1");
+                		},
                 		change: function(e){
+                			if(e.field === 'CD_PARS' || e.field === 'NO_INVO'){
+                				return false;	
+                			};		
                 			var data = this.data();
                 			shpbyordDataVO.dataTotal = data.length;
+                			
                 			angular.element($("#grd_chk_master")).prop("checked",false);
                 		},
                 		/*pageSize: 6,*/
@@ -679,8 +666,7 @@
 															nullable: false,
 															validation: {
 																cd_parsvalidation: function (input) {
-																	var self = this;
-					  									    		if (input.is("[name='CD_PARS']") && input.val() == "") {
+					  									    		if (input.is("[name='CD_PARS']") && !input.val()) {
 			                                                        	input.attr("data-cd_parsvalidation-msg", "택배사를 입력해 주세요.");
 			                                                            return false;
 			                                                        }
@@ -693,39 +679,39 @@
 															editable: true,
 															nullable: false,
 															validation: {
-																no_invovalidation: function (input) {
-					  									    		if (input.is("[name='NO_INVO']") && input.val().length > 100) {
-			                                                        	input.attr("data-no_invovalidation-msg", "송장번호를 100자 이내로 입력해 주세요.");
-			                                                            return false;
-			                                                        }
-				                                                  return true;
+																no_invovalidation: function (input) {	
+																	return Util03saSvc.NoINVOValidation(input, 'NO_INVO', 'no_invovalidation');																	
 				  									    	  	}
 															}
 								    				   },
-								    CD_CCLRSN     :    { type: "string"      , 
+								    CD_CCLRSN     :    { 
+								    						type: "array", 
 									                        validation: {
 									                            cd_cclrsnvalidation: function (input) {
-									                                    if (input.is("[name='CD_CCLRSN']") && input.val() === "") {
+									                                if (input.is("[name='CD_CCLRSN']") && input.val() === "") {
 									                                    input.attr("data-cd_cclrsnvalidation-msg", "취소 사유코드를 입력해 주세요.");
 									                                    return false;
 									                                }
 									                              return true;
-									                              }
+									                           }
 									                        }
 					                                    },
-					                DC_CCLRSNCTT  :     { type: APP_SA_MODEL.DC_CCLRSNCTT.type   , editable: true , nullable: false,
+					                DC_CCLRSNCTT  :     { 
+					                						type: APP_SA_MODEL.DC_CCLRSNCTT.type,   
+					                						editable: true, 
+					                						nullable: false,
 									                    	validation: {
 									                            dc_cclrsncttvalidation: function (input) {
-									                                    if (input.is("[name='DC_CCLRSNCTT']") && input.val() === "") {
+									                                if (input.is("[name='DC_CCLRSNCTT']") && input.val() === "") {
 									                                    input.attr("data-dc_cclrsncttvalidation-msg", "주문취소사유를 입력해 주세요.");
 									                                    return false;
 									                                }
-									                                    if(input.val().length > 1000){
-									                                        input.attr("data-dc_cclrsncttvalidation-msg", "주문취소사유를 1000자 이내로 입력해 주세요.");
+									                                if(input.val().length > 1000){
+									                                    input.attr("data-dc_cclrsncttvalidation-msg", "주문취소사유를 1000자 이내로 입력해 주세요.");
 									                                    return false;
-									                                    }
-									                              return true;
-									                                  }
+									                                }
+									                                return true;
+									                            }
 									                        }
 					                                    }
                 				}
@@ -737,7 +723,7 @@
 			                        field: "ROW_CHK",
 			                        title: "<input class='ROW_CHK k-checkbox' type='checkbox' id='grd_chk_master' ng-click='onOrdGrdCkboxAllClick($event)'><label class='k-checkbox-label k-no-text' for='grd_chk_master' style='margin-bottom:0;'>​</label>",				                        
 			                        width: 50,
-			                        template: "<input class='k-checkbox' data-role='checkbox' type='checkbox' ng-click='onOrdGrdCkboxClick($event)' id='#= uid #_alt'><label class='k-checkbox-label k-no-text' for='#= uid #_alt'></label>",
+			                        template: "<input class='k-checkbox' data-role='checkbox' type='checkbox' ng-click='onOrdGrdCkboxClick($event)' id='#= uid #'><label class='k-checkbox-label k-no-text' for='#= uid #'></label>",
 			                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}			                          
                 	            },    
                                	{
@@ -763,18 +749,7 @@
 	                                title: "결제번호 / 상품번호",
 	                                width: 100,
 	                                template: function(e){
-	                                	var str = "";
-	                                	if(e.NO_APVL == null || e.NO_APVL == "undefined" ){
-	                                		str += '- / ';
-	                                	}else{
-	                                		str += e.NO_APVL+" / ";
-	                                	}
-	                                	if(e.NO_MRKREGITEM == null || e.NO_MRKREGITEM == "undefined"){
-	                                		str += '-';
-	                                	}else{
-	                                		str += e.NO_MRKREGITEM;
-	                                	}
-	                                   	return str;                                   	
+	                                   	return ((e.NO_APVL) ? e.NO_APVL : '')+' / '+ ((e.NO_MRKREGITEM) ? e.NO_MRKREGITEM : '');                                   	
                                     },
 			                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}		                                       		
 	                            },		                        
@@ -795,7 +770,8 @@
 		                            title: "상품명 / 옵션(상품구성) / 주문수량",
 		                            width: 100,
 		                            template: function(e){
-	                                   	return e.NM_MRKOPT == true ? e.NM_MRKITEM + " / ("+e.NM_MRKOPT+") / (" + e.QT_ORD+ ")" : e.NM_MRKITEM + " / "+e.QT_ORD+" 개";                                   	
+	                                   	return ((e.NM_MRKITEM) ? e.NM_MRKITEM : '') + " / " 
+	                                   	+ ((e.NM_MRKOPT) ? e.NM_MRKOPT : '') + " / " + ((e.QT_ORD) ? e.QT_ORD : '') +" 개";                        	
                                     },
 		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
 		                        },
@@ -830,7 +806,7 @@
 		                            	  dbbox = "",
 		                            	  input = "";
 		                            			                            	
-	                            		if(nmd){        
+	                            		if(nmd){
 	                            			if(!nmd.hasOwnProperty("CD_PARS")){
 	                            				input = e.NO_MRK;
 		                            			
@@ -937,127 +913,19 @@
 		                            title: "연동구분",
 		                            width: 100,
 		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
-		                        }/*,       
-		                        {	// 기획서에 없어지만 내가 추가함
-		                        	field: "INVO_YN",
-		                            title: "전송 유무",
-		                            width: 100,
-		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
-		                            template: function(e){
-		                            	if(e.INVO_YN === e.NO_ORD){
-		                            		return "전송";
-		                            	}else{
-		                            		return "미전송";
-		                            	}
-		                            }
-		                        }*/
+		                        }
                     ]                	          	
 	        	};
-	            
-	            $scope.$on("kendoWidgetCreated", function(event, widget){    // 위젯은 그리드를 setOptions 를 하면 초기화 되어 작동을 하지 않았다.
-                	var grd = $scope.shpbyordkg;
-                	
-	                if (widget === grd){
-	                	//송장출력
-	                	/*widget.element.find(".k-grid-no-out").on("click", function(e){
-	                		var chkedLeng = grd.element.find(".k-grid-content input:checked").length;
-	                		
-		                	if(chkedLeng < 1){
-		                		alert("송장 정보를 출력 하실 주문을 선택해 주세요!");
-		                		return;
-		                	}
-		                	shpbyordDataVO.updateChange = "001";
-	                		grd.saveChanges();
-	                	});*/
-	                	
-	                	//배송정보등록
-	                	/*widget.element.find(".k-grid-delivery-info").on("click", function(e){	 
-	                		
-	                	});  */
-	                	
-	                	//주문취소
-	                	/*widget.element.find(".k-grid-edit").on("click", function(e){
-	                		
-	                	});*/
-	                	
-	                	//배송정보전송
-	                	/*widget.element.find(".k-grid-delivery-info-send").on("click", function(e){	 
-	                		var chkedLeng = grd.element.find(".k-grid-content input:checked").length;
-	                		
-		                	if(chkedLeng < 1){
-		                		alert("배송 정보를 전송 하실 주문을 선택해 주세요!");
-		                		return;
-		                	}
-		                	shpbyordDataVO.updateChange = "003";
-	                		grd.saveChanges();
-	                	}); */     
-	                	
-	                	//주문 상세 정보로 이동
-	                	/*widget.tbody.dblclick(function(ev){
-	                		
-	                    });*/
-	                }
-                });            
 	           
 	            //kendo grid 체크박스 옵션
                 $scope.onOrdGrdCkboxClick = function(e){
-	                var i = 0,
-	                	element = $(e.currentTarget),
-	                	checked = element.is(':checked'),
-	                	row = element.closest("tr"),
-	                	grid = $scope.shpbyordkg,
-	                	dataItem = grid.dataItem(row),
-	                	allChecked = true;
-	                 	                
-	                dataItem.ROW_CHK = checked;
-	                dataItem.dirty = checked;
-	                
-	                for(i; i<grid.dataSource.data().length; i+=1){
-	                	if(!grid.dataSource.data()[i].ROW_CHK){
-	                		allChecked = false;
-	                	}
-	                }
-	                
-	                angular.element($("#grd_chk_master")).prop("checked",allChecked);
-	                
-	                if(checked){
-	                	row.addClass("k-state-selected");
-	                }else{
-	                	row.removeClass("k-state-selected");
-	                };
+                	UtilSvc.grdCkboxClick(e, $scope.shpbyordkg);
                 };
-                
-                $scope.shpbyordDataVO.cookieSearchPlay();
                 
                 //kendo grid 체크박스 all click
                 $scope.onOrdGrdCkboxAllClick = function(e){
-	                var i = 0,
-	                	element = $(e.currentTarget),
-	                	checked = element.is(':checked'),
-	                	row = element.parents("div").find(".k-grid-content table tr"),
-	                	grid = $scope.shpbyordkg,
-	                	dataItem = grid.dataItems(row),
-	                	dbLength = dataItem.length;
-	                
-	                if(dbLength < 1){	                	
-	                	alert("전체 선택 할 데이터가 없습니다.");
-	                	angular.element($("#grd_chk_master")).prop("checked",false);
-	                	return;
-	                };   
-	                
-	                for(i; i<dbLength; i += 1){
-	                	dataItem[i].ROW_CHK = checked;
-	                	dataItem[i].dirty = checked;
-	                };
-	                
-	                if(checked){
-	                	row.addClass("k-state-selected");
-	                	row.find(".k-checkbox").prop( "checked", true );
-	                }else{
-	                	row.removeClass("k-state-selected");
-	                	row.find(".k-checkbox").prop( "checked", false );
-	                };
-                };	           
+                	UtilSvc.grdCkboxAllClick(e, $scope.shpbyordkg);
+                };		            	           
 	                         
             }]);                              
 }());

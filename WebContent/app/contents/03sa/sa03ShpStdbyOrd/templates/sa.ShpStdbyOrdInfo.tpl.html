@@ -242,7 +242,8 @@
                        				data-eden-type="kor"
                        				style="width: 100%;" 
 									data-required-msg="송장번호를 입력해 주세요."
-									data-lengthy-msg="송장번호를 100자 이내로 입력해 주세요."
+									data-lengthy-msg="송장번호를 3자이상 100자 이내로 입력해 주세요."
+									data-reg-msg="송장 번호는 택배사에 따라 숫자 또는 숫자 와 '-'(짝대기, 연속으로 안됨) 조합으로 가능합니다."
 									ng-disabled="ordInfoDataVO.ds.CD_ORDSTAT > '003'"									
 								<span class="k-invalid-msg" data-for="NO_INVO"></span>	
                        		</td>
@@ -256,8 +257,8 @@
     </div>
    	   	
 	<div class="btn-group1 mt-20 mb-20">
-		<kendo-button type="submit" ng-click="ordInfoDataVO.shpInfoReg()" style="width:100px;" ><span class="k-icon k-i-add"></span>배송정보등록</kendo-button>
-		<kendo-button type="button" ng-click="ordInfoDataVO.ordCancelPopOptionsOpen()" style="width:100px;"><span class="k-icon k-i-close"></span>주문취소</kendo-button>
+		<kendo-button type="submit" ng-click="ordInfoDataVO.shpInfoReg()" style="width:100px;" ng-if="ordInfoDataVO.ds.CD_ORDSTAT === '002'"><span class="k-icon k-i-add"></span>배송정보등록</kendo-button>
+		<kendo-button type="button" ng-click="ordInfoDataVO.ordCancelPopOptionsOpen()" style="width:100px;"  ng-if="['001','002'].indexOf(ordInfoDataVO.ds.CD_ORDSTAT) >= 0"><span class="k-icon k-i-close"></span>주문취소</kendo-button>
 		<kendo-button type="button" ng-click="ordInfoDataVO.goBack()" style="width:80px;"><span class="k-icon k-i-undo"></span>목록</kendo-button>   
 	</div>
 	

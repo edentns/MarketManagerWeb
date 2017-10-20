@@ -123,11 +123,11 @@
 	            //popup insert & update Validation
 	            $scope.readValidation = function(idx){
 	            	var result = true;	            	
-            		if(idx.I_NO_MRK === null || idx.I_NO_MRK === ""){ $scope.showPopup("마켓명을 입력해 주세요."); result = false; return; };
-            		if(idx.I_CD_INQSTAT === null || idx.I_CD_INQSTAT === ""){ $scope.showPopup("상태값을 입력해 주세요."); result = false; return;};
+            		if(idx.I_NO_MRK === null || idx.I_NO_MRK === ""){ alert("마켓명을 입력해 주세요."); result = false; return; };
+            		if(idx.I_CD_INQSTAT === null || idx.I_CD_INQSTAT === ""){ alert("상태값을 입력해 주세요."); result = false; return;};
             		//LIKE 로 바뀌면서 필수값에서 해제 됨
             		//if(idx.I_NM_INQCLFT === null || idx.I_NM_INQCLFT === ""){ $scope.showPopup("문의 구분을 입력해 주세요."); result = false; return;};
-            		if(idx.I_DTS_INQREG_F > idx.I_DTS_INQREG_T){ $scope.showPopup("문의일자를 올바르게 입력해 주세요."); result = false; return;};            		
+            		if(idx.I_DTS_INQREG_F > idx.I_DTS_INQREG_T){ alert("문의일자를 올바르게 입력해 주세요."); result = false; return;};            		
 	            	return result;
 	            };	               
 	            //cs 검색 그리드
@@ -158,7 +158,7 @@
                     				var defer = $q.defer(),
     	                			 	param = e.data.models[0];       
                     				if(param.CD_INQSTAT === "002"){
-                    					$scope.showPopup("이미 답변이 등록되어 있습니다.");
+                    					alert("이미 답변이 등록되어 있습니다.");
                     					return false;
                     				};
                     				csInqSvc.csUpdate(param).then(function(res) {
@@ -401,11 +401,8 @@
 	                dataItem.ROW_CHK = checked;
 	                dataItem.dirty = checked;
 	                
-	                if (checked) {
-	                	row.addClass("k-state-selected");
-	                } else {
-	                	row.removeClass("k-state-selected");
-	                };
+	                checked ? row.addClass("k-state-selected") : row.removeClass("k-state-selected");
+	                
                 };
                 
                 $scope.onCsGridEditClick = function(){            	
@@ -415,49 +412,22 @@
                 	
                 	if(chkedLeng === 1){
                 		grd.editRow(chked.closest('tr'));
-                	}else if(chkedLeng > 1){
+                	}else{
                 		//alert("답변 하실 데이터를 1개만 선택해 주세요.");
-                		$scope.showPopup("답변 하실 데이터를 1개만 선택해 주세요.");
-                	}else if(chkedLeng < 1){
-                		//alert("답변 하실 데이터를 선택해 주세요.");
-                		$scope.showPopup("답변 하실 데이터를 선택해 주세요.");
+                		alert("답변 하실 데이터를 1개만 선택해 주세요.");
+                		return false;
                 	}
                 };	
                 
                 $scope.onOpen = function(){
-                	$scope.showPopup("문의정보 가져오기는 준비중 입니다.");
-                	return;
+                	alert("문의정보 가져오기는 준비중 입니다.");
+                	return false;
                 };
                 
                 $scope.onSend = function(){
-                	$scope.showPopup("답변 전송하기는 준비중 입니다.");
-                	return;
-                };
-                
-                //alert 경고
-                $scope.notf1Options = {
-            		position: {
-                        // notification popup will scroll together with the other content
-                        pinned: false,
-                        // the first notification popup will appear 30px from the viewport's top and right edge
-                        bottom: 0,
-                        right: 0,
-                        height: 300,
-                        width: 250
-                    },	
-                    templates: [{                    	
-                        type: "warning",
-                        template: $("#notificationTemplate").html()
-                    }]
-                };
-
-                $scope.ngValue = "[닫기]";
-
-                $scope.showPopup = function (msg) {
-                    $scope.notf1.show({
-                      kValue: msg
-                    }, "warning");
-                };
+                	alert("답변 전송하기는 준비중 입니다.");
+                	return false;
+                };                
                 
             }]);
 }());

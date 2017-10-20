@@ -78,44 +78,6 @@
                     }
 	            });
 	            
-	            /*//주문 취소 코드 드랍 박스
-	            var cancelCodeOp = new kendo.data.DataSource({
-                    transport: {
-                        read: function(e) {
-                    		var param = {
-            					lnomngcdhd: "SYCH00056",
-            					lcdcls: "SA_000015"
-            				};
-                			UtilSvc.getCommonCodeList(param).then(function (res) {
-                				if(res.data.length >= 1){
-                					e.success(res.data);
-                				}else{
-                					e.error();
-                				}
-                			});	
-                        }
-                    }
-	            });
-
-	            //배송 지연 코드 드랍 박스
-	            var delayCodeOp = new kendo.data.DataSource({
-                    transport: {
-                        read: function(e) {
-                        		var param = {
-                					lnomngcdhd: "SYCH00062",
-                					lcdcls: "SA_000021"
-                				};
-                    			UtilSvc.getCommonCodeList(param).then(function (res) {
-                    				if(res.data.length >= 1){
-                    					e.success(res.data);
-                    				}else{
-                    					e.error();
-                    				}
-                    			});	
-                        }
-                    }
-		        });*/
-	            
 	            var grdField =  {
                     ROW_CHK       : { type: APP_SA_MODEL.ROW_CHK.type        , editable: true , nullable: false },
                     NO_ORD        : { type: APP_SA_MODEL.NO_ORD.type         , editable: false, nullable: false },
@@ -141,31 +103,32 @@
                     DC_CONSOLDADDR: { type: APP_SA_MODEL.DC_CONSOLDADDR.type , editable: false, nullable: false },
                     CD_ORDSTAT    : { type: APP_SA_MODEL.CD_ORDSTAT.type     , editable: false, nullable: false },
                     DC_SHPWAY     : { type: APP_SA_MODEL.DC_SHPWAY.type      , editable: false, nullable: false },
-
                     DTS_ORD       : { type: APP_SA_MODEL.DTS_ORD.type        , editable: false, nullable: false },
-                    DT_SND        : { type: APP_SA_MODEL.DT_SND.type         , editable: false, nullable: false },
-                    
+                    DT_SND        : { type: APP_SA_MODEL.DT_SND.type         , editable: false, nullable: false },                    
                     QT_ORD        : { type: APP_SA_MODEL.QT_ORD.type         , editable: false, nullable: false },
                     CD_SHPSTAT    : { type: APP_SA_MODEL.CD_SHPSTAT.type     , editable: false, nullable: false },
-                    CD_PARS       : { type: APP_SA_MODEL.CD_PARS.type        , editable: true , nullable: false,
+                    CD_PARS       : { type: APP_SA_MODEL.CD_PARS.type        , editable: false, nullable: false },
+                    CD_PARS_INPUT : { 
+                    					type: APP_SA_MODEL.CD_PARS.type, 
+                    					editable: true,
+                    					nullable: false,
 				                    	validation: {
-											cd_parsvalidation: function (input) {
-												if (input.is("[name='CD_PARS']") && input.val() === "") {
-													input.attr("data-cd_parsvalidation-msg", "택배사를 선택해 주세요.");
+				                    		cd_pars_inputvalidation: function (input) {
+												if (input.is("[name='CD_PARS_INPUT']") && !input.val()) {
+													input.attr("data-cd_pars_inputvalidation-msg", "택배사를 선택해 주세요.");
 												    return false;
 												}
 												return true;
 											}
 										}
                     				},
-                    NO_INVO       : { type: APP_SA_MODEL.NO_INVO.type        , editable: true , nullable: false,
+                    NO_INVO       : { 
+                    					type: APP_SA_MODEL.NO_INVO.type, 
+                    					editable: true,
+                    					nullable: false,
 				                    	validation: {
-											no_invpvalidation: function (input) {
-												if (input.is("[name='NO_INVO']") && input.val() === "") {
-													input.attr("data-no_invpvalidation-msg", "송장번호를 입력해 주세요.");
-												    return false;
-												}
-												return true;
+				                    		no_invovalidation: function (input) {
+				                    			return Util03saSvc.NoINVOValidation(input, 'NO_INVO', 'no_invovalidation');													
 											}
 										}
 				    				}
@@ -174,8 +137,8 @@
                 APP_SA_MODEL.CD_ORDSTAT.fNm = "shippingDataVO.ordStatusOp";
                 APP_SA_MODEL.CD_SHPSTAT.fNm = "shippingDataVO.shipStatusOp";
                 
-                var grdCol = [[APP_SA_MODEL.ROW_CHK],
-                              [APP_SA_MODEL.NO_ORD       , APP_SA_MODEL.NO_APVL       ],
+                var grdCol = [[APP_SA_MODEL.ROW_CHK],                              
+                              [APP_SA_MODEL.NO_ORD         , [APP_SA_MODEL.NO_APVL, APP_SA_MODEL.NO_MRKORD]],
                               [APP_SA_MODEL.NM_MRK       , APP_SA_MODEL.NO_MRKORD     ],
                               [APP_SA_MODEL.NO_MRKITEM   , APP_SA_MODEL.NO_MRKREGITEM ],
                               [APP_SA_MODEL.NM_MRKITEM   , APP_SA_MODEL.NM_MRKOPT     ],
@@ -235,18 +198,6 @@
                         dataValueField: "CD_PARS",
                     	valuePrimitive: true
 	        		},
-	        		/*delayCodeOp: {
-	        			dataSource: delayCodeOp,
-	        			dataTextField:"NM_DEF",
-	                    dataValueField:"CD_DEF",
-	                    valuePrimitive: true
-	        		},
-	        		cancelCodeOp:{
-	        			dataSource: cancelCodeOp,
-	        			dataTextField:"NM_DEF",
-	                    dataValueField:"CD_DEF",
-	                    valuePrimitive: true
-	        		},*/
 	        		param : ""
 	            };   
 	            
@@ -322,9 +273,6 @@
                     	messages: UtilSvc.gridPageableMessages
                     },
                     noRecords: true,
-                  /*  dataBound: function(e) {
-                        this.expandRow(this.tbody.find("tr.k-master-row").first());// 마스터 테이블을 확장하므로 세부행을 볼 수 있음     
-                    },*/
                     collapse: function(e) {
                         this.cancelRow();
                     },       
@@ -339,9 +287,10 @@
                     edit: function(e){
                     	// ng-if가  edit보다 나오는 순서가 늦음어서 timeout 사용
                     	$timeout(function(){
-                    		var ddl = $("select[name=CD_PARS]").data("kendoDropDownList");
+                    		var ddl = $("select[name=CD_PARS_INPUT]").data("kendoDropDownList");
+                    		
                     		ddl.value(shippingDataVO.selectedCdPars);
-                        	ddl.trigger("change");	
+                        	ddl.trigger("change");
                     	},500);
                     },
                 	scrollable: true,
@@ -359,6 +308,7 @@
             					});  
                 			},
                 			update: function(e){
+                				var shpingGrd = $scope.shippingkg;
                 				// 배송정보 수정
                 				if(confirm("배송정보를 수정 하시겠습니까?")){
                 					var defer = $q.defer(),
@@ -380,71 +330,11 @@
                 							alert("배송정보를 수정하는데 실패 하였습니다.");
                 							e.error();
                 						}
-                					}); 
-                					
+                					});                 					
 		                			return defer.promise;
-            	            	}
-                				/*switch(shippingDataVO.updateChange){
-                					case '001' : {
-                						if(confirm("배송지연 사유를 저장 하시겠습니까?")){
-                        					var defer = $q.defer(),
-                        						whereIn = ["001","002","003","004","009"],
-        	                			 	    param = e.data.models.filter(function(ele){
-        	                			 	    	return ele.ROW_CHK === true && (whereIn.indexOf(ele.CD_ORDSTAT) > -1) ;
-        	                			 	    }); 
-                        					
-                        					if(param.length !== 1){
-                        						alert("배송지연을 등록할 수 있는 주문상태가 아닙니다.");
-                        						return;
-                        					};
-                        					
-                        					saShpIngSvc.delay(param[0]).then(function (res) {
-                        						defer.resolve();
-                        						if(res.data === "success"){
-                        							alert("배송지연을 등록 하였습니다.");
-            	            						$scope.shippingkg.dataSource.read();
-                        						}else{
-                        							alert("배송지연을 등록하는데 실패 하였습니다.");
-                        							e.error();
-                        						}
-                        					}); 
-                        					
-        		                			return defer.promise;
-                    	            	}
-                						break;
-                					}
-                					case '002' : {
-                						if(confirm("주문 취소 사항을 저장 하시겠습니까?")){
-                        					var defer = $q.defer(),
-                        						whereIn = ["001","002","003","004","005"],	
-                        						param = e.data.models.filter(function(ele){
-        	                			 	    	return ele.ROW_CHK === true && (whereIn.indexOf(ele.CD_ORDSTAT) > -1) ;
-        	                			 	    });    
-                        					
-                        					if(param.length !== 1){
-                        						alert("취소 할 수 있는 주문상태가 아닙니다.");
-                        						return;
-                        					};
-                        					
-                        					saOrdCclSvc.orderCancel(param[0]).then(function (res) {
-                        						defer.resolve();
-                        						if(res.data === "success"){
-                        							//alert("주문을 취소 하였습니다.");
-                        							//shippingDataVO.ordStatusMo = (shippingDataVO.ordStatusMo === '*') ? shippingDataVO.ordStatusMo : shippingDataVO.ordStatusMo + "^006";
-            	            						$scope.shippingkg.dataSource.read();
-                        						}else{
-                        							//alert("주문취소를 실패하였습니다.");
-                        							e.error();
-                        						};
-                        					});   
-        		                			return defer.promise;
-                						}  
-                						break;
-                					}
-                					default : {
-                						break;
-                					}
-                				}*/             					
+            	            	}else{
+            	            		shpingGrd.cancelChanges();
+            	            	}      					
                 			},                			
                 			parameterMap: function(e, operation) {
                 				if(operation !== "read" && e.models) {
@@ -455,7 +345,6 @@
                 		change: function(e){
                 			var data = this.data();
                 			shippingDataVO.dataTotal = data.length;
-                			//angular.element($(".k-checkbox:eq(0)")).prop("checked",false);
                 		},                		
                 		pageSize: 9,
                 		batch: true,
@@ -466,7 +355,7 @@
                 			}
                 		},
                 	}),                	
-                	columns: grdDetOption.gridColumn,            	          	
+                	columns: grdDetOption.gridColumn      	          	
 	        	};
 
 	            UtilSvc.gridtooltipOptions.filter = "td div";
@@ -474,32 +363,37 @@
 		        
 	            //kendo grid 체크박스 옵션
                 $scope.onOrdGrdCkboxClick = function(e){
-	                var i = 0,
-	                	element = $(e.currentTarget),
+	                var element = $(e.currentTarget),
 	                	checked = element.is(':checked'),
 	                	row = element.closest("tr"),
 	                	grid = $scope.shippingkg,
-	                	dataItem = grid.dataItem(row),
-	                	allChecked = true;
+	                	dataItem = grid.dataItem(row);
 	                 	                
 	                dataItem.ROW_CHK = checked;
 	                dataItem.dirty = checked;
 	                
-	                /*for(i; i<element.parents('tbody').find("tr").length; i+=1){
-	                	if(!element.parents('tbody').find("tr:eq("+i+")").find(".k-checkbox").is(":checked")){
-	                		allChecked = false;
-	                	}
-	                }*/
-	                
-	                //angular.element($(".k-checkbox:eq(0)")).prop("checked",allChecked);
-	                
-//	                if(checked){
-//	                	row.addClass("k-state-selected");
-//	                }else{
-//	                	row.removeClass("k-state-selected");
-//	                };
+	                if(checked){
+	                	row.addClass("k-state-selected");
+	                }else{
+	                	row.removeClass("k-state-selected");
+	                };
                 };
-	            
+
+                //한번 틀리고 원래 값으로 변경 하면 경고문구가 사라지지 않음
+                $scope.popupUtil = {
+                	blur : function(e){
+                		var element = $(e.currentTarget),
+                			msg = element.closest("tr").find(".k-invalid-msg"),
+                		    inputText = element.closest("input").val(),
+                		    //regTest = /^[0-9]{1}[0-9\-]+[0-9]{1}$/;
+                    	    regTest = /^(([\d]+)\-|([\d]+))+(\d)+$/;
+                		
+                		if(regTest.test(inputText) && msg.length > 0){
+                			msg.hide();
+                		}
+                	}
+                };
+                
 	            $scope.$on("kendoWidgetCreated", function(event, widget){
                 	var grd = $scope.shippingkg;
                 	
@@ -526,77 +420,7 @@
 	                				break;
 	                			}	                			
 	                		}
-	                	});
-	                	
-	                	//베송지연
-	                	/*widget.element.find(".k-grid-delay").on("click", function(e){
-	                		var chked = grd.element.find(".k-grid-content input:checked");
-	                		
-	                		switch(chked.length){
-	                			case 1 : {
-	                				var dataItem = grd.dataItem(chked.closest("tr")), 
-	                					 whereIn = ["001","002","003","004","009"];
-	                				
-	                				if(whereIn.indexOf(dataItem.CD_ORDSTAT) <= -1){
-	            						alert("배송지연을 등록할 수 있는 주문상태가 아닙니다.");
-	            						break;
-	            					};	                				
-	                				if(dataItem.DC_SHPDLYRSN){
-	                					if(confirm("이미 배송지연사유를 등록 하셨습니다. 수정하시겠습니까?!")){
-	                						
-	                					}else{
-	                						break;
-	                					}
-	                				};	           			
-            						shippingDataVO.updateChange = "001";
-	    	                		grd.editRow(chked.closest("tr"));	    	                		
-	                				break;	
-	                			}
-	                			case 0 : {
-	                				alert("배송지연 하실 주문을 선택해 주세요!");
-	                				break;
-	                			}
-	                			default : {
-	                				alert("배송지연 하실 주문을 1개만 선택해 주세요!");
-	                				break;
-	                			}	                			
-	                		}
-	                	});
-	                	
-	                	//주문취소
-	                	widget.element.find(".k-grid-ocl").on("click", function(e){	 
-	                		var chked = grd.element.find(".k-grid-content input:checked");
-	                		
-	                		switch(chked.length){
-	                			case 1 : {
-	                				var dataItem = grd.dataItem(chked.closest("tr")), 
-	                					 whereIn = ["006","007","008","009"];
-	                				
-	                				if(whereIn.indexOf(dataItem.CD_ORDSTAT) > -1){
-	            						alert("취소 할  수 있는 주문상태가 아닙니다.");
-	            						break;
-	            					}; 					
-	            					
-	        						shippingDataVO.updateChange = "002";
-	    	                		grd.editRow(chked.closest("tr"));
-	    	                		
-	                				break;	
-	                			}
-	                			case 0 : {
-	                				alert("주문을 선택해 주세요!");
-	                				break;
-	                			}
-	                			default : {
-	                				alert("주문을 1개만 선택해 주세요!");
-	                				break;
-	                			}	                			
-	                		}	                		
-	                	}); */           
-	                	
-	                	//배송 완료 가져오기
-	                	widget.element.find(".k-grid-open-finished").on("click", function(e){	 
-	                		alert("배송완료 가져오기는 준비중입니다.");
-	                	});   
+	                	});	                	
 	                }
                 });  
             }]);

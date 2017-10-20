@@ -34,6 +34,7 @@
         			UtilSvc.getCommonCodeList(param).then(function (res) {
         				if(res.data.length >= 1){
         					ordInfoDataVO.cancelCodeOptions.dataSource = res.data;
+        					ordInfoDataVO.inputs.CD_CCLRSN = res.data[0];
         				}
         			});
 	            }());                 	
@@ -48,8 +49,7 @@
 	        		cancelCodeOptions : {
 	        			dataSource: [],
     					dataTextField: "NM_DEF",
-                        dataValueField: "CD_DEF",
-                    	valuePrimitive: true
+                        dataValueField: "CD_DEF"
 	        		},
 	        		orderInfo : { boxTitle : "주문 정보" },
 	        		procInfo : { boxTitle : "제품 정보" },
@@ -57,7 +57,7 @@
 	        		receiveInfo : { boxTitle : "수령인 정보" },
 	        		deliveryInfo : { boxTitle : "배송 정보" },
 	        		inputs: {
-	        			CD_CCLRSN : "001",
+	        			CD_CCLRSN : "",
 	        			DC_CCLRSNCTT : ""
 	        		}
 		        };

@@ -128,7 +128,7 @@
                 			gridColVal.title = "<input class='k-checkbox' type='checkbox' id='grid_chk_master' ng-click='"+gridCheckOption.allClickNm+"($event)'><label class='k-checkbox-label k-no-text' for='grid_chk_master' style='margin-bottom:0;'>​</label>";
                 		
                 		gridColVal.headerAttributes = {"class": "table-header-cell", style: "text-align: center; font-size: 12px; vertical-align:middle;"};
-                		gridColVal.selectable       = true;
+                		//gridColVal.selectable       = true;
                 		rtnObj.gridColumn.push(gridColVal);
                     	continue;
                 	}
@@ -171,7 +171,51 @@
                 rtnObj.gridContentTemplate = rtnObj.gridContentTemplate + "</tr>\n";
                 
                 return rtnObj;
-	        }
+	        };
+	        
+	        this.grdCkboxClick = function(e, iGrd) {
+	        	var i = 0,
+	            	element = $(e.currentTarget),
+	            	checked = element.is(':checked'),
+	            	row = element.closest("tr"),
+	            	dataItem = iGrd.dataItem(row),
+	            	allChecked = true;
+             	                
+	            dataItem.ROW_CHK = checked;
+	            dataItem.dirty = checked;
+	            
+	            for(i; i<element.parents('tbody').find("tr").length; i+=1){
+	            	if(!element.parents('tbody').find("tr:eq("+i+")").find(".k-checkbox").is(":checked")){
+	            		allChecked = false;
+	            	}
+	            }
+	            
+	            angular.element($(".k-checkbox:eq(0)")).prop("checked",allChecked);
+	            
+	            checked ? row.addClass("k-state-selected") : row.removeClass("k-state-selected");
+	        };
+	        
+	        this.grdCkboxAllClick = function(e, iGrd) {
+	        	var i = 0,
+	             	element = $(e.currentTarget),
+	             	checked = element.is(':checked'),
+	             	row = element.parents("div").find(".k-grid-content table tr"),
+	             	dataItem = iGrd.dataItems(row),
+	             	dbLength = dataItem.length;
+         
+	            if(dbLength < 1){	                	
+	            	alert("전체 선택 할 데이터가 없습니다.");
+	            	angular.element($(".k-checkbox:eq(0)")).prop("checked",false);
+	             	return;
+	            };   
+	             
+	            for(i; i<dbLength; i += 1){
+	             	dataItem[i].ROW_CHK = checked;
+	             	dataItem[i].dirty = checked;
+	            };
+	             
+	            checked ? row.addClass("k-state-selected").find(".k-checkbox").prop( "checked", true ) : row.removeClass("k-state-selected").find(".k-checkbox").prop( "checked", false );
+	        };
 	        
 	        /**
 	         * Get group info.
@@ -578,7 +622,7 @@
 				 * @param {string=} psUrl
 				 */
 				setInquiryParam: function (poJson, psKind, psUrl) {
-					var fixKey = user.NO_C +''+ user.CD,
+					var fixKey = user.NO_C +''+ user.DC_ID,
 						key;
 
 					if (psUrl) {
@@ -590,7 +634,7 @@
 					if (angular.isString(psKind)) {
 						key += psKind;
 					}
-
+					console.log(poJson);
 					$window.sessionStorage.setItem(key, JSON.stringify(poJson));
 				},
 
@@ -600,7 +644,7 @@
 				 * @returns {Object}
 				 */
 				getInquiryParam: function (psKind) {
-					var fixKey = user.NO_C +''+ user.CD,
+					var fixKey = user.NO_C +''+ user.DC_ID,
 						key = fixKey +''+ MenuSvc.getNO_M($state.current.name) +'Inquiry',
 						rtnData;
 

@@ -226,17 +226,10 @@
 
 <!-- 주문 조회 그리드 툴바 템플릿 -->
 <script id="ord-toolbar-template" type="text/x-kendo-template">
-	<a class="k-button k-button-icontext k-grid-custom" ng-click="showPopup('신규주문 가져오기는 [공사중]입니다.')"><span class="k-icon k-i-custom"></span>신규주문 가져오기</a>
+	<!-- <a class="k-button k-button-icontext k-grid-custom" ng-click=""><span class="k-icon k-i-custom"></span>신규주문 가져오기</a> -->
 	<a class="k-button k-button-icontext k-grid-edit"><span class="k-icon k-i-close"></span>주문취소</a>        
 	<a class="k-button k-button-icontext k-grid-save"><span class="k-icon k-i-check"></span>주문 확정</a>  
 </script>
-
-<!-- 검색시 유효성 검사 경고창 -->
-<script id="ord-notificationTemplate" type="text/x-kendo-template">
-	<p style="width: 19em; padding:1em; white-space:nowrap">#:kValue# {{ngValue}}</p>
-</script>
-
-<span kendo-notification="notf1" k-options="notf1Options"></span>
 
 <!-- 
 	사용가능한  아이콘

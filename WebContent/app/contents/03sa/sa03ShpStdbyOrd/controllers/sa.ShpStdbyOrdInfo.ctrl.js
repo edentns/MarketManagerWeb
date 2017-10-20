@@ -33,6 +33,7 @@
         			UtilSvc.getCommonCodeList(param).then(function (res) {
         				if(res.data.length >= 1){
         					ordInfoDataVO.cancelCodeOptions.dataSource = res.data;
+        					ordInfoDataVO.inputs.CD_CCLRSN = res.data[0];
         				}
         			});
 	            }());       
@@ -48,8 +49,7 @@
 	        		cancelCodeOptions : {
 	        			dataSource: [],
     					dataTextField: "NM_DEF",
-                        dataValueField: "CD_DEF",
-                    	valuePrimitive: true
+                        dataValueField: "CD_DEF"
 	        		},
 	        		shpCodeOptions : {
 	        			dataSource: {
@@ -77,7 +77,7 @@
 	        		receiveInfo : { boxTitle : "수령인 정보" },
 	        		deliveryInfo : { boxTitle : "배송 정보" },
 	        		inputs: {
-	        			CD_CCLRSN : "001",
+	        			CD_CCLRSN : "",
 	        			DC_CCLRSNCTT : ""
 	        		}
 		        };
@@ -97,8 +97,7 @@
         							selectDDL.value(res.data.CD_PARS);
         							selectDDL.trigger("change");
 	    						}
-        					},0);
-        					
+        					},0);        					
         				}else{
         					alert("조회된 데이터가 없습니다.");
         				}
@@ -129,11 +128,11 @@
 		        
 		        //유효성 검사
 		        ordInfoDataVO.valid = function(stat){
-		        	if(this.ds.CD_PARS === ""){
+		        	if(!this.ds.CD_PARS){
 		        		angular.element("input[name=CD_PARS]").focus();
 	            		return false;
 	            	}
-	            	if(this.ds.NO_INVO === "" || this.ds.NO_INVO.length > 100){
+	            	if(!this.ds.NO_INVO || this.ds.NO_INVO.length > 100){
 	            		angular.element("input[name=NO_INVO]").focus();
 	            	    return false;
 	            	}
@@ -181,23 +180,7 @@
 	        			return defer.promise;
 	            	}
 	            };
-	            
-	            //배송정보 전송
-	            ordInfoDataVO.shpInfoSend = function(){
-	            	if(!this.valid('004')) return;
-	            	
-	            	if(confirm("배송정보를 전송 하시겠습니까?")){
-	            		var defer = $q.defer(),
-    			 			param = [$.extend({ROW_CHK: true}, ordInfoDataVO.ds)];
-	            				            		
-	            		ShpStdbyOrdSvc.shpinsend(param).then(function (res) {
-            				defer.resolve();            				
-            				location.reload();
-            			});
-	        			return defer.promise;
-	            	}
-	            };
-	            
+	            	            
 	            ordInfoDataVO.ordCancelPopOptions = {
 			        	actions: [ "Minimize", "Maximize", "Close"],
 		            	height : "500",
@@ -231,7 +214,7 @@
 		            		alert("주문취소 코드를 선택해주세요.");
 		            		return;
 		            	}
-		            	if(this.inputs.DC_CCLRSNCTT === "" || this.inputs.DC_CCLRSNCTT.length > 10){ 
+		            	if(this.inputs.DC_CCLRSNCTT === "" || this.inputs.DC_CCLRSNCTT.length > 1000){ 
 		            		alert("주문취소 사유를 확인해주세요.");
 		            	    return;
 		            	}
@@ -265,23 +248,35 @@
                         },
                         required: function(input) {
                             return input.data("required-msg");
-                        }                        
+                        },
+                        reg: function(input) {
+                            return input.data("reg-msg");
+                        } 
                     },
                     rules: {
                     	lengthy: function(input) {
 	                        if (input.is("[name=NO_INVO]")) {                   	
-	                            return input.val().length < 100;
-	                        }
+	                            return input.val().length < 100 || input.val().length > 2;
+	                        }	                        
 	                        return true;
                     	},
                     	required: function(input) {
                     		if (input.is("[name=NO_INVO]")) {                   	
-                    			return input.val() !== "";
+                    			return input.val();
                     		}
                     		if (input.is("[name=CD_PARS]")) {                     	
-                    			return input.val() !== "";
+                    			return input.val();
                     		}
                     		return true;
+                        },
+                        reg : function(input) {
+                        	//var regTest = /^[0-9]{1}[0-9\-]+[0-9]{1}$/;
+                        	var regTest = /^(([\d]+)\-|([\d]+))+(\d)+$/;
+                        	
+                        	if (input.is("[name='NO_INVO']") && !regTest.test(input.val())) {
+							    return false;
+							};
+							return true;
                         }
                     }
 	            };
@@ -300,5 +295,5 @@
 			            	element.text(kendo.toString(parseInt(scope.val), scope.decimal));
 			            });
 		            }
-		     }});
+		     };});
 }());

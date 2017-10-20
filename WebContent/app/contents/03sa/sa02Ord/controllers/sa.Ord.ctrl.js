@@ -95,14 +95,15 @@
                     YN_CONN       : { type: APP_SA_MODEL.YN_CONN.type        , editable: false, nullable: false },
                     DTS_ORDDTRM   : { type: APP_SA_MODEL.DTS_ORDDTRM.type    , editable: false, nullable: false },
                     AM_ITEMPRC    : { type: APP_SA_MODEL.AM_ITEMPRC.type     , editable: false, nullable: false },
-                    AM_CMS    : { type: APP_SA_MODEL.AM_CMS.type     , editable: false, nullable: false },
+                    AM_CMS    	  : { type: APP_SA_MODEL.AM_CMS.type     	 , editable: false, nullable: false },
                     AM_CUSTOM_SALES      : { type: APP_SA_MODEL.AM_CUSTOM_SALES.type        , editable: false, nullable: false },
-                   // NO_MRKITEMORD        : { type: APP_SA_MODEL.NO_MRKITEMORD.type          , editable: false, nullable: false },
+                 // NO_MRKITEMORD        : { type: APP_SA_MODEL.NO_MRKITEMORD.type          , editable: false, nullable: false },
                     
                     DC_SHPCOSTSTAT: { type: "string" , editable: false, nullable: false },
+                    NO_MNGMRK	  : { type: "string" , editable: false, nullable: false },	
                     
                     AM_SHPCOST    : { type: APP_SA_MODEL.AM_SHPCOST.type     , editable: false, nullable: false },
-                    CD_CCLRSN     : { type: APP_SA_MODEL.CD_CCLRSN.type      , 
+                    CD_CCLRSN     : { type: "array", 
 				                        validation: {
 				                            cd_cclrsnvalidation: function (input) {
 				                                    if (input.is("[name='CD_CCLRSN']") && input.val() === "") {
@@ -144,8 +145,7 @@
                               [APP_SA_MODEL.DC_PCHRREQCTT, APP_SA_MODEL.AM_PCHSPRC     ],
                               [APP_SA_MODEL.CD_ORDSTAT   , APP_SA_MODEL.DC_SHPWAY      ],
                               [APP_SA_MODEL.DTS_ORD      , APP_SA_MODEL.DTS_APVL       ],
-                              [APP_SA_MODEL.DTS_ORDDTRM  , APP_SA_MODEL.YN_CONN        ],
-                              [{field: "DC_SHPCOSTSTAT", title: "",hidden: true}]
+                              [APP_SA_MODEL.DTS_ORDDTRM  , APP_SA_MODEL.YN_CONN        ]
                              ],
                     grdDetOption      = {},
                     grdRowTemplate    = "<tr data-uid=\"#= uid #\" ng-dblclick=\"grdDblClickGo('#: NO_ORD #','#: NO_MRKORD #',$event)\">\n",
@@ -336,7 +336,8 @@
 		                			});
 		                			return defer.promise;
             	            	}else{
-            	            		return;
+            	            		$scope.ordkg.cancelRow();
+                        			angular.element($(".k-checkbox:eq(0)")).prop("checked",false);
             	            	}	                					
                 			},
                 			parameterMap: function(e, operation) {
@@ -403,62 +404,14 @@
 		        
 	            //kendo grid 체크박스 옵션
                 $scope.onOrdGrdCkboxClick = function(e){
-	                var i = 0,
-	                	element = $(e.currentTarget),
-	                	checked = element.is(':checked'),
-	                	row = element.closest("tr"),
-	                	grid = $scope.ordkg,
-	                	dataItem = grid.dataItem(row),
-	                	allChecked = true;
-	                 	                
-	                dataItem.ROW_CHK = checked;
-                	dataItem.dirty = checked;
-	                
-	                for(i; i<grid.dataSource.data().length; i+=1){
-	                	if(!grid.dataSource.data()[i].ROW_CHK){
-	                		allChecked = false;
-	                	};
-	                };
-	                
-	                angular.element($(".k-checkbox:eq(0)")).prop("checked",allChecked);
-	                
-	                /*if(checked){
-	                	row.addClass("k-state-selected");
-	                }else{
-	                	row.removeClass("k-state-selected");
-	                };*/
+                	UtilSvc.grdCkboxClick(e, $scope.ordkg);
                 };
                 
                 //kendo grid 체크박스 all click
                 $scope.onOrdGrdCkboxAllClick = function(e){
-	                var i = 0,
-	                	element = $(e.currentTarget),
-	                	checked = element.is(':checked'),
-	                	row = element.parents("div").find(".k-grid-content table tr"),
-	                	grid = $scope.ordkg,
-	                	dataItem = grid.dataItems(row),
-	                	dbLength = dataItem.length;
-	                
-	                if(dbLength < 1){	                	
-	                	alert("전체 선택 할 데이터가 없습니다.");
-	                	angular.element($(".k-checkbox:eq(0)")).prop("checked",false);
-	                	return;
-	                };   
-	                
-	                for(i; i<dbLength; i += 1){
-	                	dataItem[i].ROW_CHK = checked;
-	                	dataItem[i].dirty = checked;
-	                };
-	                
-	                if(checked){
-	                	row.addClass("k-state-selected");
-	                	row.find(".k-checkbox").prop( "checked", true );
-	                }else{
-	                	row.removeClass("k-state-selected");
-	                	row.find(".k-checkbox").prop( "checked", false );
-	                };
-                };
-                
+                	UtilSvc.grdCkboxAllClick(e, $scope.ordkg);
+                };	
+	                            
                 $scope.$on("kendoWidgetCreated", function(event, widget){
                 	var grd = $scope.ordkg;
                 	
@@ -539,29 +492,6 @@
                 };
                 
                 $scope.ordDataVO.cookieSearchPlay();
-                
-                //alert 경고
-                $scope.notf1Options = {
-            		position: {
-                        pinned: false,
-                        /*top: 30,
-                        left: 30,*/
-                        height: 300,
-                        width: 250                        
-                    },	
-                    templates: [{                    	
-                        type: "warning",
-                        template: $("#ord-notificationTemplate").html()
-                    }]
-                };
-
-                $scope.ngValue = "[닫기]";
-
-                $scope.showPopup = function (msg) {
-                    $scope.notf1.show({
-                      kValue: msg
-                    }, "warning");
-                };
-	            
+                	            
             }]);
 }());

@@ -58,7 +58,7 @@
             			});
     	            }()),
     	            //취소 거부 구분 코드 드랍 박스 실행	
-    	            cancelReasonCode = (function(){
+    	            cancelRejectCode = (function(){
         				var param = {
         					lnomngcdhd: "SYCH00065",
         					lcdcls: "SA_000024",
@@ -72,7 +72,7 @@
             			});
     	            }()),
     	            //취소 상태 코드 드랍 박스 실행	
-    	            cancelReasonCode = (function(){
+    	            cancelStatusCode = (function(){
         				var param = {
         					lnomngcdhd: "SYCH00057",
         					lcdcls: "SA_000016"
@@ -123,7 +123,7 @@
                     NO_CCLREQ     : { type: APP_SA_MODEL.NO_CCLREQ.type      , editable: false, nullable: false },
                     DTS_CCLAPPRRJT: { type: APP_SA_MODEL.DTS_CCLAPPRRJT.type , editable: false, nullable: false },                    
                     CD_CCLSTAT    : { type: APP_SA_MODEL.CD_CCLSTAT.type     , editable: false, nullable: false },
-                    CD_CCLHRNKRSN : { type: APP_SA_MODEL.CD_CCLHRNKRSN.type  , editable: false, nullable: false },
+                    CD_CCLHRNKRSN : { type: "array"  					 	 , editable: false, nullable: false },
                     NM_CCLHRNKRSN : { type: APP_SA_MODEL.NM_CCLHRNKRSN.type  , editable: false, nullable: false },
                     cancel_reject_code : {	
 				                    	type: "array"  
@@ -146,7 +146,7 @@
 				     				   ,validation: {
 											dts_recervalidation: function (input) {
 												if (input.is("[data-role=datepicker]")) {
-													input.attr("data-dts_recervalidation-msg", "교환상품접수일자를 정확히 입력해 주세요.");
+													input.attr("data-dts_recervalidation-msg", "접수일자를 정확히 입력해 주세요.");
 													manualDataBind(input, "DTS_RECER");
 												    return input.data("kendoDatePicker").value();
 												};
@@ -198,18 +198,12 @@
 						     		   ,nullable: false
 						               ,validation: {
 						            	   no_invovalidation: function (input) {
-										    	if (input.is("[name='NO_INVO']") && input.val() === "") {
-				                                	input.attr("data-no_invovalidation-msg", "송장번호를 입력해 주세요.");
-				                                    return false;
-				                                };
-										    	if(input.is("[name='NO_INVO']") && input.val().length > 100){
-										    		input.attr("data-no_invovalidation-msg", "송장번호룰 100자 이내로 입력해 주세요.");
-				                                    return false;
-										    	};
-										    	if(input.is("[name='NO_INVO']") && input.val().length <= 100 && input.val() != ""){										    		
-										    		manualDataBind(input, "NO_INVO");
-										    	};
-										    	return true;
+						            		   if(Util03saSvc.NoINVOValidation(input, 'NO_INVO', 'no_invovalidation')){
+						            			   manualDataBind(input, "NO_INVO");
+						            		   }else{
+						            			   return false;
+						            		   }
+						            		   return true;
 									    	}
 						               }
                     				}
@@ -302,8 +296,7 @@
     					dataTextField: "NM_DEF",
                         dataValueField: "CD_DEF",
                         optionLabel : "주문취소코드를 선택해 주세요 ",
-                        enable: false,
-                    	valuePrimitive: true,
+                        enable: false
     				},   
     				dateOptions : {										//DATE PICKER
 	        			parseFormats: ["yyyyMMdd"], 					//이거 없으면 값이 바인딩 안됨
@@ -327,8 +320,8 @@
 	        		shipList : "",
 	        		cancelRjCd: "",
 	        		cancelRjCdEq : ['001','003','004','005','006'],
-	        		cancelRjCdEqCtt : ['002'],
-	        		cancelRjCdEqDate : ['001']
+	        		cancelRjCdEqCtt : ['002']/*,
+	        		cancelRjCdEqDate : ['001']*/
 		        };
 	            
 	            //조회
@@ -416,21 +409,12 @@
                     			});
                 			},
                 			update: function(e){
+                				var grd = $scope.ordCancelManagementkg;
+                				
         						if(confirm("취소거부 하시겠습니까?")){        					
                 					var defer = $q.defer(),
                 						param = e.data.models,
                 						viewName = "";
-                					/*param = e.data.models.filter(function(ele){
-	                			 		return ele.ROW_CHK === true;
-	                			 	});                				
-                					if(param.length > 1){
-                						alert("한 건의 주문만 선택할 수 있습니다.");
-                						return false;
-                					};                					
-                        			if(param[0].CD_CCLSTAT !== "001"){
-                        				alert("취소요청 된 주문만 취소거부 처리 할 수 있습니다.");
-                        				return false;
-                        			}; */          	
                 					switch(param[0].cancel_reject_code.CD_DEF){
                 						case "001" : {
                 							viewName = "ocmRejectDate";
@@ -459,7 +443,10 @@
 		                				//$scope.ordCancelManagementkg.dataSource.read();
 		                			});
 		                			return defer.promise;
-            	            	}
+            	            	}else{
+            	            		grd.cancelRow();
+            	            		angular.element($(".k-checkbox:eq(0)")).prop("checked",false);
+            	            	};
                 			},
                 			parameterMap: function(e, operation) {
                 				if(operation !== "read" && e.models) {
@@ -500,7 +487,15 @@
                 			ddlRejectCodeSel = e.container.find("select[name=cancel_reject_code]"),
                 			inputDataSource = "",
                 			rejectCodeDS = "";
-                		                		
+                		
+                		//창을 한 번 껐다가 키면 잔상이 남아 있으서 초기화 시켜줌
+                		//비동기로 안하면 멍청이가 됨
+                		if(ddlRejectCodeSel.length > 0 && dataVo.cancelRjCd !== ""){
+                			$timeout(function(){
+                				dataVo.cancelRjCd = "";
+                			},0);
+                		};
+                		
                 		inputDataSource = dataVo.shipList.filter(function(ele){
                 			return ele.DC_RMK1 === e.model.NO_MRK;
                 		});
@@ -522,9 +517,14 @@
                         				$timeout(function(){
                         					e.sender.element.parents("table").find("select[name=CD_PARS]").kendoDropDownList({
                                     			dataSource : inputDataSource,
-                                        		dataTextField : "NM_DEF",
+                                        		dataTextField : "NM_PARS",
                                         		dataValueField : "CD_DEF",
-                                        		optionLabel : "택배사를 선택해 주세요 "        		
+                                        		optionLabel : "택배사를 선택해 주세요 ",
+                                        		change: function(e){
+                                        			if(e.sender.selectedIndex > 0 ){
+                                        				e.sender.element.closest("tr").find("div.k-invalid-msg").hide();
+                                        			}
+                                        		}
                                     		});
                         				},0);
                         			};
@@ -544,62 +544,20 @@
 
 	            UtilSvc.gridtooltipOptions.filter = "td div";
 	            grdOrdCancelManagementVO.tooltipOptions = UtilSvc.gridtooltipOptions;
-	            	                            		        
+	            	   
 	            //kendo grid 체크박스 옵션
                 $scope.onOrdGrdCkboxClick = function(e){
-	                var i = 0,
-	                	element = $(e.currentTarget),
-	                	checked = element.is(':checked'),
-	                	row = element.closest("tr"),
-	                	grid = $scope.ordCancelManagementkg,
-	                	dataItem = grid.dataItem(row),
-	                	allChecked = true;
-	                 	                
-	                dataItem.ROW_CHK = checked;
-	                dataItem.dirty = checked;
-	                
-	                for(i; i<element.parents('tbody').find("tr").length; i+=1){
-	                	if(!element.parents('tbody').find("tr:eq("+i+")").find(".k-checkbox").is(":checked")){
-	                		allChecked = false;
-	                	}
-	                };
-	                
-	                angular.element($(".k-checkbox:eq(0)")).prop("checked",allChecked);
-	                
-//	                if(checked){
-//	                	row.addClass("k-state-selected");
-//	                }else{
-//	                	row.removeClass("k-state-selected");
-//	                };
+                	UtilSvc.grdCkboxClick(e, $scope.ordCancelManagementkg);
                 };
                 
                 //kendo grid 체크박스 all click
                 $scope.onOrdGrdCkboxAllClick = function(e){
-	                var i = 0,
-	                	element = $(e.currentTarget),
-	                	checked = element.is(':checked'),
-	                	row = element.parents("div").find(".k-grid-content table tr"),
-	                	grid = $scope.ordCancelManagementkg,
-	                	dataItem = grid.dataItems(row),
-	                	dbLength = dataItem.length;
-	                
-	                if(dbLength < 1){	                	
-	                	alert("전체 선택 할 데이터가 없습니다.");
-	                	angular.element($(".k-checkbox:eq(0)")).prop("checked",false);
-	                	return;
-	                };   	                
-	                for(i; i<dbLength; i += 1){
-	                	dataItem[i].ROW_CHK = checked;
-	                	dataItem[i].dirty = checked;
-	                };	                
-	                if(checked){
-	                	row.addClass("k-state-selected");
-	                	row.find(".k-checkbox").prop( "checked", true );
-	                }else{
-	                	row.removeClass("k-state-selected");
-	                	row.find(".k-checkbox").prop( "checked", false );
-	                };
-                };   
+                	UtilSvc.grdCkboxAllClick(e, $scope.ordCancelManagementkg);
+                };		     
+                
+                $scope.popupUtil = function(e){
+                	Util03saSvc.popupUtil.blur(e);
+                };
                 
                 $scope.$on("kendoWidgetCreated", function(event, widget){
                 	var grd = $scope.ordCancelManagementkg;

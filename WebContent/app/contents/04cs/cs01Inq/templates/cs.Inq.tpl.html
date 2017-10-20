@@ -276,6 +276,18 @@
 	</tr>
 	<tr class="border-bottom-line">
 		<td class="active border-right-line">
+			문의내용
+		</td>
+		<td class="border-right-line" colspan="3">	
+			<textarea name="DC_INQCTT" 
+					data-bind="value: DC_INQCTT" 
+					class="k-textbox k-state-disabled"
+					ng-disabled="true" 
+					style="width:100%; height:100px;"></textarea>
+		</td> 
+	</tr>
+	<tr class="border-bottom-line">
+		<td class="active border-right-line">
 			답변내용
 		</td>
 		<td class="border-right-line" colspan="3">	
@@ -283,7 +295,7 @@
 					data-bind="value: DC_ANSCTT" 
 					ng-class="csDataVO.popupDisAble"
 					ng-disabled="#: CD_INQSTAT # == '002'" 
-					style="width:100%; height:150px;"></textarea>
+					style="width:100%; height:100px;"></textarea>
 		</td> 
 	</tr>
 	</tbody>
@@ -296,13 +308,6 @@
 </script>
 
 <!-- <a class="k-button k-button-icontext k-grid-info" ng-click="onOpen()"><span class="k-icon k-i-info"></span>문의정보 가오기</a> -->
-
-<!-- 검색시 유효성 검사 경고창 -->
-<script id="notificationTemplate" type="text/x-kendo-template">
-	<p style="width: 19em; padding:1em; white-space:nowrap">#:kValue# {{ngValue}}</p>
-</script>
-
-<span kendo-notification="notf1" k-options="notf1Options"></span>
 
 <style>
 .not_pop_title{

@@ -26,7 +26,6 @@
 		            			result = grd[i].NM_DEF;
 		                    };
 		                }
-	                	result = (result === '') ? nmd : result;
 	                	
 	                	element.text(result);
                 	},0);

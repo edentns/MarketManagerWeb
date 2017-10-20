@@ -194,10 +194,9 @@
 		</td>
 		<td>
 			<select kendo-drop-down-list
-				id="CD_PARS"
 				k-options="shippingDataVO.parsCodeOptions"
-				name="CD_PARS"
-				data-bind="value: CD_PARS"
+				name="CD_PARS_INPUT"
+				data-bind="value: CD_PARS_INPUT"
                 style="width: 100%">
 			</select>	
 		</td>
@@ -208,12 +207,14 @@
 		<td class="active border-right-line">
 			<code>*</code>송장번호
 		</td>
-		<td colspan="3">
-          <input type="text" 
+		<td colspan="3" class="ta-l">
+          <input 
+			 type="text" 
              name="NO_INVO" 
              data-bind="value: NO_INVO"
+			 data-ng-blur="popupUtil.blur($event)"
              class="k-textbox"
-             style="width: 50%;float:left" 
+             style="width: 50%;" />
         </td> 
 	</tr>
 	</tbody>
@@ -227,7 +228,7 @@
 
 <style>
 .k-edit-form-container{
-    width: 900px;
+    width: 600px;
 }
 .k-popup-edit-form .k-edit-label{
     width: 20%;

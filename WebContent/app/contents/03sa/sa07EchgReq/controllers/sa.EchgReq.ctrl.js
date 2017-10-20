@@ -205,14 +205,7 @@
 						               ,validation: {
 						            	   no_invo_inputvalidation: function (input) {
 						            		   if(echgDataVO.procShowCode.indexOf(echgDataVO.updateChange) > -1){
-											    	if (input.is("[name='NO_INVO']") && input.val() === "" ) {
-					                                	input.attr("data-no_invo_inputvalidation-msg", "송장번호를 입력해 주세요.");
-					                                    return false;
-					                                };
-											    	if(input.is("[name='NO_INVO']") && input.val().length > 100){
-											    		input.attr("data-no_invo_inputvalidation-msg", "송장번호룰 100자 이내로 입력해 주세요.");
-					                                    return false;
-											    	};
+						            			   return Util03saSvc.NoINVOValidation(input, 'NO_INVO', 'no_invo_inputvalidation');						            			   
 						            		   	};
 						            		   	return true;
 						            	   	}
@@ -411,7 +404,7 @@
                     	
                     	cdpars.kendoDropDownList({
 	            			dataSource : chosenDS,
-	                		dataTextField : "NM_DEF",
+	                		dataTextField : "NM_PARS",
 	                		dataValueField : "CD_DEF",
 	                		optionLabel : "택배사를 선택해 주세요 ",
 	                		select : function(e){
@@ -443,7 +436,8 @@
             					});
                 			},
                 			update: function(e){
-                				var whereIn = ['004','005'];
+                				var whereIn = ['004','005'],
+            				    	echgGrd = $scope.echgkg;;
                 				
                 				switch(echgDataVO.updateChange){
 	                				case '001' : {
@@ -468,6 +462,9 @@
 	                    						}
 	                    					});  
 	            							return defer.promise;
+	            						}else{
+	            							echgGrd.cancelRow();
+	            							angular.element($(".k-checkbox:eq(0)")).prop("checked",false);
 	            						};	
 	            						break;
 	            					}; 
@@ -492,7 +489,10 @@
                         						}
                         					});                         
         		                			return defer.promise;
-                						}  
+                						}else{
+	            							echgGrd.cancelRow();
+	            							angular.element($(".k-checkbox:eq(0)")).prop("checked",false);
+	            						};  
                 						break;
                 					};        
                 					case '003' : {
@@ -520,7 +520,10 @@
                         						}
                         					});                         					
         		                			return defer.promise;
-                    	            	}
+                    	            	}else{
+	            							echgGrd.cancelRow();
+	            							angular.element($(".k-checkbox:eq(0)")).prop("checked",false);
+	            						};
                 						break;
                 					};
                 					default : {
@@ -787,61 +790,13 @@
 		        
 	            //kendo grid 체크박스 옵션
                 $scope.onOrdGrdCkboxClick = function(e){
-	                var i = 0,
-	                	element = $(e.currentTarget),
-	                	checked = element.is(':checked'),
-	                	row = element.closest("tr"),
-	                	grid = $scope.echgkg,
-	                	dataItem = grid.dataItem(row),
-	                	allChecked = true;
-	                 	                
-	                dataItem.ROW_CHK = checked;
-	                dataItem.dirty = checked;
-	                
-	                for(i; i<element.parents('tbody').find("tr").length; i+=1){
-	                	if(!element.parents('tbody').find("tr:eq("+i+")").find(".k-checkbox").is(":checked")){
-	                		allChecked = false;
-	                	}
-	                }
-	                
-	                angular.element($(".k-checkbox:eq(0)")).prop("checked",allChecked);
-	                
-//	                if(checked){
-//	                	row.addClass("k-state-selected");
-//	                }else{
-//	                	row.removeClass("k-state-selected");
-//	                };
+                	UtilSvc.grdCkboxClick(e, $scope.echgkg);
                 };
                 
                 //kendo grid 체크박스 all click
                 $scope.onOrdGrdCkboxAllClick = function(e){
-	                var i = 0,
-	                	element = $(e.currentTarget),
-	                	checked = element.is(':checked'),
-	                	row = element.parents("div").find(".k-grid-content table tr"),
-	                	grid = $scope.echgkg,
-	                	dataItem = grid.dataItems(row),
-	                	dbLength = dataItem.length;
-	                
-	                if(dbLength < 1){	                	
-	                	alert("전체 선택 할 데이터가 없습니다.");
-	                	angular.element($(".k-checkbox:eq(0)")).prop("checked",false);
-	                	return;
-	                };   
-	                
-	                for(i; i<dbLength; i += 1){
-	                	dataItem[i].ROW_CHK = checked;
-	                	dataItem[i].dirty = checked;
-	                };
-	                
-	                if(checked){
-	                	row.addClass("k-state-selected");
-	                	row.find(".k-checkbox").prop( "checked", true );
-	                }else{
-	                	row.removeClass("k-state-selected");
-	                	row.find(".k-checkbox").prop( "checked", false );
-	                };
-                };	
+                	UtilSvc.grdCkboxAllClick(e, $scope.echgkg);
+                };		
                 
 	            $scope.$on("kendoWidgetCreated", function(event, widget){
                 	var grd = $scope.echgkg;

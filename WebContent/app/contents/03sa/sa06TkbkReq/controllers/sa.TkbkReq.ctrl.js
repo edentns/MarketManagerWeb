@@ -202,7 +202,7 @@
 							     			   ,nullable: false
 							                   ,validation: {
 							                	   cd_parsvalidation: function (input) {
-							                		   if(tkbkDataVO.sCode.indexOf(tkbkDataVO.marketDivisionCode) > -1){
+							                		   if(tkbkDataVO.sCode.indexOf(tkbkDataVO.marketDivisionCode) > -1 && tkbkDataVO.updateChange === '003'){
 													    	if (input.is("[name='CD_PARS']") && input.val() === "") {
 							                                	input.attr("data-cd_parsvalidation-msg", "택배사를 입력해 주세요.");
 							                                    return false;
@@ -220,21 +220,11 @@
 								     		   ,editable: true
 								     		   ,nullable: false
 								               ,validation: {
-								            	   no_invovalidation: function (input) {
-								            		   if(tkbkDataVO.sCode.indexOf(tkbkDataVO.marketDivisionCode) > -1){
-													    	if (input.is("[name='NO_INVO']") && input.val() === "" ) {
-							                                	input.attr("data-no_invovalidation-msg", "송장번호를 입력해 주세요.");
-							                                    return false;
-							                                };
-													    	if(input.is("[name='NO_INVO']") && input.val().length > 100){
-													    		input.attr("data-no_invovalidation-msg", "송장번호룰 100자 이내로 입력해 주세요.");
-							                                    return false;
-													    	};
-													    	/*if(input.is("[name='NO_INVO']") && input.val().length <= 100 && input.val() != ""){										    		
-													    		manualDataBind(input, "NO_INVO");
-													    	};*/
-								            		   };
-												    	return true;
+								            	   no_invovalidation: function (input) {								            		   
+								            		   if(tkbkDataVO.sCode.indexOf(tkbkDataVO.marketDivisionCode) > -1 && tkbkDataVO.updateChange === '003'){
+															return Util03saSvc.NoINVOValidation(input, 'NO_INVO', 'no_invovalidation');	
+								            		   };								            		   
+								            		   return true;
 											    	}
 								               }
 	                    				  },
@@ -244,7 +234,7 @@
 									     	   ,nullable: false
 									           ,validation: {
 									        	   cd_holdvalidation: function (input) {
-									        		   if(tkbkDataVO.gCode.indexOf(tkbkDataVO.marketDivisionCode) > -1){
+									        		   if(tkbkDataVO.gCode.indexOf(tkbkDataVO.marketDivisionCode) > -1 && tkbkDataVO.updateChange === '003'){
 									        			   if (input.is("[name='CD_HOLD']") && input.val() === "" && tkbkDataVO.receiveCheckCode === 'N') {
 							                                	input.attr("data-cd_holdvalidation-msg", "보류사유를 입력해 주세요.");
 							                                    return false;
@@ -263,7 +253,7 @@
 								     		   ,nullable: false
 								               ,validation: {
 								            	   cd_hold_feevalidation: function (input) {
-								            		   if(tkbkDataVO.gCode.indexOf(tkbkDataVO.marketDivisionCode) > -1){
+								            		   if(tkbkDataVO.gCode.indexOf(tkbkDataVO.marketDivisionCode) > -1 && tkbkDataVO.updateChange === '003'){
 								            			   if (input.is("[name='CD_HOLD_FEE']") && (!input.val() || input.val()) < 1 && tkbkDataVO.etcCostCode === 'Y') {
 							                                	input.attr("data-cd_hold_feevalidation-msg", "반품비를 입력해 주세요.");
 							                                    return false;
@@ -538,8 +528,8 @@
                 		confirmation: false
                     },
                     edit: function(e){     
-                    	var dataVo = $scope.tkbkDataVO,
-                    	    code = e.model.CODE;
+                    	var dataVo = $scope.tkbkDataVO,                    	                      	
+                    	    code = e.model.CODE;                    	
                     	
                     	// 반품 완료              	
                     	if(tkbkDataVO.updateChange === "001"){
@@ -555,11 +545,20 @@
 		            		
 		            	// 반품 승인	
                     	}else if(tkbkDataVO.updateChange === "003"){
-                    		var selector = e.container;
+                    		var selector = e.container,
+                    			ddlHoldReasonCodeSel = e.container.find("select[name=CD_HOLD]");
                     		
                     		switch(code){
                     			case '170104':
                     			case '170102': {
+                    				//창을 한 번 껐다가 키면 잔상이 남아 있으서 초기화 시켜줌
+                            		//비동기로 안하면 멍청이가 됨
+                            		if(ddlHoldReasonCodeSel.length > 0 && dataVo.receiveCheckCode === "N"){
+                            			$timeout(function(){
+                            				dataVo.receiveCheckCode = "Y";
+                            			},0);
+                            		};                   				
+                    				
                     				selector.find("select[name=CD_HOLD]").kendoDropDownList({
         		            			dataSource : tkbkDataVO.gHoldCode,
         		                		dataTextField : "NM_DEF",
@@ -617,7 +616,7 @@
                 	resizable: true,
                 	rowTemplate: kendo.template($.trim(grdRowTemplate)),
                 	altRowTemplate: kendo.template($.trim(grdAltRowTemplate)),
-                	height: 616,
+                	height: 616,       
                 	navigatable: true, //키보드로 그리드 셀 이동 가능
                 	toolbar: [{template: kendo.template($.trim($("#tkbk_toolbar_template").html()))}],
                 	dataSource: new kendo.data.DataSource({
@@ -632,7 +631,8 @@
                 			},
                 			update: function(e){                	
                 				var whereIn = ['004','005'],
-                				    whereInCp = ['002','005'];
+                				    whereInCp = ['002','005'],
+                				    tkbkGrd = $scope.tkbkkg;
                 				
                 				switch(tkbkDataVO.updateChange){
                 					case '001' : {
@@ -659,6 +659,9 @@
                         						}
                         					});
         		                			return defer.promise;
+                    	            	}else{
+                    	            		tkbkGrd.cancelRow();
+                    	            		angular.element($(".k-checkbox:eq(0)")).prop("checked",false);
                     	            	}
                 						break;
                 					}
@@ -669,7 +672,7 @@
                 									return (ele.ROW_CHK === true && ele.CD_TKBKSTAT === "001" && (ele.NO_ORD) && ele.NO_ORD !== "" && whereIn.indexOf(ele.CD_ORDSTAT) > -1);
                 								});                             					
                         					if(param.length !== 1){
-                        						alert("배송처리 된 반품요청 주문만 거부 처리 할 수 있습니다.");
+                        						alert("주문 상태를 확인해 주세요.");
                         						return;
                         					};  
                         					saTkbkReqSvc.tkbkReject(param[0]).then(function (res) {
@@ -683,7 +686,10 @@
                         						}
                         					}); 
         		                			return defer.promise;
-                						}
+                						}else{
+                    	            		tkbkGrd.cancelRow();
+                    	            		angular.element($(".k-checkbox:eq(0)")).prop("checked",false);
+                    	            	}
                 						break;
                 					}
                 					case '003' : {
@@ -707,7 +713,10 @@
                         						}
                         					}); 
                 							return defer.promise;
-                						};	
+                						}else{
+                    	            		tkbkGrd.cancelRow();
+                    	            		angular.element($(".k-checkbox:eq(0)")).prop("checked",false);
+                    	            	}
                 						break;
                 					}
                 					default : {
@@ -725,7 +734,7 @@
                 			var data = this.data();
                 			tkbkDataVO.dataTotal = data.length;
                 			angular.element($(".k-checkbox:eq(0)")).prop("checked",false);
-                		},                		
+                		},  
                 		pageSize: 9,
                 		batch: true,
                 		schema: {
@@ -740,62 +749,16 @@
 
 	            UtilSvc.gridtooltipOptions.filter = "td div";
 	            grdTkbkVO.tooltipOptions = UtilSvc.gridtooltipOptions;
-		        
+	            
 	            //kendo grid 체크박스 옵션
                 $scope.onOrdGrdCkboxClick = function(e){
-	                var i = 0,
-	                	element = $(e.currentTarget),
-	                	checked = element.is(':checked'),
-	                	row = element.closest("tr"),
-	                	grid = $scope.tkbkkg,
-	                	dataItem = grid.dataItem(row),
-	                	allChecked = true;
-	                 	                
-	                dataItem.ROW_CHK = checked;
-	                dataItem.dirty = checked;
-	                
-	                for(i; i<element.parents('tbody').find("tr").length; i+=1){
-	                	if(!element.parents('tbody').find("tr:eq("+i+")").find(".k-checkbox").is(":checked")){
-	                		allChecked = false;
-	                	}
-	                }
-	                
-	                angular.element($(".k-checkbox:eq(0)")).prop("checked",allChecked);
-	                
-//	                if(checked){
-//	                	row.addClass("k-state-selected");
-//	                }else{
-//	                	row.removeClass("k-state-selected");
-//	                };
+                	UtilSvc.grdCkboxClick(e, $scope.tkbkkg);
                 };
                 
                 //kendo grid 체크박스 all click
                 $scope.onOrdGrdCkboxAllClick = function(e){
-	                var i = 0,
-	                	element = $(e.currentTarget),
-	                	checked = element.is(':checked'),
-	                	row = element.parents("div").find(".k-grid-content table tr"),
-	                	grid = $scope.tkbkkg,
-	                	dataItem = grid.dataItems(row),
-	                	dbLength = dataItem.length;
-	                
-	                if(dbLength < 1){	                	
-	                	alert("전체 선택 할 데이터가 없습니다.");
-	                	angular.element($(".k-checkbox:eq(0)")).prop("checked",false);
-	                	return;
-	                };   	                
-	                for(i; i<dbLength; i += 1){
-	                	dataItem[i].ROW_CHK = checked;
-	                	dataItem[i].dirty = checked;
-	                };	                
-	                if(checked){
-	                	row.addClass("k-state-selected");
-	                	row.find(".k-checkbox").prop( "checked", true );
-	                }else{
-	                	row.removeClass("k-state-selected");
-	                	row.find(".k-checkbox").prop( "checked", false );
-	                };
-                };  
+                	UtilSvc.grdCkboxAllClick(e, $scope.tkbkkg);
+                };		                
                 
                 var clickEventValidNprocess = function(grd, code, px){
             		var	chked = grd.element.find(".k-grid-content input:checked"),
