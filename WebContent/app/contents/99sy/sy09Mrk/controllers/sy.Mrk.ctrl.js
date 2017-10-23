@@ -59,6 +59,28 @@
                     	};
 					dateVO.getSubCodeList( {cd: "SY_000017", search: "all"} );
 					dateVO.getSubCodeList( param );
+					
+					// 이전에 검색조건을 세션에 저장된 것을 가져옴
+            		var history = UtilSvc.grid.getInquiryParam();
+					
+            		$timeout(function() {
+	            		if(!page.isWriteable()){
+	    					$("#mrkKg .k-grid-toolbar").hide();
+	    				}
+        			});
+					
+            		$timeout(function() {
+						if(history){
+		            		dateVO.selectedMrkIds = history.MRK_LIST;
+	            			dateVO.MrkCodeList.setSelectNames = history.MRK_SELECT_INDEX;
+							dateVO.selectedItlStatIds = history.STAT_LIST;
+							dateVO.ItlStatCodeList.setSelectNames = history.STAT_SELECT_INDEX;
+							dateVO.datesetting.period.start = history.START_DATE;
+							dateVO.datesetting.period.end = history.END_DATE;
+		            		
+							$scope.gridMrkVO.dataSource.read();
+		            	}
+            		},1000);
 				};
 				
 				dateVO.reset = function() {
@@ -104,6 +126,16 @@
                 
                 dateVO.doInquiry = function () {// 검색조건에 해당하는 유저 정보를 가져온다.
                 	gridMrkVO.dataSource.read();
+                	var param = {
+                			MRK_LIST     : dateVO.selectedMrkIds,
+                			MRK_SELECT_INDEX : dateVO.MrkCodeList.allSelectNames,
+    						STAT_LIST    : dateVO.selectedItlStatIds,
+    						STAT_SELECT_INDEX : dateVO.ItlStatCodeList.allSelectNames,
+    						START_DATE   : dateVO.datesetting.period.start,
+    						END_DATE     : dateVO.datesetting.period.end
+    	                };
+            			// 검색조건 세션스토리지에 임시 저장
+            			UtilSvc.grid.setInquiryParam(param);
                 };
 		        
                 //새로 저장시 유효성 검사 (수정 할 땐 비밀번호를 따로 입력할 필요할 없어서 required 하지 않아서 저장시 따로 함수를 만듦 kendo로는  editable true 일때만 됨)
@@ -137,7 +169,7 @@
                         		e.model.set("CD_MRKDFT", "001");
                         		e.model.set("CD_NT", "001");
                         		e.model.set("YN_USE", "Y");
-                        		e.model.set("CD_ITLSTAT", "001")
+                        		e.model.set("CD_ITLSTAT", "001");
                         	}
                         }
             		},
@@ -279,6 +311,7 @@
                 		}
                 	}),
                 	navigatable: true,
+                	autoBind: false,
                 	toolbar: 
                 		["create", "save", "cancel"],
                 	columns: [

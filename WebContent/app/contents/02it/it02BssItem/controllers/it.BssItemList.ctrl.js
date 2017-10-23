@@ -104,11 +104,11 @@
 		            		bssItemDataVO.iClftIds = history.CD_ITEMCLFT;
 		            		bssItemDataVO.iKindIds = history.CD_ITEMKIND;
 		            		bssItemDataVO.iStatIds = history.CD_ITEMSTAT;
-		            		bssItemDataVO.adulYnList.setSelectNames = history.YN_ADULCTFC_SELCT_INDEX;
-		            		bssItemDataVO.taxClftList.setSelectNames = history.CD_TAXCLFT_SELCT_INDEX;
-		            		bssItemDataVO.iClftList.setSelectNames = history.CD_ITEMCLFT_SELCT_INDEX;
-		            		bssItemDataVO.iKindList.setSelectNames = history.CD_ITEMKIND_SELCT_INDEX;
-		            		bssItemDataVO.iStatList.setSelectNames = history.CD_ITEMSTAT_SELCT_INDEX;
+		            		bssItemDataVO.adulYnList.setSelectNames = history.YN_ADULCTFC_SELECT_INDEX;
+		            		bssItemDataVO.taxClftList.setSelectNames = history.CD_TAXCLFT_SELECT_INDEX;
+		            		bssItemDataVO.iClftList.setSelectNames = history.CD_ITEMCLFT_SELECT_INDEX;
+		            		bssItemDataVO.iKindList.setSelectNames = history.CD_ITEMKIND_SELECT_INDEX;
+		            		bssItemDataVO.iStatList.setSelectNames = history.CD_ITEMSTAT_SELECT_INDEX;
 		            		bssItemDataVO.selectedDateOption = history.DATEOPT;
 		            		bssItemDataVO.datesetting.period.start = history.DATE_FROM;
 		            		bssItemDataVO.datesetting.period.end = history.DATE_TO;
@@ -130,11 +130,11 @@
 						CD_ITEMCLFT : bssItemDataVO.iClftIds,
 						CD_ITEMKIND : bssItemDataVO.iKindIds,
 						CD_ITEMSTAT : bssItemDataVO.iStatIds,
-						YN_ADULCTFC_SELCT_INDEX : bssItemDataVO.adulYnList.allSelectNames,
-						CD_TAXCLFT_SELCT_INDEX  : bssItemDataVO.taxClftList.allSelectNames,
-						CD_ITEMCLFT_SELCT_INDEX : bssItemDataVO.iClftList.allSelectNames,
-						CD_ITEMKIND_SELCT_INDEX : bssItemDataVO.iKindList.allSelectNames,
-						CD_ITEMSTAT_SELCT_INDEX : bssItemDataVO.iStatList.allSelectNames,
+						YN_ADULCTFC_SELECT_INDEX : bssItemDataVO.adulYnList.allSelectNames,
+						CD_TAXCLFT_SELECT_INDEX  : bssItemDataVO.taxClftList.allSelectNames,
+						CD_ITEMCLFT_SELECT_INDEX : bssItemDataVO.iClftList.allSelectNames,
+						CD_ITEMKIND_SELECT_INDEX : bssItemDataVO.iKindList.allSelectNames,
+						CD_ITEMSTAT_SELECT_INDEX : bssItemDataVO.iStatList.allSelectNames,
 						DATEOPT     : bssItemDataVO.selectedDateOption,
 						DATE_FROM   : bssItemDataVO.datesetting.period.start,
 	                	DATE_TO     : bssItemDataVO.datesetting.period.end
@@ -145,6 +145,7 @@
 	            
 	            //초기화버튼
 	            bssItemDataVO.init = function(){
+	            	saleItemDataVO.adulYnList.bReset   = true;
 	            	bssItemDataVO.taxClftList.bReset = true;
 	            	bssItemDataVO.iClftList.bReset = true;
 	            	bssItemDataVO.iKindList.bReset = true;

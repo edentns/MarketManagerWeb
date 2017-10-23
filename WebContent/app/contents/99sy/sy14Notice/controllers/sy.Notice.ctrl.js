@@ -50,6 +50,23 @@
 	    				dataTotal : 0,
 	             	    resetAtGrd : ""
 		        };
+	          
+	            //초기실행
+	            noticeDataVO.initLoad = function(){
+	            	$timeout(function() {
+		                 // 이전에 검색조건을 세션에 저장된 것을 가져옴
+		            		var history = UtilSvc.grid.getInquiryParam();
+			            	if(history){
+			            		noticeDataVO.contentText.value = history.SEARCH_;
+	                        	noticeDataVO.noticeCdModel = history.ARR_CD_NO;
+	                        	noticeDataVO.noticeCdVO.setSelectNames = history.ARR_CD_NO_SELECT_INDEX;
+	                        	noticeDataVO.datesetting.period.start = history.START_DATE;
+	                        	noticeDataVO.datesetting.period.end = history.END_DATE;
+			            		
+	                        	$scope.nkg.dataSource.read();
+			            	}
+	                    },1000);
+	            };	  
 	            
 	            //조회
 	            noticeDataVO.inQuiry = function(){
@@ -57,7 +74,18 @@
 	            	if(me.noticeCdModel === null || me.noticeCdModel === ""){ alert("공지구분을 입력해 주세요."); return };
 	            	
 	            	$scope.nkg.dataSource.read();
-	            };	            
+	            	
+	            	var param = {
+							SEARCH_: noticeDataVO.contentText.value,
+                        	ARR_CD_NO: noticeDataVO.noticeCdModel,
+                        	ARR_CD_NO_SELECT_INDEX : noticeDataVO.noticeCdVO.allSelectNames,
+                        	START_DATE: noticeDataVO.datesetting.period.start,
+                        	END_DATE: noticeDataVO.datesetting.period.end
+		                };
+	        			// 검색조건 세션스토리지에 임시 저장
+	        			UtilSvc.grid.setInquiryParam(param);
+	            };	    
+	            
 	            //초기화버튼
 	            noticeDataVO.inIt = function(){
 	            	var me  = this;
@@ -301,6 +329,8 @@
                     }                              
                     return hasVisibleChildren;
                };
+               
+               noticeDataVO.initLoad();
                
             }]);
 }());

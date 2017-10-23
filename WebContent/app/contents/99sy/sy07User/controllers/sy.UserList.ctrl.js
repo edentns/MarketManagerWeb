@@ -82,14 +82,32 @@
                     vo.getSubcodeList( {cd: "SY_000025", search: "all"} );
                     vo.getSubcodeList( param );
                     vo.searchName = "";
-                    
-                    vo.doInquiry(1);
-                    
+	            	
                     $timeout(function() {
 						if(!page.isWriteable()){
 							$("#userkg .k-grid-toolbar").hide();
 						}
         			});
+                    
+                    $timeout(function() {
+	                 // 이전에 검색조건을 세션에 저장된 것을 가져옴
+	            		var history = UtilSvc.grid.getInquiryParam();
+		            	if(history){
+		            		vo.selectedDeptIds = history.DEPT_LIST;
+	            			vo.departCodeList.setSelectNames = history.DEPT_LIST_SELECT_INDEX;
+							vo.selectedRankIds = history.RANK_LIST;
+							vo.rankCodeList.setSelectNames = history.RANK_LIST_SELECT_INDEX;
+							vo.selectedStatIds = history.STAT_LIST;
+							vo.empStatList.setSelectNames = history.STAT_LIST_SELECT_INDEX;
+							vo.selectedAtrtIds = history.ATRT_LIST;
+							vo.atrtCodeList.setSelectNames = history.ATRT_LIST_SELECT_INDEX;
+							vo.searchName = history.SEARCH_NAME;
+		            		
+							grdUserVO.dataSource.read();
+		            	}else{
+		            		grdUserVO.dataSource.read();
+		            	}
+                    },1000);
                 };
                 
                 vo.reset = function() {
@@ -112,31 +130,23 @@
 	            		grdUserVO.dataSource.pageSize(24);
 	            	}
 	            };*/
-
-//                vo.doReload = function (data) {// 테이블 데이터를 갱신하다.
-//                    vo.tbl.tableParams.settings({data: data});
-//                    vo.tbl.tableParams.page(1);
-//                    vo.tbl.tableParams.reload();
-//                };
-                vo.doInquiry = function (flag) {// 검새조건에 해당하는 유저 정보를 가져온다.
-                	if(flag != 1){
-	                	if(vo.selectedDeptIds == ""){
-	                		alert("부서를 선택해주세요.");
-	                		return false;
-	                	}else if(vo.selectedRankIds == ""){
-	                		alert("직급을 선택해주세요.");
-	                		return false;
-	                	}else if(vo.selectedStatIds == ""){
-	                		alert("재직상태 선택해주세요.");
-	                		return false;
-	                	}else if(vo.selectedAtrtIds == ""){
-	                		alert("권한을 선택해주세요.");
-	                		return false;
-	                	}
-                	}
-
+				
+                vo.doInquiry = function () {// 검색조건에 해당하는 유저 정보를 가져온다.
             		grdUserVO.dataSource.page(1);
 	            	grdUserVO.dataSource.read();
+	            	var param = {
+            			DEPT_LIST  :  vo.selectedDeptIds,
+            			DEPT_LIST_SELECT_INDEX : vo.departCodeList.allSelectNames,
+						RANK_LIST  :  vo.selectedRankIds,
+						RANK_LIST_SELECT_INDEX : vo.rankCodeList.allSelectNames,
+						STAT_LIST  :  vo.selectedStatIds,
+						STAT_LIST_SELECT_INDEX : vo.empStatList.allSelectNames,
+						ATRT_LIST  :  vo.selectedAtrtIds,
+						ATRT_LIST_SELECT_INDEX : vo.atrtCodeList.allSelectNames,
+						SEARCH_NAME  : vo.searchName
+	                };
+        			// 검색조건 세션스토리지에 임시 저장
+        			UtilSvc.grid.setInquiryParam(param);
                 };
                 
                 /**

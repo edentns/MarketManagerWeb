@@ -89,12 +89,48 @@
 	            		if(!page.isWriteable()){
 	    					$("#divSaleVO .k-grid-toolbar").hide();
 	    				}
+	            		// 이전에 검색조건을 세션에 저장된 것을 가져옴
+	            		var history = UtilSvc.grid.getInquiryParam();
+		            	if(history){
+		            		saleItemDataVO.signItem.value = history.CD_SIGNITEM;	
+		            		saleItemDataVO.nmItem.value = history.NM_ITEM;
+		            		saleItemDataVO.nmMnfr.value = history.NM_MNFR;
+		            		saleItemDataVO.adulYnIds = history.YN_ADULCTFC;
+		            		saleItemDataVO.taxClftIds = history.CD_TAXCLFT;
+		            		saleItemDataVO.iClftIds = history.CD_ITEMCLFT;
+		            		saleItemDataVO.iKindIds = history.CD_ITEMKIND;
+		            		saleItemDataVO.cmrkIds = history.NO_MRK;
+		            		saleItemDataVO.adulYnList.setSelectNames = history.YN_ADULCTFC_SELECT_INDEX;
+		            		saleItemDataVO.taxClftList.setSelectNames = history.CD_TAXCLFT_SELECT_INDEX;
+		            		saleItemDataVO.iClftList.setSelectNames = history.CD_ITEMCLFT_SELECT_INDEX;
+		            		saleItemDataVO.iKindList.setSelectNames = history.CD_ITEMKIND_SELECT_INDEX;
+		            		saleItemDataVO.cmrkList.setSelectNames = history.NO_MRK_SELECT_INDEX;
+		            		
+		            		$scope.gridSaleVO.dataSource.read();
+		            	}
         			});
 	            };
 	            
 	            //조회
 	            saleItemDataVO.inQuiry = function(){
 	            	$scope.gridSaleVO.dataSource.read();
+	            	var param = {
+	            			CD_SIGNITEM :	saleItemDataVO.signItem.value,
+        					NM_ITEM : saleItemDataVO.nmItem.value,
+        		        	NM_MNFR :	saleItemDataVO.nmMnfr.value,
+				        	YN_ADULCTFC : saleItemDataVO.adulYnIds,
+							CD_TAXCLFT  : saleItemDataVO.taxClftIds,
+							CD_ITEMCLFT : saleItemDataVO.iClftIds,
+							CD_ITEMKIND : saleItemDataVO.iKindIds,
+							NO_MRK : saleItemDataVO.cmrkIds,
+							YN_ADULCTFC_SELECT_INDEX : saleItemDataVO.adulYnList.allSelectNames,
+							CD_TAXCLFT_SELECT_INDEX  : saleItemDataVO.taxClftList.allSelectNames,
+							CD_ITEMCLFT_SELECT_INDEX : saleItemDataVO.iClftList.allSelectNames,
+							CD_ITEMKIND_SELECT_INDEX : saleItemDataVO.iKindList.allSelectNames,
+							NO_MRK_SELECT_INDEX : saleItemDataVO.cmrkList.allSelectNames
+		                };
+	        			// 검색조건 세션스토리지에 임시 저장
+	        			UtilSvc.grid.setInquiryParam(param);
 	            };	 
 	            
 	            //초기화버튼
@@ -103,7 +139,6 @@
 	            	saleItemDataVO.taxClftList.bReset  = true;
 	            	saleItemDataVO.iClftList.bReset    = true;
 	            	saleItemDataVO.iKindList.bReset    = true;
-	            	saleItemDataVO.iStatList.bReset    = true;
 	            	saleItemDataVO.cmrkList.bReset     = true;
 	            	
 	            	saleItemDataVO.signItem.value = "";
