@@ -65,28 +65,30 @@
 	            	saleItemDataVO.itemCtgrList1   = resData.itCtgrList;
 	            	saleItemDataVO.cmrkList    = resData.cmrkList;
 	            	
-	            	// 이전에 검색조건을 세션에 저장된 것을 가져옴
-            		var history = UtilSvc.grid.getInquiryParam();
-	            	if(history){
-	            		saleItemDataVO.signItem.value = history.CD_SIGNITEM;
-    					saleItemDataVO.nmItem.value = history.NM_ITEM;
-    					saleItemDataVO.cmrkIds = history.NO_MRK;
-    					saleItemDataVO.cmrkList.setSelectNames = history.NO_MRK_SELECT_INDEX;
-    					saleItemDataVO.iStatIds = history.CD_ITEMSTAT;
-    					saleItemDataVO.iStatList.setSelectNames = history.CD_ITEMSTAT_SELECT_INDEX;
-    					saleItemDataVO.selectedCtgr1.ID_CTGR = history.CD_ITEMCTGR1;
-    					saleItemDataVO.selectedCtgr1.NM_CTGR = history.NM_ITEMCTGR1;
-    					saleItemDataVO.ctgrChange(1);
-    					saleItemDataVO.selectedCtgr2.ID_CTGR = history.CD_ITEMCTGR2;
-    					saleItemDataVO.selectedCtgr2.NM_CTGR = history.NM_ITEMCTGR2;
-    					saleItemDataVO.ctgrChange(2);
-    					saleItemDataVO.selectedCtgr3.ID_CTGR = history.CD_ITEMCTGR3;
-    					saleItemDataVO.selectedCtgr3.NM_CTGR = history.NM_ITEMCTGR3;
-						saleItemDataVO.datesetting.period.start = history.DATE_FROM;
-	                	saleItemDataVO.datesetting.period.end = history.DATE_TO;
-	            		
-	            		$scope.gridSaleVO.dataSource.read();
-	            	}
+	            	$timeout(function() {
+		            	// 이전에 검색조건을 세션에 저장된 것을 가져옴
+	            		var history = UtilSvc.grid.getInquiryParam();
+		            	if(history){
+		            		saleItemDataVO.signItem.value = history.CD_SIGNITEM;
+	    					saleItemDataVO.nmItem.value = history.NM_ITEM;
+	    					saleItemDataVO.cmrkIds = history.NO_MRK;
+	    					saleItemDataVO.cmrkList.setSelectNames = history.NO_MRK_SELECT_INDEX;
+	    					saleItemDataVO.iStatIds = history.CD_ITEMSTAT;
+	    					saleItemDataVO.iStatList.setSelectNames = history.CD_ITEMSTAT_SELECT_INDEX;
+	    					saleItemDataVO.selectedCtgr1.ID_CTGR = history.CD_ITEMCTGR1;
+	    					saleItemDataVO.selectedCtgr1.NM_CTGR = history.NM_ITEMCTGR1;
+	    					saleItemDataVO.ctgrChange(1);
+	    					saleItemDataVO.selectedCtgr2.ID_CTGR = history.CD_ITEMCTGR2;
+	    					saleItemDataVO.selectedCtgr2.NM_CTGR = history.NM_ITEMCTGR2;
+	    					saleItemDataVO.ctgrChange(2);
+	    					saleItemDataVO.selectedCtgr3.ID_CTGR = history.CD_ITEMCTGR3;
+	    					saleItemDataVO.selectedCtgr3.NM_CTGR = history.NM_ITEMCTGR3;
+							saleItemDataVO.datesetting.period.start = history.DATE_FROM;
+		                	saleItemDataVO.datesetting.period.end = history.DATE_TO;
+		            		
+		            		$scope.gridSaleVO.dataSource.read();
+		            	}
+	            	},1000);
 	            };
 	            
 	            //조회
