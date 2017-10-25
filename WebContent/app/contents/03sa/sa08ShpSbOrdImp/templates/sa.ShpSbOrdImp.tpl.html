@@ -19,10 +19,13 @@
 <!-- 주문 조회 그리드 툴바 템플릿 -->
 <script id="shpbyord-toolbar-template" type="text/x-kendo-template">
 	<div class="row">   
-		<div class="col-xs-4" style="padding:0px;">   
+		<div class="col-xs-8" style="padding:0px;">   
 			<div style="margin-left:15px;">
-				<!-- <a class="k-button k-button-icontext k-grid-excel"><span class="k-icon k-i-excel"></span>Excel로딩</a> -->
-				<input name="files" id="files"
+				<div style="width:103px;float:left;">
+					<a class="k-button k-button-icontext k-grid-delivery-info" ng-click = "shpbyordDataVO.excelExecute()"><span class="k-icon k-i-add"></span>배송정보등록</a> 
+				</div>
+				<div style="width:300px;float:left;">
+					<input name="files" id="files"
 		                   type="file"
 		                   kendo-upload
 		                   k-async="{ saveUrl: '{{shpbyordDataVO.url}}/sa08ShpImp/excelUpload',  autoUpload: true }"
@@ -30,11 +33,11 @@
 		                   k-multiple="false"
 		                   k-validation="{allowedExtensions:['.xlsx']}"
 		                   k-localization="{ invalidFileExtension: '엑셀파일이 아닙니다.', select: 'Excel로딩'}"
-		        />
-				<a class="k-button k-button-icontext k-grid-delivery-info" ng-click = "shpbyordDataVO.excelExecute()"><span class="k-icon k-i-add"></span>배송정보등록</a> 
+		        	/>
+				</div>
 			</div>
 		</div>
-		<div class="col-xs-8" style="padding:0px;">
+		<div class="col-xs-4" style="padding:0px;">
 			<div style="margin-right:35px;">    
 				<p class="text-right" style="margin:0px;">총  <strong>{{shpbyordDataVO.dataTotal}}</strong> 건이 검색</p>
 			</div>
@@ -226,5 +229,11 @@
 }
 .k-grid-content > table > tbody > tr > td:nth-child(21) {
 	text-align: center;
+}
+.k-dropzone {
+    border-style: solid;
+    border-width: 0;
+    padding: .1em;
+    background-color: transparent;
 }
 </style>

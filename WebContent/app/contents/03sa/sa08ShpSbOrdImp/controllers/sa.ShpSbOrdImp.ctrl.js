@@ -107,7 +107,7 @@
 	                    editable: true,
 	                	scrollable: true,
 	                	sortable: true,
-	                	height: 616,
+	                	height: 828,
 	                	navigatable: true, //키보드로 그리드 셀 이동 가능
 	                	toolbar: [{template: kendo.template($.trim($("#shpbyord-toolbar-template").html()))}],
 	                	excel: {
@@ -347,7 +347,7 @@
 	                                },    
 	                                {
 			                        	field: "CD_PARS",
-			                            title: "<code>*</code>택배사",
+			                            title: "<span class='form-required'>* </span>택배사",
 			                            width: 100,
 			                            editor: function shipCategoryDropDownEditor(container, options) {	
 			                            	var db = "";
@@ -390,7 +390,7 @@
 			                        },
 	                               	{
 	                                    field: "NO_INVO",
-	                                    title: "<code>*</code>송장번호",
+	                                    title: "<span class='form-required'>* </span>송장번호",
 	                                    width: 100,
 				                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}                  
 			                        },
