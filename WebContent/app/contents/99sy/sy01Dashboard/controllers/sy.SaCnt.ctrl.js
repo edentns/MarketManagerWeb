@@ -16,9 +16,30 @@
 	            });
 	        });
 	
-	        var today   = edt.getToday(),
-	            period  = { startYear: today.y, startMonth: today.m, endYear: today.y, endMonth: today.m },
-            	grid_header       = {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"};
+	        var today       = edt.getToday(),
+	            period      = { startYear: today.y, startMonth: today.m, endYear: today.y, endMonth: today.m },
+            	grid_header = {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"},
+            	tableDataSource = { autoBind: false,
+						transport: {
+							read: function(e) {
+							}
+						},
+						schema: {
+							model: {
+								fields: {
+									CD_DEF : {type:"string"},
+									NM_DEF : {type:"string"},
+									CNT    : {type:"number"}
+								}
+							}
+						}
+					},
+				chartDataSource = {
+			        	transport: {
+			        		read: function(e) {
+			        		}
+			        	}
+					};
 	
 	        var saCnt = $scope.saCnt = {
 	            tabName     : '',
@@ -74,22 +95,7 @@
     				requestFailed: "정보를 가져오는 중 오류가 발생하였습니다.",
     				retry: "갱신",
     			},
-    			dataSource: new kendo.data.DataSource({
-    				autoBind: false,
-    				transport: {
-    					read: function(e) {
-    					}
-    				},
-    				schema: {
-    					model: {
-    						fields: {
-    							CD_DEF : {type:"string"},
-    							NM_DEF : {type:"string"},
-    							CNT    : {type:"number"}
-    						}
-    					}
-    				}
-    			}),
+    			dataSource: new kendo.data.DataSource(tableDataSource),
     			columns: [
             		{field: "NM_DEF", width: 100, title: "주문상태", headerAttributes: grid_header, template:'<div style="text-align:center;">#=NM_DEF#</div>'},
           			{field: "CNT"   , width: 100, title: "건수"  , headerAttributes: grid_header, template:'<div style="text-align:right; margin-right:5px;">#=kendo.toString(CNT,"n0")#</div>'}
@@ -97,58 +103,13 @@
           		scrollable: false
 	        };
 	        saCnt.table.optionsCcl  = angular.copy(saCnt.table.optionsOrd);
-	        saCnt.table.optionsCcl.dataSource = new kendo.data.DataSource({
-				autoBind: false,
-				transport: {
-					read: function(e) {
-					}
-				},
-				schema: {
-					model: {
-						fields: {
-							CD_DEF : {type:"string"},
-							NM_DEF : {type:"string"},
-							CNT    : {type:"number"}
-						}
-					}
-				}
-			});
+	        saCnt.table.optionsCcl.dataSource = new kendo.data.DataSource(tableDataSource);
 	        saCnt.table.optionsCcl.columns[0].title = "취소상태";
 	        saCnt.table.optionsTkbk = angular.copy(saCnt.table.optionsOrd);
-	        saCnt.table.optionsTkbk.dataSource = new kendo.data.DataSource({
-				autoBind: false,
-				transport: {
-					read: function(e) {
-					}
-				},
-				schema: {
-					model: {
-						fields: {
-							CD_DEF : {type:"string"},
-							NM_DEF : {type:"string"},
-							CNT    : {type:"number"}
-						}
-					}
-				}
-			});
+	        saCnt.table.optionsTkbk.dataSource = new kendo.data.DataSource(tableDataSource);
 	        saCnt.table.optionsTkbk.columns[0].title = "반품상태";
 	        saCnt.table.optionsEchg = angular.copy(saCnt.table.optionsOrd);
-	        saCnt.table.optionsEchg.dataSource = new kendo.data.DataSource({
-				autoBind: false,
-				transport: {
-					read: function(e) {
-					}
-				},
-				schema: {
-					model: {
-						fields: {
-							CD_DEF : {type:"string"},
-							NM_DEF : {type:"string"},
-							CNT    : {type:"number"}
-						}
-					}
-				}
-			});
+	        saCnt.table.optionsEchg.dataSource = new kendo.data.DataSource(tableDataSource);
 	        saCnt.table.optionsEchg.columns[0].title = "교환상태";
 	        
 	        saCnt.chart = {
@@ -188,29 +149,9 @@
                 }
 	        };
 	        
-	        saCnt.chart.dataOrd = new kendo.data.DataSource({
-	        	transport: {
-	        		read: function(e) {
-	        		}
-	        	}
-	        });
-	        saCnt.chart.dataCcl  = new kendo.data.DataSource({
-	        	transport: {
-	        		read: function(e) {
-	        		}
-	        	}
-	        });
-	        saCnt.chart.dataTkbk = new kendo.data.DataSource({
-	        	transport: {
-	        		read: function(e) {
-	        		}
-	        	}
-	        });
-	        saCnt.chart.dataEchg = new kendo.data.DataSource({
-	        	transport: {
-	        		read: function(e) {
-	        		}
-	        	}
-	        });
+	        saCnt.chart.dataOrd  = new kendo.data.DataSource(chartDataSource);
+	        saCnt.chart.dataCcl  = new kendo.data.DataSource(chartDataSource);
+	        saCnt.chart.dataTkbk = new kendo.data.DataSource(chartDataSource);
+	        saCnt.chart.dataEchg = new kendo.data.DataSource(chartDataSource);
         }]);
 }());

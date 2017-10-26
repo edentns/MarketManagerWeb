@@ -173,7 +173,7 @@
 	        		labels: {
 	        			format: ""
 	        		},
-	        		majorUnit: 1,
+	        		majorUnit: 10,
 	        		line: {
 	        			visible: false
 	        		},

@@ -26,7 +26,6 @@
 	                };
 	            
 	            var sy15ParsVO = $scope.sy15ParsVO = {
-	            		ParsCodeList : [],
 		            	initLoad: function(bLoading) {
 		            		var self = this;
 		            		//self.ctgrId                   = resData.cfctData[0].ID_CTGR;
@@ -167,6 +166,7 @@
 		            	localSelf.dataSource = new kendo.data.DataSource({
 		            		autoBind: false,
 		            		batch : true,
+		            		ParsCodeList : [],
 	        				transport: {
 	        					read: function(e) {
 	        						var ls = localSelf;
@@ -176,7 +176,7 @@
         			                    	L_FLAG : String(ls.iIndex)
         			                    };
         			            		UtilSvc.getList(param).then(function (res) {
-        			            			sy15ParsVO.ParsCodeList = res.data.results[1];
+        			            			ls.ParsCodeList = res.data.results[1];
         			            			ls.dataSource.data(res.data.results[0]);
         							});
 	        					},
@@ -254,10 +254,10 @@
 								cellClass: "ta-c",
 								headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"},
 								editor: function(container, options) {
-									sy15ParsVO.dropDownEditor(container, options, sy15ParsVO.ParsCodeList, ["NM_DEF","CD_DEF"]);
+									sy15ParsVO.dropDownEditor(container, options, localSelf.ParsCodeList, ["NM_DEF","CD_DEF"]);
 	           		        	},
 	           		        	template: function(e){
-	          		       	   		return sy15ParsVO.fTemplate(e, sy15ParsVO.ParsCodeList, ["CD_DEF", "NM_DEF", "DC_RMK2"]);
+	          		       	   		return sy15ParsVO.fTemplate(e, localSelf.ParsCodeList, ["CD_DEF", "NM_DEF", "DC_RMK2"]);
 	          		       	  	},
 		              		},
 		              		{command: [ {
