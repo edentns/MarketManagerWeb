@@ -585,7 +585,7 @@
     	    	            		});	            				
                     				e.container.find("select[name=CD_PARS]").kendoDropDownList({
     	    	            			dataSource : deliverDS,
-    	    	                		dataTextField : "NM_DEF",
+    	    	                		dataTextField : "NM_PARS_TEXT",
     	    	                		dataValueField : "CD_DEF",
     	    	                		optionLabel : "택배사를 선택해 주세요 ",
     	    	                		select : function(e){

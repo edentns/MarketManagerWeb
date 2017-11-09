@@ -257,6 +257,7 @@
 	        		},
 	        		dateOptions : {										//DATE PICKER
 	        			parseFormats: ["yyyyMMddHHmmss"], 				//이거 없으면 값이 바인딩 안됨
+	        			value: new Date(),
         	            animation: {
         	                close: {
         	                    effects: "fadeOut zoom:out",
@@ -404,7 +405,7 @@
                     	
                     	cdpars.kendoDropDownList({
 	            			dataSource : chosenDS,
-	                		dataTextField : "NM_PARS",
+	                		dataTextField : "NM_PARS_TEXT",
 	                		dataValueField : "CD_DEF",
 	                		optionLabel : "택배사를 선택해 주세요 ",
 	                		select : function(e){
@@ -798,12 +799,16 @@
                 	UtilSvc.grdCkboxAllClick(e, $scope.echgkg);
                 };		
                 
+                $scope.popupUtil = function(e){
+                	Util03saSvc.popupUtil.blur(e);
+                };
+                
 	            $scope.$on("kendoWidgetCreated", function(event, widget){
                 	var grd = $scope.echgkg;
                 	
 	                if (widget === grd){
 	                	
-	                	widget.element.find(".k-grid-echg").on("click", function(e){            				
+	                	widget.element.find(".k-grid-echg").on("click", function(e){         				
 	                		if(grd.element.find(".k-grid-content input:checked").length != 1){
 	                			alert("한 건의 주문을 선택해 주세요");
 	                			return false;
@@ -851,7 +856,7 @@
 		                    };
 		                    if($(this).hasClass("complete") && vali(2)){//교환완료		                    	
 		                    	if((grdItem.CD_ORDSTAT == "009" && grdItem.CD_ECHGSTAT == "002") || (['004','005'].indexOf(grdItem.CD_ORDSTAT) > -1 && grdItem.CD_ECHGSTAT === "001" && ['170104','170102'].indexOf(grdItem.CODE) > -1)){				                			
-		                    		grdItem.DTS_RECER = new Date();
+		                    		//grdItem.DTS_RECER = new Date();
 		                    		proc("550px", "003");		
 		                		}else{
 		                			alert("마켓 및 주문 상태를 확인해 주세요.");

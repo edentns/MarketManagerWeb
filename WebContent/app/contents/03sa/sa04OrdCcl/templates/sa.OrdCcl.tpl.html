@@ -249,7 +249,12 @@
 					<code>*</code>송장번호<br/>
 				</td>
 				<td colspan="3">			
-					<textarea class="k-textbox" name="NO_INVO" data-bind="value: NO_INVO" rows="3" data-ng-blur="popupUtil($event)" style="width:100%; overflow-y: scroll;"></textarea>
+					<textarea class="k-textbox" 
+						name="NO_INVO" 
+						data-bind="value: NO_INVO" 
+						rows="3" 
+						data-ng-blur="popupUtil($event)" 
+						style="width:100%; overflow-y: scroll;"></textarea>
 				</td> 
 			</tr>	
 			<tr class="border-bottom-line" data-ng-if="ngIfdata(ordCancelManagementDataVO.cancelRjCdEqCtt)">
@@ -272,7 +277,7 @@
              			   data-bind="value: DTS_RECER"
 						   data-ng-blur="popupUtil($event)" 
              			   style="width: 50%;" />
-				</td> 
+				</td>
 			</tr>
 		</tbody>
 	</table>

@@ -25,16 +25,17 @@
             this.NoINVOValidation = function(input, colunm, valicolunm){
             	//var regTest = /^[0-9]{1}[0-9\-]+[0-9]{1}$/;
             	var regTest = /^(([\d]+)\-|([\d]+))+(\d)+$/;
+            	var iValue = input.val(); 
  			    
-			    if (input.is("[name='"+colunm+"']") && !input.val()) {
+			    if (input.is("[name='"+colunm+"']") && !iValue) {
                  	input.attr("data-"+valicolunm+"-msg", "송장번호를 입력해 주세요.");
                     return false;
                 };
-			    if(input.is("[name='"+colunm+"']") && (input.val().length > 100 || input.val().length < 3)){
+			    if(input.is("[name='"+colunm+"']") && iValue && (iValue.trim().length > 100 || iValue.trim().length < 3)){
 			    	input.attr("data-"+valicolunm+"-msg", "송장번호룰 3자 이상 100자 이내로 입력해 주세요.");
                     return false;
 			    };
-			    if (input.is("[name='"+colunm+"']") && input.val() && !regTest.test(input.val())) {
+			    if (input.is("[name='"+colunm+"']") && iValue && !regTest.test(iValue.trim())) {
 					input.attr("data-"+valicolunm+"-msg", "송장 번호는 택배사에 따라 숫자 또는 숫자 와 '-'(짝대기, 연속으로 안됨) 조합으로 가능합니다.");
 				    return false;
 				};				

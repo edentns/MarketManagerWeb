@@ -339,7 +339,7 @@
            		        	    {
              		        	   field: "NM_INQ",
              		        	   title: "문의자",
-             		        	   width: 130,
+             		        	   width: 100,
              		        	   headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
             		        	},
         		        	    {
@@ -351,7 +351,7 @@
         		        	    {
              		        	   field: "NO_MRKORD",
              		        	   title: "주문번호",
-             		        	   width: 130,
+             		        	   width: 110,
              		        	   headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
             		        	}            		        	
                     	],

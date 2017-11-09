@@ -109,7 +109,7 @@
                     CD_SHPSTAT    : { type: APP_SA_MODEL.CD_SHPSTAT.type     , editable: false, nullable: false },
                     CD_PARS       : { type: APP_SA_MODEL.CD_PARS.type        , editable: false, nullable: false },
                     CD_PARS_INPUT : { 
-                    					type: APP_SA_MODEL.CD_PARS.type, 
+                    					type: "string", 
                     					editable: true,
                     					nullable: false,
 				                    	validation: {
@@ -194,7 +194,7 @@
 	        		selectedNoMrk : "",
 	        		parsCodeOptions : {
 	        			dataSource: parsCodeOp,
-	        			dataTextField: "NM_PARS",
+	        			dataTextField: "NM_PARS_TEXT",
                         dataValueField: "CD_PARS",
                     	valuePrimitive: true
 	        		},
@@ -203,7 +203,7 @@
 	            
 	            //조회
 	            shippingDataVO.inQuiry = function(){
-	            	var me = this;	            	
+	            	var me = this;
 	            	me.param = {
     				    NM_MRKITEM : shippingDataVO.procName.value,
 					    NO_MRK : shippingDataVO.ordMrkNameMo, 

@@ -271,6 +271,8 @@
 					});	 
 	            	return changDbbox;
 	            };
+	            
+	            //그리드 셀 더블 클릭
 	            $("#divShpbyordGrd").delegate("tbody>tr", "dblclick", function(ev){
 	            	var grd = $scope.shpbyordkg;
 	            	var getCurrentCell = "",
@@ -371,8 +373,8 @@
             			e.preventDefault();
                     	if(shpbyordDataVO.flag){
 	                    	var grid = $("#divShpbyordGrd").data("kendoGrid"),
-	            		    op1 = { editable : true },
-	            		    data = grid._data;
+	            		         op1 = { editable : true },
+	            		        data = grid._data;
 	                    	
 	                    	grid.setOptions(op1);
 	                    	$scope.shpbyordkg.dataSource.data(data);
@@ -787,12 +789,12 @@
 		                            width: 100,
 		                            editor: function shipCategoryDropDownEditor(container, options) {	
 		                            	var db = "";
+		                            	
 		                            	db = filteringShpbox(options.model.NO_MRK);
-		                            	$('<input name="' + options.field + '" data-bind="value: CD_PARS"/>')
-		                                .appendTo(container)
-		                                .kendoDropDownList({
+		                            	
+		                            	$('<input name="' + options.field + '" data-bind="value: CD_PARS"/>').appendTo(container).kendoDropDownList({
 		                                    autoBind: false,
-		                                    dataTextField: "NM_PARS",
+		                                    dataTextField: "NM_PARS_TEXT",
 		                                    dataValueField: "CD_PARS",
 		                                    optionLabel : "택배사를 선택해 주세요 ",
 		                                    dataSource: db               
@@ -818,7 +820,7 @@
 		                                    		};
 		                                    	};
 	                            			};
-	                            			return e.CD_PARS.NM_PARS;
+	                            			return e.CD_PARS.NM_PARS_TEXT;
 	                            		};
 	                            		return "";
 		                            },

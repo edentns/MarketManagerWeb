@@ -66,7 +66,7 @@
 	        	                }
 	        	              }
 	        	        },
-	        			dataTextField: "NM_PARS",
+	        			dataTextField: "NM_PARS_TEXT",
                         dataValueField: "CD_PARS",
                     	valuePrimitive: false,
                     	autoBind: true
@@ -255,8 +255,8 @@
                     },
                     rules: {
                     	lengthy: function(input) {
-	                        if (input.is("[name=NO_INVO]")) {                   	
-	                            return input.val().length < 100 || input.val().length > 2;
+	                        if (input.is("[name=NO_INVO]")) {                 	
+	                            return (input.val().length < 100 && input.val().length > 2);
 	                        }	                        
 	                        return true;
                     	},

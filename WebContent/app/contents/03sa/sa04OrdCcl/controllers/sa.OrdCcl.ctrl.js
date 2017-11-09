@@ -193,17 +193,17 @@
 										}
                     				},	
                     NO_INVO:        {
-				                    	type: APP_SA_MODEL.NO_INVO.type  
+				                    	type: "string"
 						     		   ,editable: true
 						     		   ,nullable: false
 						               ,validation: {
 						            	   no_invovalidation: function (input) {
 						            		   if(Util03saSvc.NoINVOValidation(input, 'NO_INVO', 'no_invovalidation')){
 						            			   manualDataBind(input, "NO_INVO");
+						            			   return true;
 						            		   }else{
 						            			   return false;
 						            		   }
-						            		   return true;
 									    	}
 						               }
                     				}
@@ -225,7 +225,7 @@
 	            		};
 	            	}else if(target === "DTS_RECER"){
 	            		dataItem[target] = kendo.toString(new Date(input.val()), "yyyyMMdd");
-	            	}else{
+	            	}else if(target === input.attr("name")){
 	            		dataItem[target] = input.val();
 	            	}
 	            };
@@ -300,6 +300,7 @@
     				},   
     				dateOptions : {										//DATE PICKER
 	        			parseFormats: ["yyyyMMdd"], 					//이거 없으면 값이 바인딩 안됨
+	                    value: new Date(),
         	            animation: {
         	                close: {
         	                    effects: "fadeOut zoom:out",
@@ -362,13 +363,15 @@
                 	},0);                	
                 	        			
                 	me.ordStatusOp.bReset = true;
-                	me.ordMrkNameOp.bReset = true;  
+                	me.ordMrkNameOp.bReset = true;
+                	me.cancelStatusOp.bReset = true;
 		        	                	                	
                 	angular.element($("#grd_chk_master")).prop("checked",false);
                 	me.dataTotal = 0;
                 	me.resetAtGrd = $scope.ordCancelManagementkg;
                 	me.resetAtGrd.dataSource.data([]);	 
                 	me.cancelRjCd = "";
+                	
 	            };	
 
 	            ordCancelManagementDataVO.isOpen = function (val) {
@@ -424,9 +427,18 @@
                 							viewName = "ocmRejectCtt";
                 							break;
                 						};
-                						case "003" :
-                						case "004" :
-                						case "005" :
+                						case "003" : {
+                							viewName = "ocmRejectNormal";
+                							break;
+                						};
+                						case "004" : {
+                							viewName = "ocmRejectNormal";
+                							break;
+                						};
+                						case "005" : {
+                							viewName = "ocmRejectNormal";
+                							break;
+                						};
                 						case "006" : {
                 							viewName = "ocmRejectNormal";
                 							break;
@@ -517,7 +529,7 @@
                         				$timeout(function(){
                         					e.sender.element.parents("table").find("select[name=CD_PARS]").kendoDropDownList({
                                     			dataSource : inputDataSource,
-                                        		dataTextField : "NM_PARS",
+                                        		dataTextField : "NM_PARS_TEXT",
                                         		dataValueField : "CD_DEF",
                                         		optionLabel : "택배사를 선택해 주세요 ",
                                         		change: function(e){
@@ -525,7 +537,7 @@
                                         				e.sender.element.closest("tr").find("div.k-invalid-msg").hide();
                                         			}
                                         		}
-                                    		});
+                                    		});                        					
                         				},0);
                         			};
                     			},0);
@@ -582,7 +594,7 @@
                 				alert("취소요청 된 주문만 취소거부 처리 할 수 있습니다.");	
                 				return;
                 			};
-		                	grd.editRow(chked.closest('tr'));		                	
+		                	grd.editRow(chked.closest('tr'));
 	                	});                	
 	                	
 	                	//취소 승인
