@@ -210,7 +210,10 @@
 	                			syMrkSvc.saveUserMrk(e.data.models, "I").success(function () {
 	                				defer.resolve();
 	                				gridMrkVO.dataSource.read();
-	                            });
+	                            }).error(function() {
+                                	defer.resolve();
+                                	e.error();
+								});;
 	                			
 	                			return defer.promise;
 	            			},
@@ -224,7 +227,10 @@
 	                			syMrkSvc.saveUserMrk(e.data.models, "U").success(function () {
 	                				defer.resolve();
 	                				gridMrkVO.dataSource.read();
-	                            });
+	                            }).error(function() {
+                                	defer.resolve();
+                                	e.error();
+								});;
 	                			
 	                			return defer.promise;
                 			},
@@ -233,7 +239,10 @@
                 				syMrkSvc.saveUserMrk(e.data.models, "D").success(function () {
             						defer.resolve();
             						gridMrkVO.dataSource.read();
-                                });
+                                }).error(function() {
+                                	defer.resolve();
+                                	e.error();
+								});
                     			return defer.promise;
                 			},
                 			parameterMap: function(e, operation) {
