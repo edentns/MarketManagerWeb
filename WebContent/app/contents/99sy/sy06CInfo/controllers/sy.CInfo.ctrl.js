@@ -250,10 +250,8 @@
 					
 					vo.fileSave = function() {
 		        		if(vo.fileBsnsVO.dirty) {
-		        			vo.fileBsnsVO.CD_REF1 = vo.param.NO_C;
 		        			vo.fileBsnsVO.doUpload(function(){
 				        		if(vo.fileCommVO.dirty) {
-				        			vo.fileCommVO.CD_REF1 = vo.param.NO_C;
 				        			vo.fileCommVO.doUpload(function(){
 					        			alert('성공하였습니다.');
 					        		}, function() {
@@ -287,7 +285,7 @@
 	                    }
 	                    
 	                    // 사업자등록번호
-	                    if (data.NO_BSNSRGTT && !/^\d{3}-\d{2}-\d{5}$/.test(data.NO_BSNSRGTT)) {
+	                    if (/*data.NO_BSNSRGTT &&*/ !/^\d{3}-\d{2}-\d{5}$/.test(data.NO_BSNSRGTT)) {
 			                return edt.invalidFocus("userNO_BSNSTGTT", "[형식] 사업자등록번호는 유효하지 않은 형식입니다.(ex-\"012-34-56789\")");
 		                }
 	                    

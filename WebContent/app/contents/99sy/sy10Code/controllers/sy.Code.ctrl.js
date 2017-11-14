@@ -10,7 +10,8 @@
         .controller("sy.CodeCtrl", ["$scope", "$http", "$q", "$log", "sy.CodeSvc", "APP_CODE", "$timeout", "resData", "Page","UtilSvc",
             function ($scope, $http, $q, $log, SyCodeSvc, APP_CODE, $timeout, resData, Page, UtilSvc) {
 	            var page  = $scope.page = new Page({ auth: resData.access }),
-		            today = edt.getToday();
+		            today = edt.getToday(),
+		            gridHeaderAttributes = {"class": "table-header-cell", style: "text-align: center; font-size: 12px"};
 
 	            var rowClick = function( arg ) {
 	            	var selected = $.map(this.select(), function(item) {
@@ -71,12 +72,12 @@
                 	}),
                 	navigatable: true,
                 	columns: [
-                	    { field : "NO_MNGCDHD", title: "", width: 0, cellClass: "ta-c", hidden:true },
-                	    { field : "CD_CLS", title: "분류코드", width: 90, cellClass: "ta-c" },
-                        { field : "NM_CLS", title: "분류명칭", width: 120, cellClass: "ta-c" },
-                        { field : "DC_RMK", title: "비고", width: 100 },
-                        { field : "YN_SYS", title: "수정여부", width: 80, cellClass: "ta-c", template: '#if (YN_SYS == "Y") {# #="불가능"# #} else {# #="가능"# #} #'},
-                        { field : "DTS_UPDATE", title: "수정일시", width: 120, cellClass: "ta-c" }
+                	    { field : "NO_MNGCDHD", title: "", width: 0, hidden:true },
+                	    { field : "CD_CLS", title: "분류코드", width: 90, headerAttributes: gridHeaderAttributes, attributes:{class:"ta-l"}},
+                        { field : "NM_CLS", title: "분류명칭", width: 120, headerAttributes: gridHeaderAttributes, attributes:{class:"ta-l"} },
+                        { field : "DC_RMK", title: "비고", width: 100, headerAttributes: gridHeaderAttributes, attributes:{class:"ta-l"} },
+                        { field : "YN_SYS", title: "수정여부", width: 80, headerAttributes: gridHeaderAttributes, attributes:{class:"ta-l"}, template: '#if (YN_SYS == "Y") {# #="불가능"# #} else {# #="가능"# #} #'},
+                        { field : "DTS_UPDATE", title: "수정일시", width: 120, headerAttributes: gridHeaderAttributes, attributes:{class:"ta-l"} }
                 	],
                     collapse: function(e) {
                         // console.log(e.sender);

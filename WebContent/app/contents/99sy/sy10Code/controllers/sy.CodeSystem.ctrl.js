@@ -8,7 +8,7 @@
      */
     angular.module("sy.Code.controller")
         .controller("sy.CodeSystemCtrl", [ "$scope", function ($scope) {
-        	
+        	var gridHeaderAttributes = {"class": "table-header-cell", style: "text-align: center; font-size: 12px"};
         	
         	var gridSysCodeVO = $scope.gridSysCodeVO = {
     			NO_MNGCDHD   : "",
@@ -38,16 +38,19 @@
             	}),
             	navigatable: true,
             	columns: [
-    		           { field : "NM_DEF", title: "구분코드명", width: "160" },
-    		           { field : "DC_RMK1", title: "비고1", width: "90" },
-                       { field : "DC_RMK2", title: "비고2", width: "90" },
-                       { field : "DC_RMK3", title: "비고3", width: "90" },
-                       { field : "DC_RMK4", title: "비고4", width: "90" },
-                       { field : "DC_RMK5", title: "비고5", width: "90" },
-                       { field : "YN_USE", title: "사용여부", width: "100", cellClass: "ta-c", cellFilter: "ynUse", editableCellTemplate: "ui-grid/dropdownEditor", editDropdownValueLabel: "YN_USE",
-                           editDropdownOptionsArray : [  { id: "Y", YN_USE: "사용" }, { id: "N", YN_USE: "사용안함" } ]
+    		           { field : "NM_DEF", title: "구분코드명", width: 80, headerAttributes: gridHeaderAttributes, attributes:{class:"ta-l"} },
+    		           { field : "DC_RMK1", title: "비고1", width: 40, headerAttributes: gridHeaderAttributes, attributes:{class:"ta-l"} },
+                       { field : "DC_RMK2", title: "비고2", width: 40, headerAttributes: gridHeaderAttributes, attributes:{class:"ta-l"} },
+                       { field : "DC_RMK3", title: "비고3", width: 40, headerAttributes: gridHeaderAttributes, attributes:{class:"ta-l"} },
+                       { field : "DC_RMK4", title: "비고4", width: 40, headerAttributes: gridHeaderAttributes, attributes:{class:"ta-l"}},
+                       { field : "DC_RMK5", title: "비고5", width: 40, headerAttributes: gridHeaderAttributes, attributes:{class:"ta-l"} },
+                       { field : "YN_USE", title: "사용여부", width: 50, headerAttributes: gridHeaderAttributes, attributes:{class:"ta-l"}
+                       , cellFilter: "ynUse", editableCellTemplate: "ui-grid/dropdownEditor", editDropdownValueLabel: "YN_USE",
+                           editDropdownOptionsArray : [  { id: "Y", YN_USE: "사용" }, { id: "N", YN_USE: "사용안함" } ],
+                           template: '#if (YN_USE == "Y") {# #="사용"# #} else {# #="사용안함"# #} #'
                        },
-                       { field : "DTS_UPDATE", title: "수정일시", width: "200", cellClass: "ta-c", enableCellEdit: false }
+                       { field : "DTS_UPDATE", title: "수정일시", width: 100, headerAttributes: gridHeaderAttributes, attributes:{class:"ta-l"}
+                       , enableCellEdit: false }
             	],
                 collapse: function(e) {
                     // console.log(e.sender);

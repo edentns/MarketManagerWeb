@@ -188,7 +188,8 @@
                             editable: true,
                             expandable: true,
                             template: $('#departTemplate').html(),
-                            attributes: { style: "text-align: left" }
+                            attributes: { style: "text-align: left" },
+                            headerAttributes: { style: "text-align: center" }
                         },
                         { 
                             field: 'CD_OCC',
@@ -196,7 +197,8 @@
                             width: '150px',
                             template: $('#workGroupNameTemplate').html(),
                             editor: syDeptVO.workGroupDropDownEditor,
-                            attributes: { style: "text-align: center" }
+                            attributes: { style: "text-align: center" },
+                            headerAttributes: { style: "text-align: center" }
                         },
                         { 
                             field: 'CNT_EMP',
@@ -204,7 +206,8 @@
                             width: '120px',
                             template: $('#cntEmpTemplate').html(),
                             editable: false,
-                            attributes: { style: "text-align: right" }
+                            attributes: { style: "text-align: right" },
+                            headerAttributes: { style: "text-align: center" }
                         },
                         {
                             command: [ "createchild","edit","destroy" ],

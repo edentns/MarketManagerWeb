@@ -9,6 +9,7 @@
     angular.module("sy.Code.controller")
         .controller("sy.CodeCustomCtrl", ["$scope", "$http", "$log", "$timeout", "$q", "sy.CodeSvc", "APP_CODE","UtilSvc",
             function ($scope, $http, $log, $timeout, $q, SyCodeSvc, APP_CODE, UtilSvc) {
+        	var gridHeaderAttributes = {"class": "table-header-cell", style: "text-align: center; font-size: 12px"};
         	
         	var gridCusCodeVO = $scope.gridCusCodeVO = {
     			NO_MNGCDHD   : "",
@@ -106,16 +107,17 @@
             		["create", "save", "cancel"],
             	columns: [
             	       { field : "CD_DEF_OLD", hidden:true },   
-       		           { field : "CD_DEF", title: "구분코드", width: "160" },
-    		           { field : "NM_DEF", title: "구분코드명", width: "170" },
-    		           { field : "DC_RMK1", title: "비고1", width: "90" },
-                       { field : "DC_RMK2", title: "비고2", width: "90" },
-                       { field : "DC_RMK3", title: "비고3", width: "90" },
-                       { field : "DC_RMK4", title: "비고4", width: "90" },
-                       { field : "DC_RMK5", title: "비고5", width: "90" },
-                       { field : "YN_USE", title: "사용여부", width: "100", cellClass: "ta-c", 
+       		           { field : "CD_DEF", title: "구분코드", width: 100, headerAttributes: gridHeaderAttributes, attributes:{class:"ta-l"} },
+    		           { field : "NM_DEF", title: "구분코드명", width: 120, headerAttributes: gridHeaderAttributes, attributes:{class:"ta-l"} },
+    		           { field : "DC_RMK1", title: "비고1", width: 50, headerAttributes: gridHeaderAttributes, attributes:{class:"ta-l"} },
+                       { field : "DC_RMK2", title: "비고2", width: 50, headerAttributes: gridHeaderAttributes, attributes:{class:"ta-l"} },
+                       { field : "DC_RMK3", title: "비고3", width: 50, headerAttributes: gridHeaderAttributes, attributes:{class:"ta-l"} },
+                       { field : "DC_RMK4", title: "비고4", width: 50, headerAttributes: gridHeaderAttributes, attributes:{class:"ta-l"} },
+                       { field : "DC_RMK5", title: "비고5", width: 50 , headerAttributes: gridHeaderAttributes, attributes:{class:"ta-l"}},
+                       { field : "YN_USE", title: "사용여부", width: 70, headerAttributes: gridHeaderAttributes, attributes:{class:"ta-l"}, 
                     	   template: '#if (YN_USE == "Y") {# #="사용"# #} else {# #="사용안함"# #} #', editor: categoryDropDownEditor},
-                       { field : "DTS_UPDATE", title: "수정일시", width: "170", cellClass: "ta-c", enableCellEdit: false },
+                       { field : "DTS_UPDATE", title: "수정일시", width: 120, headerAttributes: gridHeaderAttributes, attributes:{class:"ta-l"}
+                    	   , enableCellEdit: false },
                        {command: [ "destroy" ]}
             	],
                 collapse: function(e) {
