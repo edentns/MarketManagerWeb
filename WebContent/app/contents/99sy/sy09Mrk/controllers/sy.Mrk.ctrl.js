@@ -414,7 +414,7 @@
        	   	   				{field: "DTS_INSERT", title: "등록일자", width: 80, headerAttributes: gridHeaderAttributes},
        	   	   				{field: "DTS_UPDATE", title: "수정일자", width: 80, headerAttributes: gridHeaderAttributes},
        	   	   				{field: "NM_UPDATE",  title: "수정자" , width: 80, headerAttributes: gridHeaderAttributes},
-        		            {command: ["destroy"], attributes:{class:"ta-l"}},
+        		            {command: [{text:"연동체크", click: checkCon }, "destroy"], attributes:{class:"ta-l"}},
                 	],
                     collapse: function(e) {
                         // console.log(e.sender);
@@ -459,6 +459,12 @@
                 function checkCon(e) {
                 	e.preventDefault();
                 	var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+                	
+                	if(dataItem.NO_MRK == undefined ||
+                	   dataItem.NO_MRK == '') {
+                		alert('저장 후에 연동 버튼을 클릭하여 주세요.');
+                		return;
+                	}
                 	
                 	var param = {
                     	NO_MNGMRK: dataItem.NO_MNGMRK,
