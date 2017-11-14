@@ -312,6 +312,7 @@
                 	}),
                 	navigatable: true,
                 	autoBind: false,
+                	resizable: true,
                 	toolbar: 
                 		["create", "save", "cancel"],
                 	columns: [
