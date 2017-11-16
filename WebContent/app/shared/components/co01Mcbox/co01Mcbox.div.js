@@ -12,19 +12,19 @@
                 },
                 template:
                 		"<div class='btn-group' data-ng-class='{open: open}' style='width:100%;'>" +
-                            "<button class='btn btn-small dropdown-toggle' style='overflow:hidden; text-overflow:ellipsis; width:calc(100% - 30px); text-align:left; font-family: initial; font-size: 11px; background: #ffffff;border-color: #e5e6e7;' " +
+                            "<button class='btn btn-small dropdown-toggle' style='overflow:hidden; text-overflow:ellipsis; width:calc(100% - 30px); text-align:left; font-size: 11px; background: #ffffff;border-color: #e5e6e7;' " +
                 		    "data-ng-click='openDropdown()'> {{co01McboxVO.selectNames}}</button>" +
-                            "<button class='btn btn-small dropdown-toggle' style='width:30px; text-align:center; font-family: initial; font-size: 11px; background: #ffffff;border-color: #e5e6e7;' " +
+                            "<button class='btn btn-small dropdown-toggle' style='width:30px; text-align:center; font-size: 11px; background: #ffffff;border-color: #e5e6e7;' " +
                             "data-ng-click='openDropdown()'>"+
                             	"<span class='caret'></span>" +
                             "</button>" +
                             "<ul class='dropdown-menu' aria-labelledby='dropdownMenu' style='margin-top: 0px; padding: 0px' tabindex='0' data-ng-blur='onBlur()' data-ng-focus='onFocus()'>" +
-                                "<li><a data-ng-click='selectAll();'><span class='glyphicon glyphicon-ok green' aria-hidden='true'></span><font style='text-align:left; font-family: initial; font-size: 11px; color:#606060'> 전체선택</font></a></li>" +
-                                "<li><a data-ng-click='deselectAll();'><span class='glyphicon glyphicon-remove red' aria-hidden='true'></span><font style='text-align:left; font-family: initial; font-size: 11px; color:#606060'> 전체해제</font></a></li>" +
+                                "<li><a data-ng-click='selectAll();'><span class='glyphicon glyphicon-ok green' aria-hidden='true'></span><font style='text-align:left; font-size: 11px; color:#606060'> 전체선택</font></a></li>" +
+                                "<li><a data-ng-click='deselectAll();'><span class='glyphicon glyphicon-remove red' aria-hidden='true'></span><font style='text-align:left; font-size: 11px; color:#606060'> 전체해제</font></a></li>" +
                                 "<li class='divider' style='margin:3px 0;'></li>" +
                                 "<li data-ng-repeat='option in options' class='nm-list'>"+
                                 	"<a data-ng-click='toggleSelectItem(option, $event)'>"+
-                                		"<span data-ng-class='getClassName(option)' aria-hidden='true'></span><font style='text-align:left; font-family: initial; font-size: 11px; color:#606060'> {{option[co01McboxVO.name]}}</font>" +
+                                		"<span data-ng-class='getClassName(option)' aria-hidden='true'></span><font style='text-align:left; font-size: 11px; color:#606060'> {{option[co01McboxVO.name]}}</font>" +
                                 	"</a>" +
                                 "</li>" +
                             "</ul>" +
