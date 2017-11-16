@@ -51,11 +51,6 @@
                             </td>   
                             <th>공지대상</th>
                             <td>     
-                            	 <!-- <div id="result" style="display:inline-block; width:70%;">
-					                <span ng-repeat="obj in repeaterItems" class='selectedName'>
-					                    {{obj.FullName}}
-					                </span>
-					            </div> -->
 					            <div style="display:inline-block; width:71%; vertical-align: middle;">
 					            	<select kendo-multi-select
 					            		title="공지대상" 
@@ -96,7 +91,7 @@
 <!-- 가입자 검색 그리드(조회용) -->
 <div kendo-dialog="dialog" k-options="memSearchGrd">
     <div class='k-textbox k-space-right search-wrapper'>
-        <input class="memberSearch" type='text' ng-model="memSearchGrd.searchValue" ng-keyup="memSearchGrd.searchKeyUp($event)" ng-keydown="memSearchGrd.searchKeyUp($event)"
+        <input id="memberSearchMain" class="memberSearch" type='text' ng-model="memSearchGrd.searchValue" ng-keyup="memSearchGrd.searchKeyUp($event)" ng-keydown="memSearchGrd.searchKeyUp($event)"
             placeholder='검색할 가입자를 입력하세요'/><span class='k-icon k-i-search'></span>
     </div>
     <div class='select-all-wrapper'>
@@ -104,16 +99,19 @@
         <label class='k-checkbox-label' for='selectAllInput'>전체 선택</label>
         <span class='selected-count'>{{memSearchGrd.selectedCount}} 명 선택</span>
     </div>
-    <div kendo-tree-view="treeView" k-options="memSearchGrd">      
+    <div kendo-tree-view="treeView" k-options="memSearchGrd">
         <span k-template data-color-matches="memSearchGrd.searchValue" data-value="{{dataItem.NM}}">
-        </span>
+        </span>        
+    </div>
+    <div data-ng-if="!(dataItem.NM)" style="width:100; text-align:center; margin-top:5px;">
+    	<span>조회된 데이터가 없습니다.</span>
     </div>
 </div>
 
 <!-- 가입자 검색 그리드(업데이트 용) -->
 <div kendo-dialog="dialogPop" k-options="memSearchPopGrd">
     <div class='k-textbox k-space-right search-wrapper'>
-        <input class="memberSearch" type='text' ng-model="memSearchPopGrd.searchValue" ng-keyup="memSearchPopGrd.searchKeyUp($event)" ng-keydown="memSearchPopGrd.searchKeyUp($event)" 
+        <input id="memberSearchSub" class="memberSearch" type='text' ng-model="memSearchPopGrd.searchValue" ng-keyup="memSearchPopGrd.searchKeyUp($event)" ng-keydown="memSearchPopGrd.searchKeyUp($event)" 
             placeholder='검색할 가입자를 입력하세요'/><span class='k-icon k-i-search'></span>
     </div>
     <div class='select-all-wrapper'>
@@ -131,8 +129,8 @@
 <script id="ma_notice_template" type="text/x-kendo-template">		
      <tr data-uid="#= uid #">
         <td class="ta-c">            
-			<input class='k-checkbox' data-role='checkbox' type='checkbox' ng-click='onNoticeGrdClick($event)' id='#= uid #'>
-			<label class='k-checkbox-label k-no-text' for='#= uid #'></label>
+			<input class='k-checkbox' data-role='checkbox' type='checkbox' ng-click='onNoticeGrdClick($event)' id='#= uid #_chk'>
+			<label class='k-checkbox-label k-no-text' for='#= uid #_chk'></label>
         </td>
 		<td class="ta-r">
             <span class="seq ells">
@@ -202,8 +200,8 @@
 <script id="alt_ma_notice_template" type="text/x-kendo-template">		
      <tr class="k-alt" data-uid="#= uid #">
         <td class="ta-c">            
-			<input class='k-checkbox' data-role='checkbox' type='checkbox' ng-click='onNoticeGrdClick($event)' id='#= uid #'>
-			<label class='k-checkbox-label k-no-text' for='#= uid #'></label>
+			<input class='k-checkbox' data-role='checkbox' type='checkbox' ng-click='onNoticeGrdClick($event)' id='#= uid #_alt_chk'>
+			<label class='k-checkbox-label k-no-text' for='#= uid #_alt_chk'></label>
         </td>
 		<td class="ta-r">
             <span class="seq ells">
@@ -350,7 +348,7 @@
 			공지제목
 		</td>
 		<td colspan="5">
-			<input type="text" data-bind="value: NM_SUBJECT" class="k-textbox" required>
+			<input type="text" name="NM_SUBJECT" data-bind="value: NM_SUBJECT" class="k-textbox">
 		</td> 
 	</tr>
 	<tr class="border-bottom-line">
@@ -358,7 +356,7 @@
 			공지내용
 		</td>
 		<td colspan="5">
-			<textarea kendo-editor data-bind="value: DC_HTMLCONTENT" required></textarea>
+			<textarea kendo-editor name="DC_HTMLCONTENT" data-bind="value: DC_HTMLCONTENT" k-options="noticeDataVO.kEditor" style="text-align:left;"></textarea>
 		</td> 
 	</tr>
 	<tr class="border-bottom-line">
@@ -389,7 +387,7 @@
 <!-- 그리드 툴바 템플릿 -->
 <script id="ma-notice-toolbar-template" type="text/x-kendo-template">
 	<a class="k-button k-button-icontext k-grid-add"><span class="k-icon k-i-add"></span>추가</a>    
-    <a class="k-button k-button-icontext k-grid-delete" ng-click="onDeleteGrd()"><span class="k-icon k-i-delete"></span>삭제</a>
+    <a class="k-button k-button-icontext k-grid-delete" data-ng-click="onDeleteGrd()"><span class="k-icon k-i-delete"></span>삭제</a>
 </script>
 
 <style>
@@ -493,4 +491,7 @@
 	white-space: nowrap; 
 	overflow:hidden;
 }
+.k-editor-toolbar-wrap{
+	text-align: left;
+};
 </style>
