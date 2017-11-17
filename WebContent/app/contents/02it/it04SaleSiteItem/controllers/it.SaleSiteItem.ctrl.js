@@ -77,12 +77,13 @@
 	    					saleItemDataVO.iStatList.setSelectNames = history.CD_ITEMSTAT_SELECT_INDEX;
 	    					saleItemDataVO.selectedCtgr1.ID_CTGR = history.CD_ITEMCTGR1;
 	    					saleItemDataVO.selectedCtgr1.NM_CTGR = history.NM_ITEMCTGR1;
-	    					saleItemDataVO.ctgrChange(1);
+	    					saleItemDataVO.ctgrChange(0);
 	    					saleItemDataVO.selectedCtgr2.ID_CTGR = history.CD_ITEMCTGR2;
 	    					saleItemDataVO.selectedCtgr2.NM_CTGR = history.NM_ITEMCTGR2;
-	    					saleItemDataVO.ctgrChange(2);
+	    					saleItemDataVO.ctgrChange(1);
 	    					saleItemDataVO.selectedCtgr3.ID_CTGR = history.CD_ITEMCTGR3;
 	    					saleItemDataVO.selectedCtgr3.NM_CTGR = history.NM_ITEMCTGR3;
+	    					saleItemDataVO.ctgrChange(2);
 							saleItemDataVO.datesetting.period.start = history.DATE_FROM;
 		                	saleItemDataVO.datesetting.period.end = history.DATE_TO;
 		            		

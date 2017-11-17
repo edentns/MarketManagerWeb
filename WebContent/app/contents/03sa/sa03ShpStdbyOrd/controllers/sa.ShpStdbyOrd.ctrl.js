@@ -414,13 +414,13 @@
                 	},
                 	dataSource: new kendo.data.DataSource({
                 		transport: {
-                			read: function(e) {                				
+                			read: function(e) {	
                 				saShpStdbyOrdSvc.shpbyordList(shpbyordDataVO.param).then(function (res) {
             						shpbyordDataVO.shipCodeTotal = res.data.shpList;
             						e.success(res.data.searchList);	                    					                   				                    					
                     			});
                 			},
-                			update: function(e){                				
+                			update: function(e){
                 				switch(shpbyordDataVO.updateChange){
                 					case '001' : {
                 						if(confirm("송장정보를 출력 하시겠습니까?")){
@@ -486,7 +486,7 @@
                 					default : {
                 						break;
                 					}
-                				}                		
+                				}
                 			},                			
                 			parameterMap: function(e, operation) {
                 				if(operation !== "read" && e.models) {
@@ -681,7 +681,7 @@
 															editable: true,
 															nullable: false,
 															validation: {
-																no_invovalidation: function (input) {	
+																no_invovalidation: function (input) {
 																	return Util03saSvc.NoINVOValidation(input, 'NO_INVO', 'no_invovalidation');																	
 				  									    	  	}
 															}
