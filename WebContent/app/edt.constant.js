@@ -70,7 +70,8 @@
 	    NO_ORD        : { field: "NO_ORD"        , type: "string" , width: "100px", textAlign: "center", title: "관리번호"},                                        
 	    NO_APVL       : { field: "NO_APVL"       , type: "string" , width: "100px", textAlign: "left"  , title: "결제번호"},
 	    NM_MRK        : { field: "NM_MRK"        , type: "string" , width: "100px", textAlign: "center", title: "마켓명"},
-	    NO_MRKORD     : { field: "NO_MRKORD"     , type: "string" , width: "100px", textAlign: "center", title: "상품주문번호"},
+	    NO_MRKORD     : { field: "NO_MRKORD"     , type: "string" , width: "100px", textAlign: "center", title: "주문번호"},
+	    NO_MRKITEMORD : { field: "NO_MRKITEMORD" , type: "string" , width: "100px", textAlign: "center", title: "상품주문번호"},
 	    
 	    NO_MRK        : { field: "NO_MRK"        , type: "string" , width: "100px", textAlign: "center"},                        
 	    NO_MNGMRK     : { field: "NO_MNGMRK"     , type: "string" , width: "100px", textAlign: "center"},

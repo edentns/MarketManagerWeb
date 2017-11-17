@@ -748,16 +748,16 @@
 		                        },
 	                           	{
 	                                field: "NO_APVL",
-	                                title: "결제번호 / 상품번호",
+	                                title: "결제번호 / 주문번호",
 	                                width: 100,
 	                                template: function(e){
-	                                   	return ((e.NO_APVL) ? e.NO_APVL : '')+' / '+ ((e.NO_MRKREGITEM) ? e.NO_MRKREGITEM : '');                                   	
+	                                   	return ((e.NO_APVL) ? e.NO_APVL : '')+' / '+ ((e.NO_MRKORD) ? e.NO_MRKORD : '');                                   	
                                     },
 			                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}		                                       		
 	                            },		                        
                                	{
-                                    field: "NO_MRKORD",
-                                    title: "주문번호",
+                                    field: "NO_MRKITEMORD",
+                                    title: "상품주문번호",
                                     width: 100,
 			                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
                                 },                   

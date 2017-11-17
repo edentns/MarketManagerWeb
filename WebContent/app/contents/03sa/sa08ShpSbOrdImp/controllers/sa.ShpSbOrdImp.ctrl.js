@@ -161,6 +161,11 @@
 																editable: false, 
 																nullable: false
 							    	    				   },
+							    	    NO_MRKITEMORD: 	   {
+																type: "string", 
+																editable: false, 
+																nullable: false
+							    	    				   },
 							    	    NO_MRK: 	   	   {
 																type: "string", 
 																editable: false, 

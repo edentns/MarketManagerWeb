@@ -96,8 +96,8 @@
                     DTS_ORDDTRM   : { type: APP_SA_MODEL.DTS_ORDDTRM.type    , editable: false, nullable: false },
                     AM_ITEMPRC    : { type: APP_SA_MODEL.AM_ITEMPRC.type     , editable: false, nullable: false },
                     AM_CMS    	  : { type: APP_SA_MODEL.AM_CMS.type     	 , editable: false, nullable: false },
-                    AM_CUSTOM_SALES      : { type: APP_SA_MODEL.AM_CUSTOM_SALES.type        , editable: false, nullable: false },
-                 // NO_MRKITEMORD        : { type: APP_SA_MODEL.NO_MRKITEMORD.type          , editable: false, nullable: false },
+                    AM_CUSTOM_SALES  : { type: APP_SA_MODEL.AM_CUSTOM_SALES.type        , editable: false, nullable: false },
+                    NO_MRKITEMORD    : { type: APP_SA_MODEL.NO_MRKITEMORD.type          , editable: false, nullable: false },
                     
                     DC_SHPCOSTSTAT: { type: "string" , editable: false, nullable: false },
                     NO_MNGMRK	  : { type: "string" , editable: false, nullable: false },	
@@ -133,7 +133,7 @@
                 
                 grdCol = [[APP_SA_MODEL.ROW_CHK],
                               [APP_SA_MODEL.NO_ORD       , [APP_SA_MODEL.NO_APVL, APP_SA_MODEL.NO_MRKORD]],
-                              [APP_SA_MODEL.NM_MRK       , APP_SA_MODEL.NO_MRKORD      ],
+                              [APP_SA_MODEL.NM_MRK       , APP_SA_MODEL.NO_MRKITEMORD  ],
                               [APP_SA_MODEL.NO_MRKITEM   , APP_SA_MODEL.NO_MRKREGITEM  ],
                               [APP_SA_MODEL.NM_MRKITEM   , APP_SA_MODEL.NM_MRKOPT      ],                               
                               [APP_SA_MODEL.AM_ORDSALEPRC, APP_SA_MODEL.AM_CMS		   ],                              

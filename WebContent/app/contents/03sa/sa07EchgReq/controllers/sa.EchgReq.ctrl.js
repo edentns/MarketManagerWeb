@@ -93,7 +93,8 @@
                     NO_ORD        	: { type: "string"    , editable: false, nullable: false },
                     NO_APVL       	: { type: "string"    , editable: false, nullable: false },
                     NM_MRK        	: { type: "string"    , editable: false, nullable: false },
-                    NO_MRKORD     	: { type: "string"    , editable: false, nullable: false },                    
+                    NO_MRKORD     	: { type: "string"    , editable: false, nullable: false },
+                    NO_MRKITEMORD   : { type: "string"    , editable: false, nullable: false },
                     NO_MRKITEM    	: { type: "string"    , editable: false, nullable: false },
                     NO_MRKREGITEM 	: { type: "string"    , editable: false, nullable: false },
                     NM_MRKITEM    	: { type: "string"    , editable: true , nullable: false },
@@ -567,7 +568,7 @@
 	                            columns : [	
 	                                       		{
 													field: "NO_APVL",
-													title: "결제번호 / 상품번호",
+													title: "결제번호 / 주문번호",
 													width: 100,
 													headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
 	                            				}	
@@ -580,8 +581,8 @@
 	                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
 	                            columns : [
 											{
-												field: "NO_MRKORD",
-												title: "상풍주문번호",
+												field: "NO_MRKITEMORD",
+												title: "상품주문번호",
 												width: 100,
 												headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
 											}	

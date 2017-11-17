@@ -99,7 +99,8 @@
                     NO_ORD        		: { type: APP_SA_MODEL.NO_ORD.type         		, editable: false, nullable: false },
                     NO_APVL       		: { type: APP_SA_MODEL.NO_APVL.type        		, editable: false, nullable: false },
                     NM_MRK        		: { type: APP_SA_MODEL.NM_MRK.type         		, editable: false, nullable: false },
-                    NO_MRKORD     		: { type: APP_SA_MODEL.NO_MRKORD.type      		, editable: false, nullable: false },                    
+                    NO_MRKORD     		: { type: APP_SA_MODEL.NO_MRKORD.type      		, editable: false, nullable: false },  
+                    NO_MRKITEMORD       : { type: APP_SA_MODEL.NO_MRKITEMORD.type      	, editable: false, nullable: false },
                     NO_MRKITEM    		: { type: APP_SA_MODEL.NO_MRKITEM.type     		, editable: false, nullable: false},
                     NO_MRKREGITEM 		: { type: APP_SA_MODEL.NO_MRKREGITEM.type  		, editable: false, nullable: false },
                     NM_MRKITEM    		: { type: APP_SA_MODEL.NM_MRKITEM.type     		, editable: true , nullable: false },
@@ -346,7 +347,7 @@
                 
                 var grdCol = [[APP_SA_MODEL.ROW_CHK],
                               [APP_SA_MODEL.NO_ORD           ,[APP_SA_MODEL.NO_APVL, APP_SA_MODEL.NO_MRKORD]],
-                              [APP_SA_MODEL.NM_MRK           , APP_SA_MODEL.NO_MRKORD     ],
+                              [APP_SA_MODEL.NM_MRK           , APP_SA_MODEL.NO_MRKITEMORD ],
                               [APP_SA_MODEL.NO_MRKITEM       , APP_SA_MODEL.NO_MRKREGITEM ],
                               [APP_SA_MODEL.NM_MRKITEM		 , APP_SA_MODEL.NM_MRKOPT	  ],
                               [APP_SA_MODEL.QT_ORD           , APP_SA_MODEL.QT_TKBK       ],
