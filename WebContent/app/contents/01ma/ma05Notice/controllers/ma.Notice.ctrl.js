@@ -30,18 +30,31 @@
 	            }());
 	            
 	            //공지 대상
-	            var connSetting2 = (function(e, seq, view){
+	            var connSetting2 = (function(proparam, e, seq, view){
             		var param = {
-            			procedureParam: "MarketManager.USP_MA_05MEMBERSEARCH01_GET"
+            			procedureParam: proparam
     				};
             		Util01maSvc.getListMset(param, seq).then(function (res) {
-        				if(res.data.results[0].length >= 1){
-        					view.initTotalCount = res.data.results[0].length;
-        					e.success(res.data.results[0]);        					
-        				};
+            			if(res.data.results[0]){
+            				view.initTotalCount = res.data.results[0].length;
+        					e.success(res.data.results[0]);
+            			}else{
+            				e.success('');
+            			}
         			});
 	            });
 	            
+	            var initCdTarget = (function(){
+	            	var multiSelect = angular.element(document.querySelector("#nkms")).data("kendoMultiSelect");                   
+	                multiSelect.dataSource.data([]);
+	                
+	                var multiData = multiSelect.dataSource.data();
+	                multiData.push({NM: "전체", NO_C: "*"});
+	                multiSelect.dataSource.data(multiData);    
+	            	multiSelect.value(["*"]);
+	            	multiSelect.trigger("change"); //트리거를 안하면 모델에 안들어감!
+	            });
+	            	            
 	            //팝업 파일 리스트
 	            var fileList = (function(no){
 	            	var param = {
@@ -56,56 +69,94 @@
 	            });
 	            
 	            var noticeDataVO = $scope.noticeDataVO = {
-		            	boxTitle : "검색",
-		            	setting : {
-		        			id: "CD_DEF",
-		        			name: "NM_DEF",
-		        			maxNames: 2
-		        		},
-		            	datesetting : {
-		        			dateType   : 'market',
-							buttonList : ['current', '1Day', '1Week', '1Month'],
-							selected   : '1Week',
-							period : {
-								start : angular.copy(today),
-								end   : angular.copy(today)
-							}
-		        		},
-		        		writeText: { value: "" , focus: false},				//작성자
-	                    contentText: { value: "" , focus: false},			//제목/내용
-	                    noticeCdModel : "*",								//공지구분	                    
-	                    noticeTargetModel : ["*"],			   				//공지대상
-	                    allSelectTargetModel : [],							//전체 선택시 공지대상자들 아이디를 담아 놓는 모델 
-	                    noticeCdVO : [],		 							//조회시 필요한 공지구분 드랍다운
-	                    noticeTargetVO : {									//조회시 필요한 공지대상 드랍다운
-	                    	tagTemplate: kendo.template($.trim($("#ma-notice-select-template").html())),
-	                    	tagMode: "single",
-	                        placeholder: "가입자를 선택해 주세요.",
-	                        dataTextField: "NM",
-	                        dataValueField: "NO_C",
-	                        valuePrimitive: true /*,
-	                        minLength: 1000000,				//아래로 목록이 안 뜨게 하기 위함;
-	                        enforceMinLength: true	        //아래로 목록이 안 뜨게 하기 위함; */
-	                    },
-	                    popUpNoticeTargetVO : {
-	                    	tagTemplate: kendo.template($.trim($("#ma-notice-select-template").html())),
-	                    	tagMode: "single",
-	                    	//placeholder: "가입자를 선택해 주세요.",
-	                        dataTextField: "NM",
-	                        dataValueField: "NO_C",
-	                        valuePrimitive: true /*,
-	                        minLength: 1000000,				//아래로 목록이 안 뜨게 하기 위함;
-	                        enforceMinLength: true	        //아래로 목록이 안 뜨게 하기 위함; */           
-	                    },
-	                    popUpNoticeCdVO : {
-	    					dataSource: [],
-	    					dataTextField: "NM_DEF",
-	                        dataValueField: "CD_DEF",
-	                      /*  optionLabel: {"NM_DEF": "공지구분을 선택해 주세요.", "CD_DEF": ""},*/
-                        	valuePrimitive: true
-	    				},
-	    				dataTotal : 0,
-	             	    resetAtGrd : ""
+	            	boxTitle : "검색",
+	            	setting : {
+	        			id: "CD_DEF",
+	        			name: "NM_DEF",
+	        			maxNames: 2
+	        		},
+	            	datesetting : {
+	        			dateType   : 'market',
+						buttonList : ['current', '1Day', '1Week', '1Month'],
+						selected   : '1Week',
+						period : {
+							start : angular.copy(today),
+							end   : angular.copy(today)
+						}
+	        		},
+	        		writeText: { value: "" , focus: false},				//작성자
+                    contentText: { value: "" , focus: false},			//제목/내용
+                    noticeCdModel : "*",								//공지구분	                    
+                    noticeTargetModel : ["*"],			   				//공지대상                    
+                    allSelectTargetModel : [],							//전체 선택시 공지대상자들 아이디를 담아 놓는 모델 
+                    noticeCdVO : [],		 							//조회시 필요한 공지구분 드랍다운
+                    noticeTargetVO : {									//조회시 필요한 공지대상 드랍다운
+                    	tagTemplate: kendo.template($.trim($("#ma-notice-select-template").html())),
+                    	tagMode: "single",
+                        placeholder: "가입자를 선택해 주세요.",
+                        dataTextField: "NM",
+                        dataValueField: "NO_C",
+                        valuePrimitive: true /*,
+                        minLength: 1000000,				//아래로 목록이 안 뜨게 하기 위함;
+                        enforceMinLength: true	        //아래로 목록이 안 뜨게 하기 위함; */
+                    },
+                    popUpNoticeTargetVO : {
+                    	tagTemplate: kendo.template($.trim($("#ma-notice-select-template").html())),
+                        placeholder: "가입자를 선택해 주세요.",
+                    	tagMode: "single",
+                        dataTextField: "NM",
+                        dataValueField: "NO_C",
+                        valuePrimitive: true      
+                    },
+                    popUpNoticeCdVO : {
+    					dataSource: [],
+    					dataTextField: "NM_DEF",
+                        dataValueField: "CD_DEF",
+                      /*  optionLabel: {"NM_DEF": "공지구분을 선택해 주세요.", "CD_DEF": ""},*/
+                    	valuePrimitive: true
+    				},
+    				dataTotal : 0,
+             	    resetAtGrd : "",
+             	    deleteOrdUpdate : "",
+             	    kEditor : {
+             	    	tools: [
+             	    	   "bold",
+                           "italic",
+                           "underline",
+                           "strikethrough",
+                           "justifyLeft",
+                           "justifyCenter",
+                           "justifyRight",
+                           "justifyFull",
+                           "insertUnorderedList",
+                           "insertOrderedList",
+                           "indent",
+                           "outdent",
+                           "createLink",
+                           "unlink"//,
+            	    	   //"insertImage"
+                        ]
+    					//,
+	                    /*imageBrowser: {
+	                    	  messages: {
+	                              dropFilesHere: "드래그 한 파일을 여기에 놓아 주세요."
+	                          },
+	                          transport: {
+	                        	  read: APP_CONFIG.domain + "/ut05FileUpload",//"/kendo-ui/service/ImageBrowser/Read",
+	                              destroy: {
+	                            	  url: APP_CONFIG.domain + "/ut05FileUpload",
+	                                  type: "DELETE"
+	                              },
+	                              create: {
+	                            	  url: APP_CONFIG.domain + "/ut05FileUpload",
+	                                  type: "POST"
+	                              },
+	                              thumbnailUrl: "/kendo-ui/service/ImageBrowser/Thumbnail",
+	                              uploadUrl: "/kendo-ui/service/ImageBrowser/Upload",
+	                              imageUrl: "/kendo-ui/service/ImageBrowser/Image?path={0}"
+	                         }
+	                     }*/
+             	    }
 		        };
 
 	            UtilSvc.gridtooltipOptions.filter = "td";
@@ -131,8 +182,8 @@
                     	NOTI_FROM: new Date(noticeDataVO.datesetting.period.end.y, noticeDataVO.datesetting.period.end.m-1, noticeDataVO.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis")
                     }; 
 	            		          
-	            	if(me.noticeTargetModel === null || me.noticeTargetModel.length < 1){ alert("공지대상을 입력해 주세요."); return; };
-	            	if(me.noticeCdModel === null || me.noticeCdModel === ""){ alert("공지구분을 입력해 주세요."); return; };
+	            	if(!me.noticeTargetModel){ alert("공지대상을 입력해 주세요."); return; };
+	            	if(!me.noticeCdModel){ alert("공지구분을 입력해 주세요."); return; };
 	            	if(me.param.NOTI_TO > me.param.NOTI_FROM){ alert("공지일자를 올바르게 선택해 주세요."); return; };
 	            	
 	            	$scope.nkg.dataSource.data([]);
@@ -164,54 +215,55 @@
                 	
                 	$scope.memSearchGrd.selectAll = false;
                 	$scope.memSearchGrd.selectAllItems();              	
-                	$scope.memSearchGrd.searchValue = "전체"; 	//공지대상 검색 팝업창 초기화 
+                	$scope.memSearchGrd.searchValue = ""; 	//공지대상 검색 팝업창 초기화 
                 	                	 
                 	$scope.memSearchPopGrd.selectAll = false;
                 	$scope.memSearchPopGrd.selectAllItems();
                 	$scope.memSearchPopGrd.searchValue = ""; 	//공지대상 검색 팝업창 초기화
+                	
+                	initCdTarget();
 	            };
 	            
-	            noticeDataVO.isOpen = function (val) {
+	            //open
+	            noticeDataVO.isOpen = function(val){
 	            	if(val) {
 	            		$scope.nkg.wrapper.height(657);
 	            		$scope.nkg.resize();
 	            		gridNoticeVO.dataSource.pageSize(20);
-	            	}
-	            	else {
+	            	}else {
 	            		$scope.nkg.wrapper.height(798);
 	            		$scope.nkg.resize();
 	            		gridNoticeVO.dataSource.pageSize(24);
 	            	}
-	            };
-	            
-	            
-	            //popup insert & update Validation
-	            $scope.insertValidation = function(org){
-	            	var result = true;
-	            	angular.forEach(org.data, function (NM) {
-	            		if(NM.ARR_NO_C === null){ alert("공지대상을 입력해 주세요."); result = false; return; }
-	            		else if(NM.ARR_NO_C.indexOf("*") > -1){
-	            			org.data[0].ARR_NO_C = $scope.noticeDataVO.allSelectTargetModel;
-	            		};
-	            		if(NM.NO_WRITE === null || NM.NO_WRITE === ""){ alert("작성자를 입력해 주세요."); result = false; return;};
-	            		if(NM.NM_SUBJECT === null || NM.NM_SUBJECT === ""){ alert("공지제목을 입력해 주세요."); result = false; return;};
-	            		if(NM.DC_HTMLCONTENT === null || NM.DC_HTMLCONTENT === ""){ alert("공지내용을 입력해 주세요."); result = false; return;};	            
-	            		if(NM.NM_SUBJECT.length > 400){ alert("공지제목을 400자 이내로 입력해주세요."); result = false; return;};	    	            		
-	            	});
-	            	return result;
-	            };
-	            
+	            };	            
+	            	            
 	            //저장 후 조회
 	            noticeDataVO.afterSaveQuery = function(param){
 	            	var me = this;
+	            		            		            	
+	            	me.param = {
+                    	procedureParam: "MarketManager.USP_MA_05NOTICE_SEARCH01_GET&NO_WR@s|ARR_CD_NO@s|ARR_NO_C@s|SB_NM@s|NOTI_TO@s|NOTI_FROM@s",    
+                    	NO_WR: param.NO_WRITE,
+                    	ARR_CD_NO: param.CD_NOTICE,                                    	
+                    	ARR_NO_C: param.ARR_NO_C.toString().replace(/,/g,'^'),
+                    	SB_NM: param.NM_SUBJECT,
+                    	NOTI_TO: new Date(today.y, today.m-1, today.d, "00", "00", "00").dateFormat("YmdHis"),
+                    	NOTI_FROM: new Date(today.y, today.m-1, today.d, "00", "00", "00").dateFormat("YmdHis")
+	                }; 
 	            	
-            		me.writeText.value = param.NO_WRITE;
-	            	me.noticeCdModel = param.CD_NOTICE;                                 	
-	            	me.noticeTargetModel = param.ARR_NO_C;
-	            	me.contentText.value = param.NM_SUBJECT;
-	            		            	
-	            	$scope.nkg.dataSource.read();
+	            	$scope.nkg.dataSource.data([]);
+	            	$scope.nkg.dataSource.page(1);
 	            };	
+	            
+	            noticeDataVO.paramFunc =  function(param){
+					var inputParam = angular.copy(param);
+					
+					if(param.data[0].ARR_NO_C.indexOf('*') > -1){
+						inputParam.data[0].ARR_NO_C = $scope.noticeDataVO.allSelectTargetModel;    
+						$scope.noticeDataVO.allSelectTargetModel = [];
+					}
+					return inputParam;
+				};
 	            	                      
 	            //마켓 검색 그리드
                 var gridNoticeVO = $scope.gridNoticeVO = {
@@ -232,22 +284,19 @@
                         noRecords: true,
                     	dataSource: new kendo.data.DataSource({
                     		transport: {
-                    			read: function(e) {                    				
+                    			read: function(e) {                   
+                    				console.log(noticeDataVO.param);
                 					UtilSvc.getList(noticeDataVO.param).then(function (res) {          						
                 						e.success(res.data.results[0]);
                 					});
                     			},
                     			create: function(e) {
     	                			var defer = $q.defer(),
-    	                			    param = {
-    	                					data: [e.data.models[0]] //왜  리스트만 인식할까?
-    	                				};    	                			
-    	                			if(!$scope.insertValidation(param)){
-    	                				return;
-    	                			};    	                			
-    	                			MaNoticeSvc.noticeInsert(param).then(function(res) {    	                				
-    	                				defer.resolve(); 
-    	                				if(res.data !== "") {
+    	                			    param = { data: [e.data.models[0]]}, //왜  리스트만 인식할까?    	
+    	                			    paramFunction =  noticeDataVO.paramFunc(param);
+    	                			
+    	                			MaNoticeSvc.noticeInsert(paramFunction).then(function(res) {
+    	                				if(res.data) {
     	                					if(noticeDataVO.fileDataVO.dirty) {
 	                							noticeDataVO.fileDataVO.CD_REF1 = res.data;
 	                							noticeDataVO.fileDataVO.doUpload(function(){
@@ -259,65 +308,66 @@
 	                		        			alert('저장 되었습니다.');
 	                		        		}
     	                					
-    	                					//alert("저장 되었습니다.");
-    	                					try{    	                						
-    	        	                			noticeDataVO.afterSaveQuery(param.data[0]); // 저장값으로 조회  
-    	        	                			noticeDataVO.inIt(); 						// 조회 후 초기화           		
-    	    	                			}catch(err){    	    	                			
-    	    	        	            		//$scope.nkg.dataSource.cancelChanges();	    // 스크립트 오류가 발생하면 등록 팝업창 꺼짐	        	            		
-    	    	        	            		location.reload();
-    	    	        	            	}
+    	                					noticeDataVO.afterSaveQuery(param.data[0]); // 저장값으로 조회              						                						    	        	                			           		
+    	    	                		
     	                				}else{
+    	                					alert(res.data);
     	                					alert("저장 실패 하였습니다 새 글을 써주세요.");
     	                				}    	                				
+    	                				defer.resolve(); 
     	                			});             
-    	                			return defer.promise; 
-    	                			        				
+    	                			return defer.promise;     	                			        				
     	            			},
                     			update: function(e) {
-                    				var defer = $q.defer(),
-    	                			 	param = {
-    	                			 		data: [e.data.models[0]]
-    	                			 	};
-                    				if(!$scope.insertValidation(param)){
-    	                				return;
-    	                			}; 
-    	                			MaNoticeSvc.noticeUpdate(param).then(function(res) {	
-    	                				defer.resolve(); 
-    	                				if(res.data !== "") {
-    	                					if(noticeDataVO.fileDataVO.dirty) {
-	                							noticeDataVO.fileDataVO.CD_REF1 = param.data[0].NO_NOTICE;
-	                							noticeDataVO.fileDataVO.doUpload(function(){
-	                			        			alert("수정 되었습니다.");
-	                			        		}, function() {
-	                			        			alert('첨부파일업로드 실패하였습니다.');
-	                			        		});
-	                		        		}else{
-	                		        			alert('성공하였습니다.');
-	                		        		}    	           
-    	                					
-	                						$scope.nkg.dataSource.read();    	        	                		
-    	                				}else{
-    	                					alert("수정 실패하였습니다.!! 연구소에 문의 부탁드립니다.");
-    	                				}  
-    	                			});
-    	                			return defer.promise;			
-                    			},
-                    			destroy: function(e) {
-                    				//호출될때마다 인덱스 만큼 파람이 늘어난다.
-                    				//마지막 인덱스일때 DB 처리를 한다.
-                    				if($scope.deStroyCheck){
-                    					var defer = $q.defer(),
-	                			 		param = {
-	                			 			data: e.data.models
-	                			 		}; 
+                    				var defer = $q.defer();
+    	                			 	
+                    				if(noticeDataVO.deleteOrdUpdate === "d"){
+                    					var param = { data: e.data.models };
+                    					
                     					MaNoticeSvc.noticeDelete(param).then(function(res) {
     	    	                			$scope.gridNoticeVO.dataSource.read();
     	    	                			defer.resolve();
-        	                			});                   				
-                    					return defer.promise;	
-                    				};
-                    			},    	                		
+        	                			});
+                    					noticeDataVO.deleteOrdUpdate = "";
+                    				}else{
+                    					var param = {data: [e.data.models[0]]},
+	                						paramFunction =  noticeDataVO.paramFunc(param);
+                    					
+        	                			MaNoticeSvc.noticeUpdate(paramFunction).then(function(res) {   	                				
+        	                				if(res.data) {
+        	                					if(noticeDataVO.fileDataVO.dirty) {
+    	                							noticeDataVO.fileDataVO.CD_REF1 = param.data[0].NO_NOTICE;
+    	                							noticeDataVO.fileDataVO.doUpload(function(){
+    	                			        			alert("수정 되었습니다.");
+    	                			        		}, function() {
+    	                			        			alert('첨부파일업로드 실패하였습니다.');
+    	                			        		});
+    	                		        		}else{
+    	                		        			alert('성공하였습니다.');
+    	                		        		}    	           
+        	                					
+    	                						$scope.nkg.dataSource.read();    	        	                		
+        	                				}else{
+        	                					alert("수정 실패하였습니다.!! 연구소에 문의 부탁드립니다.");
+        	                				}
+        	                				defer.resolve(); 
+        	                			});
+                    				}                    				
+    	                			return defer.promise;			
+                    			},
+                    			/*destroy: function(e) 
+                    				//단일 로우만 타는 것 같음
+                    				var defer = $q.defer(),
+	                			 			param = {
+	                			 				data: e.data.models
+	                			 			};
+                    					
+                					MaNoticeSvc.noticeDelete(param).then(function(res) {
+	    	                			$scope.gridNoticeVO.dataSource.read();
+	    	                			defer.resolve();
+    	                			});                   				
+                					return defer.promise;	
+                    			},   */ 	                		
                     			parameterMap: function(e, operation) {
                     				if(operation !== "read" && e.models) {
                     					return {models:kendo.stringify(e.models)};
@@ -327,10 +377,6 @@
                     		change: function(e){
                     			var data = this.data();
                     			noticeDataVO.dataTotal = data.length;
-                    			//console.log("변화된 데이터 => ",data.length);
-                    			/*if(e.action == "remove"){
-                    		       alert("remove")
-                    		    }*/                    			
                     		},
                     		pageSize: 20,
                     		batch: true,
@@ -340,7 +386,7 @@
                     				fields: {
                     					ROW_CHK: 		   {	
 					                    						type: "boolean", 
-																editable: false,  
+																editable: true,  
 																nullable: false
                 										   },
                     					ROW_NUM:		   {	
@@ -356,7 +402,16 @@
                     				    ARR_NO_C: 		   {	
 																type: "array", 
 																editable: true, 
-																nullable: true
+																nullable: true,
+																validation: {
+																	arr_no_cvalidation: function (input) {																		
+																		if (input.is("[name='ARR_NO_C']") && !input.val()) {
+																			input.attr("data-arr_no_cvalidation-msg", "공지대상을 입력해 주세요.");
+																		    return false;
+																		};
+																		return true;
+																	}
+																}
 	                    						    	   },
 	                   				    NO_C: 		   	   {
 																type: "string", 
@@ -366,16 +421,42 @@
                     					CD_NOTICE: 		   {
 	                    										type: "string",
 	                    										defaultValue: "001",
-	                    										nullable: false //true 일때 defaultValue가 안 됨
+	                    										nullable: false //true 일때 defaultValue가 안 됨	                    										
                     									   },
                     					NM_SUBJECT: 	   {
 	                											type: "string",                     										
 	                    										editable: true, 
-	                    										nullable: false
+	                    										nullable: false,
+																validation: {
+																	nm_subjectvalidation: function (input) {																		
+																		if (input.is("[name='NM_SUBJECT']") && !input.val()) {
+																			input.attr("data-nm_subjectvalidation-msg", "공지제목을 입력해 주세요.");
+																		    return false;
+																		};
+																		if (input.is("[name='NM_SUBJECT']") && input.val().trim().length < 10 && input.val().trim().length > 8000) {
+																			input.attr("data-nm_subjectvalidation-msg", "공지제목을 10자 이상 8000자 이내로 입력해 주세요.");
+																		    return false;
+																		};
+																		return true;
+																	}
+																}
                     									   },                    									   
                     					DC_HTMLCONTENT:	   {	type: "string", 
                     											editable: true, 
-                    											nullable: true
+                    											nullable: true,
+																validation: {
+																	dc_htmlcontentvalidation: function (input) {																		
+																		if (input.is("[name='DC_HTMLCONTENT']") && !input.val()) {
+																			input.attr("data-dc_htmlcontentvalidation-msg", "공지내용을 입력해 주세요.");
+																		    return false;
+																		};
+																		if (input.is("[name='DC_HTMLCONTENT']") && input.val().trim().length < 10 && input.val().trim().length > 2000) {
+																			input.attr("data-dc_htmlcontentvalidation-msg", "공지내용을 10자 이상 2000자 이내로 입력해 주세요.");
+																		    return false;
+																		};
+																		return true;
+																	}
+																}
                     									   },
                        					DC_CONTENT:	   	   {	
 	                       										type: "string", 
@@ -390,7 +471,16 @@
 	                											type: "string",
 	                    										defaultValue: $scope.userInfo.NM_EMP,
 	                    										editable: false, 
-	                    										nullable: false //true 일때 defaultValue가 안 됨	                    										
+	                    										nullable: false, //true 일때 defaultValue가 안 됨
+	                    										validation: {
+	                    											no_writevalidation: function (input) {																		
+																		if (input.is("[name='NO_WRITE']") && !input.val()) {
+																			input.attr("data-no_writevalidation-msg", "작성자를 입력해 주세요.");
+																		    return false;
+																		};
+																		return true;
+																	}
+																}
                     									   },
                     					SQ_NOTICE: 	       {
 	                    										type: "number",
@@ -476,68 +566,64 @@
                     	editable: {
                     		mode: "popup",
                     		window : {
-                    	        title: "공지 사항"
+                    	        title: "공지 사항",
+                    	        open: function(e){
+	                	        	$scope.treeViewPop.element.find(".k-checkbox").removeAttr("checked").trigger("change");	                                  
+                    	        }
                     	    },
                     		template: kendo.template($.trim($("#ma_notice_popup_template").html())),
-                    		confirmation: false
+                    		confirmation: false,
+                    	    destroy: true
                     	},	
                     	edit: function (e) {                      		
-                		    //add a title
+                		    //새 글 일때
                 		    if (e.model.isNew()) {                		    	
                 		        $(".k-grid-update").text("저장");
-                		        $(".k-window-title").text("공지 사항 등록");                		        
-                		    } else {
-                		       $(".k-grid-update").text("수정");
-                		       $(".k-window-title").text("공지 사항 수정");
-                		       // 파일 리스트 출력
-                		       fileList(e.model.NO_NOTICE);
-                		       // 공지사항 수정시 역으로 공지대상 설정
-                		       var multiSelect = angular.element(document.querySelector("#pnkms")).data("kendoMultiSelect");                   
-                               multiSelect.dataSource.data([]);
+                		        $(".k-window-title").text("공지 사항 등록");
+                		    //수정 할 글일때
+                		    }else{
+                		    	$(".k-grid-update").text("수정");
+                		    	$(".k-window-title").text("공지 사항 수정");
+                		    	
+                		    	// 파일 리스트 출력
+                		    	fileList(e.model.NO_NOTICE);
+                		    	
+                		    	// 공지사항 수정시 역으로 공지대상 설정
+                		    	var multiSelect = angular.element(document.querySelector("#pnkms")).data("kendoMultiSelect"),
+                		    	    multiData = multiSelect.dataSource.data(),
+                		    	    arraySplit = e.model.NO_C.split(",");    
+                		    	
+                		    	multiSelect.dataSource.data([]);
                                 
-                               var multiData = multiSelect.dataSource.data();                   
+                                for (var i = 0; i < arraySplit.length; i++) {                             	
+                                    multiData.push({ "NM": arraySplit[i], "NO_C": arraySplit[i]});
+                                };
+                                
+                                multiSelect.dataSource.data(multiData);
+                                multiSelect.dataSource.filter({});
+                                multiSelect.value(arraySplit);
+                                multiSelect.trigger("change");
                                
-                               var array = e.model.NO_C.split(",");
-                               for (var i = 0; i < array.length; i++) {                                	
-                                   multiData.push({ NM: array[i], NO_C: array[i]});
-                               }
-                               multiSelect.dataSource.data(multiData);
-                               multiSelect.dataSource.filter({});
-                               multiSelect.value(array);
-                               multiSelect.trigger("change");
-                               
-                               setTimeout(function () {
-                               	if(!page.isWriteable()) {
-                       				$(".k-grid-update").addClass("k-state-disabled");
-                       				$(".k-grid-update").click(stopEvent);
-                       			}
-                               });
-                		    }                		
-                			// 공지사항 수정시 역으로 공지대상 설정
-                			/*
-                			if(e.model.NO_C !== "undefined" && e.model.NO_C !== "" && e.model.NO_C !== null){
-                				
-                			}
-                			*/          			
+                                $timeout(function () {
+                                	if(!page.isWriteable()) {
+                                		$(".k-grid-update").addClass("k-state-disabled");
+                                		$(".k-grid-update").click(stopEvent);
+                                	}
+                                });
+                		    }
                     	},
                     	cancel: function(e) { //pop up 창 닫힐때 작동됨  
                     		// 파일 리스트 출력 초기화 
             		        $scope.noticeDataVO.fileDataVO.currentDataList = [];
                     	},
-                    	/*remove: function(e) {
-                			console.log("Removing", e.model.name);
-                    	},*/
-                    	/*beforeEdit: function(e) {
-                		    console.log(e);
-                		},*/
                     	resizable: true,
                     	rowTemplate: kendo.template($.trim($("#ma_notice_template").html())),
                     	altRowTemplate: kendo.template($.trim($("#alt_ma_notice_template").html())),
                     	height: 657                    	
         		};
                 
-                $scope.checkedIds = [];
-                $scope.deStroyCheck = false;
+                //$scope.checkedIds = [];
+                //$scope.deStroyCheck = false;
                 
                 //체크박스 옵션
                 $scope.onNoticeGrdClick = function(e){
@@ -548,7 +634,7 @@
 	                	grid = $scope.nkg,
 	                	dataItem = grid.dataItem(row);
 	
-	                $scope.checkedIds[dataItem.ROW_NUM] = checked;	                	                
+	               // $scope.checkedIds[dataItem.ROW_NUM] = checked;	                	                
 	                dataItem.ROW_CHK = checked;
 	                dataItem.dirty = checked;
 	                
@@ -557,48 +643,31 @@
 	                } else {
 	                	row.removeClass("k-state-selected");
 	                }
-                };
-                
-                //그리드 선택 수정 버튼
-                /*$scope.onChangeGrdEdit = function(){                	
-                	var grid = $scope.nkg,
-                     	selectedRow = grid.select(),
-                     	dataItem = grid.dataItem(selectedRow);
-                	if(selectedRow.length > 1){
-                		alert("수정은 한개씩 가능 합니다.");
-                		return;
-                	}
-                	
-                	if(selectedRow.length < 1){
-                		alert("수정할 열을 선택해 주세요.");
-                		return;
-                	}
-                	grid.editRow(selectedRow);
-                }; */    
-                $scope.onDeleteGrd = function(){                	
+                };               
+                                                    
+                $scope.onDeleteGrd = function(){
                 	var grid = $scope.nkg,
                 		chked = grid.element.find("input:checked"),
-                		chkedLeng = grid.element.find("input:checked").length;
+                		chkedLeng = grid.element.find("input:checked").length,
+                		row = chked.closest('tr');
                 	
-                	$scope.deStroyCheck = false;
-                	
-                	if(!page.isWriteable()) return;
-                	
+                	if(!page.isWriteable()){
+                		return;
+                	}                	
                 	if(chkedLeng < 1){
                 		alert("삭제할 데이터를 선택해 주세요.");
-                		return;
-                	};               	
-                	if(confirm(chkedLeng+"개 의 데이터를 삭제 하시겠습니까?")){                		
-                		//destroy에 한번에  넘기는 removeRow가 없어서 이런..방법을 씀...  
-                		chked.each(function(idx, nm){
-                			if(idx === (chkedLeng-1)){
-                				$scope.deStroyCheck = true; 
-                			};
-    	                    grid.removeRow($(this).closest('tr'));    	                    
-    	                });
+                		return false;
+                	};
+                	                	
+                	if(confirm(chkedLeng+"개 의 데이터를 삭제 하시겠습니까?")){       
+                		grid.dataSource.fetch(function(){
+                			noticeDataVO.deleteOrdUpdate = "d";
+                			grid.dataSource.remove(grid.dataItems(row));
+                			grid.dataSource.sync();
+            			});
                 	};
                 };
-                
+                              
                 //가입자 검색 UI
                 //조회용
                 $scope.memSearchGrd = {
@@ -614,7 +683,17 @@
         			height: "500",
         			width: "400",
         			title: "가입자 검색",
-        			show: $scope.dialogShow,
+        			show: function(e){        		           
+                       angular.element(document.querySelector("#memberSearchMain")).focus();    
+                       
+                       if(noticeDataVO.noticeTargetModel.indexOf("*") > -1){
+                    	   $scope.treeView.element.find(".k-checkbox").removeAttr("checked").trigger("change");
+                           for (var i = 0; i < $scope.memSearchGrd.dataSource.data().length; i++) {
+                        	   var item = $scope.treeView.findByText($scope.memSearchGrd.dataSource.data()[i]["NM"]);
+                               item.find(".k-checkbox").first().click();
+                           }   
+                       }                       
+        			},
         			searchKeyUp: function(keyEvent){
         				filter($scope.treeView.dataSource, keyEvent.target.value.toLowerCase(), $scope.memSearchGrd.searchTotal);
         				$scope.memSearchGrd.selectedCount = 0;
@@ -622,48 +701,59 @@
                         $scope.treeView.element.find(".k-checkbox").trigger("change");
         			},
         			actions : [
-        		                    { text: '취소' },
-        		                    {
-        		                        text: '확인', action: function () {
-        		                            $scope.$apply(function (e) {
-        		                            	var view = $scope.memSearchGrd;
-        		                                view.repeaterItems = getCheckedItems($scope.treeView, view);
+    		                    { 
+    		                    	text: '취소' 
+    		                    },
+    		                    {
+    		                        text: '확인', 
+    		                        action: function () {
+    		                            $scope.$apply(function (e) {
+    		                            	var view = $scope.memSearchGrd;
+    		                                view.repeaterItems = getCheckedItems($scope.treeView, view);
+    		                                
+    		                                //전체 조회 시의 체크시 "전체"로 표시함
+    		                                if(view.selectAll && view.repeaterItems.length === view.initTotalCount){        		                                	
+    		                                	var multiSelect = angular.element(document.querySelector("#nkms")).data("kendoMultiSelect");                   
+        		                                multiSelect.dataSource.data([]);
         		                                
-        		                                //전체 조회 시의 체크시 "전체"로 표시함
-        		                                if(view.selectAll && view.repeaterItems.length === view.initTotalCount){        		                                	
-        		                                	var multiSelect = angular.element(document.querySelector("#nkms")).data("kendoMultiSelect");                   
-            		                                multiSelect.dataSource.data([]);
-            		                                
-            		                                var multiData = multiSelect.dataSource.data();
-            		                                multiData.push({NM: "전체", NO_C: "*"});
-            		                                multiSelect.dataSource.data(multiData);    
-        		                                	multiSelect.value(["*"]);
-        		                                	multiSelect.trigger("change"); //트리거를 안하면 모델에 안들어감!
-        		                                }else{
-        		                                	populateMultiSelect(view.repeaterItems, "#nkms");
-        		                                }        		                                
-        		                            });
-        		                        }
-        		                    }
+        		                                var multiData = multiSelect.dataSource.data();
+        		                                multiData.push({NM: "전체", NO_C: "*"});
+        		                                multiSelect.dataSource.data(multiData);    
+    		                                	multiSelect.value(["*"]);
+    		                                	multiSelect.trigger("change"); //트리거를 안하면 모델에 안들어감!
+    		                                }else{
+    		                                	populateMultiSelect(view.repeaterItems, "#nkms");
+    		                                }       		                                
+    		                            });
+    		                        }
+    		                    }
         		    ],
         		    dataSource : new kendo.data.HierarchicalDataSource ({ 
         		    	transport : {
         		    		read : function(e){
-        		    			connSetting2(e, "noticeGet", $scope.memSearchGrd); 
+        		    			connSetting2("MarketManager.USP_MA_05MEMBERSEARCH01_GET", e, "noticeGet", $scope.memSearchGrd); 
         		    		}
         		    	},
         		    	schema: {
                 			model: {
                     			id: "NM",
                 				fields: {
-                					NM : {},
-                					NO_C : {}
+                					NM : {
+                						type: "string", 
+										editable: false,  
+										nullable: false
+                					},
+                					NO_C : {
+                						type: "string", 
+										editable: false,  
+										nullable: false
+                					}
                 				}
                 			}
         		    	}
         		    }),
 	    			autoBind: true,
-                    dataTextField: "NM", //유기적으로 바뀌는 값
+                    dataTextField: "NM", 
                     checkboxes: true,
                     loadOnDemand: false,
                     expandAll: true, 
@@ -702,10 +792,13 @@
         			searchValue : "",
         			modal: true,
         			visible: false,
+        			actionChk : 'h',
         			height: "500",
         			width: "400",
         			title: "가입자 검색",
-        			show: $scope.dialogShow,
+        			show: function(e){        		           
+        				angular.element(document.querySelector("#memberSearchSub")).focus();
+        			},
         			searchKeyUp: function(keyEvent){
         				var scopeTreeView = $scope.treeViewPop;
         				var grdView = $scope.memSearchPopGrd;
@@ -715,19 +808,25 @@
         				scopeTreeView.element.find(".k-checkbox").trigger("change");
         			},
         			actions : [
-        	                    { text: '취소' },
+        			            { 
+        			        	   text: '취소'
+        	                    },
         	                    {
-        	                        text: '확인', action: function () {
+        	                	   text: '확인',
+        	                	   action: function () {
         	                            $scope.$apply(function (e) {                            	
         	                            	var view = $scope.memSearchPopGrd; 
         	                            	view.repeaterItems = getCheckedItems($scope.treeViewPop, view);
         	                            	
         	                            	//전체 조회 시의 체크시 "전체"로 표시함
     		                                if(view.selectAll && view.repeaterItems.length === view.initTotalCount){    		                                	
-    		                                	var multiSelect = angular.element(document.querySelector("#pnkms")).data("kendoMultiSelect");
-    		                                	var item = view.repeaterItems;
-        		                                multiSelect.dataSource.data([]);        		                                
-        		                                var multiData = multiSelect.dataSource.data();
+    		                                	var multiSelect = angular.element(document.querySelector("#pnkms")).data("kendoMultiSelect"),
+    		                                	    item = view.repeaterItems,
+    		                                	    multiData = multiSelect.dataSource.data();
+    		                                	    
+        		                                //multiSelect.dataSource.data([]);
+    		                                	    
+    		                                	multiData = [];    
         		                                
         		                                multiData.push({NM: "전체", NO_C: "*"});
         		                                multiSelect.dataSource.data(multiData);    
@@ -739,7 +838,7 @@
     		                                    }
     		                                }else{
     		                                	populateMultiSelect(view.repeaterItems, "#pnkms");
-    		                                }  
+    		                                }
         	                            });
         	                        }
         	                    }
@@ -747,7 +846,7 @@
         	        dataSource: new kendo.data.HierarchicalDataSource ({ 
         		    	transport : {
         		    		read : function(e){
-        		    			connSetting2(e, "noticeGet", $scope.memSearchPopGrd);
+        		    			connSetting2("MarketManager.USP_MA_05MEMBERSEARCH01_GET", e, "noticeGet", $scope.memSearchPopGrd);
         		    		}
         		    	}
         		    }),
@@ -760,11 +859,6 @@
                         e.sender.expand(e.node);
                     },
                     check: function (e) {
-                    	/*setTimeout(function () {
-                        $scope.$apply(function () {
-                            $scope.selectedCount = getCheckedItems(e.sender).length;
-                        });
-                    	});*/
                         $timeout(function () {
                         	$scope.$apply(function(){
                         		var view = $scope.memSearchPopGrd;
@@ -783,20 +877,7 @@
                         $scope.treeViewPop.element.find(".k-checkbox").trigger("change");
                     }
                 };             
-                                
-                //done
-                $scope.dialogShow = function (e) {
-                    //Focusing the search box when the dialog is opened
-                    //angular.element(document.getElementById("memberSearch")).focus();
-                    e.sender.element.find(".memberSearch").focus();
-                    //checking preselected values
-                    //var dataSource = $scope.treeView.dataSource;
-                    e.sender.element.find(".k-checkbox").removeAttr("checked").trigger("change");
-                    for (var i = 0; i < e.sender.options.repeaterItems.length; i++) {
-                        var item = e.sender.element.findByText(e.sender.options.repeaterItems[i]["NM"]); //유기적으로 바뀌는 값
-                        item.find(".k-checkbox").first().click();
-                    };
-                };
+                                     
                 //done
                 function getCheckedItems(treeview, obj) {
                     var nodes = treeview.dataSource.data();
@@ -806,7 +887,7 @@
                 function getCheckedNodes(nodes, obj) {
                     var node, childCheckedNodes;
                     var checkedNodes = [];
-                    //$scope.searchTotal = nodes.length;
+                    
                     obj.searchTotal = nodes.length;
                     
                     for (var i = 0; i < obj.searchTotal; i++) {
@@ -822,7 +903,7 @@
                         };
                     }
                     return checkedNodes;
-                };
+                };                
                 //done
                 function filter(dataSource, query, viewGrdCnt) {
                     var hasVisibleChildren = false;
@@ -847,7 +928,7 @@
                         dataSource.filter({ field: "hidden", operator: "neq", value: true });
                     }                              
                     return hasVisibleChildren;
-               };
+               };               
                //done
                function populateMultiSelect(checkedNodes, id) {
                    var multiSelect = angular.element(document.querySelector(id)).data("kendoMultiSelect");                   
@@ -868,19 +949,21 @@
                        multiSelect.trigger("change");
                    };
                };
-
                function stopEvent(e) {
-               	e.preventDefault();
-               	e.stopPropagation();
-               }
+            	   e.preventDefault();
+            	   e.stopPropagation();
+               };               
                
-               setTimeout(function () {
-               	if(!page.isWriteable()) {
-       				$(".k-grid-add").addClass("k-state-disabled");
-       				$(".k-grid-delete").addClass("k-state-disabled");
-       				$(".k-grid-add").click(stopEvent);
-       				$(".k-grid-delete").click(stopEvent);
-       			}
+               $timeout(function () {
+            	   if(!page.isWriteable()) {
+            		   $(".k-grid-add").addClass("k-state-disabled");
+            		   $(".k-grid-delete").addClass("k-state-disabled");
+       				   $(".k-grid-add").click(stopEvent);
+       				   $(".k-grid-delete").click(stopEvent);
+       				}
+
+            	   initCdTarget();           
                });
+               
             }]);
 }());
