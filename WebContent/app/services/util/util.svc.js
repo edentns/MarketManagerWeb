@@ -634,7 +634,7 @@
 					if (angular.isString(psKind)) {
 						key += psKind;
 					}
-					console.log(poJson);
+					//console.log(poJson);
 					$window.sessionStorage.setItem(key, JSON.stringify(poJson));
 				},
 

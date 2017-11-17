@@ -837,7 +837,7 @@
 		                            title: "구매자 ( 수취인 )",
 		                            width: 100,
 		                            template: function(e){
-	                                   	return e.NM_CONS == true ? e.NM_PCHR + +"("+e.NM_CONS+")" : e.NM_PCHR;	                                   	
+	                                   	return (e.NM_CONS) ? e.NM_PCHR +"("+e.NM_CONS+")" : e.NM_PCHR;	                                   	
                                     },
 		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
 		                        }, 
@@ -853,7 +853,7 @@
                                     title: "전화번호 (구매자 )",
                                     width: 100,
                                     template: function(e){
-                                    	return e.NO_PCHRPHNE == true ? e.NO_CONSHDPH + +"("+e.NO_PCHRPHNE+")" : e.NO_CONSHDPH;                                    
+                                    	return (e.NO_PCHRPHNE)? e.NO_CONSHDPH +"("+e.NO_PCHRPHNE+")" : e.NO_CONSHDPH;                                    
                                     },
 			                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
                                 }, 
@@ -862,7 +862,7 @@
                                     title: "주소1 (주소2)", 
                                     width: 100,
                                     template: function(e){
-                                    	return e.DC_CONSOLDADDR == true ? e.DC_CONSNEWADDR + +"("+e.DC_CONSOLDADDR+")" : e.DC_CONSNEWADDR;	                                   
+                                    	return (e.DC_CONSOLDADDR) ? e.DC_CONSNEWADDR + +"("+e.DC_CONSOLDADDR+")" : e.DC_CONSNEWADDR;	                                   
                                     },
 			                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
                                 },  
