@@ -26,7 +26,7 @@
 					
 					if (recentLoginBsCd) {
 						recentLoginBsCd    = JSON.parse(recentLoginBsCd);
-						self.info.bsCd     = recentLoginInfo.bsCd;
+						self.info.bsCd     = recentLoginBsCd.bsCd;
 					}
 					
 					if (recentLoginInfo) {
