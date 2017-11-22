@@ -495,7 +495,7 @@
 					else { hiddenA = document.createElement('a'); }
 					hiddenA.setAttribute('id', 'excelDownload');
 					hiddenA.setAttribute('class', 'throw');
-					hiddenA.setAttribute('href', APP_CONFIG.domain +'/ut03Excel?filename='+ psFineName+'&downfilename='+decodeURIComponent(downFilename));
+					hiddenA.setAttribute('href', APP_CONFIG.domain +'/ut03Excel?filename='+ psFineName+'&downfilename='+encodeURIComponent(decodeURIComponent(downFilename)));
 					document.body.appendChild(hiddenA);
 
 					hiddenA.click();
