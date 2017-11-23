@@ -148,8 +148,6 @@
 
 	            page.bootstrap(function() {
 	                vm.broadcast();
-	                $timeout(function() {
-	                }, 100);
 	            });
             }]);
 }());
