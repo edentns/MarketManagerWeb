@@ -13,7 +13,7 @@
 				/**
 				 * 새 마켓정보 등록 Parameter 생성한다.
 				 */
-            	mngmrkInsert : function (param) {					
+            	mngmrkInsert : function (param, e) {					
 					return $http({
 						method	: "POST",
 						url		: APP_CONFIG.domain +"/mngmrk/mrkInsert",
@@ -24,14 +24,15 @@
 							return;
 						}
 					}).error(function (data, status, headers, config) {
-						console.log("error",data,status,headers,config);
+						//console.log("error",data,status,headers,config);
+						e.error();
 					});
 				}
             
 	            /**
 				 * 기존 마켓정보를 수정 Parameter 생성한다.
 				 */
-            	,mngmrkUpdate : function (param) {					
+            	,mngmrkUpdate : function (param, e) {					
 					return $http({
 						method	: "PUT",
 						url		: APP_CONFIG.domain +"/mngmrk/mrkUpdate",
@@ -42,14 +43,15 @@
 							return;
 						}
 					}).error(function (data, status, headers, config) {
-						console.log("error",data,status,headers,config);
+						//console.log("error",data,status,headers,config);
+						e.error();
 					});
 				}
             	
             	/**
 				 * 기존 마켓정보를 삭제 Parameter 생성한다.
 				 */
-            	,mngmrkDelete: function (param) {					
+            	,mngmrkDelete: function (param, e) {					
 					return $http({
 						method	: "PUT",
 						url		: APP_CONFIG.domain +"/mngmrk/mrkDelete",
@@ -60,7 +62,8 @@
 							return;
 						}
 					}).error(function (data, status, headers, config) {
-						console.log("error",data,status,headers,config);
+						//console.log("error",data,status,headers,config);
+						e.error();
 					});
 				}
             	

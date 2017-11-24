@@ -161,10 +161,10 @@
                     					alert("이미 답변이 등록되어 있습니다.");
                     					return false;
                     				};
-                    				csInqSvc.csUpdate(param).then(function(res) {
+                    				csInqSvc.csUpdate(param, e).then(function(res) {
     	                				defer.resolve();
     	                				$scope.cskg.dataSource.read();
-    	                			});  
+    	                			});
                     				return defer.promise;
                     			}, 	                		
                     			parameterMap: function(e, operation) {

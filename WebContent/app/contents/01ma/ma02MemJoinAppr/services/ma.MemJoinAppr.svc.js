@@ -13,7 +13,7 @@
             	/**
 				 * 가입 승인 처리!
 				 */
-            	joinerMem : function (param) {
+            	joinerMem : function (param, e) {
 					return $http({
 						method	: "POST",
 						url		: APP_CONFIG.domain +"/memJoinAppr/joinerMem",
@@ -31,7 +31,7 @@
 							return;
 						}
 					}).error(function (data, status, headers, config) {
-						//console.log("error",data,status,headers,config);
+						e.error();
 					});
 				}
             };

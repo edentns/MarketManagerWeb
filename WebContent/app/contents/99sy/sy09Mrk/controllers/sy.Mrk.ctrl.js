@@ -471,7 +471,7 @@
                     	DC_MRKID: dataItem.DC_MRKID
                     };
                 	
-                	syMrkSvc.conMrk(param).then(function(res) {
+                	syMrkSvc.conMrk(param, e).then(function(res) {
         				//defer.resolve();
         				alert( res.data );
         				$scope.kg.dataSource.read();

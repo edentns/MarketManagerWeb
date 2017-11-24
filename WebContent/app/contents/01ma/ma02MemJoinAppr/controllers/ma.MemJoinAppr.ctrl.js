@@ -166,7 +166,7 @@
     	                			var param = {
                                     	data: $scope.trueDataResult(e.data.models) //e.data.models
                                     };
-    	                			MaMemJoinApprSvc.joinerMem(param).then(function(res) {
+    	                			MaMemJoinApprSvc.joinerMem(param, e).then(function(res) {
     	                				defer.resolve();
     	                				//joinerDataVO.inIt();
     	                				$scope.kg.dataSource.read();

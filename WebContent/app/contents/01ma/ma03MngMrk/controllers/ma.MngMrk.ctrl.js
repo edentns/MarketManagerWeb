@@ -169,7 +169,7 @@
                                     };
     	                			
     	                			if(!isValid(param)) { return false; };
-    	                			MaMngMrkSvc.mngmrkInsert(param).then(function(res) {
+    	                			MaMngMrkSvc.mngmrkInsert(param, e).then(function(res) {
     	                				defer.resolve();
     	                				//mngMrkDateVO.init();
     	                				$scope.gridMngMrkUserVO.dataSource.read();
@@ -183,7 +183,7 @@
                                     };
     	                			
     	                			if(!isValid(param)) { return };
-    	                			MaMngMrkSvc.mngmrkUpdate(param).then(function(res) {
+    	                			MaMngMrkSvc.mngmrkUpdate(param, e).then(function(res) {
     	                				defer.resolve();
     	                				//mngMrkDateVO.init();
     	                				$scope.gridMngMrkUserVO.dataSource.read();
@@ -195,7 +195,7 @@
     	                			var param = {
     	                				data: e.data.models	
                                     };
-    	                			MaMngMrkSvc.mngmrkDelete(param).then(function(res) {
+    	                			MaMngMrkSvc.mngmrkDelete(param, e).then(function(res) {
     	                				defer.resolve();
     	                				//mngMrkDateVO.init();
     	                				$scope.gridMngMrkUserVO.dataSource.read();
