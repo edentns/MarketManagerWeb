@@ -552,6 +552,7 @@ form[name="businessForm"]:after {content: ''; display: block; clear: both;}
 .k-grid-content > table > tbody > tr > td > div.custom-style:nth-child(odd){
 	border-bottom: dotted 0.5px #bbdceb;	
 }
+/* 컬럼들의 점점점 표시  */
 .ells{
 	text-overflow: ellipsis; 
 	white-space: nowrap; 
@@ -569,4 +570,15 @@ form[name="businessForm"]:after {content: ''; display: block; clear: both;}
 
 .k-grid-header .k-header>.k-link, .k-header, .k-treemap-title {
     color: white;
+}
+.border-right-line{    
+	border-right: 1px solid #eee;    
+}
+.border-top-line{	
+	border-top: 1px solid #eee;
+}
+.signal > tbody > tr> th{	
+	border-right: 1px solid #eee;    
+	background: rgba(199,211,237,.3);
+    border-bottom: 1px solid #dadada;
 }
