@@ -495,7 +495,7 @@
 					else { hiddenA = document.createElement('a'); }
 					hiddenA.setAttribute('id', 'excelDownload');
 					hiddenA.setAttribute('class', 'throw');
-					hiddenA.setAttribute('href', APP_CONFIG.domain +'/ut03Excel?filename='+ psFineName+'&downfilename='+decodeURIComponent(downFilename));
+					hiddenA.setAttribute('href', APP_CONFIG.domain +'/ut03Excel?filename='+ psFineName+'&downfilename='+encodeURIComponent(decodeURIComponent(downFilename)));
 					document.body.appendChild(hiddenA);
 
 					hiddenA.click();
@@ -969,6 +969,15 @@
 					
 				});
 			};
+			
+			/**
+			 * html 태그 없애기
+			 * @param html tag
+			 * @returns 순수 텍스트 리턴
+			 */
+			this.removeHtmlTag = (function(html) {
+				return html.replace(/<(\/)?([a-zA-Z]*)(\s[a-zA-Z]*=[^>]*)?(\s)*(\/)?>/ig, "");				
+			});
 		}
 	]);
 }());
