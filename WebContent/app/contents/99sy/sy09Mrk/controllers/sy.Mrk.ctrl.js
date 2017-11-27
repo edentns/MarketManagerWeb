@@ -166,8 +166,6 @@
                     edit: function (e) {
                         if (e.model.isNew()) {
                         	if(e.model.YN_USE == ""){
-                        		e.model.set("CD_MRKDFT", "001");
-                        		e.model.set("CD_NT", "001");
                         		e.model.set("YN_USE", "Y");
                         		e.model.set("CD_ITLSTAT", "001");
                         	}
@@ -268,7 +266,7 @@
                 							required: {message: "마켓명을 입력하여 주세요."}
                 						}  
 									},
-                					CD_MRKDFT:   { type: "string" },
+                					NM_MRKDFT:   { type: "string" },
                 					DT_ITLSTART: { type: "string", editable: false },
                 					CD_ITLSTAT:  { type: "string", editable: false },
                 					DC_MRKID:    { type: "string", editable: true, validation: { required: {message: "마켓ID를 입력하여 주세요."} } },
@@ -311,7 +309,7 @@
                 						validation: { required: {message: "판매관리URL을 입력하여 주세요."} } 
                 					},
                 					YN_USE:      { type: "string" },
-                					CD_NT:       { type: "string" },
+                					NM_NT:       { type: "string" },
                 					DTS_INSERT: {type: "string", editable: false},
                 					DTS_UPDATE: {type: "string", editable: false},
                 					NM_UPDATE : {type: "string", editable: false}
@@ -339,22 +337,16 @@
 									if(grdData[i].NO_MNGMRK === e.NO_MNGMRK){
 										nmd = grdData[i].NM_MRK;
 										if(e.DC_SALEMNGURL === '') e.DC_SALEMNGURL = grdData[i].DC_SALEMNGURL;
+										if(e.NM_MRKDFT === '') e.NM_MRKDFT = grdData[i].NM_MRKDFT;
+										if(e.NM_NT === '') e.NM_NT = grdData[i].NM_NT;
 									}
 								}
 	            		        return nmd;
           		       	  	}},
         		           {field: "NM_MRK",      title: "<span class='form-required'>* </span>마켓명",    width: 100,
        	   					headerAttributes: gridHeaderAttributes},
-        		           {field: "CD_MRKDFT",   title: "마켓구분",   width: 100, 
-          		       	  	editor: function(container, options) {
-          		       	  		gridMrkVO.dropDownEditor(container, options, dateVO.cdMrkDftDataSource, ["NM_DEF","CD_DEF"]);
-           		        	},
-       	   					template: function(e){
-          		       	   		return gridMrkVO.fTemplate(e, dateVO.cdMrkDftDataSource, ["CD_DEF", "NM_DEF", "CD_MRKDFT"]);
-          		       	  	}, 
-           	   				headerAttributes: gridHeaderAttributes},
-        		           {field: "DT_ITLSTART", title: "연동시작일자", width: 90,
-       	   					headerAttributes: gridHeaderAttributes},
+        		           {field: "NM_MRKDFT",   title: "마켓구분", width: 100,  headerAttributes: gridHeaderAttributes},
+        		           {field: "DT_ITLSTART", title: "연동시작일자", width: 90, headerAttributes: gridHeaderAttributes},
         		           {field: "CD_ITLSTAT",  title: "연동상태",    width: 80,
           		       	  	editor: function(container, options) {
           		       	  		gridMrkVO.dropDownEditor(container, options, dateVO.ItlStatCodeList, ["NM_DEF","CD_DEF"]);
@@ -403,14 +395,7 @@
           		       	   		return gridMrkVO.fTemplate(e, dateVO.ynUseDataSource, ["CD_DEF", "NM_DEF", "YN_USE"]);
           		       	  	},
 	       	   				headerAttributes: gridHeaderAttributes},
-        		           {field: "CD_NT",       title: "국가",       width: 80, 
-          		       	  	editor: function(container, options) {
-          		       	  		gridMrkVO.dropDownEditor(container, options, dateVO.cdNtDataSource, ["NM_DEF","CD_DEF"]);
-           		        	},   
-	       	   				template: function(e){
-          		       	   		return gridMrkVO.fTemplate(e, dateVO.cdNtDataSource, ["CD_DEF", "NM_DEF", "CD_NT"]);
-          		       	  	}, 
-       	   	   				headerAttributes: gridHeaderAttributes},
+	       	   			    {field: "NM_NT",      title: "국가",   width: 80, headerAttributes: gridHeaderAttributes},
        	   	   				{field: "DTS_INSERT", title: "등록일자", width: 80, headerAttributes: gridHeaderAttributes},
        	   	   				{field: "DTS_UPDATE", title: "수정일자", width: 80, headerAttributes: gridHeaderAttributes},
        	   	   				{field: "NM_UPDATE",  title: "수정자" , width: 80, headerAttributes: gridHeaderAttributes},
@@ -471,7 +456,7 @@
                     	DC_MRKID: dataItem.DC_MRKID
                     };
                 	
-                	syMrkSvc.conMrk(param).then(function(res) {
+                	syMrkSvc.conMrk(param, e).then(function(res) {
         				//defer.resolve();
         				alert( res.data );
         				$scope.kg.dataSource.read();

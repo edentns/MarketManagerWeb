@@ -16,28 +16,11 @@
                     resolve		: {
                         resData: ["AuthSvc", "$q", "UtilSvc", function (AuthSvc, $q, UtilSvc) {
                             var defer 	= $q.defer(),
-                                resData = {},
-                                strPcdParam = "USP_SY_10CODE02_GET&L_NO_MNGCDHD@s|L_CD_CLS@s";
+                                resData = {};
 
                             AuthSvc.isAccess().then(function (result) {
                                 resData.access = result[0];
-                                var param = {
-            						procedureParam:strPcdParam,
-            						L_NO_MNGCDHD:"SYCH00005",
-            						L_CD_CLS:"SY_000005"
-            					};
-            					UtilSvc.getList(param).then(function (res) {
-            						resData.cdMrkDftDataSource = res.data.results[0];
-            						var param = {
-                						procedureParam:strPcdParam,
-                						L_NO_MNGCDHD:"SYCH00027",
-                						L_CD_CLS:"SY_000027"
-                					};
-            						UtilSvc.getList(param).then(function (res) {
-                						resData.cdNtDataSource = res.data.results[0];
-                						defer.resolve(resData);
-                					});
-            					});
+                                defer.resolve(resData);
                             });
 
                             return defer.promise;

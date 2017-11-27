@@ -42,7 +42,7 @@
 				/**
 				 * cs 답변 저장
 				 */
-	        	csUpdate : function (param) {					
+	        	csUpdate : function (param, e) {					
 					return $http({
 						method	: "PUT",
 						url		: APP_CONFIG.domain +"/cs/update",
@@ -55,7 +55,7 @@
         					location.reload();
         				}  
 					}).error(function (data, status, headers, config) {
-						
+						e.error();
 					});
 				}
             };

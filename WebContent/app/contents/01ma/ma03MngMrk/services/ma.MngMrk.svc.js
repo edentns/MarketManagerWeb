@@ -13,7 +13,7 @@
 				/**
 				 * 새 마켓정보 등록 Parameter 생성한다.
 				 */
-            	mngmrkInsert : function (param) {					
+            	mngmrkInsert : function (param, e) {					
 					return $http({
 						method	: "POST",
 						url		: APP_CONFIG.domain +"/mngmrk/mrkInsert",
@@ -21,17 +21,19 @@
 					}).success(function (data, status, headers, config) {
 						if(data !== "1") {
 							alert("저장 실패하였습니다.!! 연구소에 문의 부탁드립니다.");
+							e.error();
 							return;
 						}
 					}).error(function (data, status, headers, config) {
-						console.log("error",data,status,headers,config);
+						//console.log("error",data,status,headers,config);
+						e.error();
 					});
 				}
             
 	            /**
 				 * 기존 마켓정보를 수정 Parameter 생성한다.
 				 */
-            	,mngmrkUpdate : function (param) {					
+            	,mngmrkUpdate : function (param, e) {					
 					return $http({
 						method	: "PUT",
 						url		: APP_CONFIG.domain +"/mngmrk/mrkUpdate",
@@ -39,17 +41,19 @@
 					}).success(function (data, status, headers, config) {
 						if(data !== "1") {
 							alert("수정 실패하였습니다.!! 연구소에 문의 부탁드립니다.");
+							e.error();
 							return;
 						}
 					}).error(function (data, status, headers, config) {
-						console.log("error",data,status,headers,config);
+						//console.log("error",data,status,headers,config);
+						e.error();
 					});
 				}
             	
             	/**
 				 * 기존 마켓정보를 삭제 Parameter 생성한다.
 				 */
-            	,mngmrkDelete: function (param) {					
+            	,mngmrkDelete: function (param, e) {					
 					return $http({
 						method	: "PUT",
 						url		: APP_CONFIG.domain +"/mngmrk/mrkDelete",
@@ -57,10 +61,12 @@
 					}).success(function (data, status, headers, config) {
 						if(data !== "1") {
 							alert("삭제 실패하였습니다.!! 연구소에 문의 부탁드립니다.");
+							e.error();
 							return;
 						}
 					}).error(function (data, status, headers, config) {
-						console.log("error",data,status,headers,config);
+						//console.log("error",data,status,headers,config);
+						e.error();
 					});
 				}
             	

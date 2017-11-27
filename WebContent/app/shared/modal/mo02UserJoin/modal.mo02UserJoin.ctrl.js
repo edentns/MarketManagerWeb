@@ -75,29 +75,43 @@
 	                    }, 500);
 						return;
 					}
+					else if(self.param.DC_EMIADDR === '') {
+						alert('이메일을 입력하여 주세요.');
+						$timeout(function () {
+	                        edt.id("joinEmiAddr").focus();
+	                    }, 500);
+						return;
+					}
 					
-					SyLoginSvc.dupCheckNmC(self.param.NM_C).then(function (res) {
+					SyLoginSvc.dupCheckNmC(self.param.NM_C, self.param.DC_EMIADDR).then(function (res) {
 						self.ynChkDup = false; // 사업자명 변경시 'N'으로 변경해야 함.
 
 						if(res.status !== 200) return;
 						
-						if(res.data !== 'null') {
-							if(res.data.CD_JOINYN == '001') {
-								alert(UtilSvc.dateFormat(res.data.DTS_JOINREQ) + '에 가입요청 중 입니다.');
-							}
-							else if(res.data.CD_JOINYN == '002') {
-								alert('미가입상태입니다. 관리자에게 문의바랍니다.');
-							}
-							else if(res.data.CD_JOINYN == '003') {
-								alert(UtilSvc.dateFormat(res.data.DTS_JOIN) + '에 가입 중 입니다.');
-							}
-							else {
-								alert('관리자에게 문의바랍니다.');
-							}
+						if(res.data === 'null' || (res.data[0].CD_JOINYN === '' && res.data[1].CD_JOINYN === '')) {
+							self.ynChkDup = true; // 사업자명 변경시 'N'으로 변경해야 함.
+							alert('중복된 사업자명과 이메일이 없습니다.');
+						}
+						else if(res.data[0].CD_JOINYN == '001') {
+							alert('사업자명['+self.param.NM_C+']은 '+UtilSvc.dateFormat(res.data[0].DTS_JOINREQ) + '에 가입요청 중 입니다.');
+						}
+						else if(res.data[0].CD_JOINYN == '002') {
+							alert('사업자명['+self.param.NM_C+']은 미가입상태입니다. 관리자에게 문의바랍니다.');
+						}
+						else if(res.data[0].CD_JOINYN == '003') {
+							alert('사업자명['+self.param.NM_C+']은 '+UtilSvc.dateFormat(res.data[0].DTS_JOIN) + '에 가입 중 입니다.');
+						}
+						else if(res.data[1].CD_JOINYN == '001') {
+							alert('이메일['+self.param.DC_EMIADDR+']은 '+UtilSvc.dateFormat(res.data[1].DTS_JOINREQ) + '에 가입요청 중 입니다.');
+						}
+						else if(res.data[1].CD_JOINYN == '002') {
+							alert('이메일['+self.param.DC_EMIADDR+']은 '+'미가입상태입니다. 관리자에게 문의바랍니다.');
+						}
+						else if(res.data[1].CD_JOINYN == '003') {
+							alert('이메일['+self.param.DC_EMIADDR+']은 '+UtilSvc.dateFormat(res.data[1].DTS_JOIN) + '에 가입 중 입니다.');
 						}
 						else {
-							self.ynChkDup = true; // 사업자명 변경시 'N'으로 변경해야 함.
-							alert('중복된 사업자명이 없습니다.');
+							alert('관리자에게 문의바랍니다.');
 						}
 					});
 				};
@@ -135,6 +149,11 @@
 		                }
 	                }
 
+	                // 중복체크 여부
+	                if (!self.ynChkDup) {
+	                	return edt.invalidFocus("btnDupCheck", "중복체크를 하지 않았습니다.");
+	                }
+	                
                     // ID
                     if (!data.DC_ID) {
 	                    return edt.invalidFocus("joinDcId", "[필수] ID를 입력해주세요.");
@@ -254,10 +273,16 @@
 						return;
 					}
 					
-					SyLoginSvc.saveUserJoin(self.param).then(function (res) {
+					SyLoginSvc.doChkMe(self.param.DC_EMIADDR).then(function (res) {
 						if(res.status === 200) {
-							alert('회원 가입하였습니다.');
-							$modalInstance.dismiss( "ok" );
+							self.param.NO_OWNCONF = res.data.NO_OWNCONF; // 본인확인 여부 데이터
+							
+							SyLoginSvc.saveUserJoin(self.param).then(function (res) {
+								if(res.status === 200) {
+									alert('회원 가입하였습니다.');
+									$modalInstance.dismiss( "ok" );
+								}
+							});
 						}
 					});
 				};

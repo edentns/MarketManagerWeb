@@ -21,11 +21,16 @@
 				 */
 				loginVO.initLoad = function () {
 					var self = this,
-						recentLoginInfo = $window.localStorage.getItem("recentLoginInfo"); // 기억한 로그인 정보
+						recentLoginInfo = $window.localStorage.getItem("recentLoginInfo"), // 기억한 로그인 정보
+						recentLoginBsCd = $window.localStorage.getItem("recentLoginBsCd");
+					
+					if (recentLoginBsCd) {
+						recentLoginBsCd    = JSON.parse(recentLoginBsCd);
+						self.info.bsCd     = recentLoginBsCd.bsCd;
+					}
 					
 					if (recentLoginInfo) {
 						recentLoginInfo    = JSON.parse(recentLoginInfo);
-						self.info.bsCd     = recentLoginInfo.bsCd;
 						self.info.user 	   = recentLoginInfo.user;
 						self.isRegisterId  = true;
 					}
@@ -45,8 +50,9 @@
 
 					$rootScope.$broadcast("event:autoLoader", false);
 					LoginSvc.login(info).then(function (res) {
+						$window.localStorage.setItem("recentLoginBsCd", JSON.stringify({bsCd: info.bsCd}));
 						if (self.isRegisterId) {
-							$window.localStorage.setItem("recentLoginInfo", JSON.stringify({bsCd: info.bsCd, user: info.user}));
+							$window.localStorage.setItem("recentLoginInfo", JSON.stringify({user: info.user}));
 						}
 						else {
 				            $window.localStorage.removeItem("recentLoginInfo");

@@ -105,16 +105,17 @@
 				},
 				
 				/**
-				 * 사업자명 중복 체크
-				 * @param {{NM_C:string}} userDataSet
+				 * 사업자명, 이메일 중복 체크
+				 * @param {{nmC:string}} 사업자명
+				 * @param {{dcEmiaddr:string}} 이메일
 				 * @returns {*}
 				 */
-				dupCheckNmC : function (nmC) {
+				dupCheckNmC : function (nmC, dcEmiaddr) {
 					return $http({
 						method	: "POST",
 						url		: APP_CONFIG.domain +"/dupCheckNmC",
 						headers	: { "Content-Type": "application/x-www-form-urlencoded; text/plain; */*; charset=utf-8" },
-						data    : $.param({L_NM_C:nmC})
+						data    : $.param({L_NM_C:nmC, L_DC_EMIADDR:dcEmiaddr})
 					});
 				},
 				

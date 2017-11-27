@@ -78,7 +78,8 @@
 
 					switch (config.status) {
 						case 400:// 로그인 실패
-							alert('아이디와 패스워드를 다시 확인해주세요.');
+							//alert('아이디와 패스워드를 다시 확인해주세요.');
+							alert(config.data);
 							defer.reject(config);
 							break;
 						case 401:// 로그인 상태가 아닐경우

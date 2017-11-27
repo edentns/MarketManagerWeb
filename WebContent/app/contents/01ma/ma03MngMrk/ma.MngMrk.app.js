@@ -23,13 +23,33 @@
                                 resData.access = result[0];
                                 var param = {
             						procedureParam:strPcdParam,
-            						L_NO_MNGCDHD:"SYCH00016",
-            						L_CD_CLS:"SY_000016"
+            						L_NO_MNGCDHD:"SYCH00005",
+            						L_CD_CLS:"SY_000005"
             					};
             					UtilSvc.getList(param).then(function (res) {
-            						resData.methodDataSource = res.data.results[0];
-            						defer.resolve(resData);
+            						resData.cdMrkDftDataSource = res.data.results[0];
+            						var param = {
+                						procedureParam:strPcdParam,
+                						L_NO_MNGCDHD:"SYCH00027",
+                						L_CD_CLS:"SY_000027"
+                					};
+            						UtilSvc.getList(param).then(function (res) {
+                						resData.cdNtDataSource = res.data.results[0];
+                						
+                						var param = {
+                    						procedureParam:strPcdParam,
+                    						L_NO_MNGCDHD:"SYCH00016",
+                    						L_CD_CLS:"SY_000016"
+                    					};
+                    					UtilSvc.getList(param).then(function (res) {
+                    						resData.methodDataSource = res.data.results[0];
+                    						defer.resolve(resData);
+                    					});
+                					});
             					});
+            					
+            					
+                                
                             });
 
                             return defer.promise;
