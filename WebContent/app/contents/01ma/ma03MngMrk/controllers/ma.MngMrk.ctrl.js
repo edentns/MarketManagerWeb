@@ -39,9 +39,11 @@
 							end   : angular.copy(today)
 						}
 	        		},
-                    searchText: {value: "", focus: false},				    //검색어
-             	    methodDataCode : "",			//연동방법
+                    searchText: {value: "", focus: false},			 //검색어
+             	    methodDataCode : "",			                 //연동방법
              	    methodDataSource : resData.methodDataSource,
+	        		cdMrkDftDataSource : resData.cdMrkDftDataSource,
+	        		cdNtDataSource : resData.cdNtDataSource,
              	    itlDataSource : [{CD_DEF:'001',NM_DEF:'미연동'}, {CD_DEF:'002',NM_DEF:'연동중'}],
              	    dataTotal : 0,
              	    resetAtGrd : "",
@@ -141,6 +143,12 @@
                             }
                             ,noRecords: "검색된 데이터가 없습니다."
                         },
+                        edit: function (e) {
+                            if (e.model.isNew()) {
+                        		e.model.set("CD_MRKDFT", "001");
+                        		e.model.set("CD_NT", "001");
+                            }
+                		},
                     	boxTitle : "마켓 리스트",
                     	sortable: true,         	
                         pageable: {
@@ -168,7 +176,11 @@
                                     	data: e.data.models
                                     };
     	                			
-    	                			if(!isValid(param)) { return false; };
+    	                			if(!isValid(param)) {
+    	                				e.error();
+    	                				return false; 
+    	                			};
+    	                			
     	                			MaMngMrkSvc.mngmrkInsert(param, e).then(function(res) {
     	                				defer.resolve();
     	                				//mngMrkDateVO.init();
@@ -182,7 +194,10 @@
                                     	data: e.data.models
                                     };
     	                			
-    	                			if(!isValid(param)) { return };
+    	                			if(!isValid(param)) {
+    	                				e.error();
+    	                				return false; 
+    	                			};
     	                			MaMngMrkSvc.mngmrkUpdate(param, e).then(function(res) {
     	                				defer.resolve();
     	                				//mngMrkDateVO.init();
@@ -239,6 +254,7 @@
 	                    							 	,editable: true
 	                    							 	,nullable: false
                     							 },
+                             			CD_MRKDFT:   { type: "string" },
                     					CD_ITLWAY : {
 				        							   editable: true
 				        						 },
@@ -262,6 +278,7 @@
                     							      ,editable: true
                     							      ,nullable: false
                     						     } ,
+                             			CD_NT:       { type: "string" },
                              			DTS_INSERT:{
                              				editable: false
                  						}
@@ -291,6 +308,18 @@
                		        	  ,headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}
             		              ,attributes: {class:"ta-l"}
             		           },
+            		           {
+            		        	   field: "CD_MRKDFT"
+            		        	  ,title: "마켓구분"
+            		        	  ,width: 100
+            		        	  ,editor: function(container, options) {
+            		        		  gridMngMrkUserVO.dropDownEditor(container, options, mngMrkDateVO.cdMrkDftDataSource, ["NM_DEF","CD_DEF"]);
+                 		           }
+            		              ,template: function(e){
+                  		       	   	 return gridMngMrkUserVO.fTemplate(e, mngMrkDateVO.cdMrkDftDataSource, ["CD_DEF", "NM_DEF", "CD_MRKDFT"]);
+                  		       	   }
+                 		          ,headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}
+                   	   		   },
             		           {
                		        	   field: "CD_ITLWAY"
                		        	  ,title: "<span class='form-required'>* </span>연동방법"
@@ -365,6 +394,18 @@
             		        	 ,headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
          		                 ,attributes: {class:"ta-l", style:"text-overflow: ellipsis; white-space: nowrap; overflow:hidden;"}
            		        	   },
+           		        	   {
+           		        		  field: "CD_NT"
+           		        		 ,title: "국가"
+           		        		 ,width: 80
+           		        		 ,editor: function(container, options) {
+           		        			gridMngMrkUserVO.dropDownEditor(container, options, mngMrkDateVO.cdNtDataSource, ["NM_DEF","CD_DEF"]);
+                  		          }
+           		        	     ,template: function(e){
+                 		       	   	 return gridMngMrkUserVO.fTemplate(e, mngMrkDateVO.cdNtDataSource, ["CD_DEF", "NM_DEF", "CD_NT"]);
+                 		       	  }
+           		        	     ,headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}
+           		        	   },
 	            		       {
          		        	      field: "DTS_INSERT"
          		        	     ,title: "등록일자"
@@ -386,6 +427,30 @@
                     	height: 657
         		};
 
+                gridMngMrkUserVO.dropDownEditor = function(container, options, objDataSource, arrField) {
+		       		$('<input required name='+ options.field +' data-bind="value:' + options.field + '" />')
+		    		.appendTo(container)
+		    		.kendoDropDownList({
+		    			autoBind: true,
+		    			dataTextField: arrField[0],
+                        dataValueField: arrField[1],
+		    			dataSource: objDataSource,
+		    			valuePrimitive: true
+		    		});
+                };
+
+                gridMngMrkUserVO.fTemplate = function(e, objDataSource, arrField) {
+                	var nmd = (!e[arrField[2]].hasOwnProperty(arrField[0])) ?  e[arrField[2]] : "";
+	       		    var grdData = objDataSource;	
+		       		for(var i = 0, leng=grdData.length; i<leng; i++){
+		       			if(grdData[i][arrField[0]] === e[arrField[2]]){
+		       				nmd = grdData[i][arrField[1]];
+		       				break;
+		       			}
+		       		}	
+                	return nmd;
+                };
+                
                 setTimeout(function () {
                 	if(!page.isWriteable()) {
         				$(".k-grid-add").addClass("k-state-disabled");
