@@ -294,7 +294,7 @@
                 	altRowTemplate: kendo.template($.trim(grdAltRowTemplate)),
                 	height: 616,
                 	navigatable: true, //키보드로 그리드 셀 이동 가능
-                	toolbar: [{template: kendo.template($.trim($("#ordall_toolbar_template").html()))}],
+                	//toolbar: [{template: kendo.template($.trim($("#ordall_toolbar_template").html()))}],
                 	dataSource: new kendo.data.DataSource({
                 		transport: {
                 			read: function(e) {                				
