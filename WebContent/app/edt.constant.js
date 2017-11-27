@@ -163,6 +163,16 @@
         CD_CCLRSN     : { field: "CD_CCLRSN"     , type: "string" , width: "100px", textAlign: "center", title: "주문취소사유코드"},
         AM_TKBKSHP    : { field: "AM_TKBKSHP"    , type: "number" , width: "100px", textAlign: "right" , title: "반품배송비"},        
         CD_PARS_TKBK  : { field: "CD_PARS_TKBK"  , type: "string" , width: "100px", textAlign: "center", title: "반품택배사"},
-        NO_INVO_TKBK  : { field: "NO_INVO_TKBK"  , type: "string" , width: "100px", textAlign: "center", title: "반품송장번호"}
+        NO_INVO_TKBK  		: { field: "NO_INVO_TKBK"  		 , type: "string" , width: "100px", textAlign: "center", title: "반품송장번호"},   
+        DTS_TKBKCPLT_VIEW   : { field: "DTS_TKBKCPLT_VIEW"	 , type: "string" , width: "100px", textAlign: "center", title: "반납상품접수일자"},
+
+        ROW_NUM 	  : { field: "ROW_NUM" 		, type: "number" , width: "50px",  textAlign: "center", title: "번호"},
+        NO_C          : { field: "NO_C"       	, type: "string" , width: "100px", textAlign: "center", title: "문의 가입자번호"},
+        DC_INQTITLE   : { field: "DC_INQTITLE"  , type: "string" , width: "100px", textAlign: "center", title: "문의제목"},                
+        DC_INQCTT     : { field: "DC_INQCTT"  	, type: "string" , width: "100px", textAlign: "center", title: "문의내용"},
+        DTS_INQREG    : { field: "DTS_INQREG"   , type: "string" , width: "100px", textAlign: "center", title: "문의등록일시"},   
+        NM_FILE       : { field: "NM_FILE"  	, type: "string" , width: "100px", textAlign: "center", title: "문의 첨부파일 여부"},
+        CD_ANSSTAT    : { field: "CD_ANSSTAT"   , type: "string" , width: "100px", textAlign: "center", title: "답변상태"},    
+        DC_HTMLANSCTT : { field: "DC_HTMLANSCTT"   , type: "string" , width: "100px", textAlign: "center", title: "답변내용"}  
 	});
 }());
