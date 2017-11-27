@@ -7,8 +7,8 @@
      * 코드관리
      */
     angular.module("ma.Notice.controller")
-        .controller("ma.NoticeCtrl", ["$window", "$scope", "$http", "$q", "$log", "ma.NoticeSvc", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "MenuSvc", "Util01maSvc",
-            function ($window, $scope, $http, $q, $log, MaNoticeSvc, APP_CODE, $timeout, resData, Page, UtilSvc, MenuSvc, Util01maSvc) {
+        .controller("ma.NoticeCtrl", ["$window", "$scope", "$http", "$q", "$log", "ma.NoticeSvc", "APP_CONFIG", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "MenuSvc", "Util01maSvc",
+            function ($window, $scope, $http, $q, $log, MaNoticeSvc, APP_CONFIG, APP_CODE, $timeout, resData, Page, UtilSvc, MenuSvc, Util01maSvc) {
 	            var page  = $scope.page = new Page({ auth: resData.access }),
 		            today = edt.getToday();
 	            
@@ -65,8 +65,13 @@
         				if(res.data.results[0].length >= 1){
         					$scope.noticeDataVO.fileDataVO.currentDataList = res.data.results[0];
         				}
-        			});	
-	            });
+        			});
+	            });	            
+
+	            var stopEvent = function(e){
+	            	e.preventDefault();
+	            	e.stopPropagation();
+                };               
 	            
 	            var noticeDataVO = $scope.noticeDataVO = {
 	            	boxTitle : "검색",
@@ -115,60 +120,77 @@
                       /*  optionLabel: {"NM_DEF": "공지구분을 선택해 주세요.", "CD_DEF": ""},*/
                     	valuePrimitive: true
     				},
+    				fileDataVO : {
+	        			CD_AT:'007',
+	        			limitCnt: 5,
+	        			bImage: true
+    				},	 
     				dataTotal : 0,
              	    resetAtGrd : "",
-             	    deleteOrdUpdate : "",
-             	    kEditor : {
-             	    	tools: [
-             	    	   "bold",
-                           "italic",
-                           "underline",
-                           "strikethrough",
-                           "justifyLeft",
-                           "justifyCenter",
-                           "justifyRight",
-                           "justifyFull",
-                           "insertUnorderedList",
-                           "insertOrderedList",
-                           "indent",
-                           "outdent",
-                           "createLink",
-                           "unlink"//,
-            	    	   //"insertImage"
-                        ]
-    					//,
-	                    /*imageBrowser: {
-	                    	  messages: {
-	                              dropFilesHere: "드래그 한 파일을 여기에 놓아 주세요."
-	                          },
-	                          transport: {
-	                        	  read: APP_CONFIG.domain + "/ut05FileUpload",//"/kendo-ui/service/ImageBrowser/Read",
-	                              destroy: {
-	                            	  url: APP_CONFIG.domain + "/ut05FileUpload",
-	                                  type: "DELETE"
-	                              },
-	                              create: {
-	                            	  url: APP_CONFIG.domain + "/ut05FileUpload",
-	                                  type: "POST"
-	                              },
-	                              thumbnailUrl: "/kendo-ui/service/ImageBrowser/Thumbnail",
-	                              uploadUrl: "/kendo-ui/service/ImageBrowser/Upload",
-	                              imageUrl: "/kendo-ui/service/ImageBrowser/Image?path={0}"
-	                         }
-	                     }*/
-             	    }
+             	    deleteOrdUpdate : ""
 		        };
 
 	            UtilSvc.gridtooltipOptions.filter = "td";
 	            noticeDataVO.tooltipOptions = UtilSvc.gridtooltipOptions;
 	            
-	            //파일 VO
-	            noticeDataVO.fileDataVO = {
-        			CD_AT:'007',
-        			limitCnt: 5,
-        			currentDataList:[]
-        		};	 
-	            
+	            noticeDataVO.kEditor = {
+	            	noNotice : "",
+                    path: "",
+         	    	tools: [
+         	    	   "bold",
+                       "italic",
+                       "underline",
+                       "strikethrough",
+                       "justifyLeft",
+                       "justifyCenter",
+                       "justifyRight",
+                       "justifyFull",
+                       "insertUnorderedList",
+                       "insertOrderedList",
+                       "indent",
+                       "outdent"/*,
+        	    	   "insertImage"*/
+                    ],
+                    imageBrowser: {
+                    	messages: {
+                    		dropFilesHere: "드래그 한 파일을 여기에 놓아 주세요.",
+                            empty: "비었음",
+                            uploadFile: "그림 파일 업로드"
+                        },
+                        change: function(е) {
+                            var selectedImage = e.sender._selectedItem();
+                            console.log('selectedImage', selectedImage);
+                        },
+                        transport: {
+                        	  read: function(e){
+                        		  var param = {
+                        			  procedureParam: "MarketManager.USP_MA_05NOTICE_FILELIST_GET&no@s",
+              	    				  no: noticeDataVO.kEditor.noNotice
+              	    			  };
+          	            		  UtilSvc.getList(param).then(function (res) {
+          	            			  if(res.data.results[0].length >= 1){
+          	            				  e.success(res.data.results[0]);		  
+          	            			  }else{
+          	            				  e.success([]);          	            				  
+          	            			  }
+          	            		  });
+              		          },
+                              destroy: {
+                            	  url: APP_CONFIG.domain + "/ut05FileUpload",
+                                  type: "DELETE"
+                              },
+                              uploadUrl : APP_CONFIG.domain + "/ut05FileUpload",
+                              thumbnailUrl: function(path, file){
+                            	  console.log(path, file);
+                              },
+                              imageUrl: function(e){
+                            	  /*console.log(e);
+                            	  return e;*/
+                              }
+                        }
+                    }
+         	    };
+	            	            
 	            //조회
 	            noticeDataVO.inQuiry = function(){
 	            	var me = this;
@@ -285,7 +307,6 @@
                     	dataSource: new kendo.data.DataSource({
                     		transport: {
                     			read: function(e) {                   
-                    				console.log(noticeDataVO.param);
                 					UtilSvc.getList(noticeDataVO.param).then(function (res) {          						
                 						e.success(res.data.results[0]);
                 					});
@@ -306,27 +327,31 @@
 	                			        		});
 	                		        		}else{
 	                		        			alert('저장 되었습니다.');
-	                		        		}
-    	                					
-    	                					noticeDataVO.afterSaveQuery(param.data[0]); // 저장값으로 조회              						                						    	        	                			           		
-    	    	                		
+	                		        		}    	                					
+    	                					noticeDataVO.afterSaveQuery(param.data[0]); // 저장값으로 조회             		
     	                				}else{
+    	                					e.error([]);
     	                					alert(res.data);
     	                					alert("저장 실패 하였습니다 새 글을 써주세요.");
     	                				}    	                				
     	                				defer.resolve(); 
-    	                			});             
+    	                			},function(err){
+    	                				e.error([]);
+    	                			});
     	                			return defer.promise;     	                			        				
     	            			},
                     			update: function(e) {
                     				var defer = $q.defer();
     	                			 	
                     				if(noticeDataVO.deleteOrdUpdate === "d"){
-                    					var param = { data: e.data.models };
+                    					var param = { data: e.data.models },
+                						    paramFunction = noticeDataVO.paramFunc(param);;
                     					
-                    					MaNoticeSvc.noticeDelete(param).then(function(res) {
+                    					MaNoticeSvc.noticeDelete(paramFunction).then(function(res) {
     	    	                			$scope.gridNoticeVO.dataSource.read();
     	    	                			defer.resolve();
+        	                			},function(err){
+        	                				e.error([]);
         	                			});
                     					noticeDataVO.deleteOrdUpdate = "";
                     				}else{
@@ -351,7 +376,10 @@
         	                					alert("수정 실패하였습니다.!! 연구소에 문의 부탁드립니다.");
         	                				}
         	                				defer.resolve(); 
+        	                			},function(err){
+        	                				e.error([]);
         	                			});
+        	                			
                     				}                    				
     	                			return defer.promise;			
                     			},
@@ -396,8 +424,17 @@
             											   },                    					
                     					NO_NOTICE:		   {	
                     											type: "string", 
-                    											editable: false, 
-                    											nullable: false
+                    											editable: true, 
+                    											nullable: false,
+                    											validation: {
+                    												no_noticevalidation: function (input) {																		
+																		if (input.is("[name='NO_NOTICE']") && !input.val()) {
+																			input.attr("data-no_noticevalidation-msg", "공지번호가 없습니다. 창을 닫고 다시 켜주세요 .");
+																		    return false;
+																		};
+																		return true;
+																	}
+																}
                     									   },
                     				    ARR_NO_C: 		   {	
 																type: "array", 
@@ -433,8 +470,8 @@
 																			input.attr("data-nm_subjectvalidation-msg", "공지제목을 입력해 주세요.");
 																		    return false;
 																		};
-																		if (input.is("[name='NM_SUBJECT']") && input.val().trim().length < 10 && input.val().trim().length > 8000) {
-																			input.attr("data-nm_subjectvalidation-msg", "공지제목을 10자 이상 8000자 이내로 입력해 주세요.");
+																		if (input.is("[name='NM_SUBJECT']") && input.val().trim().length < 10 && input.val().trim().length > 800) {
+																			input.attr("data-nm_subjectvalidation-msg", "공지제목을 10자 이상 800자 이내로 입력해 주세요.");
 																		    return false;
 																		};
 																		return true;
@@ -449,10 +486,13 @@
 																		if (input.is("[name='DC_HTMLCONTENT']") && !input.val()) {
 																			input.attr("data-dc_htmlcontentvalidation-msg", "공지내용을 입력해 주세요.");
 																		    return false;
-																		};
-																		if (input.is("[name='DC_HTMLCONTENT']") && input.val().trim().length < 10 && input.val().trim().length > 2000) {
-																			input.attr("data-dc_htmlcontentvalidation-msg", "공지내용을 10자 이상 2000자 이내로 입력해 주세요.");
-																		    return false;
+																		};		
+																		if (input.is("[name='DC_HTMLCONTENT']") && input.val()) {
+																			var inputInEditor = UtilSvc.removeHtmlTag(input.data("kendoEditor").value().trim()).length;
+																			if(inputInEditor > 2000 || inputInEditor < 10){
+																				input.attr("data-dc_htmlcontentvalidation-msg", "공지내용을 10자 이상 2000자 이내로 입력해 주세요.");
+																			    return false;
+																			};
 																		};
 																		return true;
 																	}
@@ -485,7 +525,16 @@
                     					SQ_NOTICE: 	       {
 	                    										type: "number",
 	                    									    defaultValue: 1,
-	                    									    nullable: false
+	                    									    nullable: false,
+	                    									    validation: {
+	                    									    	sq_noticevalidation: function (input) {																		
+																		if (input.is("[name='SQ_NOTICE']") && !input.val()) {
+																			input.attr("data-sq_noticevalidation-msg", "우선 순위를 입력해 주세요.");
+																		    return false;
+																		};
+																		return true;
+																	}
+																}
                     									   },
                     					SY_FILES: 		   {
                     											type: "string", 
@@ -575,16 +624,82 @@
                     		confirmation: false,
                     	    destroy: true
                     	},	
-                    	edit: function (e) {                      		
+                    	edit: function (e) {
+                    		/*var editor = $("#k-edi").data("kendoEditor");
+
+                            // attach a click handler on the tool button, which opens the ImageBrowser dialog
+                            editor.toolbar.element.find(".k-i-image").parent().click(function(){
+                                // a setTimeout is required, otherwise the ImageBrowser widget will still not be initialized
+                                $timeout(function(){
+            	            		  
+      	          	       		  var onUpload = function onUpload(e) {
+  		    	          	       	    e.formData = new FormData();
+  			    	          	       	e.formData.append("cd_at", "007");
+  			    	          	        e.formData.append("cd_ref1", "");
+  			    	          	        e.formData.append("cd_ref2", "");
+  			    	          	        e.formData.append("cd_ref3", "");
+  			    	          	        e.formData.append("cd_ref4", "");
+  			    	          	        e.formData.append("cd_ref5", "");
+  			    	          	        e.formData.append("bimage", true);
+      	          	       		  };
+            	            		  
+	  		    	          	    $("[data-role='upload']").kendoUpload({
+	      	          	       			  async: {
+	      	          	       				  saveUrl: APP_CONFIG.domain + "/ut05FileUpload"
+	  		    	          	          },
+	  		    	          	         upload: onUpload
+	  		    	          	    });       	       	
+	      	          	       		  
+                                    // retrieve the ImageBrowser widget object
+                                    var imageBrowser = $(".k-imagebrowser").data("kendoImageBrowser");
+                                    console.log(imageBrowser);
+                                    
+                                    // retrieve the ListView widget object
+                                    var listView = imageBrowsser.listView;
+                                    console.log(listView);
+
+                                    // retrieve the Upload widget object
+                                    var upload = imageBrowser.upload;
+                                    console.log(upload);
+
+                                    // retrieve the DropDownList widget object
+                                    var dropdownlist = imageBrowser.arrangeBy;
+                                    console.log(dropdownlist);                                   
+                                });
+                            });*/
+                            
                 		    //새 글 일때
-                		    if (e.model.isNew()) {                		    	
+                		    if (e.model.isNew()) { 		    	
                 		        $(".k-grid-update").text("저장");
                 		        $(".k-window-title").text("공지 사항 등록");
+                		        
+                		       /* $scope.$apply(function(){
+                		        	e.model.NO_NOTICE = "123456798";
+                		        	console.log($scope.gridNoticeVO.dataSource.data()[0].NO_NOTICE);
+                		        }); */              		        
+                		        
+                		        if(!e.model.NO_NOTICE){
+                		        	var getUrl = location.href.toString(),
+                			    	    param = { data : getUrl };
+                			
+		                			MaNoticeSvc.noticeGetseq(param).then(function(res) {
+		                				if(res.data) {
+		                					e.model.NO_NOTICE = res.data;	
+		                					e.model.dirty = true;
+		                				}else{
+		                					alert("공지사항 등록 창을 다시 열어 주세요.");
+		                				}    	           
+		                			},
+	            				    function(err) {
+		                				alert("공지사항 등록 창을 다시 열어 주세요.");
+	            				    });             
+                		        }
                 		    //수정 할 글일때
-                		    }else{
+                		    }else{                		    	                		    	
                 		    	$(".k-grid-update").text("수정");
                 		    	$(".k-window-title").text("공지 사항 수정");
                 		    	
+                		    	noticeDataVO.kEditor.noNotice = e.model.NO_NOTICE; 
                 		    	// 파일 리스트 출력
                 		    	fileList(e.model.NO_NOTICE);
                 		    	
@@ -614,7 +729,11 @@
                     	},
                     	cancel: function(e) { //pop up 창 닫힐때 작동됨  
                     		// 파일 리스트 출력 초기화 
-            		        $scope.noticeDataVO.fileDataVO.currentDataList = [];
+            		        $scope.noticeDataVO.fileDataVO.currentDataList = [];           		        
+            		        
+            		        $scope.$apply(function(){
+            		        	noticeDataVO.kEditor.noNotice = "";
+            		        });
                     	},
                     	resizable: true,
                     	rowTemplate: kendo.template($.trim($("#ma_notice_template").html())),
@@ -948,12 +1067,8 @@
                        multiSelect.value(array);
                        multiSelect.trigger("change");
                    };
-               };
-               function stopEvent(e) {
-            	   e.preventDefault();
-            	   e.stopPropagation();
-               };               
-               
+               };           	   
+                                             
                $timeout(function () {
             	   if(!page.isWriteable()) {
             		   $(".k-grid-add").addClass("k-state-disabled");
@@ -962,7 +1077,7 @@
        				   $(".k-grid-delete").click(stopEvent);
        				}
 
-            	   initCdTarget();           
+            	   initCdTarget();            	  
                });
                
             }]);

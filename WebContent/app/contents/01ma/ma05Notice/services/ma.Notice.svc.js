@@ -13,7 +13,22 @@
             	/**
 				 * 새 마켓정보 등록 Parameter 생성한다.
 				 */
-            	noticeInsert : function (param) {					
+            	imgUpload : function (param) {					
+					return $http({
+						method	: "POST",
+						url		: APP_CONFIG.domain +"/ut05FileUpload",
+						data	: param
+					}).success(function (data, status, headers, config) {
+						
+					}).error(function (data, status, headers, config) {
+						alert("재 업로드 해주세요.");
+					});
+				}
+            	
+            	/**
+				 * 새 마켓정보 등록 Parameter 생성한다.
+				 */
+            	,noticeInsert : function (param) {					
 					return $http({
 						method	: "POST",
 						url		: APP_CONFIG.domain +"/notice/noticeI",
@@ -58,6 +73,22 @@
 					}).error(function (data, status, headers, config) {						
 						//console.log("error",data,status,headers,config);
 						alert("다시 삭제 해주세요.");
+					});
+				}
+            	
+            	/**
+				 * 공지사항 시퀀스 번호 가져오기
+				 */
+            	,noticeGetseq: function (param) {					
+					return $http({
+						method	: "POST",
+						url		: APP_CONFIG.domain +"/notice/noticeS",
+						data	: param
+					}).success(function (data, status, headers, config) {
+						
+					}).error(function (data, status, headers, config) {						
+						//console.log("error",data,status,headers,config);
+						alert("순번 가져오기 실패.");
 					});
 				}
             	
