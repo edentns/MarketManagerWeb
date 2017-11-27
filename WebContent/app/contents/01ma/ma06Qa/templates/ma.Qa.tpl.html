@@ -1,0 +1,448 @@
+<div id="app-content" class="col-xs-12 col-sm-10">
+    <div class="row">
+        <div id="app-content-header">
+            <ol class="breadcrumb">
+                <li><a href="#01ma/maDashboard"><i class="fa fa-home fa-2x"></i></a></li>
+                <li><a href="#01ma/maQa">QA관리</a></li>
+            </ol>
+        </div>
+    </div>
+    
+    <div class="row">
+        <!-- 검색 -->
+        <div class="content-area-container col-xs-12">
+        	<div data-content-box-layer data-box-title="qaDataVO.boxTitle" data-is-open="qaDataVO.isOpen(val)">
+                <form class="search-type1" id="myForm">
+                	<table>
+                        <colgroup>
+                            <col style="width: 7%;">
+                            <col style="width: 13%;">
+                            <col style="width: 7%;">
+                            <col style="width: 18%;">
+                            <col style="width: 7%;">
+                            <col style="width: 19%;">
+                            <col style="width: 7%;">
+                            <col style="width: 25%;">
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th>제목/내용</th>
+                            <td>
+                            	<input data-ng-model="qaDataVO.contentText.value"
+                            			focus="qaDataVO.contentText.focus"
+                            			title="제목/내용"
+                            			data-eden-type="kor" 
+                            			type="text" 
+                            			class="form-control" style="width:100%;"/>
+                            </td>
+                            <th>답변처리상태</th>
+                            <td>
+                            	<co01-mcbox id="qa-asr-sts" title="답변처리상태" model="qaDataVO.answerStatusModel" options="qaDataVO.answerStatusBind" setting="qaDataVO.setting"  style="width:100%;">
+        						</co01-mcbox>        		
+                            </td>		
+                            <th>문의대상</th>
+                            <td colspan="2">     
+					            <div style="display:inline-block; width:71%; vertical-align: middle;">
+					            	<select kendo-multi-select
+					            		title="문의대상" 
+					            		id="nkms"
+	                            		k-ng-model="qaDataVO.qaNocModel"
+	                            		k-options="qaDataVO.qaNocOp" >
+                            		</select>
+					            </div>					  
+                            	<button class="k-button" ng-click="dialog.open()" style="width:28%;">검색</button>		
+                            </td>      
+                            <td></td>   
+                        </tr>
+                        <tr>
+                            <th>문의등록일자</th>
+                            <td colspan="7">                            	              	
+                            	<div class="frm-group" data-date-search-group="qaDataVO.datesetting" style="display:inline-block;"></div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>            
+                    <div class="btn-group1 mt-10">
+                        <kendo-button type="submit" class="k-primary" title="검색" data-ng-click="qaDataVO.inQuiry()" style="width:70px;">검색</kendo-button>
+                        <kendo-button type="botton" title="초기화" data-ng-click="qaDataVO.inIt()" style="width:70px;">초기화</kendo-button>
+                    </div>
+                </form>
+            </div>
+        </div>
+                
+        <!-- qa 리스트 -->          
+		<div class="content-area-container col-xs-12" style="padding:0px 0px 0px 0px; margin-top:-5px;">		
+			<kendo-tooltip options="qaDataVO.tooltipOptions">		
+		        <div id="divQaGrd" kendo-grid="qakg" options="gridQaVO">
+		        </div>	            
+		    </kendo-tooltip>
+        </div>
+    </div>
+</div>
+
+<!-- 가입자 검색 그리드(조회용) -->
+<div kendo-dialog="dialog" k-options="memSearchGrd">
+    <div class='k-textbox k-space-right search-wrapper'>
+        <input id="memberSearchMain" class="memberSearch" type='text' ng-model="memSearchGrd.searchValue" ng-keyup="memSearchGrd.searchKeyUp($event)" ng-keydown="memSearchGrd.searchKeyUp($event)"
+            placeholder='검색할 가입자를 입력하세요'/><span class='k-icon k-i-search'></span>
+    </div>
+    <div class='select-all-wrapper'>
+        <input type='checkbox' class='k-checkbox' ng-change="memSearchGrd.selectAllItems()" ng-model="memSearchGrd.selectAll" id='selectAllInput'/>
+        <label class='k-checkbox-label' for='selectAllInput'>전체 선택</label>
+        <span class='selected-count'>{{memSearchGrd.selectedCount}} 명 선택</span>
+    </div>
+    <div kendo-tree-view="treeView" k-options="memSearchGrd">
+        <span k-template data-color-matches="memSearchGrd.searchValue" data-value="{{dataItem.NM}}">
+        </span>        
+    </div>
+    <div data-ng-if="!(dataItem.NM)" style="width:100; text-align:center; margin-top:5px;">
+    	<span>조회된 데이터가 없습니다.</span>
+    </div>
+</div>
+
+<!-- 문의사항 조회 그리드 -->
+<script id="qa-template" type="text/x-kendo-template">		
+     <tr class="k-grid-row" data-uid="#= uid #">
+		<td class="ta-r">
+            <span class="seq ells">
+				# if(ROW_NUM){		# 
+				#: ROW_NUM 			# 
+				# } 				#
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells">
+				# if(NO_C){ 		# 
+				#: NO_C 			# 
+				# } 				#
+			</span>
+        </td>
+		<td class="ta-c">
+            <span class="ells cd-notice">
+				# if(DC_INQTITLE){  #
+				#: DC_INQTITLE      #                             
+                # } 			    #	
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells">
+				# if(DC_INQCTT){ 	#
+					# if(NM_FILE > 0){  #  
+					<img src="/assets/img/common/file.png"/> 
+					#}					#
+                #: DC_INQCTT 		# 
+                # } 				#
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells">
+				# if(DTS_INQREG) {  #
+				<co06-date-format origin-date="'#:DTS_INQREG#'">
+                # } 				#
+			</span>
+        </td>
+		<td class="ta-c">
+            <span class="ells">
+				# if(NM_C){    		#
+				#: NM_C 			#
+      			# } 				#
+			</span>
+        </td>
+		<td class="ta-c">
+            <span class="ells">
+				# if(NM_FILE){ 		#
+				  	 있음
+ 				# }else{ 			#
+					없음
+				# }					#	
+			</span>
+        </td>
+		<td class="ta-r">
+            <span class="ells">
+				# if(DC_ANSCTT){    #
+					# if(M_NM_FILE > 0){	#  
+					<img src="/assets/img/common/file.png"/> 
+					#}						#
+				#: DC_ANSCTT 	    #
+				# } 				#
+			</span>
+        </td>
+		<td class="ta-r">
+            <span class="ells">
+				# if(CD_ANSSTAT){ 	#
+				<co04-cd-to-nm cd="#:CD_ANSSTAT#" nm-box="qaDataVO.answerStatusBind">
+				# } 				#
+			</span>
+        </td>
+	</tr>
+</script>
+
+<!-- 문의사항 답변 팝업 그리드 -->
+<script id="qa-popup-template" type="text/x-kendo-template">
+<div class="not_pop_title"><h3>문의내용</h3></div>
+<table class="signal">
+	<colgroup>
+      <col style="width: 11%;">
+      <col style="width: 18%;">
+      <col style="width: 11%;">
+      <col style="width: 26%;">
+      <col style="width: 11%;">
+      <col style="width: 21%;">
+    </colgroup>
+    <tbody data-uid="#= uid #">	
+	<tr class="border-bottom-line border-top-line">	
+		<th class="border-right-line">
+			문의번호
+		</td>
+		<td class="border-right-line">
+			# if(NO_QA){ 		# 
+			#: NO_QA 			# 
+			# } 				#
+		</td>
+		<th class="border-right-line">
+			가입자 번호
+		</td>
+		<td class="border-right-line">
+			# if(NO_C){ 		# 
+			#: NO_C 			# 
+			# } 				#
+		</td>
+		<td class="border-right-line">
+		</td>
+		<td>
+		</td> 
+	</tr>
+	<tr class="border-bottom-line">
+		<th class="border-right-line">
+			작성자
+		</td>
+		<td class="border-right-line">
+			# if(NM_C){         #
+			#: NM_C             #                             
+            # } 			    #			
+		</td>
+		<th class="border-right-line">
+			작성일시
+		</td>
+		<td class="border-right-line">
+			# if(DTS_INQREG){   #
+			<co06-date-format origin-date="'#:DTS_INQREG#'"> 
+            # } 			    #
+		</td>
+		<td class="border-right-line">			
+		</td>
+		<td>			
+		</td> 
+	</tr>
+	<tr class="border-bottom-line">
+		<th class="border-right-line">
+			문의자 전화번호
+		</td>
+		<td class="border-right-line">			
+			# if(NO_INQPHNE){   #
+			#: NO_INQPHNE       #                             
+            # } 			    #
+		</td>
+		<th class="border-right-line">
+			핸드폰 번호
+		</td>
+		<td class="border-right-line">			
+			# if(NO_INQCEPH){   #
+			#: NO_INQCEPH       #                             
+            # } 			    #
+		</td>
+		<th class="border-right-line">
+			이메일			
+		</td>
+		<td>			
+			# if(DC_INQEMI){    #
+			#: DC_INQEMI        #                             
+            # } 			    #
+		</td> 
+	</tr>
+	<tr class="border-bottom-line">
+		<th class="border-right-line">
+			문의제목
+		</td>
+		<td colspan="5">
+			# if(DC_INQTITLE){  #
+			#: DC_INQTITLE      #                             
+            # } 			    #
+		</td> 
+	</tr>
+	<tr class="border-bottom-line">
+		<th class="border-right-line">
+			문의내용
+		</td>
+		<td colspan="5" id="html-inq-ctt">			
+		</td> 
+	</tr>
+	<tr class="border-bottom-line">
+		<th class="border-right-line">
+			문의첨부파일
+		</td>
+		<td colspan="5">
+			<div id="qa-slr-file-list"></div>
+		</td>
+	</tr>
+	<tr class="border-bottom-line">
+		<th class="border-right-line">
+			답변내용
+		</td>
+		<td colspan="5">
+			 <textarea kendo-editor 
+							id="k-qa-medtr" 
+							name="DC_HTMLANSCTT" 
+							data-bind="value: DC_HTMLANSCTT" 
+							k-options="qaDataVO.kEditor"
+							style="text-align:left;"></textarea>
+		</td>
+	</tr>
+	<tr class="border-bottom-line">
+		<th class="border-right-line">
+			답변첨부파일
+		</td>
+		<td colspan="5">
+			 <co02-filebox filevo="qaDataVO.fileMngDataVO"></co02-filebox>
+		</td>
+	</tr>
+	<tr class="border-bottom-line">
+		<th class="border-right-line">
+			답변처리상태
+		</td>
+		<td class="border-right-line">
+			<select kendo-drop-down-list
+					name="CD_ANSSTAT"
+					data-bind="value: CD_ANSSTAT"
+            		k-options="qaDataVO.customOptions"
+					data-ng-disabled="'#:CD_ANSSTAT#' == '003'" 
+					style="width: 100%"></select>
+		</td>
+		<th class="border-right-line">
+			답변등록일시
+		</td>
+		<td class="border-right-line">
+			# if(DTS_ANSREG){ 	#
+			<co06-date-format origin-date="'#:DTS_ANSREG#'">
+            # } 				#			
+		</td>
+		<th class="border-right-line">
+			답변자명	
+		</td>
+		<td>			
+			# if(NM_ANS){ 		#
+            #: NM_ANS 			# 
+            # } 				#		
+		</td> 
+	</tr>
+	</tbody>
+</table>
+</script>
+
+<!-- 가입자 검색 멀티 셀렉트 박스 템플릿 -->
+<script id="qa-select-template" type="text/x-kendo-template">
+# if(values.indexOf("*") > -1) { #
+	#return "전체"# 
+# } #
+# if(values.length > 1){ #
+	#:values[0]# 외  #:values.length-1#  명	
+# } #
+	#if(values.length === 1){ #
+	#:values[0]#
+# } #
+</script>
+
+<style>
+.not_pop_title{
+	padding: 10px;
+}
+/*
+    Increase the width of the edit form.
+    The default one is 400px.
+*/
+.k-edit-form-container{
+    width: 900px;
+}
+/*
+    Decrease the width of the edit form labels. The default one is 30%.
+    The new width should depend on the column titles.
+    Switch the text alignment to the left. By default, it is to the right.
+*/
+.k-popup-edit-form .k-edit-label{
+    width: 20%;
+    text-align: left;
+}
+/*
+    Increase the width of the textbox containers. The default one is 60%.
+    The sum of label and editor percentage widths should be around 90%, to make up for existing paddings.
+*/
+.k-popup-edit-form .k-edit-field{
+    width: 70%;
+}
+/*
+    Expand the edit textboxes and any other Kendo UI widgets.
+    In case of unexpected side effects, use widget-specific classes, instead of .k-widget.
+*/
+.k-popup-edit-form .k-edit-field > .k-textbox,
+.k-popup-edit-form .k-edit-field > .k-widget:not(.k-tooltip){
+    width: 98%;
+}
+.signal{    
+    width: 99%;
+    margin: 5px;
+}
+.border-bottom-line{	
+	border-bottom: 1px solid #eee;
+}
+.k-edit-form-container .k-edit-buttons{
+	border-style: none;
+}
+#example{
+    min-height: 200px;
+}
+#example .title {
+    font-weight: bold;
+    margin-bottom: 25px;
+}
+.search-wrapper {
+    width: 100%;
+}
+.query-match {
+	color: red;
+}
+.select-all-wrapper {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.selected-count {
+    float: right;
+    color: #aaa;
+}
+.k-treeview {
+    border-width: 1px!important;
+    padding: 5px;
+}
+.selectedName {
+    padding: 5px 10px;
+    background: #aaa;
+    color: white;
+    float: left;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    border-radius: 10px;
+} 
+.class-target-dropdown{
+	width:65%; 
+	display:inline-block; 
+	vertical-align:middle;
+}
+.class-target-button{
+	width:33%; 
+	display:inline-block; 
+	vertical-align:middle; 
+	text-align:right;
+}
+.k-editor-toolbar-wrap{
+	text-align: left;
+};
+</style>
