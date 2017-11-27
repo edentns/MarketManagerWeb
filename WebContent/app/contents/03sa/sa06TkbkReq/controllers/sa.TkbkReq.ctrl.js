@@ -128,6 +128,7 @@
                     NO_TKBKREQ    		: { type: APP_SA_MODEL.NO_TKBKREQ.type     		, editable: false, nullable: false },
                     NO_MRK        		: { type: APP_SA_MODEL.NO_MRK.type         		, editable: false, nullable: false },
                     DTS_TKBKAPPRRJT 	: { type: APP_SA_MODEL.DTS_TKBKAPPRRJT.type		, editable: false, nullable: false },
+                    DTS_TKBKCPLT_VIEW 	: { type: APP_SA_MODEL.DTS_TKBKCPLT.type		, editable: false, nullable: false },
                     CODE			 	: { type: "string"								, editable: false, nullable: false },
                     NO_MNGMRK		 	: { type: "string"								, editable: false, nullable: false },
                     CD_PARS_TKBK	 	: { type: "string"								, editable: false, nullable: false },
@@ -151,7 +152,7 @@
 													}
 												}
 							              },
-                    DTS_TKBKCPLT  		: {
+                    DTS_TKBKCPLT		: {
 						                    	 type: APP_SA_MODEL.DTS_TKBKCPLT.type   
 						                    	,editable: true 
 						                    	,nullable: false
@@ -359,7 +360,7 @@
                               [APP_SA_MODEL.CD_ORDSTAT       , APP_SA_MODEL.DC_SHPWAY     ],
                               [APP_SA_MODEL.DTS_ORD          , APP_SA_MODEL.DTS_TKBKREQ   ],
                               [APP_SA_MODEL.DTS_TKBKAPPRRJT  , APP_SA_MODEL.NO_INSERT     ],
-                              [APP_SA_MODEL.DTS_TKBKCPLT	 , APP_SA_MODEL.NO_TKBKCPLT   ],
+                              [APP_SA_MODEL.DTS_TKBKCPLT_VIEW, APP_SA_MODEL.NO_TKBKCPLT   ],
                               [APP_SA_MODEL.YN_CONN          , APP_SA_MODEL.CD_TKBKSTAT   ]
                              ],
                     grdDetOption      = {},
