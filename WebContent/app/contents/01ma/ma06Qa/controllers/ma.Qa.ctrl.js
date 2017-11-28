@@ -170,8 +170,8 @@
                 	me.answerStatusModel = ["*"];
                 	me.allSelectTargetModel = [];
 
-            		me.fileSlrDataVO.currentDataList = [];;
-        			me.fileMngDataVO.currentDataList = [];;
+            		me.fileSlrDataVO.currentDataList = [];
+        			me.fileMngDataVO.currentDataList = [];
                 	
                 	me.answerStatusBind.bReset = true;
                 	
@@ -223,7 +223,7 @@
 		                        APP_SA_MODEL.DTS_INQREG,                                   
 		                        APP_SA_MODEL.NO_INSERT,
 		                        APP_SA_MODEL.NM_FILE,
-		                        APP_SA_MODEL.DC_HTMLANSCTT,
+		                        APP_SA_MODEL.DC_ANSCTT,
 		                        APP_SA_MODEL.CD_ANSSTAT],
             			extTpl = {headerAttributes : {"class": "table-header-cell", style: "text-align: center; font-size: 12px; vertical-align:middle;"}},
             			returnTpl = [];
@@ -575,7 +575,7 @@
         			show: function(e){        		           
                        angular.element(document.querySelector("#memberSearchMain")).focus();    
                        
-                       if(qaDataVO.noticeTargetModel.indexOf("*") > -1){
+                       if(qaDataVO.qaNocModel.indexOf("*") > -1){
                     	   $scope.treeView.element.find(".k-checkbox").removeAttr("checked").trigger("change");
                            for (var i = 0; i < $scope.memSearchGrd.dataSource.data().length; i++) {
                         	   var item = $scope.treeView.findByText($scope.memSearchGrd.dataSource.data()[i]["NM"]);
