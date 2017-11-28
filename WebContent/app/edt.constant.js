@@ -173,6 +173,7 @@
         DTS_INQREG    : { field: "DTS_INQREG"   , type: "string" , width: "100px", textAlign: "center", title: "문의등록일시"},   
         NM_FILE       : { field: "NM_FILE"  	, type: "string" , width: "100px", textAlign: "center", title: "문의 첨부파일 여부"},
         CD_ANSSTAT    : { field: "CD_ANSSTAT"   , type: "string" , width: "100px", textAlign: "center", title: "답변상태"},    
-        DC_HTMLANSCTT : { field: "DC_HTMLANSCTT"   , type: "string" , width: "100px", textAlign: "center", title: "답변내용"}  
+        DC_HTMLANSCTT : { field: "DC_HTMLANSCTT"   , type: "string" , width: "100px", textAlign: "center", title: "답변내용"},
+        DC_ANSCTT	  : { field: "DC_ANSCTT"    , type: "string" , width: "100px", textAlign: "center", title: "답변내용"}
 	});
 }());

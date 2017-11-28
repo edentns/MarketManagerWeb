@@ -15,6 +15,7 @@
         "sy.Dept",
         "sy.Menu",
         "sy.Notice",
-        "sy.Pars"        
+        "sy.Pars",
+        "sy.Qa"
     ]);
 }());
