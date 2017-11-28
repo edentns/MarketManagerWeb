@@ -217,18 +217,19 @@
 				//각 컬럼에 header 정보 넣어줌, 공통 모듈이 2줄 위주로 작성 되어 있기 떄문에  일부러 일케 했음 
 				qaDataVO.columnProc = (function(){
             		var tpl = [ APP_SA_MODEL.ROW_NUM,
-		                        APP_SA_MODEL.NO_C,
+		                        APP_SA_MODEL.NO_C,                                   
+		                        APP_SA_MODEL.NO_INSERT,
 		                        APP_SA_MODEL.DC_INQTITLE,
 		                        APP_SA_MODEL.DC_INQCTT,
-		                        APP_SA_MODEL.DTS_INQREG,                                   
-		                        APP_SA_MODEL.NO_INSERT,
-		                        APP_SA_MODEL.NM_FILE,
+		                        APP_SA_MODEL.DTS_INQREG,
+		                        APP_SA_MODEL.NM_ANS,
 		                        APP_SA_MODEL.DC_ANSCTT,
+		                        APP_SA_MODEL.DTS_ANSREG,
 		                        APP_SA_MODEL.CD_ANSSTAT],
             			extTpl = {headerAttributes : {"class": "table-header-cell", style: "text-align: center; font-size: 12px; vertical-align:middle;"}},
             			returnTpl = [];
             		
-            			tpl[5].title = "문의자";
+            			tpl[2].title = "문의자";
             			
         				for(var i=0; i<tpl.length; i++){
         					var temp = angular.extend(extTpl, tpl[i]);
@@ -377,11 +378,6 @@
 															nullable: false
 							        				   },
 							        NM_ANS:	   	       {
-													    	type: "string", 
-															editable: false,  
-															nullable: false
-							        				   },
-							        DC_HTMLANSCTT:	   {
 													    	type: "string", 
 															editable: false,  
 															nullable: false
