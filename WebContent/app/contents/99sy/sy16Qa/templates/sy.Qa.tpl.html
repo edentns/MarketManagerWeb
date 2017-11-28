@@ -1,0 +1,300 @@
+<div id="app-content" class="col-xs-12 col-sm-10">
+    <div class="row">
+        <div id="app-content-header">
+            <ol class="breadcrumb">
+                <li><a href="#99sy/syDashboard"><i class="fa fa-home fa-2x"></i></a></li>
+                <li><a href="#99sy/syQa">/ 고객지원센터 / 묻고답하기</a></li>
+            </ol>
+        </div>
+    </div>
+    
+    <div class="row">
+        <!-- 검색 -->
+        <div class="content-area-container col-xs-12">
+        	<div data-content-box-layer data-box-title="syQaDataVO.boxTitle" data-is-open="syQaDataVO.isOpen(val)">
+                <form class="search-type1" id="myForm">
+                	<table>
+                        <colgroup>
+                            <col style="width: 7%;">
+                            <col style="width: 13%;">
+                            <col style="width: 7%;">
+                            <col style="width: 18%;">
+                            <col style="width: 7%;">
+                            <col style="width: 19%;">
+                            <col style="width: 7%;">
+                            <col style="width: 25%;">
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th>제목/내용</th>
+                            <td>
+                            	<input data-ng-model="syQaDataVO.contentText.value"
+                            			focus="syQaDataVO.contentText.focus"
+                            			title="제목/내용"
+                            			data-eden-type="kor" 
+                            			type="text" 
+                            			class="form-control" style="width:100%;"/>
+                            </td>		
+                            <th>답변처리 상태</th>
+                            <td>            
+       							<co01-mcbox id="sy-qa-cd" title="답변처리상태" model="syQaDataVO.answerStatusModel" options="syQaDataVO.answerStatusBind" setting="syQaDataVO.setting"  style="width:100%;">
+        						</co01-mcbox>        						
+                            </td>       
+                        </tr>
+                        <tr>
+                            <th>공지일자</th>
+                            <td colspan="7">                            	              	
+                            	<div class="frm-group" data-date-search-group="syQaDataVO.datesetting" style="display:inline-block;"></div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>		     
+                    <div class="btn-group1 mt-10">
+                        <kendo-button type="submit" class="k-primary" title="검색" data-ng-click="syQaDataVO.inQuiry()" style="width:70px;" >검색</kendo-button>
+                        <kendo-button type="botton" class="" title="초기화" data-ng-click="syQaDataVO.inIt()" style="width:70px;" >초기화</kendo-button>
+                    </div>
+                </form>
+            </div>
+        </div>
+                
+        <!-- 승인 리스트 -->          
+		<div class="content-area-container col-xs-12" style="padding:0px 0px 0px 0px; margin-top:-5px;">				
+	        <div id="divSyQaGrd" kendo-grid="syqakg" options="gridSyQaVO">
+	        </div>	            
+        </div>
+    </div>
+</div>
+<!-- 공지사항 조회 그리드 -->
+<script id="sy_qa_template" type="text/x-kendo-template">		
+     <tr class="k-grid-row" data-uid="#= uid #">
+		<td class="ta-r">
+			<input class='k-checkbox' data-role='checkbox' type='checkbox' ng-click="onOrdGrdCkboxClick($event)" id="#= uid #">
+			<label class='k-checkbox-label k-no-text' for="#= uid #"></label>       
+		</td>
+		<td class="ta-r">
+            <span class="ells">
+				# if(ROW_NUM){ 		#
+				#: ROW_NUM     		#
+				# }            		#
+			</span>	        
+        </td>		
+		<td class="ta-c">
+            <span class="ells">
+				# if(DC_INQTITLE){ 	#
+				#: DC_INQTITLE     	#
+				# }            		#
+			</span>	        
+        </td>
+		<td class="ta-c">
+            <span class="ells">
+				# if(DC_INQCTT){ 	#
+				#: DC_INQCTT     	#
+				# }            		#
+			</span>	        
+        </td>
+		<td class="ta-c">
+            <span class="ells">
+				# if(DTS_INQREG){ 	#
+				#: DTS_INQREG     	#
+				# }            		#
+			</span>	        
+        </td>
+		<td class="ta-c">
+            <span class="ells">
+				# if(NO_INSERT){ 	#
+				#: NO_INSERT     	#
+				# }            		#
+			</span>	        
+        </td>
+		<td class="ta-c">
+            <span class="ells">
+				# if(DC_ANSCTT){ 	#
+				#: DC_ANSCTT     	#
+				# }            		#
+			</span>	        
+        </td>
+		<td class="ta-c">
+            <span class="ells">
+				# if(CD_ANSSTAT){ 	#
+				#: CD_ANSSTAT    	#
+				# }            		#
+			</span>	        
+        </td>
+	</tr>
+</script>
+
+
+<script id="sy_qa_popup_template" type="text/x-kendo-template">
+<table class="signal">
+	<colgroup>
+      <col style="width: 8%;">
+      <col style="width: 20%;">
+      <col style="width: 8%;">
+      <col style="width: 31%;">
+      <col style="width: 8%;">
+      <col style="width: 23%;">
+    </colgroup>
+    <tbody data-uid="#= uid #">	
+	<tr class="border-bottom-line border-top-line">	
+		<td class="border-right-line">
+			공지번호
+		</td>
+		<td class="border-right-line">
+			<input type="text" data-bind="value: NO_NOTICE" class="k-textbox" readonly="readonly" > 
+		</td>
+		<td class="border-right-line">
+			공지구분
+		</td>
+		<td class="border-right-line">
+			<input type="text" data-bind="value: CD_NOTICE === '001' ? '일반' : '긴급'" class="k-textbox" readonly="readonly" >
+		</td> 
+		<td class="border-right-line">
+		</td>
+		<td class="border-right-line">
+		</td>
+	</tr>
+	<tr class="border-bottom-line">
+		<td class="border-right-line">
+			우선순위
+		</td>
+		<td class="border-right-line">
+			<input type="text" data-bind="value: SQ_NOTICE" class="k-textbox" readonly="readonly" >
+		</td>
+		<td class="border-right-line">
+			작성자
+		</td>
+		<td class="border-right-line">
+			<input type="text" class="k-textbox" data-bind="value: NO_WRITE" readonly="readonly" >
+		</td>
+		<td class="border-right-line">
+			작성일시
+		</td>
+		<td class="border-right-line">
+			<input type="text" class="k-textbox" data-bind="value: DTS_INSERT" readonly="readonly" >
+		</td> 
+	</tr>
+	<tr class="border-bottom-line">
+		<td class="border-right-line">
+			공지제목
+		</td>
+		<td colspan="5" class="border-right-line">
+			<input type="text" data-bind="value: NM_SUBJECT" class="k-textbox" readonly="readonly">
+		</td> 
+	</tr>
+	<tr class="border-bottom-line">
+		<td class="border-right-line">
+			공지내용
+		</td>
+		<td colspan="5" class="border-right-line">
+			<textarea id="editor" kendo-editor data-bind="value: DC_HTMLCONTENT"></textarea>
+		</td> 
+	</tr>
+	<tr class="border-bottom-line">
+		<td class="border-right-line" >
+			첨부파일
+		</td>
+		<td id="fileInfo" colspan="5">
+		</td>
+	</tr>
+	</tbody>
+</table>
+</script>
+
+
+<style>
+.not_pop_title{
+	padding: 10px;
+}
+/*
+    Increase the width of the edit form.
+    The default one is 400px.
+*/
+.k-edit-form-container{
+    width: 900px;
+}
+/*
+    Decrease the width of the edit form labels. The default one is 30%.
+    The new width should depend on the column titles.
+    Switch the text alignment to the left. By default, it is to the right.
+*/
+.k-popup-edit-form .k-edit-label{
+    width: 20%;
+    text-align: left;
+}
+/*
+    Increase the width of the textbox containers. The default one is 60%.
+    The sum of label and editor percentage widths should be around 90%, to make up for existing paddings.
+*/
+.k-popup-edit-form .k-edit-field{
+    width: 70%;
+}
+/*
+    Expand the edit textboxes and any other Kendo UI widgets.
+    In case of unexpected side effects, use widget-specific classes, instead of .k-widget.
+*/
+.k-popup-edit-form .k-edit-field > .k-textbox,
+.k-popup-edit-form .k-edit-field > .k-widget:not(.k-tooltip){
+    width: 98%;
+}
+.signal{    
+    width: 99%;
+    margin: 5px;
+}
+.border-right-line{    
+	border-right: 1px solid #eee;    
+}
+.border-top-line{	
+	border-top: 1px solid #eee;
+}
+.border-bottom-line{	
+	border-bottom: 1px solid #eee;
+}
+.k-edit-form-container .k-edit-buttons{
+	border-style: none;
+}
+#example{
+    min-height: 200px;
+}
+#example .title {
+    font-weight: bold;
+    margin-bottom: 25px;
+}
+.search-wrapper {
+    width: 100%;
+}
+.query-match {
+	color: red;
+}
+.select-all-wrapper {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.selected-count {
+    float: right;
+    color: #aaa;
+}
+.k-treeview {
+    border-width: 1px!important;
+    padding: 5px;
+}
+.selectedName {
+    padding: 5px 10px;
+    background: #aaa;
+    color: white;
+    float: left;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    border-radius: 10px;
+} 
+.class-target-dropdown{
+	width:65%; 
+	display:inline-block; 
+	vertical-align:middle;
+}
+.class-target-button{
+	width:33%; 
+	display:inline-block; 
+	vertical-align:middle; 
+	text-align:right;
+}
+</style>
