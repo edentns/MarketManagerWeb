@@ -382,11 +382,6 @@
 															editable: false,  
 															nullable: false
 							        				   },
-							        DC_HTMLANSCTT:	   {
-													    	type: "string", 
-															editable: false,  
-															nullable: false
-							        				   },
 							        DC_ANSCTT:	   	   {
 													    	type: "string", 
 															editable: false,  
