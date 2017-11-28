@@ -32,7 +32,7 @@
                             			focus="qaDataVO.contentText.focus"
                             			title="제목/내용"
                             			data-eden-type="kor" 
-                            			type="text" 
+                            			type="text"
                             			class="form-control" style="width:100%;"/>
                             </td>
                             <th>답변처리상태</th>
@@ -110,7 +110,7 @@
 				# } 				#
 			</span>
         </td>
-		<td class="ta-l">
+		<td class="ta-c">
             <span class="ells">
 				# if(NO_C){ 		# 
 				#: NO_C 			# 
@@ -118,6 +118,13 @@
 			</span>
         </td>
 		<td class="ta-c">
+            <span class="ells">
+				# if(NM_C){    		#
+				#: NM_C 			#
+      			# } 				#
+			</span>
+        </td>
+		<td class="ta-l">
             <span class="ells cd-notice">
 				# if(DC_INQTITLE){  #
 				#: DC_INQTITLE      #                             
@@ -134,7 +141,7 @@
                 # } 				#
 			</span>
         </td>
-		<td class="ta-l">
+		<td class="ta-c">
             <span class="ells">
 				# if(DTS_INQREG) {  #
 				<co06-date-format origin-date="'#:DTS_INQREG#'">
@@ -143,21 +150,12 @@
         </td>
 		<td class="ta-c">
             <span class="ells">
-				# if(NM_C){    		#
-				#: NM_C 			#
+				# if(NM_ANS){    		#
+				#: NM_ANS 			#
       			# } 				#
 			</span>
         </td>
-		<td class="ta-c">
-            <span class="ells">
-				# if(NM_FILE){ 		#
-				  	 있음
- 				# }else{ 			#
-					없음
-				# }					#	
-			</span>
-        </td>
-		<td class="ta-r">
+		<td class="ta-l">
             <span class="ells">
 				# if(DC_ANSCTT){    #
 					# if(M_NM_FILE > 0){	#  
@@ -167,7 +165,14 @@
 				# } 				#
 			</span>
         </td>
-		<td class="ta-r">
+		<td class="ta-c">
+            <span class="ells">
+				# if(DTS_ANSREG) {  #
+				<co06-date-format origin-date="'#:DTS_ANSREG#'">
+                # } 				#
+			</span>
+        </td>
+		<td class="ta-c">
             <span class="ells">
 				# if(CD_ANSSTAT){ 	#
 				<co04-cd-to-nm cd="#:CD_ANSSTAT#" nm-box="qaDataVO.answerStatusBind">
@@ -179,6 +184,8 @@
 
 <!-- 문의사항 답변 팝업 그리드 -->
 <script id="qa-popup-template" type="text/x-kendo-template">
+
+
 <div class="not_pop_title"><h3>문의내용</h3></div>
 <table class="signal">
 	<colgroup>
@@ -353,6 +360,12 @@
 </script>
 
 <style>
+table tbdoy tr th, table tbody tr td {
+	padding: 6px 7px;
+	text-align: left;
+	vertical-align: middle;
+}
+
 .not_pop_title{
 	padding: 10px;
 }
