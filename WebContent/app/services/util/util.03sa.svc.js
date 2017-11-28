@@ -41,10 +41,21 @@
 				};	
 				if (input.is("[name='"+colunm+"']") && iValue ) {
 					var row = input.closest("tr");
-					var grid = row.closest("[data-role=grid]").data("kendoGrid");
-					var dataItem = grid.dataItem(row);
-					if(dataItem.CD_PARS){
-						var parsName = dataItem.CD_PARS.NM_PARS;
+					var grid = row.closest("[data-role=grid]").data("kendoGrid");					
+					var gridPop = angular.element(document.querySelector("div[kendo-grid]")).data("kendoGrid");
+					var dataItem = "";
+					var parsName = "";
+					var cdName = "";
+					
+					if(grid){
+						dataItem = grid.dataItem(row); 
+					}else if(gridPop){
+						dataItem = gridPop.dataItem($("[data-uid='" + input.closest("tr").parents("table").attr("data-uid") + "']", gridPop.table));
+					}						
+					
+					if(dataItem.CD_PARS || dataItem.CD_PARS_INPUT){
+						cdName = dataItem.CD_PARS || dataItem.CD_PARS_INPUT;
+						parsName = cdName.NM_PARS;
 						
 						if (parsName == "기타택배") {
 							var pattern1 = /^[0-9a-zA-Z]{9,12}$/i;

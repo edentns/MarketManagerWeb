@@ -147,7 +147,7 @@
 										}
                     	              },
 	                DTS_RECER 		: {
-						            	 type: "string"
+						            	 type: "date"
 									    ,editable: true
 									    ,nullable: false
 									    ,validation: {
@@ -258,7 +258,6 @@
 	        		},
 	        		dateOptions : {										//DATE PICKER
 	        			parseFormats: ["yyyyMMddHHmmss"], 				//이거 없으면 값이 바인딩 안됨
-	        			value: new Date(),
         	            animation: {
         	                close: {
         	                    effects: "fadeOut zoom:out",
@@ -391,7 +390,7 @@
                     		dsModel = e.model,
                     		cdpars = cntnr.find("select[name=CD_PARS]"),
                     		chosenDS = "";
-                    		                     	
+                 
                     	echgDataVO.curCode = dsModel.CODE;
                     	
                     	if(echgDataVO.updateChange === '001'){
@@ -857,7 +856,7 @@
 		                    };
 		                    if($(this).hasClass("complete") && vali(2)){//교환완료		                    	
 		                    	if((grdItem.CD_ORDSTAT == "009" && grdItem.CD_ECHGSTAT == "002") || (['004','005'].indexOf(grdItem.CD_ORDSTAT) > -1 && grdItem.CD_ECHGSTAT === "001" && ['170104','170102'].indexOf(grdItem.CODE) > -1)){				                			
-		                    		//grdItem.DTS_RECER = new Date();
+		                    		grdItem.DTS_RECER = new Date();
 		                    		proc("550px", "003");		
 		                		}else{
 		                			alert("마켓 및 주문 상태를 확인해 주세요.");
