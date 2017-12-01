@@ -36,6 +36,15 @@
 		                	templateURL : 'app/contents/01ma/ma01Dashboard/templates/ma.JoinItem.tpl.html'
 		                }
 		            ];
+
+	            vm.mainComponents = {
+            		visible     : true,
+                	order       : 1,
+                	name        : 'ma.DashQaCtrl',
+                	displayName : 'Q&A',
+                	templateURL : 'app/contents/01ma/ma01Dashboard/templates/ma.Qa.tpl.html',
+                	open        : resData.mainOpen
+	            };
 	            
 	            vm.broadcast = function() {
 	            	$timeout(function() {
@@ -138,9 +147,9 @@
 	            };
 
 	            page.bootstrap(function() {
-	                vm.broadcast();
 	                $timeout(function() {
-	                }, 100);
+		                vm.broadcast();
+	                }, 500);
 	            });
             }]);
 }());

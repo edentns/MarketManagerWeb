@@ -14,13 +14,20 @@
                     templateUrl	: "app/contents/01ma/ma01Dashboard/templates/ma.Dashboard.tpl.html",
                     controller  : "ma.DashboardCtrl as vm",
                     resolve		: {
-                        resData: ["AuthSvc", "$q", function (AuthSvc, $q) {
+                        resData: ["AuthSvc", "$q", 'UtilSvc', function (AuthSvc, $q, UtilSvc) {
                             var defer 	= $q.defer(),
                                 resData = {};
 
                             AuthSvc.isAccess().then(function (result) {
                                 resData.access = result[0];
-                                defer.resolve(resData);
+                            	var param = {
+            	                	procedureParam: "USP_MA_01DASHBOARD06_GET"
+                            	};
+                	            
+                				UtilSvc.getList(param).then(function (res) {
+                					resData.mainOpen = (res.data.results[0].length > 0)? true : false;
+                                    defer.resolve(resData);
+                				});
                             });
 
                             return defer.promise;

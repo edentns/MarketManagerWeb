@@ -40,11 +40,21 @@
 	            vm.mainComponents = {
             		visible     : true,
                 	order       : 1,
-                	name        : 'sy.NoticeCtrl',
+                	name        : 'sy.DashNoticeCtrl',
                 	displayName : '공지사항',
-                	templateURL : 'app/contents/99sy/sy01Dashboard/templates/sy.Notice.tpl.html'
+                	templateURL : 'app/contents/99sy/sy01Dashboard/templates/sy.Notice.tpl.html',
+                	open        : resData.mainOpen
 	            };
 	            
+	            vm.subComponents = {
+            		visible     : true,
+                	order       : 1,
+                	name        : 'sy.DashQaCtrl',
+                	displayName : '묻고답하기',
+                	templateURL : 'app/contents/99sy/sy01Dashboard/templates/sy.Qa.tpl.html',
+                	open        : resData.subOpen
+	            };
+            
 	            vm.broadcast = function() {
 	            	$timeout(function() {
 	            		$scope.$broadcast('dashboard:query', {
@@ -147,7 +157,9 @@
 
 
 	            page.bootstrap(function() {
-	                vm.broadcast();
+	            	$timeout(function() {
+		                vm.broadcast();
+	                }, 500);
 	            });
             }]);
 }());

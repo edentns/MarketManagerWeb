@@ -8,9 +8,9 @@
      */
     angular.module("sy.Dashboard.controller")
         .controller("sy.DashNoticeCtrl", ['$scope', 'sy.DashboardSvc', '$timeout', 'UtilSvc', "APP_CONFIG", 
-            function ($scope, MaDashboardSvc, $timeout, UtilSvc, APP_CONFIG) {
+            function ($scope, SyDashboardSvc, $timeout, UtilSvc, APP_CONFIG) {
 	        $scope.$on('dashboard:query', function(event, payload) {
-	            MaDashboardSvc.setPayload(notice, payload);
+	            SyDashboardSvc.setPayload(notice, payload);
 	            $timeout(function() {
 	            	notice.find();
 	            });
@@ -29,9 +29,9 @@
 	            }
 	        };
 
-            $("#divGrd").delegate("tbody>tr", "dblclick", function(){
-            	var grid = $("#divGrd").data("kendoGrid");
-            	$("#divGrd").data("kendoGrid").editRow($(this));
+            $("#divNoticeGrd").delegate("tbody>tr", "dblclick", function(){
+            	var grid = $("#divNoticeGrd").data("kendoGrid");
+            	$("#divNoticeGrd").data("kendoGrid").editRow($(this));
             });
 
             UtilSvc.gridtooltipOptions.filter = "td";
@@ -58,7 +58,6 @@
 			                	procedureParam: "USP_SY_01DASHBOARD01_GET"
 			                };
 							UtilSvc.getList(param).then(function (res) {
-								//notice.gridNoticeVO.dataSource.data(res.data.results[0]);
 								e.success(res.data.results[0]);
 							});
 						}
