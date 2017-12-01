@@ -160,7 +160,7 @@
 						angular.forEach(self.inqFileList, function (data) {
 							inqHtmlCode += "<a href='"+qa.gridQaVO.url+"?NO_AT="+data.NO_AT+"&CD_AT="+data.CD_AT+"' download="+data.NM_FILE+"> "+data.NM_FILE+" </a></br>";
 		                });
-						angular.forEach(self.inqFileList, function (data) {
+						angular.forEach(self.ansFileList, function (data) {
 							ansHtmlCode += "<a href='"+qa.gridQaVO.url+"?NO_AT="+data.NO_AT+"&CD_AT="+data.CD_AT+"' download="+data.NM_FILE+"> "+data.NM_FILE+" </a></br>";
 		                });
 						$("#inqFileInfo").append(inqHtmlCode);

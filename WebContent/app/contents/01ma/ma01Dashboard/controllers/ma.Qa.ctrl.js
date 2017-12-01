@@ -146,7 +146,7 @@
 					var param = {
 						procedureParam: "USP_MA_01DASHBOARD05_GET&L_CD_REF1@s|L_CD_REF2@s",    
 						L_CD_REF1: e.model.NO_C,
-						L_CD_REF1: e.model.NO_QA
+						L_CD_REF2: e.model.NO_QA
 					};
 					UtilSvc.getList(param).then(function (res) {
 						self.currentFileList = res.data.results[0];
