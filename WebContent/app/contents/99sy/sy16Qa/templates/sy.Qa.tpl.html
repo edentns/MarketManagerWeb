@@ -68,8 +68,10 @@
 <script id="sy_qa_template" type="text/x-kendo-template">		
      <tr class="k-grid-row" data-uid="#= uid #">
 		<td class="ta-r">
+			# if(CD_ANSSTAT == "001"){ 		#
 			<input class='k-checkbox' data-role='checkbox' type='checkbox' ng-click="onOrdGrdCkboxClick($event)" id="#= uid #">
-			<label class='k-checkbox-label k-no-text' for="#= uid #"></label>       
+			<label class='k-checkbox-label k-no-text' for="#= uid #"></label> 
+			# }            		#      
 		</td>
 		<td class="ta-r">
             <span class="ells">
@@ -125,7 +127,7 @@
 
 <script id="sy-qa-toolbar-template" type="text/x-kendo-template">
 	<a class="k-button k-button-icontext k-grid-add"><span class="k-icon k-i-add"></span>추가</a>    
-	<a class="k-button k-button-icontext k-grid-delete"><span class="k-icon k-i-close"></span>삭제</a>  
+	<a class="k-button k-button-icontext k-grid-delete" ng-click="qaDelete()"><span class="k-icon k-i-close"></span>삭제</a>  
 </script>
 
 <script id="sy_qa_popup_template" type="text/x-kendo-template">
@@ -162,19 +164,19 @@
 			문의자 전화번호
 		</th>
 		<td class="border-right-line">
-			<input type="text" data-bind="value: NO_INQPHNE" class="k-textbox"> 		
+			<input type="text" id="NO_INQPHNE" data-bind="value: NO_INQPHNE" class="k-textbox"> 		
 		</td>
 		<th class="border-right-line">
 			핸드폰번호
 		</th>
 		<td class="border-right-line">
-			<input type="text" data-bind="value: NO_INQCEPH" class="k-textbox">
+			<input type="text" id="NO_INQCEPH" data-bind="value: NO_INQCEPH" class="k-textbox">
 		</td>
 		<th class="border-right-line">
 			이메일			
 		</th>
 		<td class="border-right-line">
-			<input type="text" name="DC_INQEMI" data-bind="value: DC_INQEMI" class="k-textbox">			
+			<input type="text" id="DC_INQEMI" name="DC_INQEMI" data-bind="value: DC_INQEMI" class="k-textbox">			
 		</td> 
 	</tr>
 	<tr class="border-bottom-line">
@@ -182,7 +184,7 @@
 			문의제목
 		</td>
 		<td colspan="5">
-			<input type="text" name="DC_INQTITLE" data-bind="value: DC_INQTITLE" class="k-textbox">		
+			<input type="text" id="DC_INQTITLE" name="DC_INQTITLE" data-bind="value: DC_INQTITLE" class="k-textbox">		
 		</td> 
 	</tr>
 	<tr class="border-bottom-line">

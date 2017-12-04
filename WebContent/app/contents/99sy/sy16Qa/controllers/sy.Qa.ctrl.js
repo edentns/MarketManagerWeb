@@ -253,7 +253,7 @@
                     			create: function(e) {
     	                			var defer = $q.defer();
 	                			
-    	                			syQaSvc.qaInsert(e.data.models, "I").then(function(res) {
+    	                			syQaSvc.qaSave(e.data.models, "I").then(function(res) {
 		                				if(res.data) {
 		                					if(syQaDataVO.fileSlrDataVO.dirty) {
 		                						syQaDataVO.fileSlrDataVO.CD_REF1 = res.data;
@@ -279,46 +279,30 @@
 		            			},
                 			update: function(e) {
                 				var defer = $q.defer();
-	                			 	
-                				if(noticeDataVO.deleteOrdUpdate === "d"){
-                					var param = { data: e.data.models },
-            						    paramFunction = noticeDataVO.paramFunc(param);;
-                					
-                					MaNoticeSvc.noticeDelete(paramFunction).then(function(res) {
-	    	                			$scope.gridNoticeVO.dataSource.read();
-	    	                			defer.resolve();
-    	                			},function(err){
-    	                				e.error([]);
-    	                			});
-                					noticeDataVO.deleteOrdUpdate = "";
-                				}else{
-                					var param = {data: [e.data.models[0]]},
-                						paramFunction =  noticeDataVO.paramFunc(param);
-                					
-    	                			MaNoticeSvc.noticeUpdate(paramFunction).then(function(res) {   	                				
-    	                				if(res.data) {
-    	                					if(noticeDataVO.fileDataVO.dirty) {
-	                							noticeDataVO.fileDataVO.CD_REF1 = param.data[0].NO_NOTICE;
-	                							noticeDataVO.fileDataVO.doUpload(function(){
-	                			        			alert("수정 되었습니다.");
-	                			        		}, function() {
-	                			        			alert('첨부파일업로드 실패하였습니다.');
-	                			        		});
-	                		        		}else{
-	                		        			alert('성공하였습니다.');
-	                		        		}    	           
-    	                					
-	                						$scope.nkg.dataSource.read();    	        	                		
-    	                				}else{
-    	                					alert("수정 실패하였습니다.!! 연구소에 문의 부탁드립니다.");
-    	                				}
-    	                				defer.resolve(); 
-    	                			},function(err){
-    	                				e.error([]);
-    	                			});
-    	                			
-                				}                    				
-	                			return defer.promise;			
+	                			
+	                			syQaSvc.qaSave(e.data.models, "U").then(function(res) {
+	                				if(res.data) {
+	                					if(syQaDataVO.fileSlrDataVO.dirty) {
+	                						syQaDataVO.fileSlrDataVO.CD_REF1 = res.data;
+	                						syQaDataVO.fileSlrDataVO.doUpload(function(){
+                			        			alert('저장 되었습니다.');
+                			        		}, function() {
+                			        			alert('첨부파일업로드 실패하였습니다.');
+                			        		});
+                		        		}else{
+                		        			alert('저장 되었습니다.');
+                		        		}    	                					
+	                					syQaDataVO.inQuiry();           		
+	                				}else{
+	                					e.error([]);
+	                					alert(res.data);
+	                					alert("저장 실패 하였습니다 새 글을 써주세요.");
+	                				}    	                				
+	                				defer.resolve(); 
+	                			},function(err){
+	                				e.error([]);
+	                			});
+	                			return defer.promise;     	
                 			},
                     		},
                     		pageSize: 11,
@@ -439,14 +423,11 @@
     															editable: false,  
     															nullable: false
     							        				   },
-<<<<<<< HEAD
     							        DC_HTMLANSCTT:	   {
     													    	type: "string", 
     															editable: true,  
     															nullable: false
     							        				   },
-=======
->>>>>>> branch 'master' of https://github.com/edentns/MarketManagerWeb.git
     							        DC_ANSCTT:	   	   {
     													    	type: "string", 
     															editable: true,  
@@ -529,6 +510,13 @@
 	                		    });
                 		    	
                 		    	if(e.model.CD_ANSSTAT == "002" || e.model.CD_ANSSTAT == "003"){
+                		    		$($('#k-edi').data().kendoEditor.body).attr('contenteditable', false);
+                		    		angular.element("#DC_INQTITLE").attr("readonly", true);
+                		    		angular.element("#DC_INQEMI").attr("readonly", true);
+                		    		angular.element("#NO_INQCEPH").attr("readonly", true);
+                		    		angular.element("#NO_INQPHNE").attr("readonly", true);
+                		    		$(".k-grid-update").hide();
+                		    		$(".k-grid-cancel").text("확인");
 	                		    	var fileLsit = [];
 	                        		var htmlcode = "";
 	                        		var param = {
@@ -548,6 +536,14 @@
 	                                        });
 	                                        $("#fileMngInfo").append(htmlcode);
 	                					});
+	                					if( e.model.CD_ANSSTAT == "003" && e.model.NM_ANSCFM == "" && e.model.DTS_ANSCFM == "" ){
+	                						var param = {
+	    	                                    	procedureParam: "USP_SY_16QA_ANSCFM_UPDATE&L_NM_EMP@s|L_NO_QA@s",
+	    	                                    	L_NM_EMP : syQaDataVO.userInfo.NM_EMP,
+	    	                                    	L_NO_QA  : e.model.NO_QA
+	    	                                    };
+	    	                				UtilSvc.getList(param);
+	                					}
                 		    	}else if(e.model.CD_ANSSTAT == "001"){
                 		    		var param = {
 	                                    	procedureParam: "USP_SY_16QASLRFILES_GET&L_CD_REF1@s",
@@ -584,12 +580,45 @@
                
                 //kendo grid 체크박스 옵션
                 $scope.onOrdGrdCkboxClick = function(e){
-                	UtilSvc.grdCkboxClick(e, $scope.syqakg);
+                	var element =$(e.currentTarget);
+	                var checked = element.is(':checked'),
+	                	row = element.closest("tr"),
+	                	grid = $scope.syqakg,
+	                	dataItem = grid.dataItem(row);
+	                 	                
+	                dataItem.ROW_CHK = checked;
+	                
+	                if (checked) {
+	                	row.addClass("k-state-selected");
+	                } else {
+	                	row.removeClass("k-state-selected");
+	                };
                 };
                 
                 //kendo grid 체크박스 all click
                 $scope.onOrdGrdCkboxAllClick = function(e){
                 	UtilSvc.grdCkboxAllClick(e, $scope.syqakg);
                 };	
+                
+                $scope.qaDelete = function() {
+                	var grid = $scope.syqakg,
+                	    dataItem = grid._data,
+                	    deleteItem = [];
+                	
+                	angular.forEach(dataItem, function (data) {
+                        if(data.ROW_CHK){
+                        	deleteItem.push(data.NO_QA);
+                        }
+                    });
+                	if(deleteItem.length == 0){
+                		alert("삭제할 질문을 선택해주세요.");
+                	}else{
+                		if(confirm('정말로 삭제하시겠습니까?')){
+                			syQaSvc.qaDelete(deleteItem).then(function(res) {
+                				syQaDataVO.inQuiry(); 
+                			});  
+                    	}
+                	}
+				};
             }]);
 }());
