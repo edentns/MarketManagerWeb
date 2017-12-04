@@ -70,7 +70,6 @@
 								ROW_NUM      : {type: "string"},
 								NO_QA        : {type: "string"},
 								NO_C         : {type: "string"},
-								NO_QA        : {type: "string"},
 								DTS_INQREG   : {type: "string"},                    									   
 								CD_BCL       : {type: "string"},
 								NM_BCL       : {type: "string"},
