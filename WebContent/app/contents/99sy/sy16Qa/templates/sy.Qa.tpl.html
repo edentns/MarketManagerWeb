@@ -3,7 +3,7 @@
         <div id="app-content-header">
             <ol class="breadcrumb">
                 <li><a href="#99sy/syDashboard"><i class="fa fa-home fa-2x"></i></a></li>
-                <li><a href="#99sy/syQa">/ 고객지원센터 / 묻고답하기</a></li>
+                <li><a href="#99sy/syQa">고객지원센터 / 묻고답하기</a></li>
             </ol>
         </div>
     </div>
@@ -42,7 +42,7 @@
                             </td>       
                         </tr>
                         <tr>
-                            <th>공지일자</th>
+                            <th>문의등록일자</th>
                             <td colspan="7">                            	              	
                             	<div class="frm-group" data-date-search-group="syQaDataVO.datesetting" style="display:inline-block;"></div>
                             </td>
@@ -116,85 +116,138 @@
 		<td class="ta-c">
             <span class="ells">
 				# if(CD_ANSSTAT){ 	#
-				#: CD_ANSSTAT    	#
-				# }            		#
+				<co04-cd-to-nm cd="#:CD_ANSSTAT#" nm-box="syQaDataVO.answerStatusBind">
+				# } 				#
 			</span>	        
         </td>
 	</tr>
 </script>
 
+<script id="sy-qa-toolbar-template" type="text/x-kendo-template">
+	<a class="k-button k-button-icontext k-grid-add"><span class="k-icon k-i-add"></span>추가</a>    
+	<a class="k-button k-button-icontext k-grid-delete"><span class="k-icon k-i-close"></span>삭제</a>  
+</script>
 
 <script id="sy_qa_popup_template" type="text/x-kendo-template">
+<div class="not_pop_title"><h3>문의내용</h3></div>
 <table class="signal">
 	<colgroup>
-      <col style="width: 8%;">
-      <col style="width: 20%;">
-      <col style="width: 8%;">
-      <col style="width: 31%;">
-      <col style="width: 8%;">
-      <col style="width: 23%;">
+      <col style="width: 11%;">
+      <col style="width: 18%;">
+      <col style="width: 11%;">
+      <col style="width: 26%;">
+      <col style="width: 11%;">
+      <col style="width: 21%;">
     </colgroup>
     <tbody data-uid="#= uid #">	
 	<tr class="border-bottom-line border-top-line">	
-		<td class="border-right-line">
-			공지번호
-		</td>
-		<td class="border-right-line">
-			<input type="text" data-bind="value: NO_NOTICE" class="k-textbox" readonly="readonly" > 
-		</td>
-		<td class="border-right-line">
-			공지구분
-		</td>
-		<td class="border-right-line">
-			<input type="text" data-bind="value: CD_NOTICE === '001' ? '일반' : '긴급'" class="k-textbox" readonly="readonly" >
-		</td> 
+		<th class="border-right-line">
+			문의번호
+		</th>
 		<td class="border-right-line">
 		</td>
-		<td class="border-right-line">
-		</td>
-	</tr>
-	<tr class="border-bottom-line">
-		<td class="border-right-line">
-			우선순위
-		</td>
-		<td class="border-right-line">
-			<input type="text" data-bind="value: SQ_NOTICE" class="k-textbox" readonly="readonly" >
-		</td>
-		<td class="border-right-line">
+		<th class="border-right-line">
 			작성자
-		</td>
+		</th>
 		<td class="border-right-line">
-			<input type="text" class="k-textbox" data-bind="value: NO_WRITE" readonly="readonly" >
 		</td>
-		<td class="border-right-line">
+		<th class="border-right-line">
 			작성일시
-		</td>
+		</th>
 		<td class="border-right-line">
-			<input type="text" class="k-textbox" data-bind="value: DTS_INSERT" readonly="readonly" >
 		</td> 
 	</tr>
 	<tr class="border-bottom-line">
+		<th class="border-right-line">
+			문의자 전화번호
+		</th>
 		<td class="border-right-line">
-			공지제목
+			<input type="text" data-bind="value: NO_INQPHNE" class="k-textbox"> 		
 		</td>
-		<td colspan="5" class="border-right-line">
-			<input type="text" data-bind="value: NM_SUBJECT" class="k-textbox" readonly="readonly">
+		<th class="border-right-line">
+			핸드폰번호
+		</th>
+		<td class="border-right-line">
+			<input type="text" data-bind="value: NO_INQCEPH" class="k-textbox">
+		</td>
+		<th class="border-right-line">
+			이메일			
+		</th>
+		<td class="border-right-line">
+			<input type="text" name="DC_INQEMI" data-bind="value: DC_INQEMI" class="k-textbox">			
 		</td> 
 	</tr>
 	<tr class="border-bottom-line">
-		<td class="border-right-line">
-			공지내용
+		<th class="border-right-line">
+			문의제목
 		</td>
-		<td colspan="5" class="border-right-line">
-			<textarea id="editor" kendo-editor data-bind="value: DC_HTMLCONTENT"></textarea>
+		<td colspan="5">
+			<input type="text" name="DC_INQTITLE" data-bind="value: DC_INQTITLE" class="k-textbox">		
 		</td> 
 	</tr>
 	<tr class="border-bottom-line">
-		<td class="border-right-line" >
-			첨부파일
+		<th class="border-right-line">
+			문의내용
 		</td>
-		<td id="fileInfo" colspan="5">
+		<td colspan="5">	
+			<textarea kendo-editor id="k-edi" name="DC_HTMLINQCTT" data-bind="value: DC_HTMLINQCTT" k-options="syQaDataVO.kEditor" style="text-align:left;"></textarea>		
+		</td> 
+	</tr>
+	<tr class="border-bottom-line">
+		<th class="border-right-line">
+			문의첨부파일
 		</td>
+		<td colspan="5" id="fileSlrInfo">
+			# if(CD_ANSSTAT == "001" || CD_ANSSTAT == ""){ 	#
+			<co02-filebox filevo="syQaDataVO.fileSlrDataVO"></co02-filebox>
+            # } 			#
+		</td>
+	</tr>
+	<tr class="border-bottom-line">
+		<th class="border-right-line">
+			답변내용
+		</td>
+		<td colspan="5">
+			<textarea kendo-editor 
+					  id="k-qa-medtr" 
+					  name="DC_HTMLANSCTT" 
+					  data-bind="value: DC_HTMLANSCTT" 
+					  k-options="syQaDataVO.kEditor"
+					  style="text-align:left;"></textarea>
+		</td>
+	</tr>
+	<tr class="border-bottom-line">
+		<th class="border-right-line">
+			답변첨부파일
+		</td>
+		<td colspan="5" id="fileMngInfo">
+		</td>
+	</tr>
+	<tr class="border-bottom-line">
+		<th class="border-right-line">
+			답변처리상태
+		</td>
+		<td class="border-right-line">
+			#if (CD_ANSSTAT == "003") {# #="처리완료"# #}
+   		    else if (CD_ANSSTAT == "002") {# #="처리중"# #}
+   		    else {# #="미답변"# #} #
+		</td>
+		<th class="border-right-line">
+			답변등록일시
+		</td>
+		<td class="border-right-line">
+			# if(DTS_ANSREG){ 	#
+			<co06-date-format origin-date="'#:DTS_ANSREG#'">
+            # } 				#			
+		</td>
+		<th class="border-right-line">
+			답변자명	
+		</td>
+		<td>			
+			# if(NM_ANS){ 		#
+            #: NM_ANS 			# 
+            # } 				#		
+		</td> 
 	</tr>
 	</tbody>
 </table>
