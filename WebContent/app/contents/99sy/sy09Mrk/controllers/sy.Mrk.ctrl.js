@@ -303,8 +303,7 @@
        							  	  ,editable: true
        							  	  ,nullable: true
                 					},
-                					DC_SALEMNGURL: {type: "string", editable: false} 
-                					},
+                					DC_SALEMNGURL: {type: "string", editable: false},
                 					YN_USE:     {type: "string" },
                 					NM_NT:      {type: "string", editable: false},
                 					DTS_INSERT: {type: "string", editable: false},
