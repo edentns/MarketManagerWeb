@@ -147,16 +147,25 @@
 			문의번호
 		</th>
 		<td class="border-right-line">
+			# if(NO_QA){ 	#
+			#: NO_QA     	#
+			# }            	#
 		</td>
 		<th class="border-right-line">
 			작성자
 		</th>
 		<td class="border-right-line">
+			# if(NO_INSERT){ 	#
+			#: NO_INSERT    	#
+			# }            		#
 		</td>
 		<th class="border-right-line">
 			작성일시
 		</th>
 		<td class="border-right-line">
+			# if(DTS_INQREG){ 	#
+			<co06-date-format origin-date="'#:DTS_INQREG#'">
+			# }            		#
 		</td> 
 	</tr>
 	<tr class="border-bottom-line">
