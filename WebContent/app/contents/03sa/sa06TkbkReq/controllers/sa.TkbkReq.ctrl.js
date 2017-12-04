@@ -128,6 +128,7 @@
                     NO_TKBKREQ    		: { type: APP_SA_MODEL.NO_TKBKREQ.type     		, editable: false, nullable: false },
                     NO_MRK        		: { type: APP_SA_MODEL.NO_MRK.type         		, editable: false, nullable: false },
                     DTS_TKBKAPPRRJT 	: { type: APP_SA_MODEL.DTS_TKBKAPPRRJT.type		, editable: false, nullable: false },
+                    NO_TKBKAPPRRJT 		: { type: APP_SA_MODEL.NO_TKBKAPPRRJT.type		, editable: false, nullable: false },
                     DTS_TKBKCPLT_VIEW 	: { type: APP_SA_MODEL.DTS_TKBKCPLT.type		, editable: false, nullable: false },
                     CODE			 	: { type: "string"								, editable: false, nullable: false },
                     NO_MNGMRK		 	: { type: "string"								, editable: false, nullable: false },
@@ -224,7 +225,13 @@
 								               ,validation: {
 								            	   no_invovalidation: function (input) {								            		   
 								            		   if(tkbkDataVO.sCode.indexOf(tkbkDataVO.marketDivisionCode) > -1 && tkbkDataVO.updateChange === '003'){
-															return Util03saSvc.NoINVOValidation(input, 'NO_INVO', 'no_invovalidation');	
+								            			  if (input.is("[name='NO_INVO']")) {
+								            				  var result =  Util03saSvc.NoINVOValidation(input, 'NO_INVO', 'no_invovalidation');
+								            				  if(result){//유효성 체크하다 보면 바인딩이 안될때가 있음
+								            					  manualDataBind(input, "NO_INVO");
+								            				  }
+								            				  return result;
+							                               }
 								            		   };								            		   
 								            		   return true;
 											    	}
@@ -359,7 +366,7 @@
                               [APP_SA_MODEL.CD_TKBKRSN       , APP_SA_MODEL.DC_CONSNEWADDR],
                               [APP_SA_MODEL.CD_ORDSTAT       , APP_SA_MODEL.DC_SHPWAY     ],
                               [APP_SA_MODEL.DTS_ORD          , APP_SA_MODEL.DTS_TKBKREQ   ],
-                              [APP_SA_MODEL.DTS_TKBKAPPRRJT  , APP_SA_MODEL.NO_INSERT     ],
+                              [APP_SA_MODEL.DTS_TKBKAPPRRJT  , APP_SA_MODEL.NO_TKBKAPPRRJT],
                               [APP_SA_MODEL.DTS_TKBKCPLT_VIEW, APP_SA_MODEL.NO_TKBKCPLT   ],
                               [APP_SA_MODEL.YN_CONN          , APP_SA_MODEL.CD_TKBKSTAT   ]
                              ],
@@ -629,7 +636,10 @@
                 				saTkbkReqSvc.orderList(me.param).then(function (res) {
                 					me.shipList = res.data.queryShipList;
                 					e.success(res.data.queryList);
+            					},function(err){
+            						e.error([]);
             					});
+                				
                 			},
                 			update: function(e){                	
                 				var whereIn = ['004','005'],
@@ -659,6 +669,8 @@
                         							alert("반품완료가 실패하였습니다.");
                         							e.error();
                         						}
+                        					},function(err){
+                        						e.error([]);
                         					});
         		                			return defer.promise;
                     	            	}else{
@@ -686,6 +698,8 @@
                         							alert("반품거부를 실패하였습니다.");
                         							e.error();
                         						}
+                        					},function(err){
+                        						e.error([]);
                         					}); 
         		                			return defer.promise;
                 						}else{
@@ -713,6 +727,8 @@
                         							alert("반품처리를 실패하였습니다.");
                         							e.error();
                         						}
+                        					},function(err){
+                        						e.error([]);
                         					}); 
                 							return defer.promise;
                 						}else{

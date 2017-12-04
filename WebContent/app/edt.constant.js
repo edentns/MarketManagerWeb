@@ -6,7 +6,7 @@
     edtApp.constant('APP_CONFIG', {
         bsCd    : '00000',
 		domain  : '/MarketManagerServer', // 운영
-        version : 'V 0.0.1',
+        version : 'V 0.1.0',
         encrypt : false
     });
 
@@ -131,11 +131,12 @@
         
         CD_TKBKRSN    : { field: "CD_TKBKRSN"    , type: "string" , width: "100px", textAlign: "center", title: "반품사유"},
         DTS_TKBKREQ   : { field: "DTS_TKBKREQ"   , type: "string" , width: "100px", textAlign: "center", title: "반품요청일시"},
-        DTS_TKBKAPPRRJT: { field: "DTS_TKBKAPPRRJT"   , type: "string" , width: "100px", textAlign: "center", title: "반품요청처리일시"},
+        DTS_TKBKAPPRRJT: { field: "DTS_TKBKAPPRRJT"   , type: "string" , width: "100px", textAlign: "center", title: "반품처리일시"},
+        NO_TKBKAPPRRJT: { field: "NO_TKBKAPPRRJT"   , type: "string" , width: "100px", textAlign: "center", title: "반품처리자"},
         NO_TKBKCPLT   : { field: "NO_TKBKCPLT"   , type: "string" , width: "100px", textAlign: "center", title: "반납상품접수확인자"},
         QT_TKBK       : { field: "QT_TKBK"       , type: "string" , width: "100px", textAlign: "right" , title: "반품수량"},
         
-        NO_INSERT     : { field: "NO_INSERT"     , type: "string" , width: "100px", textAlign: "center", title: "반품확인자"},
+        NO_INSERT     : { field: "NO_INSERT"     , type: "string" , width: "100px", textAlign: "center", title: ""},
         CD_TKBKSTAT   : { field: "CD_TKBKSTAT"   , type: "string" , width: "100px", textAlign: "center", title: "반품상태"},
         NO_TKBKREQ    : { field: "NO_TKBKREQ"    , type: "string" , width: "100px", textAlign: "center", title: ""},
         requesteNo    : { field: "requesteNo"    , type: "string" , width: "100px", textAlign: "center", title: ""},
@@ -149,6 +150,7 @@
         NO_CONSPHNE   : { field: "NO_CONSPHNE"   , type: "string" , width: "100px", textAlign: "center", title: "수취인 전화번호"},
         DTS_ECHGREQ   : { field: "DTS_ECHGREQ"   , type: "string" , width: "100px", textAlign: "center", title: "교환요청일시"},
         DTS_ECHGAPPRRJT : { field: "DTS_ECHGAPPRRJT", type: "string" , width: "100px", textAlign: "center", title: "교환상품접수일"},
+        NO_ECHGAPPRRJT: { field: "NO_ECHGAPPRRJT", type: "string" , width: "100px", textAlign: "center", title: "교환상품접수자"},
         NO_ECHGCPLT   : { field: "NO_ECHGCPLT"   , type: "string" , width: "100px", textAlign: "center", title: "접수확인자"},
         CD_ECHGSTAT   : { field: "CD_ECHGSTAT"   , type: "string" , width: "100px", textAlign: "center", title: "교환상태"},
         NO_ECHGREQ    : { field: "NO_ECHGREQ"    , type: "string" , width: "100px", textAlign: "center", title: ""},
@@ -176,6 +178,7 @@
         DC_ANSCTT     : { field: "DC_ANSCTT"    , type: "string" , width: ""     , textAlign: "left"  , title: "답변내용"},  
         DC_HTMLANSCTT : { field: "DC_HTMLANSCTT", type: "string" , width: "100px", textAlign: "left"  , title: "답변내용"},  
         NM_ANS        : { field: "NM_ANS"       , type: "string" , width: "100px", textAlign: "center", title: "답변자"},  
-        DTS_ANSREG    : { field: "DTS_ANSREG"   , type: "string" , width: "150px", textAlign: "center", title: "답변등록일시"}   
+        DTS_ANSREG    : { field: "DTS_ANSREG"   , type: "string" , width: "150px", textAlign: "center", title: "답변등록일시"},   
+        YN_DEL		  : { field: "YN_DEL"   	, type: "string" , width: "150px", textAlign: "center", title: ""}	
 	});
 }());

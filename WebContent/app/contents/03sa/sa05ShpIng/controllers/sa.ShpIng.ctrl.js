@@ -84,20 +84,17 @@
                     NO_APVL       : { type: APP_SA_MODEL.NO_APVL.type        , editable: false, nullable: false },
                     NM_MRK        : { type: APP_SA_MODEL.NM_MRK.type         , editable: false, nullable: false },
                     NO_MRKORD     : { type: APP_SA_MODEL.NO_MRKORD.type      , editable: false, nullable: false },
-                    NO_MRKITEMORD : { type: APP_SA_MODEL.NO_MRKITEMORD.type  , editable: false, nullable: false },
-                    
-                    NO_MRKITEM    : { type: APP_SA_MODEL.NO_MRKITEM.type     , defaultValue: "", nullable: false},
+                    NO_MRKITEMORD : { type: APP_SA_MODEL.NO_MRKITEMORD.type  , editable: false, nullable: false },                    
+                    NO_MRKITEM    : { type: APP_SA_MODEL.NO_MRKITEM.type     , editable: false, nullable: false },
                     NO_MRKREGITEM : { type: APP_SA_MODEL.NO_MRKREGITEM.type  , editable: false, nullable: false },
-                    NM_MRKITEM    : { type: APP_SA_MODEL.NM_MRKITEM.type     , editable: true , nullable: false },
-                    NM_MRKOPT     : { type: APP_SA_MODEL.NM_MRKOPT.type      , editable: false, nullable: false },
-                    
+                    NM_MRKITEM    : { type: APP_SA_MODEL.NM_MRKITEM.type     , editable: false, nullable: false },
+                    NM_MRKOPT     : { type: APP_SA_MODEL.NM_MRKOPT.type      , editable: false, nullable: false },                    
                     AM_ORDSALEPRC : { type: APP_SA_MODEL.AM_ORDSALEPRC.type  , editable: false, nullable: false },
                     AM_PCHSPRC    : { type: APP_SA_MODEL.AM_PCHSPRC.type     , editable: false, nullable: false },
-                    NM_PCHR       : { type: APP_SA_MODEL.NM_PCHR.type        , editable: true , nullable: false },
+                    NM_PCHR       : { type: APP_SA_MODEL.NM_PCHR.type        , editable: false, nullable: false },
                     NM_CONS       : { type: APP_SA_MODEL.NM_CONS.type        , editable: false, nullable: false },
                     NO_PCHRPHNE   : { type: APP_SA_MODEL.NO_PCHRPHNE.type    , editable: false, nullable: false },
-                    NO_CONSHDPH   : { type: APP_SA_MODEL.NO_CONSHDPH.type    , editable: false, nullable: false },
-                    
+                    NO_CONSHDPH   : { type: APP_SA_MODEL.NO_CONSHDPH.type    , editable: false, nullable: false },                    
                     DC_PCHREMI    : { type: APP_SA_MODEL.DC_PCHREMI.type     , editable: false, nullable: false },
                     DC_CONSNEWADDR: { type: APP_SA_MODEL.DC_CONSNEWADDR.type , editable: false, nullable: false },
                     DC_PCHRREQCTT : { type: APP_SA_MODEL.DC_PCHRREQCTT.type  , editable: false, nullable: false },
@@ -129,7 +126,10 @@
                     					nullable: false,
 				                    	validation: {
 				                    		no_invovalidation: function (input) {
-				                    			return Util03saSvc.NoINVOValidation(input, 'NO_INVO', 'no_invovalidation');													
+				                    			if (input.is("[name='NO_INVO']")) {
+				                    				return Util03saSvc.NoINVOValidation(input, 'NO_INVO', 'no_invovalidation');
+				                    			}
+												return true;
 											}
 										}
 				    				}
@@ -139,7 +139,7 @@
                 APP_SA_MODEL.CD_SHPSTAT.fNm = "shippingDataVO.shipStatusOp";
                 
                 var grdCol = [[APP_SA_MODEL.ROW_CHK],                              
-                              [APP_SA_MODEL.NO_ORD         , [APP_SA_MODEL.NO_APVL, APP_SA_MODEL.NO_MRKORD]],
+                              [APP_SA_MODEL.NO_ORD       , [APP_SA_MODEL.NO_APVL, APP_SA_MODEL.NO_MRKORD]],
                               [APP_SA_MODEL.NM_MRK       , APP_SA_MODEL.NO_MRKITEMORD ],
                               [APP_SA_MODEL.NO_MRKITEM   , APP_SA_MODEL.NO_MRKREGITEM ],
                               [APP_SA_MODEL.NM_MRKITEM   , APP_SA_MODEL.NM_MRKOPT     ],
@@ -207,8 +207,8 @@
 	            	var me = this;
 	            	me.param = {
     				    NM_MRKITEM : shippingDataVO.procName.value,
-					    NO_MRK : shippingDataVO.ordMrkNameMo, 
-					    CD_ORDSTAT : shippingDataVO.ordStatusMo,
+					    NO_MRK : shippingDataVO.ordMrkNameMo.toString(), 
+					    CD_ORDSTAT : shippingDataVO.ordStatusMo.toString(),
 					    NO_MRKORD : shippingDataVO.orderNo.value,      
 					    NM_PCHR : shippingDataVO.buyerName.value,
 					    DTS_CHK : shippingDataVO.betweenDateOptionMo,  
@@ -306,6 +306,8 @@
                 			read: function(e) {
                 				saShpIngSvc.orderList(shippingDataVO.param).then(function (res) {
             						e.success(res.data);			                   				                    					
+            					}, function(err){
+            						e.error([]);
             					});  
                 			},
                 			update: function(e){
@@ -331,6 +333,8 @@
                 							alert("배송정보를 수정하는데 실패 하였습니다.");
                 							e.error();
                 						}
+                					}, function(err){
+                						e.error([]);
                 					});                 					
 		                			return defer.promise;
             	            	}else{

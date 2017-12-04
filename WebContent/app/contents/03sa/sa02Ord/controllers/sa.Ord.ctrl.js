@@ -65,68 +65,65 @@
                     NO_ORD        : { type: APP_SA_MODEL.NO_ORD.type         , editable: false, nullable: false },
                     NO_APVL       : { type: APP_SA_MODEL.NO_APVL.type        , editable: false, nullable: false },
                     NM_MRK        : { type: APP_SA_MODEL.NM_MRK.type         , editable: false, nullable: false },
-                    NO_MRKORD     : { type: APP_SA_MODEL.NO_MRKORD.type      , editable: false, nullable: false },
-                    
+                    NO_MRKORD     : { type: APP_SA_MODEL.NO_MRKORD.type      , editable: false, nullable: false },                    
                     NO_MRK        : { type: APP_SA_MODEL.NO_MRK.type         , editable: false, nullable: false },
-                    NO_MRKITEM    : { type: APP_SA_MODEL.NO_MRKITEM.type     , defaultValue: "", nullable: false},
+                    NO_MRKITEM    : { type: APP_SA_MODEL.NO_MRKITEM.type     , editable: false, nullable: false },
                     NO_MRKREGITEM : { type: APP_SA_MODEL.NO_MRKREGITEM.type  , editable: false, nullable: false },
-                    NM_MRKITEM    : { type: APP_SA_MODEL.NM_MRKITEM.type     , editable: true , nullable: false },
-                    NM_MRKOPT     : { type: APP_SA_MODEL.NM_MRKOPT.type      , editable: false, nullable: false },
-                    
+                    NM_MRKITEM    : { type: APP_SA_MODEL.NM_MRKITEM.type     , editable: false, nullable: false },
+                    NM_MRKOPT     : { type: APP_SA_MODEL.NM_MRKOPT.type      , editable: false, nullable: false },                    
                     AM_ORDSALEPRC : { type: APP_SA_MODEL.AM_ORDSALEPRC.type  , editable: false, nullable: false },
                     AM_PCHSPRC    : { type: APP_SA_MODEL.AM_PCHSPRC.type     , editable: false, nullable: false },
-                    NM_PCHR       : { type: APP_SA_MODEL.NM_PCHR.type        , editable: true , nullable: false },
+                    NM_PCHR       : { type: APP_SA_MODEL.NM_PCHR.type        , editable: false, nullable: false },
                     NM_CONS       : { type: APP_SA_MODEL.NM_CONS.type        , editable: false, nullable: false },
-                    NO_PCHRPHNE   : { type: APP_SA_MODEL.NO_PCHRPHNE.type    , editable: false, nullable: false },
-                    
+                    NO_PCHRPHNE   : { type: APP_SA_MODEL.NO_PCHRPHNE.type    , editable: false, nullable: false },                    
                     NO_CONSHDPH   : { type: APP_SA_MODEL.NO_CONSHDPH.type    , editable: false, nullable: false },
                     DC_PCHREMI    : { type: APP_SA_MODEL.DC_PCHREMI.type     , editable: false, nullable: false },
                     NO_CONSPOST   : { type: APP_SA_MODEL.NO_CONSPOST.type    , editable: false, nullable: false },
                     DC_CONSNEWADDR: { type: APP_SA_MODEL.DC_CONSNEWADDR.type , editable: false, nullable: false },
-                    DC_PCHRREQCTT : { type: APP_SA_MODEL.DC_PCHRREQCTT.type  , editable: false, nullable: false },
-                    
+                    DC_PCHRREQCTT : { type: APP_SA_MODEL.DC_PCHRREQCTT.type  , editable: false, nullable: false },                    
                     DC_CONSOLDADDR: { type: APP_SA_MODEL.DC_CONSOLDADDR.type , editable: false, nullable: false },
                     CD_ORDSTAT    : { type: APP_SA_MODEL.CD_ORDSTAT.type     , editable: false, nullable: false },
                     DC_SHPWAY     : { type: APP_SA_MODEL.DC_SHPWAY.type      , editable: false, nullable: false },
                     QT_ORD        : { type: APP_SA_MODEL.QT_ORD.type         , editable: false, nullable: false },
-                    DTS_APVL      : { type: APP_SA_MODEL.DTS_APVL.type       , editable: false, nullable: false },
-                    
+                    DTS_APVL      : { type: APP_SA_MODEL.DTS_APVL.type       , editable: false, nullable: false },                    
                     DTS_ORD       : { type: APP_SA_MODEL.DTS_ORD.type        , editable: false, nullable: false },
                     YN_CONN       : { type: APP_SA_MODEL.YN_CONN.type        , editable: false, nullable: false },
                     DTS_ORDDTRM   : { type: APP_SA_MODEL.DTS_ORDDTRM.type    , editable: false, nullable: false },
                     AM_ITEMPRC    : { type: APP_SA_MODEL.AM_ITEMPRC.type     , editable: false, nullable: false },
                     AM_CMS    	  : { type: APP_SA_MODEL.AM_CMS.type     	 , editable: false, nullable: false },
-                    AM_CUSTOM_SALES  : { type: APP_SA_MODEL.AM_CUSTOM_SALES.type        , editable: false, nullable: false },
-                    NO_MRKITEMORD    : { type: APP_SA_MODEL.NO_MRKITEMORD.type          , editable: false, nullable: false },
-                    
-                    DC_SHPCOSTSTAT: { type: "string" , editable: false, nullable: false },
-                    NO_MNGMRK	  : { type: "string" , editable: false, nullable: false },	
-                    
                     AM_SHPCOST    : { type: APP_SA_MODEL.AM_SHPCOST.type     , editable: false, nullable: false },
-                    CD_CCLRSN     : { type: "array", 
-				                        validation: {
+                    AM_CUSTOM_SALES  : { type: APP_SA_MODEL.AM_CUSTOM_SALES.type        , editable: false, nullable: false },
+                    NO_MRKITEMORD    : { type: APP_SA_MODEL.NO_MRKITEMORD.type          , editable: false, nullable: false },                    
+                    DC_SHPCOSTSTAT: { type: "string" , editable: false, nullable: false },
+                    NO_MNGMRK	  : { type: "string" , editable: false, nullable: false },	                                        
+                    CD_CCLRSN     : { type: "array",  
+                    				  editable: true, 
+                    				  nullable: false,
+				                      validation: {
 				                            cd_cclrsnvalidation: function (input) {
-				                                    if (input.is("[name='CD_CCLRSN']") && input.val() === "") {
+				                            	if (input.is("[name='CD_CCLRSN']") && input.val() === "") {
 				                                    input.attr("data-cd_cclrsnvalidation-msg", "취소 사유코드를 입력해 주세요.");
 				                                    return false;
-				                                }
-				                              return true;
-				                                  }
+				                                };
+				                                return true;
+				                            }
 				                        }
                                     },
-                    DC_CCLRSNCTT  : { type: APP_SA_MODEL.DC_CCLRSNCTT.type   , editable: true , nullable: false,
-				                    	validation: {
+                    DC_CCLRSNCTT  : { type: APP_SA_MODEL.DC_CCLRSNCTT.type, 
+                    				  editable: true, 
+                    				  nullable: false,
+				                      validation: {
 				                            dc_cclrsncttvalidation: function (input) {
-				                                    if (input.is("[name='DC_CCLRSNCTT']") && input.val() === "") {
-				                                    input.attr("data-dc_cclrsncttvalidation-msg", "주문취소사유를 입력해 주세요.");
+				                            	if (input.is("[name='DC_CCLRSNCTT']") && input.val() === "") {
+				                            		input.attr("data-dc_cclrsncttvalidation-msg", "주문취소사유를 입력해 주세요.");
+					                                return false;
+				                                }
+				                            	if(input.val().length > 1000){
+				                            		input.attr("data-dc_cclrsncttvalidation-msg", "주문취소사유를 1000자 이내로 입력해 주세요.");
 				                                    return false;
 				                                }
-				                                    if(input.val().length > 1000){
-				                                        input.attr("data-dc_cclrsncttvalidation-msg", "주문취소사유를 1000자 이내로 입력해 주세요.");
-				                                    return false;
-				                                    }
-				                              return true;
-				                                  }
+				                                return true;
+				                            }
 				                        }
                                     }
                 },
@@ -147,11 +144,10 @@
                               [APP_SA_MODEL.DTS_ORD      , APP_SA_MODEL.DTS_APVL       ],
                               [APP_SA_MODEL.DTS_ORDDTRM  , APP_SA_MODEL.YN_CONN        ]
                              ],
-                    grdDetOption      = {},
-                    grdRowTemplate    = "<tr data-uid=\"#= uid #\" ng-dblclick=\"grdDblClickGo('#: NO_ORD #','#: NO_MRKORD #',$event)\">\n",
-                    grdAltRowTemplate = "<tr class=\"k-alt\" data-uid=\"#= uid #\" ng-dblclick=\"grdDblClickGo('#: NO_ORD #','#: NO_MRKORD #',$event)\">\n",
-                    grdCheckOption    = {clickNm:"onOrdGrdCkboxClick",
-                		                 allClickNm:"onOrdGrdCkboxAllClick"};
+                grdDetOption      = {},
+                grdRowTemplate    = "<tr data-uid=\"#= uid #\" ng-dblclick=\"grdDblClickGo('#: NO_ORD #','#: NO_MRKORD #',$event)\">\n",
+                grdAltRowTemplate = "<tr class=\"k-alt\" data-uid=\"#= uid #\" ng-dblclick=\"grdDblClickGo('#: NO_ORD #','#: NO_MRKORD #',$event)\">\n",
+                grdCheckOption    = {clickNm:"onOrdGrdCkboxClick", allClickNm:"onOrdGrdCkboxAllClick"};
 
                 APP_SA_MODEL.CD_ORDSTAT.fNm = "ordDataVO.ordStatusOp";
                 grdDetOption       = UtilSvc.gridDetOption(grdCheckOption, grdCol);
@@ -292,10 +288,7 @@
             		autoBind: false,
                     messages: {                        	
                         requestFailed: "주문정보를 가져오는 중 오류가 발생하였습니다.",
-                        commands: {
-                            update: "저장",
-                            canceledit: "닫기"
-                        }
+                        commands: { update: "저장", canceledit: "닫기" }
                         ,noRecords: "검색된 데이터가 없습니다."
                     },
                 	boxTitle : "주문 목록",
@@ -318,7 +311,9 @@
         					     
                 				saOrdSvc.orderList(searchParam).then(function (res) {
                 					e.success(res.data);
-                    			});
+                    			}, function(err){
+            						e.error([]);
+            					});
                 			},
                 			update: function(e){
                 				if(confirm("주문 취소 하시겠습니까?")){
@@ -333,7 +328,9 @@
 		                				defer.resolve(); 
 		                				e.success(res.data.results);
 		                				$scope.ordkg.dataSource.read();
-		                			});
+		                			}, function(err){
+                						e.error([]);
+                					});
 		                			return defer.promise;
             	            	}else{
             	            		$scope.ordkg.cancelRow();
@@ -365,13 +362,8 @@
                 		},
                 	}),
                 	navigatable: true, //키보드로 그리드 셀 이동 가능
-                	//selectable: "multiple, row",
-                	//persistSelection: true,
                 	toolbar: [{template: kendo.template($.trim($("#ord-toolbar-template").html()))}],
                 	columns: grdDetOption.gridColumn,
-                	dataBound: function(e) {
-                        //this.expandRow(this.tbody.find("tr.k-master-row").first());                                        
-                    },
                     collapse: function(e) {
                         this.cancelRow();
                     },    
@@ -421,18 +413,16 @@
 	                		var	chked = grd.element.find(".k-grid-content input:checked"),
 		            			chkedLeng = grd.element.find(".k-grid-content input:checked").length,
 		            			element = $(event.currentTarget),
-			                	checked = element.is(':checked'),
 			                	row = element.parents("div").find(".k-grid-content input:checked"),
 			                	grid = $scope.ordkg,
-			                	dataItem = grid.dataItems(row),
-			                	dbLength = dataItem.length;
+			                	dataItem = grid.dataItems(row);
 	                		
 	                		/*var selected = grid.dataItem(grid.select()).NO_MRK;*/
 		                    if(chkedLeng === 1){
 		                    	for(var i = 0 ; i < dataItem.length; i++){
-		                    		if(dataItem[i].ROW_CHK  && dataItem[i].NO_MRK == "SYMR170101_00004"){   // 쿠팡 - 주문취소 막음 (?)
-		                    		alert("쿠팡의 상품은 주문취소가 어렵습니다.");
-		                    		return;
+		                    		if(dataItem[i].ROW_CHK  && dataItem[i].NO_MRK == "SYMM170901_00001"){   // 쿠팡 - 주문취소 막음 (?)
+			                    		alert("쿠팡의 상품은 주문취소가 어렵습니다.");
+			                    		return;
 		                    		}
 		                    	}
 		                		grd.editRow(chked.closest('tr'));
@@ -470,7 +460,9 @@
 		                					$timeout(function(){
 		                						$scope.ordkg.dataSource.read();	  
 		            						}, 0);
-		                    			});
+		                    			}, function(err){
+	                						e.error([]);
+	                					});
 		                			}
 		                		}
 		                	};

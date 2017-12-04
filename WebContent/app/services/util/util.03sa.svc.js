@@ -25,14 +25,14 @@
             this.NoINVOValidation = function(input, colunm, valicolunm){
             	//var regTest = /^[0-9]{1}[0-9\-]+[0-9]{1}$/;
             	var regTest = /^(([\d]+)\-|([\d]+))+(\d)+$/;
-            	var iValue = input.val(); 
+            	var iValue = input.val().trim(); 
  			    
 			    if (input.is("[name='"+colunm+"']") && !iValue) {
                  	input.attr("data-"+valicolunm+"-msg", "송장번호를 입력해 주세요.");
                     return false;
                 };
-			    if(input.is("[name='"+colunm+"']") && iValue && (iValue.trim().length > 100 || iValue.trim().length < 3)){
-			    	input.attr("data-"+valicolunm+"-msg", "송장번호룰 3자 이상 100자 이내로 입력해 주세요.");
+			    if(input.is("[name='"+colunm+"']") && iValue && (iValue.trim().length > 20 || iValue.trim().length < 6)){
+			    	input.attr("data-"+valicolunm+"-msg", "송장번호룰 6자 이상 20자 이내로 입력해 주세요.");
                     return false;
 			    };
 			    if (input.is("[name='"+colunm+"']") && iValue && !regTest.test(iValue.trim())) {
@@ -55,52 +55,58 @@
 					
 					if(dataItem.CD_PARS || dataItem.CD_PARS_INPUT){
 						cdName = dataItem.CD_PARS || dataItem.CD_PARS_INPUT;
-						parsName = cdName.NM_PARS;
+						parsName = cdName.NM_PARS || dataItem.CD_PARS;
 						
-						if (parsName == "기타택배") {
+						if (parsName === "기타택배") {
 							var pattern1 = /^[0-9a-zA-Z]{9,12}$/i;
 							var pattern2 = /^[0-9a-zA-Z]{18}$/i;
 							var pattern3 = /^[0-9a-zA-Z]{25}$/i;
-							if (iValue.search(pattern1) == -1 && iValue.search(pattern2) == -1 && iValue.search(pattern3) == -1) {
+							if(iValue.search(pattern1) == -1 && iValue.search(pattern2) == -1 && iValue.search(pattern3) == -1) {
 							   input.attr("data-"+valicolunm+"-msg", parsName+"의 운송장 번호 패턴에 맞지 않습니다.");
 							   return false;
-						}} else if (parsName == "EMS") {
-							   var pattern = /^[a-zA-Z]{2}[0-9]{9}[a-zA-Z]{2}$/;
-							   if (iValue.search(pattern) == -1) {
-							     input.attr("data-"+valicolunm+"-msg", parsName+"의 운송장 번호 패턴에 맞지 않습니다.");
-							   return false;
-						}} else if (parsName == "한진택배" || parsName == "현대택배") {
-								if (!isNumeric(iValue)) {
-							    input.attr("data-"+valicolunm+"-msg", "운송장 번호는 숫자만 입력해주세요.");
+							}
+						} else if (parsName === "EMS") {
+							var pattern = /^[a-zA-Z]{2}[0-9]{9}[a-zA-Z]{2}$/;
+							if(iValue.search(pattern) == -1) {
+								input.attr("data-"+valicolunm+"-msg", parsName+"의 운송장 번호 패턴에 맞지 않습니다.");
 							    return false;
-						} else if ( iValue.length != 10 && iValue.length != 12 ) {
-							    input.attr("data-"+valicolunm+"-msg", parsName+"의 운송장 번호는 10자리 또는 12자리의 숫자로 입력해주세요.");
-							    return false;
-						}} else if (parsName == "경동택배") {
-							    if (!isNumeric(iValue)) {
-							    input.attr("data-"+valicolunm+"-msg", "운송장 번호는 숫자만 입력해주세요.");
-							    return false;
-						}} else if (iValue.length != 9 && iValue.length != 10 && iValue.length != 11) {
-							     input.attr("data-"+valicolunm+"-msg",parsName+"의 운송장 번호는 9자리 또는 10자리 또는 11자리의 숫자로 입력해주세요.");
-							     return false;
-						}} else if (parsName == "이노지스택배") {
-							    if (!isNumeric(iValue)) {
-							     input.attr("data-"+valicolunm+"-msg", "운송장 번호는 숫자만 입력해주세요.");
-							     return false;
-						} else if (iValue.length > 13) {
-						    input.attr("data-"+valicolunm+"-msg",parsName+"의 운송장 번호는 최대 13자리의 숫자로 입력해주세요.");
-						    return false;
-						}} else if (parsName == "TNT Express") {
-						   var pattern1 = /^[a-zA-Z]{2}[0-9]{9}[a-zA-Z]{2}$/;
-						   var pattern2 = /^[0-9]{9}$/;
-						   if (iValue.search(pattern1) == -1 && iValue.search(pattern2) == -1) {
-						     input.attr("data-"+valicolunm+"-msg", parsName+"의 운송장 번호 패턴에 맞지 않습니다.");
-						     return false;
-						}};
-						
+							}
+						} else if (parsName === "한진택배" || parsName == "현대택배") {
+								if(!$.isNumeric(iValue)) {
+								    input.attr("data-"+valicolunm+"-msg", "운송장 번호는 숫자만 입력해주세요.");
+								    return false;
+								}else if( iValue.length != 10 && iValue.length != 12 ) {
+								    input.attr("data-"+valicolunm+"-msg", parsName+"의 운송장 번호는 10자리 또는 12자리의 숫자로 입력해주세요.");
+								    return false;
+								}
+						} else if (parsName === "경동택배") {
+							    if(!$.isNumeric(iValue)) {
+								    input.attr("data-"+valicolunm+"-msg", "운송장 번호는 숫자만 입력해주세요.");
+								    return false;
+							    }else if(iValue.length != 9 && iValue.length != 10 && iValue.length != 11) {
+								    input.attr("data-"+valicolunm+"-msg",parsName+"의 운송장 번호는 9자리 또는 10자리 또는 11자리의 숫자로 입력해주세요.");
+								    return false;
+							    }
+						} else if (parsName === "이노지스택배") {
+							    if(!$.isNumeric(iValue)) {
+								    input.attr("data-"+valicolunm+"-msg", "운송장 번호는 숫자만 입력해주세요.");
+								    return false;
+							    }else if(iValue.length > 13) {
+								    input.attr("data-"+valicolunm+"-msg",parsName+"의 운송장 번호는 최대 13자리의 숫자로 입력해주세요.");
+								    return false;
+							    }
+						} else if (parsName === "TNT Express") {
+								var pattern1 = /^[a-zA-Z]{2}[0-9]{9}[a-zA-Z]{2}$/;
+								var pattern2 = /^[0-9]{9}$/;
+								if(iValue.search(pattern1) == -1 && iValue.search(pattern2) == -1) {
+								   input.attr("data-"+valicolunm+"-msg", parsName+"의 운송장 번호 패턴에 맞지 않습니다.");
+								   return false;
+								}
+						};						
 					}
+				}
 				return true;
-            }; 
+			}; 
             
             this.popupUtil = {
             	blur : function(e){

@@ -581,4 +581,7 @@ form[name="businessForm"]:after {content: ''; display: block; clear: both;}
 	border-right: 1px solid #eee;    
 	background: rgba(199,211,237,.3);
     border-bottom: 1px solid #dadada;
+}   
+.border-bottom-line{	
+	border-bottom: 1px solid #eee;
 }

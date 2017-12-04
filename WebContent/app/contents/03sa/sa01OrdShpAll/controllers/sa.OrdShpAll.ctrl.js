@@ -76,8 +76,9 @@
                     DTS_ORDDTRM    : { type: APP_SA_MODEL.DTS_ORDDTRM.type    , editable: false, nullable: false },
                     NO_CONSHDPH    : { type: APP_SA_MODEL.NO_CONSHDPH.type    , editable: false, nullable: false },
                     AM_PCHSPRC     : { type: APP_SA_MODEL.AM_PCHSPRC.type     , editable: false, nullable: false },
-                    DT_SND         : { type: APP_SA_MODEL.DT_SND.type         , editable: false, nullable: false },
-                    DC_PCHRREQCTT  : { type: APP_SA_MODEL.DC_PCHRREQCTT.type  , editable: false, nullable: false }
+                    DT_SND         : { type: APP_SA_MODEL.DT_SND.type         , editable: false, nullable: false },                    
+                    DC_PCHRREQCTT  : { type: APP_SA_MODEL.DC_PCHRREQCTT.type  , editable: false, nullable: false },
+                    YN_DEL  	   : { type: APP_SA_MODEL.YN_DEL.type  		  , editable: false, nullable: false }
                 };
 
                 APP_SA_MODEL.CD_ORDSTAT.fNm  = "ordAllDataVO.ordStatusOp";
@@ -212,6 +213,8 @@
                                     };                   				
                 					saOrdShpAllSvc.orderDetailList(param).then(function (res) {
 	            						e.success(res.data);			                   				                    					
+                					}, function(err){
+                						e.error([]);
                 					});         
                     			},
                     			parameterMap: function(e, operation) {
@@ -226,7 +229,7 @@
                             noRecords: "검색된 데이터가 없습니다."
                         },
                         noRecords: true,
-                        height: "300px",
+                        height: "150px",
                         scrollable: true,
                         sortable: true,
                         columns: [
@@ -283,23 +286,18 @@
                 	scrollable: true,
                 	resizable: true,
                 	detailInit: gridDetailOptions,
-                	/*detailCollapse: function(e) {
-                	    console.log(e.masterRow, e.detailRow);	//줄일때
-                	},
-                	detailExpand: function(e) {
-                		console.log(e.masterRow, e.detailRow);	// 확장할떄
-                	},*/
                 	detailTemplate: kendo.template($("#ordall_detail_template").html()),
                 	rowTemplate: kendo.template($.trim(grdRowTemplate)),
                 	altRowTemplate: kendo.template($.trim(grdAltRowTemplate)),
                 	height: 616,
                 	navigatable: true, //키보드로 그리드 셀 이동 가능
-                	//toolbar: [{template: kendo.template($.trim($("#ordall_toolbar_template").html()))}],
                 	dataSource: new kendo.data.DataSource({
                 		transport: {
                 			read: function(e) {                				
                 				saOrdShpAllSvc.orderList(ordAllDataVO.param).then(function (res) {
             						e.success(res.data);
+            					}, function(err){
+            						e.error([]);
             					});
                 			},
                 			parameterMap: function(e, operation) {

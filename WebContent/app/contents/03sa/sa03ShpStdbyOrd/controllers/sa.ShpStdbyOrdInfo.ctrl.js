@@ -61,8 +61,12 @@
 	        	                	ShpStdbyOrdSvc.shplist(param).then(function (res) {
 	        	                		if(res.data.length >= 1){  
 	        	                			e.success(res.data);    
+	        	                		}else{
+	        	                			e.error([]);
 	        	                		}
-                        			});
+                        			}, function(err){
+                						e.error([]);
+                					});
 	        	                }
 	        	              }
 	        	        },
@@ -160,7 +164,9 @@
 	            		ShpStdbyOrdSvc.noout(param).then(function (res) {
             				defer.resolve();            			
             				location.reload();
-            			});	            		
+            			}, function(err){
+    						e.error([]);
+    					});	            		
             			return defer.promise;
 	            	}
 	            };
@@ -176,7 +182,9 @@
 	            		ShpStdbyOrdSvc.shpInReg(param).then(function (res) {
             				defer.resolve();            		
             				location.reload();
-            			});
+            			}, function(err){
+    						e.error([]);
+    					});
 	        			return defer.promise;
 	            	}
 	            };
@@ -226,7 +234,9 @@
 	            				defer.resolve();            				
 	            				ordInfoDataVO.ordCancelPopOptionsClose();
 	            				location.reload();
-	            			});
+	            			}, function(err){
+        						e.error([]);
+        					});
 	            			return defer.promise;
 		            	}
 		            };
@@ -272,10 +282,63 @@
                         reg : function(input) {
                         	//var regTest = /^[0-9]{1}[0-9\-]+[0-9]{1}$/;
                         	var regTest = /^(([\d]+)\-|([\d]+))+(\d)+$/;
+							var valicolunm = "reg";
+							var iValue = input.val();
                         	
                         	if (input.is("[name='NO_INVO']") && !regTest.test(input.val())) {
 							    return false;
-							};
+							};															
+							if (input.is("[name='NO_INVO']") && input.val()) {
+								var parsName = ordInfoDataVO.ds.CD_PARS.NM_PARS;
+								
+								if (parsName == "기타택배") {
+									var pattern1 = /^[0-9a-zA-Z]{9,12}$/i;
+									var pattern2 = /^[0-9a-zA-Z]{18}$/i;
+									var pattern3 = /^[0-9a-zA-Z]{25}$/i;
+									
+									if (iValue.search(pattern1) == -1 && iValue.search(pattern2) == -1 && iValue.search(pattern3) == -1) {
+									   input.attr("data-"+valicolunm+"-msg", parsName+"의 운송장 번호 패턴에 맞지 않습니다.");
+									   return false;
+									}
+								} else if (parsName == "EMS") {
+									   var pattern = /^[a-zA-Z]{2}[0-9]{9}[a-zA-Z]{2}$/;
+									   if (iValue.search(pattern) == -1) {
+									     input.attr("data-"+valicolunm+"-msg", parsName+"의 운송장 번호 패턴에 맞지 않습니다.");
+									     return false;
+									   }	
+								} else if (parsName == "한진택배" || parsName == "현대택배") {
+										if (!$.isNumeric(iValue)) {
+										    input.attr("data-"+valicolunm+"-msg", "운송장 번호는 숫자만 입력해주세요.");
+										    return false;
+										} else if ( iValue.length != 10 && iValue.length != 12 ) {
+										    input.attr("data-"+valicolunm+"-msg", parsName+"의 운송장 번호는 10자리 또는 12자리의 숫자로 입력해주세요.");
+										    return false;
+										}		
+								} else if (parsName == "경동택배") {
+									    if (!$.isNumeric(iValue)) {
+										    input.attr("data-"+valicolunm+"-msg", "운송장 번호는 숫자만 입력해주세요.");
+										    return false;
+									    }else if (iValue.length != 9 && iValue.length != 10 && iValue.length != 11) {
+									    	input.attr("data-"+valicolunm+"-msg",parsName+"의 운송장 번호는 9자리 또는 10자리 또는 11자리의 숫자로 입력해주세요.");
+									    	return false;
+									    }
+								} else if (parsName == "이노지스택배") {
+									    if (!$.isNumeric(iValue)) {
+										     input.attr("data-"+valicolunm+"-msg", "운송장 번호는 숫자만 입력해주세요.");
+										     return false;
+									    } else if (iValue.length > 13) {
+										    input.attr("data-"+valicolunm+"-msg",parsName+"의 운송장 번호는 최대 13자리의 숫자로 입력해주세요.");
+										    return false;
+									    }
+								} else if (parsName == "TNT Express") {
+									var pattern1 = /^[a-zA-Z]{2}[0-9]{9}[a-zA-Z]{2}$/;
+									var pattern2 = /^[0-9]{9}$/;
+									if (iValue.search(pattern1) == -1 && iValue.search(pattern2) == -1) {
+										input.attr("data-"+valicolunm+"-msg", parsName+"의 운송장 번호 패턴에 맞지 않습니다.");
+										return false;
+									}
+								};
+							}
 							return true;
                         }
                     }

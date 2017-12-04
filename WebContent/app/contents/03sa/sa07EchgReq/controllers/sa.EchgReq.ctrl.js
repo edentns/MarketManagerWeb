@@ -114,6 +114,7 @@
                     DTS_ECHGREQ   	: { type: "string"    , editable: false, nullable: false },
                     DT_SND        	: { type: "string"    , editable: false, nullable: false },
                     DTS_ECHGAPPRRJT : { type: "string"    , editable: false, nullable: false },
+                    NO_ECHGAPPRRJT  : { type: "string"    , editable: false, nullable: false },
                     NO_ECHGCPLT   	: { type: "string"	  , editable: false, nullable: false },                    
                     YN_CONN       	: { type: "string"    , editable: false, nullable: false },
                     CD_ECHGSTAT   	: { type: "string"    , editable: false, nullable: false },
@@ -206,7 +207,9 @@
 						               ,validation: {
 						            	   no_invo_inputvalidation: function (input) {
 						            		   if(echgDataVO.procShowCode.indexOf(echgDataVO.updateChange) > -1){
-						            			   return Util03saSvc.NoINVOValidation(input, 'NO_INVO', 'no_invo_inputvalidation');						            			   
+						            			   if (input.is("[name='NO_INVO']")) {
+							            			   return Util03saSvc.NoINVOValidation(input, 'NO_INVO', 'no_invo_inputvalidation');
+					                                };						            			   
 						            		   	};
 						            		   	return true;
 						            	   	}
@@ -424,7 +427,7 @@
                 	scrollable: true,
                 	resizable: true,
                 	rowTemplate: kendo.template($.trim($("#echg_template").html())),
-                	altRowTemplate: kendo.template($.trim($("#echg_alt_template").html())),
+                	altRowTemplate: kendo.template($.trim(angular.element(document.querySelector("#echg_template")).html()).replace("class=\"k-grid-row\"","class=\"k-alt\"")),
                 	height: 616,
                 	navigatable: true, //키보드로 그리드 셀 이동 가능
                 	toolbar: [{template: kendo.template($.trim($("#echg_toolbar_template").html()))}],
@@ -434,7 +437,10 @@
                 				saEchgReqSvc.orderList(echgDataVO.param).then(function (res) {    						
             						e.success(res.data.queryList);			
             						echgDataVO.shpList = res.data.queryShipList;
+            					}, function(err){
+            						e.error([]);
             					});
+                				
                 			},
                 			update: function(e){
                 				var whereIn = ['004','005'],
@@ -461,6 +467,8 @@
 	                    							alert("교환승인을 실패하였습니다.");
 	                    							e.error();
 	                    						}
+	                    					}, function(err){
+	                    						e.error([]);
 	                    					});  
 	            							return defer.promise;
 	            						}else{
@@ -488,6 +496,8 @@
                         							alert("교환거부를 실패하였습니다.");
                         							e.error();
                         						}
+                        					}, function(err){
+                        						e.error([]);
                         					});                         
         		                			return defer.promise;
                 						}else{
@@ -519,6 +529,8 @@
                         							alert("교환완료를 실패하였습니다.");
                         							e.error();
                         						}
+                        					}, function(err){
+                        						e.error([]);
                         					});                         					
         		                			return defer.promise;
                     	            	}else{

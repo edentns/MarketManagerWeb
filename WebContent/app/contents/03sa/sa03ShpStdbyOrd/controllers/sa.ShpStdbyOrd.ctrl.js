@@ -248,11 +248,11 @@
 	    	            			result = false;
 	        						return;
 	    	            		}
-	    	            		if(tempParam[i].INVO_YN === tempParam[i].NO_ORD){
+	    	            		/*if(tempParam[i].INVO_YN === tempParam[i].NO_ORD){
 	    	            			alert('이미 전송 주문이 있습니다.');
 	    	            			result = false;
 	    	            			return;
-	    	            		}
+	    	            		}*/
 	            			};
 	            			break;
 	            		} 	
@@ -284,8 +284,8 @@
 	         		getData = grd.dataItem(getCurrentRow);           
 	         		
 	         		//택배사 수정 하다가 넘어가면 짜증 나니까 택배사및 송장번호 더블클릭은 막음
-	         		if(getCurrentCell.find(".k-checkbox").length || getCurrentCell.find("[name='CD_PARS']").length || getCurrentCell.find("[name='NO_INVO']").length){
-	         			return;
+	         		if(getCurrentCell.closest("td").hasClass("dnt-clk")){	         			
+	         			return false;
 	         		}
 	         		$cookieStore.put("moveshpStdbyOrdInfo",true);
 	         		$state.go("app.saShpStdbyOrd", { kind: null, menu: null, noOrd : getData.NO_ORD, noMrkord: getData.NO_MRKORD, noMrk: getData.NO_MRK });
@@ -319,7 +319,7 @@
 	            		/*var selected = grid.dataItem(grid.select()).NO_MRK;*/
 	                    if(chkedLeng === 1){
 	                    	for(var i = 0 ; i < dataItem.length; i++){
-	                    		if(dataItem[i].ROW_CHK && dataItem[i].NO_MRK == "SYMR170101_00004"){   // 쿠팡 - 주문취소 막음 (?)
+	                    		if(dataItem[i].ROW_CHK && dataItem[i].NO_MRK == "SYMM170901_00001"){   // 쿠팡 - 주문취소 막음 (?)
 	                    			alert("쿠팡의 상품은 주문취소가 어렵습니다.");
 	                    			return;
 	                    		}
@@ -417,8 +417,16 @@
                 			read: function(e) {	
                 				saShpStdbyOrdSvc.shpbyordList(shpbyordDataVO.param).then(function (res) {
             						shpbyordDataVO.shipCodeTotal = res.data.shpList;
-            						e.success(res.data.searchList);	                    					                   				                    					
-                    			});
+            						e.success(res.data.searchList);
+            						if(shpbyordDataVO.dataTotal > 0 ){
+            							for(var i = 0; i < shpbyordDataVO.dataTotal; i++){
+            								angular.element(document.querySelector("[data-role=grid]")).find("table > tbody > tr:eq("+i+") > td:eq(0)," +
+            										" table > tbody > tr:eq("+i+") > td:eq(9), table > tbody > tr:eq("+i+") > td:eq(10)").addClass("dnt-clk");
+            							};
+            						}
+                    			}, function(err){
+            						e.error([]);
+            					});
                 			},
                 			update: function(e){
                 				switch(shpbyordDataVO.updateChange){
@@ -436,7 +444,9 @@
         		                				e.success(res.data.results);
         		                				//shpbyordDataVO.ordStatusMo = (shpbyordDataVO.ordStatusMo === '*') ? shpbyordDataVO.ordStatusMo : shpbyordDataVO.ordStatusMo + "^003";
         		                				$scope.shpbyordkg.dataSource.read();
-        		                			});
+        		                			}, function(err){
+        	            						e.error([]);
+        	            					});
         		                			return defer.promise;
                     	            	}	
                 						break;
@@ -459,7 +469,9 @@
         		                				e.success(res.data.results);
         		                				//shpbyordDataVO.ordStatusMo = (shpbyordDataVO.ordStatusMo === '*') ? shpbyordDataVO.ordStatusMo : shpbyordDataVO.ordStatusMo + "^004";
         		                				$scope.shpbyordkg.dataSource.read();
-        		                			});
+        		                			}, function(err){
+        	            						e.error([]);
+        	            					});
         		                			return defer.promise;
                 						}else{
                 							grd.cancelChanges();
@@ -478,7 +490,9 @@
         		                				defer.resolve(); 
         		                				e.success(res.data.results);
         		                				$scope.shpbyordkg.dataSource.read();
-        		                			});
+        		                			}, function(err){
+        	            						e.error([]);
+        	            					});
         		                			return defer.promise;
                 						}
                 						break;
@@ -652,11 +666,11 @@
 															editable: false, 
 															nullable: false
                 				    				   },    
-			    				    INVO_YN: 	   	   {
+			    				    /*INVO_YN: 	   	   {
 					                				    	type: "string", 
 															editable: false, 
 															nullable: false
-							    				   	   },    
+							    				   	   },*/    
 							    	NO_MRKITEMORD: 	   {
 					                				    	type: "string", 
 															editable: false, 
@@ -682,7 +696,10 @@
 															nullable: false,
 															validation: {
 																no_invovalidation: function (input) {
-																	return Util03saSvc.NoINVOValidation(input, 'NO_INVO', 'no_invovalidation');																	
+																	if (input.is("[name='NO_INVO']")) {
+																		return Util03saSvc.NoINVOValidation(input, 'NO_INVO', 'no_invovalidation');
+																	};
+																	return true;
 				  									    	  	}
 															}
 								    				   },
@@ -853,7 +870,14 @@
                                     title: "전화번호 (구매자 )",
                                     width: 100,
                                     template: function(e){
-                                    	return (e.NO_PCHRPHNE)? e.NO_CONSHDPH +"("+e.NO_PCHRPHNE+")" : e.NO_CONSHDPH;                                    
+                                    	var vwTxt = "";
+                                    	vwTxt = e.NO_CONSHDPH ? e.NO_CONSHDPH.toString() : '';
+                                    	vwTxt += e.NO_PCHRHDPH ? '(' + e.NO_PCHRHDPH.toString() + ')' : '';
+                                    	if(!vwTxt){
+                                    		vwTxt = e.NO_CONSPHNE ? e.NO_CONSPHNE.toString() : '';
+                                    		vwTxt += e.NO_PCHRPHNE ? '(' + e.NO_PCHRPHNE.toString() + ')' : '';
+                                    	};            
+                                    	return vwTxt;
                                     },
 			                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
                                 }, 
@@ -862,7 +886,10 @@
                                     title: "주소1 (주소2)", 
                                     width: 100,
                                     template: function(e){
-                                    	return (e.DC_CONSOLDADDR) ? e.DC_CONSNEWADDR + +"("+e.DC_CONSOLDADDR+")" : e.DC_CONSNEWADDR;	                                   
+                                    	var vwAddr = "";
+                                    	vwAddr = e.DC_CONSNEWADDR ? e.DC_CONSNEWADDR.toString() : '';
+                                    	vwAddr += e.DC_CONSOLDADDR ? '('+e.DC_CONSOLDADDR.toString() + ')' : '';
+                                    	return vwAddr;
                                     },
 			                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
                                 },  
@@ -927,8 +954,8 @@
                 //kendo grid 체크박스 all click
                 $scope.onOrdGrdCkboxAllClick = function(e){
                 	UtilSvc.grdCkboxAllClick(e, $scope.shpbyordkg);
-                };		            	           
-	                         
+                };                            
+                
             }]);                              
 }());
 		

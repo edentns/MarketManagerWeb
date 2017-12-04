@@ -161,7 +161,7 @@
 				     				   ,nullable: false
 				                       ,validation: {
 				                    	   dc_cclrjtcttvalidation: function (input) {
-										    	if (input.is("[name='DC_CCLRJTCTT']") && input.val() === "") {
+										    	if (input.is("[name='DC_CCLRJTCTT']") && !input.val()) {
 				                                	input.attr("data-dc_cclrjtcttvalidation-msg", "취소거부사유를 입력해 주세요.");
 				                                    return false;
 				                                }
@@ -199,12 +199,11 @@
 						     		   ,nullable: false
 						               ,validation: {
 						            	   no_invovalidation: function (input) {
-						            		   if(Util03saSvc.NoINVOValidation(input, 'NO_INVO', 'no_invovalidation')){
+						            		   if (input.is("[name='NO_INVO']")) {
 						            			   manualDataBind(input, "NO_INVO");
-						            			   return true;
-						            		   }else{
-						            			   return false;
-						            		   }
+						            			   return Util03saSvc.NoINVOValidation(input, 'NO_INVO', 'no_invovalidation');
+				                               }
+						            		   return true;
 									    	}
 						               }
                     				}
@@ -410,7 +409,9 @@
                 				saOrdCclSvc.ocmList(ordCancelManagementDataVO.param).then(function (res) {
                 					$scope.ordCancelManagementDataVO.shipList = res.data.queryShipList;
                 					e.success(res.data.querylist);
-                    			});
+                    			}, function(err){
+            						e.error([]);
+            					});
                 			},
                 			update: function(e){
                 				var grd = $scope.ordCancelManagementkg;
@@ -454,7 +455,9 @@
 		                				e.success(res.data.results);
 		                				ordCancelManagementDataVO.inQuiry();
 		                				//$scope.ordCancelManagementkg.dataSource.read();
-		                			});
+		                			}, function(err){
+	            						e.error([]);
+	            					});
 		                			return defer.promise;
             	            	}else{
             	            		grd.cancelRow();
@@ -622,7 +625,9 @@
                 				saOrdCclSvc.orderCancel(param).then(function (res) {
 	                				defer.resolve(); 
 	                				$scope.ordCancelManagementkg.dataSource.read();
-	                			});
+	                			}, function(err){
+            						e.error([]);
+            					});
 	                			return defer.promise;
 	                		}
                 			return false;
