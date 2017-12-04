@@ -1,0 +1,264 @@
+<div data-ng-controller="ma.DashQaCtrl">
+    <div class="box-content-article">
+        <div class="article-view">
+			<!-- CHART -->
+			<div>
+			    <div class="jui-chart-row">	
+			    	<kendo-tooltip options="qa.tooltipOptions">
+						<kendo-grid id="divGrd" options="qa.gridQaVO">
+						</kendo-grid> 
+					</kendo-tooltip>
+				</div>
+			</div>
+        </div>
+    </div>
+</div>
+
+<!-- 공지사항 조회 그리드 -->
+<script id="ma_qa_template" type="text/x-kendo-template">
+     <tr data-uid="#= uid #">
+		<td class="ta-c">
+			<span class="ells"># if(DTS_INQREG !== ""){ #
+<co06-date-format origin-date="'#:DTS_INQREG#'">
+      						   # } #
+			</span>
+        </td>
+		<td class="ta-c">
+			<span class="ells"># if(NO_C !== ""){ #
+							   #: NO_C #
+      						   # } #
+			</span>
+        </td>
+		<td class="ta-c">
+			<span class="ells"># if(NM_C !== ""){ #
+							   #: NM_C #
+      						   # } #
+			</span>
+        </td>
+		<td class="ta-l">
+			<span class="ells"># if(DC_INQTITLE !== ""){ #
+							   #: DC_INQTITLE #
+      						   # } #
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells"># if(CNT_FILE > 0) { #
+							      <img src="/assets/img/common/file.png"/>
+                               # } #
+                               # if(DC_INQCTT !== ""){ #
+							   #: DC_INQCTT #
+							   #} #
+			</span>
+        </td>
+	</tr>
+</script>
+
+<script id="ma_qa_popup_template" type="text/x-kendo-template">
+<table class="signal" style="margin-top:-7px;">
+	<colgroup>
+      <col style="width: 11%;">
+      <col style="width: 18%;">
+      <col style="width: 11%;">
+      <col style="width: 26%;">
+      <col style="width: 11%;">
+      <col style="width: 21%;">
+    </colgroup>
+    <tbody data-uid="#= uid #">	
+	<tr class="border-bottom-line border-top-line">	
+		<th class="border-right-line">
+			문의번호
+		</td>
+		<td class="border-right-line">
+			# if(NO_QA){ 		# 
+			#: NO_QA 			# 
+			# } 				#
+		</td>
+		<th class="border-right-line">
+			가입자 번호
+		</td>
+		<td class="border-right-line">
+			# if(NO_C){ 		# 
+			#: NO_C 			# 
+			# } 				#
+		</td>
+		<td class="border-right-line">
+		</td>
+		<td>
+		</td> 
+	</tr>
+	<tr class="border-bottom-line">
+		<th class="border-right-line">
+			작성자
+		</td>
+		<td class="border-right-line">
+			# if(NM_C){         #
+			#: NM_C             #                             
+            # } 			    #			
+		</td>
+		<th class="border-right-line">
+			작성일시
+		</td>
+		<td class="border-right-line">
+			# if(DTS_INQREG){   #
+			<co06-date-format origin-date="'#:DTS_INQREG#'"> 
+            # } 			    #
+		</td>
+		<td class="border-right-line">			
+		</td>
+		<td>			
+		</td> 
+	</tr>
+	<tr class="border-bottom-line">
+		<th class="border-right-line">
+			문의자 전화번호
+		</td>
+		<td class="border-right-line">			
+			# if(NO_INQPHNE){   #
+			#: NO_INQPHNE       #                             
+            # } 			    #
+		</td>
+		<th class="border-right-line">
+			핸드폰 번호
+		</td>
+		<td class="border-right-line">			
+			# if(NO_INQCEPH){   #
+			#: NO_INQCEPH       #                             
+            # } 			    #
+		</td>
+		<th class="border-right-line">
+			이메일			
+		</td>
+		<td>			
+			# if(DC_INQEMI){    #
+			#: DC_INQEMI        #                             
+            # } 			    #
+		</td> 
+	</tr>
+	<tr class="border-bottom-line">
+		<th class="border-right-line">
+			문의제목
+		</td>
+		<td colspan="5">
+			# if(DC_INQTITLE){  #
+			#: DC_INQTITLE      #                             
+            # } 			    #
+		</td> 
+	</tr>
+	<tr class="border-bottom-line">
+		<th class="border-right-line">
+			문의내용
+		</td>
+		<td colspan="5" id="html-inq-ctt">			
+		</td> 
+	</tr>
+	<tr class="border-bottom-line">
+		<th class="border-right-line">
+			문의첨부파일
+		</td>
+		<td id="fileInfo" colspan="5" style="text-align:left;">
+		</td>
+	</tr>
+	</tbody>
+</table>
+</script>
+
+<style>
+table tbdoy tr th, table tbody tr td {
+	padding: 6px 7px;
+	text-align: left;
+	vertical-align: middle;
+}
+
+.not_pop_title{
+	padding: 10px;
+}
+/*
+    Increase the width of the edit form.
+    The default one is 400px.
+*/
+.k-edit-form-container{
+    width: 900px;
+}
+/*
+    Decrease the width of the edit form labels. The default one is 30%.
+    The new width should depend on the column titles.
+    Switch the text alignment to the left. By default, it is to the right.
+*/
+.k-popup-edit-form .k-edit-label{
+    width: 20%;
+    text-align: left;
+}
+/*
+    Increase the width of the textbox containers. The default one is 60%.
+    The sum of label and editor percentage widths should be around 90%, to make up for existing paddings.
+*/
+.k-popup-edit-form .k-edit-field{
+    width: 70%;
+}
+/*
+    Expand the edit textboxes and any other Kendo UI widgets.
+    In case of unexpected side effects, use widget-specific classes, instead of .k-widget.
+*/
+.k-popup-edit-form .k-edit-field > .k-textbox,
+.k-popup-edit-form .k-edit-field > .k-widget:not(.k-tooltip){
+    width: 98%;
+}
+.signal{    
+    width: 99%;
+    margin: 5px;
+}
+.border-bottom-line{	
+	border-bottom: 1px solid #eee;
+}
+.k-edit-form-container .k-edit-buttons{
+	border-style: none;
+}
+#example{
+    min-height: 200px;
+}
+#example .title {
+    font-weight: bold;
+    margin-bottom: 25px;
+}
+.search-wrapper {
+    width: 100%;
+}
+.query-match {
+	color: red;
+}
+.select-all-wrapper {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.selected-count {
+    float: right;
+    color: #aaa;
+}
+.k-treeview {
+    border-width: 1px!important;
+    padding: 5px;
+}
+.selectedName {
+    padding: 5px 10px;
+    background: #aaa;
+    color: white;
+    float: left;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    border-radius: 10px;
+} 
+.class-target-dropdown{
+	width:65%; 
+	display:inline-block; 
+	vertical-align:middle;
+}
+.class-target-button{
+	width:33%; 
+	display:inline-block; 
+	vertical-align:middle; 
+	text-align:right;
+}
+.k-editor-toolbar-wrap{
+	text-align: left;
+};
+</style>

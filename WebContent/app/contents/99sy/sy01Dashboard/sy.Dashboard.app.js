@@ -14,16 +14,24 @@
                     templateUrl	: "app/contents/99sy/sy01Dashboard/templates/sy.Dashboard.tpl.html",
                     controller  : "sy.DashboardCtrl as vm",
                     resolve		: {
-                        resData: ["AuthSvc", "$q", function (AuthSvc, $q) {
-                            var defer 	= $q.defer(),
-                                resData = {};
+                        resData: ["AuthSvc", "$q", 'UtilSvc', function (AuthSvc, $q, UtilSvc) {
+                        	var defer 	= $q.defer(),
+                            resData = {};
 
-                            AuthSvc.isAccess().then(function (result) {
-                                resData.access = result[0];
-                                defer.resolve(resData);
-                            });
-
-                            return defer.promise;
+	                        AuthSvc.isAccess().then(function (result) {
+	                            resData.access = result[0];
+	                        	var param = {
+	        	                	procedureParam: "USP_SY_01DASHBOARD07_GET"
+	                        	};
+	            	            
+	            				UtilSvc.getList(param).then(function (res) {
+	            					resData.mainOpen = (res.data.results[0].length > 0)? true : false;
+	            					resData.subOpen = (res.data.results[1].length > 0)? true : false;
+	                                defer.resolve(resData);
+	            				});
+	                        });
+	
+	                        return defer.promise;
                         }]
                     }
                 }

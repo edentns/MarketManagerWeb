@@ -8,9 +8,9 @@
      */
     angular.module("sy.Dashboard.controller")
         .controller("sy.SaCntCtrl", ['$scope', 'sy.DashboardSvc', '$timeout', 'UtilSvc', 
-            function ($scope, MaDashboardSvc, $timeout, UtilSvc) {
+            function ($scope, SyDashboardSvc, $timeout, UtilSvc) {
 	        $scope.$on('dashboard:query', function(event, payload) {
-	            MaDashboardSvc.setPayload(saCnt, payload);
+	            SyDashboardSvc.setPayload(saCnt, payload);
 	            $timeout(function() {
 	            	saCnt.find();
 	            });

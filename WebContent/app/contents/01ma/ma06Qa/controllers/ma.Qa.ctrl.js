@@ -74,7 +74,8 @@
         			UtilSvc.getCommonCodeList(param).then(function (res) {
         					if(res.data.length >= 1){
         						self.answerStatusBind = res.data;
-        						self.customOptions.dataSource = res.data;
+        						self.customOptions.dataSource = angular.copy(res.data);
+        						self.customOptions.dataSource.splice(0,1);
         					}
 	        			},
 					    function(err) {
@@ -258,6 +259,7 @@
                     dataSource: new kendo.data.DataSource({
                     	transport: {
                     		read: function(e){
+                    			qaDataVO.param.NO_SALE_C =qaDataVO.param.NO_C; 
                 				MaQaSvc.qaList(qaDataVO.param).then(function (res) {
                 					if(res.data.queryList){
                 						var data = res.data.queryList, i=0, sum=0;		
@@ -280,11 +282,12 @@
                 			update: function(e) {
                 				var defer = $q.defer();
                 				var param = e.data.models[0];
-                				
+                				param.NO_SALE_C = param.NO_C;
                 				MaQaSvc.qaUpdate(param).then(function (res) {    
                 					if(res.data){
 	                					if(qaDataVO.fileMngDataVO.dirty) {
-                							qaDataVO.fileMngDataVO.CD_REF1 = param.NO_QA;
+                							qaDataVO.fileMngDataVO.CD_REF1 = param.NO_C;
+                							qaDataVO.fileMngDataVO.CD_REF2 = param.NO_QA;
                 							qaDataVO.fileMngDataVO.doUpload(function(){
                 			        			alert("저장 되었습니다.");
                 			        		}, function() {
@@ -485,9 +488,14 @@
                 	edit: function (e) {
                 		var fileLst, fileUrl, fileSlrDataVO, fileMngDataVO, btnSave, shwTitle, htmlcode = "";
                 		
-                		fileLst = (function(noQa, cdAt){
+                		fileLst = (function(gubun, noC, noQa, cdAt){
                 							var returnDta = qaDataVO.fileDtLst.filter(function(ele){
-				                				return ((ele.CD_REF1 === noQa) && (ele.CD_AT === cdAt));
+                								if(gubun === 'slr') {
+                									return ((ele.NO_C === noC) && (ele.CD_REF1 === noQa) && (ele.CD_AT === cdAt));
+                								}
+                								if(gubun === 'mng') {
+                									return ((ele.CD_REF1 === noC) && (ele.CD_REF2 === noQa) && (ele.CD_AT === cdAt));
+                								}
 				                			});
                 							return returnDta;
 				            			});
@@ -497,8 +505,8 @@
 				        fileSlrDataVO = qaDataVO.fileSlrDataVO;
 	        			fileMngDataVO = qaDataVO.fileMngDataVO;
                 			
-            			fileSlrDataVO.currentDataList = fileLst(e.model.NO_QA, fileSlrDataVO.CD_AT);
-            			fileMngDataVO.currentDataList = fileLst(e.model.NO_QA, fileMngDataVO.CD_AT);
+            			fileSlrDataVO.currentDataList = fileLst('slr', e.model.NO_C, e.model.NO_QA, fileSlrDataVO.CD_AT);
+            			fileMngDataVO.currentDataList = fileLst('mng', e.model.NO_C, e.model.NO_QA, fileMngDataVO.CD_AT);
                 			
             			angular.forEach(fileSlrDataVO.currentDataList, function (data, index) {
 		                    htmlcode += "<span>"+(index+1)+".</span> <a href='"+fileUrl+"?NO_AT="+data.NO_AT+"&CD_AT="+data.CD_AT+"' download="+data.NM_FILE+"> "+data.NM_FILE+" </a></br>";
