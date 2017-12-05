@@ -207,9 +207,13 @@
 						               ,validation: {
 						            	   no_invo_inputvalidation: function (input) {
 						            		   if(echgDataVO.procShowCode.indexOf(echgDataVO.updateChange) > -1){
-						            			   if (input.is("[name='NO_INVO']")) {
-							            			   return Util03saSvc.NoINVOValidation(input, 'NO_INVO', 'no_invo_inputvalidation');
-					                                };						            			   
+						            			   if (input.is("[name='NO_INVO']") && input.val()){
+						            				   var result = Util03saSvc.NoINVOValidation(input, 'NO_INVO', 'no_invo_inputvalidation');		
+						            				   if(result){
+						            					   echgDataVO.manualDataBind(input, "NO_INVO_INPUT");
+						            				   };
+						            				   return result;
+					                               };						            			   
 						            		   	};
 						            		   	return true;
 						            	   	}
@@ -357,6 +361,29 @@
 	            	
 	            	return (shkChk && eqChk);
 	            };
+	            
+	            //팝업에 입력창들이 NG-IF 인하여 데이터 바인딩이 안되서 수동으로 데이터 바인딩을 함
+	            echgDataVO.manualDataBind = function(input, target){
+	            	var getUid = input.parents("table").attr("data-uid"),
+	            	    grid = $scope.echgkg,
+	            	    viewToRow = $("[data-uid='" + getUid + "']", grid.table),
+	            	    dataItem = grid.dataItem(viewToRow);				                	    
+	            	
+	            	if(target === "CD_PARS_INPUT" || target === "CD_HOLD"){
+	            		var i, chosenPureData = input.data().handler.dataSource.data();
+	            		for(i=0; i<chosenPureData.length; i++){
+	            			if(chosenPureData[i]["CD_DEF"] === input.val()){
+	            				dataItem[target] = chosenPureData[i];
+	            			}
+	            		};
+	            	}else if(target === "NOW_YN"){
+	            		dataItem[target] = input.is(":checked");
+	            	}else if(target === "RECEIVE_SET"){
+	            		dataItem[target] = $("#receive-group").find("[type=radio]:checked").val();
+	            	}else{
+	            		dataItem[target] = input.val();
+	            	};
+	            };	 
 	                
                 //검색 그리드
 	            var grdEchgVO = $scope.grdEchgVO = {
@@ -444,7 +471,7 @@
                 			},
                 			update: function(e){
                 				var whereIn = ['004','005'],
-            				    	echgGrd = $scope.echgkg;;
+            				    	echgGrd = $scope.echgkg;
                 				
                 				switch(echgDataVO.updateChange){
 	                				case '001' : {

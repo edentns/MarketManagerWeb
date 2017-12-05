@@ -227,12 +227,12 @@
 								            		   if(tkbkDataVO.sCode.indexOf(tkbkDataVO.marketDivisionCode) > -1 && tkbkDataVO.updateChange === '003'){
 								            			  if (input.is("[name='NO_INVO']")) {
 								            				  var result =  Util03saSvc.NoINVOValidation(input, 'NO_INVO', 'no_invovalidation');
-								            				  if(result){//유효성 체크하다 보면 바인딩이 안될때가 있음
+								            				  if(result){
 								            					  manualDataBind(input, "NO_INVO");
 								            				  }
 								            				  return result;
-							                               }
-								            		   };								            		   
+							                              }
+								            		   };
 								            		   return true;
 											    	}
 								               }

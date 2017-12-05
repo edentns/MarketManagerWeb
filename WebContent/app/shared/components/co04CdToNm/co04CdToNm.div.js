@@ -20,7 +20,8 @@
 		            			result = grd[i].NM_DEF;
 		                    };
 		                }
-	                	result = (result === '') ? nmd : result;
+	                	
+	                	result = (!result) ? '' : result;
 	                	
 	                	element.text(result);
                 	},0);

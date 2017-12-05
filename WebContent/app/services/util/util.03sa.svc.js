@@ -31,8 +31,8 @@
                  	input.attr("data-"+valicolunm+"-msg", "송장번호를 입력해 주세요.");
                     return false;
                 };
-			    if(input.is("[name='"+colunm+"']") && iValue && (iValue.trim().length > 20 || iValue.trim().length < 6)){
-			    	input.attr("data-"+valicolunm+"-msg", "송장번호룰 3자 이상 100자 이내로 입력해 주세요.");
+			    if(input.is("[name='"+colunm+"']") && iValue && (iValue.trim().length > 20 || iValue.trim().length < 8)){
+			    	input.attr("data-"+valicolunm+"-msg", "송장번호를 8자 이상 20자 이내로 입력해 주세요.");
                     return false;
 			    };
 			    if (input.is("[name='"+colunm+"']") && iValue && !regTest.test(iValue.trim())) {
@@ -61,17 +61,17 @@
 							var pattern1 = /^[0-9a-zA-Z]{9,12}$/i;
 							var pattern2 = /^[0-9a-zA-Z]{18}$/i;
 							var pattern3 = /^[0-9a-zA-Z]{25}$/i;
-							if(iValue.search(pattern1) == -1 && iValue.search(pattern2) == -1 && iValue.search(pattern3) == -1) {
+							if(iValue.search(pattern1) === -1 && iValue.search(pattern2) === -1 && iValue.search(pattern3) === -1) {
 							   input.attr("data-"+valicolunm+"-msg", parsName+"의 운송장 번호 패턴에 맞지 않습니다.");
 							   return false;
 							}
 						} else if (parsName === "EMS") {
 							var pattern = /^[a-zA-Z]{2}[0-9]{9}[a-zA-Z]{2}$/;
-							if(iValue.search(pattern) == -1) {
+							if(iValue.search(pattern) === -1) {
 								input.attr("data-"+valicolunm+"-msg", parsName+"의 운송장 번호 패턴에 맞지 않습니다.");
 							    return false;
 							}
-						} else if (parsName === "한진택배" || parsName == "현대택배") {
+						} else if (parsName === "한진택배" || parsName === "현대택배") {
 								if(!$.isNumeric(iValue)) {
 								    input.attr("data-"+valicolunm+"-msg", "운송장 번호는 숫자만 입력해주세요.");
 								    return false;
@@ -98,11 +98,11 @@
 						} else if (parsName === "TNT Express") {
 								var pattern1 = /^[a-zA-Z]{2}[0-9]{9}[a-zA-Z]{2}$/;
 								var pattern2 = /^[0-9]{9}$/;
-								if(iValue.search(pattern1) == -1 && iValue.search(pattern2) == -1) {
+								if(iValue.search(pattern1) === -1 && iValue.search(pattern2) === -1) {
 								   input.attr("data-"+valicolunm+"-msg", parsName+"의 운송장 번호 패턴에 맞지 않습니다.");
 								   return false;
 								}
-						};						
+						};
 					}
 				}
 				return true;

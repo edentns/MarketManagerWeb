@@ -48,8 +48,7 @@
         					shippingDataVO.betweenDateOptionMo = res.data[0].CD_DEF; //처음 로딩 때 초기 인덱스를 위하여
         				}
         			});
-	            }());	
-	            
+	            }());		            
 	            //배송 상태 디렉시브	
 	            var shipStatus = (function(){
     				var param = {
@@ -61,8 +60,7 @@
         					shippingDataVO.shipStatusOp = res.data;
         				}
         			});
-	            }());
-	            
+	            }());	            
 	            var parsCodeOp = new kendo.data.DataSource({
                     transport: {
                     	read: function(e){
@@ -107,7 +105,7 @@
                     CD_SHPSTAT    : { type: APP_SA_MODEL.CD_SHPSTAT.type     , editable: false, nullable: false },
                     CD_PARS       : { type: APP_SA_MODEL.CD_PARS.type        , editable: false, nullable: false },
                     CD_PARS_INPUT : { 
-                    					type: "string", 
+                    					type: "array", 
                     					editable: true,
                     					nullable: false,
 				                    	validation: {
@@ -116,6 +114,9 @@
 													input.attr("data-cd_pars_inputvalidation-msg", "택배사를 선택해 주세요.");
 												    return false;
 												}
+												/*if (input.is("[name='CD_PARS_INPUT']") && input.val()) {
+													shippingDataVO.manualDataBind(input, 'CD_PARS_INPUT');
+												}*/
 												return true;
 											}
 										}
@@ -126,13 +127,87 @@
                     					nullable: false,
 				                    	validation: {
 				                    		no_invovalidation: function (input) {
-				                    			if (input.is("[name='NO_INVO']")) {
-				                    				return Util03saSvc.NoINVOValidation(input, 'NO_INVO', 'no_invovalidation');
+				                    			if (input.is("[name='NO_INVO']") && !input.val()) {	
+				                    				input.attr("data-no_invovalidation-msg", "택배사를 선택해 주세요.");
+												    return false;
+				                    			};
+				                    			if (input.is("[name='NO_INVO']") && input.val()) {				                    				
+				                					var gridPop = angular.element(document.querySelector("div[kendo-grid]")).data("kendoGrid");
+				                					var dataItem = "", parsName = "", iValue = $.trim(input.val());
+				                					var valicolunm = "no_invovalidation";
+				                	            	var regTest = /^(([\d]+)\-|([\d]+))+(\d)+$/;
+				                									                					
+				                    				if (input.is("[name='NO_INVO']") && !iValue) {
+				                                     	input.attr("data-"+valicolunm+"-msg", "송장번호를 입력해 주세요.");
+				                                        return false;
+				                                    };
+				                    			    if(input.is("[name='NO_INVO']") && iValue && (iValue.trim().length > 20 || iValue.trim().length < 8)){
+				                    			    	input.attr("data-"+valicolunm+"-msg", "송장번호를 8자 이상 20자 이내로 입력해 주세요.");
+				                                        return false;
+				                    			    };
+				                    			    if (input.is("[name='NO_INVO']") && iValue && !regTest.test(iValue.trim())) {
+				                    					input.attr("data-"+valicolunm+"-msg", "송장 번호는 택배사에 따라 숫자 또는 숫자 와 '-'(짝대기, 연속으로 안됨) 조합으로 가능합니다.");
+				                    				    return false;
+				                    				};					                    				
+				                					
+				                    				dataItem = gridPop.dataItem($("[data-uid='" + input.closest("tr").parents("table").attr("data-uid") + "']", gridPop.table));
+				                    				
+				                					if(dataItem.CD_PARS_INPUT.NM_PARS){
+				                						parsName = dataItem.CD_PARS_INPUT.NM_PARS;
+				                						
+				                						if (parsName === "기타택배") {
+				                							var pattern1 = /^[0-9a-zA-Z]{9,12}$/i;
+				                							var pattern2 = /^[0-9a-zA-Z]{18}$/i;
+				                							var pattern3 = /^[0-9a-zA-Z]{25}$/i;
+				                							if(iValue.search(pattern1) === -1 && iValue.search(pattern2) === -1 && iValue.search(pattern3) === -1) {
+				                							   input.attr("data-"+valicolunm+"-msg", parsName+"의 운송장 번호 패턴에 맞지 않습니다.");
+				                							   return false;
+				                							};
+				                						} else if (parsName === "EMS") {
+				                							var pattern = /^[a-zA-Z]{2}[0-9]{9}[a-zA-Z]{2}$/;
+				                							if(iValue.search(pattern) === -1) {
+				                								input.attr("data-"+valicolunm+"-msg", parsName+"의 운송장 번호 패턴에 맞지 않습니다.");
+				                							    return false;
+				                							};
+				                						} else if (parsName === "한진택배" || parsName === "현대택배") {
+				                								if(!$.isNumeric(iValue)) {
+				                								    input.attr("data-"+valicolunm+"-msg", "운송장 번호는 숫자만 입력해주세요.");
+				                								    return false;
+				                								}else if( iValue.length != 10 && iValue.length != 12 ) {
+				                								    input.attr("data-"+valicolunm+"-msg", parsName+"의 운송장 번호는 10자리 또는 12자리의 숫자로 입력해주세요.");
+				                								    return false;
+				                								};
+				                						} else if (parsName === "경동택배") {
+				                							    if(!$.isNumeric(iValue)) {
+				                								    input.attr("data-"+valicolunm+"-msg", "운송장 번호는 숫자만 입력해주세요.");
+				                								    return false;
+				                							    }else if(iValue.length != 9 && iValue.length != 10 && iValue.length != 11) {
+				                								    input.attr("data-"+valicolunm+"-msg",parsName+"의 운송장 번호는 9자리 또는 10자리 또는 11자리의 숫자로 입력해주세요.");
+				                								    return false;
+				                							    };
+				                						} else if (parsName === "이노지스택배") {
+				                							    if(!$.isNumeric(iValue)) {
+				                								    input.attr("data-"+valicolunm+"-msg", "운송장 번호는 숫자만 입력해주세요.");
+				                								    return false;
+				                							    }else if(iValue.length > 13) {
+				                								    input.attr("data-"+valicolunm+"-msg",parsName+"의 운송장 번호는 최대 13자리의 숫자로 입력해주세요.");
+				                								    return false;
+				                							    };
+				                						} else if (parsName === "TNT Express") {
+				                								var pattern1 = /^[a-zA-Z]{2}[0-9]{9}[a-zA-Z]{2}$/;
+				                								var pattern2 = /^[0-9]{9}$/;
+				                								if(iValue.search(pattern1) === -1 && iValue.search(pattern2) === -1) {
+				                								   input.attr("data-"+valicolunm+"-msg", parsName+"의 운송장 번호 패턴에 맞지 않습니다.");
+				                								   return false;
+				                								};
+				                						};
+				                					}
+				                					//shippingDataVO.manualDataBind(input, 'NO_INVO');
 				                    			}
-												return true;
-											}
-										}
-				    				}
+			                					return true;
+				                    		}
+				    				 }
+                    }
                 };
 
                 APP_SA_MODEL.CD_ORDSTAT.fNm = "shippingDataVO.ordStatusOp";
@@ -193,14 +268,36 @@
 	        		dataTotal : 0,
 	        		resetAtGrd :"",
 	        		selectedNoMrk : "",
+	        		param : "",
 	        		parsCodeOptions : {
 	        			dataSource: parsCodeOp,
 	        			dataTextField: "NM_PARS_TEXT",
-                        dataValueField: "CD_PARS",
-                    	valuePrimitive: true
-	        		},
-	        		param : ""
-	            };   
+                        dataValueField: "CD_PARS"
+	        		}
+	            };      
+	            
+                //팝업에 입력창들이 NG-IF 인하여 데이터 바인딩이 안되서 수동으로 데이터 바인딩을 함
+                shippingDataVO.manualDataBind = function(input, target){
+	            	var getUid = input.parents("table").attr("data-uid"),
+	            	    grid = $scope.shippingkg,
+	            	    viewToRow = $("[data-uid='" + getUid + "']", grid.table),
+	            	    dataItem = grid.dataItem(viewToRow);				                	    
+	            	
+	            	if(target === "CD_PARS_INPUT"){
+	            		var i, chosenPureData = input.data().handler.dataSource.data();
+	            		for(i=0; i<chosenPureData.length; i++){
+	            			if(chosenPureData[i]["CD_PARS"] === input.val()){
+	            				dataItem[target] = chosenPureData[i];
+	            			}
+	            		};
+	            	}else if(target === "NOW_YN"){
+	            		dataItem[target] = input.is(":checked");	            		
+	            	}else if(target === "RECEIVE_SET"){
+	            		dataItem[target] = $("#receive-group").find("[type=radio]:checked").val();
+	            	}else{
+	            		dataItem[target] = input.val();
+	            	};
+	            };
 	            
 	            //조회
 	            shippingDataVO.inQuiry = function(){

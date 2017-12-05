@@ -232,12 +232,16 @@
 									    DC_ANSCTT:	   	   {	type: "string", 
 														    	validation: {
 														    		dc_anscttvalidation: function (input) {
-						  									    		if (input.is("[name='DC_ANSCTT']") && input.val() === "") {
+						  									    		if (input.is("[name='DC_ANSCTT']") && !input.val()) {
 			                                                            	input.attr("data-dc_anscttvalidation-msg", "답변 내용을 입력해 주세요.");
 			                                                                return false;
 			                                                            }
-					                                                  return true;
-					  									    	  }
+						  									    		if (input.is("[name='DC_ANSCTT']") && ($.trim(input.val()).length < 4 || $.trim(input.val()).length > 30000)){
+			                                                            	input.attr("data-dc_anscttvalidation-msg", "답변 내용을 4자 이상 30000자 이하로 써주세요.");
+			                                                                return false;
+			                                                            }
+						  									    		return true;
+					  									    	  	}
 					  									        },
 									    						editable: true
                     									   },
