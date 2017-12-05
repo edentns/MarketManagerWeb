@@ -52,13 +52,11 @@
                     },
     				fileMngDataVO : {
 	        			CD_AT:'009',
-	        			limitCnt: 5,
-	        			bImage: true
+	        			limitCnt: 5
     				},	 
     				fileSlrDataVO : {
 	        			CD_AT:'008',
-	        			limitCnt: 5,
-	        			bImage: true
+	        			limitCnt: 5
     				},	 
     				fileDtLst : "",
     				dataTotal : 0,

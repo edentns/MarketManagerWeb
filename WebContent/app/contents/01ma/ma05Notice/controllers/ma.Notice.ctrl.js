@@ -122,8 +122,7 @@
     				},
     				fileDataVO : {
 	        			CD_AT:'007',
-	        			limitCnt: 5,
-	        			bImage: true
+	        			limitCnt: 5
     				},	 
     				dataTotal : 0,
              	    resetAtGrd : "",
