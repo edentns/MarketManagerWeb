@@ -423,20 +423,12 @@
     													    	type: "string", 
     															editable: false,  
     															nullable: false
-<<<<<<< HEAD
     							        				   },
-=======
-    							        				   },
->>>>>>> branch 'master' of https://github.com/edentns/MarketManagerWeb.git
     							        DC_HTMLANSCTT:	   {
     													    	type: "string", 
     															editable: true,  
     															nullable: false
-<<<<<<< HEAD
     							        				   },
-=======
-    							        				   },
->>>>>>> branch 'master' of https://github.com/edentns/MarketManagerWeb.git
     							        DC_ANSCTT:	   	   {
     													    	type: "string", 
     															editable: true,  
@@ -564,8 +556,7 @@
                 		    	}
                 		    	$timeout(function () {
                                 	if(!page.isWriteable()) {
-                                		$(".k-grid-update").addClass("k-state-disabled");
-                                		$(".k-grid-update").click(stopEvent);
+                                		$(".k-grid-update").hide();
                                 	}
                                 });
                 		    }
@@ -578,10 +569,7 @@
                 
                 $timeout(function () {
              	    if(!page.isWriteable()) {            		   
-             		   $(".k-grid-add").addClass("k-state-disabled");    //todo
-             		   $(".k-grid-delete").addClass("k-state-disabled");
-        				   $(".k-grid-add").click(qaDataVO.stopEvent);
-        				   $(".k-grid-delete").click(qaDataVO.stopEvent);
+    					$("#divSyQaGrd .k-grid-toolbar").hide();
         		    };
         			   
         			syQaDataVO.asrStsBind();
