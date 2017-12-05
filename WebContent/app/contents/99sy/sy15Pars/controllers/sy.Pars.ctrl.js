@@ -23,7 +23,7 @@
 	    	    			valuePrimitive: true,
 	                	},
 	                	mngMrkMd: function() {
-	                		if(resData.csMrkDataSource[0].CD_DEF){
+	                		if(resData.csMrkDataSource.length != 0){
 	                			return resData.csMrkDataSource[0].CD_DEF;
 	                		}
 						}
@@ -102,7 +102,9 @@
 	            			}
 	            		}
 	            	}
-	            	mrkName.mngMrkMd = resData.csMrkDataSource[0].CD_DEF;
+	            	if(resData.csMrkDataSource.length != 0){
+	            		mrkName.mngMrkMd = resData.csMrkDataSource[0].CD_DEF;
+	            	}
 	            	self.search();
 	            };
 	            
