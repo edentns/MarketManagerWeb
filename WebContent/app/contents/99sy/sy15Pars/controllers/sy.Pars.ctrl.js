@@ -22,7 +22,11 @@
 	    	    			dataSource: resData.csMrkDataSource,
 	    	    			valuePrimitive: true,
 	                	},
-	                	mngMrkMd: resData.csMrkDataSource[0].CD_DEF
+	                	mngMrkMd: function() {
+	                		if(resData.csMrkDataSource[0].CD_DEF){
+	                			return resData.csMrkDataSource[0].CD_DEF;
+	                		}
+						}
 	                };
 	            
 	            var sy15ParsVO = $scope.sy15ParsVO = {
