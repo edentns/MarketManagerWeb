@@ -31,7 +31,7 @@
 	        			maxNames: 2
 	        		},
 	        		datesetting : {
-	        			dateType   : 'basic',
+	        			dateType   : 'market',
 						buttonList : ['current', '1Day', '1Week', '1Month'],
 						selected   : 'current',
 						period : {
