@@ -67,7 +67,7 @@
                         </tr>
                         <tr>
                             <th>부서/직급<span class="form-required">* </span></th>
-                            <td colspan="3">
+                            <td>
                                 <span data-ng-if="page.isWriteable()">
                                     <select class="form-control wid-x5" id="userDepart" title="부서선택"
                                             data-ng-model="syUserVO.selectedDepart"
@@ -84,6 +84,8 @@
                                     {{syUserVO.param.NM_DEPT}} / {{syUserVO.param.NM_RANK}}
                                 </span>
                             </td>
+                            <td></td>
+                            <td></td>
                         </tr>
                         <tr>
                             <th>직군/권한<span class="form-required">* </span></th>

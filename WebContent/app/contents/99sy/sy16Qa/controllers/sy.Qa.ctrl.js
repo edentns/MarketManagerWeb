@@ -41,13 +41,11 @@
                     fileMngDataVO : {
 	        			CD_AT:'009',
 	        			limitCnt: 5,
-	        			bImage: true,
 	        			currentDataList:[]
     				},	 
     				fileSlrDataVO : {     
 	        			CD_AT:'008',
 	        			limitCnt: 5,
-	        			bImage: true,
 	        			currentDataList:[]
     				},	 
     				fileDtLst : "",
@@ -275,6 +273,7 @@
 		                			},function(err){
 		                				e.error([]);
 		                			});
+    	                			syQaDataVO.fileSlrDataVO.currentDataList=[];
 		                			return defer.promise;     	                			        				
 		            			},
                 			update: function(e) {
@@ -302,6 +301,8 @@
 	                			},function(err){
 	                				e.error([]);
 	                			});
+	                			syQaDataVO.fileSlrDataVO.currentDataList=[];
+	                			syQaDataVO.fileMngDataVO.currentDataList=[];
 	                			return defer.promise;     	
                 			},
                     		},
