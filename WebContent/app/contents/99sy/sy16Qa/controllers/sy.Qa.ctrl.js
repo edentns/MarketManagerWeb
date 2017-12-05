@@ -423,12 +423,20 @@
     													    	type: "string", 
     															editable: false,  
     															nullable: false
+<<<<<<< HEAD
     							        				   },
+=======
+    							        				   },
+>>>>>>> branch 'master' of https://github.com/edentns/MarketManagerWeb.git
     							        DC_HTMLANSCTT:	   {
     													    	type: "string", 
     															editable: true,  
     															nullable: false
+<<<<<<< HEAD
     							        				   },
+=======
+    							        				   },
+>>>>>>> branch 'master' of https://github.com/edentns/MarketManagerWeb.git
     							        DC_ANSCTT:	   	   {
     													    	type: "string", 
     															editable: true,  

@@ -266,7 +266,7 @@
                 							required: {message: "마켓명을 입력하여 주세요."}
                 						}  
 									},
-                					NM_MRKDFT:   { type: "string" },
+                					NM_MRKDFT:   { type: "string", editable: false },
                 					DT_ITLSTART: { type: "string", editable: false },
                 					CD_ITLSTAT:  { type: "string", editable: false },
                 					DC_MRKID:    { type: "string", editable: true, validation: { required: {message: "마켓ID를 입력하여 주세요."} } },
@@ -303,13 +303,9 @@
        							  	  ,editable: true
        							  	  ,nullable: true
                 					},
-                					DC_SALEMNGURL: {
-                						type: "string", 
-                						nullable: false,
-                						validation: { required: {message: "판매관리URL을 입력하여 주세요."} } 
-                					},
-                					YN_USE:      { type: "string" },
-                					NM_NT:       { type: "string" },
+                					DC_SALEMNGURL: {type: "string", editable: false},
+                					YN_USE:     {type: "string" },
+                					NM_NT:      {type: "string", editable: false},
                 					DTS_INSERT: {type: "string", editable: false},
                 					DTS_UPDATE: {type: "string", editable: false},
                 					NM_UPDATE : {type: "string", editable: false}
@@ -384,7 +380,7 @@
 	          		           		 return returnAPIMsg;
 	          		           	 },
 	    	   				headerAttributes: gridHeaderAttributes, attributes:{class:"ta-l"}},
-        		           {field: "DC_SALEMNGURL", title: "<span class='form-required'>* </span>판매관리URL", width: 250,
+        		           {field: "DC_SALEMNGURL", title: "판매관리URL", width: 250,
 	   	   					headerAttributes: gridHeaderAttributes,
 	   	   				    attributes: {class:"ta-l", style:"text-overflow:ellipsis; white-space:nowrap; overflow:hidden;"}},
         		           {field: "YN_USE",      title: "사용여부",    width: 80,
