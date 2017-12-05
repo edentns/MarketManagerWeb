@@ -22,11 +22,7 @@
 	    	    			dataSource: resData.csMrkDataSource,
 	    	    			valuePrimitive: true,
 	                	},
-	                	mngMrkMd: function() {
-	                		if(resData.csMrkDataSource.length != 0){
-	                			return resData.csMrkDataSource[0].CD_DEF;
-	                		}
-						}
+	                	mngMrkMd: resData.csMrkDataSource.length != 0 ? resData.csMrkDataSource[0].CD_DEF : ""
 	                };
 	            
 	            var sy15ParsVO = $scope.sy15ParsVO = {
@@ -279,6 +275,13 @@
 	            		];
 		            	localSelf.edit = function(e) {
 		            		var self = this;
+		            		var ls = localSelf;
+		            		if(ls.ParsCodeList.length == 0){
+		            			var grid = $("#grid"+ls.iIndex).data("kendoGrid").dataSource;
+		            			grid.cancelChanges();
+		            			alert("관리마켓을 선택후 검색을 눌러주세요.");
+		            			return;
+		            		}
 		            		if(self._data[0].DC_RMK1 == ""){
 		            			self._data[0].DC_RMK1 = $scope.mrkName.mngMrkMd;
 		            			if(self.options.boxTitle == "발송"){
