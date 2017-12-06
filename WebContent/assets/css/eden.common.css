@@ -571,6 +571,11 @@ form[name="businessForm"]:after {content: ''; display: block; clear: both;}
 .k-grid-header .k-header>.k-link, .k-header, .k-treemap-title {
     color: white;
 }
+
+.k-link {
+    color: #333;
+}
+
 .border-right-line{    
 	border-right: 1px solid #eee;    
 }
