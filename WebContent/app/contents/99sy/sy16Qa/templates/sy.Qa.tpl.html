@@ -80,15 +80,18 @@
 				# }            		#
 			</span>	        
         </td>		
-		<td class="ta-c">
+		<td class="ta-l">
             <span class="ells">
 				# if(DC_INQTITLE){ 	#
 				#: DC_INQTITLE     	#
 				# }            		#
 			</span>	        
         </td>
-		<td class="ta-c">
+		<td class="ta-l">
             <span class="ells">
+				# if(CNT_FILE > 0) { #
+					<img src="/assets/img/common/file.png"/>
+                # } #
 				# if(DC_INQCTT){ 	#
 				#: DC_INQCTT     	#
 				# }            		#
@@ -108,8 +111,11 @@
 				# }            		#
 			</span>	        
         </td>
-		<td class="ta-c">
+		<td class="ta-l">
             <span class="ells">
+				# if(M_CNT_FILE > 0) { #
+					<img src="/assets/img/common/file.png"/>
+                # } #
 				# if(DC_ANSCTT){ 	#
 				#: DC_ANSCTT     	#
 				# }            		#
@@ -266,6 +272,12 @@
 
 
 <style>
+table tbdoy tr th, table tbody tr td {
+	padding: 6px 7px;
+	text-align: left;
+	vertical-align: middle;
+}
+
 .not_pop_title{
 	padding: 10px;
 }

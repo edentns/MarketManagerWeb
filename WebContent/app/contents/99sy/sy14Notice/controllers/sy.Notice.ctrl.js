@@ -199,12 +199,7 @@
 	                											type: "string",
 	                    										defaultValue: $scope.userInfo.NM_EMP,
 	                    										nullable: false //true 일때 defaultValue가 안 됨
-                    									   },
-                    					SY_FILES: 		   {
-                    											type: "string", 
-                    											editable: true, 
-                    											nullable: false
-                    									   }		
+                    									   }	
                     				}
                     			}
                     		},
@@ -214,46 +209,39 @@
                		            {
 								   field: "ROW_NUM",
 								   title: "번호",
-								   width: 30,
+								   width: 40,
 								   headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 10px"}
                		            },
             		            {
                		        	   field: "CD_NOTICE",
                		        	   title: "공지구분",
-               		        	   width: 100,
+               		        	   width: 70,
                		        	   headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 10px"}
                		            },
 	            		        {
            		        	       field: "NM_SUBJECT",
            		        	       title: "제목",
-           		        	       width: 150,
+           		        	       width: 250,
            		        	       headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 10px"}
            		        	    },
             		            {
             		        	   field: "DC_HTMLCONTENT",
             		               title: "공지내용",
-            		               width: 120,
             		               headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 10px"}
             		            },
             		            {
             		        	   field: "DTS_INSERT",
             		               title: "공지일시",
-            		               width: 70,
+            		               width: 150,
             		               headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 10px"}
             		               //format: "{0: yyyy-MM-dd HH:mm:ss}"
             		            },
             		            {
             		        	   field: "NO_WRITE",
             		               title: "작성자",
-            		               width: 80,
+            		               width: 100,
             		               headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 10px"}
-            		            },
-            		            {
-            		        	   field: "SY_FILES",
-            		        	   title: "첨부파일여부",
-            		        	   width: 50,
-            		        	   headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 10px"}
-           		        	    }
+            		            }
                     	],  	
                     	editable: {
                     		mode: "popup",
