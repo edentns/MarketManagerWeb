@@ -104,6 +104,7 @@
                     QT_ORD        : { type: APP_SA_MODEL.QT_ORD.type         , editable: false, nullable: false },
                     CD_SHPSTAT    : { type: APP_SA_MODEL.CD_SHPSTAT.type     , editable: false, nullable: false },
                     CD_PARS       : { type: APP_SA_MODEL.CD_PARS.type        , editable: false, nullable: false },
+                    AM_CJM        : { type: APP_SA_MODEL.AM_CJM.type         , editable: false, nullable: false },
                     CD_PARS_INPUT : { 
                     					type: "array", 
                     					editable: true,
@@ -218,7 +219,7 @@
                               [APP_SA_MODEL.NM_MRK       , APP_SA_MODEL.NO_MRKITEMORD ],
                               [APP_SA_MODEL.NO_MRKITEM   , APP_SA_MODEL.NO_MRKREGITEM ],
                               [APP_SA_MODEL.NM_MRKITEM   , APP_SA_MODEL.NM_MRKOPT     ],
-                              [APP_SA_MODEL.AM_ORDSALEPRC, APP_SA_MODEL.AM_PCHSPRC    ],
+                              [APP_SA_MODEL.AM_ORDSALEPRC, APP_SA_MODEL.AM_CJM	      ],
                               [APP_SA_MODEL.NM_PCHR      , APP_SA_MODEL.NM_CONS       ],
                               [APP_SA_MODEL.NO_PCHRPHNE  , APP_SA_MODEL.NO_CONSHDPH   ],
                               [APP_SA_MODEL.DC_PCHREMI   , APP_SA_MODEL.DC_CONSNEWADDR],

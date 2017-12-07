@@ -65,11 +65,12 @@
 	            	cdEchgrjt = (function(){
 	    				var param = {
 	    					lnomngcdhd: "SYCH00068",
-	    					lcdcls: "SA_000027"
+	    					lcdcls: "SA_000027",
+	    					customnoc: "00000"
 	    				};
 	        			UtilSvc.getCommonCodeList(param).then(function (res) {
 	        				if(res.data.length >= 1){
-	        					echgDataVO.cdEchgrjtOp.dataSource = res.data;
+	        					echgDataVO.cdEchgrjtOp = res.data;
 	        				}
 	        			});
 	            	}()),
@@ -256,13 +257,7 @@
                         enable: false,
 	                    valuePrimitive: true
 	        		},
-	        		cdEchgrjtOp:{
-	        			dataSource: [],
-	        			dataTextField:"NM_DEF",
-	                    dataValueField:"CD_DEF",
-                		optionLabel : "교환거부코드를 선택해 주세요 ",	                    
-	                    valuePrimitive: true
-	        		},
+	        		cdEchgrjtOp: [],
 	        		dateOptions : {										//DATE PICKER
 	        			parseFormats: ["yyyyMMddHHmmss"], 				//이거 없으면 값이 바인딩 안됨
         	            animation: {
@@ -419,20 +414,44 @@
                     	var cntnr = e.container,
                     		dsModel = e.model,
                     		cdpars = cntnr.find("select[name=CD_PARS]"),
+                    		cdechgrjtrsn = cntnr.find("select[name=CD_ECHGRJTRSN]"),
                     		chosenDS = "";
                  
                     	echgDataVO.curCode = dsModel.CODE;
                     	
-                    	if(echgDataVO.updateChange === '001'){
-                    		chosenDS = echgDataVO.shpList.filter(function(ele){
-    	            			return (ele.DC_RMK1 === e.model.NO_MRK && ele.DC_RMK3 === '002');
-    	            		});
-                    	}else if(echgDataVO.updateChange === '003'){
-                    		chosenDS = echgDataVO.shpList.filter(function(ele){
-    	            			return (ele.DC_RMK1 === e.model.NO_MRK && ele.DC_RMK3 === '003');
-    	            		});
-                    	}                    	
-                    	
+                    	switch(echgDataVO.updateChange) {
+                    		case "001" : {
+                    			chosenDS = echgDataVO.shpList.filter(function(ele){
+        	            			return (ele.DC_RMK1 === e.model.NO_MRK && ele.DC_RMK3 === '002');
+        	            		});
+                    			break;
+                    		} 
+                    		case "002" : {
+                    			chosenDS = echgDataVO.cdEchgrjtOp.filter(function(ele){
+        	            			return (ele.DC_RMK1 === e.model.NO_MNGMRK);
+        	            		});
+                    			
+                    			cdechgrjtrsn.kendoDropDownList({
+        	            			dataSource : chosenDS,
+        		        			dataTextField:"NM_DEF",
+        		                    dataValueField:"CD_DEF",
+        	                		optionLabel : "교환거부코드를 선택해 주세요 ",	                    
+        		                    valuePrimitive: true
+        	            		});
+                    			
+                    			break;
+                    		}
+                    		case "003" : {
+                    			chosenDS = echgDataVO.shpList.filter(function(ele){
+        	            			return (ele.DC_RMK1 === e.model.NO_MRK && ele.DC_RMK3 === '003');
+        	            		});
+                    			break;
+                    		}
+                    		default : {
+                    			break;
+                    		}                    		
+                    	}             	
+                    	                    	
                     	cdpars.kendoDropDownList({
 	            			dataSource : chosenDS,
 	                		dataTextField : "NM_PARS_TEXT",

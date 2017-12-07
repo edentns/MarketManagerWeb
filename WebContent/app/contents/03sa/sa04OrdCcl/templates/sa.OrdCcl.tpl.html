@@ -216,6 +216,38 @@
 					<textarea class="k-textbox k-state-disabled" name="NM_CCLHRNKRSN" data-bind="value: NM_CCLHRNKRSN" disabled="disabled" style="width:100%; height:100px; overflow-y: scroll;"></textarea>
 				</td> 
 			</tr>
+			#if(NO_MNGMRK === 'SYMM170901_00001'){#
+			<tr class="border-bottom-line">
+				<td class="active border-right-line">
+					주문취소 상세코드 
+				</td>
+				<td>
+					<select kendo-drop-down-list
+               		 	k-options="ordCancelManagementDataVO.cancelLowCodeOp"
+						name="CD_CCLLRKRSN"
+						data-bind="value: CD_CCLLRKRSN"
+                		style="width: 100%">
+					</select>
+				</td>
+				<td colspan="2">
+				</td> 
+			</tr>
+			#}#
+			#if(NO_MNGMRK === 'SYMM170901_00001'){#
+			<tr class="border-bottom-line">
+				<td class="active border-right-line">
+					주문취소 상세사유
+				</td>
+				<td colspan="3">			
+					<textarea class="k-textbox k-state-disabled" 
+									name="NM_CCLLRKRSN" 
+									data-bind="value: NM_CCLLRKRSN" 
+									disabled="disabled" 
+									style="width:100%; height:100px; overflow-y: scroll;">
+					</textarea>
+				</td> 
+			</tr>
+			#}#	
 			<tr class="border-bottom-line">
 				<td class="active border-right-line">
 					<code>*</code>취소거부 구분<br/>	
@@ -313,14 +345,5 @@
 .signal{    
     width: 99%;
     margin: 5px;
-}
-.border-right-line{    
-	border-right: 1px solid #eee;    
-}
-.border-top-line{	
-	border-top: 1px solid #eee;
-}
-.border-bottom-line{	
-	border-bottom: 1px solid #eee;
 }
 </style>

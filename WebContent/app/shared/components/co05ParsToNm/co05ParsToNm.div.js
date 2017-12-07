@@ -23,7 +23,7 @@
 	                	
 	                	for(var i=0, leng=deliverDS.length; i<leng; i++){
 	                		if(deliverDS[i].CD_PARS === nmd){
-		            			result = grd[i].NM_DEF;
+		            			result = deliverDS[i].NM_DEF;
 		                    };
 		                }
 	                	

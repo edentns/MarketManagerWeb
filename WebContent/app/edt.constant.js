@@ -179,6 +179,7 @@
         DC_HTMLANSCTT : { field: "DC_HTMLANSCTT", type: "string" , width: "100px", textAlign: "left"  , title: "답변내용"},  
         NM_ANS        : { field: "NM_ANS"       , type: "string" , width: "100px", textAlign: "center", title: "답변자"},  
         DTS_ANSREG    : { field: "DTS_ANSREG"   , type: "string" , width: "150px", textAlign: "center", title: "답변등록일시"},   
-        YN_DEL		  : { field: "YN_DEL"   	, type: "string" , width: "150px", textAlign: "center", title: ""}	
+        YN_DEL		  : { field: "YN_DEL"   	, type: "string" , width: "150px", textAlign: "center", title: ""},	
+        AM_CJM		  : { field: "AM_CJM"   	, type: "number" , width: "100px", textAlign: "right", title: "정산예정금액"}
 	});
 }());
