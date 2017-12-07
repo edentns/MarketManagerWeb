@@ -54,14 +54,29 @@
             			UtilSvc.getCommonCodeList(param).then(function (res) {
             				if(res.data.length >= 1){
             					ordCancelManagementDataVO.cancelCodeOp.dataSource = res.data;
+            				};
+            			});
+    	            }()),
+    	            //취소  상세 사유 코드 드랍 박스 실행	
+    	            cancelRowReasonCode = (function(){
+        				var param = {
+        					lnomngcdhd: "SYCH00056",
+        					lcdcls: "SA_000015",
+    	    				customnoc: "00000"
+        				};
+            			UtilSvc.getCommonCodeList(param).then(function (res) {
+            				if(res.data.length >= 1){
+            					ordCancelManagementDataVO.cancelLowCodeOp.dataSource =  res.data.filter(function(ele){
+            						return (ele.DC_RMK2);
+            					}); 
             				}
             			});
     	            }()),
     	            //취소 거부 구분 코드 드랍 박스 실행	
     	            cancelRejectCode = (function(){
         				var param = {
-        					lnomngcdhd: "SYCH00065",
-        					lcdcls: "SA_000024",
+        					lnomngcdhd: "SYCH00063",
+        					lcdcls: "SA_000022",
         					mid: 'undefined',
         					customnoc: '00000'
         				};
@@ -295,7 +310,13 @@
     					dataSource: [],
     					dataTextField: "NM_DEF",
                         dataValueField: "CD_DEF",
-                        optionLabel : "주문취소코드를 선택해 주세요 ",
+                        //optionLabel : "주문취소코드를 선택해 주세요 ",
+                        enable: false
+    				},   
+    				cancelLowCodeOp : {
+    					dataSource: [],
+    					dataTextField: "NM_DEF",
+                        dataValueField: "CD_DEF",
                         enable: false
     				},   
     				dateOptions : {										//DATE PICKER
@@ -496,14 +517,14 @@
                 	        title: ""
                 	    },
                 		template: kendo.template($.trim($("#ocm_popup_template").html())),
-                		confirmation: false
+                		confirmation: false            
                 	},
                 	edit: function(e){
                 		var dataVo = $scope.ordCancelManagementDataVO,              			
                 			ddlRejectCodeSel = e.container.find("select[name=cancel_reject_code]"),
                 			inputDataSource = "",
                 			rejectCodeDS = "";
-                		
+                		                		
                 		//창을 한 번 껐다가 키면 잔상이 남아 있으서 초기화 시켜줌
                 		//비동기로 안하면 멍청이가 됨
                 		if(ddlRejectCodeSel.length > 0 && dataVo.cancelRjCd !== ""){

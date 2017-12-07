@@ -78,7 +78,8 @@
                     AM_PCHSPRC     : { type: APP_SA_MODEL.AM_PCHSPRC.type     , editable: false, nullable: false },
                     DT_SND         : { type: APP_SA_MODEL.DT_SND.type         , editable: false, nullable: false },                    
                     DC_PCHRREQCTT  : { type: APP_SA_MODEL.DC_PCHRREQCTT.type  , editable: false, nullable: false },
-                    YN_DEL  	   : { type: APP_SA_MODEL.YN_DEL.type  		  , editable: false, nullable: false }
+                    YN_DEL  	   : { type: APP_SA_MODEL.YN_DEL.type  		  , editable: false, nullable: false },
+                    AM_CJM		   : { type: APP_SA_MODEL.AM_CJM.type  		  , editable: false, nullable: false }
                 };
 
                 APP_SA_MODEL.CD_ORDSTAT.fNm  = "ordAllDataVO.ordStatusOp";
@@ -88,7 +89,7 @@
                               [APP_SA_MODEL.NM_MRK       , APP_SA_MODEL.NO_MRKITEMORD ],
                               [APP_SA_MODEL.NO_MRKITEM   , APP_SA_MODEL.NO_MRKREGITEM ],
                               [APP_SA_MODEL.NM_MRKITEM   , APP_SA_MODEL.NM_MRKOPT     ],
-                              [APP_SA_MODEL.AM_ORDSALEPRC, APP_SA_MODEL.AM_PCHSPRC    ],
+                              [APP_SA_MODEL.AM_ORDSALEPRC, APP_SA_MODEL.AM_CJM    	  ],
                               [APP_SA_MODEL.NM_PCHR      , APP_SA_MODEL.NM_CONS       ],
                               [APP_SA_MODEL.NO_PCHRPHNE  , APP_SA_MODEL.NO_CONSHDPH   ],
                               [APP_SA_MODEL.DC_PCHREMI   , APP_SA_MODEL.DC_CONSNEWADDR],

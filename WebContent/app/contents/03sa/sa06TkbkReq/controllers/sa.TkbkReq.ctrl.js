@@ -61,7 +61,8 @@
     	            cdTkbkrjt = (function(){
         				var param = {
         					lnomngcdhd: "SYCH00065",
-        					lcdcls: "SA_000024"
+        					lcdcls: "SA_000024",
+	    					customnoc: "00000"        						
         				};
             			UtilSvc.getCommonCodeList(param).then(function (res) {
             				if(res.data.length >= 1){
@@ -312,7 +313,7 @@
 	                        enable: false,
 		                    valuePrimitive: true
 		        		},
-		        		cdTkbkrjtOp:{
+		        		cdTkbkrjtOp: {
 		        			dataSource: [],
 		        			dataTextField:"NM_DEF",
 		                    dataValueField:"CD_DEF",
@@ -545,9 +546,13 @@
                     		
                     	// 반품 거절
                     	}else if(tkbkDataVO.updateChange === "002"){
+                    		// 나중에 댑스 생기면 주석 풀기
+                    		/*var chosenDS = tkbkDataVO.cdTkbkrjtOp.filter(function(ele){
+    	            			return (ele.DC_RMK1 === e.model.NO_MNGMRK);
+    	            		});*/
+                			                    		                    		
 		            		$timeout(function(){
-		                    	var ddlRjt = e.container.find("select[name=CD_TKBKRJT]").data("kendoDropDownList");                    		          
-		                    	
+		                    	var ddlRjt = e.container.find("select[name=CD_TKBKRJT]").data("kendoDropDownList");            
 		                    	ddlRjt.select(0);
 		                    	ddlRjt.trigger("change");                			
 		                	},50);

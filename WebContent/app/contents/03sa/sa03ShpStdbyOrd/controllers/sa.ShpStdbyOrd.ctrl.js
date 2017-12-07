@@ -581,6 +581,11 @@
                 											editable: false,
                 											nullable: false
                 									   },
+                					AM_CJM: 	       {
+		           											type: "number", 
+		        											editable: false,
+		        											nullable: false
+        									   		   },
                 					AM_PCHSPRC: 	   {
                 											type: "number",
                     										editable: false, 
@@ -907,8 +912,8 @@
 		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
 		                        },
 	                           	{
-	                                field: "AM_PCHSPRC",
-	                                title: "구입가",
+	                                field: "AM_CJM",
+	                                title: "정산예정금액",
 	                                width: 100,
 	                                format: '{0:c}',
 			                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
