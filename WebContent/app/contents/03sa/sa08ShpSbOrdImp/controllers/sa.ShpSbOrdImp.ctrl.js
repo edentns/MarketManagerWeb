@@ -75,8 +75,7 @@
 		            	
 		            	saShpSbOrdImpSvc.excelExecute(dataItem).then(function (resData) {
 		    				$scope.shpbyordkg.dataSource.data(resData.data.failList);
-		    				var successCnt = Number(resData.data.totalCnt) - Number(resData.data.failList.length);
-		    				alert("요청하신 총 "+resData.data.totalCnt+"건 중 "+successCnt+"건 등록완료");
+		    				alert("요청하신 총 "+resData.data.totalCnt+"건 중 "+resData.data.successCnt+"건 등록완료");
 		                });
 		            }; 
 		            
