@@ -51,46 +51,56 @@
 						if(iIndex !== 0) gridContentTemplate = gridContentTemplate + "&nbsp;/&nbsp;";
 						
 						if(gridColVal[iIndex].field.indexOf("AM") === 0) {
-							gridContentTemplate = gridContentTemplate + "#= kendo.toString("+gridColVal[iIndex].field+",'C0', 'ko-KR') #\n";
+							if(gridColVal[iIndex].field.indexOf("AM_CJM") === 0) {
+								gridContentTemplate += "#if("+gridColVal[iIndex].field+" && (CD_ORDSTAT === '006' || CD_ORDSTAT === '007')){ #\n #= kendo.toString(0,'C0', 'ko-KR') # \n #} else {# \n #= kendo.toString("+gridColVal[iIndex].field+",'C0', 'ko-KR') # \n #}#";
+							}else{
+								gridContentTemplate += "#= kendo.toString("+gridColVal[iIndex].field+",'C0', 'ko-KR') #\n";
+							}							
 						}else if(gridColVal[iIndex].field.indexOf("CD") === 0 && gridColVal[iIndex].field.indexOf("CD_PARS_TKBK") !== 0 && gridColVal[iIndex].fNm !== "" && gridColVal[iIndex].fNm !== undefined) {
-							gridContentTemplate = gridContentTemplate + "<co04-cd-to-nm cd=\"#:"+gridColVal[iIndex].field+"#\" nm-box=\""+gridColVal[iIndex].fNm+"\">\n";
+							gridContentTemplate += "<co04-cd-to-nm cd=\"#:"+gridColVal[iIndex].field+"#\" nm-box=\""+gridColVal[iIndex].fNm+"\">\n";
 						}else if(gridColVal[iIndex].field.indexOf("CD_PARS_TKBK") === 0 && gridColVal[iIndex].fNm !== "" && (gridColVal[iIndex].fNm)) {
-							gridContentTemplate = gridContentTemplate + "<co05-pars-to-nm no-mrk=\"#: NO_MRK #\" cd=\"#:"+gridColVal[iIndex].field+"#\" nm-box=\""+gridColVal[iIndex].fNm+"\">\n";
+							gridContentTemplate += "<co05-pars-to-nm no-mrk=\"#: NO_MRK #\" cd=\"#:"+gridColVal[iIndex].field+"#\" nm-box=\""+gridColVal[iIndex].fNm+"\">\n";
 						}else if(gridColVal[iIndex].field.indexOf("DTS") === 0) {
 							gridContentTemplate += "<co06-date-format origin-date=\"\'#:"+ gridColVal[iIndex].field+"#\'\"> \n";
+						}else if(gridColVal[iIndex].field.indexOf("YN_CONN") === 0) {
+							gridContentTemplate += "# if("+gridColVal[iIndex].field+" !== 'N'){#\n Y\n #}else{#\n N\n#}#";						
 						}else {
-							gridContentTemplate = gridContentTemplate + "#: "+gridColVal[iIndex].field+" #\n";
+							gridContentTemplate += "#: "+gridColVal[iIndex].field+" #\n";
 						}
-					    gridContentTemplate = gridContentTemplate + "# }else{ }#\n";
+					    gridContentTemplate += "# }else{ }#\n";
 					}
-					gridContentTemplate = gridContentTemplate + "</div>\n";
+					gridContentTemplate += "</div>\n";
 	        	}else {
-	        		gridContentTemplate = gridContentTemplate + "<div class=\"custom-style ";
+	        		gridContentTemplate += "<div class=\"custom-style ";
 				
 	        		if(gridColVal.textAlign === "center"){
-						gridContentTemplate = gridContentTemplate + "ta-c";
+						gridContentTemplate += "ta-c";
 					}else if(gridColVal.textAlign === "right"){
-						gridContentTemplate = gridContentTemplate + "ta-r";	
+						gridContentTemplate += "ta-r";	
 					}else{
-						gridContentTemplate = gridContentTemplate + "ta-l";
+						gridContentTemplate += "ta-l";
 					}
 					
-					gridContentTemplate = gridContentTemplate + "\">\n";
+					gridContentTemplate += "\">\n";
 					
 					if(gridColVal.field.indexOf("AM") === 0) {
-						gridContentTemplate = gridContentTemplate + "# if("+gridColVal.field+"){ #\n #= kendo.toString("+gridColVal.field+",'C0', 'ko-KR') #\n #}#";
+						if(gridColVal.field.indexOf("AM_CJM") === 0) {
+							gridContentTemplate += "#if("+gridColVal.field+" && (CD_ORDSTAT === '006' || CD_ORDSTAT === '007')){#\n #= kendo.toString(0,'C0', 'ko-KR') # \n #} else {# \n #= kendo.toString("+gridColVal.field+",'C0', 'ko-KR') # \n #}#";
+						}else{
+							gridContentTemplate += "# if("+gridColVal.field+"){ #\n #= kendo.toString("+gridColVal.field+",'C0', 'ko-KR') #\n #}#";
+						}						
 					}else if(gridColVal.field.indexOf("DTS") === 0) {
 						gridContentTemplate += "<co06-date-format origin-date=\"\'#:"+ gridColVal.field+"#\'\"> \n";	
 					}else if(gridColVal.field.indexOf("CD") === 0 && gridColVal.field.indexOf("CD_PARS_TKBK") !== 0 && gridColVal.fNm !== "" && gridColVal.fNm !== undefined) {
-						gridContentTemplate = gridContentTemplate + "# if("+gridColVal.field+"){ #\n <co04-cd-to-nm cd=\"#:"+gridColVal.field+"#\" nm-box=\""+gridColVal.fNm+"\">\n #}#";
+						gridContentTemplate += "# if("+gridColVal.field+"){ #\n <co04-cd-to-nm cd=\"#:"+gridColVal.field+"#\" nm-box=\""+gridColVal.fNm+"\">\n #}#";
 					}else if(gridColVal.field.indexOf("CD_PARS_TKBK") === 0 && gridColVal.fNm !== "" && (gridColVal.fNm)) {
-						gridContentTemplate = gridContentTemplate + "<co05-pars-to-nm no-mrk=\"#: NO_MRK #\" cd=\"#:"+gridColVal.field+"#\" nm-box=\""+gridColVal.fNm+"\">\n";
+						gridContentTemplate += "<co05-pars-to-nm no-mrk=\"#: NO_MRK #\" cd=\"#:"+gridColVal.field+"#\" nm-box=\""+gridColVal.fNm+"\">\n";
 					}else if(gridColVal.field.indexOf("YN_CONN") === 0) {
-						gridContentTemplate = gridContentTemplate + "# if("+gridColVal.field+" !== 'N'){#\n Y\n #}else{#\n N\n#}#";
+						gridContentTemplate += "# if("+gridColVal.field+" !== 'N'){#\n Y\n #}else{#\n N\n#}#";					
 					}else {
-						gridContentTemplate = gridContentTemplate + "# if("+gridColVal.field+"){ #\n #: "+gridColVal.field+" #\n #}#";
+						gridContentTemplate += "# if("+gridColVal.field+"){ #\n #: "+gridColVal.field+" #\n #}#";
 					}					
-				    gridContentTemplate = gridContentTemplate + "\n</div>\n";
+				    gridContentTemplate += "\n</div>\n";
 	        	}
 			    return gridContentTemplate;
             };
@@ -982,6 +992,27 @@
 			this.removeHtmlTag = (function(html) {
 				return html.replace(/<(\/)?([a-zA-Z]*)(\s[a-zA-Z]*=[^>]*)?(\s)*(\/)?>/ig, "");				
 			});
+			
+			/**
+			 * 파일 업로드시 dirty 트루인것을 가져와서 업로드 실행
+			 * @param imgVO 배열
+			 * @returns 
+			 */
+			this.fileSaveExe = function (list) {					
+				var exeList = [];
+            	for(var i = 0 ; i < list.length ; i++){
+            		if(list[i].dirty){
+            			exeList.push(list[i]);
+            		}
+            	}
+            	for(var i = 0 ; i < exeList.length ; i++){
+            		exeList[i].doUpload(function() {
+					}, function() {
+	        			alert('이미지 업로드를 실패하였습니다.');
+	        			return;
+	        		});
+            	}
+			};
 		}
 	]);
 }());
