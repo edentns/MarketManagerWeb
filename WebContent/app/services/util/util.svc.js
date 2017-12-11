@@ -982,6 +982,27 @@
 			this.removeHtmlTag = (function(html) {
 				return html.replace(/<(\/)?([a-zA-Z]*)(\s[a-zA-Z]*=[^>]*)?(\s)*(\/)?>/ig, "");				
 			});
+			
+			/**
+			 * 파일 업로드시 dirty 트루인것을 가져와서 업로드 실행
+			 * @param imgVO 배열
+			 * @returns 
+			 */
+			this.fileSaveExe = function (list) {					
+				var exeList = [];
+            	for(var i = 0 ; i < list.length ; i++){
+            		if(list[i].dirty){
+            			exeList.push(list[i]);
+            		}
+            	}
+            	for(var i = 0 ; i < exeList.length ; i++){
+            		exeList[i].doUpload(function() {
+					}, function() {
+	        			alert('이미지 업로드를 실패하였습니다.');
+	        			return;
+	        		});
+            	}
+			};
 		}
 	]);
 }());

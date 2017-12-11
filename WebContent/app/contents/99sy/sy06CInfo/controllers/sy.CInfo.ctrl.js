@@ -217,6 +217,7 @@
 	                        		var a = $("#grid").data("kendoGrid");
 	        	                	a.dataSource.sync();
 	        	                	vo.fileSave();
+	        	                	alert("저장되었습니다.");
 	                        		vo.reload();
 	                            });
 	                        }
@@ -249,25 +250,10 @@
 					};
 					
 					vo.fileSave = function() {
-		        		if(vo.fileBsnsVO.dirty) {
-		        			vo.fileBsnsVO.doUpload(function(){
-				        		if(vo.fileCommVO.dirty) {
-				        			vo.fileCommVO.doUpload(function(){
-					        			alert('성공하였습니다.');
-					        		}, function() {
-					        			alert('통신판매업신고증 파일업로드 실패하였습니다.');
-					        		});
-				        		}
-				        		else {
-				        			alert('성공하였습니다.');
-				        		}
-			        		}, function() {
-			        			alert('사업자등록증 파일업로드 실패하였습니다.');
-			        		});
-		        		}
-		        		else {
-		        			alert('성공하였습니다.');
-		        		}
+						var imgList = [];
+		            	imgList.push(vo.fileBsnsVO);
+		            	imgList.push(vo.fileCommVO);
+		            	UtilSvc.fileSaveExe(imgList);
 		        	};
 
 	                // 등록전 유효성을 체크한다.
