@@ -758,36 +758,16 @@
 	            };
 	            
 	            bssInfoDataVO.fileSave = function() {
-	        		if(bssInfoDataVO.fileMainVO.dirty) {
-		        		bssInfoDataVO.fileMainVO.CD_REF1 = bssInfoDataVO.CD_ITEM;
-		        		bssInfoDataVO.fileMainVO.doUpload(function(){
-			        		if(bssInfoDataVO.fileSmallVO.dirty) {
-				        		bssInfoDataVO.fileSmallVO.CD_REF1 = bssInfoDataVO.CD_ITEM;
-				        		bssInfoDataVO.fileSmallVO.doUpload(function(){
-				        			if(bssInfoDataVO.fileDExVO.dirty) {
-						        		bssInfoDataVO.fileDExVO.CD_REF1 = bssInfoDataVO.CD_ITEM;
-						        		bssInfoDataVO.fileDExVO.doUpload(function(){
-						        			if(bssInfoDataVO.fileDImageVO.dirty) {
-								        		bssInfoDataVO.fileDImageVO.CD_REF1 = bssInfoDataVO.CD_ITEM;
-								        		bssInfoDataVO.fileDImageVO.doUpload(function(){
-								        		}, function() {
-								        			alert('상세이미지 첨부파일업로드 실패하였습니다.');
-								        		});
-							        		}
-						        		}, function() {
-						        			alert('상세설명 첨부파일업로드 실패하였습니다.');
-						        		});
-					        		}
-				        		}, function() {
-				        			alert('작은이미지 첨부파일업로드 실패하였습니다.');
-				        		});
-			        		}
-			        		else {
-			        		}
-		        		}, function() {
-		        			alert('대표이미지 첨부파일업로드 실패하였습니다.');
-		        		});
-	        		}
+	            	var imgList = [];
+	            	bssInfoDataVO.fileMainVO.CD_REF1 = bssInfoDataVO.CD_ITEM;
+	            	imgList.push(bssInfoDataVO.fileMainVO);
+	            	bssInfoDataVO.fileSmallVO.CD_REF1 = bssInfoDataVO.CD_ITEM;
+	            	imgList.push(bssInfoDataVO.fileSmallVO);
+	            	bssInfoDataVO.fileDExVO.CD_REF1 = bssInfoDataVO.CD_ITEM;
+	            	imgList.push(bssInfoDataVO.fileDExVO);
+	            	bssInfoDataVO.fileDImageVO.CD_REF1 = bssInfoDataVO.CD_ITEM;
+	            	imgList.push(bssInfoDataVO.fileDImageVO);
+	            	UtilSvc.fileSaveExe(imgList);
 	        	};
 	            
 	            // 옵션구분

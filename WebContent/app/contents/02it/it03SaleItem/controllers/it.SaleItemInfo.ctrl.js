@@ -178,10 +178,10 @@
 	            						e.success(res.data.results[0]);
 	            						saleInfoDataVO.NM_COM = res.data.results[1][0].NM_C;
 	            						if(!page.isWriteable()){
-	            	    					var grid = $("#gridOpt"+bssInfoDataVO.param.CD_OPTTP).data("kendoGrid");
+	            	    					var grid = $("#gridOpt"+saleInfoDataVO.param.CD_OPTTP).data("kendoGrid");
 	            	    					grid.setOptions({editable : false});   
 	            	    					grid.hideColumn(5);
-	            	    					$("#gridOpt"+bssInfoDataVO.param.CD_OPTTP+" .k-grid-toolbar").hide();
+	            	    					$("#gridOpt"+saleInfoDataVO.param.CD_OPTTP+" .k-grid-toolbar").hide();
 	            	    				}
 	            					});
 	                			},
@@ -309,10 +309,10 @@
 	            					UtilSvc.getList(param).then(function (res) {
 	            						e.success(res.data.results[0]);
 	            						if(!page.isWriteable()){
-	            							var grid = $("#gridOpt"+bssInfoDataVO.param.CD_OPTTP).data("kendoGrid");
+	            							var grid = $("#gridOpt"+saleInfoDataVO.param.CD_OPTTP).data("kendoGrid");
 	            	    					grid.setOptions({editable : false});   
 	            	    					grid.hideColumn(7);
-	            	    					$("#gridOpt"+bssInfoDataVO.param.CD_OPTTP+" .k-grid-toolbar").hide();
+	            	    					$("#gridOpt"+saleInfoDataVO.param.CD_OPTTP+" .k-grid-toolbar").hide();
 	            	    				}
 	            					});
 	                			},
@@ -754,36 +754,16 @@
 	            };
 	            
 	            saleInfoDataVO.fileSave = function() {
-	        		if(saleInfoDataVO.fileMainVO.dirty) {
-		        		saleInfoDataVO.fileMainVO.CD_REF1 = saleInfoDataVO.CD_ITEM;
-		        		saleInfoDataVO.fileMainVO.doUpload(function(){
-			        		if(saleInfoDataVO.fileSmallVO.dirty) {
-				        		saleInfoDataVO.fileSmallVO.CD_REF1 = saleInfoDataVO.CD_ITEM;
-				        		saleInfoDataVO.fileSmallVO.doUpload(function(){
-				        			if(saleInfoDataVO.fileDExVO.dirty) {
-						        		saleInfoDataVO.fileDExVO.CD_REF1 = saleInfoDataVO.CD_ITEM;
-						        		saleInfoDataVO.fileDExVO.doUpload(function(){
-						        			if(saleInfoDataVO.fileDImageVO.dirty) {
-								        		saleInfoDataVO.fileDImageVO.CD_REF1 = saleInfoDataVO.CD_ITEM;
-								        		saleInfoDataVO.fileDImageVO.doUpload(function(){
-								        		}, function() {
-								        			alert('상세이미지 첨부파일업로드 실패하였습니다.');
-								        		});
-							        		}
-						        		}, function() {
-						        			alert('상세설명 첨부파일업로드 실패하였습니다.');
-						        		});
-					        		}
-				        		}, function() {
-				        			alert('작은이미지 첨부파일업로드 실패하였습니다.');
-				        		});
-			        		}
-			        		else {
-			        		}
-		        		}, function() {
-		        			alert('대표이미지 첨부파일업로드 실패하였습니다.');
-		        		});
-	        		}
+	            	var imgList = [];
+	            	saleInfoDataVO.fileMainVO.CD_REF1 = saleInfoDataVO.CD_ITEM;
+	            	imgList.push(saleInfoDataVO.fileMainVO);
+	            	saleInfoDataVO.fileSmallVO.CD_REF1 = saleInfoDataVO.CD_ITEM;
+	            	imgList.push(saleInfoDataVO.fileSmallVO);
+	            	saleInfoDataVO.fileDExVO.CD_REF1 = saleInfoDataVO.CD_ITEM;
+	            	imgList.push(saleInfoDataVO.fileDExVO);
+	            	saleInfoDataVO.fileDImageVO.CD_REF1 = saleInfoDataVO.CD_ITEM;
+	            	imgList.push(saleInfoDataVO.fileDImageVO);
+	            	UtilSvc.fileSaveExe(imgList);
 	        	};
 	            
 	            // 옵션구분
