@@ -509,7 +509,7 @@
                 			}
                 		},
                 		saveChanges: function(e) {
-                			console.log("1");
+                			//console.log("1");
                 		},
                 		change: function(e){
                 			if(e.field === 'CD_PARS' || e.field === 'NO_INVO'){
@@ -851,7 +851,7 @@
                                	{
                                     field: "NO_INVO",
                                     title: "<span class='form-required'>* </span>송장번호",
-                                    width: 100,
+                                    width: 150,
 			                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}                  
 		                        },
 		                        {

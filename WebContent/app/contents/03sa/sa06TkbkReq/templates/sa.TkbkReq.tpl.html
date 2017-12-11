@@ -140,11 +140,11 @@
 			#}#
 		</td>
 		<td class="active border-right-line">
-			주문번호
+			상품주문번호
 		</td>
 		<td>
-			#if(NO_MRKORD){ #
-			#: NO_MRKORD #
+			#if(NO_MRKITEMORD){ #
+			#: NO_MRKITEMORD #
 			#}#
 		</td>
 	</tr>
@@ -308,7 +308,7 @@
 			</td>
 			<td class="border-right-line">
 				<div data-ng-show="tkbkDataVO.updateChange === '003' && tkbkDataVO.etcCostCode === 'Y' && ngIfdata(tkbkDataVO.gCode, '#: CODE #')">
-					<input name="CD_HOLD_FEE" data-bind="value: CD_HOLD_FEE" kendo-numeric-text-box k-min="0" k-max="1000000000" style="width: 100%;" />
+					<input name="CD_HOLD_FEE" data-bind="value: CD_HOLD_FEE" kendo-numeric-text-box k-options="tkbkDataVO.cdHoldFee" style="width: 100%;" />
 				</div>
 			</td>
 		</tr>		
@@ -389,15 +389,6 @@
 .signal{
     width: 99%;
     margin: 5px;
-}
-.border-right-line{    
-	border-right: 1px solid #eee;    
-}
-.border-top-line{	
-	border-top: 1px solid #eee;
-}
-.border-bottom-line{	
-	border-bottom: 1px solid #eee;
 }
 /* .k-grid-content > table > tbody > tr > td > div.never-fix{
 	border-bottom: solid 1px #bbdceb !important;

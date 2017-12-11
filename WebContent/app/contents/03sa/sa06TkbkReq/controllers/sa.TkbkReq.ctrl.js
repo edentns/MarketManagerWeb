@@ -332,6 +332,12 @@
 	        	                }
 	        	            }
 		        		},
+		        		cdHoldFee : {
+		        			min : "0", 
+		        			max : "1000000",
+		        			format : "C0",
+		        			step : 100
+		        		},
 		        		userInfo : JSON.parse($window.localStorage.getItem("USER")).NM_EMP,
 		        		updateChange : "",
 		        		dataTotal : 0,

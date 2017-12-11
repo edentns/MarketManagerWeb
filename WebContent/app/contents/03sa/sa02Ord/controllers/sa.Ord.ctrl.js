@@ -50,7 +50,8 @@
     	            cancelReasonCode : (function(){
         				var param = {
         					lnomngcdhd: "SYCH00056",
-        					lcdcls: "SA_000015"
+        					lcdcls: "SA_000015",
+	    					customnoc: "00000"
         				};
             			UtilSvc.getCommonCodeList(param).then(function (res) {
             				if(res.data.length >= 1){

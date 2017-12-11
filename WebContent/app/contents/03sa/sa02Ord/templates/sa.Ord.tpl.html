@@ -137,11 +137,11 @@
 			#}#
 		</td>
 		<td class="active border-right-line">
-			주문번호
+			상품주문번호
 		</td>
 		<td>
-			#if(NO_MRKORD){ #
-			#: NO_MRKORD #
+			#if(NO_MRKITEMORD){ #
+			#: NO_MRKITEMORD #
 			#}#
 		</td>
 	</tr>
@@ -160,9 +160,9 @@
 			상품명
 		</td>
 		<td colspan="3">
-			#if(NM_MRKITEM){ #
-			#: NM_MRKITEM #
-			#}#
+			#if(NM_MRKITEM){	 #
+			#: NM_MRKITEM 		#
+			#}					#
 		</td>
 	</tr>
 	<tr class="border-bottom-line">
@@ -230,18 +230,6 @@
 	<a class="k-button k-button-icontext k-grid-edit"><span class="k-icon k-i-close"></span>주문취소</a>        
 	<a class="k-button k-button-icontext k-grid-save"><span class="k-icon k-i-check"></span>주문 확정</a>  
 </script>
-
-<!-- 
-	사용가능한  아이콘
-	  k-i-undo
-	  k-i-redo
-	  k-i-lock
-	  k-i-clock
-	  k-i-calendar
-	  print
-	  delete 모양이 다름
-	  k-i-custom 
---> 
 
 <style>
 .k-edit-form-container{
