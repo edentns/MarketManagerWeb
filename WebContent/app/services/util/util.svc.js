@@ -85,7 +85,7 @@
 					
 					if(gridColVal.field.indexOf("AM") === 0) {
 						if(gridColVal.field.indexOf("AM_CJM") === 0) {
-							gridContentTemplate += "#if("+gridColVal.field+" && (CD_ORDSTAT === '006' || CD_ORDSTAT === '007')){#\n #= kendo.toString(0,'C0', 'ko-KR') # \n #} else {# \n #= kendo.toString("+gridColVal.field+",'C0', 'ko-KR') # \n #}#";
+							gridContentTemplate += "#if("+gridColVal.field+" && (CD_ORDSTAT === '006' || CD_ORDSTAT === '007')){#\n #= kendo.toString(0,'C0', 'ko-KR') # \n #} else { if(kendo.toString("+gridColVal.field+",'C0', 'ko-KR') === null) {#\n #= '' #\n #} else {# \n #= kendo.toString("+gridColVal.field+",'C0', 'ko-KR') # \n #}}#";
 						}else{
 							gridContentTemplate += "# if("+gridColVal.field+"){ #\n #= kendo.toString("+gridColVal.field+",'C0', 'ko-KR') #\n #}#";
 						}						
