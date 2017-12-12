@@ -24,20 +24,6 @@
 	    			});
             	}());
 	            
-            	//취소 사유 코드 드랍 박스 실행	
-            	var cancelReasonCode = (function(){
-    				var param = {
-    					lnomngcdhd: "SYCH00056",
-    					lcdcls: "SA_000015"
-    				};
-        			UtilSvc.getCommonCodeList(param).then(function (res) {
-        				if(res.data.length >= 1){
-        					ordInfoDataVO.cancelCodeOptions.dataSource = res.data;
-        					ordInfoDataVO.inputs.CD_CCLRSN = res.data[0];
-        				}
-        			});
-	            }());       
-            	
 	            var ordInfoDataVO = $scope.ordInfoDataVO = { 	
 	        		kind : "",
 	        		no: "",
@@ -94,7 +80,23 @@
 	            	ShpStdbyOrdSvc.shpbyordInfo(param).then(function (res) {   		
         				if(res.data.NO_ORD){        					
         					ordInfoDataVO.ds = res.data;
-        					
+
+        	            	//취소 사유 코드 드랍 박스 실행	
+        	            	var cancelReasonCode = (function(){
+        	    				var param = {
+        	    					lnomngcdhd: "SYCH00056",
+        	    					lcdcls: "SA_000015",
+        	    					customnoc: "00000",
+        	    					mid: ordInfoDataVO.ds.NO_MNGMRK
+        	    				};
+        	        			UtilSvc.getCommonCodeList(param).then(function (res) {
+        	        				if(res.data.length >= 1){
+        	        					ordInfoDataVO.cancelCodeOptions.dataSource = res.data;
+        	        					ordInfoDataVO.inputs.CD_CCLRSN = res.data[0];
+        	        				}
+        	        			});
+        		            }());      
+        	            	
         					$timeout(function(){
         						if(res.data.CD_PARS){
     								var selectDDL = angular.element("#CD_PARS").data("kendoDropDownList");
@@ -229,7 +231,8 @@
 		            	if(confirm("현재 주문을 취소 하시겠습니까?")){
 		            		var defer = $q.defer(),
 	        			 		param = $.extend(ordInfoDataVO.inputs, ordInfoDataVO.ds);
-	    				
+
+	    				    param.CD_CCLRSN = param.CD_CCLRSN.CD_DEF;
 	        				saOrdSvc.orderCancel(param).then(function (res) {
 	            				defer.resolve();            				
 	            				ordInfoDataVO.ordCancelPopOptionsClose();

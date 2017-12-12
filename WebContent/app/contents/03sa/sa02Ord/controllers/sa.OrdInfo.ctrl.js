@@ -125,10 +125,11 @@
 	            //주문취소
 	            ordInfoDataVO.doOrdCancel = function(){
 	            	if(this.inputs.CD_CCLRSN === ""){
+	            		alert("주문취소 코드를 선택해주세요.");
 	            		return;
 	            	}
-	            	if(this.inputs.DC_CCLRSNCTT === "" || this.inputs.DC_CCLRSNCTT.length < 10){  
-	            		alert("주문취소사유가 없거나 10미만입니다.")
+	            	if(this.inputs.DC_CCLRSNCTT === "" || this.inputs.DC_CCLRSNCTT.length > 1000){  
+	            		alert("주문취소 사유가 없거나 1000자 이상입니다.");
 	            	    return;
 	            	}
 	            	if(confirm("현재 주문을 취소 하시겠습니까?")){

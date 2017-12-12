@@ -50,11 +50,12 @@
     	            cancelReasonCode = (function(){
         				var param = {
         					lnomngcdhd: "SYCH00056",
-        					lcdcls: "SA_000015"
+        					lcdcls: "SA_000015",
+	    					customnoc: "00000"
         				};
             			UtilSvc.getCommonCodeList(param).then(function (res) {
             				if(res.data.length >= 1){
-            					shpbyordDataVO.cancelCodeOp.dataSource = res.data;
+            					shpbyordDataVO.cancelCodeOp = res.data;
             				}
             			});
     	            }());
@@ -84,11 +85,7 @@
 	        		ordStatusMo : "*",
 	        		betweenDateOptionOp : [],
 	        		betweenDateOptionMo : "",
-	        		cancelCodeOp : {
-    					dataSource: [],
-    					dataTextField: "NM_DEF",
-                        dataValueField: "CD_DEF"
-    				},   				
+	        		cancelCodeOp : [],   				
 	        		cancelCodeMo : "",
 	        		shipCodeTotal : "",
 	        		updateChange : "",
@@ -358,15 +355,22 @@
                         this.cancelRow();
                     },
                     edit: function(e){
-                    	e.container.find("select[name=CD_CCLRSN]").kendoDropDownList({
-                				dataSource : shpbyordDataVO.cancelCodeOp.dataSource,
-                    			dataTextField : "NM_DEF",
-	                    		dataValueField : "CD_DEF"
-                		});
                     	if(shpbyordDataVO.flag){
-                    		var ddl = $("select[name=CD_CCLRSN]").data("kendoDropDownList");
-	                		ddl.select(0);
-	                		ddl.trigger("change");
+	                    	var cntnr = e.container,
+	                		cdcclrsn = cntnr.find("select[name=CD_CCLRSN]"),
+	                		chosenDS = "";
+	                		
+	                		chosenDS = shpbyordDataVO.cancelCodeOp.filter(function(ele){
+		            			return (ele.DC_RMK1 === e.model.NO_MNGMRK);
+		            		});
+	
+	                		cdcclrsn.kendoDropDownList({
+		            			dataSource : chosenDS,
+			        			dataTextField:"NM_DEF",
+			                    dataValueField:"CD_DEF",
+		                		optionLabel : "취소사유코드를 선택해 주세요 ",	                    
+			                    valuePrimitive: true
+		            		});
                     	}
                 	},
             		cancel: function(e){
