@@ -21,7 +21,7 @@
             					ordDataVO.ordMrkNameOp = res.data;
             				}
             			});		
-    	            }()),
+    	            }),
     	            orderStatus : (function(){
         				var param = {
         					lnomngcdhd: "SYCH00048",
@@ -55,7 +55,7 @@
         				};
             			UtilSvc.getCommonCodeList(param).then(function (res) {
             				if(res.data.length >= 1){
-            					ordDataVO.cancelCodeOp = res.data;
+            					ordDataVO.cancelCodeOp.dataSource = res.data;
             				}
             			});
     	            }())
@@ -182,7 +182,13 @@
 	        		ordStatusMo : "*",
 	        		betweenDateOptionOp : [],
 	        		betweenDateOptionMo : "",
-	        		cancelCodeOp : [],
+	        		cancelCodeOp : {
+            			dataSource : [],
+	        			dataTextField:"NM_DEF",
+	                    dataValueField:"CD_DEF",
+                		optionLabel : "취소사유코드를 선택해 주세요 ",	                    
+	                    valuePrimitive: true      
+	        		},
 	        		cancelCodeMo : "",
 	        		dataTotal : 0,
 	        		resetAtGrd :"",
@@ -331,7 +337,8 @@
 		                			return defer.promise;
             	            	}else{
             	            		$scope.ordkg.cancelRow();
-                        			angular.element($(".k-checkbox:eq(0)")).prop("checked",false);
+            	            		angular.element($("#grid_chk_master")).prop("checked",false);
+                        			//angular.element($(".k-checkbox:eq(0)")).prop("checked",false);
             	            	}	                					
                 			},
                 			parameterMap: function(e, operation) {
@@ -343,7 +350,8 @@
                 		change: function(e){
                 			var data = this.data();                			
                 			ordDataVO.dataTotal = $scope.ordkg.dataSource.total();
-                			angular.element($(".k-checkbox:eq(0)")).prop("checked",false);
+                			//angular.element($(".k-checkbox:eq(0)")).prop("checked",false)
+                			angular.element($("#grid_chk_master")).prop("checked",false);
                 		},
                 		serverPaging: true,
                 		page: 1,   		
@@ -367,27 +375,21 @@
                 	editable: {
                 		mode: "popup",
                 		window : {
-                	        title: ""
+                	        title: "",
+                        	close : function(e){
+                        		angular.element($("#grid_chk_master")).prop("checked",false);
+                        	}
                 	    },
                 		template: kendo.template($.trim($("#ord_popup_template").html())),
                 		confirmation: false
                 	},
-                	edit: function(e){
-                		var cntnr = e.container,
-                		cdcclrsn = cntnr.find("select[name=CD_CCLRSN]"),
-                		chosenDS = "";
+                	edit: function(e){                		
+                		var s = e.container.find("select[name=CD_CCLRSN]").data("kendoDropDownList"),
+                		    em = e.model.NO_MNGMRK;
                 		
-                		chosenDS = ordDataVO.cancelCodeOp.filter(function(ele){
-	            			return (ele.DC_RMK1 === e.model.NO_MNGMRK);
-	            		});
-
-                		cdcclrsn.kendoDropDownList({
-	            			dataSource : chosenDS,
-		        			dataTextField:"NM_DEF",
-		                    dataValueField:"CD_DEF",
-	                		optionLabel : "취소사유코드를 선택해 주세요 ",	                    
-		                    valuePrimitive: true
-	            		});
+                		s.dataSource.data(ordDataVO.cancelCodeOp.dataSource.filter(function(ele){
+	            			return (ele.DC_RMK1 === em);
+	            		}));
                 	},
                 	resizable: true,
                 	rowTemplate: kendo.template($.trim(grdRowTemplate)),
@@ -492,6 +494,5 @@
                 };
                 
                 $scope.ordDataVO.cookieSearchPlay();
-                	            
             }]);
 }());
