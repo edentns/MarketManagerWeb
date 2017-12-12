@@ -283,6 +283,7 @@
 						inputParam.data[0].ARR_NO_C = $scope.noticeDataVO.allSelectTargetModel;    
 						$scope.noticeDataVO.allSelectTargetModel = [];
 					}
+					inputParam.data[0].NO_WRITE = $scope.userInfo.NO_EMP;
 					return inputParam;
 				};
 	            	                      
@@ -306,9 +307,13 @@
                     	dataSource: new kendo.data.DataSource({
                     		transport: {
                     			read: function(e) {                   
-                					UtilSvc.getList(noticeDataVO.param).then(function (res) {          						
-                						e.success(res.data.results[0]);
-                					});
+                					UtilSvc.getList(noticeDataVO.param).then(function (res) {
+                						if(res.data.results[0]){
+                							e.success(res.data.results[0]);
+                						}else{
+                							e.error([]);
+                						}
+                					});                					
                     			},
                     			create: function(e) {
     	                			var defer = $q.defer(),
@@ -347,10 +352,12 @@
                 						    paramFunction = noticeDataVO.paramFunc(param);;
                     					
                     					MaNoticeSvc.noticeDelete(paramFunction).then(function(res) {
-    	    	                			$scope.gridNoticeVO.dataSource.read();
-    	    	                			defer.resolve();
-        	                			},function(err){
-        	                				e.error([]);
+                    						if(res.data){
+        	    	                			$scope.gridNoticeVO.dataSource.read();
+                    						}else{
+                	                			e.error([]);                	                			
+                    						}
+    	    	                			defer.resolve();	
         	                			});
                     					noticeDataVO.deleteOrdUpdate = "";
                     				}else{
@@ -368,15 +375,14 @@
     	                			        		});
     	                		        		}else{
     	                		        			alert('성공하였습니다.');
-    	                		        		}    	           
+    	                		        		}    	          
         	                					
     	                						$scope.nkg.dataSource.read();    	        	                		
         	                				}else{
+        	                					e.error([]);
         	                					alert("수정 실패하였습니다.!! 연구소에 문의 부탁드립니다.");
         	                				}
         	                				defer.resolve(); 
-        	                			},function(err){
-        	                				e.error([]);
         	                			});
         	                			
                     				}                    				
@@ -450,6 +456,11 @@
 																}
 	                    						    	   },
 	                   				    NO_C: 		   	   {
+																type: "string", 
+																editable: false, 
+																nullable: false
+												    	   },
+	                   				    NM_C: 		   	   {
 																type: "string", 
 																editable: false, 
 																nullable: false
@@ -620,10 +631,10 @@
                     	        }
                     	    },
                     		template: kendo.template($.trim($("#ma_notice_popup_template").html())),
-                    		confirmation: false,
-                    	    destroy: true
+                    		confirmation: false
                     	},	
                     	edit: function (e) {
+                    		$scope.memSearchPopGrd.repeaterItems = [];
                     		/*var editor = $("#k-edi").data("kendoEditor");
 
                             // attach a click handler on the tool button, which opens the ImageBrowser dialog
@@ -717,6 +728,9 @@
                                 multiSelect.dataSource.filter({});
                                 multiSelect.value(arraySplit);
                                 multiSelect.trigger("change");
+                                
+
+                                $scope.memSearchPopGrd.repeaterItems = e.model.NM_C.split(",");
                                
                                 $timeout(function () {
                                 	if(!page.isWriteable()) {
@@ -916,6 +930,12 @@
         			title: "가입자 검색",
         			show: function(e){        		           
         				angular.element(document.querySelector("#memberSearchSub")).focus();
+        			        				        				
+    					$scope.treeViewPop.element.find(".k-checkbox").removeAttr("checked").trigger("change");
+                        for (var i = 0; i < $scope.memSearchPopGrd.repeaterItems.length; i++) {
+                        	var item = $scope.treeViewPop.findByText($scope.memSearchPopGrd.repeaterItems[i]);
+                            item.find(".k-checkbox").first().click();
+                        };        				          	    
         			},
         			searchKeyUp: function(keyEvent){
         				var scopeTreeView = $scope.treeViewPop;

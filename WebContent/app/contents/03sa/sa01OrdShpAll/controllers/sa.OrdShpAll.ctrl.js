@@ -213,7 +213,11 @@
                     				    NO_ORD : noOrd
                                     };                   				
                 					saOrdShpAllSvc.orderDetailList(param).then(function (res) {
-	            						e.success(res.data);			                   				                    					
+                						if(res.data){
+                							e.success(res.data);
+                						}else{
+                							e.error([]);
+                						}	            									                   				                    					
                 					}, function(err){
                 						e.error([]);
                 					});         
@@ -229,9 +233,10 @@
                             requestFailed: "주문정보를 가져오는 중 오류가 발생하였습니다.",                          
                             noRecords: "검색된 데이터가 없습니다."
                         },
-                        noRecords: true,
                         height: "150px",
+                        noRecords: true,
                         scrollable: true,
+                        pageable: false,
                         sortable: true,
                         columns: [
                             { 	width: "30px" },      
