@@ -55,7 +55,7 @@
         				};
             			UtilSvc.getCommonCodeList(param).then(function (res) {
             				if(res.data.length >= 1){
-            					ordDataVO.cancelCodeOp.dataSource = res.data;
+            					ordDataVO.cancelCodeOp = res.data;
             				}
             			});
     	            }())
@@ -182,12 +182,7 @@
 	        		ordStatusMo : "*",
 	        		betweenDateOptionOp : [],
 	        		betweenDateOptionMo : "",
-	        		cancelCodeOp : {
-    					dataSource: [],
-    					dataTextField: "NM_DEF",
-                        dataValueField: "CD_DEF",
-                    	valuePrimitive: true,
-    				},
+	        		cancelCodeOp : [],
 	        		cancelCodeMo : "",
 	        		dataTotal : 0,
 	        		resetAtGrd :"",
@@ -378,10 +373,21 @@
                 		confirmation: false
                 	},
                 	edit: function(e){
-                		//그리드에서는 그리드 모델과 연결되어 있어서  처음에  selected 되는 값이 null로 되어 강제로 불러와서 셀렉팅을 해줌                		
-                		var ddl = $("select[name=CD_CCLRSN]").data("kendoDropDownList");
-                		ddl.select(0);
-                		ddl.trigger("change");
+                		var cntnr = e.container,
+                		cdcclrsn = cntnr.find("select[name=CD_CCLRSN]"),
+                		chosenDS = "";
+                		
+                		chosenDS = ordDataVO.cancelCodeOp.filter(function(ele){
+	            			return (ele.DC_RMK1 === e.model.NO_MNGMRK);
+	            		});
+
+                		cdcclrsn.kendoDropDownList({
+	            			dataSource : chosenDS,
+		        			dataTextField:"NM_DEF",
+		                    dataValueField:"CD_DEF",
+	                		optionLabel : "취소사유코드를 선택해 주세요 ",	                    
+		                    valuePrimitive: true
+	            		});
                 	},
                 	resizable: true,
                 	rowTemplate: kendo.template($.trim(grdRowTemplate)),

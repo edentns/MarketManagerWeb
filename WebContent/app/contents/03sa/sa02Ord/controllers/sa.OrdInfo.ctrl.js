@@ -24,21 +24,7 @@
 	    				}
 	    			});		
             	}());
-	            
-            	//취소 사유 코드 드랍 박스 실행	
-            	var cancelReasonCode = (function(){
-    				var param = {
-    					lnomngcdhd: "SYCH00056",
-    					lcdcls: "SA_000015"
-    				};
-        			UtilSvc.getCommonCodeList(param).then(function (res) {
-        				if(res.data.length >= 1){
-        					ordInfoDataVO.cancelCodeOptions.dataSource = res.data;
-        					ordInfoDataVO.inputs.CD_CCLRSN = res.data[0];
-        				}
-        			});
-	            }());                 	
-            	
+	               
 	            var ordInfoDataVO = $scope.ordInfoDataVO = {       	
 	        		kind : "",
 	        		no: "",
@@ -69,6 +55,22 @@
 	            	saOrdSvc.orderInfo(param).then(function (res) {
         				if(res.data.NO_ORD){
         					ordInfoDataVO.ds = res.data;
+        					
+        	            	//취소 사유 코드 드랍 박스 실행	
+        	            	var cancelReasonCode = (function(){
+        	    				var param = {
+        	    					lnomngcdhd: "SYCH00056",
+        	    					lcdcls: "SA_000015",
+        	    					customnoc: "00000",
+        	    					mid: ordInfoDataVO.ds.NO_MNGMRK
+        	    				};
+        	        			UtilSvc.getCommonCodeList(param).then(function (res) {
+        	        				if(res.data.length >= 1){
+        	        					ordInfoDataVO.cancelCodeOptions.dataSource = res.data;
+        	        					ordInfoDataVO.inputs.CD_CCLRSN = res.data[0];
+        	        				}
+        	        			});
+        		            }());  
         				}else{
         					alert("조회된 데이터가 없습니다.");
         				}
@@ -125,13 +127,15 @@
 	            	if(this.inputs.CD_CCLRSN === ""){
 	            		return;
 	            	}
-	            	if(this.inputs.DC_CCLRSNCTT === "" || this.inputs.DC_CCLRSNCTT.length > 10){          		
+	            	if(this.inputs.DC_CCLRSNCTT === "" || this.inputs.DC_CCLRSNCTT.length < 10){  
+	            		alert("주문취소사유가 없거나 10미만입니다.")
 	            	    return;
 	            	}
 	            	if(confirm("현재 주문을 취소 하시겠습니까?")){
 	            		var defer = $q.defer(),
         			 		param = $.extend(ordInfoDataVO.inputs, ordInfoDataVO.ds);
-    				
+    				    param.CD_CCLRSN = param.CD_CCLRSN.CD_DEF;
+    				    
         				saOrdSvc.orderCancel(param).then(function (res) {
             				defer.resolve();            				
             				ordInfoDataVO.ordCancelPopOptionsClose();
