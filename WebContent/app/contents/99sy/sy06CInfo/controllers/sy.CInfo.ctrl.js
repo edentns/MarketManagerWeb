@@ -375,9 +375,9 @@
 			                	 return edt.invalidFocus("userNM_WAHO", "[형식] 창고명은 유효하지 않은 형식입니다.");
 			                 }
 			                 
-			                 if(!data.CD_PARS){
-			                	 return edt.invalidFocus("userCD_PARS", "[형식] 택배사는 유효하지 않은 형식입니다.");
-			                 }
+//			                 if(!data.CD_PARS){
+//			                	 return edt.invalidFocus("userCD_PARS", "[형식] 택배사는 유효하지 않은 형식입니다.");
+//			                 }
 			                 
 			                 if(!data.NO_POST){
 			                	 return edt.invalidFocus("userW_NO_POST", "[형식] 우편번호는 유효하지 않은 형식입니다.");
@@ -431,7 +431,7 @@
 	                					DC_NEWADDR: {validation: {required: true}},
 	                					DC_OLDADDR: {},
 	                					DC_DETADDR: {validation: {required: true}},
-	                					CD_PARS: {},
+	                					CD_PARS: {editable: false},
 	                					ITEM1:  {editable: false},
 	                					ITEM2:  {editable: false},
 	                					CD_WAHODFT : {}
@@ -450,11 +450,6 @@
 	        		           {field: "NM_WAHO",   title: "창고명",    width: 250},
 	        		           {field: "DC_NEWADDR",  title: "주소(도로명)", width: 300},
 	        		           {field: "DC_DETADDR",  title: "주소(상세)", width: 250},
-	        		           {field: "CD_PARS",     title: "택배사", width: 200, template: 
-           		        		'#if (CD_PARS == "001") {# #="우체국택배"# #}' +
-   		        	   	        'else if (CD_PARS == "002") {# #="CJ대한통운"# #}'+
-        		        	   	'else if (CD_PARS == "003") {# #="롯데택배"# #}'+
-   		        		        'else {# #="기타"# #} #', editor: DropDownEditor},
 	        		           {field: "ITEM1",     title: "상품1", width: 150},
 	        		           {field: "ITEM2",     title: "상품2", width: 150},
 	        		           {command: [ "destroy" ]}
