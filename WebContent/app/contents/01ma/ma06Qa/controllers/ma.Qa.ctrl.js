@@ -48,6 +48,7 @@
                     	dataSource: [],
                         dataTextField: "NM_DEF",
                         dataValueField: "CD_DEF",
+                        optionLabel: "선택해 주세요.",
                         valuePrimitive: true
                     },
     				fileMngDataVO : {
@@ -140,7 +141,7 @@
          	    };
 	            	            
 	            //조회
-	            qaDataVO.inQuiry = function(qa){
+	            qaDataVO.inQuiry = function(qa, noc){
 	            	var me = this, dateSts = qaDataVO.datesetting.period.start, dateSte = qaDataVO.datesetting.period.end;
 	            	me.param = {
                     	CONT: qaDataVO.contentText.value,
@@ -148,7 +149,8 @@
                     	NO_C_S : qaDataVO.qaNocModel.toString(),                    	
                     	DTS_FROM : (qa)? new Date(today.y, today.m, today.d-1, 23, 59, 58).dateFormat("YmdHis") : new Date(dateSts.y, dateSts.m-1, dateSts.d-1, 23, 59, 58).dateFormat("YmdHis"),
                     	DTS_TO : (qa)? new Date(today.y, today.m, today.d, 23, 59, 58).dateFormat("YmdHis") : new Date(dateSte.y, dateSte.m-1, dateSte.d, 23, 59, 59).dateFormat("YmdHis"),
-                    	NO_QA : qa
+                    	NO_QA : qa,
+                    	NO_SALE_C : noc
                     }; 
 	            	
 	            	if(!me.answerStatusModel){ alert("답변처리상태를 입력해 주세요."); return false; };
@@ -257,7 +259,6 @@
                     dataSource: new kendo.data.DataSource({
                     	transport: {
                     		read: function(e){
-                    			qaDataVO.param.NO_SALE_C =qaDataVO.param.NO_C; 
                 				MaQaSvc.qaList(qaDataVO.param).then(function (res) {
                 					if(res.data.queryList){
                 						var data = res.data.queryList, i=0, sum=0;		
@@ -271,7 +272,7 @@
                 						qaDataVO.fileDtLst = res.data.queryFileList;
                 					}else{
                     					e.error([]);                						
-                					}    	                			
+                					}
             					},
             				    function(err) {
             				    	e.error([]);
@@ -292,7 +293,7 @@
                 			        			alert('첨부파일업로드 실패하였습니다.');
                 			        		});
                 		        		}	    
-	                					qaDataVO.inQuiry(param.NO_QA);
+	                					qaDataVO.inQuiry();
 	                				}else{
 	                					alert("저장 실패하였습니다.!! 연구소에 문의 부탁드립니다.");
 	                				}   	                			
@@ -474,10 +475,7 @@
                 	editable: {
                 		mode: "popup",
                 		window : {
-                	        title: "문의내용",
-                	        open: function(e){
-                	        	//$scope.treeViewPop.element.find(".k-checkbox").removeAttr("checked").trigger("change");	                                  
-                	        }
+                	        title: "문의내용"
                 	    },
                 		template: kendo.template($.trim($("#qa-popup-template").html())),
                 		confirmation: false,

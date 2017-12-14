@@ -73,15 +73,7 @@
                             			data-eden-type="kor" 
                             			type="text" 
                             			class="form-control" style="width:100%;"/>
-                            </td>
-                            <th>
-                            </th>
-                            <td>
-                            </td>
-                            <th>
-                            </th>
-                            <td>
-                            </td>                            
+                            </td><th></th><td></td><th></th><td></td>                            
                         </tr>
                         <tr>
                             <th>기간</th>                            
@@ -116,8 +108,14 @@
     </div>
 </div>
 
-<!-- 주문 취소 팝업 -->
-<script id="ord_popup_template" type="text/x-kendo-template">
+<!-- 주문 조회 그리드 툴바 템플릿 -->
+<script id="ord-toolbar-template" type="text/x-kendo-template">
+	<a class="k-button k-button-icontext k-grid-edit"><span class="k-icon k-i-close"></span>주문취소</a>        
+	<a class="k-button k-button-icontext k-grid-save"><span class="k-icon k-i-check"></span>주문 확정</a>  
+</script>
+
+
+<script id="ord-cclpop-template" type="text/x-kendo-template">
 <div class="not_pop_title"><h4>주문 취소 입력</h4></div>
 <table class="table signal">
 	<colgroup>
@@ -222,13 +220,6 @@
 	</tr>
 	</tbody>
 </table>
-</script>
-
-<!-- 주문 조회 그리드 툴바 템플릿 -->
-<script id="ord-toolbar-template" type="text/x-kendo-template">
-	<!-- <a class="k-button k-button-icontext k-grid-custom" ng-click=""><span class="k-icon k-i-custom"></span>신규주문 가져오기</a> -->
-	<a class="k-button k-button-icontext k-grid-edit"><span class="k-icon k-i-close"></span>주문취소</a>        
-	<a class="k-button k-button-icontext k-grid-save"><span class="k-icon k-i-check"></span>주문 확정</a>  
 </script>
 
 <style>

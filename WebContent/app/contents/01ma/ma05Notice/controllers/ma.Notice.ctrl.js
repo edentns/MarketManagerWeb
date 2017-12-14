@@ -348,10 +348,9 @@
                     				var defer = $q.defer();
     	                			 	
                     				if(noticeDataVO.deleteOrdUpdate === "d"){
-                    					var param = { data: e.data.models },
-                						    paramFunction = noticeDataVO.paramFunc(param);;
+                    					var param = { data: e.data.models };
                     					
-                    					MaNoticeSvc.noticeDelete(paramFunction).then(function(res) {
+                    					MaNoticeSvc.noticeDelete(param).then(function(res) {
                     						if(res.data){
         	    	                			$scope.gridNoticeVO.dataSource.read();
                     						}else{

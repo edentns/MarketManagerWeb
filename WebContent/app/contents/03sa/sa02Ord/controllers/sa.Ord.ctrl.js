@@ -33,7 +33,7 @@
             					ordDataVO.ordStatusOp = res.data;
             				}
             			});
-    	            }()),
+    	            }),
     	            betweenDate : (function(){
         				var param = {
         					lnomngcdhd: "SYCH00055",
@@ -45,7 +45,7 @@
             					ordDataVO.betweenDateOptionMo = res.data[0].CD_DEF; //처음 로딩 때 초기 인덱스를 위하여
             				}
             			});
-    	            }()),
+    	            }),
     	            //취소 사유 코드 드랍 박스 실행	
     	            cancelReasonCode : (function(){
         				var param = {
@@ -58,9 +58,9 @@
             					ordDataVO.cancelCodeOp.dataSource = res.data;
             				}
             			});
-    	            }())
-	            },
-	            	            
+    	            })
+	            },  	            
+	            
 	            grdField =  {
                     ROW_CHK       : { type: APP_SA_MODEL.ROW_CHK.type        , editable: true , nullable: false },
                     NO_ORD        : { type: APP_SA_MODEL.NO_ORD.type         , editable: false, nullable: false },
@@ -155,6 +155,14 @@
                 grdDetOption       = UtilSvc.gridDetOption(grdCheckOption, grdCol);
                 grdRowTemplate     = grdRowTemplate    + grdDetOption.gridContentTemplate;
                 grdAltRowTemplate  = grdAltRowTemplate + grdDetOption.gridContentTemplate;
+                
+	            ordInitDataBinding.onlyOncePlay = function(){
+	            	var me = this;
+	            	me.mrkName();
+	            	me.orderStatus();
+	            	me.betweenDate();
+	            	me.cancelReasonCode();
+	            };
 	            
 	            var ordDataVO = $scope.ordDataVO = {
 	            	boxTitle : "주문",
@@ -192,7 +200,7 @@
 	        		cancelCodeMo : "",
 	        		dataTotal : 0,
 	        		resetAtGrd :"",
-	        		param: ""
+	        		param : "" 
 		        };	           
 	            
 	            //조회
@@ -380,7 +388,7 @@
                         		angular.element($("#grid_chk_master")).prop("checked",false);
                         	}
                 	    },
-                		template: kendo.template($.trim($("#ord_popup_template").html())),
+                		template: kendo.template($.trim($("#ord-cclpop-template").html())),
                 		confirmation: false
                 	},
                 	edit: function(e){                		
@@ -417,7 +425,7 @@
                 $scope.$on("kendoWidgetCreated", function(event, widget){
                 	var grd = $scope.ordkg;
                 	
-	                if (widget === grd){ 
+	                if (widget === grd){
 	                	//주문취소 팝업 가져오기
 	                	widget.element.find(".k-grid-edit").on("click", function(e){
 	                		var	chked = grd.element.find(".k-grid-content input:checked"),
@@ -493,6 +501,7 @@
                 	$state.go("app.saOrd", { kind: "", menu: null, noOrd : noOrd, noMrkord: noMrkord});
                 };
                 
+                ordInitDataBinding.onlyOncePlay();
                 $scope.ordDataVO.cookieSearchPlay();
             }]);
 }());
