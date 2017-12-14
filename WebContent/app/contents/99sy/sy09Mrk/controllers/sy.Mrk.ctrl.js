@@ -455,7 +455,7 @@
                 	syMrkSvc.conMrk(param, e).then(function(res) {
         				//defer.resolve();
         				alert( res.data );
-        				$scope.kg.dataSource.read();
+        				gridMrkVO.dataSource.read();
         			});
                 };
 
