@@ -278,10 +278,13 @@
 	                }
 
 	                // EMAIL
-	                if (data.email.email1 || data.email.email2) {
+	                else if (data.email.email1 || data.email.email2) {
 						if (!/^[-A-Za-z0-9_]+[-A-Za-z0-9_.]*[@]{1}[-A-Za-z0-9_]+[-A-Za-z0-9_.]*[.]{1}[A-Za-z]{2,5}$/.test(data.email.email1 +"@"+ data.email.email2)) {
 							return edt.invalidFocus("userEmail", "[형식] 이메일은 유효하지 않은 형식입니다.");
 						}
+	                }
+	                else {
+	                	return edt.invalidFocus("userEmail", "[필수] 이메일을 입력해주세요");
 	                }
 
                     // 퇴사일자

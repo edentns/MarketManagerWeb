@@ -141,7 +141,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <th>E-mail</th>
+                            <th>E-mail<span data-ng-if="syUserVO.kind=='insert'" class="form-required">* </span></th>
                             <td colspan="3">
                                 <span data-ng-if="page.isWriteable()">
                                     <input type="text" class="form-control wid-x3" id="userEmail" title="emailId 입력" maxlength='20' data-ng-model="syUserVO.param.email.email1" /> @
