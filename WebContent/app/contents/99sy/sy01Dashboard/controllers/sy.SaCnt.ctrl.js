@@ -7,7 +7,7 @@
      * 코드관리
      */
     angular.module("sy.Dashboard.controller")
-        .controller("sy.SaCntCtrl", ['$scope', 'sy.DashboardSvc', '$timeout', 'UtilSvc', 
+        .controller("sy.SaCntCtrl", ['$scope', 'sy.DashboardSvc', '$timeout', 'UtilSvc',  
             function ($scope, SyDashboardSvc, $timeout, UtilSvc) {
 	        $scope.$on('dashboard:query', function(event, payload) {
 	            SyDashboardSvc.setPayload(saCnt, payload);

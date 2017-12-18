@@ -7,8 +7,8 @@
      * 코드관리
      */
     angular.module("sy.Dashboard.controller")
-        .controller("sy.DashboardCtrl", ["$scope", "$http", "$q", "$log", "sy.DashboardSvc", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "ModalSvc",  
-            function ($scope, $http, $q, $log, MaDashboardSvc, APP_CODE, $timeout, resData, Page, UtilSvc, ModalSvc) {
+        .controller("sy.DashboardCtrl", ["$scope", "$http", "$q", "$log", "sy.DashboardSvc", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "ModalSvc", "$state",   
+            function ($scope, $http, $q, $log, MaDashboardSvc, APP_CODE, $timeout, resData, Page, UtilSvc, ModalSvc, $state) {
         		var vm = this;
 	            var page  = $scope.page = new Page({ auth: resData.access }),
 		            today = edt.getToday(),
@@ -36,6 +36,8 @@
 		                	templateURL : 'app/contents/99sy/sy01Dashboard/templates/sy.SaCnt.tpl.html'
 		                }
 		            ];
+
+	            vm.allOpen = resData.cmrkOpen && resData.parsOpen;
 	            
 	            vm.mainComponents = {
             		visible     : true,
@@ -43,7 +45,7 @@
                 	name        : 'sy.DashNoticeCtrl',
                 	displayName : '공지사항',
                 	templateURL : 'app/contents/99sy/sy01Dashboard/templates/sy.Notice.tpl.html',
-                	open        : resData.mainOpen
+                	open        : resData.mainOpen && vm.allOpen
 	            };
 	            
 	            vm.subComponents = {
@@ -52,7 +54,7 @@
                 	name        : 'sy.DashQaCtrl',
                 	displayName : '묻고답하기',
                 	templateURL : 'app/contents/99sy/sy01Dashboard/templates/sy.Qa.tpl.html',
-                	open        : resData.subOpen
+                	open        : resData.subOpen && vm.allOpen
 	            };
             
 	            vm.broadcast = function() {
@@ -94,6 +96,23 @@
 
 	            };
 
+	            vm.maintitle = "시작";
+	            vm.userJoinImg = "/assets/img/userJoin.png";
+	            
+	            vm.markImg = (resData.cmrkOpen)? "/assets/img/markIn.png":"/assets/img/markOut.png";
+	            vm.parsImg = (resData.parsOpen)? "/assets/img/parsIn.png":"/assets/img/parsOut.png";
+	            vm.saImg = (vm.allOpen)? "/assets/img/saIn.png":"/assets/img/saOut.png";
+	            vm.arrowImg = (vm.allOpen)? "/assets/img/arrowIn.png":"/assets/img/arrowOut.png";
+	            
+	            
+	            vm.markmanagerClick = function() {
+	            	$state.go('app.syMrk', { kind: null, menu: null });
+	            };
+
+	            vm.parsClick = function() {
+	            	$state.go('app.syPars', { kind: null, menu: null });
+	            };
+	            
 	            // 2016-08-02
 	            // -1-
 	            // 마지막으로 선택된 탭 값 불러오기.
@@ -155,11 +174,12 @@
 	                vm.broadcast();
 	            };
 
-
 	            page.bootstrap(function() {
-	            	$timeout(function() {
-		                vm.broadcast();
-	                }, 500);
+	            	if(vm.allOpen) {
+	            		$timeout(function() {
+			                vm.broadcast();
+		                }, 500);
+	            	}
 	            });
             }]);
 }());

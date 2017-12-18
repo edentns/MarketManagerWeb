@@ -21,14 +21,22 @@
 	                        AuthSvc.isAccess().then(function (result) {
 	                            resData.access = result[0];
 	                        	var param = {
-	        	                	procedureParam: "USP_SY_01DASHBOARD07_GET"
+	                        		noticeQa:{procedureParam: "USP_SY_01DASHBOARD07_GET"},
+	                        		cmrkPars:{procedureParam: "USP_SY_01DASHBOARD08_GET"}
 	                        	};
 	            	            
-	            				UtilSvc.getList(param).then(function (res) {
-	            					resData.mainOpen = (res.data.results[0].length > 0)? true : false;
-	            					resData.subOpen = (res.data.results[1].length > 0)? true : false;
-	                                defer.resolve(resData);
-	            				});
+	                        	$q.all([
+                                    UtilSvc.getList(param.noticeQa),
+                                    UtilSvc.getList(param.cmrkPars)
+                                ]).then(function (result) {
+                                	resData.mainOpen = (result[0].data.results[0].length > 0)? true : false;
+	            					resData.subOpen = (result[0].data.results[1].length > 0)? true : false;
+	            					
+	            					resData.cmrkOpen = (result[1].data.results[0].length > 0 && result[1].data.results[0][0].CNT_NO_MRK > 0)? true : false;
+	            					resData.parsOpen = (result[1].data.results[1].length > 0 && result[1].data.results[1][0].CNT_CD_DEF > 0)? true : false;
+	            					
+                                    defer.resolve( resData );
+                                });
 	                        });
 	
 	                        return defer.promise;
