@@ -12,6 +12,13 @@
 	            var page  = $scope.page = new Page({ auth: resData.access }),
 		            today = edt.getToday();
 	            
+	            var rowClick = function( arg ) {
+	            	var selected = $.map(this.select(), function(item) {
+	            		return item.childNodes[17].innerText;
+                    });
+	            	$scope.itlDataVO.rowClick(selected);
+				};
+	            
 	            var itlDataVO = $scope.itlDataVO = {
 	            	userInfo : JSON.parse($window.localStorage.getItem("USER")),
 	            	boxTitle : "검색",
@@ -49,59 +56,38 @@
 	            	e.preventDefault();
 	            	e.stopPropagation();
                 };
+                
+                itlDataVO.rowClick = function(selected){
+                	var param = {
+    					procedureParam: "USP_MA_07ITL_CLICK_GET&L_RESERVED_DATE@s",
+    					L_RESERVED_DATE : selected[0]
+    				};
+					UtilSvc.getList(param).then(function (res) {
+						$scope.ordkg.dataSource.data(res.data.results[0]);/*
+						$scope.trankg.dataSource.data(res.data.results[1]);
+						$scope.cankg.dataSource.data(res.data.results[2]);
+						$scope.cskg.dataSource.data(res.data.results[3]);*/
+					});
+                };
 	            
 	            //toolTip
 	            UtilSvc.gridtooltipOptions.filter = "td";
 	            itlDataVO.tooltipOptions = UtilSvc.gridtooltipOptions;
-	            
-	            //text Editor
-	            itlDataVO.kEditor = {
-	            	NO_QA:"",
-         	    	tools: [
-         	    	   "bold",
-                       "italic",
-                       "underline",
-                       "strikethrough",
-                       "justifyLeft",
-                       "justifyCenter",
-                       "justifyRight",
-                       "justifyFull",
-                       "insertUnorderedList",
-                       "insertOrderedList",
-                       "indent",
-                       "outdent"
-                    ]
-         	    };
 	            	            
 	            //초기 실행
 	            itlDataVO.inQuiry = function(){
 	            	itlDataVO.mngMrkBind = resData.mngMrkData;
 	            	itlDataVO.nmJobBind = resData.nmJobData;
 	            	itlDataVO.stJobBind = resData.stJobData;
-	            	
-	            	/*var me = this, dateSts = itlDataVO.datesetting.period.start, dateSte = itlDataVO.datesetting.period.end;
-	            	me.param = {
-                    	CONT: itlDataVO.contentText.value,
-                    	CD_ANSSTAT : itlDataVO.answerStatusModel,
-                    	NO_C_S : itlDataVO.qaNocModel.toString(),                    	
-                    	DTS_FROM : (qa)? new Date(today.y, today.m, today.d-1, 23, 59, 58).dateFormat("YmdHis") : new Date(dateSts.y, dateSts.m-1, dateSts.d-1, 23, 59, 58).dateFormat("YmdHis"),
-                    	DTS_TO : (qa)? new Date(today.y, today.m, today.d, 23, 59, 58).dateFormat("YmdHis") : new Date(dateSte.y, dateSte.m-1, dateSte.d, 23, 59, 59).dateFormat("YmdHis"),
-                    	NO_QA : qa
-                    }; 
-	            	
-	            	if(!me.answerStatusModel){ alert("답변처리상태를 입력해 주세요."); return false; };
-	            	if(!me.qaNocModel){ alert("문의대상을 입력해 주세요."); return false; };	            	
-	            	if(me.param.NOTI_TO > me.param.NOTI_FROM){ alert("공지일자를 올바르게 선택해 주세요."); return false; };
-	            	
-	            	$scope.qakg.dataSource.data([]);
-	            	$scope.qakg.dataSource.page(1);
-	            	$scope.nkg.dataSource.read();*/
-	            	
-	            	
 	            };	 
 	            
 	          //초기 실행
 	            itlDataVO.search = function(){
+	            	//to-do
+	            	/*if(!me.answerStatusModel){ alert("답변처리상태를 입력해 주세요."); return false; };
+	            	if(!me.qaNocModel){ alert("문의대상을 입력해 주세요."); return false; };	            	
+	            	if(me.param.NOTI_TO > me.param.NOTI_FROM){ alert("공지일자를 올바르게 선택해 주세요."); return false; };*/
+	            	
 	            	$scope.itlkg.dataSource.data([]);
 	            	$scope.itlkg.dataSource.page(1);
 	            	$scope.itlkg.dataSource.read();
@@ -193,15 +179,13 @@
                         commands: {
                             update: "저장",
                             canceledit: "취소"
-                        }
-                        ,noRecords: "검색된 데이터가 없습니다."
+                        },
+                        noRecords: "검색된 데이터가 없습니다."
                     },
-                    boxTitle : "Itl 리스트",
                     sortable: true,                    	
                     pageable: {
                        	messages: UtilSvc.gridPageableMessages
                     },
-                    pageSize: 8,
                     noRecords: true,
                     dataSource: new kendo.data.DataSource({
                     	transport: {
@@ -237,6 +221,7 @@
                 			var data = this.data();
                 			itlDataVO.dataTotal = data.length;
                 		},
+                       	pageSize: 8,
                 		batch: true,
                 		schema: {
                 			model: { 
@@ -311,140 +296,530 @@
 	                			}
 	                		}
 	                	}
-                	}),                    	
+                	}), 
+                	change : rowClick,
                 	navigatable: true, //키보드로 그리드 셀 이동 가능
-                	selectable: "single, row",
-                	columns: itlDataVO.columnProc,                			      
-                	dataBound: function(e) {
-                		
-                    },
+                	selectable: "multiple",
+                	columns: itlDataVO.columnProc,
                     collapse: function(e) {
                         this.cancelRow();
                     },
                 	resizable: true,
-                	rowTemplate: kendo.template($.trim(angular.element(document.querySelector("#qa-template")).html())),
-                	altRowTemplate: kendo.template($.trim(angular.element(document.querySelector("#qa-template")).html()).replace("class=\"k-grid-row\"","class=\"k-alt\"")),
-                	height: 294                 	
+                	rowTemplate: kendo.template($.trim(angular.element(document.querySelector("#itl-template")).html())),
+                	altRowTemplate: kendo.template($.trim(angular.element(document.querySelector("#itl-template")).html()).replace("class=\"k-grid-row\"","class=\"k-alt\"")),
+                	height: 302                 	
         		};
                 
-                /*//가입자 검색 UI
-                //조회용
-                $scope.memSearchGrd = {
-                	id: "memSearchGrd",
-                	initTotalCount : 0, 			// 초기 로드시 데이터의 총 갯수
-        			repeaterItems : [],
-        			searchTotal : 0,
-        			selectAll : false,
-        			selectedCount : 0,
-        			searchValue : "",
-        			modal: true,
-        			visible: false,
-        			height: "500",
-        			width: "400",
-        			title: "가입자 검색",
-        			show: function(e){        		           
-                       angular.element(document.querySelector("#memberSearchMain")).focus();    
-                       
-                       if(itlDataVO.qaNocModel.indexOf("*") > -1){
-                    	   $scope.treeView.element.find(".k-checkbox").removeAttr("checked").trigger("change");
-                           for (var i = 0; i < $scope.memSearchGrd.dataSource.data().length; i++) {
-                        	   var item = $scope.treeView.findByText($scope.memSearchGrd.dataSource.data()[i]["NM"]);
-                               item.find(".k-checkbox").first().click();2
-                           }   
-                       }                       
-        			},
-        			searchKeyUp: function(keyEvent){
-        				filter($scope.treeView.dataSource, keyEvent.target.value.toLowerCase(), $scope.memSearchGrd.searchTotal);
-        				$scope.memSearchGrd.selectedCount = 0;
-        				$scope.treeView.element.find(".k-checkbox").prop("checked", false);
-                        $scope.treeView.element.find(".k-checkbox").trigger("change");
-        			},
-        			actions : [
-    		                    { 
-    		                    	text: '취소' 
-    		                    },
-    		                    {
-    		                        text: '확인', 
-    		                        action: function () {
-    		                            $scope.$apply(function (e) {
-    		                            	var view = $scope.memSearchGrd;
-    		                                view.repeaterItems = getCheckedItems($scope.treeView, view);
-    		                                
-    		                                //전체 조회 시의 체크시 "전체"로 표시함
-    		                                if(view.selectAll && view.repeaterItems.length === view.initTotalCount){        		                                	
-    		                                	var multiSelect = angular.element(document.querySelector("#nkms")).data("kendoMultiSelect");                   
-        		                                multiSelect.dataSource.data([]);
-        		                                
-        		                                var multiData = multiSelect.dataSource.data();
-        		                                multiData.push({NM: "전체", NO_C: "*"});
-        		                                multiSelect.dataSource.data(multiData);    
-    		                                	multiSelect.value(["*"]);
-    		                                	multiSelect.trigger("change"); //트리거를 안하면 모델에 안들어감!
-    		                                }else{
-    		                                	populateMultiSelect(view.repeaterItems, "#nkms");
-    		                                }       		                                
-    		                            });
-    		                        }
-    		                    }
-        		    ],
-        		    dataSource : new kendo.data.HierarchicalDataSource ({ 
-        		    	transport : {
-        		    		read : function(e){
-        		    			itlDataVO.qaTgtBind("MarketManager.USP_MA_05MEMBERSEARCH01_GET", e, "noticeGet", $scope.memSearchGrd); 
-        		    		}
-        		    	},
-        		    	schema: {
-                			model: {
-                    			id: "NM",
+              //검색 그리드
+                var gridOrdVO = $scope.gridOrdVO = {
+                	autoBind: false,
+                    messages: {                        	
+                        requestFailed: "정보를 가져오는 중 오류가 발생하였습니다.",
+                        commands: {
+                            update: "저장",
+                            canceledit: "취소"
+                        },
+                        noRecords: "검색된 데이터가 없습니다."
+                    },
+                    sortable: true,                    	
+                    pageable: {
+                       	messages: UtilSvc.gridPageableMessages
+                    },
+                    noRecords: true,
+                    dataSource: new kendo.data.DataSource({
+                    	transport: {
+                		},
+                		change: function(e){
+                			var data = this.data();
+                			itlDataVO.dataTotal = data.length;
+                		},
+                       	pageSize: 8,
+                		batch: true,
+                		schema: {
+                			model: { 
+                    			id: "ROW_NUM",
                 				fields: {
-                					NM : {
-                						type: "string", 
-										editable: false,  
-										nullable: false
-                					},
-                					NO_C : {
-                						type: "string", 
-										editable: false,  
-										nullable: false
-                					}
-                				}
-                			}
-        		    	}
-        		    }),
-	    			autoBind: true,
-                    dataTextField: "NM", 
-                    checkboxes: true,
-                    loadOnDemand: false,
-                    expandAll: true, 
-                    dataBound: function (e) {
-                        e.sender.expand(e.node);    
+                					ROW_NUM: 		   {	
+				                    						type: "number", 
+															editable: false,  
+															nullable: false
+            										   },
+            						orderNo:		   {
+													    	type: "string", 
+															editable: false,  
+															nullable: false
+							        		           },
+							        productOrderNo:	   {
+													    	type: "string", 
+															editable: false,  
+															nullable: false
+							        		           },
+							        mallOrderNo:	   {
+													    	type: "string", 
+															editable: false,  
+															nullable: false
+							        		           },
+							        paymentNo:		   {
+													    	type: "string", 
+															editable: false,  
+															nullable: false
+							        		           },
+							        definiteOrderDate: {
+													    	type: "string", 
+															editable: false,  
+															nullable: false
+							        		           },
+							        process_result:	   {
+													    	type: "string", 
+															editable: false,  
+															nullable: false
+							        				   },      
+							        req_datetime:	   {
+													    	type: "string", 
+															editable: false,  
+															nullable: false
+							        				   },       
+							        result_msg:	   	   {
+													    	type: "string", 
+															editable: false,  
+															nullable: false
+							        				   }
+	                			}
+	                		}
+	                	}
+                	}), 
+                	change : rowClick,
+                	navigatable: true, //키보드로 그리드 셀 이동 가능
+                	selectable: "multiple",
+                	columns: [
+              		           {field: "ROW_NUM", title: "번호", type: "string" , width: "15px", textAlign: "center"},
+              		           {field: "orderNo", title: "주문번호", type: "string" , width: "70px", textAlign: "center"},
+	              		       {field: "productOrderNo", title: "상품주문번호", type: "string" , width: "60px", textAlign: "center"},
+	              		       {field: "mallOrderNo", title: "마켓주문번호", type: "string" , width: "70px", textAlign: "center"},
+	              		       {field: "paymentNo", title: "결재번호", type: "string" , width: "30px", textAlign: "center"},
+	              		       {field: "definiteOrderDate", title: "주문확정일시", type: "string" , width: "70px", textAlign: "center"},
+	              		       {field: "process_result", title: "처리상태", type: "string" , width: "25px", textAlign: "center"},
+	              		       {field: "req_datetime", title: "처리일시", type: "string" , width: "70px", textAlign: "center"},
+	              		       {field: "result_msg", title: "결과메시지", type: "string" , width: "100px", textAlign: "center"}
+                       	],
+                    collapse: function(e) {
+                        this.cancelRow();
                     },
-                    check: function (e) {
-                        $timeout(function () {
-                        	$scope.$apply(function(){
-                        		var view = $scope.memSearchGrd,
-                        		    liList = $scope.treeView.element.find("li").length;
-                        		
-                        		view.selectedCount = getCheckedItems(e.sender, view).length;
-                                if(view.selectedCount === liList && view.selectAll === false){
-                                	view.selectAll = true;
-                                }else if(view.selectedCount !== liList && view.selectAll === true){
-                                	view.selectAll = false;
-                                };
-                        	});
-                    	}, 0);
+                	resizable: true,
+                	rowTemplate: kendo.template($.trim(angular.element(document.querySelector("#ord-template")).html())),
+                	altRowTemplate: kendo.template($.trim(angular.element(document.querySelector("#ord-template")).html()).replace("class=\"k-grid-row\"","class=\"k-alt\"")),
+                	height: 302   	
+        		};
+                
+                //검색 그리드
+                var gridTranVO = $scope.gridTranVO = {
+                	autoBind: false,
+                    messages: {                        	
+                        requestFailed: "정보를 가져오는 중 오류가 발생하였습니다.",
+                        commands: {
+                            update: "저장",
+                            canceledit: "취소"
+                        },
+                        noRecords: "검색된 데이터가 없습니다."
                     },
-                    selectAllItems : function () {
-                    	$scope.treeView.element.find(".k-checkbox").prop("checked", $scope.memSearchGrd.selectAll);
-                        $scope.treeView.element.find(".k-checkbox").trigger("change");
-                    }
-                };                            
-                      */               
+                    sortable: true,                    	
+                    pageable: {
+                       	messages: UtilSvc.gridPageableMessages
+                    },
+                    noRecords: true,
+                    dataSource: new kendo.data.DataSource({
+                    	transport: {
+                		},
+                       	pageSize: 8,
+                		batch: true,
+                		schema: {
+                			model: { 
+                    			id: "ROW_NUM",
+                				fields: {
+                					ROW_NUM: 		   {	
+				                    						type: "number", 
+															editable: false,  
+															nullable: false
+            										   },
+            						orderNo:		   {
+													    	type: "string", 
+															editable: false,  
+															nullable: false
+							        		           },
+							        productOrderNo:	   {
+													    	type: "string", 
+															editable: false,  
+															nullable: false
+							        		           },
+							        mallOrderNo:	   {
+													    	type: "string", 
+															editable: false,  
+															nullable: false
+							        		           },
+							        paymentNo:		   {
+													    	type: "string", 
+															editable: false,  
+															nullable: false
+							        		           },
+							        deliveryDivision:  {
+													    	type: "string", 
+															editable: false,  
+															nullable: false
+							        		           },
+							        delivery_type:	   {
+													    	type: "string", 
+															editable: false,  
+															nullable: false
+							        				   },      
+							        invoiceNo:	   	   {
+													    	type: "string", 
+															editable: false,  
+															nullable: false
+							        				   },       
+							        invoiceInsertedDate:{
+													    	type: "string", 
+															editable: false,  
+															nullable: false
+							        				   }, 
+							        process_result:	   {
+													    	type: "string", 
+															editable: false,  
+															nullable: false
+							        				   },
+							        req_datetime:	   {
+													    	type: "string", 
+															editable: false,  
+															nullable: false
+							        				   },
+							        result_msg:	   	   {
+													    	type: "string", 
+															editable: false,  
+															nullable: false
+							        				   }
+	                			}
+	                		}
+	                	}
+                	}), 
+                	change : rowClick,
+                	navigatable: true, //키보드로 그리드 셀 이동 가능
+                	selectable: "multiple",
+                	columns: [
+             		           {field: "ROW_NUM", title: "번호", type: "string" , width: "60px", textAlign: "center"},
+             		           {field: "orderNo", title: "주문번호", type: "string" , width: "60px", textAlign: "center"},
+	              		       {field: "productOrderNo", title: "상품주문번호", type: "string" , width: "60px", textAlign: "center"},
+	              		       {field: "mallOrderNo", title: "마켓주문번호", type: "string" , width: "60px", textAlign: "center"},
+	              		       {field: "paymentNo", title: "결재번호", type: "string" , width: "60px", textAlign: "center"},
+	              		       {field: "deliveryDivision", title: "배송구분", type: "string" , width: "60px", textAlign: "center"},
+	              		       {field: "delivery_type", title: "택배사", type: "string" , width: "60px", textAlign: "center"},
+	              		       {field: "invoiceNo", title: "송장번호", type: "string" , width: "60px", textAlign: "center"},
+	              		       {field: "invoiceInsertedDate", title: "요청일시", type: "string" , width: "60px", textAlign: "center"},
+	              		       {field: "process_result", title: "처리상태", type: "string" , width: "60px", textAlign: "center"},
+	              		       {field: "req_datetime", title: "처리일시", type: "string" , width: "60px", textAlign: "center"},
+	              		       {field: "result_msg", title: "처리결과 메시지", type: "string" , width: "60px", textAlign: "center"}
+	              		
+                      	],
+                    collapse: function(e) {
+                        this.cancelRow();
+                    },
+                	resizable: true,
+                	rowTemplate: kendo.template($.trim(angular.element(document.querySelector("#tran-template")).html())),
+                	altRowTemplate: kendo.template($.trim(angular.element(document.querySelector("#tran-template")).html()).replace("class=\"k-grid-row\"","class=\"k-alt\"")),
+                	height: 302                 	
+        		};
+                
+                //검색 그리드
+                var gridCanVO = $scope.gridCanVO = {
+                	autoBind: false,
+                    messages: {                        	
+                        requestFailed: "정보를 가져오는 중 오류가 발생하였습니다.",
+                        commands: {
+                            update: "저장",
+                            canceledit: "취소"
+                        },
+                        noRecords: "검색된 데이터가 없습니다."
+                    },
+                    sortable: true,                    	
+                    pageable: {
+                       	messages: UtilSvc.gridPageableMessages
+                    },
+                    noRecords: true,
+                    dataSource: new kendo.data.DataSource({
+                    	transport: {
+                		},
+                		change: function(e){
+                			var data = this.data();
+                			itlDataVO.dataTotal = data.length;
+                		},
+                       	pageSize: 8,
+                		batch: true,
+                		schema: {
+                			model: { 
+                    			id: "ROW_NUM",
+                				fields: {
+                					ROW_NUM: 		   {	
+				                    						type: "number", 
+															editable: false,  
+															nullable: false
+            										   },
+            						requesteNo:		   {
+													    	type: "string", 
+															editable: false,  
+															nullable: false
+							        		           },
+							        claimType:		   {
+													    	type: "string", 
+															editable: false,  
+															nullable: false
+							        		           },
+							        requestDate:	   {
+													    	type: "string", 
+															editable: false,  
+															nullable: false
+							        		           },
+							        product_order_no:  {
+													    	type: "string", 
+															editable: false,  
+															nullable: false
+							        		           },
+							        mallOrderNo:	   {
+													    	type: "string", 
+															editable: false,  
+															nullable: false
+							        		           },
+							        payment_no:	   	   {
+													    	type: "string", 
+															editable: false,  
+															nullable: false
+							        				   },      
+							        permission_date:   {
+													    	type: "string", 
+															editable: false,  
+															nullable: false
+							        				   },       
+							        permission_person: {
+													    	type: "string", 
+															editable: false,  
+															nullable: false
+							        				   }, 
+							        rejection_type:	   {
+													    	type: "string", 
+															editable: false,  
+															nullable: false
+							        				   },
+							        rejection_reason:  {
+													    	type: "string", 
+															editable: false,  
+															nullable: false
+							        				   },
+							        process_result:	   {
+													    	type: "string", 
+															editable: false,  
+															nullable: false
+							        				   },
+							        req_datetime:	   {
+													    	type: "string", 
+															editable: false,  
+															nullable: false
+							        				   },
+							        result_msg:	       {
+													    	type: "string", 
+															editable: false,  
+															nullable: false
+							        				   },
+							        deliveryDivision:  {
+													    	type: "string", 
+															editable: false,  
+															nullable: false
+							        				   },
+							        delivery_type:	   {
+													    	type: "string", 
+															editable: false,  
+															nullable: false
+							        				   },
+							        invoiceNo:	       {
+													    	type: "string", 
+															editable: false,  
+															nullable: false
+							        				   },
+							        pickupStatue:	   {
+													    	type: "string", 
+															editable: false,  
+															nullable: false
+							        				   }
+							        				   
+	                			}
+	                		}
+	                	}
+                	}), 
+                	change : rowClick,
+                	navigatable: true, //키보드로 그리드 셀 이동 가능
+                	selectable: "multiple",
+                	columns: [
+            		           {field: "ROW_NUM", title: "번호", type: "string" , width: "60px", textAlign: "center"},
+            		           {field: "requesteNo", title: "요청번호", type: "string" , width: "60px", textAlign: "center"},
+	              		       {field: "claimType", title: "요청유형", type: "string" , width: "60px", textAlign: "center"},
+	              		       {field: "requestDate", title: "요청일시", type: "string" , width: "60px", textAlign: "center"},
+	              		       {field: "product_order_no", title: "상품주문번호", type: "string" , width: "60px", textAlign: "center"},
+	              		       {field: "mallOrderNo", title: "마켓주문번호", type: "string" , width: "60px", textAlign: "center"},
+	              		       {field: "payment_no", title: "결재번호", type: "string" , width: "60px", textAlign: "center"},
+	              		       {field: "permission_date", title: "승인/거부일시", type: "string" , width: "60px", textAlign: "center"},
+	              		       {field: "permission_person", title: "승인/거부 입력자", type: "string" , width: "60px", textAlign: "center"},
+	              		       {field: "rejection_type", title: "거부구분", type: "string" , width: "60px", textAlign: "center"},
+	              		       {field: "rejection_reason", title: "거부내용", type: "string" , width: "60px", textAlign: "center"},
+	              		       {field: "process_result", title: "처리상태", type: "string" , width: "60px", textAlign: "center"},
+	              		       {field: "req_datetime", title: "처리일시", type: "string" , width: "60px", textAlign: "center"},
+	              		       {field: "result_msg", title: "처리결과 메시지", type: "string" , width: "60px", textAlign: "center"},
+	              		       {field: "deliveryDivision", title: "배송구분", type: "string" , width: "60px", textAlign: "center"},
+	              		       {field: "delivery_type", title: "택배사명", type: "string" , width: "60px", textAlign: "center"},
+	              		       {field: "invoiceNo", title: "송장번호", type: "string" , width: "60px", textAlign: "center"},
+	              		       {field: "pickupStatue", title: "교환상품수거여부", type: "string" , width: "60px", textAlign: "center"}
+                     	],
+                    collapse: function(e) {
+                        this.cancelRow();
+                    },
+                	resizable: true,
+                	rowTemplate: kendo.template($.trim(angular.element(document.querySelector("#can-template")).html())),
+                	altRowTemplate: kendo.template($.trim(angular.element(document.querySelector("#can-template")).html()).replace("class=\"k-grid-row\"","class=\"k-alt\"")),
+                	height: 302                 	
+        		};
+                
+                //검색 그리드
+                var gridCsVO = $scope.gridCsVO = {
+                	autoBind: false,
+                    messages: {                        	
+                        requestFailed: "정보를 가져오는 중 오류가 발생하였습니다.",
+                        commands: {
+                            update: "저장",
+                            canceledit: "취소"
+                        },
+                        noRecords: "검색된 데이터가 없습니다."
+                    },
+                    sortable: true,                    	
+                    pageable: {
+                       	messages: UtilSvc.gridPageableMessages
+                    },
+                    noRecords: true,
+                    dataSource: new kendo.data.DataSource({
+                    	transport: {
+                		},
+                		change: function(e){
+                			var data = this.data();
+                			itlDataVO.dataTotal = data.length;
+                		},
+                       	pageSize: 8,
+                		batch: true,
+                		schema: {
+                			model: { 
+                    			id: "ROW_NUM",
+                				fields: {
+                					ROW_NUM: 		   {	
+				                    						type: "number", 
+															editable: false,  
+															nullable: false
+            										   },
+            						inquiryStatueCode: {
+													    	type: "string", 
+															editable: false,  
+															nullable: false
+							        		           },
+							        regDate:		   {
+													    	type: "string", 
+															editable: false,  
+															nullable: false
+							        		           },
+							        req_person:		   {
+													    	type: "string", 
+															editable: false,  
+															nullable: false
+							        		           },
+							        inquiryDivisionCode:{
+													    	type: "string", 
+															editable: false,  
+															nullable: false
+							        		           },
+							        mallItemCode:	   {
+													    	type: "string", 
+															editable: false,  
+															nullable: false
+							        		           },
+							        mallOrderNo:	   {
+													    	type: "string", 
+															editable: false,  
+															nullable: false
+							        				   },      
+							        inquiryNo:	   	   {
+													    	type: "string", 
+															editable: false,  
+															nullable: false
+							        				   },       
+							        replyContents:	   {
+													    	type: "string", 
+															editable: false,  
+															nullable: false
+							        				   }, 
+							        replyDate:	       {
+													    	type: "string", 
+															editable: false,  
+															nullable: false
+							        				   },
+							        replyPerson:	   {
+													    	type: "string", 
+															editable: false,  
+															nullable: false
+							        				   },
+							        process_result:	   {
+													    	type: "string", 
+															editable: false,  
+															nullable: false
+							        				   },
+							        process_date:	   {
+													    	type: "string", 
+															editable: false,  
+															nullable: false
+							        				   },
+							        result_msg:	       {
+													    	type: "string", 
+															editable: false,  
+															nullable: false
+							        				   }
+							        				   
+	                			}
+	                		}
+	                	}
+                	}),
+                	navigatable: true, //키보드로 그리드 셀 이동 가능
+                	selectable: "multiple",
+                	columns: [
+           		           	   {field: "ROW_NUM", title: "번호", type: "string" , width: "60px", textAlign: "center"},
+           		           	   {field: "inquiryStatueCode", title: "요청번호", type: "string" , width: "60px", textAlign: "center"},
+	              		       {field: "regDate", title: "요청유형", type: "string" , width: "60px", textAlign: "center"},
+	              		       {field: "req_person", title: "요청일시", type: "string" , width: "60px", textAlign: "center"},
+	              		       {field: "inquiryDivisionCode", title: "상품주문번호", type: "string" , width: "60px", textAlign: "center"},
+	              		       {field: "mallItemCode", title: "마켓주문번호", type: "string" , width: "60px", textAlign: "center"},
+	              		       {field: "mallOrderNo", title: "결재번호", type: "string" , width: "60px", textAlign: "center"},
+	              		       {field: "inquiryNo", title: "승인/거부일시", type: "string" , width: "60px", textAlign: "center"},
+	              		       {field: "replyContents", title: "승인/거부 입력자", type: "string" , width: "60px", textAlign: "center"},
+	              		       {field: "replyDate", title: "거부구분", type: "string" , width: "60px", textAlign: "center"},
+	              		       {field: "replyPerson", title: "거부내용", type: "string" , width: "60px", textAlign: "center"},
+	              		       {field: "process_result", title: "처리상태", type: "string" , width: "60px", textAlign: "center"},
+	              		       {field: "process_date", title: "처리일시", type: "string" , width: "60px", textAlign: "center"},
+	              		       {field: "result_msg", title: "처리결과 메시지", type: "string" , width: "60px", textAlign: "center"}
+                    	],
+                    collapse: function(e) {
+                        this.cancelRow();
+                    },
+                	resizable: true,
+                	rowTemplate: kendo.template($.trim(angular.element(document.querySelector("#cs-template")).html())),
+                	altRowTemplate: kendo.template($.trim(angular.element(document.querySelector("#cs-template")).html()).replace("class=\"k-grid-row\"","class=\"k-alt\"")),
+                	height: 302                 	
+        		};
+                
                 //done
                 function getCheckedItems(treeview, obj) {
                     var nodes = treeview.dataSource.data();
                     return getCheckedNodes(nodes, obj);
-                };                
+                };
+                
                 //done
                 function getCheckedNodes(nodes, obj) {
                     var node, childCheckedNodes;

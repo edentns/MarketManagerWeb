@@ -75,26 +75,26 @@
 	                <li class="k-state-active" data-ng-click = "myInfoVO.tab(myInfoVO)">주문확정</li>
 	                <li data-ng-click = "myInfoVO.tab(myInfoVO)">배송정보</li>
 	                <li data-ng-click = "myInfoVO.tab(myInfoVO)">취소/반품/교환</li>
-	                <li data-ng-click = "myInfoVO.tab(myInfoVO)">문의처</li>
+	                <li data-ng-click = "myInfoVO.tab(myInfoVO)">문의처리</li>
 	              </ul>
 	          
 	              <div style="padding: 1em">
-	                <div id="" kendo-grid="" options="">
+	                <div id="divOrdGrd" kendo-grid="ordkg" options="gridOrdVO">
 		        	</div>	 
 	              </div>
 	          
 	              <div style="padding: 1em">
-	                <div id="" kendo-grid="" options="">
+	                <div id="divTranGrd" kendo-grid="trankg" options="gridTranVO">
 		        	</div>	 
 	              </div>
 	              
 	              <div style="padding: 1em">
-	                <div id="" kendo-grid="" options="">
+	                <div id="divCanGrd" kendo-grid="cankg" options="gridCanVO">
 		        	</div>	 
 	              </div>
 	              
 	              <div style="padding: 1em">
-	                <div id="" kendo-grid="" options="">
+	                <div id="divCsGrd" kendo-grid="cskg" options="gridCsVO">
 		        	</div>	 
 	              </div>
 	            </div>            
@@ -103,28 +103,8 @@
     </div>
 </div>
 
-<!-- 가입자 검색 그리드(조회용) -->
-<div kendo-dialog="dialog" k-options="memSearchGrd">
-    <div class='k-textbox k-space-right search-wrapper'>
-        <input id="memberSearchMain" class="memberSearch" type='text' ng-model="memSearchGrd.searchValue" ng-keyup="memSearchGrd.searchKeyUp($event)" ng-keydown="memSearchGrd.searchKeyUp($event)"
-            placeholder='검색할 가입자를 입력하세요'/><span class='k-icon k-i-search'></span>
-    </div>
-    <div class='select-all-wrapper'>
-        <input type='checkbox' class='k-checkbox' ng-change="memSearchGrd.selectAllItems()" ng-model="memSearchGrd.selectAll" id='selectAllInput'/>
-        <label class='k-checkbox-label' for='selectAllInput'>전체 선택</label>
-        <span class='selected-count'>{{memSearchGrd.selectedCount}} 명 선택</span>
-    </div>
-    <div kendo-tree-view="treeView" k-options="memSearchGrd">
-        <span k-template data-color-matches="memSearchGrd.searchValue" data-value="{{dataItem.NM}}">
-        </span>        
-    </div>
-    <div data-ng-if="!(dataItem.NM)" style="width:100; text-align:center; margin-top:5px;">
-    	<span>조회된 데이터가 없습니다.</span>
-    </div>
-</div>
-
 <!-- 문의사항 조회 그리드 -->
-<script id="qa-template" type="text/x-kendo-template">		
+<script id="itl-template" type="text/x-kendo-template">		
      <tr class="k-grid-row" data-uid="#= uid #">
 		<td class="ta-r">
             <span class="seq ells">
@@ -207,6 +187,394 @@
             <span class="ells">
 				# if(UPDATED){      #
 				#: UPDATED          #                             
+                # } 			    #	
+			</span>
+        </td>
+	</tr>
+</script>
+
+<!-- 주문확정 -->
+<script id="ord-template" type="text/x-kendo-template">		
+     <tr class="k-grid-row" data-uid="#= uid #">
+		<td class="ta-r">
+            <span class="seq ells">
+				# if(ROW_NUM){		# 
+				#: ROW_NUM 			# 
+				# } 				#
+			</span>
+        </td>
+		<td class="ta-c">
+            <span class="ells">
+				# if(orderNo){ 		# 
+				#: orderNo 			# 
+				# } 				#
+			</span>
+        </td>
+		<td class="ta-c">
+            <span class="ells">
+				# if(productOrderNo){    #
+				#: productOrderNo 		#
+      			# } 				#
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells">
+				# if(mallOrderNo){  		#
+				#: mallOrderNo     		#                             
+                # } 			    #	
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells">
+				# if(paymentNo){  	#
+				#: paymentNo     	#                             
+                # } 			    #	
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells">
+				# if(definiteOrderDate){  		#
+				#: definiteOrderDate    	 		#                             
+                # } 			    #	
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells">
+				# if(process_result){  		#
+				#: process_result    	 	#                             
+                # } 			    #	
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells">
+				# if(req_datetime){  		#
+				#: req_datetime    	 	#                             
+                # } 			    #	
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells">
+				# if(result_msg){#
+				#: result_msg    #                             
+                # } 			    #	
+			</span>
+        </td>
+	</tr>
+</script>
+
+<!-- 배송정보 -->
+<script id="tran-template" type="text/x-kendo-template">		
+     <tr class="k-grid-row" data-uid="#= uid #">
+		<td class="ta-r">
+            <span class="seq ells">
+				# if(ROW_NUM){		# 
+				#: ROW_NUM 			# 
+				# } 				#
+			</span>
+        </td>
+		<td class="ta-c">
+            <span class="ells">
+				# if(orderNo){ 		# 
+				#: orderNo 			# 
+				# } 				#
+			</span>
+        </td>
+		<td class="ta-c">
+            <span class="ells">
+				# if(productOrderNo){    #
+				#: productOrderNo 		#
+      			# } 				#
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells">
+				# if(mallOrderNo){  		#
+				#: mallOrderNo     		#                             
+                # } 			    #	
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells">
+				# if(paymentNo){  	#
+				#: paymentNo     	#                             
+                # } 			    #	
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells">
+				# if(deliveryDivision){  		#
+				#: deliveryDivision    	 		#                             
+                # } 			    #	
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells">
+				# if(delivery_type){  		#
+				#: delivery_type   	 	#                             
+                # } 			    #	
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells">
+				# if(invoiceNo){  		#
+				#: invoiceNo    	 	#                             
+                # } 			    #	
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells">
+				# if(invoiceInsertedDate){#
+				#: invoiceInsertedDate    #                             
+                # } 			    #	
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells">
+				# if(process_result){#
+				#: process_result    #                             
+                # } 			    #	
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells">
+				# if(req_datetime){#
+				#: req_datetime    #                             
+                # } 			    #	
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells">
+				# if(result_msg){#
+				#: result_msg    #                             
+                # } 			    #	
+			</span>
+        </td>
+	</tr>
+</script>
+
+<!-- 취소/반품/교환 -->
+<script id="can-template" type="text/x-kendo-template">		
+     <tr class="k-grid-row" data-uid="#= uid #">
+		<td class="ta-r">
+            <span class="seq ells">
+				# if(ROW_NUM){		# 
+				#: ROW_NUM 			# 
+				# } 				#
+			</span>
+        </td>
+		<td class="ta-c">
+            <span class="ells">
+				# if(requesteNo){ 		# 
+				#: requesteNo 			# 
+				# } 				#
+			</span>
+        </td>
+		<td class="ta-c">
+            <span class="ells">
+				# if(claimType){    #
+				#: claimType 		#
+      			# } 				#
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells">
+				# if(requestDate){  		#
+				#: requestDate     		#                             
+                # } 			    #	
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells">
+				# if(product_order_no){  	#
+				#: product_order_no     	#                             
+                # } 			    #	
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells">
+				# if(payment_no){  		#
+				#: payment_no    	 		#                             
+                # } 			    #	
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells">
+				# if(permission_date){  		#
+				#: permission_date   	 	#                             
+                # } 			    #	
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells">
+				# if(permission_person){  		#
+				#: permission_person    	 	#                             
+                # } 			    #	
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells">
+				# if(rejection_type){#
+				#: rejection_type    #                             
+                # } 			    #	
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells">
+				# if(rejection_reason){#
+				#: rejection_reason    #                             
+                # } 			    #	
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells">
+				# if(process_result){#
+				#: process_result    #                             
+                # } 			    #	
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells">
+				# if(req_datetime){#
+				#: req_datetime   #                             
+                # } 			    #	
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells">
+				# if(result_msg){#
+				#: result_msg   #                             
+                # } 			    #	
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells">
+				# if(deliveryDivision){#
+				#: deliveryDivision   #                             
+                # } 			    #	
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells">
+				# if(delivery_type){#
+				#: delivery_type   #                             
+                # } 			    #	
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells">
+				# if(invoiceNo){#
+				#: invoiceNo   #                             
+                # } 			    #	
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells">
+				# if(pickupStatue){#
+				#: pickupStatue   #                             
+                # } 			    #	
+			</span>
+        </td>
+	</tr>
+</script>
+
+<!-- 문의처리 -->
+<script id="cs-template" type="text/x-kendo-template">		
+     <tr class="k-grid-row" data-uid="#= uid #">
+		<td class="ta-r">
+            <span class="seq ells">
+				# if(ROW_NUM){		# 
+				#: ROW_NUM 			# 
+				# } 				#
+			</span>
+        </td>
+		<td class="ta-c">
+            <span class="ells">
+				# if(inquiryStatueCode){ 		# 
+				#: inquiryStatueCode 			# 
+				# } 				#
+			</span>
+        </td>
+		<td class="ta-c">
+            <span class="ells">
+				# if(regDate){    #
+				#: regDate 		#
+      			# } 				#
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells">
+				# if(req_person){  		#
+				#: req_person     		#                             
+                # } 			    #	
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells">
+				# if(inquiryDivisionCode){  	#
+				#: inquiryDivisionCode     	#                             
+                # } 			    #	
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells">
+				# if(mallItemCode){  		#
+				#: mallItemCode    	 		#                             
+                # } 			    #	
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells">
+				# if(mallOrderNo){  		#
+				#: mallOrderNo   	 	#                             
+                # } 			    #	
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells">
+				# if(inquiryNo){  		#
+				#: inquiryNo    	 	#                             
+                # } 			    #	
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells">
+				# if(replyContents){#
+				#: replyContents    #                             
+                # } 			    #	
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells">
+				# if(replyDate){#
+				#: replyDate    #                             
+                # } 			    #	
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells">
+				# if(replyPerson){#
+				#: replyPerson    #                             
+                # } 			    #	
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells">
+				# if(process_result){#
+				#: process_result    #                             
+                # } 			    #	
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells">
+				# if(process_date){#
+				#: process_date    #                             
+                # } 			    #	
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells">
+				# if(result_msg){#
+				#: result_msg    #                             
                 # } 			    #	
 			</span>
         </td>
