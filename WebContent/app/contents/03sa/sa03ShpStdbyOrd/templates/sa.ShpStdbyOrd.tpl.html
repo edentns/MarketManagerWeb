@@ -3,7 +3,7 @@
         <div id="app-content-header">
             <ol class="breadcrumb">
                 <li><a href="#99sy/syDashboard"><i class="fa fa-home fa-2x"></i></a></li>
-                <li><a href="#03sa/saShpStdbyOrd">주문·배송 / 주문  / 배송대기&nbsp;주문관리</a></li>
+                <li><a href="#03sa/saShpStdbyOrd">주문·배송 / 배송준비 </a></li>
             </ol>
         </div>
     </div>
@@ -271,114 +271,6 @@
 				# }	 #
 		</td>
 	</tr>			
-</script>
-
-<!-- 주문 취소 팝업 -->
-<script id="ord_popup_template" type="text/x-kendo-template">
-<div class="not_pop_title"><h4>주문 취소 입력</h4></div>
-<table class="table signal">
-	<colgroup>
-      <col style="width: 14%;">
-      <col style="width: 30%;">
-      <col style="width: 14%;">
-      <col style="width: 30%;">
-    </colgroup>
-    <tbody data-uid="#= uid #">	
-	<tr class="border-bottom-line border-top-line">	
-		<td class="active border-right-line">
-			마켓
-		</td>
-		<td class="border-right-line">
-			#if(NM_MRK){ #
-			#: NM_MRK #
-			#}#
-		</td>
-		<td class="active border-right-line">
-			상품주문번호
-		</td>
-		<td>
-			#if(NO_MRKITEMORD){ #
-			#: NO_MRKITEMORD #
-			#}#
-		</td>
-	</tr>
-	<tr class="border-bottom-line">
-		<td class="active border-right-line">
-			상품코드
-		</td>
-		<td colspan="3">
-			#if(NO_MRKITEM){ #
-			#: NO_MRKITEM #
-			#}#	
-		</td>
-	</tr>
-	<tr class="border-bottom-line">
-		<td class="active border-right-line">
-			상품명
-		</td>
-		<td colspan="3">
-			#if(NM_MRKITEM){ #
-			#: NM_MRKITEM #
-			#}#
-		</td>
-	</tr>
-	<tr class="border-bottom-line">
-		<td class="active border-right-line">
-			구매자
-		</td>
-		<td class="border-right-line">
-			#if(NM_PCHR){ #
-			#: NM_PCHR #
-			#}#	
-		</td>
-		<td class="active border-right-line">
-			배송방법
-		</td>
-		<td>
-			#if(DC_SHPWAY){ #
-			#: DC_SHPWAY #
-			#}#			
-		</td>
-	</tr>
-	<tr class="border-bottom-line">
-		<td class="active border-right-line">
-			구매수량
-		</td>
-		<td class="ta-r">
-			#if(QT_ORD){ #
-			#: QT_ORD #
-			#}#
-
-		<td class="active border-right-line">
-		</td>
-		<td>
-		</td>
-	</tr>
-	<tr class="border-bottom-line">
-		<td class="active border-right-line">
-			<code>*</code>취소사유코드
-		</td>
-		<td>
-			<select kendo-drop-down-list
-                k-options="shpbyordDataVO.cancelCodeOp"
-				name="CD_CCLRSN"
-				data-bind="value: CD_CCLRSN"
-                style="width: 100%">
-			</select>
-		</td>
-		<td colspan="2">
-		</td> 
-	</tr>
-	<tr class="border-bottom-line">
-		<td class="active border-right-line">
-			<code>*</code>주문취소사유
-		</td>
-		<td colspan="3">			
-			<textarea class="k-textbox" name="DC_CCLRSNCTT" data-bind="value: DC_CCLRSNCTT" style="width:100%; height:150px;"></textarea>
-		</td> 
-	</tr>
-	</tbody>
-</table>
 </script>
 
 <style>

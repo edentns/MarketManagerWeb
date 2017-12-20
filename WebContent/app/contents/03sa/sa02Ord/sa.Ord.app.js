@@ -8,7 +8,7 @@
 
     ordApp.config(["$stateProvider", function ($stateProvider) {
         $stateProvider.state("app.saOrd", {
-            url		: "/03sa/saOrd/:kind?menu&noOrd&noMrkord",
+            url		: "/03sa/saOrd/:kind?menu&rootMenu&noOrd&noMrkord",
             views	: {
                 contentView	: {
                     templateUrl	: function($stateParams){

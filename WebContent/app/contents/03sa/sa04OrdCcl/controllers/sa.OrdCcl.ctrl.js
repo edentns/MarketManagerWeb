@@ -49,16 +49,20 @@
     	            cancelReasonCode = (function(){
         				var param = {
         					lnomngcdhd: "SYCH00056",
-        					lcdcls: "SA_000015"
+        					lcdcls: "SA_000015",
+    	    				customnoc: "00000"
         				};
             			UtilSvc.getCommonCodeList(param).then(function (res) {
             				if(res.data.length >= 1){
             					ordCancelManagementDataVO.cancelCodeOp.dataSource = res.data;
+            					ordCancelManagementDataVO.cancelLowCodeOp.dataSource =  res.data.filter(function(ele){
+            						return (ele.DC_RMK2);
+            					});
             				};
             			});
     	            }()),
     	            //취소  상세 사유 코드 드랍 박스 실행	
-    	            cancelRowReasonCode = (function(){
+    	            /*cancelRowReasonCode = (function(){
         				var param = {
         					lnomngcdhd: "SYCH00056",
         					lcdcls: "SA_000015",
@@ -71,7 +75,7 @@
             					}); 
             				}
             			});
-    	            }()),
+    	            }()),*/
     	            //취소 거부 구분 코드 드랍 박스 실행	
     	            cancelRejectCode = (function(){
         				var param = {
@@ -520,8 +524,12 @@
                 		confirmation: false            
                 	},
                 	edit: function(e){
-                		var dataVo = $scope.ordCancelManagementDataVO,              			
+                		var dataVo = $scope.ordCancelManagementDataVO,
+                			noMngmrk = e.model.NO_MNGMRK,
+                			noMrk = e.model.NO_MNGMRK,
                 			ddlRejectCodeSel = e.container.find("select[name=cancel_reject_code]"),
+                			ddlCancelReason = e.container.find("select[name=CD_CCLHRNKRSN]").data("kendoDropDownList"),
+                			ddlCancelLowReason = e.container.find("select[name=CD_CCLLRKRSN]").data("kendoDropDownList"),
                 			inputDataSource = "",
                 			rejectCodeDS = "";
                 		                		
@@ -533,12 +541,23 @@
                 			},0);
                 		};
                 		
+                		ddlCancelReason.dataSource.data(dataVo.cancelCodeOp.dataSource.filter(function(ele){
+                			return ele.DC_RMK1 === noMngmrk;
+                		}));
+                		
+        				if(ddlCancelLowReason){
+        					var dclr = ddlCancelLowReason.dataSource;
+        					dclr.data(dataVo.cancelLowCodeOp.dataSource.filter(function(ele){
+                    			return ele.DC_RMK1 === noMngmrk;
+                    		}));
+        				}	        				   
+                		
                 		inputDataSource = dataVo.shipList.filter(function(ele){
-                			return ele.DC_RMK1 === e.model.NO_MRK;
+                			return ele.DC_RMK1 === noMrk;
                 		});
                 		
                 		rejectCodeDS = dataVo.cancelRejectCodeOp.filter(function(ele){
-                			return ele.DC_RMK1 === e.model.NO_MNGMRK;
+                			return ele.DC_RMK1 === noMngmrk;
                 		});
                 		                		
                 		ddlRejectCodeSel.kendoDropDownList({

@@ -3,7 +3,7 @@
         <div id="app-content-header">
             <ol class="breadcrumb">
                 <li><a href="#99sy/syDashboard"><i class="fa fa-home fa-2x"></i></a></li>
-                <li><a href="#03sa/saOrdCcl">주문·배송 / 취소·반품·교환 / 취소처리</a></li>
+                <li><a href="#03sa/saOrdCcl">취소·반품·교환 / 취소처리</a></li>
             </ol>
         </div>
     </div>
@@ -203,9 +203,23 @@
 						data-bind="value: CD_CCLHRNKRSN"
                 		style="width: 100%">
 					</select>
-				</td>
+				</td>				
+				#if(NO_MNGMRK === 'SYMM170901_00001'){#
+					<td class="active border-right-line">
+						주문취소 상세코드 
+					</td>
+					<td>
+					<select kendo-drop-down-list
+               		 	k-options="ordCancelManagementDataVO.cancelLowCodeOp"
+						name="CD_CCLLRKRSN"
+						data-bind="value: CD_CCLLRKRSN"
+                		style="width: 100%">
+					</select>
+					</td>
+				#}else{#
 				<td colspan="2">
-				</td> 
+				</td>	
+				#}#	
 			</tr>
 
 			<tr class="border-bottom-line">
@@ -216,38 +230,6 @@
 					<textarea class="k-textbox k-state-disabled" name="NM_CCLHRNKRSN" data-bind="value: NM_CCLHRNKRSN" disabled="disabled" style="width:100%; height:100px; overflow-y: scroll;"></textarea>
 				</td> 
 			</tr>
-			#if(NO_MNGMRK === 'SYMM170901_00001'){#
-			<tr class="border-bottom-line">
-				<td class="active border-right-line">
-					주문취소 상세코드 
-				</td>
-				<td>
-					<select kendo-drop-down-list
-               		 	k-options="ordCancelManagementDataVO.cancelLowCodeOp"
-						name="CD_CCLLRKRSN"
-						data-bind="value: CD_CCLLRKRSN"
-                		style="width: 100%">
-					</select>
-				</td>
-				<td colspan="2">
-				</td> 
-			</tr>
-			#}#
-			#if(NO_MNGMRK === 'SYMM170901_00001'){#
-			<tr class="border-bottom-line">
-				<td class="active border-right-line">
-					주문취소 상세사유
-				</td>
-				<td colspan="3">			
-					<textarea class="k-textbox k-state-disabled" 
-									name="NM_CCLLRKRSN" 
-									data-bind="value: NM_CCLLRKRSN" 
-									disabled="disabled" 
-									style="width:100%; height:100px; overflow-y: scroll;">
-					</textarea>
-				</td> 
-			</tr>
-			#}#	
 			<tr class="border-bottom-line">
 				<td class="active border-right-line">
 					<code>*</code>취소거부 구분<br/>	
@@ -323,7 +305,7 @@
 
 <style>
 .k-edit-form-container{
-    width: 700px;
+    width: 750px;
 }
 .k-popup-edit-form .k-edit-label{
     width: 20%;

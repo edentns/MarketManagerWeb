@@ -12,20 +12,10 @@
             views	: {
                 contentView	: {
                     templateUrl	: function($stateParams){
-                    	if ($stateParams.menu) {
-                            $stateParams.kind = "";
-                        }else{
-                        	$stateParams.kind = "Info";
-                        }
-                    	return "app/contents/03sa/sa03ShpStdbyOrd/templates/sa.ShpStdbyOrd"+ $stateParams.kind +".tpl.html";                    	
+                    	return "app/contents/03sa/sa03ShpStdbyOrd/templates/sa.ShpStdbyOrd.tpl.html";                    	
                     },
-                    controllerProvider  : ["$stateParams",function($stateParams){
-                    	if ($stateParams.menu) {
-                            $stateParams.kind = "";
-                        }else{
-                        	$stateParams.kind = "Info";
-                        }
-                    	return "sa.ShpStdbyOrd"+ $stateParams.kind +"Ctrl";                                  
+                    controllerProvider  : ["$stateParams",function($stateParams){                    
+                    	return "sa.ShpStdbyOrdCtrl";                                  
                     }],
                     resolve		: {
                         resData: ["AuthSvc", "$q", function (AuthSvc, $q) {

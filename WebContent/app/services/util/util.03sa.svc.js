@@ -22,6 +22,7 @@
             	return result;
             };
             
+            //송장번호 유효성검사
             this.NoINVOValidation = function(input, colunm, valicolunm){
             	//var regTest = /^[0-9]{1}[0-9\-]+[0-9]{1}$/;
             	var regTest = /^(([\d]+)\-|([\d]+))+(\d)+$/;
@@ -122,6 +123,37 @@
             		};
             	}
             };
+            
+            //외부 kendo html 파일 불러오기
+            this.externalKmodalPopup = function (param) {
+				return $http({
+					method  : "GET",
+					url 	: param,
+		            contentType: "text/x-kendo-template; charset=UTF-8",
+				}).success(function (data, status, headers, config) {
+					angular.element("#app-content").append(data);
+				}).error(function (data, status, headers, config) {
+                    alert("Error Loading Templates -- TODO: Better Error Handling");
+				});
+			};
+            
+			//심플한 검색어 저장 
+			this.sessionStorage = {
+				setItem: function(name, data) {	
+					$window.sessionStorage.setItem(name, JSON.stringify(data));
+				},				
+				getItem: function(name) {
+					var result = $window.sessionStorage.getItem(name);
+					
+					if (result) {
+						result = JSON.parse(result);
+					}					
+					return result;
+				},	            
+	            removeItem: function(name) {	                
+	                $window.sessionStorage.removeItem(name);
+	            }
+			};
 		}
 	]);
 }());

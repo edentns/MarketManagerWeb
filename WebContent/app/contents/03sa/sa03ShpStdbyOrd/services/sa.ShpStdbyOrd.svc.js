@@ -113,11 +113,21 @@
 						method	: "GET",
 						url		: APP_CONFIG.domain +"/shpbyord/shplist/"+decodeURIComponent(param.NO_MRK),
 					}).success(function (data, status, headers, config) {
-						if(data === "success"){
-							//alert("배송정보를 전송 하였습니다.");
-						}else{
-							//alert("배송정보 전송을 실패 하였습니다.");
-						}
+						
+					}).error(function (data, status, headers, config) {
+						alert("시스템 오류로 인하여 택배사 코드가 표시되지 않았습니다.");
+					});
+				},
+				
+				/**
+				 * 단일 택배사 코드
+				 */
+				shplistInfo : function (param) {					
+					return $http({
+						method	: "GET",
+						url		: APP_CONFIG.domain +"/shpbyord/shplistinfo/"+decodeURIComponent(param.NO_ORD),
+					}).success(function (data, status, headers, config) {
+						
 					}).error(function (data, status, headers, config) {
 						alert("시스템 오류로 인하여 택배사 코드가 표시되지 않았습니다.");
 					});

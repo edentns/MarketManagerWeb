@@ -7,10 +7,9 @@
      * 상품분류관리
      */
     angular.module("sa.Ord.controller")
-        .controller("sa.OrdCtrl", ["$scope", "$cookieStore", "$state", "$http", "$q", "$log", "sa.OrdSvc", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "MenuSvc", "Util03saSvc", "APP_SA_MODEL", 
-            function ($scope, $cookieStore, $state, $http, $q, $log, saOrdSvc, APP_CODE, $timeout, resData, Page, UtilSvc, MenuSvc, Util03saSvc, APP_SA_MODEL) {
-	            var page  = $scope.page = new Page({ auth: resData.access }),
-		            today = edt.getToday(),
+        .controller("sa.OrdCtrl", ["$scope", "$window", "$state", "$http", "$q", "$log", "sa.OrdSvc", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "MenuSvc", "Util03saSvc", "APP_SA_MODEL", 
+            function ($scope, $window, $state, $http, $q, $log, saOrdSvc, APP_CODE, $timeout, resData, Page, UtilSvc, MenuSvc, Util03saSvc, APP_SA_MODEL) {	            
+		        var today = edt.getToday(),
 		            menuId = MenuSvc.getNO_M($state.current.name);
 	            
 	            var ordInitDataBinding = {
@@ -55,9 +54,18 @@
         				};
             			UtilSvc.getCommonCodeList(param).then(function (res) {
             				if(res.data.length >= 1){
-            					ordDataVO.cancelCodeOp.dataSource = res.data;
+            					ordDataVO.cancelCodeOp = res.data.filter(function(ele){
+            						return (!ele.DC_RMK2);
+            					});
+            					ordDataVO.cancelCodeLowOp = res.data.filter(function(ele){
+            						return (ele.DC_RMK2);
+            					});
             				}
             			});
+    	            }),
+    	            cclPop : (function(){
+    	            	var param = "app/contents/03sa/sa02Ord/templates/sa.OrdCclPop.tpl.html";
+    	            	Util03saSvc.externalKmodalPopup(param).then(function (res) {});
     	            })
 	            },  	            
 	            
@@ -98,7 +106,8 @@
                     NO_MRKITEMORD    : { type: APP_SA_MODEL.NO_MRKITEMORD.type          , editable: false, nullable: false },                    
                     DC_SHPCOSTSTAT: { type: "string" , editable: false, nullable: false },
                     NO_MNGMRK	  : { type: "string" , editable: false, nullable: false },	                                        
-                    CD_CCLRSN     : { type: "array",  
+                    CD_CCLRSN     : { 
+                    				  type: "string",  
                     				  editable: true, 
                     				  nullable: false,
 				                      validation: {
@@ -110,24 +119,39 @@
 				                                return true;
 				                            }
 				                        }
+                                    },                          
+                    CD_CCLLRKRSN :  { 
+                    				  type: "string",  
+                    				  editable: true, 
+                    				  nullable: false,
+				                      validation: {
+				                    	  cd_ccllrkrsnvalidation: function (input) {
+				                            	if (input.is("[name='CD_CCLLRKRSN']") && input.val() === "") {
+				                                    input.attr("data-cd_ccllrkrsnvalidation-msg", "하위 취소 사유코드를 입력해 주세요.");
+				                                    return false;
+				                                };
+				                                return true;
+				                            }
+				                        }
                                     },
-                    DC_CCLRSNCTT  : { type: APP_SA_MODEL.DC_CCLRSNCTT.type, 
+                    DC_CCLRSNCTT :  { 
+                    				  type: APP_SA_MODEL.DC_CCLRSNCTT.type, 
                     				  editable: true, 
                     				  nullable: false,
 				                      validation: {
 				                            dc_cclrsncttvalidation: function (input) {
-				                            	if (input.is("[name='DC_CCLRSNCTT']") && input.val() === "") {
+				                            	if (input.is("[name='DC_CCLRSNCTT']") && !input.val()) {
 				                            		input.attr("data-dc_cclrsncttvalidation-msg", "주문취소사유를 입력해 주세요.");
 					                                return false;
 				                                }
-				                            	if(input.val().length > 1000){
-				                            		input.attr("data-dc_cclrsncttvalidation-msg", "주문취소사유를 1000자 이내로 입력해 주세요.");
+				                            	if(input.is("[name='DC_CCLRSNCTT']") && (input.val().length > 1000 || input.val().length < 8)){
+				                            		input.attr("data-dc_cclrsncttvalidation-msg", "주문취소사유를 8자 이상 1000자 이내로 입력해 주세요.");
 				                                    return false;
 				                                }
 				                                return true;
 				                            }
 				                        }
-                                    }
+                                     }
                 },
                 
                 grdCol = [[APP_SA_MODEL.ROW_CHK],
@@ -162,6 +186,7 @@
 	            	me.orderStatus();
 	            	me.betweenDate();
 	            	me.cancelReasonCode();
+	            	me.cclPop();
 	            };
 	            
 	            var ordDataVO = $scope.ordDataVO = {
@@ -188,15 +213,12 @@
 	        		ordMrkNameMo : "*",
 	        		ordStatusOp : [],
 	        		ordStatusMo : "*",
+	        		cancelCodeOp : [],
+	        		cancelCodeSel : [],
+	        		cancelCodeLowOp : [],
+	        		cancelCodeLowSel : [],
 	        		betweenDateOptionOp : [],
 	        		betweenDateOptionMo : "",
-	        		cancelCodeOp : {
-            			dataSource : [],
-	        			dataTextField:"NM_DEF",
-	                    dataValueField:"CD_DEF",
-                		optionLabel : "취소사유코드를 선택해 주세요 ",	                    
-	                    valuePrimitive: true      
-	        		},
 	        		cancelCodeMo : "",
 	        		dataTotal : 0,
 	        		resetAtGrd :"",
@@ -223,7 +245,12 @@
     				if(Util03saSvc.readValidation(me.param)){
     					$scope.ordkg.dataSource.read();
     				};
-    				$cookieStore.put("ordSerchParam",me.param);
+    				if(Util03saSvc.sessionStorage.getItem("ordSerchParam")){        				
+    					Util03saSvc.sessionStorage.removeItem("ordSerchParam");
+    					Util03saSvc.sessionStorage.setItem("ordSerchParam" ,me.param);
+    				}else{
+    					Util03saSvc.sessionStorage.setItem("ordSerchParam" ,me.param);    					
+    				}    					    				
 	            };
 	            
 	            //초기화버튼
@@ -250,11 +277,11 @@
                 	me.resetAtGrd.dataSource.data([]);	            		            	
 	            };
 	            
-	            //쿠키를 이용한 조회 저장 기능
-	            ordDataVO.cookieSearchPlay = function(){
-            		var getParam = $cookieStore.get("ordSerchParam"), me = this;
+	            //마지막으로 조회한 워딩으로 로드시 다시 조회
+	            ordDataVO.savedSearchPlay = function(){
+            		var getParam = Util03saSvc.sessionStorage.getItem("ordSerchParam"), me = this;
             			            	
-            		if($cookieStore.get("moveOrdInfo") && Util03saSvc.readValidation(getParam)){            			
+            		if(Util03saSvc.sessionStorage.getItem("ordSerchParamChk") && Util03saSvc.readValidation(getParam)){            			
             			me.datesetting.selected = getParam.DTS_SELECTED;            			
  					    me.param = getParam;
  					    
@@ -277,7 +304,7 @@
      					   	me.datesetting.period.end.m = getParam.DTS_TO.substring(4,6); 
      					   	me.datesetting.period.end.d = getParam.DTS_TO.substring(6,8);
             				$scope.ordkg.dataSource.read();
-        					$cookieStore.put("moveOrdInfo",false);
+            				Util03saSvc.sessionStorage.removeItem("ordSerchParamChk");
 						}, 0);
             		};
 		        };
@@ -358,7 +385,6 @@
                 		change: function(e){
                 			var data = this.data();                			
                 			ordDataVO.dataTotal = $scope.ordkg.dataSource.total();
-                			//angular.element($(".k-checkbox:eq(0)")).prop("checked",false)
                 			angular.element($("#grid_chk_master")).prop("checked",false);
                 		},
                 		serverPaging: true,
@@ -385,19 +411,53 @@
                 		window : {
                 	        title: "",
                         	close : function(e){
-                        		angular.element($("#grid_chk_master")).prop("checked",false);
+                        		angular.element($("#grid_chk_master")).prop("checked",false);                        		
                         	}
                 	    },
-                		template: kendo.template($.trim($("#ord-cclpop-template").html())),
+                		template: function(data){
+                			return kendo.template($.trim($("#ord-cclpop-template").html()))(data);
+                		},
                 		confirmation: false
                 	},
-                	edit: function(e){                		
-                		var s = e.container.find("select[name=CD_CCLRSN]").data("kendoDropDownList"),
-                		    em = e.model.NO_MNGMRK;
+                	edit: function(e){
+                		var sf = e.container.find("select[name=CD_CCLRSN]"),
+                		    lf = e.container.find("select[name=CD_CCLLRKRSN]"),
+                		    tx = e.container.find("[name=DC_CCLRSNCTT]"),
+                		    lfData = "";
+                		               		
+                		if(lf.length > 0){
+                			lf.kendoDropDownList({
+                				dataSource : [],
+    		        			dataTextField : "NM_DEF",
+    		                    dataValueField : "CD_DEF",
+    	                		optionLabel : "하위 취소사유코드를 선택해 주세요 ",	                    
+    		                    valuePrimitive : true
+    	            		}); 
+                			
+                			lfData = lf.data("kendoDropDownList");
+                		}
                 		
-                		s.dataSource.data(ordDataVO.cancelCodeOp.dataSource.filter(function(ele){
-	            			return (ele.DC_RMK1 === em);
-	            		}));
+                		sf.kendoDropDownList({
+            				dataSource : ordDataVO.cancelCodeSel,
+		        			dataTextField : "NM_DEF",
+		                    dataValueField : "CD_DEF",
+	                		optionLabel : "취소사유코드를 선택해 주세요 ",	                    
+		                    valuePrimitive : true,
+		                    change : function(e){
+		                    	var cdDef = this.dataItem().CD_DEF,
+		                    		dcRmk1 = this.dataItem().DC_RMK1;
+		                    	
+		                    	if(lfData){
+		                    		lfData.dataSource.data(ordDataVO.cancelCodeLowSel.filter(function(ele){
+		                    			return (ele.DC_RMK2 === cdDef) && (ele.DC_RMK1 === dcRmk1);
+		                    		}));
+		                    	}
+		                    }
+	            		});  
+                		
+                		if(tx.length){
+                			tx.val("");
+                		}
                 	},
                 	resizable: true,
                 	rowTemplate: kendo.template($.trim(grdRowTemplate)),
@@ -437,17 +497,23 @@
 	                		
 	                		/*var selected = grid.dataItem(grid.select()).NO_MRK;*/
 		                    if(chkedLeng === 1){
-		                    	for(var i = 0 ; i < dataItem.length; i++){
-		                    		if(dataItem[i].ROW_CHK  && dataItem[i].NO_MRK == "SYMM170901_00001"){   // 쿠팡 - 주문취소 막음 (?)
-			                    		alert("쿠팡의 상품은 주문취소가 어렵습니다.");
-			                    		return;
-		                    		}
-		                    	}
-		                		grd.editRow(chked.closest('tr'));
+		                    	var noMngmrk = grid.dataItem(chked.closest('tr'));
+		                    	
+		                		ordDataVO.cancelCodeSel = ordDataVO.cancelCodeOp.filter(function(ele){
+			            			return (ele.DC_RMK1 === noMngmrk.NO_MNGMRK);
+			            		});
+		                		
+		                		ordDataVO.cancelCodeLowSel = ordDataVO.cancelCodeLowOp.filter(function(ele){
+			            			return (ele.DC_RMK1 === noMngmrk.NO_MNGMRK);
+			            		});   			
+		                				                		
+		                		grd.editRow(chked.closest('tr'));		        
 		                	}else if(chkedLeng > 1){
 		                		alert("취소할 주문을 1개만 선택해 주세요!");
+	                    		return false;
 		                	}else if(chkedLeng < 1){
 		                		alert("취소할 주문을 선택해 주세요!");
+	                    		return false;
 		                	}
 	                	});
 	                	//Switches the table row which is in edit mode and saves any changes made by the user.
@@ -497,11 +563,11 @@
 		       		if(getCurrentCell.find(".k-checkbox").length){
 		       			return;
 		       		}
-		       		$cookieStore.put("moveOrdInfo",true);
-                	$state.go("app.saOrd", { kind: "", menu: null, noOrd : noOrd, noMrkord: noMrkord});
+		       		Util03saSvc.sessionStorage.setItem("ordSerchParamChk", true)
+                	$state.go("app.saOrd", { kind: "", menu: null, rootMenu : "saOrd",  noOrd : noOrd, noMrkord: noMrkord});
                 };
                 
                 ordInitDataBinding.onlyOncePlay();
-                $scope.ordDataVO.cookieSearchPlay();
+                $scope.ordDataVO.savedSearchPlay();
             }]);
 }());
