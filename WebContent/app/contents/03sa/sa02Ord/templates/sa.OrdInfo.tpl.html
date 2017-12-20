@@ -214,12 +214,11 @@
                        	<tr data-ng-if="ordInfoDataVO.buttonHidden('004')">
                        		<th style="vertical-align:middle;">택배사</th>
                        		<td>                       			
-								<div ng-if="ordInfoDataVO.shpCodeOptions.dataSource">
                        			<select 
                        				id="CD_PARS"
                        				name="CD_PARS"                       				 
-						            kendo-drop-down-list style="width: 100%"
-						            k-option-label="'-- 택배사를 선택해 주세요 --'"
+						            kendo-drop-down-list 
+						            style="width: 100%"
 						            k-options="ordInfoDataVO.shpCodeOptions"
 						            k-ng-model="ordInfoDataVO.ds.CD_PARS"
 						            data-required-msg="택배사를 선택해 주세요."
@@ -227,7 +226,6 @@
                        				required >
                        			</select>	
                        			<span class="k-invalid-msg" data-for="CD_PARS"></span>
-                       			</div>
 							</td>
                        		<th style="vertical-align:middle;">송장번호</th>
                        		<td>

@@ -66,26 +66,30 @@
 	        			dataSource: {
 	        	            transport: {
 	        	                read: function(e){
-	        	                	var param = {	  
+	        	                	var param = {
 	        	                		NO_ORD : $stateParams.noOrd
-                                    };	        	           
-	        	                	ShpStdbyOrdSvc.shplistInfo(param).then(function (res) {
-	        	                		if(res.data.length > 0){
-	        	                			e.success(res.data);    
-	        	                		}else{
-	        	                			e.error([]);
-	        	                			alert("택배사를 설정해 주세요.");
-	        	                		}
-                        			}, function(err){
-                						e.error([]);
-                					});
+                                    };
+	        	                	if($stateParams.rootMenu !== "saOrd"){
+		        	                	ShpStdbyOrdSvc.shplistInfo(param).then(function (res) {
+		        	                		if(res.data.length > 0){
+		        	                			e.success(res.data);
+		        	                		}else{
+		        	                			e.error([]);
+		        	                			alert("택배사를 설정해 주세요.");
+		        	                		}
+	                        			}, function(err){
+	                						e.error([]);
+	                					});	        	                		
+	        	                	}else{
+	        	                		e.success([]);
+	        	                	}
 	        	                }
-	        	              }
+	        	           }
 	        	        },
 	        			dataTextField: "NM_PARS_TEXT",
                         dataValueField: "CD_PARS",
                     	valuePrimitive: false,
-                    	autoBind: true
+                    	optionLabel : "-- 택배사를 선택해 주세요 --"
 	        		},
 	        		orderInfo : { boxTitle : "주문 정보" },
 	        		procInfo : { boxTitle : "제품 정보" },
@@ -124,18 +128,19 @@
         	        						return (ele.DC_RMK2);
         	        					});
         	        				}
-        	        			});        	        			
-
-            					$timeout(function(){
-            						var selectDDL = angular.element("#CD_PARS").data("kendoDropDownList");
-            						
-            						if(res.data.CD_PARS && selectDDL){        								
-            							selectDDL.value(res.data.CD_PARS);
-            							selectDDL.trigger("change");
-            						}
-            					},0); 
-        		            });
-        	            	cancelReasonCode();        	            	
+        	        			});
+        		            }());
+        	            	
+        	            	//cancelReasonCode();
+        	            	
+        	            	$timeout(function(){
+        						var selectDDL = angular.element("#CD_PARS").data("kendoDropDownList");
+        						
+        						if(res.data.CD_PARS && selectDDL){					
+        							selectDDL.value(res.data.CD_PARS);
+        							selectDDL.trigger("change");
+        						}
+        					},0); 
         				}else{
         					alert("조회된 데이터가 없습니다.");
         				}
