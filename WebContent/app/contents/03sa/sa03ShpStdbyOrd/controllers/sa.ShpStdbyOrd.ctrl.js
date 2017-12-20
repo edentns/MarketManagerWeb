@@ -7,8 +7,8 @@
      * 상품분류관리
      */
     angular.module("sa.ShpStdbyOrd.controller")
-        .controller("sa.ShpStdbyOrdCtrl", ["$scope", "$cookieStore", "$http", "$q", "$log", "$state", "sa.ShpStdbyOrdSvc", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "MenuSvc",  "Util03saSvc", "APP_SA_MODEL", "sa.OrdSvc", 
-            function ($scope, $cookieStore, $http, $q, $log, $state, saShpStdbyOrdSvc, APP_CODE, $timeout, resData, Page, UtilSvc, MenuSvc, Util03saSvc, APP_SA_MODEL, saOrdSvc) {
+        .controller("sa.ShpStdbyOrdCtrl", ["$scope", "$http", "$q", "$log", "$state", "sa.ShpStdbyOrdSvc", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "MenuSvc",  "Util03saSvc", "APP_SA_MODEL", "sa.OrdSvc", 
+            function ($scope, $http, $q, $log, $state, saShpStdbyOrdSvc, APP_CODE, $timeout, resData, Page, UtilSvc, MenuSvc, Util03saSvc, APP_SA_MODEL, saOrdSvc) {
 	            var page  = $scope.page = new Page({ auth: resData.access }),
 		            today = edt.getToday(),
 		            menuId = MenuSvc.getNO_M($state.current.name);
@@ -19,7 +19,7 @@
             				if(res.data.length >= 1){
             					shpbyordDataVO.ordMrkNameOp = res.data;
             				}
-            			});		
+            			});
     	            }),
     	            //주문상태 드랍 박스 실행	
     	            orderStatus = (function(){
@@ -432,7 +432,7 @@
             			if( !grid.dataSource._total || grid.dataSource._total == 0){
             				alert("그리드에 데이터가 없습니다.");
             			}else{
-            				var getParam = $cookieStore.get("shpStdbyOrdSerchParam");
+            				var getParam = Util03saSvc.sessionStorage.getItem("shpStdbyOrdSerchParam");
             				var colVo = angular.copy($scope.grdShpbyordVO.columns);
             				colVo.splice(0,1);
             				getParam.gridInfo       = [colVo,[{field:"NM_MRK",title:"마켓명"},{field:"CD_DEF",title:"택배사코드"},{field:"NM_DEF",title:"택배사명"},{field:"NM_SHPCLFT",title:"택배사구분"}]];
