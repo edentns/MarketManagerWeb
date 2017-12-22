@@ -11,98 +11,7 @@
             function ($scope, $http, $q, $log, saOrdCclSvc, APP_CODE, $timeout, resData, Page, UtilSvc, MenuSvc, Util03saSvc, APP_SA_MODEL) {
 	            var page = $scope.page = new Page({ auth: resData.access }),
 		            today = edt.getToday();		            
-	            
-	             	//마켓명 드랍 박스 실행	
-	            var	mrkName = (function(){
-            			UtilSvc.csMrkList().then(function (res) {
-            				if(res.data.length >= 1){
-            					ordCancelManagementDataVO.ordMrkNameOp = res.data;
-            				}
-            			});		
-    	            }()),
-    	            //주문상태 드랍 박스 실행	
-    	            orderStatus = (function(){
-        				var param = {
-        					lnomngcdhd: "SYCH00048",
-        					lcdcls: "SA_000007"
-        				};
-            			UtilSvc.getCommonCodeList(param).then(function (res) {
-            				if(res.data.length >= 1){
-            					ordCancelManagementDataVO.ordStatusOp = res.data;
-            				}
-            			});		
-    	            }()),    	            
-    	            //기간 상태 드랍 박스 실행	
-    	            betweenDate = (function(){
-        				var param = {
-        					lnomngcdhd: "SYCH00072",
-        					lcdcls: "SA_000028"
-        				};
-            			UtilSvc.getCommonCodeList(param).then(function (res) {
-            				if(res.data.length >= 1){
-            					ordCancelManagementDataVO.betweenDateOptionOp = res.data;
-            					ordCancelManagementDataVO.betweenDateOptionMo = res.data[0].CD_DEF; //처음 로딩 때 초기 인덱스를 위하여
-            				}
-            			});		
-    	            }()),	            
-            		//취소 사유 코드 드랍 박스 실행	
-    	            cancelReasonCode = (function(){
-        				var param = {
-        					lnomngcdhd: "SYCH00056",
-        					lcdcls: "SA_000015",
-    	    				customnoc: "00000"
-        				};
-            			UtilSvc.getCommonCodeList(param).then(function (res) {
-            				if(res.data.length >= 1){
-            					ordCancelManagementDataVO.cancelCodeOp.dataSource = res.data;
-            					ordCancelManagementDataVO.cancelLowCodeOp.dataSource =  res.data.filter(function(ele){
-            						return (ele.DC_RMK2);
-            					});
-            				};
-            			});
-    	            }()),
-    	            //취소  상세 사유 코드 드랍 박스 실행	
-    	            /*cancelRowReasonCode = (function(){
-        				var param = {
-        					lnomngcdhd: "SYCH00056",
-        					lcdcls: "SA_000015",
-    	    				customnoc: "00000"
-        				};
-            			UtilSvc.getCommonCodeList(param).then(function (res) {
-            				if(res.data.length >= 1){
-            					ordCancelManagementDataVO.cancelLowCodeOp.dataSource =  res.data.filter(function(ele){
-            						return (ele.DC_RMK2);
-            					}); 
-            				}
-            			});
-    	            }()),*/
-    	            //취소 거부 구분 코드 드랍 박스 실행	
-    	            cancelRejectCode = (function(){
-        				var param = {
-        					lnomngcdhd: "SYCH00063",
-        					lcdcls: "SA_000022",
-        					mid: 'undefined',
-        					customnoc: '00000'
-        				};
-            			UtilSvc.getCommonCodeList(param).then(function (res) {
-            				if(res.data.length >= 1){
-            					ordCancelManagementDataVO.cancelRejectCodeOp = res.data;
-            				}
-            			});
-    	            }()),
-    	            //취소 상태 코드 드랍 박스 실행	
-    	            cancelStatusCode = (function(){
-        				var param = {
-        					lnomngcdhd: "SYCH00057",
-        					lcdcls: "SA_000016"
-        				};
-            			UtilSvc.getCommonCodeList(param).then(function (res) {
-            				if(res.data.length >= 1){
-            					ordCancelManagementDataVO.cancelStatusOp = res.data;
-            				}
-            			});
-    	            }());
-	            
+	            	            
 	            var grdField =  {
                     ROW_CHK       : { type: APP_SA_MODEL.ROW_CHK.type        , editable: true , nullable: false },
                     NO_ORD        : { type: APP_SA_MODEL.NO_ORD.type         , editable: false, nullable: false },
@@ -314,7 +223,6 @@
     					dataSource: [],
     					dataTextField: "NM_DEF",
                         dataValueField: "CD_DEF",
-                        //optionLabel : "주문취소코드를 선택해 주세요 ",
                         enable: false
     				},   
     				cancelLowCodeOp : {
@@ -350,6 +258,73 @@
 	        		cancelRjCdEqDate : ['001']*/
 		        };
 	            
+	            ordCancelManagementDataVO.initLoad = function () {
+	            	var me = this;
+                	var ordParam = {
+                			lnomngcdhd: "SYCH00048",
+        					lcdcls: "SA_000007"
+        				},
+        				betParam = {
+        					lnomngcdhd: "SYCH00055",
+        					lcdcls: "SA_000014"
+        				},
+        				cclCodeParam = {
+                			lnomngcdhd: "SYCH00056",
+        					lcdcls: "SA_000015",
+	    					customnoc: "00000"
+                		},
+                		cclrjtparam = {
+        					lnomngcdhd: "SYCH00063",
+        					lcdcls: "SA_000022",
+        					mid: 'undefined',
+        					customnoc: '00000'
+            			},
+            			cclstsparam = {
+        					lnomngcdhd: "SYCH00057",
+        					lcdcls: "SA_000016"
+                		};;
+                    $q.all([
+	            			UtilSvc.csMrkList().then(function (res) {
+	            				return res.data;
+	            			}),	
+	            			UtilSvc.getCommonCodeList(ordParam).then(function (res) {
+	            				return res.data;
+	            			}),
+	            			UtilSvc.getCommonCodeList(betParam).then(function (res) {
+	            				return res.data;
+	            			}),
+	            			//취소 사유 코드 드랍 박스 실행	
+	            			UtilSvc.getCommonCodeList(cclCodeParam).then(function (res) {
+	            				return res.data;
+	            			}),
+	            			//취소 거부 구분 코드 드랍 박스 실행	
+	            			UtilSvc.getCommonCodeList(cclrjtparam).then(function (res) {
+	            				return res.data;
+                			}),
+	            			//취소 상태 코드 드랍 박스 실행	
+	            			UtilSvc.getCommonCodeList(cclstsparam).then(function (res) {
+	            				return res.data;
+                			})
+                    ]).then(function (result) {
+                        me.ordMrkNameOp = result[0];
+                        me.ordStatusOp = result[1];
+                        me.betweenDateOptionOp = result[2];
+                        me.betweenDateOptionMo = result[2][0].CD_DEF; 
+                        me.cancelCodeOp = result[3].filter(function(ele){
+    						return (!ele.DC_RMK2);
+    					});
+                        me.cancelCodeLowOp = result[3].filter(function(ele){
+    						return (ele.DC_RMK2);
+    					});
+                        me.cancelRejectCodeOp = result[4];
+                        me.cancelStatusOp = result[5];
+                        
+                        $timeout(function(){
+            				Util03saSvc.storedQuerySearchPlay(me, "ordCancelParam");
+                        },0);    
+                    });
+                };
+	            
 	            //조회
 	            ordCancelManagementDataVO.inQuiry = function(){
 	            	var me = this;
@@ -360,18 +335,28 @@
 					    CD_ORDSTAT : me.ordStatusMo,
 					    NO_MRKORD : me.orderNo.value,      
 					    NM_CONS : me.buyerName.value.trim(),
-					    CD_CCLSTAT : ordCancelManagementDataVO.cancelStatusMo,
+					    CD_CCLSTAT : me.cancelStatusMo,
 					    DTS_CHK : me.betweenDateOptionMo,  
 					    DTS_FROM : new Date(me.datesetting.period.start.y, me.datesetting.period.start.m-1, me.datesetting.period.start.d).dateFormat("Ymd"),           
-					    DTS_TO : new Date(me.datesetting.period.end.y, me.datesetting.period.end.m-1, me.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis")
+					    DTS_TO : new Date(me.datesetting.period.end.y, me.datesetting.period.end.m-1, me.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis"),
+					    NM_MRK_SELCT_INDEX : me.ordMrkNameOp.allSelectNames,
+					    NM_ORDSTAT_SELCT_INDEX : me.ordStatusOp.allSelectNames,
+					    DTS_SELECTED : me.datesetting.selected	
                     }; 
     				if(Util03saSvc.readValidation(me.param)){
     					$scope.ordCancelManagementkg.dataSource.data([]);
     	            	$scope.ordCancelManagementkg.dataSource.page(1);
     	            	//$scope.ordCancelManagementkg.dataSource.read();
     				};	            	
-	            };	
-	            
+    				
+    				if(UtilSvc.localStorage.getItem("ordCancelParam")){        				
+    					UtilSvc.localStorage.removeItem("ordCancelParam");
+    					UtilSvc.localStorage.setItem("ordCancelParam" ,me.param);
+    				}else{
+    					UtilSvc.localStorage.setItem("ordCancelParam" ,me.param);    					
+    				} 
+	            };
+	            		        
 	            //초기화버튼
 	            ordCancelManagementDataVO.inIt = function(){	
             		var me  = this;
@@ -395,8 +380,7 @@
                 	me.dataTotal = 0;
                 	me.resetAtGrd = $scope.ordCancelManagementkg;
                 	me.resetAtGrd.dataSource.data([]);	 
-                	me.cancelRjCd = "";
-                	
+                	me.cancelRjCd = "";                	
 	            };	
 
 	            ordCancelManagementDataVO.isOpen = function (val) {
@@ -674,7 +658,8 @@
 	                			
 	                	});	                
 	                }
-                });
-                
+                });                
+
+                ordCancelManagementDataVO.initLoad();
             }]);    
 }());

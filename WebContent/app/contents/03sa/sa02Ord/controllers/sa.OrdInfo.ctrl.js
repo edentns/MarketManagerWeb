@@ -167,7 +167,9 @@
 	            
 	            //배송정보 등록	
 	            ordInfoDataVO.shpInfoReg = function(){
-	            	if(!this.valid('003')) return false;
+	            	if(!this.valid('003')){
+	            		return false;
+	            	}
 	            	            	
 	            	if(confirm("배송정보를 등록 하시겠습니까?")){
 	            		var defer = $q.defer(),
@@ -342,7 +344,7 @@
                     rules: {
                     	lengthy: function(input) {
 	                        if (input.is("[name=NO_INVO]")) {                 	
-	                            return (ordInfoDataVO.ordCancelPopOptionsOpenChk) ? true : (input.val().length < 20 && input.val().length > 8);
+	                            return (ordInfoDataVO.ordCancelPopOptionsOpenChk) ? true : (input.val().length < 20 && input.val().length > 7);
 	                        }
 	                        if (input.is("[name=DC_CCLRSNCTT]")) {                 	
 	                            return (input.val().length < 1000 && input.val().length > 4);
@@ -437,26 +439,5 @@
 	            	      	            
 		        //초기 화면 로드시 조회
 		        ordInfoDataVO.getInitializeOrdInfo();
-            }])
-    
-		  	//currency util
-		    .directive('kendoCustomCurrencyDirective', function($timeout) {
-		        return {
-		            restrict: 'E',
-		            scope:{
-		            	val: '@',
-		            	decimal: '@'	
-		            },
-		            link: function (scope, element) {
-		            	var val = scope.val;
-		            	
-		            	if(!angular.isNumber(val) && !val){
-		            		val = 0;
-		            	}
-		            	
-			            $timeout(function() {			            	
-			            	element.text(kendo.toString(parseInt(val), scope.decimal));
-			            });
-		            }
-		     };});
+            }]);
 }());

@@ -12,64 +12,7 @@
 		        var today = edt.getToday(),
 		            menuId = MenuSvc.getNO_M($state.current.name);
 	            
-	            var ordInitDataBinding = {
-    	            //마켓명 드랍 박스 실행	
-    	            mrkName : (function(){
-            			UtilSvc.csMrkList().then(function (res) {
-            				if(res.data.length >= 1){
-            					ordDataVO.ordMrkNameOp = res.data;
-            				}
-            			});		
-    	            }),
-    	            orderStatus : (function(){
-        				var param = {
-        					lnomngcdhd: "SYCH00048",
-        					lcdcls: "SA_000007",
-        					mid: menuId
-        				};
-            			UtilSvc.getCommonCodeList(param).then(function (res) {
-            				if(res.data.length >= 1){
-            					ordDataVO.ordStatusOp = res.data;
-            				}
-            			});
-    	            }),
-    	            betweenDate : (function(){
-        				var param = {
-        					lnomngcdhd: "SYCH00055",
-        					lcdcls: "SA_000014"
-        				};
-            			UtilSvc.getCommonCodeList(param).then(function (res) {
-            				if(res.data.length >= 1){
-            					ordDataVO.betweenDateOptionOp = res.data;
-            					ordDataVO.betweenDateOptionMo = res.data[0].CD_DEF; //처음 로딩 때 초기 인덱스를 위하여
-            				}
-            			});
-    	            }),
-    	            //취소 사유 코드 드랍 박스 실행	
-    	            cancelReasonCode : (function(){
-        				var param = {
-        					lnomngcdhd: "SYCH00056",
-        					lcdcls: "SA_000015",
-	    					customnoc: "00000"
-        				};
-            			UtilSvc.getCommonCodeList(param).then(function (res) {
-            				if(res.data.length >= 1){
-            					ordDataVO.cancelCodeOp = res.data.filter(function(ele){
-            						return (!ele.DC_RMK2);
-            					});
-            					ordDataVO.cancelCodeLowOp = res.data.filter(function(ele){
-            						return (ele.DC_RMK2);
-            					});
-            				}
-            			});
-    	            }),
-    	            cclPop : (function(){
-    	            	var param = "app/contents/03sa/sa02Ord/templates/sa.OrdCclPop.tpl.html";
-    	            	Util03saSvc.externalKmodalPopup(param).then(function (res) {});
-    	            })
-	            },  	            
-	            
-	            grdField =  {
+	            var grdField =  {
                     ROW_CHK       : { type: APP_SA_MODEL.ROW_CHK.type        , editable: true , nullable: false },
                     NO_ORD        : { type: APP_SA_MODEL.NO_ORD.type         , editable: false, nullable: false },
                     NO_APVL       : { type: APP_SA_MODEL.NO_APVL.type        , editable: false, nullable: false },
@@ -180,15 +123,6 @@
                 grdRowTemplate     = grdRowTemplate    + grdDetOption.gridContentTemplate;
                 grdAltRowTemplate  = grdAltRowTemplate + grdDetOption.gridContentTemplate;
                 
-	            ordInitDataBinding.onlyOncePlay = function(){
-	            	var me = this;
-	            	me.mrkName();
-	            	me.orderStatus();
-	            	me.betweenDate();
-	            	me.cancelReasonCode();
-	            	me.cclPop();
-	            };
-	            
 	            var ordDataVO = $scope.ordDataVO = {
 	            	boxTitle : "주문",
 	            	setting : {
@@ -225,19 +159,71 @@
 	        		param : "" 
 		        };	           
 	            
+	            ordDataVO.initLoad = function () {
+	            	var me = this;
+                	var ordParam = {
+                			lnomngcdhd: "SYCH00048",
+        					lcdcls: "SA_000007",
+        					mid: menuId
+        				},
+        				betParam = {
+        					lnomngcdhd: "SYCH00055",
+        					lcdcls: "SA_000014"
+        				},
+        				cclCodeParam = {
+                			lnomngcdhd: "SYCH00056",
+        					lcdcls: "SA_000015",
+	    					customnoc: "00000"
+                		},
+                		externalParam = "app/contents/03sa/sa02Ord/templates/sa.OrdCclPop.tpl.html";
+                    $q.all([
+            			UtilSvc.csMrkList().then(function (res) {
+            				return res.data;
+            			}),	
+            			UtilSvc.getCommonCodeList(ordParam).then(function (res) {
+            				return res.data;
+            			}),
+            			UtilSvc.getCommonCodeList(betParam).then(function (res) {
+            				return res.data;
+            			}),
+            			//취소 사유 코드 드랍 박스 실행	
+            			UtilSvc.getCommonCodeList(cclCodeParam).then(function (res) {
+            				return res.data;
+            			}),
+    	            	Util03saSvc.externalKmodalPopup(externalParam).then(function (res) {
+    	            		return res.data;
+    	            	})
+                    ]).then(function (result) {
+                        me.ordMrkNameOp = result[0];
+                        me.ordStatusOp = result[1];
+                        me.betweenDateOptionOp = result[2];
+                        me.betweenDateOptionMo = result[2][0].CD_DEF; 
+                        me.cancelCodeOp = result[3].filter(function(ele){
+    						return (!ele.DC_RMK2);
+    					});
+                        me.cancelCodeLowOp = result[3].filter(function(ele){
+    						return (ele.DC_RMK2);
+    					});
+                        
+                        $timeout(function(){
+            				Util03saSvc.storedQuerySearchPlay(me, "ordSerchParam");
+                        },0);    
+                    });
+                };
+	            
 	            //조회
             	ordDataVO.inQuiry = function(){
 	            	var me = this;
 	            	me.param = {
-    				    NM_MRKITEM : me.procName.value.trim(),
-					    NM_MRK : me.ordMrkNameMo.trim(),
+    				    NM_MRKITEM : me.procName.value,
+					    NM_MRK : me.ordMrkNameMo,
 					    NM_MRK_SELCT_INDEX : me.ordMrkNameOp.allSelectNames,
-					    CD_ORDSTAT : me.ordStatusMo.trim(),
+					    CD_ORDSTAT : me.ordStatusMo,
 					    NM_ORDSTAT_SELCT_INDEX : me.ordStatusOp.allSelectNames,
-					    NO_MRKORD : me.orderNo.value.trim(),      
-					    NM_PCHR : me.buyerName.value.trim(),
-					    NO_ORDDTRM : me.admin.value.trim(),  
-					    DTS_CHK : me.betweenDateOptionMo.trim(),  
+					    NO_MRKORD : me.orderNo.value,      
+					    NM_PCHR : me.buyerName.value,
+					    NO_ORDDTRM : me.admin.value,  
+					    DTS_CHK : me.betweenDateOptionMo,  
 					    DTS_FROM : new Date(me.datesetting.period.start.y, me.datesetting.period.start.m-1, me.datesetting.period.start.d, "00", "00", "00").dateFormat("YmdHis"),           
 					    DTS_TO : new Date(me.datesetting.period.end.y, me.datesetting.period.end.m-1, me.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis"),
 					    DTS_SELECTED : me.datesetting.selected					    
@@ -245,11 +231,11 @@
     				if(Util03saSvc.readValidation(me.param)){
     					$scope.ordkg.dataSource.read();
     				};
-    				if(Util03saSvc.sessionStorage.getItem("ordSerchParam")){        				
-    					Util03saSvc.sessionStorage.removeItem("ordSerchParam");
-    					Util03saSvc.sessionStorage.setItem("ordSerchParam" ,me.param);
+    				if(UtilSvc.localStorage.getItem("ordSerchParam")){        				
+    					UtilSvc.localStorage.removeItem("ordSerchParam");
+    					UtilSvc.localStorage.setItem("ordSerchParam" ,me.param);
     				}else{
-    					Util03saSvc.sessionStorage.setItem("ordSerchParam" ,me.param);    					
+    					UtilSvc.localStorage.setItem("ordSerchParam" ,me.param);    					
     				}    					    				
 	            };
 	            
@@ -277,38 +263,6 @@
                 	me.resetAtGrd.dataSource.data([]);	            		            	
 	            };
 	            
-	            //마지막으로 조회한 워딩으로 로드시 다시 조회
-	            ordDataVO.savedSearchPlay = function(){
-            		var getParam = Util03saSvc.sessionStorage.getItem("ordSerchParam"), me = this;
-            			            	
-            		if(Util03saSvc.sessionStorage.getItem("ordSerchParamChk") && Util03saSvc.readValidation(getParam)){            			
-            			me.datesetting.selected = getParam.DTS_SELECTED;            			
- 					    me.param = getParam;
- 					    
-            			$timeout(function(){
-            				me.ordMrkNameMo = getParam.NM_MRK; 
-            				me.ordMrkNameOp.setSelectNames = getParam.NM_MRK_SELCT_INDEX;
-                			me.ordStatusMo = getParam.CD_ORDSTAT;
-                			me.ordStatusOp.setSelectNames = getParam.NM_ORDSTAT_SELCT_INDEX;
-                			                			
-            				me.procName.value = getParam.NM_MRKITEM;
-	            			me.orderNo.value = getParam.NO_MRKORD;
-	            			me.buyerName.value = getParam.NM_PCHR;
-	            			me.admin.value = getParam.NO_ORDDTRM; 
-            				me.betweenDateOptionMo = getParam.DTS_CHK;
-            				
-            				me.datesetting.period.start.y = getParam.DTS_FROM.substring(0,4);
-                			me.datesetting.period.start.m = getParam.DTS_FROM.substring(4,6);
-                			me.datesetting.period.start.d = getParam.DTS_FROM.substring(6,8); 					    
-                			me.datesetting.period.end.y = getParam.DTS_TO.substring(0,4);
-     					   	me.datesetting.period.end.m = getParam.DTS_TO.substring(4,6); 
-     					   	me.datesetting.period.end.d = getParam.DTS_TO.substring(6,8);
-            				$scope.ordkg.dataSource.read();
-            				Util03saSvc.sessionStorage.removeItem("ordSerchParamChk");
-						}, 0);
-            		};
-		        };
-
 	            ordDataVO.isOpen = function (val) {
 	            	if(val) {
 	            		$scope.ordkg.wrapper.height(616);
@@ -561,13 +515,11 @@
 		       		
 		       		//체크박스 체크다가 넘어 가면 짜증나니까 체크박스에선 막음
 		       		if(getCurrentCell.find(".k-checkbox").length){
-		       			return;
+		       			return false;
 		       		}
-		       		Util03saSvc.sessionStorage.setItem("ordSerchParamChk", true)
                 	$state.go("app.saOrd", { kind: "", menu: null, rootMenu : "saOrd",  noOrd : noOrd, noMrkord: noMrkord});
                 };
                 
-                ordInitDataBinding.onlyOncePlay();
-                $scope.ordDataVO.savedSearchPlay();
+                ordDataVO.initLoad();
             }]);
 }());

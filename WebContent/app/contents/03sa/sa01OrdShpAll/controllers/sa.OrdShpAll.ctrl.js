@@ -11,43 +11,7 @@
             function ($scope, $http, $q, $log, saOrdShpAllSvc, APP_CODE, $timeout, resData, Page, UtilSvc, Util03saSvc, APP_SA_MODEL) {
 	            var page  = $scope.page = new Page({ auth: resData.access }),
 		            today = edt.getToday();
-	            
-	            var searchBox = {
-            		//마켓명 드랍 박스 실행	
-            		mrkName : (function(){
-            			UtilSvc.csMrkList().then(function (res) {
-            				if(res.data.length >= 1){
-            					ordAllDataVO.ordMrkNameOp = res.data;
-            				}
-            			});
-    	            }()),	
-    	            //주문상태 드랍 박스 실행
-    	            orderStatus : (function(){
-        				var param = {
-        					lnomngcdhd: "SYCH00048",
-        					lcdcls: "SA_000007"
-        				};
-            			UtilSvc.getCommonCodeList(param).then(function (res) {
-            				if(res.data.length >= 1){
-            					ordAllDataVO.ordStatusOp = res.data;
-            				}
-            			});
-    	            }()),
-    	            //기간 상태 드랍 박스 실행
-    	            betweenDate : (function(){
-        				var param = {
-        					lnomngcdhd: "SYCH00055",
-        					lcdcls: "SA_000014"
-        				};
-            			UtilSvc.getCommonCodeList(param).then(function (res) {
-            				if(res.data.length >= 1){
-            					ordAllDataVO.betweenDateOptionOp = res.data;
-            					ordAllDataVO.betweenDateOptionMo = res.data[0].CD_DEF; //처음 로딩 때 초기 인덱스를 위하여
-            				}
-            			});
-    	            }())
-	            };
-
+	         
 	            var grdField =  {
                     NO_ORD         : { type: APP_SA_MODEL.NO_ORD.type         , editable: false, nullable: false },
                     NO_APVL        : { type: APP_SA_MODEL.NO_APVL.type        , editable: false, nullable: false },
@@ -139,28 +103,64 @@
 	        		dataTotal : 0,
 	        		resetAtGrd : "",
 	        		param : ""
-	            };   
-			            
+	            };   	         
+	            
+	            ordAllDataVO.initLoad = function () {
+	            	var me = this;
+                	var ordParam = {
+        					lnomngcdhd: "SYCH00048",
+        					lcdcls: "SA_000007"
+        				};
+                	var betParam = {
+        					lnomngcdhd: "SYCH00055",
+        					lcdcls: "SA_000014"
+        				};
+                    $q.all([
+                        UtilSvc.csMrkList().then(function (result) {
+                        	return result.data;
+            			}),
+            			UtilSvc.getCommonCodeList(ordParam).then(function (result) {
+            				return result.data;
+            			}),
+            			UtilSvc.getCommonCodeList(betParam).then(function (result) {
+            				return result.data;
+            			})
+                    ]).then(function (result) {
+                        me.ordMrkNameOp = result[0];
+                        me.ordStatusOp = result[1];
+                        me.betweenDateOptionOp = result[2];
+                        me.betweenDateOptionMo = result[2][0].CD_DEF; //처음 로딩 때 초기 인덱스를 위하여
+                        
+                        $timeout(function(){
+            				Util03saSvc.storedQuerySearchPlay(me, "ordAllDataVO");
+                        },0);    
+                    });
+                };
+
 	            //조회
 	            ordAllDataVO.inQuiry = function(){
 	            	var me = this;
 	            	me.param = {
-    				    NM_MRKITEM : ordAllDataVO.procName.value,
-					    NO_MRK : ordAllDataVO.ordMrkNameMo, 
-					    CD_ORDSTAT : ordAllDataVO.ordStatusMo,
-					    NO_MRKORD : ordAllDataVO.orderNo.value,      
-					    NM_PCHR : ordAllDataVO.buyerName.value,
-					    DTS_CHK : ordAllDataVO.betweenDateOptionMo,  
-					    DTS_FROM : new Date(ordAllDataVO.datesetting.period.start.y, ordAllDataVO.datesetting.period.start.m-1, ordAllDataVO.datesetting.period.start.d, "00", "00", "00").dateFormat("YmdHis"),           
-					    DTS_TO : new Date(ordAllDataVO.datesetting.period.end.y, ordAllDataVO.datesetting.period.end.m-1, ordAllDataVO.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis")
+    				    NM_MRKITEM : me.procName.value,
+					    NO_MRK : me.ordMrkNameMo, 
+					    CD_ORDSTAT : me.ordStatusMo,
+					    NO_MRKORD : me.orderNo.value,      
+					    NM_PCHR : me.buyerName.value,
+					    DTS_CHK : me.betweenDateOptionMo,  
+					    DTS_FROM : new Date(me.datesetting.period.start.y, me.datesetting.period.start.m-1, me.datesetting.period.start.d, "00", "00", "00").dateFormat("YmdHis"),           
+					    DTS_TO : new Date(me.datesetting.period.end.y, me.datesetting.period.end.m-1, me.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis"),
+					    NM_MRK_SELCT_INDEX : me.ordMrkNameOp.allSelectNames,
+					    NM_ORDSTAT_SELCT_INDEX : me.ordStatusOp.allSelectNames,
+					    DTS_SELECTED : me.datesetting.selected	
                     };
     				if(Util03saSvc.readValidation(me.param)){
     					$scope.ordallkg.dataSource.data([]); // 페이지 인덱스 초기화가 제대로 안되서 일케함	
     	            	$scope.ordallkg.dataSource.page(1);
     	            	//$scope.ordallkg.dataSource.read();
-    				}	            	              	
+    				}	         				
+    				UtilSvc.localStorage.setItem("ordAllDataVO" ,me.param);
 	            };
-		            
+	            
 	            //초기화버튼
 	            ordAllDataVO.inIt = function(){      	
             		var me  = this;
@@ -334,24 +334,22 @@
 	            $scope.$on("kendoWidgetCreated", function(event, widget){
                 	var grd = $scope.ordallkg;
                 	
-	                if (widget === grd){	                	
-	                	//
+	                if (widget === grd){	    
 	                	widget.element.find(".k-grid-ordall-delay").on("click", function(e){
 	                		alert("배송지연은 [공사중]입니다.");
 	                	});
-	                	//
 	                	widget.element.find(".k-grid-ordall-cencel").on("click", function(e){
 	                		alert("주문취소는 [공사중]입니다.");
 	                	});
-	                	//
 	                	widget.element.find(".k-grid-ordall-output").on("click", function(e){
 	                		alert("송장출력은 [공사중]입니다.");
-	                	});	                		                	
-	                	//
+	                	});	 
 	                	widget.element.find(".k-grid-ordall-send").on("click", function(e){
 	                		alert("배송정보 전송하기는 [공사중]입니다.");
 	                	});
 	                }
-                });    
+                });	      
+	            
+	            ordAllDataVO.initLoad();	           
             }]);
 }());

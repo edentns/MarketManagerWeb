@@ -11,84 +11,7 @@
             function ($scope, $http, $q, $log, saEchgReqSvc, APP_CODE, $timeout, resData, Page, UtilSvc, MenuSvc, $window, Util03saSvc) {
 	            var page  = $scope.page = new Page({ auth: resData.access }),
 		            today = edt.getToday();
-	            
-            	//마켓명 드랍 박스 실행	
-        		var mrkName = (function(){
-	        			UtilSvc.csMrkList().then(function (res) {
-	        				if(res.data.length >= 1){
-	        					echgDataVO.ordMrkNameOp = res.data;
-	        				}
-	        			});
-		            }()),
-        		
-	            	//주문상태 드랍 박스 실행
-	            	orderStatus = (function(){
-	    				var param = {
-	    					lnomngcdhd: "SYCH00048",
-	    					lcdcls: "SA_000007"
-	    				};
-	        			UtilSvc.getCommonCodeList(param).then(function (res) {
-	        				if(res.data.length >= 1){
-	        					echgDataVO.ordStatusOp = res.data;
-	        				}
-	        			});
-	            	}()),
-	            
-	            	//기간 상태 드랍 박스 실행
-	            	betweenDate = (function(){
-	    				var param = {
-	    					lnomngcdhd: "SYCH00067",
-	    					lcdcls: "SA_000026"
-	    				};
-	        			UtilSvc.getCommonCodeList(param).then(function (res) {
-	        				if(res.data.length >= 1){
-	        					echgDataVO.betweenDateOptionOp = res.data;
-	        					echgDataVO.betweenDateOptionMo = res.data[0].CD_DEF; //처음 로딩 때 초기 인덱스를 위하여
-	        				}
-	        			});
-	            	}()),
-	            
-	            	//교환 사유 코드
-	            	cdEchgrsn = (function(){
-	    				var param = {
-	    					lnomngcdhd: "SYCH00052",
-	    					lcdcls: "SA_000011"
-	    				};
-	        			UtilSvc.getCommonCodeList(param).then(function (res) {
-	        				if(res.data.length >= 1){
-	        					echgDataVO.cdEchgrsnOp.dataSource = res.data;
-	        				}
-	        			});
-	            	}()),
-	            
-	            	//교환 거부 코드
-	            	cdEchgrjt = (function(){
-	    				var param = {
-	    					lnomngcdhd: "SYCH00068",
-	    					lcdcls: "SA_000027",
-	    					customnoc: "00000"
-	    				};
-	        			UtilSvc.getCommonCodeList(param).then(function (res) {
-	        				if(res.data.length >= 1){
-	        					echgDataVO.cdEchgrjtOp = res.data;
-	        				}
-	        			});
-	            	}()),
-	            
-	            	//교환 상태 코드
-		            cdEchgrjt = (function(){
-	    				var param = {
-	    					lnomngcdhd: "SYCH00054",
-	    					lcdcls: "SA_000013"
-	    				};
-	        			UtilSvc.getCommonCodeList(param).then(function (res) {
-	        				if(res.data.length >= 1){
-	        					echgDataVO.echgStatusOp = res.data;
-	        					echgDataVO.echgStatusMo = res.data[0].CD_DEF;
-	        				}
-	        			});
-		            }());
-
+	           
 	            var grdField =  {
                     ROW_CHK       	: { type: "bolean"    , editable: true , nullable: false },
                     NO_ORD        	: { type: "string"    , editable: false, nullable: false },
@@ -286,25 +209,96 @@
 	        		shpList : "",
 	        		curCode : ""
 	            };
-			            
+			       
+	            echgDataVO.initLoad = function () {
+	            	var me = this;
+                	var ordParam = {
+                			lnomngcdhd: "SYCH00048",
+        					lcdcls: "SA_000007"
+        				},
+        				betParam = {
+        					lnomngcdhd: "SYCH00067",
+        					lcdcls: "SA_000026"
+        				},
+        				cdEchgrsnParm = {
+	    					lnomngcdhd: "SYCH00052",
+	    					lcdcls: "SA_000011"
+                		},
+                		cdEchgrjtParm = {
+	    					lnomngcdhd: "SYCH00068",
+	    					lcdcls: "SA_000027",
+	    					customnoc: "00000"
+                		},
+                		cdEchgstsParm = {
+	    					lnomngcdhd: "SYCH00054",
+	    					lcdcls: "SA_000013"
+                		};
+                    $q.all([
+            			UtilSvc.csMrkList().then(function (res) {
+            				return res.data;
+            			}),	
+            			UtilSvc.getCommonCodeList(ordParam).then(function (res) {
+            				return res.data;
+            			}),
+            			UtilSvc.getCommonCodeList(betParam).then(function (res) {
+            				return res.data;
+            			}),
+            			//교환 사유 코드
+	        			UtilSvc.getCommonCodeList(cdEchgrsnParm).then(function (res) {
+	        				return res.data;
+	        			}),    	            
+    	            	//교환 거부 코드
+	        			UtilSvc.getCommonCodeList(cdEchgrjtParm).then(function (res) {
+	        				return res.data;
+	        			}),    	            
+    	            	//교환 상태 코드
+	        			UtilSvc.getCommonCodeList(cdEchgstsParm).then(function (res) {
+	        				return res.data;
+	        			})
+                    ]).then(function (result) {
+                        me.ordMrkNameOp = result[0];
+                        me.ordStatusOp = result[1];
+                        me.betweenDateOptionOp = result[2];
+                        me.betweenDateOptionMo = result[2][0].CD_DEF;
+                        
+                        me.cdEchgrsnOp.dataSource = result[3];
+                        me.cdEchgrjtOp = result[4];
+                        me.echgStatusOp = result[5];
+                        me.echgStatusMo = result[5][0].CD_DEF;
+                                                
+                        $timeout(function(){
+            				Util03saSvc.storedQuerySearchPlay(me, "echgDataVO");
+                        },0);    
+                    });
+                };	            
+	            
 	            //조회
 	            echgDataVO.inQuiry = function(){
 	            	var self = this;
 	            	self.param = {
-        				    NM_MRKITEM : echgDataVO.procName.value,
-    					    NO_MRK : echgDataVO.ordMrkNameMo, 
-    					    CD_ORDSTAT : echgDataVO.ordStatusMo,
-    					    NO_MRKORD : echgDataVO.orderNo.value,      
-    					    NM_PCHR : echgDataVO.buyerName.value,
-    					    CD_ECHGSTAT : echgDataVO.echgStatusMo,
-    					    DTS_CHK : echgDataVO.betweenDateOptionMo,  
-    					    DTS_FROM : new Date(echgDataVO.datesetting.period.start.y, echgDataVO.datesetting.period.start.m-1, echgDataVO.datesetting.period.start.d, "00", "00", "00").dateFormat("YmdHis"),           
-    					    DTS_TO : new Date(echgDataVO.datesetting.period.end.y, echgDataVO.datesetting.period.end.m-1, echgDataVO.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis")
+        				    NM_MRKITEM : self.procName.value,
+    					    NO_MRK : self.ordMrkNameMo, 
+    					    CD_ORDSTAT : self.ordStatusMo,
+    					    NO_MRKORD : self.orderNo.value,      
+    					    NM_PCHR : self.buyerName.value,
+    					    CD_ECHGSTAT : self.echgStatusMo,
+    					    DTS_CHK : self.betweenDateOptionMo,  
+    					    DTS_FROM : new Date(self.datesetting.period.start.y, self.datesetting.period.start.m-1, self.datesetting.period.start.d, "00", "00", "00").dateFormat("YmdHis"),           
+    					    DTS_TO : new Date(self.datesetting.period.end.y, self.datesetting.period.end.m-1, self.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis"),
+    					    NM_MRK_SELCT_INDEX : self.ordMrkNameOp.allSelectNames,
+    					    NM_ORDSTAT_SELCT_INDEX : self.ordStatusOp.allSelectNames,
+    					    DTS_SELECTED : self.datesetting.selected	
 	            	};
 	            	if(Util03saSvc.readValidation(self.param)){
 	            		$scope.echgkg.dataSource.data([]);
 		            	$scope.echgkg.dataSource.page(1);
         			};
+        			if(UtilSvc.localStorage.getItem("echgDataVO")){        				
+    					UtilSvc.localStorage.removeItem("echgDataVO");
+    					UtilSvc.localStorage.setItem("echgDataVO" ,self.param);
+    				}else{
+    					UtilSvc.localStorage.setItem("echgDataVO" ,self.param);    					
+    				}          			
 	            };
 		            
 	            //초기화버튼
@@ -925,5 +919,6 @@
 	                }
                 });    
 	            
+	            echgDataVO.initLoad();
             }]);
 }());

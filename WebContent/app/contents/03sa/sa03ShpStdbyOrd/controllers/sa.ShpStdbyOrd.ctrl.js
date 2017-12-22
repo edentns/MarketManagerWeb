@@ -13,62 +13,6 @@
 		            today = edt.getToday(),
 		            menuId = MenuSvc.getNO_M($state.current.name);
 	            
-            		//마켓명 드랍 박스 실행	
-    	         var mrkName = (function(){
-            			UtilSvc.csMrkList().then(function (res) {
-            				if(res.data.length >= 1){
-            					shpbyordDataVO.ordMrkNameOp = res.data;
-            				}
-            			});
-    	            }),
-    	            //주문상태 드랍 박스 실행	
-    	            orderStatus = (function(){
-        				var param = {
-        					lnomngcdhd: "SYCH00048",
-        					lcdcls: "SA_000007",
-        					mid: menuId
-        				};
-            			UtilSvc.getCommonCodeList(param).then(function (res) {
-            				if(res.data.length >= 1){
-            					shpbyordDataVO.ordStatusOp = res.data;
-            				}
-            			});		
-    	            }),
-    	            //기간 상태 드랍 박스 실행	
-    	            betweenDate = (function(){
-        				var param = {
-        					lnomngcdhd: "SYCH00055",
-        					lcdcls: "SA_000014"
-        				};
-            			UtilSvc.getCommonCodeList(param).then(function (res) {
-            				if(res.data.length >= 1){
-            					shpbyordDataVO.betweenDateOptionOp = res.data;
-            					shpbyordDataVO.betweenDateOptionMo = res.data[0].CD_DEF; //처음 로딩 때 초기 인덱스를 위하여
-            				}
-            			});		
-    	            }),    	            
-    	            cancelReasonCode = (function(){
-        				var param = {
-        					lnomngcdhd: "SYCH00056",
-        					lcdcls: "SA_000015",
-	    					customnoc: "00000"
-        				};
-            			UtilSvc.getCommonCodeList(param).then(function (res) {
-            				if(res.data.length >= 1){
-            					shpbyordDataVO.cancelCodeOp = res.data.filter(function(ele){
-            						return (!ele.DC_RMK2);
-            					});
-            					shpbyordDataVO.cancelCodeLowOp = res.data.filter(function(ele){
-            						return (ele.DC_RMK2);
-            					});
-            				}
-            			});
-    	            }),
-    	            cclPop = (function(){
-    	            	var param = "app/contents/03sa/sa02Ord/templates/sa.OrdCclPop.tpl.html";
-    	            	Util03saSvc.externalKmodalPopup(param).then(function (res) {});
-    	            });
-    	         
 	            var shpbyordDataVO = $scope.shpbyordDataVO = {
             		boxTitle : "배송대기주문",
 	            	setting : {
@@ -106,6 +50,58 @@
 	        		param : ""
 	            };
 	            
+	            shpbyordDataVO.initLoad = function () {
+	            	var me = this;
+                	var ordParam = {
+                			lnomngcdhd: "SYCH00048",
+        					lcdcls: "SA_000007",
+        					mid: menuId
+        				},
+        				betParam = {
+        					lnomngcdhd: "SYCH00055",
+        					lcdcls: "SA_000014"
+        				},
+        				cclCodeParam = {
+                			lnomngcdhd: "SYCH00056",
+        					lcdcls: "SA_000015",
+	    					customnoc: "00000"
+                		},
+                		externalParam = "app/contents/03sa/sa02Ord/templates/sa.OrdCclPop.tpl.html";
+                    $q.all([
+	            			UtilSvc.csMrkList().then(function (res) {
+	            				return res.data;
+	            			}),	
+	            			UtilSvc.getCommonCodeList(ordParam).then(function (res) {
+	            				return res.data;
+	            			}),
+	            			UtilSvc.getCommonCodeList(betParam).then(function (res) {
+	            				return res.data;
+	            			}),
+	            			//취소 사유 코드 드랍 박스 실행	
+	            			UtilSvc.getCommonCodeList(cclCodeParam).then(function (res) {
+	            				return res.data;
+	            			}),
+	    	            	Util03saSvc.externalKmodalPopup(externalParam).then(function (res) {
+	    	            		return res.data;
+	    	            	})
+                    ]).then(function (result) {
+                        me.ordMrkNameOp = result[0];
+                        me.ordStatusOp = result[1];
+                        me.betweenDateOptionOp = result[2];
+                        me.betweenDateOptionMo = result[2][0].CD_DEF; 
+                        me.cancelCodeOp = result[3].filter(function(ele){
+    						return (!ele.DC_RMK2);
+    					});
+                        me.cancelCodeLowOp = result[3].filter(function(ele){
+    						return (ele.DC_RMK2);
+    					});
+                        
+                        $timeout(function(){
+            				Util03saSvc.storedQuerySearchPlay(me, "shpStdbyOrdSerchParam");
+                        },0);    
+                    });
+                };
+	            
 	            //조회
 	            shpbyordDataVO.inQuiry = function(){
 	            	var me = this;
@@ -126,11 +122,11 @@
     					$scope.shpbyordkg.dataSource.data([]);
         				$scope.shpbyordkg.dataSource.page(1);
     				};
-    				if(Util03saSvc.sessionStorage.getItem("shpStdbyOrdSerchParam")){        				
-    					Util03saSvc.sessionStorage.removeItem("shpStdbyOrdSerchParam");
-    					Util03saSvc.sessionStorage.setItem("shpStdbyOrdSerchParam" ,me.param);
+    				if(UtilSvc.localStorage.getItem("shpStdbyOrdSerchParam")){        				
+    					UtilSvc.localStorage.removeItem("shpStdbyOrdSerchParam");
+    					UtilSvc.localStorage.setItem("shpStdbyOrdSerchParam" ,me.param);
     				}else{
-    					Util03saSvc.sessionStorage.setItem("shpStdbyOrdSerchParam" ,me.param);    					
+    					UtilSvc.localStorage.setItem("shpStdbyOrdSerchParam" ,me.param);    					
     				} 
 	            };	            
 	            
@@ -156,37 +152,7 @@
                 	me.resetAtGrd = $scope.shpbyordkg;
                 	me.resetAtGrd.dataSource.data([]);
 	            };
-	            
-	            //마지막으로 조회한 워딩으로 로드시 다시 조회
-	            shpbyordDataVO.savedSearchPlay = function(){
-            		var getParam = Util03saSvc.sessionStorage.getItem("shpStdbyOrdSerchParam"), me = this;
-            			            	
-            		if(Util03saSvc.sessionStorage.getItem("shpStdbyOrdSerchParamChk") && Util03saSvc.readValidation(getParam)){            			
-            			me.datesetting.selected = getParam.DTS_SELECTED;            			
- 					    me.param = getParam;
- 					    
-            			$timeout(function(){     
-            				me.ordMrkNameMo = getParam.NM_MRK; 
-            				me.ordMrkNameOp.setSelectNames = getParam.NM_MRK_SELCT_INDEX;
-                			me.ordStatusMo = getParam.CD_ORDSTAT;
-                			me.ordStatusOp.setSelectNames = getParam.NM_ORDSTAT_SELCT_INDEX;
-                			                			
-            				me.procName.value = getParam.NM_MRKITEM;
-	            			me.orderNo.value = getParam.NO_MRKORD;
-	            			me.buyerName.value = getParam.NM_PCHR;
-            				me.betweenDateOptionMo = getParam.DTS_CHK;
-            				
-            				me.datesetting.period.start.y = getParam.DTS_FROM.substring(0,4);
-                			me.datesetting.period.start.m = getParam.DTS_FROM.substring(4,6);
-                			me.datesetting.period.start.d = getParam.DTS_FROM.substring(6,8); 					    
-                			me.datesetting.period.end.y = getParam.DTS_TO.substring(0,4);
-     					   	me.datesetting.period.end.m = getParam.DTS_TO.substring(4,6); 
-     					   	me.datesetting.period.end.d = getParam.DTS_TO.substring(6,8);
-     					    Util03saSvc.sessionStorage.removeItem("shpStdbyOrdSerchParamChk");
-            				$scope.shpbyordkg.dataSource.read();
-						}, 0);
-            		};
-		        };       
+	               
 	            
 	            shpbyordDataVO.isOpen = function (val) {
 	            	if(val) {
@@ -207,8 +173,6 @@
     	            cancelReasonCode();
     	            cclPop();
 	            };
-	            
-	            shpbyordDataVO.onlyOncePlay();
 	            
 	            // 유효성 검사
 	            var updateValidation = function(param, btnCase){
@@ -432,7 +396,7 @@
             			if( !grid.dataSource._total || grid.dataSource._total == 0){
             				alert("그리드에 데이터가 없습니다.");
             			}else{
-            				var getParam = Util03saSvc.sessionStorage.getItem("shpStdbyOrdSerchParam");
+            				var getParam = UtilSvc.localStorage.getItem("shpStdbyOrdSerchParam");
             				var colVo = angular.copy($scope.grdShpbyordVO.columns);
             				colVo.splice(0,1);
             				getParam.gridInfo       = [colVo,[{field:"NM_MRK",title:"마켓명"},{field:"CD_DEF",title:"택배사코드"},{field:"NM_DEF",title:"택배사명"},{field:"NM_SHPCLFT",title:"택배사구분"}]];
@@ -1031,11 +995,10 @@
 	         		if(getCurrentCell.closest("td").hasClass("dnt-clk")){	         			
 	         			return false;
 	         		}
-	         		Util03saSvc.sessionStorage.setItem("shpStdbyOrdSerchParamChk", true);
 	         		$state.go("app.saOrd", { kind: null, menu: null, rootMenu : "saShpStdbyOrd", noOrd : getData.NO_ORD, noMrkord: getData.NO_MRKORD });
 	            });
-                
-                shpbyordDataVO.savedSearchPlay();
+
+	            shpbyordDataVO.initLoad();
             }]);                              
 }());
 		

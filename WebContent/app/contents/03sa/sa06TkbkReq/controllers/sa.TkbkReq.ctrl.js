@@ -11,89 +11,6 @@
             function ($scope, $http, $q, $log, saTkbkReqSvc, APP_CODE, $timeout, resData, Page, UtilSvc, MenuSvc, $window, Util03saSvc, APP_SA_MODEL) {
 	            var page  = $scope.page = new Page({ auth: resData.access }),
 		            today = edt.getToday();
-	            
-            		//마켓명 드랍 박스 실행	
-            	var	mrkName = (function(){
-            			UtilSvc.csMrkList().then(function (res) {
-            				if(res.data.length >= 1){
-            					tkbkDataVO.ordMrkNameOp = res.data;
-            				}
-            			});
-    	            }()),	
-    	            //주문상태 드랍 박스 실행
-    	            orderStatus = (function(){
-        				var param = {
-        					lnomngcdhd: "SYCH00048",
-        					lcdcls: "SA_000007"
-        				};
-            			UtilSvc.getCommonCodeList(param).then(function (res) {
-            				if(res.data.length >= 1){
-            					tkbkDataVO.ordStatusOp = res.data;
-            				}
-            			});
-    	            }()),
-    	            //기간 상태 드랍 박스 실행
-    	            betweenDate = (function(){
-        				var param = {
-        					lnomngcdhd: "SYCH00064",
-        					lcdcls: "SA_000023"
-        				};
-            			UtilSvc.getCommonCodeList(param).then(function (res) {
-            				if(res.data.length >= 1){
-            					tkbkDataVO.betweenDateOptionOp = res.data;
-            					tkbkDataVO.betweenDateOptionMo = res.data[0].CD_DEF; //처음 로딩 때 초기 인덱스를 위하여
-            				}
-            			});
-    	            }()),
-    	            //반품 사유 코드
-    	            cdTkbkrsn = (function(){
-        				var param = {
-        					lnomngcdhd: "SYCH00050",
-        					lcdcls: "SA_000009"
-        				};
-            			UtilSvc.getCommonCodeList(param).then(function (res) {
-            				if(res.data.length >= 1){
-            					tkbkDataVO.cdTkbkrsnOp.dataSource = res.data;
-            				}
-            			});
-    	            }()),
-    	            //반품 거부 코드
-    	            cdTkbkrjt = (function(){
-        				var param = {
-        					lnomngcdhd: "SYCH00065",
-        					lcdcls: "SA_000024",
-	    					customnoc: "00000"        						
-        				};
-            			UtilSvc.getCommonCodeList(param).then(function (res) {
-            				if(res.data.length >= 1){
-            					tkbkDataVO.cdTkbkrjtOp.dataSource = res.data;
-            				}
-            			});
-    	            }()),
-    	            //지마켓 보류 사유 코드
-    	            gHoldCode = (function(){
-        				var param = {
-        					lnomngcdhd: "SYCH00074",
-        					lcdcls: "SA_000029"
-        				};
-            			UtilSvc.getCommonCodeList(param).then(function (res) {
-            				if(res.data.length >= 1){
-            					tkbkDataVO.gHoldCode = res.data;
-            				}
-            			});
-    	            }()),
-    	            //반품 상태 코드
-    	            cdTkbkstat = (function(){
-        				var param = {
-        					lnomngcdhd: "SYCH00066",
-        					lcdcls: "SA_000025"
-        				};
-            			UtilSvc.getCommonCodeList(param).then(function (res) {
-            				if(res.data.length >= 1){
-            					tkbkDataVO.cdTkbkstat = res.data;
-            				}
-            			});
-    	            }());
 
 	            var grdField =  {
                     ROW_CHK       		: { type: APP_SA_MODEL.ROW_CHK.type        		, editable: true , nullable: false },
@@ -354,6 +271,74 @@
 		        		receiveCheckCode : 'Y',
 		        		marketDivisionCode : ""
 		        };   
+	            
+	            tkbkDataVO.initLoad = function () {
+	            	var me = this;
+                	var ordParam = {
+                			lnomngcdhd: "SYCH00048",
+        					lcdcls: "SA_000007"
+        				},
+        				betParam = {
+        					lnomngcdhd: "SYCH00064",
+        					lcdcls: "SA_000023"
+        				},
+        				cdTkbkrsnParm = {
+        					lnomngcdhd: "SYCH00050",
+        					lcdcls: "SA_000009"
+                		},
+                		cdTkbkrjtParm = {
+        					lnomngcdhd: "SYCH00065",
+        					lcdcls: "SA_000024",
+	    					customnoc: "00000"    
+                		},gHoldCodeParm = {
+        					lnomngcdhd: "SYCH00074",
+        					lcdcls: "SA_000029"
+                		},cdTkbkstat = {
+        					lnomngcdhd: "SYCH00066",
+        					lcdcls: "SA_000025"
+                		};                	
+                    $q.all([
+            			UtilSvc.csMrkList().then(function (res) {
+            				return res.data;
+            			}),	
+            			UtilSvc.getCommonCodeList(ordParam).then(function (res) {
+            				return res.data;
+            			}),
+            			UtilSvc.getCommonCodeList(betParam).then(function (res) {
+            				return res.data;
+            			}),
+            			//반품 사유 코드
+            			UtilSvc.getCommonCodeList(cdTkbkrsnParm).then(function (res) {
+            				return res.data;
+            			}),
+        	            //반품 거부 코드
+            			UtilSvc.getCommonCodeList(cdTkbkrjtParm).then(function (res) {
+            				return res.data;
+            			}),
+        	            //지마켓 보류 사유 코드
+            			UtilSvc.getCommonCodeList(gHoldCodeParm).then(function (res) {
+            				return res.data;
+            			}),
+        	            //반품 상태 코드
+            			UtilSvc.getCommonCodeList(cdTkbkstat).then(function (res) {
+            				return res.data;
+            			})
+                    ]).then(function (result) {
+                        me.ordMrkNameOp = result[0];
+                        me.ordStatusOp = result[1];
+                        me.betweenDateOptionOp = result[2];
+                        me.betweenDateOptionMo = result[2][0].CD_DEF; 
+                        
+                        me.cdTkbkrsnOp.dataSource = result[3];
+                        me.cdTkbkrjtOp.dataSource = result[4];
+                        me.gHoldCode = result[5];
+                        me.cdTkbkstat = result[6];
+                        
+                        $timeout(function(){
+            				Util03saSvc.storedQuerySearchPlay(me, "tkbkDataVO");
+                        },0);    
+                    });
+                };
 
                 APP_SA_MODEL.CD_TKBKRSN.fNm  = "tkbkDataVO.cdTkbkrsnOp.dataSource";
                 APP_SA_MODEL.CD_ORDSTAT.fNm  = "tkbkDataVO.ordStatusOp";
@@ -450,20 +435,29 @@
 	            tkbkDataVO.inQuiry = function(){
 	            	var self = this;
 	            	self.param = {
-    				    NM_MRKITEM : tkbkDataVO.procName.value,
-					    NO_MRK : tkbkDataVO.ordMrkNameMo, 
-					    CD_ORDSTAT : tkbkDataVO.ordStatusMo,
-					    CD_TKBKSTAT : tkbkDataVO.cdTkbkstatMo,
-					    NO_MRKORD : tkbkDataVO.orderNo.value,      
-					    NM_PCHR : tkbkDataVO.buyerName.value,
-					    DTS_CHK : tkbkDataVO.betweenDateOptionMo,  
+    				    NM_MRKITEM : self.procName.value,
+					    NO_MRK : self.ordMrkNameMo, 
+					    CD_ORDSTAT : self.ordStatusMo,
+					    CD_TKBKSTAT : self.cdTkbkstatMo,
+					    NO_MRKORD : self.orderNo.value,      
+					    NM_PCHR : self.buyerName.value,
+					    DTS_CHK : self.betweenDateOptionMo,  
 					    DTS_FROM : new Date(tkbkDataVO.datesetting.period.start.y, tkbkDataVO.datesetting.period.start.m-1, tkbkDataVO.datesetting.period.start.d).dateFormat("YmdHis"),           
-					    DTS_TO : new Date(tkbkDataVO.datesetting.period.end.y, tkbkDataVO.datesetting.period.end.m-1, tkbkDataVO.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis")
+					    DTS_TO :new Date(tkbkDataVO.datesetting.period.end.y, tkbkDataVO.datesetting.period.end.m-1, tkbkDataVO.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis"),
+					    NM_MRK_SELCT_INDEX : self.ordMrkNameOp.allSelectNames,
+					    NM_ORDSTAT_SELCT_INDEX : self.ordStatusOp.allSelectNames,
+					    DTS_SELECTED : self.datesetting.selected	
                     };	            	
     				if(Util03saSvc.readValidation(self.param)){
     					$scope.tkbkkg.dataSource.data([]);
     	            	$scope.tkbkkg.dataSource.page(1);  // 페이지 인덱스 초기화
     				}
+    				if(UtilSvc.localStorage.getItem("tkbkDataVO")){        				
+    					UtilSvc.localStorage.removeItem("tkbkDataVO");
+    					UtilSvc.localStorage.setItem("tkbkDataVO" ,self.param);
+    				}else{
+    					UtilSvc.localStorage.setItem("tkbkDataVO" ,self.param);    					
+    				} 
 	            };
 		            
 	            //초기화버튼
@@ -862,5 +856,6 @@
 	                }
                 });
 	            
+	            tkbkDataVO.initLoad(); 
             }]);
 }());

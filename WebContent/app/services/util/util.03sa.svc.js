@@ -6,15 +6,15 @@
 	 * @description
 	 * 상품 유틸 서비스
 	 */
-	angular.module('edtApp.common.service').service('Util03saSvc', ['$rootScope', '$state', '$window', '$http', 'APP_CONFIG', 'MenuSvc',
-		function ($rootScope, $state, $window, $http, APP_CONFIG, MenuSvc) {
+	angular.module('edtApp.common.service').service('Util03saSvc', ['$rootScope', '$state', '$window', '$http', '$timeout', 'APP_CONFIG', 'MenuSvc', 'UtilSvc',
+		function ($rootScope, $state, $window, $http, $timeout, APP_CONFIG, MenuSvc, UtilSvc) {
 			/*var user = $rootScope.webApp.user,
 				menu = $rootScope.webApp.menu;*/
 						
 			//popup insert & update Validation
             this.readValidation = function(idx){
             	var result = true;
-        		if(idx.NM_MRK === null || idx.NM_MRK === ""){ alert("마켓명을 입력해 주세요."); result = false; return; };
+        		if(!idx.NM_MRK_SELCT_INDEX.length){ alert("마켓명을 입력해 주세요."); result = false; return; };
         		if(idx.CD_ORDSTAT === null || idx.CD_ORDSTAT === ""){ alert("주문상태를 입력해 주세요."); result = false; return;};
         		if(idx.DTS_CHK === null || idx.DTS_CHK === ""){ alert("기간을 선택해 주세요."); result = false; return;};			 
         		if(idx.DTS_TO < idx.DTS_FROM){ alert("조회기간을 올바르게 선택해 주세요."); result = false; return;};	
@@ -137,22 +137,50 @@
 				});
 			};
             
-			//심플한 검색어 저장 
-			this.sessionStorage = {
-				setItem: function(name, data) {	
-					$window.sessionStorage.setItem(name, JSON.stringify(data));
-				},				
-				getItem: function(name) {
-					var result = $window.sessionStorage.getItem(name);
-					
-					if (result) {
-						result = JSON.parse(result);
-					}					
-					return result;
-				},	            
-	            removeItem: function(name) {	                
-	                $window.sessionStorage.removeItem(name);
-	            }
+			this.storedQuerySearchPlay = function(vo, param, grd){
+				var getParam = UtilSvc.localStorage.getItem(param);
+            	
+        		if(getParam){        			        			
+        			var me = vo,
+				    	df = getParam.DTS_FROM,
+				    	dt = getParam.DTS_TO;
+				   			
+					me.datesetting.selected = getParam.DTS_SELECTED;
+    				me.betweenDateOptionMo = getParam.DTS_CHK;
+    				
+			   		me.ordMrkNameOp.setSelectNames = getParam.NM_MRK_SELCT_INDEX;
+        			me.ordStatusOp.setSelectNames = getParam.NM_ORDSTAT_SELCT_INDEX;
+        			//me.setting.allCheckYn = 'N';
+        			
+    				//me.ordMrkNameMo = getParam.NM_MRK; 
+        			//me.ordStatusMo = getParam.CD_ORDSTAT;        			                			
+    				me.procName.value = getParam.NM_MRKITEM;
+        			me.orderNo.value = getParam.NO_MRKORD;
+        			me.buyerName.value = getParam.NM_PCHR || getParam.NM_CONS; 
+        			
+    				me.datesetting.period.start.y = df.substring(0,4);
+        			me.datesetting.period.start.m = df.substring(4,6);
+        			me.datesetting.period.start.d = df.substring(6,8); 					    
+        			me.datesetting.period.end.y = dt.substring(0,4);
+				   	me.datesetting.period.end.m = dt.substring(4,6); 
+				   	me.datesetting.period.end.d = dt.substring(6,8);
+				   	
+				   	if(me.admin){
+				   		var a = me.admin; 
+				   		a.value = (!getParam.NO_ORDDTRM) ? "" : getParam.NO_ORDDTRM;
+				   	};
+				   	if(me.cancelStatusMo){
+				   		me.cancelStatusMo = getParam.CD_CCLSTAT;
+				   	}
+				   	if(me.echgStatusMo){
+				   		me.echgStatusMo = getParam.CD_ECHGSTAT;
+				   	}
+				   	if(me.cdTkbkstatMo){
+				   		me.cdTkbkstatMo = getParam.CD_TKBKSTAT;
+				   	}
+				   	
+    				me.inQuiry();
+        		};
 			};
 		}
 	]);

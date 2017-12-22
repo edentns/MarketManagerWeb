@@ -12,55 +12,7 @@
 	            var page  = $scope.page = new Page({ auth: resData.access }),
 		            today = edt.getToday(),
 		            menuId = MenuSvc.getNO_M($state.current.name);
-	            
-	            //마켓명 드랍 박스 실행	
-	            var mrkName = (function(){
-        			UtilSvc.csMrkList().then(function (res) {
-        				if(res.data.length >= 1){
-        					shippingDataVO.ordMrkNameOp = res.data;
-        				}
-        			});
-	            }());
-	            	            
-	            //주문상태 드랍 박스 실행	
-	            var orderStatus = (function(){
-    				var param = {
-    					lnomngcdhd: "SYCH00048",
-    					lcdcls: "SA_000007",
-    					mid: menuId
-    				};
-        			UtilSvc.getCommonCodeList(param).then(function (res) {
-        				if(res.data.length >= 1){
-        					shippingDataVO.ordStatusOp = res.data;
-        				}
-        			});
-	            }()); 
-	            
-	            //기간 상태 드랍 박스 실행	
-	            var betweenDate = (function(){
-    				var param = {
-    					lnomngcdhd: "SYCH00055",
-    					lcdcls: "SA_000014"
-    				};
-        			UtilSvc.getCommonCodeList(param).then(function (res) {
-        				if(res.data.length >= 1){
-        					shippingDataVO.betweenDateOptionOp = res.data;
-        					shippingDataVO.betweenDateOptionMo = res.data[0].CD_DEF; //처음 로딩 때 초기 인덱스를 위하여
-        				}
-        			});
-	            }());		            
-	            //배송 상태 디렉시브	
-	            var shipStatus = (function(){
-    				var param = {
-    					lnomngcdhd: "SYCH00060",
-    					lcdcls: "SA_000019"
-    				};
-        			UtilSvc.getCommonCodeList(param).then(function (res) {
-        				if(res.data.length >= 1){
-        					shippingDataVO.shipStatusOp = res.data;
-        				}
-        			});
-	            }());	            
+	                       
 	            var parsCodeOp = new kendo.data.DataSource({
                     transport: {
                     	read: function(e){
@@ -300,26 +252,78 @@
 	            	};
 	            };
 	            
+	            shippingDataVO.initLoad = function () {
+	            	var me = this;
+                	var ordParam = {
+                			lnomngcdhd: "SYCH00048",
+        					lcdcls: "SA_000007",
+        					mid: menuId
+        				},
+        				betParam = {
+        					lnomngcdhd: "SYCH00055",
+        					lcdcls: "SA_000014"
+        				},
+        				shipStsParam = {
+        					lnomngcdhd: "SYCH00060",
+        					lcdcls: "SA_000019"
+                		};
+                    $q.all([
+	            			UtilSvc.csMrkList().then(function (res) {
+	            				return res.data;
+	            			}),	
+	            			UtilSvc.getCommonCodeList(ordParam).then(function (res) {
+	            				return res.data;
+	            			}),
+	            			UtilSvc.getCommonCodeList(betParam).then(function (res) {
+	            				return res.data;
+	            			}),
+	            			//배송 상태 디렉시브	
+                			UtilSvc.getCommonCodeList(shipStsParam).then(function (res) {
+                				return res.data;
+                			})
+                    ]).then(function (result) {
+                        me.ordMrkNameOp = result[0];
+                        me.ordStatusOp = result[1];
+                        me.betweenDateOptionOp = result[2];
+                        me.betweenDateOptionMo = result[2][0].CD_DEF; 
+                        me.shipStatusOp = result[3];
+                        
+                        $timeout(function(){
+            				Util03saSvc.storedQuerySearchPlay(me, "shippingParam");
+                        },0);    
+                    });
+                };
+                
 	            //조회
 	            shippingDataVO.inQuiry = function(){
 	            	var me = this;
 	            	me.param = {
     				    NM_MRKITEM : shippingDataVO.procName.value,
-					    NO_MRK : shippingDataVO.ordMrkNameMo.toString(), 
-					    CD_ORDSTAT : shippingDataVO.ordStatusMo.toString(),
+					    NO_MRK : shippingDataVO.ordMrkNameMo, 
+					    CD_ORDSTAT : shippingDataVO.ordStatusMo,
 					    NO_MRKORD : shippingDataVO.orderNo.value,      
-					    NM_PCHR : shippingDataVO.buyerName.value,
+					    NM_PCHR : shippingDataVO.buyerName.value,					    
 					    DTS_CHK : shippingDataVO.betweenDateOptionMo,  
 					    DTS_FROM : new Date(shippingDataVO.datesetting.period.start.y, shippingDataVO.datesetting.period.start.m-1, shippingDataVO.datesetting.period.start.d, "00", "00", "00").dateFormat("YmdHis"),           
-					    DTS_TO : new Date(shippingDataVO.datesetting.period.end.y, shippingDataVO.datesetting.period.end.m-1, shippingDataVO.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis")
+					    DTS_TO : new Date(shippingDataVO.datesetting.period.end.y, shippingDataVO.datesetting.period.end.m-1, shippingDataVO.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis"),
+					    DTS_SELECTED : me.datesetting.selected,
+					    NM_MRK_SELCT_INDEX : me.ordMrkNameOp.allSelectNames,
+					    NM_ORDSTAT_SELCT_INDEX : me.ordStatusOp.allSelectNames
                     };   
     				if(Util03saSvc.readValidation(me.param)){
     					$scope.shippingkg.dataSource.data([]);  
     	            	$scope.shippingkg.dataSource.page(1);  // 페이지 인덱스 초기화              
     	            	//$scope.shippingkg.dataSource.read();
     				};
+    				
+    				if(UtilSvc.localStorage.getItem("shippingParam")){        				
+    					UtilSvc.localStorage.removeItem("shippingParam");
+    					UtilSvc.localStorage.setItem("shippingParam" ,me.param);
+    				}else{
+    					UtilSvc.localStorage.setItem("shippingParam" ,me.param);    					
+    				} 
 	            };
-	            
+	            		        
 	            //초기화버튼
 	            shippingDataVO.inIt = function(){
             		var me  = this;
@@ -341,8 +345,8 @@
                 	me.dataTotal = 0;
                 	me.resetAtGrd = $scope.shippingkg;
                 	me.resetAtGrd.dataSource.data([]);
-	            };	
-
+	            };
+	            
 	            shippingDataVO.isOpen = function (val) {
 	            	if(val) {
 	            		$scope.shippingkg.wrapper.height(616);
@@ -355,7 +359,7 @@
 	            		if(shippingDataVO.param !== "") grdShippngVO.dataSource.pageSize(12);
 	            	}
 	            };
-	            	            	   	            
+	            
                 //검색 그리드
 	            var grdShippngVO = $scope.grdShippngVO = {
             		autoBind: false,
@@ -526,5 +530,7 @@
 	                	});	                	
 	                }
                 });  
-            }]);
+	            
+	            shippingDataVO.initLoad();
+            }]);    
 }());
