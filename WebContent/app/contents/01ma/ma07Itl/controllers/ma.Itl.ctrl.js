@@ -10,17 +10,10 @@
         .controller("ma.ItlCtrl", ["$window", "$scope", "$http", "$q", "$log", "ma.QaSvc", "APP_CONFIG", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "MenuSvc", "Util01maSvc", "APP_SA_MODEL", 
             function ($window, $scope, $http, $q, $log, MaQaSvc, APP_CONFIG, APP_CODE, $timeout, resData, Page, UtilSvc, MenuSvc, Util01maSvc, APP_SA_MODEL) {
 	            var page  = $scope.page = new Page({ auth: resData.access }),
-		            today = edt.getToday();
-	            
-	            var rowClick = function( arg ) {
-	            	var selected = $.map(this.select(), function(item) {
-	            		return item.childNodes[17].innerText;
-                    });
-	            	$scope.itlDataVO.rowClick(selected);
-				};
+		            today = edt.getToday(),
+		            grdScmSelectAttr = {type: "string", editable: false, nullable: false};
 	            
 	            var itlDataVO = $scope.itlDataVO = {
-	            	userInfo : JSON.parse($window.localStorage.getItem("USER")),
 	            	boxTitle : "검색",
 	            	settingMrk : {
 	        			id: "NO_MNGMRK",
@@ -41,88 +34,111 @@
 							end   : angular.copy(today)
 						}
 	        		},
-                    contentText: { value: "" , focus: false},			//제목,내용
                     mngMrkModel : "*",                                  //마켓명 모델
-                    mngMrkBind  : [],                                   //마켓명 옵션
+                    mngMrkBind  : resData.mngMrkData,                                   //마켓명 옵션
                     nmJobModel  : "*",                                  //작업명 모델
-                    nmJobBind   : [],                                   //작업명 옵션                    
+                    nmJobBind   : resData.nmJobData,                                   //작업명 옵션                    
                     stJobModel  : "*",                     	            //작업상태 모델
-                    stJobBind   : [],                     	    	    //작업상태 옵션
-    				dataTotal   : 0,
-             	    resetAtGrd  : ""
+                    stJobBind   : resData.stJobData,                     	    	    //작업상태 옵션
 		        };
-	            
-	            itlDataVO.stopEvent = function(e){
-	            	e.preventDefault();
-	            	e.stopPropagation();
-                };
+                var iNumWidth = "50px",
+                    iDateTimeWidth = "140px",
+                    iNullWidth = "0px";
                 
-                itlDataVO.rowClick = function(selected){
-                	var param = {
-    					procedureParam: "USP_MA_07ITL_CLICK_GET&L_RESERVED_DATE@s",
-    					L_RESERVED_DATE : selected[0]
-    				};
-					UtilSvc.getList(param).then(function (res) {
-						$scope.ordkg.dataSource.data(res.data.results[0]);/*
-						$scope.trankg.dataSource.data(res.data.results[1]);
-						$scope.cankg.dataSource.data(res.data.results[2]);
-						$scope.cskg.dataSource.data(res.data.results[3]);*/
-					});
-                };
+	            var gridBatchLog = [
+	                    {field: "ROW_NUM"      , type : "number", width: iNumWidth, attributes: {class:"ta-r"}, title: "번호"},
+						{field: "NO_C"         , width: "80px"  , attributes: {class:"ta-c"}, title: "가입자번호"},           		            
+						{field: "NM_MRK"       , width: "120px" , attributes: {class:"ta-l"}, title: "마켓명"},   
+						{field: "NM_MNGMRK"    , width: "120px" , attributes: {class:"ta-l"}, title: "관리마켓명"},
+						{field: "DC_MRKID"     , width: "120px" , attributes: {class:"ta-l"}, title: "마켓ID"},
+						{field: "NM_JOB"       , width: "140px" , attributes: {class:"ta-l"}, title: "작업명"},
+						{field: "NM_STATUS"    , width: "70px"  , attributes: {class:"ta-c"}, title: "작업상태"},
+						{field: "RESULT"       , width: iNullWidth ,
+						 attributes: {class:"ta-l", style:"text-overflow: ellipsis; white-space: nowrap; overflow:hidden;"}, title: "결과메시지"},
+						{field: "RESERVED_DATE", width: iDateTimeWidth, attributes: {class:"ta-c"}, title: "예약시간"},
+						{field: "START_DATE"   , width: iDateTimeWidth, attributes: {class:"ta-c"}, title: "시작일시"},
+						{field: "END_DATE"     , width: iDateTimeWidth, attributes: {class:"ta-c"}, title: "종료일시"},
+						{field: "PROG_DIFF"    , width: "70px", attributes: {class:"ta-c"}, title: "진행시간"}
+					],
+		            gridOrderConfirm = [
+						{field: "ROW_NUM" 		   , type : "number", width: iNumWidth, attributes: {class:"ta-r"}, title: "번호"},
+						{field: "orderNo"          , width: "130px" , attributes: {class:"ta-c"}, title: "주문번호"},           		            
+						{field: "productOrderNo"   , width: "130px" , attributes: {class:"ta-l"}, title: "상품주문번호"},   
+						{field: "mallOrderNo"      , width: "130px" , attributes: {class:"ta-l"}, title: "마켓주문번호"},
+						{field: "paymentNo"        , width: "120px" , attributes: {class:"ta-l"}, title: "결재번호"},
+						{field: "definiteOrderDate", width: iDateTimeWidth, attributes: {class:"ta-c"}, title: "주문확정일시"},
+						{field: "process_result"   , width: "70px"  , attributes: {class:"ta-c"}, title: "처리상태"},
+						{field: "req_datetime"     , width: iDateTimeWidth, attributes: {class:"ta-c"}, title: "처리일시"},
+						{field: "result_msg"       , width: iNullWidth,
+						 attributes: {class:"ta-l" , style:"text-overflow: ellipsis; white-space: nowrap; overflow:hidden;"}, title: "결과메시지"}
+					],
+  		            gridInvoiceNo = [
+						{field: "ROW_NUM" 		     , type : "number", width: iNumWidth, attributes: {class:"ta-r"}, title: "번호"},
+						{field: "orderNo"            , width: "130px" , attributes: {class:"ta-c"}, title: "주문번호"},           		            
+						{field: "productOrderNo"     , width: "130px" , attributes: {class:"ta-l"}, title: "상품주문번호"},   
+						{field: "mallOrderNo"        , width: "130px" , attributes: {class:"ta-l"}, title: "마켓주문번호"},
+						{field: "paymentNo"          , width: "120px" , attributes: {class:"ta-l"}, title: "결재번호"},
+						{field: "deliveryDivision"   , width: "120px" , attributes: {class:"ta-l"}, title: "배송구분"},
+						{field: "delivery_type"      , width: "120px" , attributes: {class:"ta-l"}, title: "택배사"},
+						{field: "invoiceNo"          , width: "120px" , attributes: {class:"ta-l"}, title: "송장번호"},
+						{field: "invoiceInsertedDate", width: iDateTimeWidth, attributes: {class:"ta-c"}, title: "요청일시"},
+						{field: "process_result"     , width: "70px"  , attributes: {class:"ta-c"}, title: "처리상태"},
+						{field: "req_datetime"       , width: iDateTimeWidth, attributes: {class:"ta-c"}, title: "처리일시"},
+						{field: "result_msg"         , width: iNullWidth,
+						 attributes: {class:"ta-l", style:"text-overflow: ellipsis; white-space: nowrap; overflow:hidden;"}, title: "결과메시지"}
+					],
+		            gridClaimConfirm = [
+						{field: "ROW_NUM" 		   , type : "number", width: iNumWidth, attributes: {class:"ta-r"}, title: "번호"},
+						{field: "requesteNo"       , width: "130px" , attributes: {class:"ta-c"}, title: "요청번호"},           		            
+						{field: "claimType"        , width: "120px" , attributes: {class:"ta-l"}, title: "요청유형"},   
+						{field: "requestDate"      , width: iDateTimeWidth, attributes: {class:"ta-c"}, title: "요청일시"},
+						{field: "product_order_no" , width: "130px" , attributes: {class:"ta-l"}, title: "상품주문번호"},
+						{field: "mallOrderNo"      , width: "130px" , attributes: {class:"ta-l"}, title: "마켓주문번호"},
+						{field: "payment_no"       , width: "120px" , attributes: {class:"ta-l"}, title: "결재번호"},
+						{field: "permission_date"  , width: iDateTimeWidth, attributes: {class:"ta-c"}, title: "승인/거부일시"},
+						{field: "permission_person", width: "120px" , attributes: {class:"ta-c"}, title: "승인/거부 입력자"},
+						{field: "rejection_type"   , width: "120px" , attributes: {class:"ta-c"}, title: "거부구분"},
+						{field: "rejection_reason" , width: "120px" , 
+							 attributes: {class:"ta-l" , style:"text-overflow: ellipsis; white-space: nowrap; overflow:hidden;"}, title: "거부내용"},
+						{field: "process_result"   , width: "120px" , attributes: {class:"ta-l"}, title: "처리상태"},
+						{field: "req_datetime"     , width: iDateTimeWidth , attributes: {class:"ta-c"}, title: "처리일시"},
+						{field: "result_msg", width: iNullWidth,
+						 attributes: {class:"ta-l" , style:"text-overflow: ellipsis; white-space: nowrap; overflow:hidden;"}, title: "결과메시지"},
+						{field: "deliveryDivision" , width: "100px"  , attributes: {class:"ta-c"}, title: "배송구분"},
+						{field: "delivery_type"    , width: "70px"  , attributes: {class:"ta-c"}, title: "택배사명"},
+						{field: "invoiceNo"        , width: "120px" , attributes: {class:"ta-l"}, title: "송장번호"},
+						{field: "pickupStatue"     , width: "120px" , attributes: {class:"ta-c"}, title: "교환상품수거여부"}
+					],
+		            gridInquiryProcess = [
+						{field: "ROW_NUM" 		     , type : "number", width: iNumWidth, attributes: {class:"ta-r"}, title: "번호"},
+						{field: "inquiryNo"          , width: "130px" , attributes: {class:"ta-l"}, title: "문의번호"},
+						{field: "inquiryDivisionCode", width: "70px" , attributes: {class:"ta-l"}, title: "문의유형"},,
+						{field: "inquiryStatueCode"  , width: "80px" , attributes: {class:"ta-c"}, title: "문의상태명"},           		            
+						{field: "regDate"            , width: iDateTimeWidth , attributes: {class:"ta-c"}, title: "접수일시"},   
+						{field: "req_person"         , width: "70px" , attributes: {class:"ta-c"}, title: "접수자"},
+						{field: "mallOrderNo"        , width: "130px" , attributes: {class:"ta-l"}, title: "주문번호"},
+						{field: "mallItemCode"       , width: "130px" , attributes: {class:"ta-l"}, title: "상품번호"},
+						{field: "replyContents"      , width: "150px" , 
+						 attributes: {class:"ta-l", style:"text-overflow: ellipsis; white-space: nowrap; overflow:hidden;"}, title: "답변내용"},
+						{field: "replyDate"          , width: iDateTimeWidth  , attributes: {class:"ta-c"}, title: "답변날짜"},
+						{field: "replyPerson"        , width: "70px" , attributes: {class:"ta-c"}, title: "답변자"},
+						{field: "process_result"     , width: "120px" , attributes: {class:"ta-c"}, title: "처리구분"},
+						{field: "process_date"       , width: iDateTimeWidth , attributes: {class:"ta-c"}, title: "처리일시"},
+						{field: "result_msg"         , width: iNullWidth,
+						 attributes: {class:"ta-l", style:"text-overflow: ellipsis; white-space: nowrap; overflow:hidden;"}, title: "결과메시지"}
+					];
 	            
 	            //toolTip
 	            UtilSvc.gridtooltipOptions.filter = "td";
 	            itlDataVO.tooltipOptions = UtilSvc.gridtooltipOptions;
-	            	            
-	            //초기 실행
-	            itlDataVO.inQuiry = function(){
-	            	itlDataVO.mngMrkBind = resData.mngMrkData;
-	            	itlDataVO.nmJobBind = resData.nmJobData;
-	            	itlDataVO.stJobBind = resData.stJobData;
-	            };	 
-	            
-	          //초기 실행
-	            itlDataVO.search = function(){
-	            	//to-do
-	            	/*if(!me.answerStatusModel){ alert("답변처리상태를 입력해 주세요."); return false; };
-	            	if(!me.qaNocModel){ alert("문의대상을 입력해 주세요."); return false; };	            	
-	            	if(me.param.NOTI_TO > me.param.NOTI_FROM){ alert("공지일자를 올바르게 선택해 주세요."); return false; };*/
 	            	
+	            //초기 실행
+	            itlDataVO.search = function(){
 	            	$scope.itlkg.dataSource.data([]);
 	            	$scope.itlkg.dataSource.page(1);
 	            	$scope.itlkg.dataSource.read();
 	            };	
-	            	            
-	            //초기화버튼
-	            itlDataVO.init = function(){
-	            	var me  = this;
-                	
-                	me.contentText.value = "";
-                	
-                	me.answerStatusModel = ["*"];
-                	me.allSelectTargetModel = [];
-
-            		me.fileSlrDataVO.currentDataList = [];
-        			me.fileMngDataVO.currentDataList = [];
-                	
-                	me.answerStatusBind.bReset = true;
-                	
-                	$timeout(function(){
-                		angular.element(".frm-group").find("button:eq(0)").triggerHandler("click");
-                		angular.element(".frm-group").find("button:eq(2)").triggerHandler("click");
-                	},0);                	
-                	        			                	
-                	me.dataTotal = 0;
-                	me.resetAtGrd = $scope.qakg;
-                	me.resetAtGrd.dataSource.data([]);
-                	
-                	$scope.memSearchGrd.selectAll = false;
-                	$scope.memSearchGrd.selectAllItems();              	
-                	$scope.memSearchGrd.searchValue = ""; 	//공지대상 검색 팝업창 초기화                	                	 
-                	
-                	me.initCdTarget();
-	            };
-	            
+	            	  
 	            //open
 	            itlDataVO.isOpen = function(val){
 	            	if(val) {
@@ -136,50 +152,24 @@
 	            	}
 	            };	
 	            
-	            itlDataVO.paramFunc =  function(param){
-					var inputParam = angular.copy(param.data[0].ARR_NO_C);
-					
-					if(inputParam.indexOf('*') > -1){
-						inputParam = $scope.itlDataVO.allSelectTargetModel;    
-						$scope.itlDataVO.allSelectTargetModel = [];
-					}
-					return inputParam;
-				};
-				
 				//각 컬럼에 header 정보 넣어줌, 공통 모듈이 2줄 위주로 작성 되어 있기 떄문에  일부러 일케 했음 
-				itlDataVO.columnProc = (function(){
-            		var tpl = [ APP_SA_MODEL.ROW_NUM,
-            		            { field: "NO_C"       	, type: "string" , width: "60px", textAlign: "center", title: "문의 가입자번호"},            		            
-		                        { field: "NO_MRK"       , type: "string" , width: "90px", textAlign: "center", title: "마켓명"},   
-		                        { field: "NO_MNGMRK"    , type: "string" , width: "90px", textAlign: "center", title: "관리마켓명"},
-		                        { field: "DC_MRKID"     , type: "string" , width: "50px", textAlign: "center", title: "마켓ID"},
-		                        { field: "JOB"          , type: "string" , width: "80px", textAlign: "center", title: "작업명"},
-		                        { field: "STATUS"       , type: "string" , width: "70px", textAlign: "center", title: "작업상태"},
-		                        { field: "RESULT"       , type: "string" , width: "150px",textAlign: "center", title: "결과메시지"},
-		                        { field: "RESERVED_DATE", type: "string" , width: "90px", textAlign: "center", title: "예약시간"},
-		                        { field: "START_DATE"   , type: "string" , width: "90px", textAlign: "center", title: "시작일시"},
-		                        { field: "END_DATE"     , type: "string" , width: "90px", textAlign: "center", title: "종료일시"},
-		                        { field: "UPDATED"      , type: "string" , width: "90px", textAlign: "center", title: "수정일시"},
-		                       ],
-            			extTpl = {headerAttributes : {"class": "table-header-cell", style: "text-align: center; font-size: 12px; vertical-align:middle;"}},
+				itlDataVO.columnProc = function(tpl){
+					if(tpl === undefined) return;
+            		var extTplHeaderAttr = {headerAttributes : {"class": "table-header-cell", style: "text-align: center; font-size: 12px; vertical-align:middle;"}},
             			returnTpl = [];
             			
         				for(var i=0; i<tpl.length; i++){
-        					var temp = angular.extend(extTpl, tpl[i]);
+        					var temp = angular.extend(extTplHeaderAttr, tpl[i]);
         					returnTpl.push(angular.copy(temp));
             			};
             			return returnTpl;
-            	}());				
+            	};				
 					                            
 	            //검색 그리드
                 var gridItlVO = $scope.gridItlVO = {
                 	autoBind: false,
                     messages: {                        	
                         requestFailed: "정보를 가져오는 중 오류가 발생하였습니다.",
-                        commands: {
-                            update: "저장",
-                            canceledit: "취소"
-                        },
                         noRecords: "검색된 데이터가 없습니다."
                     },
                     sortable: true,                    	
@@ -200,15 +190,6 @@
                 					};
             					UtilSvc.getList(param).then(function (res) {
             						e.success(res.data.results[0]);
-
-            	    				setTimeout(function () {
-            	                       	if(!page.isWriteable()) {
-            	               				$(".k-grid-delete").addClass("k-state-disabled");
-            	               				$(".k-grid-delete").click(stopEvent);
-            	               				$(".k-grid-연동체크").addClass("k-state-disabled");
-            	               				$(".k-grid-연동체크").click(stopEvent);
-            	               			}
-            	                    });
             					});
                 			},  		
                 			parameterMap: function(e, operation) {
@@ -217,96 +198,58 @@
                 				}
                 			}
                 		},
-                		change: function(e){
-                			var data = this.data();
-                			itlDataVO.dataTotal = data.length;
-                		},
                        	pageSize: 8,
                 		batch: true,
                 		schema: {
                 			model: { 
                     			id: "ROW_NUM",
                 				fields: {
-                					ROW_NUM: 		   {	
-				                    						type: "number", 
-															editable: false,  
-															nullable: false
-            										   },
-								    NO_C:		       {
-													    	type: "string", 
-															editable: false,  
-															nullable: false
-							        		           },
-							        NO_MRK:		       {
-													    	type: "string", 
-															editable: false,  
-															nullable: false
-							        		           },
-							        NO_MNGMRK:		   {
-													    	type: "string", 
-															editable: false,  
-															nullable: false
-							        		           },
-							        DC_MRKID:		   {
-													    	type: "string", 
-															editable: false,  
-															nullable: false
-							        		           },
-							        CD_ITLWAY:		   {
-													    	type: "string", 
-															editable: false,  
-															nullable: false
-							        		           },
-							        JOB:	   		   {
-													    	type: "string", 
-															editable: false,  
-															nullable: false
-							        				   },      
-							        STATUS:	   		   {
-													    	type: "string", 
-															editable: false,  
-															nullable: false
-							        				   },       
-							        RESULT:	   	       {
-													    	type: "string", 
-															editable: false,  
-															nullable: false
-							        				   }, 
-							        RESERVED_DATE:	   {
-													    	type: "string", 
-															editable: false,  
-															nullable: false
-							        				   },
-							        START_DATE:	       {
-													    	type: "string", 
-															editable: false,  
-															nullable: false
-							        				   },
-							        END_DATE:	   	   {
-													    	type: "string", 
-															editable: false,  
-															nullable: false
-							        				   },
-							        UPDATED:	   	   {
-													    	type: "string", 
-															editable: false,  
-															nullable: false
-							        				   }
-							        				   
+                					ROW_NUM  :{type: "number", editable: false, nullable: false},
+								    NO_C     :grdScmSelectAttr,
+							        NO_MRK   :grdScmSelectAttr,
+							        NM_MRK   :grdScmSelectAttr,
+							        NO_MNGMRK:grdScmSelectAttr,
+							        NM_MNGMRK:grdScmSelectAttr,
+							        DC_MRKID :grdScmSelectAttr,
+							        CD_ITLWAY:grdScmSelectAttr,
+							        JOB      :grdScmSelectAttr, 
+							        NM_JOB   :grdScmSelectAttr,     
+							        STATUS   :grdScmSelectAttr,     
+							        NM_STATUS:grdScmSelectAttr,        
+							        RESULT   :grdScmSelectAttr, 
+							        RESERVED_DATE:grdScmSelectAttr,
+							        START_DATE   :grdScmSelectAttr,
+							        END_DATE     :grdScmSelectAttr,
+							        UPDATED      :grdScmSelectAttr
 	                			}
 	                		}
 	                	}
                 	}), 
-                	change : rowClick,
+                	change : function(e) {
+                		var dataItem = this.dataItem(this.select());
+                		var param = {
+        					procedureParam: "USP_MA_07ITL_CLICK_GET&L_RESERVED_DATE@s|L_NO_MRK@s|L_SEL_NO_C@s",
+        					L_RESERVED_DATE : dataItem.RESERVED_DATE,
+        					L_NO_MRK : dataItem.NO_MRK,
+        					L_SEL_NO_C : dataItem.NO_C
+        				};
+    					UtilSvc.getList(param).then(function (res) {
+    						$scope.ordkg.dataSource.data(res.data.results[0]);
+    						$scope.trankg.dataSource.data(res.data.results[1]);
+    						$scope.cankg.dataSource.data(res.data.results[2]);
+    						$scope.cskg.dataSource.data(res.data.results[3]);
+    					});
+                	},
+                	dataBound: function(e) {
+                		e.sender.select("tr:eq(0)");
+                	},
+                	selectable: "row",
                 	navigatable: true, //키보드로 그리드 셀 이동 가능
-                	selectable: "multiple",
-                	columns: itlDataVO.columnProc,
+                	columns: itlDataVO.columnProc(gridBatchLog),
                     collapse: function(e) {
                         this.cancelRow();
                     },
                 	resizable: true,
-                	rowTemplate: kendo.template($.trim(angular.element(document.querySelector("#itl-template")).html())),
-                	altRowTemplate: kendo.template($.trim(angular.element(document.querySelector("#itl-template")).html()).replace("class=\"k-grid-row\"","class=\"k-alt\"")),
                 	height: 302                 	
         		};
                 
@@ -339,75 +282,26 @@
                 			model: { 
                     			id: "ROW_NUM",
                 				fields: {
-                					ROW_NUM: 		   {	
-				                    						type: "number", 
-															editable: false,  
-															nullable: false
-            										   },
-            						orderNo:		   {
-													    	type: "string", 
-															editable: false,  
-															nullable: false
-							        		           },
-							        productOrderNo:	   {
-													    	type: "string", 
-															editable: false,  
-															nullable: false
-							        		           },
-							        mallOrderNo:	   {
-													    	type: "string", 
-															editable: false,  
-															nullable: false
-							        		           },
-							        paymentNo:		   {
-													    	type: "string", 
-															editable: false,  
-															nullable: false
-							        		           },
-							        definiteOrderDate: {
-													    	type: "string", 
-															editable: false,  
-															nullable: false
-							        		           },
-							        process_result:	   {
-													    	type: "string", 
-															editable: false,  
-															nullable: false
-							        				   },      
-							        req_datetime:	   {
-													    	type: "string", 
-															editable: false,  
-															nullable: false
-							        				   },       
-							        result_msg:	   	   {
-													    	type: "string", 
-															editable: false,  
-															nullable: false
-							        				   }
+                					ROW_NUM          :{type: "number", editable: false, nullable: false},
+            						orderNo          :grdScmSelectAttr,
+							        productOrderNo   :grdScmSelectAttr,
+							        mallOrderNo      :grdScmSelectAttr,
+							        paymentNo        :grdScmSelectAttr,
+							        definiteOrderDate:grdScmSelectAttr,
+							        process_result   :grdScmSelectAttr,      
+							        req_datetime     :grdScmSelectAttr,       
+							        result_msg       :grdScmSelectAttr
 	                			}
 	                		}
 	                	}
                 	}), 
-                	change : rowClick,
                 	navigatable: true, //키보드로 그리드 셀 이동 가능
                 	selectable: "multiple",
-                	columns: [
-              		           {field: "ROW_NUM", title: "번호", type: "string" , width: "15px", textAlign: "center"},
-              		           {field: "orderNo", title: "주문번호", type: "string" , width: "70px", textAlign: "center"},
-	              		       {field: "productOrderNo", title: "상품주문번호", type: "string" , width: "60px", textAlign: "center"},
-	              		       {field: "mallOrderNo", title: "마켓주문번호", type: "string" , width: "70px", textAlign: "center"},
-	              		       {field: "paymentNo", title: "결재번호", type: "string" , width: "30px", textAlign: "center"},
-	              		       {field: "definiteOrderDate", title: "주문확정일시", type: "string" , width: "70px", textAlign: "center"},
-	              		       {field: "process_result", title: "처리상태", type: "string" , width: "25px", textAlign: "center"},
-	              		       {field: "req_datetime", title: "처리일시", type: "string" , width: "70px", textAlign: "center"},
-	              		       {field: "result_msg", title: "결과메시지", type: "string" , width: "100px", textAlign: "center"}
-                       	],
+                	columns: itlDataVO.columnProc(gridOrderConfirm),
                     collapse: function(e) {
                         this.cancelRow();
                     },
                 	resizable: true,
-                	rowTemplate: kendo.template($.trim(angular.element(document.querySelector("#ord-template")).html())),
-                	altRowTemplate: kendo.template($.trim(angular.element(document.querySelector("#ord-template")).html()).replace("class=\"k-grid-row\"","class=\"k-alt\"")),
                 	height: 302   	
         		};
                 
@@ -416,10 +310,6 @@
                 	autoBind: false,
                     messages: {                        	
                         requestFailed: "정보를 가져오는 중 오류가 발생하였습니다.",
-                        commands: {
-                            update: "저장",
-                            canceledit: "취소"
-                        },
                         noRecords: "검색된 데이터가 없습니다."
                     },
                     sortable: true,                    	
@@ -436,94 +326,28 @@
                 			model: { 
                     			id: "ROW_NUM",
                 				fields: {
-                					ROW_NUM: 		   {	
-				                    						type: "number", 
-															editable: false,  
-															nullable: false
-            										   },
-            						orderNo:		   {
-													    	type: "string", 
-															editable: false,  
-															nullable: false
-							        		           },
-							        productOrderNo:	   {
-													    	type: "string", 
-															editable: false,  
-															nullable: false
-							        		           },
-							        mallOrderNo:	   {
-													    	type: "string", 
-															editable: false,  
-															nullable: false
-							        		           },
-							        paymentNo:		   {
-													    	type: "string", 
-															editable: false,  
-															nullable: false
-							        		           },
-							        deliveryDivision:  {
-													    	type: "string", 
-															editable: false,  
-															nullable: false
-							        		           },
-							        delivery_type:	   {
-													    	type: "string", 
-															editable: false,  
-															nullable: false
-							        				   },      
-							        invoiceNo:	   	   {
-													    	type: "string", 
-															editable: false,  
-															nullable: false
-							        				   },       
-							        invoiceInsertedDate:{
-													    	type: "string", 
-															editable: false,  
-															nullable: false
-							        				   }, 
-							        process_result:	   {
-													    	type: "string", 
-															editable: false,  
-															nullable: false
-							        				   },
-							        req_datetime:	   {
-													    	type: "string", 
-															editable: false,  
-															nullable: false
-							        				   },
-							        result_msg:	   	   {
-													    	type: "string", 
-															editable: false,  
-															nullable: false
-							        				   }
+                					ROW_NUM: 		   {type: "number", editable: false, nullable: false},
+            						orderNo:		   grdScmSelectAttr,
+							        productOrderNo:	   grdScmSelectAttr,
+							        mallOrderNo:	   grdScmSelectAttr,
+							        paymentNo:		   grdScmSelectAttr,
+							        deliveryDivision:  grdScmSelectAttr,
+							        delivery_type:	   grdScmSelectAttr,      
+							        invoiceNo:	   	   grdScmSelectAttr,       
+							        invoiceInsertedDate:grdScmSelectAttr, 
+							        process_result:	   grdScmSelectAttr,
+							        req_datetime:	   grdScmSelectAttr,
+							        result_msg:	   	   grdScmSelectAttr
 	                			}
 	                		}
 	                	}
                 	}), 
-                	change : rowClick,
                 	navigatable: true, //키보드로 그리드 셀 이동 가능
-                	selectable: "multiple",
-                	columns: [
-             		           {field: "ROW_NUM", title: "번호", type: "string" , width: "60px", textAlign: "center"},
-             		           {field: "orderNo", title: "주문번호", type: "string" , width: "60px", textAlign: "center"},
-	              		       {field: "productOrderNo", title: "상품주문번호", type: "string" , width: "60px", textAlign: "center"},
-	              		       {field: "mallOrderNo", title: "마켓주문번호", type: "string" , width: "60px", textAlign: "center"},
-	              		       {field: "paymentNo", title: "결재번호", type: "string" , width: "60px", textAlign: "center"},
-	              		       {field: "deliveryDivision", title: "배송구분", type: "string" , width: "60px", textAlign: "center"},
-	              		       {field: "delivery_type", title: "택배사", type: "string" , width: "60px", textAlign: "center"},
-	              		       {field: "invoiceNo", title: "송장번호", type: "string" , width: "60px", textAlign: "center"},
-	              		       {field: "invoiceInsertedDate", title: "요청일시", type: "string" , width: "60px", textAlign: "center"},
-	              		       {field: "process_result", title: "처리상태", type: "string" , width: "60px", textAlign: "center"},
-	              		       {field: "req_datetime", title: "처리일시", type: "string" , width: "60px", textAlign: "center"},
-	              		       {field: "result_msg", title: "처리결과 메시지", type: "string" , width: "60px", textAlign: "center"}
-	              		
-                      	],
+                	columns: itlDataVO.columnProc(gridInvoiceNo),
                     collapse: function(e) {
                         this.cancelRow();
                     },
                 	resizable: true,
-                	rowTemplate: kendo.template($.trim(angular.element(document.querySelector("#tran-template")).html())),
-                	altRowTemplate: kendo.template($.trim(angular.element(document.querySelector("#tran-template")).html()).replace("class=\"k-grid-row\"","class=\"k-alt\"")),
                 	height: 302                 	
         		};
                 
@@ -532,10 +356,6 @@
                 	autoBind: false,
                     messages: {                        	
                         requestFailed: "정보를 가져오는 중 오류가 발생하였습니다.",
-                        commands: {
-                            update: "저장",
-                            canceledit: "취소"
-                        },
                         noRecords: "검색된 데이터가 없습니다."
                     },
                     sortable: true,                    	
@@ -546,140 +366,41 @@
                     dataSource: new kendo.data.DataSource({
                     	transport: {
                 		},
-                		change: function(e){
-                			var data = this.data();
-                			itlDataVO.dataTotal = data.length;
-                		},
                        	pageSize: 8,
                 		batch: true,
                 		schema: {
                 			model: { 
                     			id: "ROW_NUM",
                 				fields: {
-                					ROW_NUM: 		   {	
-				                    						type: "number", 
-															editable: false,  
-															nullable: false
-            										   },
-            						requesteNo:		   {
-													    	type: "string", 
-															editable: false,  
-															nullable: false
-							        		           },
-							        claimType:		   {
-													    	type: "string", 
-															editable: false,  
-															nullable: false
-							        		           },
-							        requestDate:	   {
-													    	type: "string", 
-															editable: false,  
-															nullable: false
-							        		           },
-							        product_order_no:  {
-													    	type: "string", 
-															editable: false,  
-															nullable: false
-							        		           },
-							        mallOrderNo:	   {
-													    	type: "string", 
-															editable: false,  
-															nullable: false
-							        		           },
-							        payment_no:	   	   {
-													    	type: "string", 
-															editable: false,  
-															nullable: false
-							        				   },      
-							        permission_date:   {
-													    	type: "string", 
-															editable: false,  
-															nullable: false
-							        				   },       
-							        permission_person: {
-													    	type: "string", 
-															editable: false,  
-															nullable: false
-							        				   }, 
-							        rejection_type:	   {
-													    	type: "string", 
-															editable: false,  
-															nullable: false
-							        				   },
-							        rejection_reason:  {
-													    	type: "string", 
-															editable: false,  
-															nullable: false
-							        				   },
-							        process_result:	   {
-													    	type: "string", 
-															editable: false,  
-															nullable: false
-							        				   },
-							        req_datetime:	   {
-													    	type: "string", 
-															editable: false,  
-															nullable: false
-							        				   },
-							        result_msg:	       {
-													    	type: "string", 
-															editable: false,  
-															nullable: false
-							        				   },
-							        deliveryDivision:  {
-													    	type: "string", 
-															editable: false,  
-															nullable: false
-							        				   },
-							        delivery_type:	   {
-													    	type: "string", 
-															editable: false,  
-															nullable: false
-							        				   },
-							        invoiceNo:	       {
-													    	type: "string", 
-															editable: false,  
-															nullable: false
-							        				   },
-							        pickupStatue:	   {
-													    	type: "string", 
-															editable: false,  
-															nullable: false
-							        				   }
+                					ROW_NUM: 		   {type: "number", editable: false, nullable: false},
+            						requesteNo:		   grdScmSelectAttr,
+							        claimType:		   grdScmSelectAttr,
+							        requestDate:	   grdScmSelectAttr,
+							        product_order_no:  grdScmSelectAttr,
+							        mallOrderNo:	   grdScmSelectAttr,
+							        payment_no:	   	   grdScmSelectAttr,      
+							        permission_date:   grdScmSelectAttr,       
+							        permission_person: grdScmSelectAttr, 
+							        rejection_type:	   grdScmSelectAttr,
+							        rejection_reason:  grdScmSelectAttr,
+							        process_result:	   grdScmSelectAttr,
+							        req_datetime:	   grdScmSelectAttr,
+							        result_msg:	       grdScmSelectAttr,
+							        deliveryDivision:  grdScmSelectAttr,
+							        delivery_type:	   grdScmSelectAttr,
+							        invoiceNo:	       grdScmSelectAttr,
+							        pickupStatue:	   grdScmSelectAttr
 							        				   
 	                			}
 	                		}
 	                	}
                 	}), 
-                	change : rowClick,
                 	navigatable: true, //키보드로 그리드 셀 이동 가능
-                	selectable: "multiple",
-                	columns: [
-            		           {field: "ROW_NUM", title: "번호", type: "string" , width: "60px", textAlign: "center"},
-            		           {field: "requesteNo", title: "요청번호", type: "string" , width: "60px", textAlign: "center"},
-	              		       {field: "claimType", title: "요청유형", type: "string" , width: "60px", textAlign: "center"},
-	              		       {field: "requestDate", title: "요청일시", type: "string" , width: "60px", textAlign: "center"},
-	              		       {field: "product_order_no", title: "상품주문번호", type: "string" , width: "60px", textAlign: "center"},
-	              		       {field: "mallOrderNo", title: "마켓주문번호", type: "string" , width: "60px", textAlign: "center"},
-	              		       {field: "payment_no", title: "결재번호", type: "string" , width: "60px", textAlign: "center"},
-	              		       {field: "permission_date", title: "승인/거부일시", type: "string" , width: "60px", textAlign: "center"},
-	              		       {field: "permission_person", title: "승인/거부 입력자", type: "string" , width: "60px", textAlign: "center"},
-	              		       {field: "rejection_type", title: "거부구분", type: "string" , width: "60px", textAlign: "center"},
-	              		       {field: "rejection_reason", title: "거부내용", type: "string" , width: "60px", textAlign: "center"},
-	              		       {field: "process_result", title: "처리상태", type: "string" , width: "60px", textAlign: "center"},
-	              		       {field: "req_datetime", title: "처리일시", type: "string" , width: "60px", textAlign: "center"},
-	              		       {field: "result_msg", title: "처리결과 메시지", type: "string" , width: "60px", textAlign: "center"},
-	              		       {field: "deliveryDivision", title: "배송구분", type: "string" , width: "60px", textAlign: "center"},
-	              		       {field: "delivery_type", title: "택배사명", type: "string" , width: "60px", textAlign: "center"},
-	              		       {field: "invoiceNo", title: "송장번호", type: "string" , width: "60px", textAlign: "center"},
-	              		       {field: "pickupStatue", title: "교환상품수거여부", type: "string" , width: "60px", textAlign: "center"}
-                     	],
+                	columns: itlDataVO.columnProc(gridClaimConfirm),
                     collapse: function(e) {
                         this.cancelRow();
                     },
                 	resizable: true,
-                	rowTemplate: kendo.template($.trim(angular.element(document.querySelector("#can-template")).html())),
-                	altRowTemplate: kendo.template($.trim(angular.element(document.querySelector("#can-template")).html()).replace("class=\"k-grid-row\"","class=\"k-alt\"")),
                 	height: 302                 	
         		};
                 
@@ -688,10 +409,6 @@
                 	autoBind: false,
                     messages: {                        	
                         requestFailed: "정보를 가져오는 중 오류가 발생하였습니다.",
-                        commands: {
-                            update: "저장",
-                            canceledit: "취소"
-                        },
                         noRecords: "검색된 데이터가 없습니다."
                     },
                     sortable: true,                    	
@@ -702,201 +419,37 @@
                     dataSource: new kendo.data.DataSource({
                     	transport: {
                 		},
-                		change: function(e){
-                			var data = this.data();
-                			itlDataVO.dataTotal = data.length;
-                		},
                        	pageSize: 8,
                 		batch: true,
                 		schema: {
                 			model: { 
                     			id: "ROW_NUM",
                 				fields: {
-                					ROW_NUM: 		   {	
-				                    						type: "number", 
-															editable: false,  
-															nullable: false
-            										   },
-            						inquiryStatueCode: {
-													    	type: "string", 
-															editable: false,  
-															nullable: false
-							        		           },
-							        regDate:		   {
-													    	type: "string", 
-															editable: false,  
-															nullable: false
-							        		           },
-							        req_person:		   {
-													    	type: "string", 
-															editable: false,  
-															nullable: false
-							        		           },
-							        inquiryDivisionCode:{
-													    	type: "string", 
-															editable: false,  
-															nullable: false
-							        		           },
-							        mallItemCode:	   {
-													    	type: "string", 
-															editable: false,  
-															nullable: false
-							        		           },
-							        mallOrderNo:	   {
-													    	type: "string", 
-															editable: false,  
-															nullable: false
-							        				   },      
-							        inquiryNo:	   	   {
-													    	type: "string", 
-															editable: false,  
-															nullable: false
-							        				   },       
-							        replyContents:	   {
-													    	type: "string", 
-															editable: false,  
-															nullable: false
-							        				   }, 
-							        replyDate:	       {
-													    	type: "string", 
-															editable: false,  
-															nullable: false
-							        				   },
-							        replyPerson:	   {
-													    	type: "string", 
-															editable: false,  
-															nullable: false
-							        				   },
-							        process_result:	   {
-													    	type: "string", 
-															editable: false,  
-															nullable: false
-							        				   },
-							        process_date:	   {
-													    	type: "string", 
-															editable: false,  
-															nullable: false
-							        				   },
-							        result_msg:	       {
-													    	type: "string", 
-															editable: false,  
-															nullable: false
-							        				   }
-							        				   
+                					ROW_NUM: 		   {type: "number", editable: false, nullable: false},
+            						inquiryStatueCode: grdScmSelectAttr,
+							        regDate:		   grdScmSelectAttr,
+							        req_person:		   grdScmSelectAttr,
+							        inquiryDivisionCode:grdScmSelectAttr,
+							        mallItemCode:	   grdScmSelectAttr,
+							        mallOrderNo:	   grdScmSelectAttr,      
+							        inquiryNo:	   	   grdScmSelectAttr,       
+							        replyContents:	   grdScmSelectAttr, 
+							        replyDate:	       grdScmSelectAttr,
+							        replyPerson:	   grdScmSelectAttr,
+							        process_result:	   grdScmSelectAttr,
+							        process_date:	   grdScmSelectAttr,
+							        result_msg:	       grdScmSelectAttr
 	                			}
 	                		}
 	                	}
                 	}),
                 	navigatable: true, //키보드로 그리드 셀 이동 가능
-                	selectable: "multiple",
-                	columns: [
-           		           	   {field: "ROW_NUM", title: "번호", type: "string" , width: "60px", textAlign: "center"},
-           		           	   {field: "inquiryStatueCode", title: "요청번호", type: "string" , width: "60px", textAlign: "center"},
-	              		       {field: "regDate", title: "요청유형", type: "string" , width: "60px", textAlign: "center"},
-	              		       {field: "req_person", title: "요청일시", type: "string" , width: "60px", textAlign: "center"},
-	              		       {field: "inquiryDivisionCode", title: "상품주문번호", type: "string" , width: "60px", textAlign: "center"},
-	              		       {field: "mallItemCode", title: "마켓주문번호", type: "string" , width: "60px", textAlign: "center"},
-	              		       {field: "mallOrderNo", title: "결재번호", type: "string" , width: "60px", textAlign: "center"},
-	              		       {field: "inquiryNo", title: "승인/거부일시", type: "string" , width: "60px", textAlign: "center"},
-	              		       {field: "replyContents", title: "승인/거부 입력자", type: "string" , width: "60px", textAlign: "center"},
-	              		       {field: "replyDate", title: "거부구분", type: "string" , width: "60px", textAlign: "center"},
-	              		       {field: "replyPerson", title: "거부내용", type: "string" , width: "60px", textAlign: "center"},
-	              		       {field: "process_result", title: "처리상태", type: "string" , width: "60px", textAlign: "center"},
-	              		       {field: "process_date", title: "처리일시", type: "string" , width: "60px", textAlign: "center"},
-	              		       {field: "result_msg", title: "처리결과 메시지", type: "string" , width: "60px", textAlign: "center"}
-                    	],
+                	columns: itlDataVO.columnProc(gridInquiryProcess),
                     collapse: function(e) {
                         this.cancelRow();
                     },
                 	resizable: true,
-                	rowTemplate: kendo.template($.trim(angular.element(document.querySelector("#cs-template")).html())),
-                	altRowTemplate: kendo.template($.trim(angular.element(document.querySelector("#cs-template")).html()).replace("class=\"k-grid-row\"","class=\"k-alt\"")),
                 	height: 302                 	
-        		};
-                
-                //done
-                function getCheckedItems(treeview, obj) {
-                    var nodes = treeview.dataSource.data();
-                    return getCheckedNodes(nodes, obj);
-                };
-                
-                //done
-                function getCheckedNodes(nodes, obj) {
-                    var node, childCheckedNodes;
-                    var checkedNodes = [];
-                    
-                    obj.searchTotal = nodes.length;
-                    
-                    for (var i = 0; i < obj.searchTotal; i++) {
-                        node = nodes[i];
-                        if (node.checked) {
-                            checkedNodes.push(node);
-                        }                        
-                        if (node.hasChildren) {
-                            childCheckedNodes = getCheckedNodes(node.children.data());
-                            if (childCheckedNodes.length > 0) {
-                                checkedNodes = checkedNodes.concat(childCheckedNodes);
-                            };
-                        };
-                    }
-                    return checkedNodes;
-                };                
-                //done
-                function filter(dataSource, query, viewGrdCnt) {
-                    var hasVisibleChildren = false;
-                    var data = dataSource instanceof kendo.data.HierarchicalDataSource && dataSource.data();
-                    
-                    for (var i = 0; i < data.length; i++) {
-                        var item = data[i];
-                        var text = item.NM.toLowerCase(); //유기적으로 변하는 값
-                        var itemVisible =
-                            query === true // parent already matches
-                            || query === "" // query is empty
-                            || text.indexOf(query) >= 0; // item text matches query
-
-                        var anyVisibleChildren = filter(item.children, itemVisible || query, viewGrdCnt); // pass true if parent matches
-
-                        hasVisibleChildren = hasVisibleChildren || anyVisibleChildren || itemVisible;
-
-                        item.hidden = !itemVisible && !anyVisibleChildren;
-                    }
-                    if (data) {
-                        // re-apply filter on children
-                        dataSource.filter({ field: "hidden", operator: "neq", value: true });
-                    }                              
-                    return hasVisibleChildren;
-               };               
-               //done
-               function populateMultiSelect(checkedNodes, id) {
-                   var multiSelect = angular.element(document.querySelector(id)).data("kendoMultiSelect");                   
-                   multiSelect.dataSource.data([]);
-                   
-                   var multiData = multiSelect.dataSource.data();                   
-                  
-                   if(checkedNodes.length > 0) {
-                       var array = multiSelect.value().slice();
-                       for (var i = 0; i < checkedNodes.length; i++) {
-                    	   var strNM = checkedNodes[i].NM.split("-");
-                           multiData.push({ NM: strNM[0], NO_C: checkedNodes[i].NO_C});
-                           array.push(checkedNodes[i].NO_C.toString());
-                       }
-                       multiSelect.dataSource.data(multiData);
-                       multiSelect.dataSource.filter({});
-                       multiSelect.value(array);
-                       multiSelect.trigger("change");
-                   };
-               };           	   
-                                             
-               $timeout(function () {
-            	   if(!page.isWriteable()) {            		   
-            		   $(".k-grid-add").addClass("k-state-disabled");
-            		   $(".k-grid-delete").addClass("k-state-disabled");
-       				   $(".k-grid-add").click(itlDataVO.stopEvent);
-       				   $(".k-grid-delete").click(itlDataVO.stopEvent);
-       			   };
-
-            	   itlDataVO.inQuiry();
-               });
-               
+        		};               
             }]);
 }());
