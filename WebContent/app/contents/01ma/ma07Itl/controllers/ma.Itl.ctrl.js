@@ -61,7 +61,8 @@
 						{field: "PROG_DIFF"    , width: "70px", attributes: {class:"ta-c"}, title: "진행시간"}
 					],
 		            gridOrderConfirm = [
-						{field: "ROW_NUM" 		   , type : "number", width: iNumWidth, attributes: {class:"ta-r"}, title: "번호"},
+						{field: "ROW_NUM" 		   , type : "number", width: iNumWidth, attributes: {class:"ta-r"}, title: "번호"},       		            
+						{field: "info_type"        , width: "70px"  , attributes: {class:"ta-l"}, title: "정보유형"},   
 						{field: "orderNo"          , width: "130px" , attributes: {class:"ta-c"}, title: "주문번호"},           		            
 						{field: "productOrderNo"   , width: "130px" , attributes: {class:"ta-l"}, title: "상품주문번호"},   
 						{field: "mallOrderNo"      , width: "130px" , attributes: {class:"ta-l"}, title: "마켓주문번호"},
@@ -73,7 +74,8 @@
 						 attributes: {class:"ta-l" , style:"text-overflow: ellipsis; white-space: nowrap; overflow:hidden;"}, title: "결과메시지"}
 					],
   		            gridInvoiceNo = [
-						{field: "ROW_NUM" 		     , type : "number", width: iNumWidth, attributes: {class:"ta-r"}, title: "번호"},
+						{field: "ROW_NUM" 		     , type : "number", width: iNumWidth, attributes: {class:"ta-r"}, title: "번호"},       		            
+						{field: "info_type"          , width: "70px"  , attributes: {class:"ta-l"}, title: "정보유형"},   
 						{field: "orderNo"            , width: "130px" , attributes: {class:"ta-c"}, title: "주문번호"},           		            
 						{field: "productOrderNo"     , width: "130px" , attributes: {class:"ta-l"}, title: "상품주문번호"},   
 						{field: "mallOrderNo"        , width: "130px" , attributes: {class:"ta-l"}, title: "마켓주문번호"},
@@ -141,15 +143,6 @@
 	            	  
 	            //open
 	            itlDataVO.isOpen = function(val){
-	            	if(val) {
-	            		$scope.qakg.wrapper.height(657);
-	            		$scope.qakg.resize();
-	            		gridItlVO.dataSource.pageSize(20);
-	            	}else {
-	            		$scope.qakg.wrapper.height(798);
-	            		$scope.qakg.resize();
-	            		gridItlVO.dataSource.pageSize(24);
-	            	}
 	            };	
 	            
 				//각 컬럼에 header 정보 넣어줌, 공통 모듈이 2줄 위주로 작성 되어 있기 떄문에  일부러 일케 했음 
@@ -302,7 +295,7 @@
                         this.cancelRow();
                     },
                 	resizable: true,
-                	height: 302   	
+                	height: 285   	
         		};
                 
                 //검색 그리드
@@ -348,7 +341,7 @@
                         this.cancelRow();
                     },
                 	resizable: true,
-                	height: 302                 	
+                	height: 285                 	
         		};
                 
                 //검색 그리드
@@ -401,7 +394,7 @@
                         this.cancelRow();
                     },
                 	resizable: true,
-                	height: 302                 	
+                	height: 285                 	
         		};
                 
                 //검색 그리드
@@ -449,7 +442,7 @@
                         this.cancelRow();
                     },
                 	resizable: true,
-                	height: 302                 	
+                	height: 285                 	
         		};               
             }]);
 }());
