@@ -284,33 +284,33 @@
         					lcdcls: "SA_000016"
                 		};;
                     $q.all([
-	            			UtilSvc.csMrkList().then(function (res) {
-	            				return res.data;
-	            			}),	
-	            			UtilSvc.getCommonCodeList(ordParam).then(function (res) {
-	            				return res.data;
-	            			}),
-	            			UtilSvc.getCommonCodeList(betParam).then(function (res) {
-	            				return res.data;
-	            			}),
-	            			//취소 사유 코드 드랍 박스 실행	
-	            			UtilSvc.getCommonCodeList(cclCodeParam).then(function (res) {
-	            				return res.data;
-	            			}),
-	            			//취소 거부 구분 코드 드랍 박스 실행	
-	            			UtilSvc.getCommonCodeList(cclrjtparam).then(function (res) {
-	            				return res.data;
-                			}),
-	            			//취소 상태 코드 드랍 박스 실행	
-	            			UtilSvc.getCommonCodeList(cclstsparam).then(function (res) {
-	            				return res.data;
-                			})
+            			UtilSvc.csMrkList().then(function (res) {
+            				return res.data;
+            			}),	
+            			UtilSvc.getCommonCodeList(ordParam).then(function (res) {
+            				return res.data;
+            			}),
+            			UtilSvc.getCommonCodeList(betParam).then(function (res) {
+            				return res.data;
+            			}),
+            			//취소 사유 코드 드랍 박스 실행	
+            			UtilSvc.getCommonCodeList(cclCodeParam).then(function (res) {
+            				return res.data;
+            			}),
+            			//취소 거부 구분 코드 드랍 박스 실행	
+            			UtilSvc.getCommonCodeList(cclrjtparam).then(function (res) {
+            				return res.data;
+            			}),
+            			//취소 상태 코드 드랍 박스 실행	
+            			UtilSvc.getCommonCodeList(cclstsparam).then(function (res) {
+            				return res.data;
+            			})
                     ]).then(function (result) {
                         me.ordMrkNameOp = result[0];
                         me.ordStatusOp = result[1];
                         me.betweenDateOptionOp = result[2];
                         me.betweenDateOptionMo = result[2][0].CD_DEF; 
-                        me.cancelCodeOp = result[3].filter(function(ele){
+                        me.cancelCodeOp.dataSource = result[3].filter(function(ele){
     						return (!ele.DC_RMK2);
     					});
                         me.cancelCodeLowOp = result[3].filter(function(ele){
@@ -510,7 +510,7 @@
                 	edit: function(e){
                 		var dataVo = $scope.ordCancelManagementDataVO,
                 			noMngmrk = e.model.NO_MNGMRK,
-                			noMrk = e.model.NO_MNGMRK,
+                			noMrk = e.model.NO_MRK,
                 			ddlRejectCodeSel = e.container.find("select[name=cancel_reject_code]"),
                 			ddlCancelReason = e.container.find("select[name=CD_CCLHRNKRSN]").data("kendoDropDownList"),
                 			ddlCancelLowReason = e.container.find("select[name=CD_CCLLRKRSN]").data("kendoDropDownList"),
