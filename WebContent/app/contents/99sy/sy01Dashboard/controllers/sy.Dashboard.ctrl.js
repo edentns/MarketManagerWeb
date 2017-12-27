@@ -38,6 +38,15 @@
 		            ];
 
 	            vm.allOpen = resData.cmrkOpen && resData.parsOpen;
+	            	            
+	            vm.sacsCnt = (function(){
+	            	var ret = [];
+	            	for(var iIndex = 0; iIndex < resData.sacsCnt.length - 1; iIndex++) {
+	            		ret[iIndex] = (resData.sacsCnt[iIndex].length > 0)? kendo.toString(resData.sacsCnt[iIndex][0].CNT_ORD,'n0', 'ko-KR'): '0';
+	            	}
+	            	ret[resData.sacsCnt.length - 1] = (resData.sacsCnt[resData.sacsCnt.length - 1].length > 0)? kendo.toString(resData.sacsCnt[resData.sacsCnt.length - 1][0].CNT_INQ,'n0', 'ko-KR'): '0';
+	            	return ret;
+	            }());
 	            
 	            vm.mainComponents = {
             		visible     : true,

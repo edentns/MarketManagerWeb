@@ -22,18 +22,22 @@
 	                            resData.access = result[0];
 	                        	var param = {
 	                        		noticeQa:{procedureParam: "USP_SY_01DASHBOARD07_GET"},
-	                        		cmrkPars:{procedureParam: "USP_SY_01DASHBOARD08_GET"}
+	                        		cmrkPars:{procedureParam: "USP_SY_01DASHBOARD08_GET"},
+	                        		sacsCnt:{procedureParam: "USP_SY_01DASHBOARD09_GET"}
 	                        	};
 	            	            
 	                        	$q.all([
                                     UtilSvc.getList(param.noticeQa),
-                                    UtilSvc.getList(param.cmrkPars)
+                                    UtilSvc.getList(param.cmrkPars),
+                                    UtilSvc.getList(param.sacsCnt)
                                 ]).then(function (result) {
                                 	resData.mainOpen = (result[0].data.results[0].length > 0)? true : false;
 	            					resData.subOpen = (result[0].data.results[1].length > 0)? true : false;
 	            					
 	            					resData.cmrkOpen = (result[1].data.results[0].length > 0 && result[1].data.results[0][0].CNT_NO_MRK > 0)? true : false;
 	            					resData.parsOpen = (result[1].data.results[1].length > 0 && result[1].data.results[1][0].CNT_CD_DEF > 0)? true : false;
+	            					
+	            					resData.sacsCnt = result[2].data.results;
 	            					
                                     defer.resolve( resData );
                                 });

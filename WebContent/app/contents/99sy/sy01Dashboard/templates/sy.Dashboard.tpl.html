@@ -1,10 +1,18 @@
 <div id="app-content" class="col-xs-12 col-sm-10">
     <div class="row">
         <div id="app-content-header">
-            <ol class="breadcrumb">
+            <ol class="breadcrumb" style="float:left;">
                 <li><a href="#99sy/syDashboard"><i class="fa fa-home fa-2x"></i></a></li>
                 <li><a href="#99sy/syDashboard">메인</a></li>
             </ol>
+            <div style="text-align:right; font-size:14px; color:white;">
+                           <a href="#/03sa/saOrd/?menu=true"         style="color:white; text-decoration:none;">[신규주문: <font style="color:#f1cee1;">{{vm.sacsCnt[0]}}</font>건]</a>
+                &nbsp-&nbsp<a href="#/03sa/saShpStdbyOrd/?menu=true" style="color:white; text-decoration:none;">[배송준비: <font style="color:#f1cee1;">{{vm.sacsCnt[1]}}</font>건]</a>
+                &nbsp-&nbsp<a href="#/03sa/saOrdCcl?menu=true"       style="color:white; text-decoration:none;">[취소요청: <font style="color:#f1cee1;">{{vm.sacsCnt[2]}}</font>건]</a>
+                &nbsp-&nbsp<a href="#/03sa/saTkbkReq?menu=true"      style="color:white; text-decoration:none;">[반품요청: <font style="color:#f1cee1;">{{vm.sacsCnt[3]}}</font>건]</a>
+                &nbsp-&nbsp<a href="#/03sa/saEchgReq?menu=true"      style="color:white; text-decoration:none;">[교환요청: <font style="color:#f1cee1;">{{vm.sacsCnt[4]}}</font>건]</a>
+                &nbsp-&nbsp<a href="#/04cs/csInq?menu=true"          style="color:white; text-decoration:none;">[CS: <font style="color:#f1cee1;">{{vm.sacsCnt[5]}}</font>건]</a>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+            </div>
         </div>
     </div>
     <div class="row mt-10">
