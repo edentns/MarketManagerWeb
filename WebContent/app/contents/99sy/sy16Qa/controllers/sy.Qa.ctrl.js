@@ -64,28 +64,24 @@
     						self.answerStatusBind = res.data;
     						self.customOptions.dataSource = res.data;
         				}
-	        		},function(err) {
+	        		},function(e) {
 	 				    e.error([]);	 				       
 	 				});
 	            });
 	            
 	            //조회
 	            syQaDataVO.inQuiry = function(){
-	            	var param = {
-    						procedureParam: "USP_SY_16QA_GET&L_CONT@s|L_CD_ANSSTAT@s|L_START_DATE@s|L_END_DATE@s",
-    						L_CONT: syQaDataVO.contentText.value,
-    						L_CD_ANSSTAT : syQaDataVO.answerStatusModel, 
-    						L_START_DATE  : new Date(syQaDataVO.datesetting.period.start.y, syQaDataVO.datesetting.period.start.m-1, syQaDataVO.datesetting.period.start.d).dateFormat("Ymd"),
-    						L_END_DATE    : new Date(syQaDataVO.datesetting.period.end.y  , syQaDataVO.datesetting.period.end.m-1  , syQaDataVO.datesetting.period.end.d).dateFormat("Ymd")
-    					};
-					UtilSvc.getList(param).then(function (res) {
-						if(res.data.results[0].length >= 1){
-							$scope.syqakg.dataSource.data(res.data.results[0]);
-			            	$scope.syqakg.dataSource.page(1);
-						}else{
-							$scope.syqakg.dataSource.data([]);
-							$scope.syqakg.dataSource.error();
-						}
+						gridSyQaVO.dataSource.read();
+	                	var param = {
+	                			procedureParam: "USP_SY_16QA_GET&L_CONT@s|L_CD_ANSSTAT@s|L_START_DATE@s|L_END_DATE@s",
+	    						L_CONT: syQaDataVO.contentText.value,
+	    						L_CD_ANSSTAT : syQaDataVO.answerStatusModel,
+	    						L_CD_ANSSTAT_INDEX : syQaDataVO.answerStatusBind.allSelectNames,
+	    						L_START_DATE  : syQaDataVO.datesetting.period.start,
+	    						L_END_DATE    : syQaDataVO.datesetting.period.end
+	    	                };
+	            			// 검색조건 세션스토리지에 임시 저장
+	            			UtilSvc.grid.setInquiryParam(param);
 						
 	    				setTimeout(function () {
 	                       	if(!page.isWriteable()) {
@@ -95,7 +91,6 @@
 	               				$(".k-grid-연동체크").click(stopEvent);
 	               			}
 	                    });
-					});
 	            	
 	            	//$scope.nkg.dataSource.read();
 	            };	    
@@ -243,10 +238,23 @@
                     	dataSource: new kendo.data.DataSource({
                     		transport: {
                     			read: function(e) {
-                					/*UtilSvc.getList(param).then(function (res) {
-                						noticeDataVO.dataTotal = res.data.results[0].length;
-                						e.success(res.data.results[0]);
-                					});*/
+                    				var param = {
+                    						procedureParam: "USP_SY_16QA_GET&L_CONT@s|L_CD_ANSSTAT@s|L_START_DATE@s|L_END_DATE@s",
+                    						L_CONT: syQaDataVO.contentText.value,
+                    						L_CD_ANSSTAT : syQaDataVO.answerStatusModel, 
+                    						L_START_DATE  : new Date(syQaDataVO.datesetting.period.start.y, syQaDataVO.datesetting.period.start.m-1, syQaDataVO.datesetting.period.start.d).dateFormat("Ymd"),
+                    						L_END_DATE    : new Date(syQaDataVO.datesetting.period.end.y  , syQaDataVO.datesetting.period.end.m-1  , syQaDataVO.datesetting.period.end.d).dateFormat("Ymd")
+                    					};
+                    				
+                					UtilSvc.getList(param).then(function (res) {
+                						if(res.data.results[0].length >= 1){
+                							syQaDataVO.dataTotal = res.data.results[0].length;
+                    						
+                    						e.success(res.data.results[0]);
+                						}else{
+                							e.error();
+                						}
+                					});
                     			},
                     			create: function(e) {
     	                			var defer = $q.defer();
@@ -567,13 +575,24 @@
                     	height: 657
         		};
                 
+                syQaDataVO.asrStsBind();
+                
+                var history = UtilSvc.grid.getInquiryParam();
+                
                 $timeout(function () {
              	    if(!page.isWriteable()) {            		   
     					$("#divSyQaGrd .k-grid-toolbar").hide();
         		    };
-        			   
-        			syQaDataVO.asrStsBind();
-                });
+        		    if(history){
+                    	syQaDataVO.contentText.value = history.L_CONT;
+						syQaDataVO.answerStatusModel = history.L_CD_ANSSTAT;
+						syQaDataVO.answerStatusBind.setSelectNames = history.L_CD_ANSSTAT_INDEX;
+						syQaDataVO.datesetting.period.start = history.L_START_DATE;
+						syQaDataVO.datesetting.period.end = history.L_END_DATE;
+	            		
+						$scope.gridSyQaVO.dataSource.read();
+	            	}
+                },1000);
                
                 //kendo grid 체크박스 옵션
                 $scope.onOrdGrdCkboxClick = function(e){

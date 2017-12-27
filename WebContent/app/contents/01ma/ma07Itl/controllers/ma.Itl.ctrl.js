@@ -128,6 +128,25 @@
 						{field: "process_date"       , width: iDateTimeWidth , attributes: {class:"ta-c"}, title: "처리일시"},
 						{field: "result_msg"         , width: iNullWidth,
 						 attributes: {class:"ta-l", style:"text-overflow: ellipsis; white-space: nowrap; overflow:hidden;"}, title: "결과메시지"}
+					],
+		            gridShippingManagement = [
+  						{field: "ROW_NUM" 		   , type : "number", width: iNumWidth, attributes: {class:"ta-r"}, title: "번호"}, 
+  						{field: "mall_no"          , width: "80px"  , attributes: {class:"ta-l"}, title: "쇼핑몰구분"},
+						{field: "info_type"        , width: "65px"  , attributes: {class:"ta-l"}, title: "정보유형"},   
+						{field: "orderNo"          , width: "128px" , attributes: {class:"ta-c"}, title: "주문번호"},
+						{field: "mallOrderNo"      , width: "88px" , attributes: {class:"ta-l"}, title: "마켓주문번호"},
+						{field: "mallItemNo"       , width: "128px" , attributes: {class:"ta-l"}, title: "마켓상품번호"},
+						{field: "paymentNo"        , width: "80px" , attributes: {class:"ta-l"}, title: "결재번호"},
+						{field: "deliveryDivision" , width: "85px"  , attributes: {class:"ta-c"}, title: "배송구분"},
+						{field: "delivery_type"    , width: "70px"  , attributes: {class:"ta-c"}, title: "택배사명"},
+						{field: "invoiceNo"        , width: "80px" , attributes: {class:"ta-l"}, title: "송장번호"},
+						{field: "updatedDeliveryDivision"  , width: "80px" , attributes: {class:"ta-l"}, title: "수정할배송구분"},
+						{field: "updatedDeliveryType"      , width: "80px" , attributes: {class:"ta-l"}, title: "수정할택배사명"},
+						{field: "updatedInvoiceNo"         , width: "80px" , attributes: {class:"ta-l"}, title: "수정할송장번호"},
+						{field: "process_result"   , width: "65px"  , attributes: {class:"ta-c"}, title: "처리상태"},
+						{field: "req_datetime"     , width: iDateTimeWidth, attributes: {class:"ta-c"}, title: "처리일시"},
+						{field: "result_msg"       , width: iNullWidth,
+						 attributes: {class:"ta-l" , style:"text-overflow: ellipsis; white-space: nowrap; overflow:hidden;"}, title: "결과메시지"}
 					];
 	            
 	            //toolTip
@@ -231,6 +250,7 @@
     						$scope.trankg.dataSource.data(res.data.results[1]);
     						$scope.cankg.dataSource.data(res.data.results[2]);
     						$scope.cskg.dataSource.data(res.data.results[3]);
+    						$scope.shikg.dataSource.data(res.data.results[4]);
     					});
                 	},
                 	dataBound: function(e) {
@@ -443,6 +463,56 @@
                     },
                 	resizable: true,
                 	height: 285                 	
-        		};               
+        		};   
+                
+              //검색 그리드
+                var gridShiVO = $scope.gridShiVO = {
+                	autoBind: false,
+                    messages: {                        	
+                        requestFailed: "정보를 가져오는 중 오류가 발생하였습니다.",
+                        noRecords: "검색된 데이터가 없습니다."
+                    },
+                    sortable: true,                    	
+                    pageable: {
+                       	messages: UtilSvc.gridPageableMessages
+                    },
+                    noRecords: true,
+                    dataSource: new kendo.data.DataSource({
+                    	transport: {
+                		},
+                       	pageSize: 8,
+                		batch: true,
+                		schema: {
+                			model: { 
+                    			id: "ROW_NUM",
+                				fields: {
+                					ROW_NUM: 		   {type: "number", editable: false, nullable: false},
+                					mall_no:           grdScmSelectAttr,
+                					info_type:		   grdScmSelectAttr,
+                					orderNo:		   grdScmSelectAttr,
+                					mallOrderNo:       grdScmSelectAttr,
+                					mallItemNo:	       grdScmSelectAttr,
+                					paymentNo:	       grdScmSelectAttr,      
+                					deliveryDivision:  grdScmSelectAttr,       
+                					delivery_type:	   grdScmSelectAttr, 
+                					invoiceNo:	       grdScmSelectAttr,
+                					updatedDeliveryDivision:  grdScmSelectAttr,
+                					updatedDeliveryType:	  grdScmSelectAttr,
+                					updatedInvoiceNo:	      grdScmSelectAttr,
+                					process_result:	   grdScmSelectAttr,
+                					req_datetime:	   grdScmSelectAttr,
+                					result_msg:	       grdScmSelectAttr
+	                			}
+	                		}
+	                	}
+                	}),
+                	navigatable: true, //키보드로 그리드 셀 이동 가능
+                	columns: itlDataVO.columnProc(gridShippingManagement),
+                    collapse: function(e) {
+                        this.cancelRow();
+                    },
+                	resizable: true,
+                	height: 285                 	
+        		};
             }]);
 }());

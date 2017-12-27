@@ -54,18 +54,18 @@
 	            //초기실행
 	            noticeDataVO.initLoad = function(){
 	            	$timeout(function() {
-		                 // 이전에 검색조건을 세션에 저장된 것을 가져옴
-		            		var history = UtilSvc.grid.getInquiryParam();
-			            	if(history){
-			            		noticeDataVO.contentText.value = history.SEARCH_;
-	                        	noticeDataVO.noticeCdModel = history.ARR_CD_NO;
-	                        	noticeDataVO.noticeCdVO.setSelectNames = history.ARR_CD_NO_SELECT_INDEX;
-	                        	noticeDataVO.datesetting.period.start = history.START_DATE;
-	                        	noticeDataVO.datesetting.period.end = history.END_DATE;
-			            		
-	                        	$scope.nkg.dataSource.read();
-			            	}
-	                    },1000);
+	                    // 이전에 검색조건을 세션에 저장된 것을 가져옴
+	            		var history = UtilSvc.grid.getInquiryParam();
+		            	if(history){
+		            		noticeDataVO.contentText.value = history.SEARCH_;
+                        	noticeDataVO.noticeCdModel = history.ARR_CD_NO;
+                        	noticeDataVO.noticeCdVO.setSelectNames = history.ARR_CD_NO_SELECT_INDEX;
+                        	noticeDataVO.datesetting.period.start = history.START_DATE;
+                        	noticeDataVO.datesetting.period.end = history.END_DATE;
+		            		
+                        	$scope.nkg.dataSource.read();
+		            	}
+                    },1000);
 	            };	  
 	            
 	            //조회

@@ -71,10 +71,11 @@
 	        <div kendo-tab-strip k-content-urls="[]">
               <!-- tab list -->
               <ul>
-                <li class="k-state-active" data-ng-click = "myInfoVO.tab(myInfoVO)">주문확정/취소 (OrderConfirm)</li>
-                <li data-ng-click = "myInfoVO.tab(myInfoVO)">배송정보/취소 (InvoiceNo)</li>
-                <li data-ng-click = "myInfoVO.tab(myInfoVO)">취소/반품/교환 (ClaimConfirm)</li>
-                <li data-ng-click = "myInfoVO.tab(myInfoVO)">문의처리 (InquiryProcess)</li>
+                <li class="k-state-active">주문확정/취소 (OrderConfirm)</li>
+                <li>배송정보/취소 (InvoiceNo)</li>
+                <li>취소/반품/교환 (ClaimConfirm)</li>
+                <li>문의처리 (InquiryProcess)</li>
+                <li>재배송 (ShippingManagement)</li>
               </ul>
           
               <div style="padding: 1em">	
@@ -101,6 +102,13 @@
               <div style="padding: 1em">	
 				<kendo-tooltip options="itlDataVO.tooltipOptions">		
 	                <div id="divCsGrd" kendo-grid="cskg" options="gridCsVO">
+		        	</div>	 
+		        </kendo-tooltip>	 
+              </div>
+              
+              <div style="padding: 1em">	
+				<kendo-tooltip options="itlDataVO.tooltipOptions">		
+	                <div id="divShiGrd" kendo-grid="shikg" options="gridShiVO">
 		        	</div>	 
 		        </kendo-tooltip>	 
               </div>
