@@ -158,7 +158,7 @@
     	            	$scope.ordallkg.dataSource.page(1);
     	            	//$scope.ordallkg.dataSource.read();
     				}	         				
-    				UtilSvc.localStorage.setItem("ordAllDataVO" ,me.param);
+    				Util03saSvc.localStorage.setItem("ordAllDataVO" ,me.param);
 	            };
 	            
 	            //초기화버튼

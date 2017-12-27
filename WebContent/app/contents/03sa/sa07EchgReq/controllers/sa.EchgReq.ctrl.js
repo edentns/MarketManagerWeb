@@ -293,12 +293,7 @@
 	            		$scope.echgkg.dataSource.data([]);
 		            	$scope.echgkg.dataSource.page(1);
         			};
-        			if(UtilSvc.localStorage.getItem("echgDataVO")){        				
-    					UtilSvc.localStorage.removeItem("echgDataVO");
-    					UtilSvc.localStorage.setItem("echgDataVO" ,self.param);
-    				}else{
-    					UtilSvc.localStorage.setItem("echgDataVO" ,self.param);    					
-    				}          			
+    				Util03saSvc.localStorage.setItem("echgDataVO" ,self.param);    	         			
 	            };
 		            
 	            //초기화버튼

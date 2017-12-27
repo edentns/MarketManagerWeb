@@ -341,20 +341,15 @@
 					    DTS_TO : new Date(me.datesetting.period.end.y, me.datesetting.period.end.m-1, me.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis"),
 					    NM_MRK_SELCT_INDEX : me.ordMrkNameOp.allSelectNames,
 					    NM_ORDSTAT_SELCT_INDEX : me.ordStatusOp.allSelectNames,
+					    CD_CCLSTAT_SELCT_INDEX : me.cancelStatusOp.allSelectNames,
 					    DTS_SELECTED : me.datesetting.selected	
                     }; 
     				if(Util03saSvc.readValidation(me.param)){
     					$scope.ordCancelManagementkg.dataSource.data([]);
     	            	$scope.ordCancelManagementkg.dataSource.page(1);
     	            	//$scope.ordCancelManagementkg.dataSource.read();
-    				};	            	
-    				
-    				if(UtilSvc.localStorage.getItem("ordCancelParam")){        				
-    					UtilSvc.localStorage.removeItem("ordCancelParam");
-    					UtilSvc.localStorage.setItem("ordCancelParam" ,me.param);
-    				}else{
-    					UtilSvc.localStorage.setItem("ordCancelParam" ,me.param);    					
-    				} 
+    				};	     
+        			Util03saSvc.localStorage.setItem("ordCancelParam" ,me.param);	
 	            };
 	            		        
 	            //초기화버튼

@@ -231,12 +231,7 @@
     				if(Util03saSvc.readValidation(me.param)){
     					$scope.ordkg.dataSource.read();
     				};
-    				if(UtilSvc.localStorage.getItem("ordSerchParam")){        				
-    					UtilSvc.localStorage.removeItem("ordSerchParam");
-    					UtilSvc.localStorage.setItem("ordSerchParam" ,me.param);
-    				}else{
-    					UtilSvc.localStorage.setItem("ordSerchParam" ,me.param);    					
-    				}    					    				
+    				Util03saSvc.localStorage.setItem("ordSerchParam" ,me.param);     					    				
 	            };
 	            
 	            //초기화버튼

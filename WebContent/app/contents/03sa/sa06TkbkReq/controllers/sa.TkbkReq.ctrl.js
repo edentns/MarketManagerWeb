@@ -452,12 +452,8 @@
     					$scope.tkbkkg.dataSource.data([]);
     	            	$scope.tkbkkg.dataSource.page(1);  // 페이지 인덱스 초기화
     				}
-    				if(UtilSvc.localStorage.getItem("tkbkDataVO")){        				
-    					UtilSvc.localStorage.removeItem("tkbkDataVO");
-    					UtilSvc.localStorage.setItem("tkbkDataVO" ,self.param);
-    				}else{
-    					UtilSvc.localStorage.setItem("tkbkDataVO" ,self.param);    					
-    				} 
+    				
+    				Util03saSvc.localStorage.setItem("tkbkDataVO" ,self.param);    
 	            };
 		            
 	            //초기화버튼

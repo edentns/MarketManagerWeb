@@ -137,8 +137,9 @@
 				});
 			};
             
+			//검색어 저장 후 조회기능
 			this.storedQuerySearchPlay = function(vo, param, grd){
-				var getParam = UtilSvc.localStorage.getItem(param);
+				var getParam = this.localStorage.getItem(param);
             	
         		if(getParam){        			        			
         			var me = vo,
@@ -150,10 +151,13 @@
     				
 			   		me.ordMrkNameOp.setSelectNames = getParam.NM_MRK_SELCT_INDEX;
         			me.ordStatusOp.setSelectNames = getParam.NM_ORDSTAT_SELCT_INDEX;
+
+			   		me.ordMrkNameOp.allSelectNames = getParam.NM_MRK_SELCT_INDEX;
+        			me.ordStatusOp.allSelectNames = getParam.NM_ORDSTAT_SELCT_INDEX;
         			//me.setting.allCheckYn = 'N';
         			
-    				//me.ordMrkNameMo = getParam.NM_MRK; 
-        			//me.ordStatusMo = getParam.CD_ORDSTAT;        			                			
+    				me.ordMrkNameMo = getParam.NM_MRK || getParam.NO_MRK; 
+        			me.ordStatusMo = getParam.CD_ORDSTAT;        			                			
     				me.procName.value = getParam.NM_MRKITEM;
         			me.orderNo.value = getParam.NO_MRKORD;
         			me.buyerName.value = getParam.NM_PCHR || getParam.NM_CONS; 
@@ -171,6 +175,8 @@
 				   	};
 				   	if(me.cancelStatusMo){
 				   		me.cancelStatusMo = getParam.CD_CCLSTAT;
+				   		me.cancelStatusOp.setSelectNames = getParam.CD_CCLSTAT_SELCT_INDEX;
+				   		me.cancelStatusOp.allSelectNames = getParam.CD_CCLSTAT_SELCT_INDEX;
 				   	}
 				   	if(me.echgStatusMo){
 				   		me.echgStatusMo = getParam.CD_ECHGSTAT;
@@ -181,6 +187,25 @@
 				   	
     				me.inQuiry();
         		};
+			};
+			//로컬 스토리지			
+			this.localStorage = {
+				setItem: function(name, data) {
+					$window.localStorage.setItem(name, JSON.stringify(data));
+				},
+				
+				getItem: function(name) {
+					var result = $window.localStorage.getItem(name);
+					
+					if (result) {
+						result = JSON.parse(result);
+					}					
+					return result;
+				},
+                
+                removeItem: function(name) {                    
+                    $window.localStorage.removeItem(name);
+                }
 			};
 		}
 	]);

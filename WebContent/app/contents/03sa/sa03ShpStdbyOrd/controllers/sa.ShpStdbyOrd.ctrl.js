@@ -122,12 +122,7 @@
     					$scope.shpbyordkg.dataSource.data([]);
         				$scope.shpbyordkg.dataSource.page(1);
     				};
-    				if(UtilSvc.localStorage.getItem("shpStdbyOrdSerchParam")){        				
-    					UtilSvc.localStorage.removeItem("shpStdbyOrdSerchParam");
-    					UtilSvc.localStorage.setItem("shpStdbyOrdSerchParam" ,me.param);
-    				}else{
-    					UtilSvc.localStorage.setItem("shpStdbyOrdSerchParam" ,me.param);    					
-    				} 
+    				Util03saSvc.localStorage.setItem("shpStdbyOrdSerchParam" ,me.param);    					
 	            };	            
 	            
 	            //초기화버튼
@@ -164,16 +159,7 @@
 	            		$scope.shpbyordkg.resize();
 	            	}
 	            };
-	            
-	            //로딩 초기화 
-	            shpbyordDataVO.onlyOncePlay = function(){
-	            	mrkName();
-    	            orderStatus();
-    	            betweenDate(); 	            
-    	            cancelReasonCode();
-    	            cclPop();
-	            };
-	            
+	            	            
 	            // 유효성 검사
 	            var updateValidation = function(param, btnCase){
 	            	var tempParam = "",

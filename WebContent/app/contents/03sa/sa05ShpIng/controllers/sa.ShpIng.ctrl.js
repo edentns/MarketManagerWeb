@@ -314,14 +314,8 @@
     					$scope.shippingkg.dataSource.data([]);  
     	            	$scope.shippingkg.dataSource.page(1);  // 페이지 인덱스 초기화              
     	            	//$scope.shippingkg.dataSource.read();
-    				};
-    				
-    				if(UtilSvc.localStorage.getItem("shippingParam")){        				
-    					UtilSvc.localStorage.removeItem("shippingParam");
-    					UtilSvc.localStorage.setItem("shippingParam" ,me.param);
-    				}else{
-    					UtilSvc.localStorage.setItem("shippingParam" ,me.param);    					
-    				} 
+    				};    				
+    				Util03saSvc.localStorage.setItem("shippingParam" ,me.param);    						
 	            };
 	            		        
 	            //초기화버튼
