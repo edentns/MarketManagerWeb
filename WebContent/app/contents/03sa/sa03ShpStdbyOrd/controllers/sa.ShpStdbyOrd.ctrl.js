@@ -382,7 +382,7 @@
             			if( !grid.dataSource._total || grid.dataSource._total == 0){
             				alert("그리드에 데이터가 없습니다.");
             			}else{
-            				var getParam = UtilSvc.localStorage.getItem("shpStdbyOrdSerchParam");
+            				var getParam = Util03saSvc.localStorage.getItem("shpStdbyOrdSerchParam");
             				var colVo = angular.copy($scope.grdShpbyordVO.columns);
             				colVo.splice(0,1);
             				getParam.gridInfo       = [colVo,[{field:"NM_MRK",title:"마켓명"},{field:"CD_DEF",title:"택배사코드"},{field:"NM_DEF",title:"택배사명"},{field:"NM_SHPCLFT",title:"택배사구분"}]];
