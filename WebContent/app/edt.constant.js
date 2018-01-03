@@ -114,7 +114,7 @@
 	    NO_UPDATE     : { field: "NO_UPDATE"     , type: "string" , width: "100px", textAlign: "center", title: "접수확인자"},
         DTS_CCLREQ    : { field: "DTS_CCLREQ"    , type: "string" , width: "100px", textAlign: "center", title: "취소요청일시"},
         NO_CCLREQ     : { field: "NO_CCLREQ"     , type: "string" , width: "100px", textAlign: "center", title: ""},
-        DTS_CCLAPPRRJT: { field: "DTS_CCLAPPRRJT", type: "string" , width: "100px", textAlign: "center", title: "취소 확인일시"},
+        DTS_CCLAPPRRJT: { field: "DTS_CCLAPPRRJT", type: "string" , width: "100px", textAlign: "center", title: "취소 요청처리일시"},
         CD_CCLSTAT    : { field: "CD_CCLSTAT"    , type: "string" , width: "100px", textAlign: "center", title: "취소상태"},
         
         CD_CCLRJT     : { field: "CD_CCLRJT"     , type: "string" , width: "100px", textAlign: "center"},
