@@ -738,6 +738,8 @@
 				},
 				
 				getItem: function(name) {
+					if(user === null || user === undefined) return '';
+					
 					var fixKey 	= user.NO_C +''+ user.NO_EMP,
 						key 	= fixKey +''+ MenuSvc.getNO_M($state.current.name) +'-'+ name,
 						result;
