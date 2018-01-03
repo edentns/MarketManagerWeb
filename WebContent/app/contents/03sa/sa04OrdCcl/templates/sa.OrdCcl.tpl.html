@@ -227,7 +227,7 @@
 					주문취소사유
 				</td>
 				<td colspan="3">			
-					<textarea class="k-textbox k-state-disabled" name="NM_CCLHRNKRSN" data-bind="value: NM_CCLHRNKRSN" disabled="disabled" style="width:100%; height:100px; overflow-y: scroll;"></textarea>
+					<textarea class="k-textbox k-state-disabled" name="NM_CCLHRNKRSN" data-bind="value: NM_CCLHRNKRSN" disabled="disabled" style="width:100%; height:100px; overflow-y: scroll;"></textarea>					
 				</td> 
 			</tr>
 			<tr class="border-bottom-line">
@@ -252,6 +252,7 @@
 					<select
 						name="CD_PARS"
 						data-bind="value: CD_PARS"
+					    data-ng-blur="popupUtil($event)" 
                 		style="width: 100%">
 					</select>
 				</td>
@@ -262,13 +263,12 @@
 				<td class="active border-right-line">
 					<code>*</code>송장번호<br/>
 				</td>
-				<td colspan="3">			
-					<textarea class="k-textbox" 
-						name="NO_INVO" 
-						data-bind="value: NO_INVO" 
-						rows="3" 
-						data-ng-blur="popupUtil($event)" 
-						style="width:100%; overflow-y: scroll;"></textarea>
+				<td colspan="3" class="ta-l">			
+					<input type="text" 
+						   class="k-textbox" 
+                           name="NO_INVO" 
+                           data-bind="value: NO_INVO"
+                           data-ng-blur="popupUtil($event)"  />
 				</td> 
 			</tr>	
 			<tr class="border-bottom-line" data-ng-if="ngIfdata(ordCancelManagementDataVO.cancelRjCdEqCtt)">
@@ -276,7 +276,12 @@
 					<code>*</code>취소거부 상세 사유<br/>
 				</td>
 				<td colspan="3">
-					<textarea class="k-textbox" name="DC_CCLRJTCTT" data-bind="value: DC_CCLRJTCTT" rows="5" style="width:100%; overflow-y: scroll;"></textarea>
+					<textarea class="k-textbox" 
+							  name="DC_CCLRJTCTT" 
+  							  data-bind="value: DC_CCLRJTCTT" 
+						      data-ng-blur="popupUtil($event)"
+							  rows="5" 
+						      style="width:100%; overflow-y: scroll;"></textarea>
 				</td> 
 			</tr>
 			<tr class="border-bottom-line" data-ng-if="ngIfdata(ordCancelManagementDataVO.cancelRjCdEq)">

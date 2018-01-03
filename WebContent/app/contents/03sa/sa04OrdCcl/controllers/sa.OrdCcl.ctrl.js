@@ -68,7 +68,7 @@
 											}
 										}
                     				},
-                    DTS_RECER : 	{
+                    DTS_RECER 	  : {
 				                    	type: APP_SA_MODEL.DTS_RECER.type  
 				     				   ,editable: true
 				     				   ,nullable: false
@@ -83,7 +83,7 @@
 											}
 										}
                     				},
-    				DC_CCLRJTCTT  :{
+    				DC_CCLRJTCTT  : {
 				     					type: APP_SA_MODEL.DC_CCLRJTCTT.type  
 				     				   ,editable: true
 				     				   ,nullable: false
@@ -104,17 +104,17 @@
 									    	}
 										}
 				     	            },	
-                    CD_PARS:        {
+                    CD_PARS	      : {
 				                    	type: "array"  
 					     			   ,editable: true
 					     			   ,nullable: false
 					                   ,validation: {
 					                	   cd_parsvalidation: function (input) {
-										    	if (input.is("[name='CD_PARS']") && input.val() === "") {
+										    	if (input.is("[name='CD_PARS']") && !input.val()) {
 				                                	input.attr("data-cd_parsvalidation-msg", "택배사를 입력해 주세요.");
 				                                    return false;
 				                                }
-										    	if(input.is("[name='CD_PARS']") && input.val() != ""){										    		
+										    	if(input.is("[name='CD_PARS']") && input.val()){										    		
 										    		manualDataBind(input, "CD_PARS");
 										    	};
 				                            	return true;
@@ -127,9 +127,16 @@
 						     		   ,nullable: false
 						               ,validation: {
 						            	   no_invovalidation: function (input) {
-						            		   if (input.is("[name='NO_INVO']")) {
-						            			   manualDataBind(input, "NO_INVO");
-						            			   return Util03saSvc.NoINVOValidation(input, 'NO_INVO', 'no_invovalidation');
+						            		   if (input.is("[name='NO_INVO']") && !input.val()) {
+						            			   input.attr("data-no_invovalidation-msg", "송장번호를 입력해 주세요.");
+						            			   return false;
+				                               }
+						            		   if (input.is("[name='NO_INVO']") && input.val()) {
+						            			   var rslt = Util03saSvc.NoINVOValidation(input, 'NO_INVO', 'no_invovalidation');
+						            			   if(rslt){
+						            				   manualDataBind(input, "NO_INVO");
+						            			   }							            			   
+						            			   return rslt; 
 				                               }
 						            		   return true;
 									    	}
@@ -422,9 +429,10 @@
                 				
         						if(confirm("취소거부 하시겠습니까?")){        					
                 					var defer = $q.defer(),
-                						param = e.data.models,
+                						param = e.data.models[0],
                 						viewName = "";
-                					switch(param[0].cancel_reject_code.CD_DEF){
+                					
+                					switch(param.cancel_reject_code.CD_DEF){
                 						case "001" : {
                 							viewName = "ocmRejectDate";
                 							break;
@@ -454,14 +462,39 @@
                 							break;
                 						}
                 					}
-                					saOrdCclSvc[viewName](param[0]).then(function (res) {
-		                				defer.resolve(); 
-		                				e.success(res.data.results);
-		                				ordCancelManagementDataVO.inQuiry();
-		                				//$scope.ordCancelManagementkg.dataSource.read();
-		                			}, function(err){
-	            						e.error([]);
-	            					});
+                					
+                                    if(param.CD_PARS){
+                                    	var iParam = {
+                                    		pars : param.CD_PARS.NM_PARS_AJAX,
+                                    		invo : param.NO_INVO
+                                    	};
+                                    	Util03saSvc.noInvoAjaxValidation(iParam).then(function(res){
+                                    		if(res.data.res === 1){
+                                    			saOrdCclSvc[viewName](param).then(function (res) {
+            		                				defer.resolve(); 
+            		                				e.success(res.data.results);
+            		                				ordCancelManagementDataVO.inQuiry();
+            		                				//$scope.ordCancelManagementkg.dataSource.read();
+            		                			}, function(err){
+            		                				if(err.status !== 412){
+                                                    	alert(err.data);
+                                                   	} 
+            	            						e.error([]);
+            	            					});                                     			 	            						
+                                    		}else{
+        	            						e.error([]);    
+        	            						var element = angular.element("input[name=NO_INVO]");
+        	            						var htmlMsg = '<div class="k-widget k-tooltip k-tooltip-validation k-invalid-msg" style="margin: 0.5em; display: block;" data-for="NO_INVO" role="alert"><span class="k-icon k-i-warning"> </span>'+res.data.msg+'<div class="k-callout k-callout-n"></div></div>';
+        	            						element.attr("data-no_invovalidation-msg", res.data.msg);
+        	            						element.closest("td").append(htmlMsg);       
+                                    		}                            		
+                                    	}, function(err){
+                                    		if(err.status !== 412){
+                                    			alert(err.data);
+                                    		}
+    	            						e.error([]);    	                        			
+    	            					});                                        	
+                                    }
 		                			return defer.promise;
             	            	}else{
             	            		grd.cancelRow();
@@ -506,6 +539,8 @@
                 		var dataVo = $scope.ordCancelManagementDataVO,
                 			noMngmrk = e.model.NO_MNGMRK,
                 			noMrk = e.model.NO_MRK,
+                			cdPars = e.model.CD_PARS,
+                			noInvo = e.model.NO_INVO,
                 			ddlRejectCodeSel = e.container.find("select[name=cancel_reject_code]"),
                 			ddlCancelReason = e.container.find("select[name=CD_CCLHRNKRSN]").data("kendoDropDownList"),
                 			ddlCancelLowReason = e.container.find("select[name=CD_CCLLRKRSN]").data("kendoDropDownList"),
@@ -550,7 +585,10 @@
                     				dataVo.cancelRjCd = code;
                     				if(dataVo.cancelRjCdEq.indexOf(dataVo.cancelRjCd) >= 0){
                         				$timeout(function(){
-                        					e.sender.element.parents("table").find("select[name=CD_PARS]").kendoDropDownList({
+                        					var cdParsDdl = e.sender.element.parents("table").find("select[name=CD_PARS]"),
+                        						noInvoTxt = e.sender.element.parents("table").find("input[name=NO_INVO]");
+                        					
+                    						cdParsDdl.kendoDropDownList({
                                     			dataSource : inputDataSource,
                                         		dataTextField : "NM_PARS_TEXT",
                                         		dataValueField : "CD_DEF",
@@ -560,7 +598,19 @@
                                         				e.sender.element.closest("tr").find("div.k-invalid-msg").hide();
                                         			}
                                         		}
-                                    		});                        					
+                    						});    
+                    						
+                    						var dropdownlist = cdParsDdl.data("kendoDropDownList");
+
+                    						dropdownlist.select(function(dataItem) {
+                    						    return dataItem.CD_PARS === cdPars;
+                    						});
+                    						
+                    						if(noInvo){
+		                						$scope.$apply(function(){                    							
+		                    						noInvoTxt.val(noInvo);                    							
+		                						});
+                    						}
                         				},0);
                         			};
                     			},0);
@@ -591,7 +641,7 @@
                 };		     
                 
                 $scope.popupUtil = function(e){
-                	Util03saSvc.popupUtil.blur(e);
+                	Util03saSvc.popupUtil.mblur(e);
                 };
                 
                 $scope.$on("kendoWidgetCreated", function(event, widget){
@@ -635,7 +685,7 @@
 	                			return;
 	                		};
                 			if(param.length !== chkedLeng){
-                				alert("주문상태를 확인해주세요.");	
+                				alert("주문상태를 확인해주세요. 배송중 일때는 거부처리 하셔야 합니다.");	
                 				return;
                 			}
                 			//if(confirm("총 "+param.length+"건의 주문을 취소 승인 하시겠습니까?")){
