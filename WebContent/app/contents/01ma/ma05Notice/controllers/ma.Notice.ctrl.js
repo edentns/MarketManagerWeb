@@ -264,7 +264,7 @@
 	            		            		            	
 	            	me.param = {
                     	procedureParam: "MarketManager.USP_MA_05NOTICE_SEARCH01_GET&NO_WR@s|ARR_CD_NO@s|ARR_NO_C@s|SB_NM@s|NOTI_TO@s|NOTI_FROM@s",    
-                    	NO_WR: param.NO_WRITE,
+                    	NO_WR: $scope.userInfo.NO_EMP,
                     	ARR_CD_NO: param.CD_NOTICE,                                    	
                     	ARR_NO_C: param.ARR_NO_C.toString().replace(/,/g,'^'),
                     	SB_NM: param.NM_SUBJECT,
@@ -374,16 +374,15 @@
     	                			        		});
     	                		        		}else{
     	                		        			alert('성공하였습니다.');
-    	                		        		}    	          
+    	                		        		}   	          
         	                					
-    	                						$scope.nkg.dataSource.read();    	        	                		
+        	                					$scope.gridNoticeVO.dataSource.read();	        	                		
         	                				}else{
         	                					e.error([]);
         	                					alert("수정 실패하였습니다.!! 연구소에 문의 부탁드립니다.");
         	                				}
         	                				defer.resolve(); 
         	                			});
-        	                			
                     				}                    				
     	                			return defer.promise;			
                     			},
