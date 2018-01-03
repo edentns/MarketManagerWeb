@@ -1,4 +1,4 @@
-<div data-ng-if="!webApp.isLogin" id="login-page" class="col-xs-4 col-xs-offset-4" style="margin-top: 15%;">
+<div data-ng-if="!webApp.isLogin" id="login-page" class="col-md-4 col-md-offset-4" style="margin-top: 15%;">
 	<div class="box">
 		<div class="box-content">
 			<form name="loginForm" style="padding: 10px;">
@@ -31,6 +31,11 @@
 		</div>
 	</div>
 	<address id="login-address">
-		<p>www.marketmanager/login/ebizone <span>{{loginVO.version}}</span>&nbsp&nbsp&nbsp<a href="mailto:help@marketmanager.co.kr"><img title="문의메일" src="/assets/img/common/email.png"/></a><a href="/assets/download/MembershipJoin(V1.0).pdf" target="_blank"><img title="회원가입메뉴얼" src="/assets/img/common/download.png"/></a></p>
+		<p>www.marketmanager/login/ebizone <span>{{loginVO.version}}</span>&nbsp&nbsp&nbsp
+		<span style="display:inline-block;">
+			<a href="mailto:help@marketmanager.co.kr"><img title="문의메일" src="/assets/img/common/email.png"/></a>
+			<a href="/assets/download/MembershipJoin(V1.0).pdf" target="_blank"><img title="회원가입메뉴얼" src="/assets/img/common/download.png"/></a>
+		</span>
+		</p>
 	</address>
 </div>
