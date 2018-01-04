@@ -200,11 +200,6 @@
 	            
 	            var ordCancelManagementDataVO = $scope.ordCancelManagementDataVO = {
             		boxTitle : "주문취소관리",
-	            	setting : {
-	        			id: "CD_DEF",
-	        			name: "NM_DEF",
-	        			maxNames: 2
-	        		},
 	            	datesetting : {
 	        			dateType   : 'market',
 						buttonList : ['current', '1Day', '1Week', '1Month'],
@@ -216,16 +211,30 @@
 	        		},
 	        		procName : { value: "" , focus: false },
 	        		orderNo: { value: "" , focus: false },
-	        		buyerName : { value: "" , focus: false },
-	        		
-	        		ordMrkNameOp : [],
+	        		buyerName : { value: "" , focus: false },	        		
+	        		ordMrkNameOp : [],	        		
 	        		ordMrkNameMo : "*",
+	        		ordMrkNameOpSetting : {
+	        			id: "CD_DEF",
+	        			name: "NM_DEF",
+	        			maxNames: 2
+	        		},
 	        		ordStatusOp : [],
 	        		ordStatusMo : "*",
+	        		ordStatusOpSetting : {
+	        			id: "CD_DEF",
+	        			name: "NM_DEF",
+	        			maxNames: 2
+	        		},
 	        		betweenDateOptionOp : [],
-	        		betweenDateOptionMo : "",
+	        		betweenDateOptionMo : "",	        		
 	        		cancelStatusOp : [],
 	        		cancelStatusMo : "",
+	        		cancelStatusOpSetting : {
+	        			id: "CD_DEF",
+	        			name: "NM_DEF",
+	        			maxNames: 2
+	        		},
 	        		cancelCodeOp : {
     					dataSource: [],
     					dataTextField: "NM_DEF",
@@ -335,7 +344,7 @@
 	            //조회
 	            ordCancelManagementDataVO.inQuiry = function(){
 	            	var me = this;
-	            	me.cancelRjCd = "";
+	            	me.cancelRjCd = "";  
 	            	me.param = {	  
     				    NM_MRKITEM : me.procName.value.trim(),
 					    NM_MRK : me.ordMrkNameMo, 
@@ -349,7 +358,7 @@
 					    NM_MRK_SELCT_INDEX : me.ordMrkNameOp.allSelectNames,
 					    NM_ORDSTAT_SELCT_INDEX : me.ordStatusOp.allSelectNames,
 					    CD_CCLSTAT_SELCT_INDEX : me.cancelStatusOp.allSelectNames,
-					    DTS_SELECTED : me.datesetting.selected	
+					    DTS_SELECTED : me.datesetting.selected			
                     }; 
     				if(Util03saSvc.readValidation(me.param)){
     					$scope.ordCancelManagementkg.dataSource.data([]);
@@ -463,18 +472,28 @@
                 						}
                 					}
                 					
-                                    if(param.CD_PARS){
-                                    	var iParam = {
-                                    		pars : param.CD_PARS.NM_PARS_AJAX,
-                                    		invo : param.NO_INVO
-                                    	};
-                                    	Util03saSvc.noInvoAjaxValidation(iParam).then(function(res){
+                					saOrdCclSvc[viewName](param).then(function (res) {
+		                				defer.resolve();
+		                				e.success();
+		                				ordCancelManagementDataVO.inQuiry();
+		                			}, function(err){
+		                				if(err.status !== 412){
+                                        	alert(err.data);
+                                       	} 
+	            						e.error([]);
+	            					});    
+                					
+                                    /*if(param.CD_PARS){
+                                    	var argParam = [{
+                                    		deliveryType : param.CD_PARS.NM_PARS_AJAX,
+                                    		invoiceNo : param.NO_INVO
+                                    	}];
+                                    	Util03saSvc.noInvoAjaxValidation(argParam).then(function(res){ 
                                     		if(res.data.res === 1){
-                                    			saOrdCclSvc[viewName](param).then(function (res) {
-            		                				defer.resolve(); 
-            		                				e.success(res.data.results);
+                                    			saOrdCclSvc[viewName](argParam).then(function (res) {
+            		                				defer.resolve();
+            		                				e.success();
             		                				ordCancelManagementDataVO.inQuiry();
-            		                				//$scope.ordCancelManagementkg.dataSource.read();
             		                			}, function(err){
             		                				if(err.status !== 412){
                                                     	alert(err.data);
@@ -494,7 +513,7 @@
                                     		}
     	            						e.error([]);    	                        			
     	            					});                                        	
-                                    }
+                                    }*/
 		                			return defer.promise;
             	            	}else{
             	            		grd.cancelRow();

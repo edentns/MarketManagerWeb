@@ -146,8 +146,7 @@
                 	me.dataTotal = 0;
                 	me.resetAtGrd = $scope.shpbyordkg;
                 	me.resetAtGrd.dataSource.data([]);
-	            };
-	               
+	            };	               
 	            
 	            shpbyordDataVO.isOpen = function (val) {
 	            	if(val) {
@@ -158,6 +157,18 @@
 	            		$scope.shpbyordkg.wrapper.height(798);
 	            		$scope.shpbyordkg.resize();
 	            	}
+	            };
+	            
+	            shpbyordDataVO.flagFnc = function(){
+	            	if(shpbyordDataVO.flag){
+                    	var grid = $("#divShpbyordGrd").data("kendoGrid"),
+            		         op1 = { editable : true },
+            		        data = grid._data;
+                    	
+                    	grid.setOptions(op1);
+                    	$scope.shpbyordkg.dataSource.data(data);
+                    	shpbyordDataVO.flag = false;
+                	}
 	            };
 	            	            
 	            // 유효성 검사
@@ -270,17 +281,17 @@
 	            	    $scope.shpbyordkg.dataSource.data(data);
 	            		/*var selected = grid.dataItem(grid.select()).NO_MRK;*/
 	                    if(chkedLeng === 1){	                    	
-	                    	var noMngmrk = grid.dataItem(chked.closest('tr'));	                    	
+	                    	var gridItem = grid.dataItem(chked.closest('tr'));
 	                    	
 	                    	shpbyordDataVO.flag = true;
 	                    	shpbyordDataVO.updateChange = "003";
 	                    	
 	                    	shpbyordDataVO.cancelCodeSel = shpbyordDataVO.cancelCodeOp.filter(function(ele){
-		            			return (ele.DC_RMK1 === noMngmrk.NO_MNGMRK);
+		            			return (ele.DC_RMK1 === gridItem.NO_MNGMRK);
 		            		});
 	                		
 	                    	shpbyordDataVO.cancelCodeLowSel = shpbyordDataVO.cancelCodeLowOp.filter(function(ele){
-		            			return (ele.DC_RMK1 === noMngmrk.NO_MNGMRK);
+		            			return (ele.DC_RMK1 === gridItem.NO_MNGMRK);
 		            		});   
 	                    	
 	                		grd.editRow(chked.closest('tr'));
@@ -361,16 +372,8 @@
                 		};                		
                 	},
             		cancel: function(e){
-            			e.preventDefault();
-                    	if(shpbyordDataVO.flag){
-	                    	var grid = $("#divShpbyordGrd").data("kendoGrid"),
-	            		         op1 = { editable : true },
-	            		        data = grid._data;
-	                    	
-	                    	grid.setOptions(op1);
-	                    	$scope.shpbyordkg.dataSource.data(data);
-	                    	shpbyordDataVO.flag = false;	                    	
-                    	}
+            			e.preventDefault();	
+            			shpbyordDataVO.flagFnc();
             		},
             		excelVO: {
             			gridTitle:["배송대기자료","택배사코드"],
@@ -420,6 +423,8 @@
             					});
                 			},
                 			update: function(e){
+        						var grd = $scope.shpbyordkg;
+                				
                 				switch(shpbyordDataVO.updateChange){
                 					case '001' : {
                 						if(confirm("송장정보를 출력 하시겠습니까?")){
@@ -432,9 +437,8 @@
                         					}	                					                          					
                         					saShpStdbyOrdSvc.noout(param).then(function (res) {
         		                				defer.resolve(); 
-        		                				e.success(res.data.results);
-        		                				//shpbyordDataVO.ordStatusMo = (shpbyordDataVO.ordStatusMo === '*') ? shpbyordDataVO.ordStatusMo : shpbyordDataVO.ordStatusMo + "^003";
-        		                				$scope.shpbyordkg.dataSource.read();
+        		                				e.success();        		                				
+        		                				Util03saSvc.storedQuerySearchPlay(shpbyordDataVO, "shpStdbyOrdSerchParam");
         		                			}, function(err){
         	            						e.error([]);
         	            					});
@@ -442,9 +446,7 @@
                     	            	}	
                 						break;
                 					}
-                					case '002' : {
-                						var grd = $scope.shpbyordkg;
-                						
+                					case '002' : {                						
                 						if(confirm("배송정보를 등록 하시겠습니까?")){
                         					var defer = $q.defer(),
         	                			 	    param = e.data.models.filter(function(ele){
@@ -453,39 +455,43 @@
                         					                        					
                         					if(!updateValidation(param, shpbyordDataVO.updateChange)){
                         						grd.cancelChanges();
-                        						return;
+                        						return false;
                         					}	                					                          					
                         					saShpStdbyOrdSvc.shpInReg(param).then(function (res) {
         		                				defer.resolve(); 
-        		                				e.success(res.data.results);
-        		                				//shpbyordDataVO.ordStatusMo = (shpbyordDataVO.ordStatusMo === '*') ? shpbyordDataVO.ordStatusMo : shpbyordDataVO.ordStatusMo + "^004";
-        		                				$scope.shpbyordkg.dataSource.read();
+        		                				e.success();
+        		                				Util03saSvc.storedQuerySearchPlay(shpbyordDataVO, "shpStdbyOrdSerchParam");
         		                			}, function(err){
         	            						e.error([]);
         	            					});
         		                			return defer.promise;
                 						}else{
                 							grd.cancelChanges();
-                                			angular.element($("#grd_chk_master")).prop("checked",false);
+                							shpbyordDataVO.flagFnc();
                 						}  
                 						break;
                 					}
                 					case '003' : {
                 						if(confirm("주문취소를 하시겠습니까?")){
                         					var defer = $q.defer(),
-                        						param = e.data.models[0];
-        	                			 	    /*param = e.data.models.filter(function(ele){
+                        						param = e.data.models;
+        	                			 	    param = e.data.models.filter(function(ele){
         	                			 	    	return ele.ROW_CHK === true;
-        	                			 	    });*/         					                          					
-                        					saOrdSvc.orderCancel(param).then(function (res) {
+        	                			 	    });     
+                        					
+                        					saOrdSvc.orderCancel(param[0]).then(function (res) {
         		                				defer.resolve(); 
-        		                				e.success(res.data.results);
-        		                				$scope.shpbyordkg.dataSource.read();
+        		                				e.success();
+        		                				shpbyordDataVO.flagFnc();  
+        		                				Util03saSvc.storedQuerySearchPlay(shpbyordDataVO, "shpStdbyOrdSerchParam");
         		                			}, function(err){
         	            						e.error([]);
         	            					});
         		                			return defer.promise;
-                						}
+                						}else{
+                							grd.cancelChanges();
+                							shpbyordDataVO.flagFnc();               							
+                						}  
                 						break;
                 					}
                 					default : {
@@ -503,7 +509,7 @@
                 			//console.log("1");
                 		},
                 		change: function(e){
-                			if(e.field === 'CD_PARS' || e.field === 'NO_INVO'){
+                			if(e.field === "CD_PARS" || e.field === "NO_INVO"){
                 				return false;	
                 			};		
                 			var data = this.data();
@@ -661,12 +667,7 @@
 				                    				    	type: "string", 
 															editable: false, 
 															nullable: false
-                				    				   },    
-			    				    /*INVO_YN: 	   	   {
-					                				    	type: "string", 
-															editable: false, 
-															nullable: false
-							    				   	   },*/    
+                				    				   },      
 							    	NO_MRKITEMORD: 	   {
 					                				    	type: "string", 
 															editable: false, 
@@ -828,7 +829,6 @@
 		                                });
 		                            	
 		                            	$('<span class="k-invalid-msg" data-for="CD_PARS"></span>').appendTo(container);
-		                            	//options.model.defaults.CD_PARS = dbBox[0];
 		                            },
 		                            template: function(e){		                            	
 		                            	var nmd = e.CD_PARS || false,		                            	

@@ -22,7 +22,7 @@
             	return result;
             };
             
-            //송장번호 유효성검사(정규식)
+            //송장번호 유효성검사(정규식 체크)
             this.NoINVOValidation = function(input, colunm, valicolunm){
             	var regTest = /^(([\d]+)\-|([\d]+))+(\d)+$/;
             	var iValue = input.val().trim(); 
@@ -38,13 +38,12 @@
 				return true;
 			}; 
 			
-			//송장번호 유효성검사(서버)
+			//송장번호 유효성검사(서버체크)
 			this.noInvoAjaxValidation = function(param){
 				return $http({
                     method  : "POST",
 					url		: APP_CONFIG.domain +"/parstest",
-					headers	: { "Content-Type": "application/x-www-form-urlencoded; text/plain; */*; charset=utf-8" },
-                    data     : $.param(param)
+                    data     : param
                 });
 			};
             
