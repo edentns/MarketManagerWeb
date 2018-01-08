@@ -1,0 +1,100 @@
+<div id="app-content" class="col-xs-12 col-sm-10">
+    <div class="row">
+        <div id="app-content-header">
+            <ol class="breadcrumb">
+                <li><a href="#01ma/maDashboard"><i class="fa fa-home fa-2x"></i></a></li>
+                <li><a href="#01ma/maItl">연동조회</a></li>
+            </ol>
+        </div>
+    </div>
+    
+    <div class="row">
+        <!-- 검색 -->
+        <div class="content-area-container col-xs-12">
+        	<div data-content-box-layer data-box-title="itlDataVO.boxTitle" data-is-open="itlDataVO.isOpen(val)">
+                <form class="search-type1" id="myForm">
+                	<table>
+                        <colgroup>
+                            <col style="width: 6%;">
+                            <col style="width: 13%;">
+                            <col style="width: 6%;">
+                            <col style="width: 13%;">
+                            <col style="width: 5%;">
+                            <col style="width: 57%;">
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th>마켓명</th>
+                            <td>
+                            	<co01-mcbox id="qa-asr-sts" title="마켓명" model="itlDataVO.mngMrkModel" options="itlDataVO.mngMrkBind" setting="itlDataVO.settingMrk"  style="width:100%;">
+        						</co01-mcbox>
+                            </td>	
+                            <th>작업상태</th>
+                            <td>     
+					            <co01-mcbox id="qa-asr-sts" title="작업상태" model="itlDataVO.stJobModel" options="itlDataVO.stJobBind" setting="itlDataVO.setting"  style="width:100%;">
+        						</co01-mcbox>	
+                            </td>      
+                            <th>예약일시</th>
+                            <td>                            	              	
+                            	<div class="frm-group" data-date-search-group="itlDataVO.datesetting" style="display:inline-block;"></div>
+                            </td> 
+                        </tr>
+                        </tbody>
+                    </table>            
+                    <div class="btn-group1 mt-10">
+                        <kendo-button type="submit" class="k-primary" title="검색" data-ng-click="itlDataVO.search()" style="width:70px;">검색</kendo-button>
+                        <kendo-button type="botton" title="초기화" data-ng-click="itlDataVO.inIt()" style="width:70px;">초기화</kendo-button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div class="content-area-container col-xs-12" style="padding:0px 0px 0px 0px;">	
+	        <div kendo-tab-strip k-content-urls="[]">
+              <!-- tab list -->
+              <ul>
+                <li class="k-state-active">주문확정/취소</li>
+                <li>배송정보/취소</li>
+                <li>취소/반품/교환</li>
+                <li>문의처리</li>
+                <li>재배송</li>
+              </ul>
+          
+              <div style="padding: 1em">	
+				<kendo-tooltip options="itlDataVO.tooltipOptions">		
+	                <div id="divOrdGrd" kendo-grid="ordkg" options="gridOrdVO">
+		        	</div>	 
+		        </kendo-tooltip>
+              </div>
+          
+              <div style="padding: 1em">	
+				<kendo-tooltip options="itlDataVO.tooltipOptions">		
+	                <div id="divTranGrd" kendo-grid="trankg" options="gridTranVO">
+		        	</div>	 
+		        </kendo-tooltip>	 
+              </div>
+              
+              <div style="padding: 1em">	
+				<kendo-tooltip options="itlDataVO.tooltipOptions">		
+	                <div id="divCanGrd" kendo-grid="cankg" options="gridCanVO">
+		        	</div>		 
+		        </kendo-tooltip> 
+              </div>
+              
+              <div style="padding: 1em">	
+				<kendo-tooltip options="itlDataVO.tooltipOptions">		
+	                <div id="divCsGrd" kendo-grid="cskg" options="gridCsVO">
+		        	</div>	 
+		        </kendo-tooltip>	 
+              </div>
+              
+              <div style="padding: 1em">	
+				<kendo-tooltip options="itlDataVO.tooltipOptions">		
+	                <div id="divShiGrd" kendo-grid="shikg" options="gridShiVO">
+		        	</div>	 
+		        </kendo-tooltip>	 
+              </div>
+            </div>  
+        </div>
+    </div>
+</div>
