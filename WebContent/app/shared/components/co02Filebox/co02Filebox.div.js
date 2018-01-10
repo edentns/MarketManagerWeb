@@ -221,6 +221,8 @@
                 			self.deleteDataList.push(fileInfo);
                 		}
                 		else {
+                    		angular.element($document[0].getElementById(self.fileId)).val(null);
+                    		
                 			angular.forEach(self.uploader.queue, function(data, key) {
                 				if(data === fileInfo.sourceFile) {
                 					self.uploader.queue.splice(key, 1);
