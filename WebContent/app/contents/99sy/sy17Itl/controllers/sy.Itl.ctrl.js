@@ -73,24 +73,28 @@
 						{field: "CNT_CPLT"         , width: "120px" , attributes: {class:"ta-r", style:sEllipsis}, title: "완료"},   
 						{field: "CNT_ERR"          , width: "120px" , attributes: {class:"ta-r", style:sEllipsis}, title: "추후 재실행"}
 					],gridOrderConfirm = [
-						{field: "ROW_NUM" 		   , type : "number", width: iNumWidth, attributes: {class:"ta-r"}, title: "번호"},       		            
+						{field: "ROW_NUM" 		   , type : "number", width: iNumWidth, attributes: {class:"ta-r"}, title: "번호"},        		            
+						{field: "NM_MNGMRK"        , width: "120px" , attributes: {class:"ta-l", style:sEllipsis}, title: "관리마켓명"},      		            
 						{field: "NM_MRK"           , width: "120px" , attributes: {class:"ta-l", style:sEllipsis}, title: "마켓명"},   
-						{field: "DC_MRKID"         , width: "120px" , attributes: {class:"ta-l", style:sEllipsis}, title: "마켓아이디"},           		     		            
+						{field: "DC_MRKID"         , width: "120px" , attributes: {class:"ta-l", style:sEllipsis}, title: "마켓아이디"},    
+						{field: "process_result"   , width: "70px"  , attributes: {class:"ta-c", style:sEllipsis}, title: "처리상태"},
+						{field: "req_datetime"     , width: iDateTimeWidth, attributes: {class:"ta-c", style:sEllipsis}, title: "처리일시"},       		     		            
 						{field: "info_type"        , width: "70px"  , attributes: {class:"ta-l", style:sEllipsis}, title: "정보유형"},   
 						{field: "orderNo"          , width: "130px" , attributes: {class:"ta-c", style:sEllipsis}, title: "주문번호"},           		            
 						{field: "productOrderNo"   , width: "130px" , attributes: {class:"ta-l", style:sEllipsis}, title: "상품주문번호"},   
 						{field: "mallOrderNo"      , width: "130px" , attributes: {class:"ta-l", style:sEllipsis}, title: "마켓주문번호"},
 						{field: "paymentNo"        , width: "120px" , attributes: {class:"ta-l", style:sEllipsis}, title: "결재번호"},
 						{field: "definiteOrderDate", width: iDateTimeWidth, attributes: {class:"ta-c", style:sEllipsis}, title: "주문확정일시"},
-						{field: "process_result"   , width: "70px"        , attributes: {class:"ta-c", style:sEllipsis}, title: "처리상태"},
-						{field: "req_datetime"     , width: iDateTimeWidth, attributes: {class:"ta-c", style:sEllipsis}, title: "처리일시"},
-						{field: "result_msg"       , width: iNullWidth    , attributes: {class:"ta-l", style:sEllipsis}, title: "결과메시지"}
+						{field: "DC_TEMP"          , width: iNullWidth, attributes: {class:"ta-c", style:sEllipsis}, title: " "}
 					],
   		            gridInvoiceNo = [
 						{field: "ROW_NUM" 		     , type : "number", width: iNumWidth, attributes: {class:"ta-r"}, title: "번호"},       		            
+						{field: "NM_MNGMRK"          , width: "120px" , attributes: {class:"ta-l", style:sEllipsis}, title: "관리마켓명"},      		            
 						{field: "NM_MRK"             , width: "120px" , attributes: {class:"ta-l", style:sEllipsis}, title: "마켓명"},   
-						{field: "DC_MRKID"           , width: "120px" , attributes: {class:"ta-l", style:sEllipsis}, title: "마켓아이디"},           		     		            
-						{field: "info_type"          , width: "70px"  , attributes: {class:"ta-l", style:sEllipsis}, title: "정보유형"},   
+						{field: "DC_MRKID"           , width: "120px" , attributes: {class:"ta-l", style:sEllipsis}, title: "마켓아이디"},  
+						{field: "process_result"     , width: "70px"  , attributes: {class:"ta-c", style:sEllipsis}, title: "처리상태"},
+						{field: "req_datetime"       , width: iDateTimeWidth, attributes: {class:"ta-c", style:sEllipsis}, title: "처리일시"},         		     		            
+						{field: "info_type"          , width: "70px"  , attributes: {class:"ta-c", style:sEllipsis}, title: "정보유형"},   
 						{field: "orderNo"            , width: "130px" , attributes: {class:"ta-c", style:sEllipsis}, title: "주문번호"},           		            
 						{field: "productOrderNo"     , width: "130px" , attributes: {class:"ta-l", style:sEllipsis}, title: "상품주문번호"},   
 						{field: "mallOrderNo"        , width: "130px" , attributes: {class:"ta-l", style:sEllipsis}, title: "마켓주문번호"},
@@ -99,36 +103,39 @@
 						{field: "delivery_type"      , width: "120px" , attributes: {class:"ta-l", style:sEllipsis}, title: "택배사"},
 						{field: "invoiceNo"          , width: "120px" , attributes: {class:"ta-l", style:sEllipsis}, title: "송장번호"},
 						{field: "invoiceInsertedDate", width: iDateTimeWidth, attributes: {class:"ta-c", style:sEllipsis}, title: "요청일시"},
-						{field: "process_result"     , width: "70px"        , attributes: {class:"ta-c", style:sEllipsis}, title: "처리상태"},
-						{field: "req_datetime"       , width: iDateTimeWidth, attributes: {class:"ta-c", style:sEllipsis}, title: "처리일시"},
-						{field: "result_msg"         , width: iNullWidth    , attributes: {class:"ta-l", style:sEllipsis}, title: "결과메시지"}
+						{field: "DC_TEMP"          , width: iNullWidth, attributes: {class:"ta-c", style:sEllipsis}, title: " "}
 					],
 		            gridClaimConfirm = [
-						{field: "ROW_NUM" 		   , type : "number", width: iNumWidth, attributes: {class:"ta-r"}, title: "번호"},     		            
+						{field: "ROW_NUM" 		   , type : "number", width: iNumWidth, attributes: {class:"ta-r"}, title: "번호"},    		            
+						{field: "NM_MNGMRK"        , width: "120px" , attributes: {class:"ta-l", style:sEllipsis}, title: "관리마켓명"},     		            
 						{field: "NM_MRK"           , width: "120px" , attributes: {class:"ta-l", style:sEllipsis}, title: "마켓명"},   
-						{field: "DC_MRKID"         , width: "120px" , attributes: {class:"ta-l", style:sEllipsis}, title: "마켓아이디"},           		
+						{field: "DC_MRKID"         , width: "120px" , attributes: {class:"ta-l", style:sEllipsis}, title: "마켓아이디"}, 
+						{field: "process_result"   , width: "70px"  , attributes: {class:"ta-c", style:sEllipsis}, title: "처리상태"},
+						{field: "req_datetime"     , width: iDateTimeWidth , attributes: {class:"ta-c", style:sEllipsis}, title: "처리일시"},         		     		            
+						{field: "info_type"        , width: "70px" , attributes: {class:"ta-c", style:sEllipsis}, title: "정보유형"},             		
 						{field: "requesteNo"       , width: "130px" , attributes: {class:"ta-c", style:sEllipsis}, title: "요청번호"},           		            
-						{field: "claimType"        , width: "120px" , attributes: {class:"ta-l", style:sEllipsis}, title: "요청유형"},   
+						{field: "claimType"        , width: "70px"  , attributes: {class:"ta-c", style:sEllipsis}, title: "요청유형"},   
 						{field: "requestDate"      , width: iDateTimeWidth, attributes: {class:"ta-c", style:sEllipsis}, title: "요청일시"},
 						{field: "product_order_no" , width: "130px" , attributes: {class:"ta-l", style:sEllipsis}, title: "상품주문번호"},
 						{field: "mallOrderNo"      , width: "130px" , attributes: {class:"ta-l", style:sEllipsis}, title: "마켓주문번호"},
 						{field: "payment_no"       , width: "120px" , attributes: {class:"ta-l", style:sEllipsis}, title: "결재번호"},
 						{field: "permission_date"  , width: iDateTimeWidth, attributes: {class:"ta-c", style:sEllipsis}, title: "승인/거부일시"},
-						{field: "permission_person", width: "120px" , attributes: {class:"ta-c", style:sEllipsis}, title: "승인/거부 입력자"},
+						{field: "permission_person", width: "100px" , attributes: {class:"ta-c", style:sEllipsis}, title: "승인/거부 입력자"},
 						{field: "rejection_type"   , width: "120px" , attributes: {class:"ta-c", style:sEllipsis}, title: "거부구분"},
 						{field: "rejection_reason" , width: "120px" , attributes: {class:"ta-l", style:sEllipsis}, title: "거부내용"},
-						{field: "process_result"   , width: "120px" , attributes: {class:"ta-l", style:sEllipsis}, title: "처리상태"},
-						{field: "req_datetime"     , width: iDateTimeWidth , attributes: {class:"ta-c", style:sEllipsis}, title: "처리일시"},
-						{field: "result_msg"       , width: iNullWidth     , attributes: {class:"ta-l", style:sEllipsis}, title: "결과메시지"},
 						{field: "deliveryDivision" , width: "100px" , attributes: {class:"ta-c", style:sEllipsis}, title: "배송구분"},
 						{field: "delivery_type"    , width: "70px"  , attributes: {class:"ta-c", style:sEllipsis}, title: "택배사명"},
 						{field: "invoiceNo"        , width: "120px" , attributes: {class:"ta-l", style:sEllipsis}, title: "송장번호"},
-						{field: "pickupStatue"     , width: "120px" , attributes: {class:"ta-c", style:sEllipsis}, title: "교환상품수거여부"}
+						{field: "pickupStatue"     , width: "110px"  , attributes: {class:"ta-c", style:sEllipsis}, title: "교환상품수거여부"},
+						{field: "DC_TEMP"          , width: iNullWidth, attributes: {class:"ta-c", style:sEllipsis}, title: " "}
 					],
 		            gridInquiryProcess = [
 						{field: "ROW_NUM" 		     , type : "number", width: iNumWidth, attributes: {class:"ta-r"}, title: "번호"},     		            
+						{field: "NM_MNGMRK"          , width: "120px" , attributes: {class:"ta-l", style:sEllipsis}, title: "관리마켓명"},     		            
 						{field: "NM_MRK"             , width: "120px" , attributes: {class:"ta-l", style:sEllipsis}, title: "마켓명"},   
-						{field: "DC_MRKID"           , width: "120px" , attributes: {class:"ta-l", style:sEllipsis}, title: "마켓아이디"},           		
+						{field: "DC_MRKID"           , width: "120px" , attributes: {class:"ta-l", style:sEllipsis}, title: "마켓아이디"},  
+						{field: "process_result"     , width: "70px"  , attributes: {class:"ta-c", style:sEllipsis}, title: "처리상태"},
+						{field: "process_date"       , width: iDateTimeWidth, attributes: {class:"ta-c", style:sEllipsis}, title: "처리일시"},         		
 						{field: "inquiryNo"          , width: "130px" , attributes: {class:"ta-l", style:sEllipsis}, title: "문의번호"},
 						{field: "inquiryDivisionCode", width: "70px"  , attributes: {class:"ta-l", style:sEllipsis}, title: "문의유형"},,
 						{field: "inquiryStatueCode"  , width: "80px"  , attributes: {class:"ta-c", style:sEllipsis}, title: "문의상태명"},           		            
@@ -139,14 +146,15 @@
 						{field: "replyContents"      , width: "150px" , attributes: {class:"ta-l", style:sEllipsis}, title: "답변내용"},
 						{field: "replyDate"          , width: iDateTimeWidth, attributes: {class:"ta-c", style:sEllipsis}, title: "답변날짜"},
 						{field: "replyPerson"        , width: "70px"        , attributes: {class:"ta-c", style:sEllipsis}, title: "답변자"},
-						{field: "process_result"     , width: "120px"       , attributes: {class:"ta-c", style:sEllipsis}, title: "처리구분"},
-						{field: "process_date"       , width: iDateTimeWidth, attributes: {class:"ta-c", style:sEllipsis}, title: "처리일시"},
-						{field: "result_msg"         , width: iNullWidth    , attributes: {class:"ta-l", style:sEllipsis}, title: "결과메시지"}
+						{field: "DC_TEMP"          , width: iNullWidth, attributes: {class:"ta-c", style:sEllipsis}, title: " "}
 					],
 		            gridShippingManagement = [
   						{field: "ROW_NUM" 		   , type : "number", width: iNumWidth, attributes: {class:"ta-r"}, title: "번호"},      		            
+						{field: "NM_MNGMRK"        , width: "120px" , attributes: {class:"ta-l", style:sEllipsis}, title: "관리마켓명"},      		            
 						{field: "NM_MRK"           , width: "120px" , attributes: {class:"ta-l", style:sEllipsis}, title: "마켓명"},   
-						{field: "DC_MRKID"         , width: "120px" , attributes: {class:"ta-l", style:sEllipsis}, title: "마켓아이디"},           		
+						{field: "DC_MRKID"         , width: "120px" , attributes: {class:"ta-l", style:sEllipsis}, title: "마켓아이디"},   
+						{field: "process_result"   , width: "65px"  , attributes: {class:"ta-c", style:sEllipsis}, title: "처리상태"},
+						{field: "req_datetime"     , width: iDateTimeWidth, attributes: {class:"ta-c", style:sEllipsis}, title: "처리일시"},        		
   						{field: "mall_no"          , width: "80px"  , attributes: {class:"ta-l", style:sEllipsis}, title: "쇼핑몰구분"},
 						{field: "info_type"        , width: "65px"  , attributes: {class:"ta-l", style:sEllipsis}, title: "정보유형"},   
 						{field: "orderNo"          , width: "128px" , attributes: {class:"ta-c", style:sEllipsis}, title: "주문번호"},
@@ -159,9 +167,7 @@
 						{field: "updatedDeliveryDivision", width: "80px", attributes: {class:"ta-l", style:sEllipsis}, title: "수정할배송구분"},
 						{field: "updatedDeliveryType"    , width: "80px", attributes: {class:"ta-l", style:sEllipsis}, title: "수정할택배사명"},
 						{field: "updatedInvoiceNo"       , width: "80px", attributes: {class:"ta-l", style:sEllipsis}, title: "수정할송장번호"},
-						{field: "process_result"   , width: "65px"        , attributes: {class:"ta-c", style:sEllipsis}, title: "처리상태"},
-						{field: "req_datetime"     , width: iDateTimeWidth, attributes: {class:"ta-c", style:sEllipsis}, title: "처리일시"},
-						{field: "result_msg"       , width: iNullWidth    , attributes: {class:"ta-l", style:sEllipsis}, title: "결과메시지"}
+						{field: "DC_TEMP"          , width: iNullWidth, attributes: {class:"ta-c", style:sEllipsis}, title: " "}
 					];
 	            
 	            //toolTip
@@ -291,6 +297,7 @@
 				var gridTabVO = $scope.gridTabVO = [{
 						defFields: {
 	    					ROW_NUM          :{type: "number", editable: false, nullable: false},
+							NM_MNGMRK        :grdScmSelectAttr,
 							NM_MRK           :grdScmSelectAttr,
 					        DC_MRKID         :grdScmSelectAttr,
 							orderNo          :grdScmSelectAttr,
@@ -300,13 +307,15 @@
 					        definiteOrderDate:grdScmSelectAttr,
 					        process_result   :grdScmSelectAttr,      
 					        req_datetime     :grdScmSelectAttr,       
-					        result_msg       :grdScmSelectAttr
+					        result_msg       :grdScmSelectAttr,       
+					        DC_TEMP          :grdScmSelectAttr
 	        			},
             			defColumns: gridOrderConfirm
 		            },
 		            {
 		            	defFields: {
         					ROW_NUM: 		   {type: "number", editable: false, nullable: false},
+    						NM_MNGMRK:         grdScmSelectAttr,
     						NM_MRK:            grdScmSelectAttr,
 					        DC_MRKID:          grdScmSelectAttr,
     						orderNo:		   grdScmSelectAttr,
@@ -319,13 +328,15 @@
 					        invoiceInsertedDate:grdScmSelectAttr, 
 					        process_result:	   grdScmSelectAttr,
 					        req_datetime:	   grdScmSelectAttr,
-					        result_msg:	   	   grdScmSelectAttr
+					        result_msg:	   	   grdScmSelectAttr,       
+					        DC_TEMP:           grdScmSelectAttr
             			},
             			defColumns: gridInvoiceNo            			
 		            },
 		            {
 		            	defFields: {
         					ROW_NUM: 		   {type: "number", editable: false, nullable: false},
+    						NM_MNGMRK:         grdScmSelectAttr,
     						NM_MRK:            grdScmSelectAttr,
 					        DC_MRKID:          grdScmSelectAttr,
     						requesteNo:		   grdScmSelectAttr,
@@ -344,13 +355,15 @@
 					        deliveryDivision:  grdScmSelectAttr,
 					        delivery_type:	   grdScmSelectAttr,
 					        invoiceNo:	       grdScmSelectAttr,
-					        pickupStatue:	   grdScmSelectAttr
+					        pickupStatue:	   grdScmSelectAttr,       
+					        DC_TEMP:           grdScmSelectAttr
             			},
             			defColumns: gridClaimConfirm     
 		            },
 		            {
 		            	defFields: {
         					ROW_NUM: 		   {type: "number", editable: false, nullable: false},
+    						NM_MNGMRK:         grdScmSelectAttr,
     						NM_MRK:            grdScmSelectAttr,
 					        DC_MRKID:          grdScmSelectAttr,
     						inquiryStatueCode: grdScmSelectAttr,
@@ -365,13 +378,15 @@
 					        replyPerson:	   grdScmSelectAttr,
 					        process_result:	   grdScmSelectAttr,
 					        process_date:	   grdScmSelectAttr,
-					        result_msg:	       grdScmSelectAttr
+					        result_msg:	       grdScmSelectAttr,       
+					        DC_TEMP:           grdScmSelectAttr
             			},
             			defColumns: gridInquiryProcess  
 		            },
 		            {
 		            	defFields: {
         					ROW_NUM: 		   {type: "number", editable: false, nullable: false},
+    						NM_MNGMRK:         grdScmSelectAttr,
     						NM_MRK:            grdScmSelectAttr,
 					        DC_MRKID:          grdScmSelectAttr,
         					mall_no:           grdScmSelectAttr,
@@ -388,7 +403,8 @@
         					updatedInvoiceNo:	      grdScmSelectAttr,
         					process_result:	   grdScmSelectAttr,
         					req_datetime:	   grdScmSelectAttr,
-        					result_msg:	       grdScmSelectAttr
+        					result_msg:	       grdScmSelectAttr,       
+					        DC_TEMP:           grdScmSelectAttr
             			},
             			defColumns: gridShippingManagement  
 		            }
