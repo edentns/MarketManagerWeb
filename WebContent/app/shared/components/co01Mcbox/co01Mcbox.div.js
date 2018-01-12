@@ -83,11 +83,18 @@
 	    	                        	if(index === 0) {
 	    	                        		$scope.model                 = item[id];
 	    	                        		$scope.co01McboxVO.selectNames = item[name];
+
+	    	                    			console.log("jhg 1 => ["+$scope.co01McboxVO.selectNames+"]");
 	    	                        	}else if(index >= $scope.co01McboxVO.maxNames) {
-	    	                        		if(index === $scope.co01McboxVO.maxNames) $scope.co01McboxVO.selectNames = $scope.co01McboxVO.selectNames + "...";
+	    	                        		if(index === $scope.co01McboxVO.maxNames) {
+	    	                        			$scope.co01McboxVO.selectNames = $scope.co01McboxVO.selectNames + "...";
+	    	                        			console.log("jhg 2 => ["+$scope.co01McboxVO.selectNames+"]");
+	    	                        		}
+	    	                    			
 	    	                        		$scope.model += "^" +  item[id];
 	    		                        }else {
 	    		                        	$scope.co01McboxVO.selectNames = $scope.co01McboxVO.selectNames + ", " +  item[name];
+    	                        			console.log("jhg 3 => ["+$scope.co01McboxVO.selectNames+"]");
 	    	                        		$scope.model += "^" +  item[id];
 	    	                        	}
 	    	                        });
@@ -106,6 +113,7 @@
                 	$scope.$watch('options.bReset', function (newValue, oldValue) {
                 		if(newValue) {
 	                		$scope.selectAll();
+	                		
 	                		if($scope.setting.allCheckYn) {
 	                			if($scope.setting.allCheckYn == "n" || $scope.setting.allCheckYn == "N") {
 	                				$scope.deselectAll();
@@ -116,6 +124,8 @@
 				    });
                 	
                 	$scope.$watch('options', function (newValue, oldValue) {
+                		if($scope.options.setSelectNames) return;
+                		
                 		$scope.selectAll();
                 		if($scope.setting.allCheckYn) {
                 			if($scope.setting.allCheckYn == "n" || $scope.setting.allCheckYn == "N") {
@@ -159,6 +169,8 @@
                         
                         $scope.model                 = "*";
                         self.co01McboxVO.selectNames = "전체";
+
+            			console.log("jhg 4 => ["+$scope.co01McboxVO.selectNames+"]");
                     };
 
                     $scope.deselectAll = function () {
@@ -167,6 +179,8 @@
                     	self.co01McboxVO.arrayModel = [];
                         $scope.model = "";
                         self.co01McboxVO.selectNames = "";
+
+            			console.log("jhg 5 => ["+$scope.co01McboxVO.selectNames+"]");
                     	$scope.options.allSelectNames = [];
                     };
 
@@ -193,20 +207,32 @@
                         
                         if(self.options.length === self.co01McboxVO.arrayModel.length) {
                             self.co01McboxVO.selectNames = "전체";
+
+                			console.log("jhg 6 => ["+$scope.co01McboxVO.selectNames+"]");
 	                        $scope.model                 = "*";
                         }
                         else {
 	                        self.co01McboxVO.selectNames = "";
+
+                			console.log("jhg 7 => ["+$scope.co01McboxVO.selectNames+"]");
 	                        $scope.model       = "";
 	                        angular.forEach(self.co01McboxVO.arrayModel, function (item, index) {
 	                        	if(index === 0) {
 	                        		$scope.model                 = item[self.co01McboxVO.id];
 	                        		self.co01McboxVO.selectNames = item[self.co01McboxVO.name];
+
+                        			console.log("jhg 8 => ["+$scope.co01McboxVO.selectNames+"]");
 	                        	}else if(index >= self.co01McboxVO.maxNames) {
-	                        		if(index == self.co01McboxVO.maxNames) self.co01McboxVO.selectNames = self.co01McboxVO.selectNames + "...";
+	                        		if(index == self.co01McboxVO.maxNames) {
+	                        			self.co01McboxVO.selectNames = self.co01McboxVO.selectNames + "...";
+
+	                        			console.log("jhg 9 => ["+$scope.co01McboxVO.selectNames+"]");
+	                        		}
 	                        		$scope.model = $scope.model + "^" +  item[self.co01McboxVO.id];
 		                        }else {
 	                        		self.co01McboxVO.selectNames = self.co01McboxVO.selectNames + ", " +  item[self.co01McboxVO.name];
+
+                        			console.log("jhg 10 => ["+$scope.co01McboxVO.selectNames+"]");
 	                        		$scope.model = $scope.model + "^" +  item[self.co01McboxVO.id];
 	                        	}
 	                        });

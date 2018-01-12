@@ -49,6 +49,35 @@
             </div>
         </div>
         
+        <div class="content-area-container col-xs-4" style="padding:0px 0px 0px 0px;">	
+        	<div data-content-box-layer data-box-title="gridMidVO[0].boxTitle">
+              	<div style="height:122px;">
+					<kendo-tooltip options="itlDataVO.tooltipOptions">		
+						<div id="divItlFailMrkGrd" kendo-grid="itlFailMrkkg" options="gridMidVO[0]">
+			        	</div>
+			        </kendo-tooltip>
+			    </div>
+		    </div>
+	    </div>
+	    <div class="content-area-container col-xs-8" style="padding:0px 0px 0px 0px;">
+    		<div data-content-box-layer data-box-title="gridMidVO[1].boxTitle">
+              	<div style="height:122px;">
+	    			<div class="content-area-container col-xs-6" style="padding:0px 5px 0px 0px;">
+				        <kendo-tooltip options="itlDataVO.tooltipOptions">		
+							<div id="divItl01Grd" kendo-grid="itl01kg" options="gridMidVO[1]">
+				        	</div>
+				        </kendo-tooltip>
+				    </div>
+					<div class="content-area-container col-xs-6" style="padding:0px 0px 0px 5px;">
+				        <kendo-tooltip options="itlDataVO.tooltipOptions">		
+							<div id="divItl02Grd" kendo-grid="itl02kg" options="gridMidVO[2]">
+				        	</div>
+				        </kendo-tooltip>
+				    </div>
+				</div>
+			</div>
+		</div>
+        
         <div class="content-area-container col-xs-12" style="padding:0px 0px 0px 0px;">	
 	        <div kendo-tab-strip k-content-urls="[]">
               <!-- tab list -->
@@ -62,35 +91,35 @@
           
               <div style="padding: 1em">	
 				<kendo-tooltip options="itlDataVO.tooltipOptions">		
-	                <div id="divOrdGrd" kendo-grid="ordkg" options="gridOrdVO">
+	                <div id="divOrdGrd" kendo-grid="ordkg" options="gridTabVO[0]">
 		        	</div>	 
 		        </kendo-tooltip>
               </div>
           
               <div style="padding: 1em">	
 				<kendo-tooltip options="itlDataVO.tooltipOptions">		
-	                <div id="divTranGrd" kendo-grid="trankg" options="gridTranVO">
+	                <div id="divTranGrd" kendo-grid="trankg" options="gridTabVO[1]">
 		        	</div>	 
 		        </kendo-tooltip>	 
               </div>
               
               <div style="padding: 1em">	
 				<kendo-tooltip options="itlDataVO.tooltipOptions">		
-	                <div id="divCanGrd" kendo-grid="cankg" options="gridCanVO">
+	                <div id="divCanGrd" kendo-grid="cankg" options="gridTabVO[2]">
 		        	</div>		 
 		        </kendo-tooltip> 
               </div>
               
               <div style="padding: 1em">	
 				<kendo-tooltip options="itlDataVO.tooltipOptions">		
-	                <div id="divCsGrd" kendo-grid="cskg" options="gridCsVO">
+	                <div id="divCsGrd" kendo-grid="cskg" options="gridTabVO[3]">
 		        	</div>	 
 		        </kendo-tooltip>	 
               </div>
               
               <div style="padding: 1em">	
 				<kendo-tooltip options="itlDataVO.tooltipOptions">		
-	                <div id="divShiGrd" kendo-grid="shikg" options="gridShiVO">
+	                <div id="divShiGrd" kendo-grid="shikg" options="gridTabVO[4]">
 		        	</div>	 
 		        </kendo-tooltip>	 
               </div>

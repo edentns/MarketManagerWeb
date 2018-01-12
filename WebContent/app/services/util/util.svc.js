@@ -649,7 +649,7 @@
 						key += psKind;
 					}
 					//console.log(poJson);
-					$window.sessionStorage.setItem(key, JSON.stringify(poJson));
+					$window.localStorage.setItem(key, JSON.stringify(poJson));
 				},
 
 				/**
@@ -658,14 +658,17 @@
 				 * @returns {Object}
 				 */
 				getInquiryParam: function (psKind) {
+					if(user === null || user === undefined) return '';
+					
 					var fixKey = user.NO_C +''+ user.DC_ID,
 						key = fixKey +''+ MenuSvc.getNO_M($state.current.name) +'Inquiry',
 						rtnData;
 
 					if (angular.isString(psKind)) {
-						key += psKind;
+						//key += psKind;
+						key = fixKey +''+ MenuSvc.getNO_M(psKind) +'Inquiry'
 					}
-					rtnData = $window.sessionStorage.getItem(key);
+					rtnData = $window.localStorage.getItem(key);
 
 					if (rtnData) {
 						rtnData = JSON.parse(rtnData);

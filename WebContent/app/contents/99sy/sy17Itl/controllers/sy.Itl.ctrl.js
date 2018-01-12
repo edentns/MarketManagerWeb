@@ -17,8 +17,8 @@
 	            	userInfo : JSON.parse($window.localStorage.getItem("USER")),
 	            	boxTitle : "검색",
 	            	settingMrk : {
-	        			id: "NO_MNGMRK",
-	        			name: "NM_MRK",
+	        			id: "CD_DEF",
+	        			name: "NM_DEF",
 	        			maxNames: 2,
 	        		},
 	            	setting : {
@@ -31,108 +31,137 @@
 						buttonList : ['current', '1Day', '1Week', '1Month'],
 						selected   : '1Week',
 						period : {
-							start : angular.copy(today),
-							end   : angular.copy(today)
+							start : resData.start,
+							end   : resData.end
 						}
 	        		},
-                    mngMrkModel : "*",                                  //마켓명 모델
-                    mngMrkBind  : resData.mngMrkData,                                   //마켓명 옵션
-                    nmJobModel  : "*",                                  //작업명 모델
-                    nmJobBind   : resData.nmJobData,                                   //작업명 옵션                    
-                    stJobModel  : "*",                     	            //작업상태 모델
-                    stJobBind   : resData.stJobData,                     	    	    //작업상태 옵션
+                    mngMrkModel : resData.mngMrkModel,                  //마켓명 모델
+                    mngMrkBind  : resData.mngMrkData,                   //마켓명 옵션                    
+                    stJobModel  : resData.stJobModel,                   //작업상태 모델
+                    stJobBind   : resData.stJobData                     //작업상태 옵션
 		        };
+	            
+	            itlDataVO.init = function() {
+		            angular.forEach($scope.gridMidVO, function (gridMidLocalVO, iIndex) {
+		            	gridMidLocalVO = $scope.gridMidVO.addCommonGridVO(gridMidLocalVO, iIndex);
+	                });
+		            
+		            angular.forEach($scope.gridTabVO, function (gridTabLocalVO, iIndex) {
+		            	gridTabLocalVO = $scope.gridTabVO.addCommonGridVO(gridTabLocalVO, iIndex);
+	                });
+		            
+		            itlDataVO.search();
+	            };
+	            
                 var iNumWidth = "50px",
                     iDateTimeWidth = "140px",
                     iNullWidth = "0px";
+                var sEllipsis = "text-overflow: ellipsis; white-space: nowrap; overflow:hidden;";
                 
-	            var gridOrderConfirm = [
+	            var gridItlFailMrk = [
 						{field: "ROW_NUM" 		   , type : "number", width: iNumWidth, attributes: {class:"ta-r"}, title: "번호"},       		            
-						{field: "info_type"        , width: "70px"  , attributes: {class:"ta-l"}, title: "정보유형"},   
-						{field: "orderNo"          , width: "130px" , attributes: {class:"ta-c"}, title: "주문번호"},           		            
-						{field: "productOrderNo"   , width: "130px" , attributes: {class:"ta-l"}, title: "상품주문번호"},   
-						{field: "mallOrderNo"      , width: "130px" , attributes: {class:"ta-l"}, title: "마켓주문번호"},
-						{field: "paymentNo"        , width: "120px" , attributes: {class:"ta-l"}, title: "결재번호"},
-						{field: "definiteOrderDate", width: iDateTimeWidth, attributes: {class:"ta-c"}, title: "주문확정일시"},
-						{field: "process_result"   , width: "70px"  , attributes: {class:"ta-c"}, title: "처리상태"},
-						{field: "req_datetime"     , width: iDateTimeWidth, attributes: {class:"ta-c"}, title: "처리일시"},
-						{field: "result_msg"       , width: iNullWidth,
-						 attributes: {class:"ta-l" , style:"text-overflow: ellipsis; white-space: nowrap; overflow:hidden;"}, title: "결과메시지"}
+						{field: "DTS_FAIL"         , width: "120px" , attributes: {class:"ta-l", style:sEllipsis}, title: "실패일시"},   
+						{field: "NM_MRK"           , width: "120px" , attributes: {class:"ta-l", style:sEllipsis}, title: "마켓명"}
+					],gridItl01 = [
+						{field: "DC_PROC" 		   , width: "120px" , attributes: {class:"ta-l", style:sEllipsis}, title: "처리사항"},       		            
+						{field: "CNT_SCD"          , width: "120px" , attributes: {class:"ta-r", style:sEllipsis}, title: "예정"},   
+						{field: "CNT_CPLT"         , width: "120px" , attributes: {class:"ta-r", style:sEllipsis}, title: "완료"},   
+						{field: "CNT_ERR"          , width: "120px" , attributes: {class:"ta-r", style:sEllipsis}, title: "추후 재실행"}
+					],gridItl02 = [
+						{field: "DC_PROC" 		   , width: "120px" , attributes: {class:"ta-l", style:sEllipsis}, title: "처리사항"},       		            
+						{field: "CNT_SCD"          , width: "120px" , attributes: {class:"ta-r", style:sEllipsis}, title: "예정"},   
+						{field: "CNT_CPLT"         , width: "120px" , attributes: {class:"ta-r", style:sEllipsis}, title: "완료"},   
+						{field: "CNT_ERR"          , width: "120px" , attributes: {class:"ta-r", style:sEllipsis}, title: "추후 재실행"}
+					],gridOrderConfirm = [
+						{field: "ROW_NUM" 		   , type : "number", width: iNumWidth, attributes: {class:"ta-r"}, title: "번호"},       		            
+						{field: "NM_MRK"           , width: "120px" , attributes: {class:"ta-l", style:sEllipsis}, title: "마켓명"},   
+						{field: "DC_MRKID"         , width: "120px" , attributes: {class:"ta-l", style:sEllipsis}, title: "마켓아이디"},           		     		            
+						{field: "info_type"        , width: "70px"  , attributes: {class:"ta-l", style:sEllipsis}, title: "정보유형"},   
+						{field: "orderNo"          , width: "130px" , attributes: {class:"ta-c", style:sEllipsis}, title: "주문번호"},           		            
+						{field: "productOrderNo"   , width: "130px" , attributes: {class:"ta-l", style:sEllipsis}, title: "상품주문번호"},   
+						{field: "mallOrderNo"      , width: "130px" , attributes: {class:"ta-l", style:sEllipsis}, title: "마켓주문번호"},
+						{field: "paymentNo"        , width: "120px" , attributes: {class:"ta-l", style:sEllipsis}, title: "결재번호"},
+						{field: "definiteOrderDate", width: iDateTimeWidth, attributes: {class:"ta-c", style:sEllipsis}, title: "주문확정일시"},
+						{field: "process_result"   , width: "70px"        , attributes: {class:"ta-c", style:sEllipsis}, title: "처리상태"},
+						{field: "req_datetime"     , width: iDateTimeWidth, attributes: {class:"ta-c", style:sEllipsis}, title: "처리일시"},
+						{field: "result_msg"       , width: iNullWidth    , attributes: {class:"ta-l", style:sEllipsis}, title: "결과메시지"}
 					],
   		            gridInvoiceNo = [
 						{field: "ROW_NUM" 		     , type : "number", width: iNumWidth, attributes: {class:"ta-r"}, title: "번호"},       		            
-						{field: "info_type"          , width: "70px"  , attributes: {class:"ta-l"}, title: "정보유형"},   
-						{field: "orderNo"            , width: "130px" , attributes: {class:"ta-c"}, title: "주문번호"},           		            
-						{field: "productOrderNo"     , width: "130px" , attributes: {class:"ta-l"}, title: "상품주문번호"},   
-						{field: "mallOrderNo"        , width: "130px" , attributes: {class:"ta-l"}, title: "마켓주문번호"},
-						{field: "paymentNo"          , width: "120px" , attributes: {class:"ta-l"}, title: "결재번호"},
-						{field: "deliveryDivision"   , width: "120px" , attributes: {class:"ta-l"}, title: "배송구분"},
-						{field: "delivery_type"      , width: "120px" , attributes: {class:"ta-l"}, title: "택배사"},
-						{field: "invoiceNo"          , width: "120px" , attributes: {class:"ta-l"}, title: "송장번호"},
-						{field: "invoiceInsertedDate", width: iDateTimeWidth, attributes: {class:"ta-c"}, title: "요청일시"},
-						{field: "process_result"     , width: "70px"  , attributes: {class:"ta-c"}, title: "처리상태"},
-						{field: "req_datetime"       , width: iDateTimeWidth, attributes: {class:"ta-c"}, title: "처리일시"},
-						{field: "result_msg"         , width: iNullWidth,
-						 attributes: {class:"ta-l", style:"text-overflow: ellipsis; white-space: nowrap; overflow:hidden;"}, title: "결과메시지"}
+						{field: "NM_MRK"             , width: "120px" , attributes: {class:"ta-l", style:sEllipsis}, title: "마켓명"},   
+						{field: "DC_MRKID"           , width: "120px" , attributes: {class:"ta-l", style:sEllipsis}, title: "마켓아이디"},           		     		            
+						{field: "info_type"          , width: "70px"  , attributes: {class:"ta-l", style:sEllipsis}, title: "정보유형"},   
+						{field: "orderNo"            , width: "130px" , attributes: {class:"ta-c", style:sEllipsis}, title: "주문번호"},           		            
+						{field: "productOrderNo"     , width: "130px" , attributes: {class:"ta-l", style:sEllipsis}, title: "상품주문번호"},   
+						{field: "mallOrderNo"        , width: "130px" , attributes: {class:"ta-l", style:sEllipsis}, title: "마켓주문번호"},
+						{field: "paymentNo"          , width: "120px" , attributes: {class:"ta-l", style:sEllipsis}, title: "결재번호"},
+						{field: "deliveryDivision"   , width: "120px" , attributes: {class:"ta-l", style:sEllipsis}, title: "배송구분"},
+						{field: "delivery_type"      , width: "120px" , attributes: {class:"ta-l", style:sEllipsis}, title: "택배사"},
+						{field: "invoiceNo"          , width: "120px" , attributes: {class:"ta-l", style:sEllipsis}, title: "송장번호"},
+						{field: "invoiceInsertedDate", width: iDateTimeWidth, attributes: {class:"ta-c", style:sEllipsis}, title: "요청일시"},
+						{field: "process_result"     , width: "70px"        , attributes: {class:"ta-c", style:sEllipsis}, title: "처리상태"},
+						{field: "req_datetime"       , width: iDateTimeWidth, attributes: {class:"ta-c", style:sEllipsis}, title: "처리일시"},
+						{field: "result_msg"         , width: iNullWidth    , attributes: {class:"ta-l", style:sEllipsis}, title: "결과메시지"}
 					],
 		            gridClaimConfirm = [
-						{field: "ROW_NUM" 		   , type : "number", width: iNumWidth, attributes: {class:"ta-r"}, title: "번호"},
-						{field: "requesteNo"       , width: "130px" , attributes: {class:"ta-c"}, title: "요청번호"},           		            
-						{field: "claimType"        , width: "120px" , attributes: {class:"ta-l"}, title: "요청유형"},   
-						{field: "requestDate"      , width: iDateTimeWidth, attributes: {class:"ta-c"}, title: "요청일시"},
-						{field: "product_order_no" , width: "130px" , attributes: {class:"ta-l"}, title: "상품주문번호"},
-						{field: "mallOrderNo"      , width: "130px" , attributes: {class:"ta-l"}, title: "마켓주문번호"},
-						{field: "payment_no"       , width: "120px" , attributes: {class:"ta-l"}, title: "결재번호"},
-						{field: "permission_date"  , width: iDateTimeWidth, attributes: {class:"ta-c"}, title: "승인/거부일시"},
-						{field: "permission_person", width: "120px" , attributes: {class:"ta-c"}, title: "승인/거부 입력자"},
-						{field: "rejection_type"   , width: "120px" , attributes: {class:"ta-c"}, title: "거부구분"},
-						{field: "rejection_reason" , width: "120px" , 
-							 attributes: {class:"ta-l" , style:"text-overflow: ellipsis; white-space: nowrap; overflow:hidden;"}, title: "거부내용"},
-						{field: "process_result"   , width: "120px" , attributes: {class:"ta-l"}, title: "처리상태"},
-						{field: "req_datetime"     , width: iDateTimeWidth , attributes: {class:"ta-c"}, title: "처리일시"},
-						{field: "result_msg", width: iNullWidth,
-						 attributes: {class:"ta-l" , style:"text-overflow: ellipsis; white-space: nowrap; overflow:hidden;"}, title: "결과메시지"},
-						{field: "deliveryDivision" , width: "100px"  , attributes: {class:"ta-c"}, title: "배송구분"},
-						{field: "delivery_type"    , width: "70px"  , attributes: {class:"ta-c"}, title: "택배사명"},
-						{field: "invoiceNo"        , width: "120px" , attributes: {class:"ta-l"}, title: "송장번호"},
-						{field: "pickupStatue"     , width: "120px" , attributes: {class:"ta-c"}, title: "교환상품수거여부"}
+						{field: "ROW_NUM" 		   , type : "number", width: iNumWidth, attributes: {class:"ta-r"}, title: "번호"},     		            
+						{field: "NM_MRK"           , width: "120px" , attributes: {class:"ta-l", style:sEllipsis}, title: "마켓명"},   
+						{field: "DC_MRKID"         , width: "120px" , attributes: {class:"ta-l", style:sEllipsis}, title: "마켓아이디"},           		
+						{field: "requesteNo"       , width: "130px" , attributes: {class:"ta-c", style:sEllipsis}, title: "요청번호"},           		            
+						{field: "claimType"        , width: "120px" , attributes: {class:"ta-l", style:sEllipsis}, title: "요청유형"},   
+						{field: "requestDate"      , width: iDateTimeWidth, attributes: {class:"ta-c", style:sEllipsis}, title: "요청일시"},
+						{field: "product_order_no" , width: "130px" , attributes: {class:"ta-l", style:sEllipsis}, title: "상품주문번호"},
+						{field: "mallOrderNo"      , width: "130px" , attributes: {class:"ta-l", style:sEllipsis}, title: "마켓주문번호"},
+						{field: "payment_no"       , width: "120px" , attributes: {class:"ta-l", style:sEllipsis}, title: "결재번호"},
+						{field: "permission_date"  , width: iDateTimeWidth, attributes: {class:"ta-c", style:sEllipsis}, title: "승인/거부일시"},
+						{field: "permission_person", width: "120px" , attributes: {class:"ta-c", style:sEllipsis}, title: "승인/거부 입력자"},
+						{field: "rejection_type"   , width: "120px" , attributes: {class:"ta-c", style:sEllipsis}, title: "거부구분"},
+						{field: "rejection_reason" , width: "120px" , attributes: {class:"ta-l", style:sEllipsis}, title: "거부내용"},
+						{field: "process_result"   , width: "120px" , attributes: {class:"ta-l", style:sEllipsis}, title: "처리상태"},
+						{field: "req_datetime"     , width: iDateTimeWidth , attributes: {class:"ta-c", style:sEllipsis}, title: "처리일시"},
+						{field: "result_msg"       , width: iNullWidth     , attributes: {class:"ta-l", style:sEllipsis}, title: "결과메시지"},
+						{field: "deliveryDivision" , width: "100px" , attributes: {class:"ta-c", style:sEllipsis}, title: "배송구분"},
+						{field: "delivery_type"    , width: "70px"  , attributes: {class:"ta-c", style:sEllipsis}, title: "택배사명"},
+						{field: "invoiceNo"        , width: "120px" , attributes: {class:"ta-l", style:sEllipsis}, title: "송장번호"},
+						{field: "pickupStatue"     , width: "120px" , attributes: {class:"ta-c", style:sEllipsis}, title: "교환상품수거여부"}
 					],
 		            gridInquiryProcess = [
-						{field: "ROW_NUM" 		     , type : "number", width: iNumWidth, attributes: {class:"ta-r"}, title: "번호"},
-						{field: "inquiryNo"          , width: "130px" , attributes: {class:"ta-l"}, title: "문의번호"},
-						{field: "inquiryDivisionCode", width: "70px" , attributes: {class:"ta-l"}, title: "문의유형"},,
-						{field: "inquiryStatueCode"  , width: "80px" , attributes: {class:"ta-c"}, title: "문의상태명"},           		            
-						{field: "regDate"            , width: iDateTimeWidth , attributes: {class:"ta-c"}, title: "접수일시"},   
-						{field: "req_person"         , width: "70px" , attributes: {class:"ta-c"}, title: "접수자"},
-						{field: "mallOrderNo"        , width: "130px" , attributes: {class:"ta-l"}, title: "주문번호"},
-						{field: "mallItemCode"       , width: "130px" , attributes: {class:"ta-l"}, title: "상품번호"},
-						{field: "replyContents"      , width: "150px" , 
-						 attributes: {class:"ta-l", style:"text-overflow: ellipsis; white-space: nowrap; overflow:hidden;"}, title: "답변내용"},
-						{field: "replyDate"          , width: iDateTimeWidth  , attributes: {class:"ta-c"}, title: "답변날짜"},
-						{field: "replyPerson"        , width: "70px" , attributes: {class:"ta-c"}, title: "답변자"},
-						{field: "process_result"     , width: "120px" , attributes: {class:"ta-c"}, title: "처리구분"},
-						{field: "process_date"       , width: iDateTimeWidth , attributes: {class:"ta-c"}, title: "처리일시"},
-						{field: "result_msg"         , width: iNullWidth,
-						 attributes: {class:"ta-l", style:"text-overflow: ellipsis; white-space: nowrap; overflow:hidden;"}, title: "결과메시지"}
+						{field: "ROW_NUM" 		     , type : "number", width: iNumWidth, attributes: {class:"ta-r"}, title: "번호"},     		            
+						{field: "NM_MRK"             , width: "120px" , attributes: {class:"ta-l", style:sEllipsis}, title: "마켓명"},   
+						{field: "DC_MRKID"           , width: "120px" , attributes: {class:"ta-l", style:sEllipsis}, title: "마켓아이디"},           		
+						{field: "inquiryNo"          , width: "130px" , attributes: {class:"ta-l", style:sEllipsis}, title: "문의번호"},
+						{field: "inquiryDivisionCode", width: "70px"  , attributes: {class:"ta-l", style:sEllipsis}, title: "문의유형"},,
+						{field: "inquiryStatueCode"  , width: "80px"  , attributes: {class:"ta-c", style:sEllipsis}, title: "문의상태명"},           		            
+						{field: "regDate"            , width: iDateTimeWidth , attributes: {class:"ta-c", style:sEllipsis}, title: "접수일시"},   
+						{field: "req_person"         , width: "70px"  , attributes: {class:"ta-c", style:sEllipsis}, title: "접수자"},
+						{field: "mallOrderNo"        , width: "130px" , attributes: {class:"ta-l", style:sEllipsis}, title: "주문번호"},
+						{field: "mallItemCode"       , width: "130px" , attributes: {class:"ta-l", style:sEllipsis}, title: "상품번호"},
+						{field: "replyContents"      , width: "150px" , attributes: {class:"ta-l", style:sEllipsis}, title: "답변내용"},
+						{field: "replyDate"          , width: iDateTimeWidth, attributes: {class:"ta-c", style:sEllipsis}, title: "답변날짜"},
+						{field: "replyPerson"        , width: "70px"        , attributes: {class:"ta-c", style:sEllipsis}, title: "답변자"},
+						{field: "process_result"     , width: "120px"       , attributes: {class:"ta-c", style:sEllipsis}, title: "처리구분"},
+						{field: "process_date"       , width: iDateTimeWidth, attributes: {class:"ta-c", style:sEllipsis}, title: "처리일시"},
+						{field: "result_msg"         , width: iNullWidth    , attributes: {class:"ta-l", style:sEllipsis}, title: "결과메시지"}
 					],
 		            gridShippingManagement = [
-  						{field: "ROW_NUM" 		   , type : "number", width: iNumWidth, attributes: {class:"ta-r"}, title: "번호"}, 
-  						{field: "mall_no"          , width: "80px"  , attributes: {class:"ta-l"}, title: "쇼핑몰구분"},
-						{field: "info_type"        , width: "65px"  , attributes: {class:"ta-l"}, title: "정보유형"},   
-						{field: "orderNo"          , width: "128px" , attributes: {class:"ta-c"}, title: "주문번호"},
-						{field: "mallOrderNo"      , width: "88px" , attributes: {class:"ta-l"}, title: "마켓주문번호"},
-						{field: "mallItemNo"       , width: "128px" , attributes: {class:"ta-l"}, title: "마켓상품번호"},
-						{field: "paymentNo"        , width: "80px" , attributes: {class:"ta-l"}, title: "결재번호"},
-						{field: "deliveryDivision" , width: "85px"  , attributes: {class:"ta-c"}, title: "배송구분"},
-						{field: "delivery_type"    , width: "70px"  , attributes: {class:"ta-c"}, title: "택배사명"},
-						{field: "invoiceNo"        , width: "80px" , attributes: {class:"ta-l"}, title: "송장번호"},
-						{field: "updatedDeliveryDivision"  , width: "80px" , attributes: {class:"ta-l"}, title: "수정할배송구분"},
-						{field: "updatedDeliveryType"      , width: "80px" , attributes: {class:"ta-l"}, title: "수정할택배사명"},
-						{field: "updatedInvoiceNo"         , width: "80px" , attributes: {class:"ta-l"}, title: "수정할송장번호"},
-						{field: "process_result"   , width: "65px"  , attributes: {class:"ta-c"}, title: "처리상태"},
-						{field: "req_datetime"     , width: iDateTimeWidth, attributes: {class:"ta-c"}, title: "처리일시"},
-						{field: "result_msg"       , width: iNullWidth,
-						 attributes: {class:"ta-l" , style:"text-overflow: ellipsis; white-space: nowrap; overflow:hidden;"}, title: "결과메시지"}
+  						{field: "ROW_NUM" 		   , type : "number", width: iNumWidth, attributes: {class:"ta-r"}, title: "번호"},      		            
+						{field: "NM_MRK"           , width: "120px" , attributes: {class:"ta-l", style:sEllipsis}, title: "마켓명"},   
+						{field: "DC_MRKID"         , width: "120px" , attributes: {class:"ta-l", style:sEllipsis}, title: "마켓아이디"},           		
+  						{field: "mall_no"          , width: "80px"  , attributes: {class:"ta-l", style:sEllipsis}, title: "쇼핑몰구분"},
+						{field: "info_type"        , width: "65px"  , attributes: {class:"ta-l", style:sEllipsis}, title: "정보유형"},   
+						{field: "orderNo"          , width: "128px" , attributes: {class:"ta-c", style:sEllipsis}, title: "주문번호"},
+						{field: "mallOrderNo"      , width: "88px"  , attributes: {class:"ta-l", style:sEllipsis}, title: "마켓주문번호"},
+						{field: "mallItemNo"       , width: "128px" , attributes: {class:"ta-l", style:sEllipsis}, title: "마켓상품번호"},
+						{field: "paymentNo"        , width: "80px"  , attributes: {class:"ta-l", style:sEllipsis}, title: "결재번호"},
+						{field: "deliveryDivision" , width: "85px"  , attributes: {class:"ta-c", style:sEllipsis}, title: "배송구분"},
+						{field: "delivery_type"    , width: "70px"  , attributes: {class:"ta-c", style:sEllipsis}, title: "택배사명"},
+						{field: "invoiceNo"        , width: "80px"  , attributes: {class:"ta-l", style:sEllipsis}, title: "송장번호"},
+						{field: "updatedDeliveryDivision", width: "80px", attributes: {class:"ta-l", style:sEllipsis}, title: "수정할배송구분"},
+						{field: "updatedDeliveryType"    , width: "80px", attributes: {class:"ta-l", style:sEllipsis}, title: "수정할택배사명"},
+						{field: "updatedInvoiceNo"       , width: "80px", attributes: {class:"ta-l", style:sEllipsis}, title: "수정할송장번호"},
+						{field: "process_result"   , width: "65px"        , attributes: {class:"ta-c", style:sEllipsis}, title: "처리상태"},
+						{field: "req_datetime"     , width: iDateTimeWidth, attributes: {class:"ta-c", style:sEllipsis}, title: "처리일시"},
+						{field: "result_msg"       , width: iNullWidth    , attributes: {class:"ta-l", style:sEllipsis}, title: "결과메시지"}
 					];
 	            
 	            //toolTip
@@ -141,41 +170,37 @@
 	            	
 	            //초기 실행
 	            itlDataVO.search = function(){
-	            	/*$scope.itlkg.dataSource.data([]);
-	            	$scope.itlkg.dataSource.page(1);*/
+	            	var self = this;
 	            	var param = {
-    						procedureParam: "USP_SY_17ITL_SEARCH&L_LIST01@s|L_LIST02@s|L_DC_ID@s|L_START_DATE@s|L_END_DATE@s",
-    						L_LIST01      : itlDataVO.mngMrkModel,
-    						L_LIST02      : itlDataVO.stJobModel,
-    						L_DC_ID       : itlDataVO.userInfo.DC_ID,
-    						L_START_DATE  : new Date(itlDataVO.datesetting.period.start.y, itlDataVO.datesetting.period.start.m-1, itlDataVO.datesetting.period.start.d).dateFormat("Ymd"),
-    						L_END_DATE    : new Date(itlDataVO.datesetting.period.end.y  , itlDataVO.datesetting.period.end.m-1  , itlDataVO.datesetting.period.end.d).dateFormat("Ymd")
+    						procedureParam: "USP_SY_17ITL_SEARCH&L_LIST01@s|L_LIST02@s|L_START_DATE@s|L_END_DATE@s",
+    						L_LIST01      : self.mngMrkModel,
+    						L_LIST02      : self.stJobModel,
+    						L_START_DATE  : new Date(self.datesetting.period.start.y, self.datesetting.period.start.m-1, self.datesetting.period.start.d).dateFormat("Ymd"),
+    						L_END_DATE    : new Date(self.datesetting.period.end.y  , self.datesetting.period.end.m-1  , self.datesetting.period.end.d).dateFormat("Ymd")
     					};
 					UtilSvc.getList(param).then(function (res) {
-						var dateList = "";
-						angular.forEach(res.data.results[0], function(data, index) {
-							if(index == 0){
-								dateList += data.RESERVED_DATE;
-							}else{
-								dateList += "^"+data.RESERVED_DATE;
-							}
-			            });
-						if(dateList != ""){
-							param={
-								procedureParam: "USP_SY_17ITL_GET&L_LIST01@s|L_LIST02@s",
-	    						L_LIST01      : dateList,
-	    						L_LIST02      : itlDataVO.mngMrkModel
-							};
-							UtilSvc.getList(param).then(function (res) {
-								$scope.ordkg.dataSource.data(res.data.results[0]);
-	    						$scope.trankg.dataSource.data(res.data.results[1]);
-	    						$scope.cankg.dataSource.data(res.data.results[2]);
-	    						$scope.cskg.dataSource.data(res.data.results[3]);
-	    						$scope.shikg.dataSource.data(res.data.results[4]);
-							});
-						}else{
-							alert("데이터가 없습니다.");
-						}
+						$scope.ordkg.dataSource.data(res.data.results[0]);
+						$scope.trankg.dataSource.data(res.data.results[1]);
+						$scope.cankg.dataSource.data(res.data.results[2]);
+						$scope.cskg.dataSource.data(res.data.results[3]);
+						$scope.shikg.dataSource.data(res.data.results[4]);
+
+						$scope.gridMidVO[0].dataSource.data(res.data.results[5]);
+						$scope.gridMidVO[1].dataSource.data(res.data.results[6]);
+						$scope.gridMidVO[2].dataSource.data(res.data.results[7]);
+
+						// 조회한 조건을 localstorage에 저장함.
+						var inquiryParam = {
+                    		mngMrkModel : self.mngMrkModel,    
+    	                    mngMrkBindSelect : self.mngMrkBind.allSelectNames,                    
+    	                    stJobModel  : self.stJobModel,
+    	                    stJobBindSelect : self.stJobBind.allSelectNames,
+    	                    start       : self.datesetting.period.start,
+    	                    end         : self.datesetting.period.end
+	                    };
+						
+	        			// 검색조건 세션스토리지에 임시 저장
+	        			UtilSvc.grid.setInquiryParam(inquiryParam);
 					});
 	            };	
 	            	  
@@ -194,344 +219,217 @@
         					returnTpl.push(angular.copy(temp));
             			};
             			return returnTpl;
-            	};				
-					                            
-	            /*//검색 그리드
-                var gridItlVO = $scope.gridItlVO = {
-                	autoBind: false,
-                    messages: {                        	
-                        requestFailed: "정보를 가져오는 중 오류가 발생하였습니다.",
-                        noRecords: "검색된 데이터가 없습니다."
-                    },
-                    sortable: true,                    	
-                    pageable: {
-                       	messages: UtilSvc.gridPageableMessages
-                    },
-                    noRecords: true,
-                    dataSource: new kendo.data.DataSource({
-                    	transport: {
-                    		read: function(e) {
-                				var param = {
-                						procedureParam: "USP_MA_07ITL_SEARCH&L_LIST01@s|L_LIST02@s|L_LIST03@s|L_START_DATE@s|L_END_DATE@s",
-                						L_LIST01      : itlDataVO.mngMrkModel,
-                						L_LIST02      : itlDataVO.nmJobModel,
-                						L_LIST03      : itlDataVO.stJobModel,
-                						L_START_DATE  : new Date(itlDataVO.datesetting.period.start.y, itlDataVO.datesetting.period.start.m-1, itlDataVO.datesetting.period.start.d).dateFormat("Ymd"),
-                						L_END_DATE    : new Date(itlDataVO.datesetting.period.end.y  , itlDataVO.datesetting.period.end.m-1  , itlDataVO.datesetting.period.end.d).dateFormat("Ymd")
-                					};
-            					UtilSvc.getList(param).then(function (res) {
-            						e.success(res.data.results[0]);
-            					});
-                			},  		
-                			parameterMap: function(e, operation) {
-                				if(operation !== "read" && e.models) {
-                					return {models:kendo.stringify(e.models)};
-                				}
-                			}
-                		},
-                       	pageSize: 8,
-                		batch: true,
-                		schema: {
-                			model: { 
-                    			id: "ROW_NUM",
-                				fields: {
-                					ROW_NUM  :{type: "number", editable: false, nullable: false},
-								    NO_C     :grdScmSelectAttr,
-							        NO_MRK   :grdScmSelectAttr,
-							        NM_MRK   :grdScmSelectAttr,
-							        NO_MNGMRK:grdScmSelectAttr,
-							        NM_MNGMRK:grdScmSelectAttr,
-							        DC_MRKID :grdScmSelectAttr,
-							        CD_ITLWAY:grdScmSelectAttr,
-							        JOB      :grdScmSelectAttr, 
-							        NM_JOB   :grdScmSelectAttr,     
-							        STATUS   :grdScmSelectAttr,     
-							        NM_STATUS:grdScmSelectAttr,        
-							        RESULT   :grdScmSelectAttr, 
-							        RESERVED_DATE:grdScmSelectAttr,
-							        START_DATE   :grdScmSelectAttr,
-							        END_DATE     :grdScmSelectAttr,
-							        UPDATED      :grdScmSelectAttr
-	                			}
-	                		}
-	                	}
-                	}), 
-                	change : function(e) {
-                		var dataItem = this.dataItem(this.select());
-                		var param = {
-        					procedureParam: "USP_MA_07ITL_CLICK_GET&L_RESERVED_DATE@s|L_NO_MRK@s|L_SEL_NO_C@s",
-        					L_RESERVED_DATE : dataItem.RESERVED_DATE,
-        					L_NO_MRK : dataItem.NO_MRK,
-        					L_SEL_NO_C : dataItem.NO_C
-        				};
-    					UtilSvc.getList(param).then(function (res) {
-    						$scope.ordkg.dataSource.data(res.data.results[0]);
-    						$scope.trankg.dataSource.data(res.data.results[1]);
-    						$scope.cankg.dataSource.data(res.data.results[2]);
-    						$scope.cskg.dataSource.data(res.data.results[3]);
-    						$scope.shikg.dataSource.data(res.data.results[4]);
-    					});
+            	};	
+            	
+                var gridMidVO = $scope.gridMidVO = [{
+                		boxTitle: "로그인 실패한 마켓리스트",
+	                	defFields: {
+	    					ROW_NUM          :{type: "number", editable: false, nullable: false},
+							DTS_FAIL         :grdScmSelectAttr,
+					        NM_MRK           :grdScmSelectAttr
+	        			},
+            			defColumns: gridItlFailMrk	        			
                 	},
-                	dataBound: function(e) {
-                		e.sender.select("tr:eq(0)");
+                	{
+                		boxTitle: "연동 통계 건수",
+                		defFields: {
+        					DC_PROC          :grdScmSelectAttr,
+        					CNT_SCD          :grdScmSelectAttr,
+        					CNT_CPLT         :grdScmSelectAttr,
+        					CNT_ERR          :grdScmSelectAttr
+            			},
+            			defColumns: gridItl01
                 	},
-                	selectable: "row",
-                	navigatable: true, //키보드로 그리드 셀 이동 가능
-                	columns: itlDataVO.columnProc(gridBatchLog),
-                    collapse: function(e) {
-                        this.cancelRow();
-                    },
-                	resizable: true,
-                	height: 302                 	
-        		};*/
+                	{
+                		boxTitle: "연동 통계 건수",
+                		defFields: {
+        					DC_PROC          :grdScmSelectAttr,
+        					CNT_SCD          :grdScmSelectAttr,
+        					CNT_CPLT         :grdScmSelectAttr,
+        					CNT_ERR          :grdScmSelectAttr
+            			},
+            			defColumns: gridItl02
+                	}
+                ];
                 
-              //검색 그리드
-                var gridOrdVO = $scope.gridOrdVO = {
-                	autoBind: false,
-                    messages: {                        	
+                gridMidVO.addCommonGridVO = function(gridMidLocalVO, iIndex) {
+                	var localSelf = gridMidLocalVO;
+	            	localSelf.iIndex = iIndex;
+	            	localSelf.autoBind = false;
+	            	localSelf.messages = {                        	
                         requestFailed: "정보를 가져오는 중 오류가 발생하였습니다.",
                         commands: {
                             update: "저장",
                             canceledit: "취소"
                         },
                         noRecords: "검색된 데이터가 없습니다."
-                    },
-                    sortable: true,                    	
-                    pageable: {
-                       	messages: UtilSvc.gridPageableMessages
-                    },
-                    noRecords: true,
-                    dataSource: new kendo.data.DataSource({
+                    };
+                    localSelf.sortable = true;
+                    localSelf.noRecords = true;
+                    localSelf.dataSource = new kendo.data.DataSource({
                     	transport: {
                 		},
-                		change: function(e){
-                			var data = this.data();
-                			itlDataVO.dataTotal = data.length;
-                		},
-                       	pageSize: 8,
                 		batch: true,
                 		schema: {
                 			model: { 
-                    			id: "ROW_NUM",
-                				fields: {
-                					ROW_NUM          :{type: "number", editable: false, nullable: false},
-            						orderNo          :grdScmSelectAttr,
-							        productOrderNo   :grdScmSelectAttr,
-							        mallOrderNo      :grdScmSelectAttr,
-							        paymentNo        :grdScmSelectAttr,
-							        definiteOrderDate:grdScmSelectAttr,
-							        process_result   :grdScmSelectAttr,      
-							        req_datetime     :grdScmSelectAttr,       
-							        result_msg       :grdScmSelectAttr
-	                			}
-	                		}
+                				fields: localSelf.defFields
+                			}
 	                	}
-                	}), 
-                	navigatable: true, //키보드로 그리드 셀 이동 가능
-                	selectable: "multiple",
-                	columns: itlDataVO.columnProc(gridOrderConfirm),
-                    collapse: function(e) {
+                	}); 
+                	localSelf.navigatable = true; //키보드로 그리드 셀 이동 가능
+                	localSelf.selectable = "multiple";
+                	localSelf.columns = itlDataVO.columnProc(localSelf.defColumns);
+                	localSelf.collapse = function(e) {
                         this.cancelRow();
-                    },
-                	resizable: true,
-                	height: 617  	
-        		};
+                    };
+                    localSelf.resizable = true;
+                    localSelf.height = 120;  
+                	
+                	return localSelf;
+                };
                 
-                //검색 그리드
-                var gridTranVO = $scope.gridTranVO = {
-                	autoBind: false,
-                    messages: {                        	
+				var gridTabVO = $scope.gridTabVO = [{
+						defFields: {
+	    					ROW_NUM          :{type: "number", editable: false, nullable: false},
+							NM_MRK           :grdScmSelectAttr,
+					        DC_MRKID         :grdScmSelectAttr,
+							orderNo          :grdScmSelectAttr,
+					        productOrderNo   :grdScmSelectAttr,
+					        mallOrderNo      :grdScmSelectAttr,
+					        paymentNo        :grdScmSelectAttr,
+					        definiteOrderDate:grdScmSelectAttr,
+					        process_result   :grdScmSelectAttr,      
+					        req_datetime     :grdScmSelectAttr,       
+					        result_msg       :grdScmSelectAttr
+	        			},
+            			defColumns: gridOrderConfirm
+		            },
+		            {
+		            	defFields: {
+        					ROW_NUM: 		   {type: "number", editable: false, nullable: false},
+    						NM_MRK:            grdScmSelectAttr,
+					        DC_MRKID:          grdScmSelectAttr,
+    						orderNo:		   grdScmSelectAttr,
+					        productOrderNo:	   grdScmSelectAttr,
+					        mallOrderNo:	   grdScmSelectAttr,
+					        paymentNo:		   grdScmSelectAttr,
+					        deliveryDivision:  grdScmSelectAttr,
+					        delivery_type:	   grdScmSelectAttr,      
+					        invoiceNo:	   	   grdScmSelectAttr,       
+					        invoiceInsertedDate:grdScmSelectAttr, 
+					        process_result:	   grdScmSelectAttr,
+					        req_datetime:	   grdScmSelectAttr,
+					        result_msg:	   	   grdScmSelectAttr
+            			},
+            			defColumns: gridInvoiceNo            			
+		            },
+		            {
+		            	defFields: {
+        					ROW_NUM: 		   {type: "number", editable: false, nullable: false},
+    						NM_MRK:            grdScmSelectAttr,
+					        DC_MRKID:          grdScmSelectAttr,
+    						requesteNo:		   grdScmSelectAttr,
+					        claimType:		   grdScmSelectAttr,
+					        requestDate:	   grdScmSelectAttr,
+					        product_order_no:  grdScmSelectAttr,
+					        mallOrderNo:	   grdScmSelectAttr,
+					        payment_no:	   	   grdScmSelectAttr,      
+					        permission_date:   grdScmSelectAttr,       
+					        permission_person: grdScmSelectAttr, 
+					        rejection_type:	   grdScmSelectAttr,
+					        rejection_reason:  grdScmSelectAttr,
+					        process_result:	   grdScmSelectAttr,
+					        req_datetime:	   grdScmSelectAttr,
+					        result_msg:	       grdScmSelectAttr,
+					        deliveryDivision:  grdScmSelectAttr,
+					        delivery_type:	   grdScmSelectAttr,
+					        invoiceNo:	       grdScmSelectAttr,
+					        pickupStatue:	   grdScmSelectAttr
+            			},
+            			defColumns: gridClaimConfirm     
+		            },
+		            {
+		            	defFields: {
+        					ROW_NUM: 		   {type: "number", editable: false, nullable: false},
+    						NM_MRK:            grdScmSelectAttr,
+					        DC_MRKID:          grdScmSelectAttr,
+    						inquiryStatueCode: grdScmSelectAttr,
+					        regDate:		   grdScmSelectAttr,
+					        req_person:		   grdScmSelectAttr,
+					        inquiryDivisionCode:grdScmSelectAttr,
+					        mallItemCode:	   grdScmSelectAttr,
+					        mallOrderNo:	   grdScmSelectAttr,      
+					        inquiryNo:	   	   grdScmSelectAttr,       
+					        replyContents:	   grdScmSelectAttr, 
+					        replyDate:	       grdScmSelectAttr,
+					        replyPerson:	   grdScmSelectAttr,
+					        process_result:	   grdScmSelectAttr,
+					        process_date:	   grdScmSelectAttr,
+					        result_msg:	       grdScmSelectAttr
+            			},
+            			defColumns: gridInquiryProcess  
+		            },
+		            {
+		            	defFields: {
+        					ROW_NUM: 		   {type: "number", editable: false, nullable: false},
+    						NM_MRK:            grdScmSelectAttr,
+					        DC_MRKID:          grdScmSelectAttr,
+        					mall_no:           grdScmSelectAttr,
+        					info_type:		   grdScmSelectAttr,
+        					orderNo:		   grdScmSelectAttr,
+        					mallOrderNo:       grdScmSelectAttr,
+        					mallItemNo:	       grdScmSelectAttr,
+        					paymentNo:	       grdScmSelectAttr,      
+        					deliveryDivision:  grdScmSelectAttr,       
+        					delivery_type:	   grdScmSelectAttr, 
+        					invoiceNo:	       grdScmSelectAttr,
+        					updatedDeliveryDivision:  grdScmSelectAttr,
+        					updatedDeliveryType:	  grdScmSelectAttr,
+        					updatedInvoiceNo:	      grdScmSelectAttr,
+        					process_result:	   grdScmSelectAttr,
+        					req_datetime:	   grdScmSelectAttr,
+        					result_msg:	       grdScmSelectAttr
+            			},
+            			defColumns: gridShippingManagement  
+		            }
+		        ];
+                
+                gridTabVO.addCommonGridVO = function(gridTabLocalVO, iIndex) {
+	            	var localSelf = gridTabLocalVO;
+	            	localSelf.iIndex = iIndex;
+	            	localSelf.autoBind = false;
+	            	localSelf.messages = {                        	
                         requestFailed: "정보를 가져오는 중 오류가 발생하였습니다.",
                         noRecords: "검색된 데이터가 없습니다."
-                    },
-                    sortable: true,                    	
-                    pageable: {
+                    };
+	            	localSelf.sortable = true;                    	
+	            	localSelf.pageable = {
                        	messages: UtilSvc.gridPageableMessages
-                    },
-                    noRecords: true,
-                    dataSource: new kendo.data.DataSource({
+                    };
+                    localSelf.noRecords = true;
+                    localSelf.dataSource = new kendo.data.DataSource({
                     	transport: {
                 		},
-                       	pageSize: 8,
+                       	pageSize: 13,
                 		batch: true,
                 		schema: {
                 			model: { 
                     			id: "ROW_NUM",
-                				fields: {
-                					ROW_NUM: 		   {type: "number", editable: false, nullable: false},
-            						orderNo:		   grdScmSelectAttr,
-							        productOrderNo:	   grdScmSelectAttr,
-							        mallOrderNo:	   grdScmSelectAttr,
-							        paymentNo:		   grdScmSelectAttr,
-							        deliveryDivision:  grdScmSelectAttr,
-							        delivery_type:	   grdScmSelectAttr,      
-							        invoiceNo:	   	   grdScmSelectAttr,       
-							        invoiceInsertedDate:grdScmSelectAttr, 
-							        process_result:	   grdScmSelectAttr,
-							        req_datetime:	   grdScmSelectAttr,
-							        result_msg:	   	   grdScmSelectAttr
-	                			}
+                				fields: localSelf.defFields
 	                		}
 	                	}
-                	}), 
-                	navigatable: true, //키보드로 그리드 셀 이동 가능
-                	columns: itlDataVO.columnProc(gridInvoiceNo),
-                    collapse: function(e) {
+                	});
+                    localSelf.navigatable = true; //키보드로 그리드 셀 이동 가능
+                    localSelf.columns = itlDataVO.columnProc(localSelf.defColumns),
+                    localSelf.collapse = function(e) {
                         this.cancelRow();
-                    },
-                	resizable: true,
-                	height: 657               	
-        		};
-                
-                //검색 그리드
-                var gridCanVO = $scope.gridCanVO = {
-                	autoBind: false,
-                    messages: {                        	
-                        requestFailed: "정보를 가져오는 중 오류가 발생하였습니다.",
-                        noRecords: "검색된 데이터가 없습니다."
-                    },
-                    sortable: true,                    	
-                    pageable: {
-                       	messages: UtilSvc.gridPageableMessages
-                    },
-                    noRecords: true,
-                    dataSource: new kendo.data.DataSource({
-                    	transport: {
-                		},
-                       	pageSize: 8,
-                		batch: true,
-                		schema: {
-                			model: { 
-                    			id: "ROW_NUM",
-                				fields: {
-                					ROW_NUM: 		   {type: "number", editable: false, nullable: false},
-            						requesteNo:		   grdScmSelectAttr,
-							        claimType:		   grdScmSelectAttr,
-							        requestDate:	   grdScmSelectAttr,
-							        product_order_no:  grdScmSelectAttr,
-							        mallOrderNo:	   grdScmSelectAttr,
-							        payment_no:	   	   grdScmSelectAttr,      
-							        permission_date:   grdScmSelectAttr,       
-							        permission_person: grdScmSelectAttr, 
-							        rejection_type:	   grdScmSelectAttr,
-							        rejection_reason:  grdScmSelectAttr,
-							        process_result:	   grdScmSelectAttr,
-							        req_datetime:	   grdScmSelectAttr,
-							        result_msg:	       grdScmSelectAttr,
-							        deliveryDivision:  grdScmSelectAttr,
-							        delivery_type:	   grdScmSelectAttr,
-							        invoiceNo:	       grdScmSelectAttr,
-							        pickupStatue:	   grdScmSelectAttr
-							        				   
-	                			}
-	                		}
-	                	}
-                	}), 
-                	navigatable: true, //키보드로 그리드 셀 이동 가능
-                	columns: itlDataVO.columnProc(gridClaimConfirm),
-                    collapse: function(e) {
-                        this.cancelRow();
-                    },
-                	resizable: true,
-                	height: 657               	
-        		};
-                
-                //검색 그리드
-                var gridCsVO = $scope.gridCsVO = {
-                	autoBind: false,
-                    messages: {                        	
-                        requestFailed: "정보를 가져오는 중 오류가 발생하였습니다.",
-                        noRecords: "검색된 데이터가 없습니다."
-                    },
-                    sortable: true,                    	
-                    pageable: {
-                       	messages: UtilSvc.gridPageableMessages
-                    },
-                    noRecords: true,
-                    dataSource: new kendo.data.DataSource({
-                    	transport: {
-                		},
-                       	pageSize: 8,
-                		batch: true,
-                		schema: {
-                			model: { 
-                    			id: "ROW_NUM",
-                				fields: {
-                					ROW_NUM: 		   {type: "number", editable: false, nullable: false},
-            						inquiryStatueCode: grdScmSelectAttr,
-							        regDate:		   grdScmSelectAttr,
-							        req_person:		   grdScmSelectAttr,
-							        inquiryDivisionCode:grdScmSelectAttr,
-							        mallItemCode:	   grdScmSelectAttr,
-							        mallOrderNo:	   grdScmSelectAttr,      
-							        inquiryNo:	   	   grdScmSelectAttr,       
-							        replyContents:	   grdScmSelectAttr, 
-							        replyDate:	       grdScmSelectAttr,
-							        replyPerson:	   grdScmSelectAttr,
-							        process_result:	   grdScmSelectAttr,
-							        process_date:	   grdScmSelectAttr,
-							        result_msg:	       grdScmSelectAttr
-	                			}
-	                		}
-	                	}
-                	}),
-                	navigatable: true, //키보드로 그리드 셀 이동 가능
-                	columns: itlDataVO.columnProc(gridInquiryProcess),
-                    collapse: function(e) {
-                        this.cancelRow();
-                    },
-                	resizable: true,
-                	height: 657               	
-        		};   
-                
-              //검색 그리드
-                var gridShiVO = $scope.gridShiVO = {
-                	autoBind: false,
-                    messages: {                        	
-                        requestFailed: "정보를 가져오는 중 오류가 발생하였습니다.",
-                        noRecords: "검색된 데이터가 없습니다."
-                    },
-                    sortable: true,                    	
-                    pageable: {
-                       	messages: UtilSvc.gridPageableMessages
-                    },
-                    noRecords: true,
-                    dataSource: new kendo.data.DataSource({
-                    	transport: {
-                		},
-                       	pageSize: 8,
-                		batch: true,
-                		schema: {
-                			model: { 
-                    			id: "ROW_NUM",
-                				fields: {
-                					ROW_NUM: 		   {type: "number", editable: false, nullable: false},
-                					mall_no:           grdScmSelectAttr,
-                					info_type:		   grdScmSelectAttr,
-                					orderNo:		   grdScmSelectAttr,
-                					mallOrderNo:       grdScmSelectAttr,
-                					mallItemNo:	       grdScmSelectAttr,
-                					paymentNo:	       grdScmSelectAttr,      
-                					deliveryDivision:  grdScmSelectAttr,       
-                					delivery_type:	   grdScmSelectAttr, 
-                					invoiceNo:	       grdScmSelectAttr,
-                					updatedDeliveryDivision:  grdScmSelectAttr,
-                					updatedDeliveryType:	  grdScmSelectAttr,
-                					updatedInvoiceNo:	      grdScmSelectAttr,
-                					process_result:	   grdScmSelectAttr,
-                					req_datetime:	   grdScmSelectAttr,
-                					result_msg:	       grdScmSelectAttr
-	                			}
-	                		}
-	                	}
-                	}),
-                	navigatable: true, //키보드로 그리드 셀 이동 가능
-                	columns: itlDataVO.columnProc(gridShippingManagement),
-                    collapse: function(e) {
-                        this.cancelRow();
-                    },
-                	resizable: true,
-                	height: 657               	
-        		};
+                    };
+                    localSelf.resizable = true;
+                    localSelf.height = 449;  
+                	
+                	return localSelf;
+	            };
+	            
+	            itlDataVO.init();
             }]);
 }());
