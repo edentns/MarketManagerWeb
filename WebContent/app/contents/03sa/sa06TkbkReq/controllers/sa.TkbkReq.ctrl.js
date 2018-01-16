@@ -205,7 +205,7 @@
 		            	datesetting : {
 		        			dateType   : 'market',
 							buttonList : ['current', '1Day', '1Week', '1Month'],
-							selected   : '1Week',
+							selected   : Util03saSvc.storedDatesettingLoad("tkbkDataVO"),
 							period : {
 								start : angular.copy(today),
 								end   : angular.copy(today)
@@ -269,7 +269,8 @@
 		        		etcCostCode : "",
 		        		gHoldCode : "",
 		        		receiveCheckCode : 'Y',
-		        		marketDivisionCode : ""
+		        		marketDivisionCode : "",
+		        		menualShwWrn: ""
 		        };   
 	            
 	            tkbkDataVO.initLoad = function () {
@@ -592,7 +593,10 @@
                     			case '170103' : {
                     				var deliverDS = dataVo.shipList.filter(function(ele){
     	    	            			return ele.DC_RMK1 === e.model.NO_MRK;
-    	    	            		});	            				
+    	    	            		});	            	
+                    				if(!deliverDS.length){
+                    					deliverDS = [{NM_PARS_TEXT : "택배사 등록", CD_PARS : ""}];
+                                	}
                     				e.container.find("select[name=CD_PARS]").kendoDropDownList({
     	    	            			dataSource : deliverDS,
     	    	                		dataTextField : "NM_PARS_TEXT",
@@ -608,7 +612,13 @@
         	    	                				me.element.parents("table").find(".k-invalid-msg").hide();
         	    	                			}
     	    	                			},0);
-    	    	                		}
+    	    	                		},
+	                                    change : function(e){
+	                                    	if(this.text() === "택배사 등록" && this.selectedIndex === 1){
+	                                    		$window.open("/#/99sy/syPars?menu=true","_self");
+	                                    		$scope.tkbkkg.cancelRow();
+	                                    	}
+	                                    }
     	    	            		});
                     				break;
                     			}
@@ -633,7 +643,9 @@
                 		transport: {
                 			read: function(e) {
                 				var me = tkbkDataVO;
-	                				me.ngIfinIt();
+                				
+	                			me.ngIfinIt();
+	                			
                 				saTkbkReqSvc.orderList(me.param).then(function (res) {
                 					me.shipList = res.data.queryShipList;
                 					e.success(res.data.queryList);
@@ -681,7 +693,7 @@
                 						break;
                 					}
                 					case '002' : {
-                						if(confirm("선택하신 주문을 반품 거부하시겠습니까?")){
+                						if(confirm("선택하신 주문을 반품거부하시겠습니까?")){
                 							var defer = $q.defer(),	
                 								param = e.data.models.filter(function(ele){
                 									return (ele.ROW_CHK === true && ele.CD_TKBKSTAT === "001" && (ele.NO_ORD) && ele.NO_ORD !== "" && whereIn.indexOf(ele.CD_ORDSTAT) > -1);
@@ -710,7 +722,7 @@
                 						break;
                 					}
                 					case '003' : {
-                						if(confirm("선택하신 주문을 처리하시겠습니까?")){
+                						if(confirm("선택하신 주문을 반품처리하시겠습니까?")){
                 							var defer = $q.defer(),
                 								param = e.data.models.filter(function(ele){
                 									return (ele.ROW_CHK === true && ele.CD_TKBKSTAT === "001" && (ele.NO_ORD) && ele.NO_ORD !== "" && whereIn.indexOf(ele.CD_ORDSTAT) > -1);
@@ -719,15 +731,36 @@
                 								alert("배송처리 된 반품요청 주문만 승인 처리 할 수 있습니다.");
                         						return;
                 							};
+                							if(param[0].NO_MNGMRK === "SYMM170101_00002"){
+                    							alert("송장번호 체크로 인하여 처리시간이 다소 소요 될수 있습니다.");                								
+                							};
+                							
                 							saTkbkReqSvc.tkbkConfirm(param[0]).then(function (res) {
-                        						defer.resolve();
-                        						if(res.data === "success"){
+                								var rtnV = res.data,
+	                    							allV = rtnV.allNoOrd,
+	    	        							    trueV = rtnV.trueNoOrd,
+	    	        							    falseV = rtnV.falseNoOrd;
+                								
+                								if(!rtnV){
+                        							alert("실패하였습니다.");
+                        							e.error([]);
+                        							return false;
+                        						};
+	    	        	            			
+	    	        	            			if(trueV.length > 0){
                         							alert("반품처리 하였습니다.");
-            	            						$scope.tkbkkg.dataSource.read();
-                        						}else{
+	    	        	            				defer.resolve();		         
+	                    							Util03saSvc.storedQuerySearchPlay(tkbkDataVO, "tkbkDataVO");
+	    	        	            			}else if(falseV.length > 0){
+	    	        	            				tkbkDataVO.menualShwWrn = falseV;
+	    	        	            				e.error([]);
+	    	        	            				defer.resolve();            		
+	    	        	            			}else if(allV.length < 1){
                         							alert("반품처리를 실패하였습니다.");
-                        							e.error();
-                        						}
+	                    							e.error();
+	    	        	            				defer.resolve();            		
+	    	        	            			};	
+                        						defer.resolve();
                         					},function(err){
                         						e.error([]);
                         					}); 

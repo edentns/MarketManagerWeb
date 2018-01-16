@@ -7,9 +7,8 @@
      * 상품분류관리
      */
     angular.module("sa.OrdCcl.service")
-        .factory("sa.OrdCclSvc", ["APP_CONFIG", "$http", function (APP_CONFIG, $http) {
-            return {
-            	
+        .factory("sa.OrdCclSvc", ["APP_CONFIG", "$http", "$log", function (APP_CONFIG, $http, $log) {
+            return {            	
             	/**
 				 * 주문 목록 
 				 */
@@ -18,21 +17,13 @@
 					return $http({
 						method	: "GET",
 						url		: APP_CONFIG.domain +"/ocm/ordlist?"+ $.param(param),
-					}).success(function (data, status, headers, config) {
-						if(data !== ""){
-							
-						}else{
-							
-						}
-					}).error(function (data, status, headers, config) {
-						alert("시스템 오류 관리자에게 문의 하세요.");
 					});
 				},
 				
 				/**
 				 * 취소 거부 DATE
 				 */            	
-				ocmRejectDate : function (param) {				
+				ocmRejectDate : function (param) {
 					return $http({
 						method	: "POST",
 						url		: APP_CONFIG.domain +"/ocm/ocmrejectdate/",
@@ -75,14 +66,6 @@
 						method	: "POST",
 						url		: APP_CONFIG.domain +"/ocm/ocmrejectnormal/",
 						data 	: param
-					}).success(function (data, status, headers, config) {
-						if(data !== ""){
-							alert("취소거부 처리 되었습니다.");
-						}else{
-							alert("취소거부 실패 하였습니다.");
-						}
-					}).error(function (data, status, headers, config) {
-						alert("시스템 오류 관리자에게 문의 하세요.");
 					});
 				},
 				
@@ -103,7 +86,40 @@
 					}).error(function (data, status, headers, config) {
 						alert("시스템 오류 관리자에게 문의 하세요.");
 					});
-				}		
+				},
+				
+				/**
+				 * 수동 값 바인딩 **/				
+				manualDataBind : function(input, target, kdgrid){
+	            	var getUid = input.parents("table").attr("data-uid"),
+	            	    grid = kdgrid,
+	            	    viewToRow = $("[data-uid='" + getUid + "']", grid.table),
+	            	    dataItem = grid.dataItem(viewToRow);								                	    
+	            	
+	            	if(target === "CD_PARS"){
+	            		var i, chosenPureData = input.data().handler.dataSource.data();
+	            		for(i=0; i<chosenPureData.length; i++){
+	            			if(chosenPureData[i]["CD_DEF"] === input.val()){
+	            				dataItem[target] = chosenPureData[i];
+	            			}
+	            		};
+	            	}else if(target === "DTS_RECER"){
+	            		dataItem[target] = kendo.toString(new Date(input.val()), "yyyyMMdd");
+	            	}else if(target === input.attr("name")){
+	            		dataItem[target] = input.val();
+	            	}
+	            },
+	            
+	            /**
+	             * err후 처리
+	             * */
+	            
+	            afterErrProc : function(err){
+	            	if(err.status !== 412){
+                    	alert(err.data);
+                   	} 
+		            $log.error(err.data);
+	            }
             };
         }]);
 }());

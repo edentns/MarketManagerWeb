@@ -236,8 +236,10 @@
                        				data-eden-type="kor"
                        				style="width: 100%;" 
 									data-required-msg="송장번호를 입력해 주세요."
-									data-lengthy-msg="송장번호를 8자이상 20자 이내로 입력해 주세요."
-									data-reg-msg="송장 번호는 택배사에 따라 숫자 또는 숫자 와 '-'(짝대기, 연속으로 안됨) 조합으로 가능합니다."
+									data-lengthy-msg="송장번호를 3자 이상 30자 이하로 입력해 주세요."
+									data-reg-msg="송장번호는  숫자 또는 숫자와 '-'(특수문자) 조합으로만 가능합니다."
+									data-response-msg="운송장이 등록되지 않았거나 업체에서 상품 준비중입니다"
+									autocomplete="off"
 									ng-disabled="ordInfoDataVO.ds.CD_ORDSTAT > '002'" />						
 								<span class="k-invalid-msg" data-for="NO_INVO"></span>	
                        		</td>

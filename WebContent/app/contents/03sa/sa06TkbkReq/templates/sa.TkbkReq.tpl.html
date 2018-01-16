@@ -347,10 +347,11 @@
 			<td class="active border-right-line">
 				<code>*</code>송장번호
 			</td>
-			<td colspan="3">			
-				<textarea class="k-textbox" name="NO_INVO" data-bind="value: NO_INVO" 
-				placeholder="송장번호는  숫자 또는 숫자와 '-'(특수문자) 조합으로만 가능합니다."
-				 rows="2" style="width:100%; overflow-y: scroll;"></textarea>
+			<td colspan="3" menual-shw-wrn="tkbkDataVO.menualShwWrn">			
+				<input class="k-textbox" name="NO_INVO" data-bind="value: NO_INVO"
+					placeholder="송장번호는  숫자 또는 숫자와 '-'(특수문자) 조합으로만 가능합니다."
+					autocomplete="off"
+				 	style="width:100%;"></textarea>
 			</td> 
 		</tr>
 

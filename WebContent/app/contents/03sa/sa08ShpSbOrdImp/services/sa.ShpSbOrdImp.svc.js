@@ -16,14 +16,6 @@
 					return $http({
 						method	: "GET",
 						url		: APP_CONFIG.domain +"/shpbyord/shplist/*",
-					}).success(function (data, status, headers, config) {
-						if(data !== ""){
-							//alert("주문확정 처리 되었습니다.");
-						}else{
-							//alert("주문확정 처리 실패 하었습니다.");
-						}
-					}).error(function (data, status, headers, config) {
-						alert("시스템 오류 관리자에게 문의 하세요.");
 					});
 				},
 				
@@ -32,14 +24,6 @@
 					return $http({
 						method	: "POST",
 						url		: APP_CONFIG.domain +"/sa08ShpImp/excelImport",
-					}).success(function (data, status, headers, config) {
-						if(data !== ""){
-							//alert("주문확정 처리 되었습니다.");
-						}else{
-							//alert("주문확정 처리 실패 하었습니다.");
-						}
-					}).error(function (data, status, headers, config) {
-						alert("시스템 오류 관리자에게 문의 하세요.");
 					});
 				},
 				
@@ -49,14 +33,6 @@
 						method	: "POST",
 						url		: APP_CONFIG.domain +"/sa08ShpImp/excelExecute",
 						data	: param
-					}).success(function (data, status, headers, config) {
-						if(data !== ""){
-							//alert("주문확정 처리 되었습니다.");
-						}else{
-							//alert("주문확정 처리 실패 하었습니다.");
-						}
-					}).error(function (data, status, headers, config) {
-						alert("시스템 오류 관리자에게 문의 하세요.");
 					});
 				}
             };

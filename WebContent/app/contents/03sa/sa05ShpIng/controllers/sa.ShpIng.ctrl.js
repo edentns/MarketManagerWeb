@@ -84,77 +84,23 @@
 				                    				input.attr("data-no_invovalidation-msg", "택배사를 선택해 주세요.");
 												    return false;
 				                    			};
-				                    			if (input.is("[name='NO_INVO']") && input.val()) {				                    				
-				                					var gridPop = angular.element(document.querySelector("div[kendo-grid]")).data("kendoGrid");
-				                					var dataItem = "", parsName = "", iValue = $.trim(input.val());
+				                    			if (input.is("[name='NO_INVO']") && input.val()) {				           
 				                					var valicolunm = "no_invovalidation";
 				                	            	var regTest = /^(([\d]+)\-|([\d]+))+(\d)+$/;
+				                	            	var iValue = input.val().trim();
 				                									                					
 				                    				if (input.is("[name='NO_INVO']") && !iValue) {
 				                                     	input.attr("data-"+valicolunm+"-msg", "송장번호를 입력해 주세요.");
 				                                        return false;
 				                                    };
-				                    			    if(input.is("[name='NO_INVO']") && iValue && (iValue.trim().length > 20 || iValue.trim().length < 8)){
-				                    			    	input.attr("data-"+valicolunm+"-msg", "송장번호를 8자 이상 20자 이내로 입력해 주세요.");
+				                    			    if(input.is("[name='NO_INVO']") && iValue && (iValue.trim().length > 30 || iValue.trim().length < 3)){
+				                    			    	input.attr("data-"+valicolunm+"-msg", "송장번호를 3자 이상 30자 이내로 입력해 주세요.");
 				                                        return false;
 				                    			    };
 				                    			    if (input.is("[name='NO_INVO']") && iValue && !regTest.test(iValue.trim())) {
-				                    					input.attr("data-"+valicolunm+"-msg", "송장 번호는 택배사에 따라 숫자 또는 숫자 와 '-'(짝대기, 연속으로 안됨) 조합으로 가능합니다.");
+				                    					input.attr("data-"+valicolunm+"-msg", "송장번호는  숫자 또는 숫자와 '-'(특수문자) 조합으로만 가능합니다.");
 				                    				    return false;
-				                    				};					                    				
-				                					
-				                    				dataItem = gridPop.dataItem($("[data-uid='" + input.closest("tr").parents("table").attr("data-uid") + "']", gridPop.table));
-				                    				
-				                					if(dataItem.CD_PARS_INPUT.NM_PARS){
-				                						parsName = dataItem.CD_PARS_INPUT.NM_PARS;
-				                						
-				                						if (parsName === "기타택배") {
-				                							var pattern1 = /^[0-9a-zA-Z]{9,12}$/i;
-				                							var pattern2 = /^[0-9a-zA-Z]{18}$/i;
-				                							var pattern3 = /^[0-9a-zA-Z]{25}$/i;
-				                							if(iValue.search(pattern1) === -1 && iValue.search(pattern2) === -1 && iValue.search(pattern3) === -1) {
-				                							   input.attr("data-"+valicolunm+"-msg", parsName+"의 운송장 번호 패턴에 맞지 않습니다.");
-				                							   return false;
-				                							};
-				                						} else if (parsName === "EMS") {
-				                							var pattern = /^[a-zA-Z]{2}[0-9]{9}[a-zA-Z]{2}$/;
-				                							if(iValue.search(pattern) === -1) {
-				                								input.attr("data-"+valicolunm+"-msg", parsName+"의 운송장 번호 패턴에 맞지 않습니다.");
-				                							    return false;
-				                							};
-				                						} else if (parsName === "한진택배" || parsName === "현대택배") {
-				                								if(!$.isNumeric(iValue)) {
-				                								    input.attr("data-"+valicolunm+"-msg", "운송장 번호는 숫자만 입력해주세요.");
-				                								    return false;
-				                								}else if( iValue.length != 10 && iValue.length != 12 ) {
-				                								    input.attr("data-"+valicolunm+"-msg", parsName+"의 운송장 번호는 10자리 또는 12자리의 숫자로 입력해주세요.");
-				                								    return false;
-				                								};
-				                						} else if (parsName === "경동택배") {
-				                							    if(!$.isNumeric(iValue)) {
-				                								    input.attr("data-"+valicolunm+"-msg", "운송장 번호는 숫자만 입력해주세요.");
-				                								    return false;
-				                							    }else if(iValue.length != 9 && iValue.length != 10 && iValue.length != 11) {
-				                								    input.attr("data-"+valicolunm+"-msg",parsName+"의 운송장 번호는 9자리 또는 10자리 또는 11자리의 숫자로 입력해주세요.");
-				                								    return false;
-				                							    };
-				                						} else if (parsName === "이노지스택배") {
-				                							    if(!$.isNumeric(iValue)) {
-				                								    input.attr("data-"+valicolunm+"-msg", "운송장 번호는 숫자만 입력해주세요.");
-				                								    return false;
-				                							    }else if(iValue.length > 13) {
-				                								    input.attr("data-"+valicolunm+"-msg",parsName+"의 운송장 번호는 최대 13자리의 숫자로 입력해주세요.");
-				                								    return false;
-				                							    };
-				                						} else if (parsName === "TNT Express") {
-				                								var pattern1 = /^[a-zA-Z]{2}[0-9]{9}[a-zA-Z]{2}$/;
-				                								var pattern2 = /^[0-9]{9}$/;
-				                								if(iValue.search(pattern1) === -1 && iValue.search(pattern2) === -1) {
-				                								   input.attr("data-"+valicolunm+"-msg", parsName+"의 운송장 번호 패턴에 맞지 않습니다.");
-				                								   return false;
-				                								};
-				                						};
-				                					}
+				                    				};				
 				                					//shippingDataVO.manualDataBind(input, 'NO_INVO');
 				                    			}
 			                					return true;
@@ -201,7 +147,7 @@
 	            	datesetting : {
 	        			dateType   : 'market',
 						buttonList : ['current', '1Day', '1Week', '1Month'],
-						selected   : '1Week',
+						selected   : Util03saSvc.storedDatesettingLoad("shippingParam"),
 						period : {
 							start : angular.copy(today),
 							end   : angular.copy(today)
@@ -226,7 +172,8 @@
 	        			dataSource: parsCodeOp,
 	        			dataTextField: "NM_PARS_TEXT",
                         dataValueField: "CD_PARS"
-	        		}
+	        		},
+	        		menualShwWrn : ""
 	            };      
 	            
                 //팝업에 입력창들이 NG-IF 인하여 데이터 바인딩이 안되서 수동으로 데이터 바인딩을 함
@@ -420,16 +367,35 @@
                 						return;
                 					};
                 					
+                					alert("송장번호 체크로 인하여 처리시간이 다소 소요 될수 있습니다.");
+                					
                 					saShpIngSvc.edit(param[0]).then(function (res) {
-                						defer.resolve();
-                						if(res.data === "success"){
+                						var rtnV = res.data,
+                							allV = rtnV.allNoOrd,
+	        							    trueV = rtnV.trueNoOrd,	        							    
+	        							    falseV = rtnV.falseNoOrd;
+                						
+                						if(!rtnV){
+                							alert("실패하였습니다.");
+                							e.error([]);
+                							return false;
+                						};
+                						
+	        	            			if(trueV.length > 0){
                 							alert("배송정보를 수정 하였습니다.");
-    	            						$scope.shippingkg.dataSource.read();
-                						}else{
-                							alert("배송정보를 수정하는데 실패 하였습니다.");
+	        	            				defer.resolve();		         
+                							Util03saSvc.storedQuerySearchPlay(shippingDataVO, "shippingParam");
+	        	            			}else if(falseV.length > 0){
+	        	            				shippingDataVO.menualShwWrn = falseV;
+	        	            				e.error([]);
+	        	            				defer.resolve();            		
+	        	            			}else if(allV.length < 1){
+	        	            				alert("배송정보를 수정하는데 실패 하였습니다.");
                 							e.error();
-                						}
+	        	            				defer.resolve();            		
+	        	            			};		        	            			
                 					}, function(err){
+                						defer.reject(err.data);
                 						e.error([]);
                 					});                 					
 		                			return defer.promise;

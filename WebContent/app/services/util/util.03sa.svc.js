@@ -8,9 +8,7 @@
 	 */
 	angular.module('edtApp.common.service').service('Util03saSvc', ['$rootScope', '$state', '$window', '$http', '$timeout', 'APP_CONFIG', 'MenuSvc', 'UtilSvc',
 		function ($rootScope, $state, $window, $http, $timeout, APP_CONFIG, MenuSvc, UtilSvc) {
-			var user = $rootScope.webApp.user,
-				menu = $rootScope.webApp.menu;
-						
+		
 			//popup insert & update Validation
             this.readValidation = function(idx){
             	var result = true;
@@ -27,8 +25,12 @@
             	var regTest = /^(([\d]+)\-|([\d]+))+(\d)+$/;
             	var iValue = input.val().trim(); 
  			                	
-			    if (input.is("[name='"+colunm+"']") && !iValue) {
+			    if (input.is("[name='"+colunm+"']") && !iValue && valicolunm !== "no_invo_non_blank_validation") {
                  	input.attr("data-"+valicolunm+"-msg", "송장번호를 입력해 주세요.");
+                    return false;
+                };
+                if (input.is("[name='"+colunm+"']") && iValue && (iValue.length<3 || iValue.length>30)) {
+                 	input.attr("data-"+valicolunm+"-msg", "송장번호를 3자 이상 30자 이하로 입력해 주세요.");
                     return false;
                 };
         		if (input.is("[name='"+colunm+"']") && iValue && !regTest.test(iValue.trim())) {
@@ -106,12 +108,12 @@
         			me.orderNo.value = getParam.NO_MRKORD;
         			me.buyerName.value = getParam.NM_PCHR || getParam.NM_CONS; 
         			
-    				me.datesetting.period.start.y = df.substring(0,4);
-        			me.datesetting.period.start.m = df.substring(4,6);
-        			me.datesetting.period.start.d = df.substring(6,8); 					    
-        			me.datesetting.period.end.y = dt.substring(0,4);
-				   	me.datesetting.period.end.m = dt.substring(4,6); 
-				   	me.datesetting.period.end.d = dt.substring(6,8);
+    				//me.datesetting.period.start.y = df.substring(0,4);
+        			//me.datesetting.period.start.m = df.substring(4,6);
+        			//me.datesetting.period.start.d = df.substring(6,8); 					    
+        			//me.datesetting.period.end.y = dt.substring(0,4);
+				   	//me.datesetting.period.end.m = dt.substring(4,6); 
+				   	//me.datesetting.period.end.d = dt.substring(6,8);
 				   	
 				   	if(me.admin){
 				   		var a = me.admin; 
@@ -132,29 +134,47 @@
     				me.inQuiry();
         		};
 			};
+			
 			//로컬 스토리지			
 			this.localStorage = {
 				setItem: function(name, data) {
-					var key = user.NO_C+user.NO_EMP+name;
+					var user = $rootScope.webApp.user,	
+						noC = user.NO_C,
+						noEmp = user.NO_EMP,
+						key = noC+noEmp+name;
 					$window.localStorage.setItem(key, JSON.stringify(data));
 				},				
-				getItem: function(name) {
+				getItem: function(name) {					
+					var user = $rootScope.webApp.user,
+						noC = user.NO_C,
+					    noEmp = user.NO_EMP,
+					    key = noC+noEmp+name,
+						result = $window.localStorage.getItem(key);
 					if (!user){
 						return '';
 					};
-					
-					var key = user.NO_C+user.NO_EMP+name,
-						result = $window.localStorage.getItem(key);
-					
 					if (result) {
 						result = JSON.parse(result);
 					}					
 					return result;
 				},                
-                removeItem: function(name) {   
-					var key = user.NO_C+user.NO_EMP+name;               
+                removeItem: function(name) {  
+                	var user = $rootScope.webApp.user,
+                		noC = user.NO_C,
+						noEmp = user.NO_EMP,
+						key = noC+noEmp+name;              
                     $window.localStorage.removeItem(key);
                 }
+			};
+			
+			this.storedDatesettingLoad = function(name, vo){
+				var storedData = this.localStorage.getItem(name);
+				
+				if(storedData){					
+					return storedData.DTS_SELECTED; 
+				}else{
+					return "1Week";
+				}
 			};
 		}
 	]);

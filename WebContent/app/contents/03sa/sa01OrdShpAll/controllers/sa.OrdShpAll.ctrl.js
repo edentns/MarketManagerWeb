@@ -83,7 +83,7 @@
 	            	datesetting : {
 	        			dateType   : 'market',
 						buttonList : ['current', '1Day', '1Week', '1Month'],
-						selected   : '1Week',
+						selected   : Util03saSvc.storedDatesettingLoad("ordAllDataVO"),
 						period : {
 							start : angular.copy(today),
 							end   : angular.copy(today)

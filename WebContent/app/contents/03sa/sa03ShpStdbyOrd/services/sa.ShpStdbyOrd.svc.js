@@ -54,56 +54,8 @@
 						method	: "POST",
 						url		: APP_CONFIG.domain +"/shpbyord/shpinreg",
 						data	: param
-					}).success(function (data, status, headers, config) {
-						if(data === "success"){
-							alert("배송정보를 등록 하였습니다.");
-						}else{
-							alert("배송정보를 등록 실패 하였습니다.");
-						}
-					}).error(function (data, status, headers, config) {
-						alert("시스템 오류 관리자에게 문의 하세요.");
 					});
-				},	
-				
-				/**
-				 * 송장 출력
-				 */
-				noout : function (param) {					
-					return $http({
-						method	: "POST",
-						url		: APP_CONFIG.domain +"/shpbyord/noout",
-						data	: param
-					}).success(function (data, status, headers, config) {
-						if(data === "success"){
-							alert("송장정보를 출력 하였습니다.");
-						}else{
-							alert("송장정보 출력을 실패 하였습니다.");
-						}
-					}).error(function (data, status, headers, config) {
-						alert("시스템 오류 관리자에게 문의 하세요.");
-					});
-				},
-				
-				/**
-				 * 배송 정보 전송
-				 */
-				shpinsend : function (param) {					
-					return $http({
-						method	: "POST",
-						url		: APP_CONFIG.domain +"/shpbyord/shpinsend",
-						data	: param
-					}).success(function (data, status, headers, config) {
-						if(data === "success"){
-							alert("배송정보를 전송 하였습니다.");
-						}else if (data === "already"){
-							location.reload();
-						}else{
-							alert("배송정보 전송을 실패 하였습니다.");
-						}
-					}).error(function (data, status, headers, config) {
-						alert("시스템 오류 관리자에게 문의 하세요.");
-					});
-				},
+				},								
 				
 				/**
 				 * 택배사 코드
@@ -131,7 +83,107 @@
 					}).error(function (data, status, headers, config) {
 						alert("시스템 오류로 인하여 택배사 코드가 표시되지 않았습니다.");
 					});
-				}
+				},
+				
+				/**
+				 *  유효성 검사
+				 * */
+	            updateValidation : function(param, btnCase){
+	            	var tempParam = "",
+	            	       result = true;
+	            	tempParam = param.filter(function(ele){
+						return ele.ROW_CHK === true;
+					});
+	            	if(tempParam.length < 1){
+	            		alert("등록 하실 행을 선택해 주세요");
+						return false;
+	            	}
+	            	switch(btnCase){
+	            		case '001' : {
+	            			var i = 0;
+	            			for(i; i< tempParam.length; i+=1){
+	            				if(tempParam[i].CD_ORDSTAT > '002'){
+	    	            			alert('주문상태가 신규주문, 상품준비중 일때 가능 합니다.');
+	    	            			result = false;
+	        						return;
+	    	            		}
+	            			};
+	            			break;
+	            		}
+	            		case '002' : {
+	            			var i = 0;
+	            			for(i; i< tempParam.length; i+=1){
+	            				if(tempParam[i].CD_ORDSTAT !== '002'){
+	    	            			alert('주문상태가 상품준비중 일때 가능 합니다.');
+	    	            			result = false;
+	        						return;
+	    	            		}
+	    	            		if(!tempParam[i].CD_PARS){
+	    	            			alert('택배사를 입력해 주세요.');
+	    	            			result = false;
+	        						return;
+	    	            		}
+	    	            		if(!tempParam[i].NO_INVO){
+	    	            			alert('송장 번호를 입력해 주세요.');
+	    	            			result = false;
+	        						return;
+	    	            		}	    	            		
+	    	            		if(tempParam[i].NO_INVO){
+	    	            			var regTest = /^(([\d]+)\-|([\d]+))+(\d)+$/;
+	    	                    	var iValue = tempParam[i].NO_INVO;
+	    	                    	
+	    	                        if (iValue.length<3 || iValue.length>30) {
+	    	                        	alert("송장번호를 3자 이상 30자 이하로 입력해 주세요.");
+	    	                         	result = false;
+		        						return false;
+	    	                        };
+	    	                		if (iValue && !regTest.test(iValue.trim())) {
+	    	                			alert("송장번호는  숫자 또는 숫자와 '-'(특수문자) 조합으로만 가능합니다.");
+	    	         					result = false;
+		        						return false;
+	    	         				};
+	    	            		}
+	            			};
+	            			break;
+	            		}
+	            		case '003' : {
+	            			var i = 0;
+	            			for(i; i< tempParam.length; i+=1){
+	            				if(tempParam[i].CD_ORDSTAT !== '004'){
+	    	            			alert('주문상태가 배송중 일때 가능 합니다.');
+	    	            			result = false;
+	        						return;
+	    	            		}
+	    	            		if(!tempParam[i].CD_PARS){
+	    	            			alert('택배사를 입력해 주세요.');
+	    	            			result = false;
+	        						return;
+	    	            		}
+	    	            		if(!tempParam[i].NO_INVO){
+	    	            			alert('송장 번호를 입력해 주세요.');
+	    	            			result = false;
+	        						return;
+	    	            		}
+	            			};
+	            			break;
+	            		} 	
+	            		default : {
+	            			break;
+	            		}
+	            	}	  
+	            	return result;
+	            },
+				
+				/**
+				 * 택배사 객체 필터링
+				 * */	            
+	            filteringShpbox : function(inputc, vo){
+	            	var changDbbox = "";
+	            	changDbbox = vo.shipCodeTotal.filter(function(element){
+						return (element.NO_MRK === inputc);
+					});	 
+	            	return changDbbox;
+	            }
             };
         }]);
 }());

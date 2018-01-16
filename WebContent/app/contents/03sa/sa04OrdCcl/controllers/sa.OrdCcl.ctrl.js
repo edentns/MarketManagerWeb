@@ -7,8 +7,8 @@
      * 상품분류관리
      */
     angular.module("sa.OrdCcl.controller")
-        .controller("sa.OrdCclCtrl", ["$scope", "$http", "$q", "$log", "sa.OrdCclSvc", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "MenuSvc", "Util03saSvc", "APP_SA_MODEL",
-            function ($scope, $http, $q, $log, saOrdCclSvc, APP_CODE, $timeout, resData, Page, UtilSvc, MenuSvc, Util03saSvc, APP_SA_MODEL) {
+        .controller("sa.OrdCclCtrl", ["$scope", "$window", "$http", "$q", "$log", "sa.OrdCclSvc", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "MenuSvc", "Util03saSvc", "APP_SA_MODEL",
+            function ($scope, $window, $http, $q, $log, saOrdCclSvc, APP_CODE, $timeout, resData, Page, UtilSvc, MenuSvc, Util03saSvc, APP_SA_MODEL) {
 	            var page = $scope.page = new Page({ auth: resData.access }),
 		            today = edt.getToday();		            
 	            	            
@@ -62,7 +62,7 @@
 				     					  cancel_reject_codevalidation: function (input) {
 												if (input.is("[name='cancel_reject_code']") && input.val() === "") {
 													input.attr("data-cancel_reject_codevalidation-msg", "취소거부 구분을 입력해 주세요.");	
-													 return false;
+													return false;
 												};
 												return true;
 											}
@@ -76,7 +76,7 @@
 											dts_recervalidation: function (input) {
 												if (input.is("[data-role=datepicker]")) {
 													input.attr("data-dts_recervalidation-msg", "접수일자를 정확히 입력해 주세요.");
-													manualDataBind(input, "DTS_RECER");
+													saOrdCclSvc.manualDataBind(input, "DTS_RECER", $scope.ordCancelManagementkg);
 												    return input.data("kendoDatePicker").value();
 												};
 												return true;
@@ -98,7 +98,7 @@
 				                                    return false;
 										    	}
 										    	if(input.is("[name='DC_CCLRJTCTT']") && input.val() != ""){										    		
-										    		manualDataBind(input, "DC_CCLRJTCTT");
+										    		saOrdCclSvc.manualDataBind(input, "DC_CCLRJTCTT", $scope.ordCancelManagementkg);
 										    	};
 				                            	return true;
 									    	}
@@ -115,7 +115,7 @@
 				                                    return false;
 				                                }
 										    	if(input.is("[name='CD_PARS']") && input.val()){										    		
-										    		manualDataBind(input, "CD_PARS");
+										    		saOrdCclSvc.manualDataBind(input, "CD_PARS", $scope.ordCancelManagementkg);
 										    	};
 				                            	return true;
 									    	}
@@ -134,7 +134,7 @@
 						            		   if (input.is("[name='NO_INVO']") && input.val()) {
 						            			   var rslt = Util03saSvc.NoINVOValidation(input, 'NO_INVO', 'no_invovalidation');
 						            			   if(rslt){
-						            				   manualDataBind(input, "NO_INVO");
+						            				   saOrdCclSvc.manualDataBind(input, "NO_INVO", $scope.ordCancelManagementkg);
 						            			   }							            			   
 						            			   return rslt; 
 				                               }
@@ -143,27 +143,7 @@
 						               }
                     				}
                    
-                };
-	            
-	            var manualDataBind = function(input, target){
-	            	var getUid = input.parents("table").attr("data-uid"),
-	            	    grid = $scope.ordCancelManagementkg,
-	            	    viewToRow = $("[data-uid='" + getUid + "']", grid.table),
-	            	    dataItem = grid.dataItem(viewToRow);								                	    
-	            	
-	            	if(target === "CD_PARS"){
-	            		var i, chosenPureData = input.data().handler.dataSource.data();
-	            		for(i=0; i<chosenPureData.length; i++){
-	            			if(chosenPureData[i]["CD_DEF"] === input.val()){
-	            				dataItem[target] = chosenPureData[i];
-	            			}
-	            		};
-	            	}else if(target === "DTS_RECER"){
-	            		dataItem[target] = kendo.toString(new Date(input.val()), "yyyyMMdd");
-	            	}else if(target === input.attr("name")){
-	            		dataItem[target] = input.val();
-	            	}
-	            };
+                };	            
 	            
 	            var ngIfdata = $scope.ngIfdata = function(input){
 	            	return input.indexOf(ordCancelManagementDataVO.cancelRjCd) > -1;
@@ -203,7 +183,7 @@
 	            	datesetting : {
 	        			dateType   : 'market',
 						buttonList : ['current', '1Day', '1Week', '1Month'],
-						selected   : '1Week',
+						selected   : Util03saSvc.storedDatesettingLoad("ordCancelParam"),
 						period : {
 							start : angular.copy(today),
 							end   : angular.copy(today)
@@ -261,6 +241,7 @@
         	                }
         	            },
 	        		},
+	        		menualShwWrn : "",
     				cancelRejectCodeOp : "",
 	        		cancelCodeMo : "",
 	        		shipCodeTotal : "",
@@ -381,8 +362,8 @@
                 	$timeout(function(){
                 		angular.element(".frm-group").find("button:eq(0)").triggerHandler("click");
                 		angular.element(".frm-group").find("button:eq(2)").triggerHandler("click");
-                	},0);                	
-                	        			
+                	},0); 
+                	
                 	me.ordStatusOp.bReset = true;
                 	me.ordMrkNameOp.bReset = true;
                 	me.cancelStatusOp.bReset = true;
@@ -434,91 +415,66 @@
             					});
                 			},
                 			update: function(e){
-                				var grd = $scope.ordCancelManagementkg;
+                				var grd = $scope.ordCancelManagementkg,
+                				 	defer = $q.defer();
                 				
-        						if(confirm("취소거부 하시겠습니까?")){        					
-                					var defer = $q.defer(),
-                						param = e.data.models[0],
-                						viewName = "";
+        						if(confirm("취소거부 하시겠습니까?")){  
+        							alert("송장번호 체크로 인하여 처리시간이 다소 소요 될수 있습니다.");
+        							var param = e.data.models[0],
+                						viewName = "",
+                						rejectCode = param.cancel_reject_code.CD_DEF,
+                						choView = ["003","004","005","006"];
                 					
-                					switch(param.cancel_reject_code.CD_DEF){
-                						case "001" : {
-                							viewName = "ocmRejectDate";
-                							break;
-                						};
-                						case "002" : {  
-                							viewName = "ocmRejectCtt";
-                							break;
-                						};
-                						case "003" : {
-                							viewName = "ocmRejectNormal";
-                							break;
-                						};
-                						case "004" : {
-                							viewName = "ocmRejectNormal";
-                							break;
-                						};
-                						case "005" : {
-                							viewName = "ocmRejectNormal";
-                							break;
-                						};
-                						case "006" : {
-                							viewName = "ocmRejectNormal";
-                							break;
-                						};
-                						default : {
-                							alert("데이터가 정확하지 않습니다.");
-                							break;
-                						}
-                					}
-                					
-                					saOrdCclSvc[viewName](param).then(function (res) {
-		                				defer.resolve();
-		                				e.success();
-		                				ordCancelManagementDataVO.inQuiry();
-		                			}, function(err){
-		                				if(err.status !== 412){
-                                        	alert(err.data);
-                                       	} 
-	            						e.error([]);
-	            					});    
-                					
-                                    /*if(param.CD_PARS){
-                                    	var argParam = [{
-                                    		deliveryType : param.CD_PARS.NM_PARS_AJAX,
-                                    		invoiceNo : param.NO_INVO
-                                    	}];
-                                    	Util03saSvc.noInvoAjaxValidation(argParam).then(function(res){ 
-                                    		if(res.data.res === 1){
-                                    			saOrdCclSvc[viewName](argParam).then(function (res) {
-            		                				defer.resolve();
-            		                				e.success();
-            		                				ordCancelManagementDataVO.inQuiry();
-            		                			}, function(err){
-            		                				if(err.status !== 412){
-                                                    	alert(err.data);
-                                                   	} 
-            	            						e.error([]);
-            	            					});                                     			 	            						
+        							if(choView.indexOf(rejectCode) > -1){
+        								viewName = "ocmRejectNormal";
+        							}else if("001".indexOf(rejectCode) > -1){
+        								viewName = "ocmRejectDate";
+        							}else if("002".indexOf(rejectCode) > -1){
+        								viewName = "ocmRejectCtt";
+        							}else{
+        								alert("데이터가 정확하지 않습니다.");
+        								grd.cancelRow();
+                	            		angular.element($(".k-checkbox:eq(0)")).prop("checked",false);
+                	            		return false;
+        							};   
+                					 
+                                    if(param.CD_PARS){
+                                    	saOrdCclSvc[viewName](param).then(function (res) {
+                                    		if(res.data === "success"){
+                    							alert("취소거부 처리 되었습니다.");
+                                    			defer.resolve({result: "success"});
+                                    			Util03saSvc.storedQuerySearchPlay(ordCancelManagementDataVO, "ordCancelParam");
+                                    		}else if(res.data === "parsreject"){
+                                    			ordCancelManagementDataVO.menualShwWrn = [res.data];
+                                    			e.error([]);
+                                    			defer.resolve({result: "success"});
                                     		}else{
-        	            						e.error([]);    
-        	            						var element = angular.element("input[name=NO_INVO]");
-        	            						var htmlMsg = '<div class="k-widget k-tooltip k-tooltip-validation k-invalid-msg" style="margin: 0.5em; display: block;" data-for="NO_INVO" role="alert"><span class="k-icon k-i-warning"> </span>'+res.data.msg+'<div class="k-callout k-callout-n"></div></div>';
-        	            						element.attr("data-no_invovalidation-msg", res.data.msg);
-        	            						element.closest("td").append(htmlMsg);       
-                                    		}                            		
-                                    	}, function(err){
-                                    		if(err.status !== 412){
-                                    			alert(err.data);
+                    							alert("취소거부 실패 하였습니다.");
+                                    			e.error([]);
+    	        	            				defer.resolve();
                                     		}
-    	            						e.error([]);    	                        			
-    	            					});                                        	
-                                    }*/
-		                			return defer.promise;
+    		                			}, function(err){    		                				
+    		                				saOrdCclSvc.afterErrProc(err);
+    		            					e.error([]);
+    		            					defer.reject(err.data);
+    	            					});                                          	
+                                    }else{
+	                                	saOrdCclSvc[viewName](param).then(function (res) {			                				
+			                				e.success();
+			                				defer.resolve({result: "success"});
+			                				ordCancelManagementDataVO.inQuiry();
+			                			}, function(err){
+			                				saOrdCclSvc.afterErrProc(err);
+			            					e.error([]);
+			            					defer.reject(err.data);
+		            					}); 
+                                    }
             	            	}else{
             	            		grd.cancelRow();
             	            		angular.element($(".k-checkbox:eq(0)")).prop("checked",false);
+            	            		return false;
             	            	};
+	                			return defer.promise;
                 			},
                 			parameterMap: function(e, operation) {
                 				if(operation !== "read" && e.models) {
@@ -607,6 +563,10 @@
                         					var cdParsDdl = e.sender.element.parents("table").find("select[name=CD_PARS]"),
                         						noInvoTxt = e.sender.element.parents("table").find("input[name=NO_INVO]");
                         					
+                        					if(!inputDataSource.length){
+                        						inputDataSource = [{NM_PARS_TEXT : "택배사 등록", CD_PARS : ""}];
+                                        	}                        					
+                        					
                     						cdParsDdl.kendoDropDownList({
                                     			dataSource : inputDataSource,
                                         		dataTextField : "NM_PARS_TEXT",
@@ -616,6 +576,10 @@
                                         			if(e.sender.selectedIndex > 0 ){
                                         				e.sender.element.closest("tr").find("div.k-invalid-msg").hide();
                                         			}
+                                        			if(this.text() === "택배사 등록" && this.selectedIndex === 1){
+    		                                    		$window.open("/#/99sy/syPars?menu=true","_self");
+    		                                    		$scope.ordCancelManagementkg.cancelRow();
+    		                                    	}
                                         		}
                     						});    
                     						

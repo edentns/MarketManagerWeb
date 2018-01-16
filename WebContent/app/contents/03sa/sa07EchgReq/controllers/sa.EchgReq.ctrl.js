@@ -155,7 +155,7 @@
 	            	datesetting : {
 	        			dateType   : 'market',
 						buttonList : ['current', '1Day', '1Week', '1Month'],
-						selected   : '1Week',
+						selected   : Util03saSvc.storedDatesettingLoad("echgDataVO"),
 						period : {
 							start : angular.copy(today),
 							end   : angular.copy(today)
@@ -207,7 +207,8 @@
 	        		completeShowMrkCode : ['170104','170102','170106','170103'],
 	        		completeShowCode : ['003'],
 	        		shpList : "",
-	        		curCode : ""
+	        		curCode : "",
+	        		menualShwWrn : ""
 	            };
 			       
 	            echgDataVO.initLoad = function () {
@@ -412,22 +413,13 @@
                     		case "001" : {
                     			chosenDS = echgDataVO.shpList.filter(function(ele){
         	            			return (ele.DC_RMK1 === e.model.NO_MRK && ele.DC_RMK3 === '002');
-        	            		});
+        	            		});                    			
                     			break;
                     		} 
                     		case "002" : {
                     			chosenDS = echgDataVO.cdEchgrjtOp.filter(function(ele){
         	            			return (ele.DC_RMK1 === e.model.NO_MNGMRK);
-        	            		});
-                    			
-                    			cdechgrjtrsn.kendoDropDownList({
-        	            			dataSource : chosenDS,
-        		        			dataTextField:"NM_DEF",
-        		                    dataValueField:"CD_DEF",
-        	                		optionLabel : "교환거부코드를 선택해 주세요 ",	                    
-        		                    valuePrimitive: true
-        	            		});
-                    			
+        	            		});                           			
                     			break;
                     		}
                     		case "003" : {
@@ -439,10 +431,18 @@
                     		default : {
                     			break;
                     		}                    		
-                    	}             	
-                    	                    	
-                    	cdpars.kendoDropDownList({
+                    	};             	
+                    	
+                    	cdechgrjtrsn.kendoDropDownList({
 	            			dataSource : chosenDS,
+		        			dataTextField:"NM_DEF",
+		                    dataValueField:"CD_DEF",
+	                		optionLabel : "교환거부코드를 선택해 주세요 ",	                    
+		                    valuePrimitive: true
+	            		});
+                    	
+                    	cdpars.kendoDropDownList({
+	            			dataSource : !chosenDS.length ? [{NM_PARS_TEXT : "택배사 등록", CD_PARS : ""}] : chosenDS,
 	                		dataTextField : "NM_PARS_TEXT",
 	                		dataValueField : "CD_DEF",
 	                		optionLabel : "택배사를 선택해 주세요 ",
@@ -453,7 +453,13 @@
     	                				me.element.parents("table").find(".k-invalid-msg").hide();
     	                			}
 	                			},0);
-	                		}
+	                		},
+                            change : function(e){
+                            	if(this.text() === "택배사 등록" && this.selectedIndex === 1){
+                            		$window.open("/#/99sy/syPars?menu=true","_self");
+                            		$scope.echgkg.cancelRow();
+                            	}
+                            }
 	            		});
                     },
                     cancel: function(e){
@@ -493,15 +499,34 @@
 	            								alert("배송처리 된 교환요청 주문만 승인 처리 할 수 있습니다.");
 	                    						return;
 	            							};
+	            							
+	            							alert("송장번호 체크로 인하여 처리시간이 다소 소요 될수 있습니다.");	            							
+	            							
 	            							saEchgReqSvc.echgConfirm(param[0]).then(function (res) {
-	                    						defer.resolve();
-	                    						if(res.data === "success"){
-	                    							alert("교환승인 하였습니다.");
-	        	            						$scope.echgkg.dataSource.read();
-	                    						}else{
-	                    							alert("교환승인을 실패하였습니다.");
+	                    						var rtnV = res.data,
+	                    							allV = rtnV.allNoOrd,
+	    	        							    trueV = rtnV.trueNoOrd,	    	        							    
+	    	        							    falseV = rtnV.falseNoOrd;
+	                    						
+	                    						if(!rtnV){
+                        							alert("실패하였습니다.");
+                        							e.error([]);
+                        							return false;
+                        						};
+                        						
+	    	        	            			if(trueV.length > 0){
+	    	        	            				alert("교환승인 하였습니다.");
+	    	        	            				defer.resolve();		         
+	                    							Util03saSvc.storedQuerySearchPlay(echgDataVO, "echgDataVO");
+	    	        	            			}else if(falseV.length > 0){
+	    	        	            				echgDataVO.menualShwWrn = falseV;
+	    	        	            				e.error([]);
+	    	        	            				defer.resolve();            		
+	    	        	            			}else if(allV.length < 1){
+	    	        	            				alert("교환승인을 실패하였습니다.");
 	                    							e.error();
-	                    						}
+	    	        	            				defer.resolve();            		
+	    	        	            			};		                    		
 	                    					}, function(err){
 	                    						e.error([]);
 	                    					});  
@@ -509,6 +534,7 @@
 	            						}else{
 	            							echgGrd.cancelRow();
 	            							angular.element($(".k-checkbox:eq(0)")).prop("checked",false);
+	            							return false;
 	            						};	
 	            						break;
 	            					}; 
@@ -532,6 +558,7 @@
                         							e.error();
                         						}
                         					}, function(err){
+                        						alert("실패하였습니다.");
                         						e.error([]);
                         					});                         
         		                			return defer.promise;
@@ -552,25 +579,44 @@
                         						return;
                         					};        
                         					
-                        					param[0].DTS_RECER = kendo.toString(new Date(param[0].DTS_RECER), "yyyyMMddHHmmss");   
+                        					param[0].DTS_RECER = kendo.toString(new Date(param[0].DTS_RECER), "yyyyMMddHHmmss");
+                        					
+                        					alert("송장번호 체크로 인하여 처리시간이 다소 소요 될수 있습니다.");
                         					
                         					saEchgReqSvc.echgCompleted(param[0]).then(function (res) {
-                        						defer.resolve();
-                        						if(res.data === "success"){
+                        						var rtnV = res.data,
+	                    							allV = rtnV.allNoOrd,
+	    	        							    trueV = rtnV.trueNoOrd,
+	    	        							    falseV = rtnV.falseNoOrd;
+                        						
+                        						if(!rtnV){
+                        							alert("실패하였습니다.");
+                        							e.error([]);
+                        							return false;
+                        						};
+	    	        	            			
+	    	        	            			if(trueV.length > 0){
                         							alert("교환완료 하였습니다.");
-                        							//echgDataVO.ordStatusMo = (echgDataVO.ordStatusMo === '*') ? echgDataVO.ordStatusMo : echgDataVO.ordStatusMo + "^008";
-            	            						$scope.echgkg.dataSource.read();
-                        						}else{
+	    	        	            				defer.resolve();		         
+	                    							Util03saSvc.storedQuerySearchPlay(echgDataVO, "echgDataVO");
+	    	        	            			}else if(falseV.length > 0){
+	    	        	            				echgDataVO.menualShwWrn = falseV;
+	    	        	            				e.error([]);
+	    	        	            				defer.resolve();            		
+	    	        	            			}else if(!allV.length < 1){
                         							alert("교환완료를 실패하였습니다.");
-                        							e.error();
-                        						}
+	                    							e.error();
+	    	        	            				defer.resolve();            		
+	    	        	            			};		   
                         					}, function(err){
+                        						alert("실패하였습니다.");
                         						e.error([]);
                         					});                         					
         		                			return defer.promise;
                     	            	}else{
 	            							echgGrd.cancelRow();
 	            							angular.element($(".k-checkbox:eq(0)")).prop("checked",false);
+	            							return false;
 	            						};
                 						break;
                 					};

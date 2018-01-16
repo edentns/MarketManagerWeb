@@ -7,8 +7,8 @@
      * 상품분류관리
      */
     angular.module("sa.Ord.controller")
-        .controller("sa.OrdInfoCtrl", ["$stateParams", "$scope", "$state", "$http", "$q", "$log", "sa.OrdSvc", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "MenuSvc", "sa.ShpStdbyOrdSvc", 
-            function ($stateParams, $scope, $state, $http, $q, $log, saOrdSvc, APP_CODE, $timeout, resData, Page, UtilSvc, MenuSvc, ShpStdbyOrdSvc) {
+        .controller("sa.OrdInfoCtrl", ["$stateParams", "$window", "$scope", "$state", "$http", "$q", "$log", "sa.OrdSvc", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "MenuSvc", "sa.ShpStdbyOrdSvc", "Util03saSvc",  
+            function ($stateParams, $window, $scope, $state, $http, $q, $log, saOrdSvc, APP_CODE, $timeout, resData, Page, UtilSvc, MenuSvc, ShpStdbyOrdSvc, Util03saSvc) {
 	            //var page  = $scope.page = new Page({ auth: resData.access }),
 		        //    today = edt.getToday();
         	        		
@@ -74,10 +74,15 @@
 		        	                		if(res.data.length > 0){
 		        	                			e.success(res.data);
 		        	                		}else{
-		        	                			e.error([]);
-		        	                			alert("택배사를 설정해 주세요.");
+		        	                			if(confirm("택배사를 등록해 주세요.\n확인을 누르시면 택배사 관리페이지로 이동합니다.")){
+		        	                				$window.open("/#/99sy/syPars?menu=true","_self");
+		        	                			}else{
+		        	                				e.success([]);
+		        	                				e.success([{NM_PARS_TEXT : "택배사 등록", CD_PARS : ""}]);
+		        	                			}
 		        	                		}
 	                        			}, function(err){
+	                        				alert("택배사 로딩 오류");
 	                						e.error([]);
 	                					});	        	                		
 	        	                	}else{
@@ -89,7 +94,12 @@
 	        			dataTextField: "NM_PARS_TEXT",
                         dataValueField: "CD_PARS",
                     	valuePrimitive: false,
-                    	optionLabel : "-- 택배사를 선택해 주세요 --"
+                    	optionLabel : "-- 택배사를 선택해 주세요 --",
+                        change : function(e){
+                        	if(this.text() === "택배사 등록" && this.selectedIndex === 1){
+                        		$window.open("/#/99sy/syPars?menu=true","_self");
+                        	}
+                        }
 	        		},
 	        		orderInfo : { boxTitle : "주문 정보" },
 	        		procInfo : { boxTitle : "제품 정보" },
@@ -100,7 +110,8 @@
 	        			CD_CCLRSN : "",
 	        			CD_CCLLRKRSN : "",
 	        			DC_CCLRSNCTT : ""
-	        		}
+	        		},
+	        		resChk : true 
 		        };
 	            	            	            
 	            ordInfoDataVO.getInitializeOrdInfoProc = function(){
@@ -130,8 +141,6 @@
         	        				}
         	        			});
         		            }());
-        	            	
-        	            	//cancelReasonCode();
         	            	
         	            	$timeout(function(){
         						var selectDDL = angular.element("#CD_PARS").data("kendoDropDownList");
@@ -167,19 +176,37 @@
 	            
 	            //배송정보 등록	
 	            ordInfoDataVO.shpInfoReg = function(){
-	            	if(!this.valid('003')){
+	            	var me = this;
+	            	if(!me.valid('003')){
 	            		return false;
-	            	}
-	            	            	
+	            	};	            	            	
 	            	if(confirm("배송정보를 등록 하시겠습니까?")){
 	            		var defer = $q.defer(),
-	            			param = [$.extend({ROW_CHK: true}, ordInfoDataVO.ds)];
+	            			param = [$.extend({ROW_CHK: true}, me.ds)];
 	            		
+	            		alert("송장번호 체크로 인하여 처리시간이 다소 소요 될수 있습니다.");
+	            		ordInfoDataVO.resChk = true;
 	            		ShpStdbyOrdSvc.shpInReg(param).then(function (res) {
-            				defer.resolve();            		
-            				location.reload();
+	            			var rtnV = res.data,
+	            				allV = rtnV.allNoOrd,
+							    trueV = rtnV.trueNoOrd,
+							    falseV = rtnV.falseNoOrd;
+	            			
+	            			if(trueV.length > 0){
+		            			alert("배송정보등록이 완료 되었습니다.");
+	            				me.getInitializeOrdInfoProc();
+	            				defer.resolve();		            
+	            				//location.reload();            		
+	            			}else if(falseV.length > 0){
+	            				ordInfoDataVO.resChk = false;    
+	            				angular.element("input[name=NO_INVO]").blur();
+	            				defer.resolve();            		
+	            			}else if(!allV){
+	            				alert("배송정보등록이 실패하였습니다.");
+	            				defer.reject();
+	            			}
             			}, function(err){
-    						e.error([]);
+            				defer.reject(err.data);
     					});
 	        			return defer.promise;
 	            	}
@@ -187,19 +214,20 @@
 	            
 	            //유효성 검사
 		        ordInfoDataVO.valid = function(stat){
-		        	if(this.ds.CD_ORDSTAT === "002"){
-		        		if(!this.ds.CD_PARS){
+		        	var me = this;
+		        	if(me.ds.CD_ORDSTAT === "002" || me.ds.CD_ORDSTAT === "003"){
+		        		if(!me.ds.CD_PARS){
 			        		//angular.element("input[name=CD_PARS]").focus();
 		            		return false;
 		            	}
-		            	if(!this.ds.NO_INVO || this.ds.NO_INVO.length > 20 || this.ds.NO_INVO.length < 8){
+		            	if(!me.ds.NO_INVO || this.ds.NO_INVO.length > 30 || this.ds.NO_INVO.length < 3){
 		            		//angular.element("input[name=NO_INVO]").focus();
 		            	    return false;
 		            	}
-		            	if(!this.ds.CD_PARS){
+		            	if(!me.ds.CD_PARS){
 		            		return false;
 		            	}
-		            	if(this.ds.CD_PARS){            			            		
+		            	if(me.ds.CD_PARS){
 		            		return $scope.myValidatorOptions.rules.reg(angular.element("[name=NO_INVO]")); 
 		            	}
 		        	}
@@ -224,7 +252,7 @@
 	            		me.getInitializeOrdInfoProc();
 	            	}else{
 	                    me.goBack(me.rootMenu);	                    
-	            	}
+	            	};
 		        };		        
 		        
 		        ordInfoDataVO.goBack = function(root) {
@@ -296,7 +324,7 @@
                 			location.reload();      						
             			});
             			return defer.promise;
-	            	}
+	            	};
 	            };
 	            	            
 	            ordInfoDataVO.doOrdConfirm = function(){
@@ -311,18 +339,19 @@
 	        				location.reload();
 	        			});
 	        			return defer.promise;
-	            	}
+	            	};
 	            };
 	            
 	            //주문상태에 따라서 버튼 숨김 유무
 	            ordInfoDataVO.buttonHidden = function(code){
-	            	if(code === "002" && this.ds.CD_ORDSTAT < code){
+	            	var me = this;
+	            	if(code === "002" && me.ds.CD_ORDSTAT !== "002"){
 	            		return false;
 	            	};
-	            	if((code === "001" || code === "003" )&& this.ds.CD_ORDSTAT > code){
+	            	if((code === "001" || code === "003" )&& me.ds.CD_ORDSTAT > code){
 	            		return false;
 	            	};
-	            	if(code === "004" && this.ds.CD_ORDSTAT === "001"){
+	            	if(code === "004" && (me.ds.CD_ORDSTAT === "001" || me.ds.CD_ORDSTAT === "006")){
 	            		return false;
 	            	};
 	            	return true;
@@ -339,100 +368,57 @@
                         },
                         reg: function(input) {
                             return (ordInfoDataVO.ordCancelPopOptionsOpenChk) ? true : input.data("reg-msg");
-                        } 
+                        },
+                        response: function(input) {
+                            return (ordInfoDataVO.ordCancelPopOptionsOpenChk) ? true : input.data("response-msg");
+                        }
                     },
                     rules: {
                     	lengthy: function(input) {
 	                        if (input.is("[name=NO_INVO]")) {                 	
-	                            return (ordInfoDataVO.ordCancelPopOptionsOpenChk) ? true : (input.val().length < 20 && input.val().length > 7);
+	                            return (ordInfoDataVO.ordCancelPopOptionsOpenChk) ? true : (input.val().length < 31 && input.val().length > 3);
 	                        }
-	                        if (input.is("[name=DC_CCLRSNCTT]")) {                 	
+	                        if (input.is("[name=DC_CCLRSNCTT]")) {
 	                            return (input.val().length < 1000 && input.val().length > 4);
 	                        }	        
-	                        return true;  
+	                        return true;
                     	},
                     	required: function(input) {
                     		if (input.is("[name=NO_INVO]")) {                   	
                     			return (ordInfoDataVO.ordCancelPopOptionsOpenChk) ? true : input.val();
-                    		}
-                    		if (input.is("[name=CD_PARS]")) {                     	
+                    		};
+                    		if (input.is("[name=CD_PARS]")) { 	
                     			return (ordInfoDataVO.ordCancelPopOptionsOpenChk) ? true : input.val();
-                    		}
-                    		if (input.is("[name=CD_CCLLRKRSN]")) {                   	
+                    		};
+                    		if (input.is("[name=CD_CCLLRKRSN]")) {       	
                     			return input.val();
-                    		}
-                    		if (input.is("[name=CD_CCLRSN]")) {                     	
+                    		};
+                    		if (input.is("[name=CD_CCLRSN]")) {
                     			return input.val();
-                    		}
-                    		if (input.is("[name=DC_CCLRSNCTT]")) {                     	
+                    		};
+                    		if (input.is("[name=DC_CCLRSNCTT]")) {
                     			return input.val();
-                    		}                    		
+                    		};
                     		return true;
                         },
                         reg : function(input) {
-                        	
                         	if(ordInfoDataVO.ordCancelPopOptionsOpenChk) return true; 
-                        	
-                        	//var regTest = /^[0-9]{1}[0-9\-]+[0-9]{1}$/;
+                        	                        	
                         	var regTest = /^(([\d]+)\-|([\d]+))+(\d)+$/;
-							var valicolunm = "reg";
-							var iValue = input.val();
-                        	
-                        	if (input.is("[name='NO_INVO']") && !regTest.test(input.val())) {
-							    return false;
-							};															
-							if (ordInfoDataVO.ds.CD_PARS && input.is("[name='NO_INVO']") && input.val()) {
-								var parsName = ordInfoDataVO.ds.CD_PARS.NM_PARS;
-								
-								if (parsName == "기타택배") {
-									var pattern1 = /^[0-9a-zA-Z]{9,12}$/i;
-									var pattern2 = /^[0-9a-zA-Z]{18}$/i;
-									var pattern3 = /^[0-9a-zA-Z]{25}$/i;
-									
-									if (iValue.search(pattern1) == -1 && iValue.search(pattern2) == -1 && iValue.search(pattern3) == -1) {
-									   input.attr("data-"+valicolunm+"-msg", parsName+"의 운송장 번호 패턴에 맞지 않습니다.");
-									   return false;
-									}
-								} else if (parsName === "EMS") {
-									   var pattern = /^[a-zA-Z]{2}[0-9]{9}[a-zA-Z]{2}$/;
-									   if (iValue.search(pattern) == -1) {
-									     input.attr("data-"+valicolunm+"-msg", parsName+"의 운송장 번호 패턴에 맞지 않습니다.");
-									     return false;
-									   }	
-								} else if (parsName === "한진택배" || parsName == "현대택배") {
-										if (!$.isNumeric(iValue)) {
-										    input.attr("data-"+valicolunm+"-msg", "운송장 번호는 숫자만 입력해주세요.");
-										    return false;
-										} else if ( iValue.length != 10 && iValue.length != 12 ) {
-										    input.attr("data-"+valicolunm+"-msg", parsName+"의 운송장 번호는 10자리 또는 12자리의 숫자로 입력해주세요.");
-										    return false;
-										}		
-								} else if (parsName === "경동택배") {
-									    if (!$.isNumeric(iValue)) {
-										    input.attr("data-"+valicolunm+"-msg", "운송장 번호는 숫자만 입력해주세요.");
-										    return false;
-									    }else if (iValue.length != 9 && iValue.length != 10 && iValue.length != 11) {
-									    	input.attr("data-"+valicolunm+"-msg",parsName+"의 운송장 번호는 9자리 또는 10자리 또는 11자리의 숫자로 입력해주세요.");
-									    	return false;
-									    }
-								} else if (parsName === "이노지스택배") {
-									    if (!$.isNumeric(iValue)) {
-										     input.attr("data-"+valicolunm+"-msg", "운송장 번호는 숫자만 입력해주세요.");
-										     return false;
-									    } else if (iValue.length > 13) {
-										    input.attr("data-"+valicolunm+"-msg",parsName+"의 운송장 번호는 최대 13자리의 숫자로 입력해주세요.");
-										    return false;
-									    }
-								} else if (parsName == "TNT Express") {
-									var pattern1 = /^[a-zA-Z]{2}[0-9]{9}[a-zA-Z]{2}$/;
-									var pattern2 = /^[0-9]{9}$/;
-									if (iValue.search(pattern1) == -1 && iValue.search(pattern2) == -1) {
-										input.attr("data-"+valicolunm+"-msg", parsName+"의 운송장 번호 패턴에 맞지 않습니다.");
-										return false;
-									}
-								};
-							}
+                        	var iValue = input.val().trim();
+             			         
+                    		if (input.is("[name='NO_INVO']") && iValue && !regTest.test(iValue.trim())) {
+             				    return false;
+             				};
 							return true;
+                        },
+                        response : function(input){
+                        	var iValue = input.val().trim();
+                        	
+                        	if (input.is("[name='NO_INVO']") && iValue && !ordInfoDataVO.resChk) {
+             				    return false;
+             				};
+             				return true;
                         }
                     }
 	            };
