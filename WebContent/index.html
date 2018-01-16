@@ -1,401 +1,207 @@
-<!doctype html>
-<html lang="ko" class="no-js" data-ng-app="edtApp">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<meta charset="utf-8">
-	<title>MarketManager</title>
-	<meta http-equiv="X-UA-compatible" content="IE=edge">
-	<!-- build:css(.) assets/css/vendor.css -->
-	<link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css" />
-	<link rel="stylesheet" href="/bower_components/font-awesome/css/font-awesome.css" />
-	<link rel="stylesheet" href="/bower_components/ag-grid/dist/angular-grid.min.css" />
-	<link rel="stylesheet" href="/bower_components/ag-grid/dist/theme-fresh.min.css" />
-	<link rel="stylesheet" href="/bower_components/angular-grid/ng-grid.css" />
-	<link rel="stylesheet" href="/bower_components/angular-ui-grid/ui-grid.css" />
-	<link rel="stylesheet" href="/bower_components/jquery-ui/themes/vader/jquery-ui.min.css" />
-	<link rel="stylesheet" href="/bower_components/metisMenu/dist/metisMenu.css" />
-	<link rel="stylesheet" href="/bower_components/select2/dist/css/select2.min.css" />
-	<link rel="stylesheet" href="/bower_components/textAngular/src/textAngular.css" />
-	<!-- endbuild -->
-	<!-- build:css assets/css/modify.vendor.css -->
-	<link rel="stylesheet" href="assets/lib/jui/jui.min.css" />
-	<link rel="stylesheet" href="assets/lib/jui/jennifer.theme.min.css" />
-	<link rel="stylesheet" href="assets/lib/ng-table/css/ng-table.css" />
-	<link rel="stylesheet" href="assets/lib/datetimepicker/css/jquery.datetimepicker.css" />
-	<!-- endbuild-->
-	<!-- build:kendocss assets/css/kendoui.css -->
-	<link rel="stylesheet" href="kendoui/styles/kendo.common.min.css" />
-	<link rel="stylesheet" href="kendoui/styles/kendo.rtl.min.css" />
-    <link rel="stylesheet" href="kendoui/styles/kendo.dataviz.blueopal.min.css" id="opal"/>
-    <link rel="stylesheet" href="kendoui/styles/kendo.blueopal.min.css" id="flat"/>
-    <link rel="stylesheet" href="kendoui/styles/kendo.blueopal.mobile.min.css" />
-	<!-- endbuild-->
-	<!-- build:css assets/css/main.css -->
-	<link rel="stylesheet" href="assets/css/style.css" >
-	<link rel="stylesheet" href="assets/css/eden.common.css" >
-	<link rel="stylesheet" href="assets/css/contents-layout.css" >
-	<link rel="stylesheet" href="assets/css/main.css" >
-	<!-- endbuild -->
-	
-	
-	
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, maximum-scale=1.0, user-scalable=no">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>마켓 매니저 </title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script language='JavaScript' src='js/member.js' type="text/javascript"></script>
+<link href="/assets/css/main_page_base_style.css" rel="stylesheet">
+<link href="/assets/css/main_page_style.css" rel="stylesheet">
 </head>
-<body data-ng-cloak>
-	<!-- loader -->
-	<div data-ng-if="webApp.loader.isLoader" class="loader-board">
-		<div class="loader">
-			<img src="assets/img/common/loading/loading-large.gif" alt="로딩애니메이션">
-			<div class="message"><span>Loading..</span></div>
+
+<body>
+	
+	<div id="warp">
+		<div class="header">
+			<ul class="menu_list">
+				<li><img src="/assets/img/main-page/logo-1.jpg"/></li>
+				<li>
+					<ul class="menu">
+						<li><a href="index.html#info">소개</a></li>
+						<li><a href="index.html#char">특징</a></li>
+						<li><a href="index.html#function">주요기능</a></li>
+						<li><a href="/login.html">로그인</a></li>
+						<li><a href="/assets/download/MembershipJoin(V1.0).pdf" target="_blank">회원가입메뉴얼</a></li>
+					</ul>
+				</li>
+			</ul>
+			<div class="btn"><img src="/assets/img/main-page/menu_btn.png"  border="0" alt=""></div>
+			<div class="clearfix"></div>
 		</div>
+		
+		<div class="title">
+			<div class="title-txt">
+				<h2>쇼핑몰 통합 관리 플랫폼 서비스</h2>
+				<h1>빠르다! 안정적이다! 무료다!</h1>
+			</div>
+			<div  id="info"></div>
+		</div>
+		<div class="info">
+			<h3><span>마켓 매니저</span> 소개</h3>			
+			<div>다양한 오픈마켓을 하나로 통합하여 관리할 수 있는 플랫폼 서비스입니다.<br/>주문,배송,재고,정산 관리를 쉽고 편리하게 무료로 사용할 수 있습니다.</div>			
+			<ul>
+				<li>
+					<dl>
+						<dt><img src="/assets/img/main-page/info-1.jpg"/></dt>
+						<dd>주문배송종합</dd>
+					</dl>
+				</li>			
+				<li>
+					<dl>
+						<dt><img src="/assets/img/main-page/info-2.jpg"/></dt>
+						<dd>상품등록</dd>
+					</dl>
+				</li>		
+				<li>
+					<dl>
+						<dt><img src="/assets/img/main-page/info-3.jpg"/></dt>
+						<dd>Dashboard</dd>
+					</dl>
+				</li>			
+				<li>
+					<dl>
+						<dt><img src="/assets/img/main-page/info-4.jpg"/></dt>
+						<dd>CS관리</dd>
+					</dl>
+				</li>		
+				<div class="clearfix"></div>		
+				<div  id="char"></div>
+			</ul>	
+			
+		</div>
+		<div class="char">
+			<h3 style="color:#fff;padding-top:60px;">마켓 매니저의 특징</h3>			
+			<div>
+				<dl>
+					<dt><img src="/assets/img/main-page/char-1.jpg"/></dt>
+					<h4>편리함</h4>
+					<dd>하나의 사이트에서 다양한<br/>
+							마켓의 상품을 등록, 주문처리,<br/>
+							배송하고, 고객대응 까지<br/>
+							무료로 사용 할 수 있습니다!
+					</dd>
+				</dl>
+				<dl>
+					<dt><img src="/assets/img/main-page/char-2.jpg"/></dt>
+					<h4>업무 효율성 증가</h4>
+					<dd>조금씩 차이나는 쇼핑몰 관리를<br/>
+							일반화하여 업무가 효율적이고 <br/>
+							단순화 됩니다!
+					</dd>
+				</dl>
+				<dl>
+					<dt><img src="/assets/img/main-page/char-3.jpg"/></dt>
+					<h4>단순한 UX/UI</h4>
+					<dd>한 눈에 들어오고 한 번에<br/>
+							알 수 있는 사용자 중심의<br/>
+							UX/UI 구현
+					</dd>
+				</dl>
+				<dl>
+					<dt><img src="/assets/img/main-page/char-4.jpg"/></dt>
+					<h4>빠른 정보 입력</h4>
+					<dd>배송 정보를 엑셀파일로<br/>
+							다운로드 받고, 택배사와<br/>
+							송장번호를 입력, 업로드 하면 끝!
+					</dd>
+				</dl>
+				
+			</div>				
+			<div class="clearfix"></div>
+		<div id="function"></div>
+				
+		</div>		
+		<div class="function">	
+			<h3><span>마켓 매니저</span>의 주요기능</h3>			
+			<dl>
+				<dt>주문/배송</dt>
+				<dd>
+					<ol>
+						<li>주문정보와 배송정보를 분리 관리하고 입출배송을 하나의 구조로 통합관리</li>
+						<li>주문의 처리과정에서 배송의 처리 및 입출고 처리가 이루어지는 핵심 프로세스 제공</li>
+				</dd>
+			</dl>
+			<dl>
+				<dt>취소 / 반품 / 교환</dt>
+				<dd>
+					<ol>
+						<li>입주문/출주문, 클레임(취소, 교환) 주문을 하나의 구조로 통합관리 </li>
+						<li>프로세스에 따라 재 발송 및 회수 예정 상품을 관리</li>
+				</dd>
+			</dl>
+			<dl>
+				<dt>CS 관리</dt>
+				<dd>
+					<ol>
+						<li>마켓 별 고객의 상담정보를 관리하는 노력과 시간을 절감</li>
+						<li>구축된 정보를 활용하여 상품 및 서비스의 품질을 향상</li>
+				</dd>
+			</dl>
+			<dl>
+				<dt>상품관리</dt>
+				<dd>
+					<ol>
+						<li>상품인증서 및 공정위 상품정보 고시정보와 통합된 상품등록 관리 기능</li>
+						<li>편리한 상품종류별 속성관리 및 셀러에 맞는 상품분류관리</li>
+				</dd>
+			</dl>
+			
+			<dl class="no-function">
+				<dt><span>COMING SOON</span>재고 관리</dt>
+				<dd>
+					<ol>
+						<li>상품관리를 통한 물품의 일괄등록, 변경 등의 처리</li>
+						<li>물리/논리 재고 설정에 따른 품절 및 재고수량 관리 기능</li>
+				</dd>
+			</dl>
+			<dl class="no-function">
+				<dt><span>COMING SOON</span>정산 관리</dt>
+				<dd>
+					<ol>
+						<li>기간별로 개별마켓 및 통합된 상품별 정산 내역정보 제공</li>
+						<li>다양한 분석 정보의 제공으로 마케팅 기회를 확대</li>
+				</dd>
+			</dl>
+			
+		</div>
+		<div class="clearfix"></div>	
+		<div class="footer">
+			<img src="/assets/img/main-page/post.jpg" align="absmiddle" /><a href="mailto:help@marketmanager.co.kr" style="color:#fff">help@marketmanager.co.kr</a>
+		</div>
+			
 	</div>
-	<!--/ loader -->
-
-	<ui-view></ui-view>
 	
-	<!-- build:js(.) assets/lib/vendor0.js -->
-	<script src="/bower_components/jquery/dist/jquery.js"></script>
-	<script src="/bower_components/jquery-ui/jquery-ui.js"></script>
-	<!-- endbuild -->
+		<!-- 모바일 메뉴 -->
+		<div id="menu">
+			<div class="mobile_close" ><img src="/assets/img/main-page/menu_x.png" onclick="history.back();" width="100%"></div>
+				<ul class="menu_footer">
+				  	<li><a href="index.html#info">소개</a></li>
+					<li><a href="index.html#char">특징</a></li>
+					<li><a href="index.html#function">주요기능</a></li>
+					<li><a href="/login.html">로그인</a></li>
+					<li><a href="/assets/download/MembershipJoin(V1.0).pdf" target="_blank">회원가입메뉴얼</a></li>
+				</ul>
+			</div>
+		</div>
 	
-	<!-- build:js(.) assets/lib/vendor1.js -->
-	<script src="/bower_components/angular/angular.js"></script>
-	<script src="/bower_components/angular-ui-router/release/angular-ui-router.js"></script>
-	<script src="/bower_components/angular-grid/ng-grid-2.0.14.debug.js"></script>
-	<script src="/bower_components/angular-resource/angular-resource.js"></script>
-	<script src="/bower_components/angular-cookies/angular-cookies.js"></script>
-	<script src="/bower_components/angular-sanitize/angular-sanitize.js"></script>
-	<script src="/bower_components/angular-animate/angular-animate.js"></script>
-	<script src="/bower_components/angular-touch/angular-touch.js"></script>
-	<script src="/bower_components/angular-ui-grid/ui-grid.js"></script>
-	<script src="/bower_components/angular-bootstrap/ui-bootstrap.js"></script>
-	<script src="/bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
-	<script src="/bower_components/angular-file-upload/angular-file-upload.js"></script>
-	<script src="/bower_components/textAngular/dist/textAngular.min.js"></script>
-	<script src="/bower_components/textAngular/dist/textAngular-sanitize.min.js"></script>
-	<script src="/bower_components/textAngular/dist/textAngular-rangy.min.js"></script>
-	<!-- endbuild -->
+	</div>
+<script>
 
-	<!-- build:js(.) assets/lib/vendor2.js -->
-	<script src="/bower_components/bootstrap/dist/js/bootstrap.js"></script>
-	<script src="/bower_components/metisMenu/dist/metisMenu.js"></script>
-	<script src="/bower_components/select2/dist/js/select2.full.min.js"></script>
-	<script src="/bower_components/moment/min/moment.min.js"></script>
-	<!-- endbuild -->
+$(document).ready(function(){
+	$('.btn').click(function () {
+		$('#menu,.page_cover,html').addClass('open');
+		window.location.hash = '#open';
+	});
+	window.onhashchange = function () {
+		if (location.hash != '#open') {
+			$('#menu,.page_cover,html').removeClass('open');
+		}
+	};
+});
 
 
-	<!-- build:kendojs assets/lib/kendoui.js -->
-	<script src="kendoui/js/jszip.min.js"></script>
-	<script src="kendoui/js/kendo.all.min.js"></script>
-	<script src="kendoui/js/cultures/kendo.culture.ko-KR.min.js"></script>
-	<!-- endbuild -->
 
-	<!-- build:js assets/lib/modify.vendor0.js -->
-	<script src="assets/lib/jui/jui.js"></script>
-	<!-- endbuild-->
-
-	<!-- build:js assets/lib/modify.vendor1.js -->
-	<script src="assets/lib/datetimepicker/js/jquery.datetimepicker.js"></script>
-	<script src="assets/lib/tinymce/tinymce.min.js"></script>
-	<!-- endbuild-->
-
-	<!-- build:js assets/lib/modify.vendor2.js -->
-	<script src="assets/lib/ag-grid/angular-grid.js"></script>
-	<script src="assets/lib/ng-table/js/ng-table.js"></script>
-	<!-- endbuild-->
-
-	<!-- build:mainJS assets/js/main.min.js -->
-	<script src="assets/js/edentns-0.1.0.js"></script>
-	<script src="assets/js/edentns-app.js"></script>
-
-	<script src="app/edt.app.js"></script>
-	<script src="app/edt.constant.js"></script>
-	<script src="app/edt.config.js"></script>
-	<script src="app/edt.boot.js"></script>
-	<script src="app/edt.app.ctrl.js"></script>
-
-	<script src="app/services/auth.svc.js"></script>
-	<script src="app/services/favorites.svc.js"></script>
-	<script src="app/services/menu.svc.js"></script>
-	<script src="app/services/interceptor.svc.js"></script>
-	<script src="app/services/util/util.01ma.svc.js"></script>
-	<script src="app/services/util/util.02it.svc.js"></script>
-	<script src="app/services/util/util.03sa.svc.js"></script>
-	<script src="app/services/util/util.04cs.svc.js"></script>
-	<script src="app/services/util/util.98te.svc.js"></script>
-	<script src="app/services/util/util.99sy.svc.js"></script>
-	<script src="app/services/util/util.svc.js"></script>
-	<script src="app/services/modal.svc.js"></script>
-
-	<script src="app/filter/yn.filter.js"></script>
-	<script src="app/filter/date.filter.js"></script>
-	<script src="app/filter/number.filter.js"></script>
-	<script src="app/filter/unsafe.filter.js"></script>
-
-	<script src="app/models/page.vo.js"></script>
-	<script src="app/models/creator.vo.js"></script>
-	<script src="app/models/valid.vo.js"></script>
-	<script src="app/models/field.vo.js"></script>
-	<!-- endbuild-->
-
-	<!-- build:mainMAJS assets/js/main.min.ma.js -->
-<!-- 01ma -->
-	<script src="app/contents/01ma/ma.app.js"></script>
-	<script src="app/contents/01ma/ma01Dashboard/ma.Dashboard.app.js"></script>
-	<script src="app/contents/01ma/ma01Dashboard/controllers/ma.Dashboard.ctrl.js"></script>
-	<script src="app/contents/01ma/ma01Dashboard/controllers/ma.DashboardSetting.modal.ctrl.js"></script>
-	<script src="app/contents/01ma/ma01Dashboard/controllers/ma.JoinItem.ctrl.js"></script>
-	<script src="app/contents/01ma/ma01Dashboard/controllers/ma.MonthJoin.ctrl.js"></script>
-	<script src="app/contents/01ma/ma01Dashboard/controllers/ma.MrkItlList.ctrl.js"></script>
-	<script src="app/contents/01ma/ma01Dashboard/controllers/ma.Qa.ctrl.js"></script>
-	<script src="app/contents/01ma/ma01Dashboard/services/ma.Dashboard.svc.js"></script>
-	
-	<script src="app/contents/01ma/ma02MemJoinAppr/ma.MemJoinAppr.app.js"></script>
-	<script src="app/contents/01ma/ma02MemJoinAppr/controllers/ma.MemJoinAppr.ctrl.js"></script>
-	<script src="app/contents/01ma/ma02MemJoinAppr/services/ma.MemJoinAppr.svc.js"></script>
-	
-	<script src="app/contents/01ma/ma03MngMrk/ma.MngMrk.app.js"></script>
-	<script src="app/contents/01ma/ma03MngMrk/controllers/ma.MngMrk.ctrl.js"></script>
-	<script src="app/contents/01ma/ma03MngMrk/services/ma.MngMrk.svc.js"></script>
-	
-	<script src="app/contents/01ma/ma04MrkOpt/ma.MrkOpt.app.js"></script>
-	<script src="app/contents/01ma/ma04MrkOpt/controllers/ma.MrkOpt.ctrl.js"></script>
-	<script src="app/contents/01ma/ma04MrkOpt/services/ma.MrkOpt.svc.js"></script>
-	
-	<script src="app/contents/01ma/ma05Notice/ma.Notice.app.js"></script>
-	<script src="app/contents/01ma/ma05Notice/controllers/ma.Notice.ctrl.js"></script>
-	<script src="app/contents/01ma/ma05Notice/services/ma.Notice.svc.js"></script>
-	
-	<script src="app/contents/01ma/ma06Qa/ma.Qa.app.js"></script>
-	<script src="app/contents/01ma/ma06Qa/controllers/ma.Qa.ctrl.js"></script>
-	<script src="app/contents/01ma/ma06Qa/services/ma.Qa.svc.js"></script>
-	
-	<script src="app/contents/01ma/ma07Itl/ma.Itl.app.js"></script>
-	<script src="app/contents/01ma/ma07Itl/controllers/ma.Itl.ctrl.js"></script>
-	<script src="app/contents/01ma/ma07Itl/services/ma.Itl.svc.js"></script>
-	<!-- endbuild-->
-
-	<!-- build:mainITJS assets/js/main.min.it.js -->
-<!-- 02it -->
-	<script src="app/contents/02it/it.app.js"></script>
-	<script src="app/contents/02it/it01ItemCfct/it.ItemCfct.app.js"></script>
-	<script src="app/contents/02it/it01ItemCfct/controllers/it.ItemCfct.ctrl.js"></script>
-	<script src="app/contents/02it/it01ItemCfct/services/it.ItemCfct.svc.js"></script>
-	
-	<script src="app/contents/02it/it02BssItem/it.BssItem.app.js"></script>
-	<script src="app/contents/02it/it02BssItem/controllers/it.BssItemInfo.ctrl.js"></script>
-	<script src="app/contents/02it/it02BssItem/controllers/it.BssItemList.ctrl.js"></script>
-	<script src="app/contents/02it/it02BssItem/services/it.BssItem.svc.js"></script>
-	
-	<script src="app/contents/02it/it03SaleItem/it.SaleItem.app.js"></script>
-	<script src="app/contents/02it/it03SaleItem/controllers/it.SaleItemInfo.ctrl.js"></script>
-	<script src="app/contents/02it/it03SaleItem/controllers/it.SaleItemList.ctrl.js"></script>
-	<script src="app/contents/02it/it03SaleItem/services/it.SaleItem.svc.js"></script>
-	
-	<script src="app/contents/02it/it04SaleSiteItem/it.SaleSiteItem.app.js"></script>
-	<script src="app/contents/02it/it04SaleSiteItem/controllers/it.SaleSiteItem.ctrl.js"></script>
-	<script src="app/contents/02it/it04SaleSiteItem/services/it.SaleSiteItem.svc.js"></script>
-	<!-- endbuild-->
-	
-	<!-- build:mainSAJS assets/js/main.min.sa.js -->
-<!-- 03sa -->
-	<script src="app/contents/03sa/sa.app.js"></script>
-	<script src="app/contents/03sa/sa01OrdShpAll/sa.OrdShpAll.app.js"></script>
-	<script src="app/contents/03sa/sa01OrdShpAll/controllers/sa.OrdShpAll.ctrl.js"></script>
-	<script src="app/contents/03sa/sa01OrdShpAll/services/sa.OrdShpAll.svc.js"></script>
-
-	<script src="app/contents/03sa/sa02Ord/sa.Ord.app.js"></script>
-	<script src="app/contents/03sa/sa02Ord/controllers/sa.Ord.ctrl.js"></script>
-	<script src="app/contents/03sa/sa02Ord/services/sa.Ord.svc.js"></script>
-	
-	<script src="app/contents/03sa/sa02Ord/controllers/sa.OrdInfo.ctrl.js"></script>
-	
-	<script src="app/contents/03sa/sa03ShpStdbyOrd/sa.ShpStdbyOrd.app.js"></script>
-	<script src="app/contents/03sa/sa03ShpStdbyOrd/controllers/sa.ShpStdbyOrd.ctrl.js"></script>
-	<script src="app/contents/03sa/sa03ShpStdbyOrd/services/sa.ShpStdbyOrd.svc.js"></script>
-	
-	<script src="app/contents/03sa/sa04OrdCcl/sa.OrdCcl.app.js"></script>
-	<script src="app/contents/03sa/sa04OrdCcl/controllers/sa.OrdCcl.ctrl.js"></script>
-	<script src="app/contents/03sa/sa04OrdCcl/services/sa.OrdCcl.svc.js"></script>
-	
-	<script src="app/contents/03sa/sa05ShpIng/sa.ShpIng.app.js"></script>
-	<script src="app/contents/03sa/sa05ShpIng/controllers/sa.ShpIng.ctrl.js"></script>
-	<script src="app/contents/03sa/sa05ShpIng/services/sa.ShpIng.svc.js"></script>
-	
-	<script src="app/contents/03sa/sa06TkbkReq/sa.TkbkReq.app.js"></script>
-	<script src="app/contents/03sa/sa06TkbkReq/controllers/sa.TkbkReq.ctrl.js"></script>
-	<script src="app/contents/03sa/sa06TkbkReq/services/sa.TkbkReq.svc.js"></script>
-	
-	<script src="app/contents/03sa/sa07EchgReq/sa.EchgReq.app.js"></script>
-	<script src="app/contents/03sa/sa07EchgReq/controllers/sa.EchgReq.ctrl.js"></script>
-	<script src="app/contents/03sa/sa07EchgReq/services/sa.EchgReq.svc.js"></script>
-	
-	<script src="app/contents/03sa/sa08ShpSbOrdImp/sa.ShpSbOrdImp.app.js"></script>
-	<script src="app/contents/03sa/sa08ShpSbOrdImp/controllers/sa.ShpSbOrdImp.ctrl.js"></script>
-	<script src="app/contents/03sa/sa08ShpSbOrdImp/services/sa.ShpSbOrdImp.svc.js"></script>
-	<!-- endbuild-->
-	
-	<!-- build:mainCSJS assets/js/main.min.cs.js -->
-<!-- 04cs -->
-	<script src="app/contents/04cs/cs.app.js"></script>
-	<script src="app/contents/04cs/cs01Inq/cs.Inq.app.js"></script>
-	<script src="app/contents/04cs/cs01Inq/controllers/cs.Inq.ctrl.js"></script>
-	<script src="app/contents/04cs/cs01Inq/services/cs.Inq.svc.js"></script>
-	<!-- endbuild-->
-
-	<!-- build:mainTEJS assets/js/main.min.te.js -->
-<!-- 98te -->
-	<script src="app/contents/98te/te.app.js"></script>
-	<script src="app/contents/98te/otherkendo/te.OtherKendo.app.js"></script>
-	<script src="app/contents/98te/otherkendo/controllers/te.OtherKendo.ctrl.js"></script>
-	<script src="app/contents/98te/otherkendo/services/te.OtherKendo.svc.js"></script>
-	<!-- endbuild-->
-
-	<!-- build:mainSYJS assets/js/main.min.sy.js -->
-<!-- 99sy -->
-	<script src="app/contents/99sy/sy.app.js"></script>
-	<script src="app/contents/99sy/sy01Dashboard/sy.Dashboard.app.js"></script>
-	<script src="app/contents/99sy/sy01Dashboard/controllers/sy.Dashboard.ctrl.js"></script>
-	<script src="app/contents/99sy/sy01Dashboard/controllers/sy.DashboardSetting.modal.ctrl.js"></script>
-	<script src="app/contents/99sy/sy01Dashboard/controllers/sy.Notice.ctrl.js"></script>
-	<script src="app/contents/99sy/sy01Dashboard/controllers/sy.SaCnt.ctrl.js"></script>
-	<script src="app/contents/99sy/sy01Dashboard/controllers/sy.MrkSaCnt.ctrl.js"></script>
-	<script src="app/contents/99sy/sy01Dashboard/controllers/sy.SaMonth.ctrl.js"></script>
-	<script src="app/contents/99sy/sy01Dashboard/controllers/sy.Qa.ctrl.js"></script>
-	<script src="app/contents/99sy/sy01Dashboard/services/sy.Dashboard.svc.js"></script>
-	
-	<script src="app/contents/99sy/sy02Login/sy.Login.app.js"></script>
-	<script src="app/contents/99sy/sy02Login/controllers/sy.Login.ctrl.js"></script>
-	<script src="app/contents/99sy/sy02Login/services/sy.Login.svc.js"></script>
-	
-	<script src="app/contents/99sy/sy03RePwdReg/sy.RePwdReg.app.js"></script>
-	<script src="app/contents/99sy/sy03RePwdReg/controllers/sy.RePwdReg.ctrl.js"></script>
-	<script src="app/contents/99sy/sy03RePwdReg/controllers/sy.Ownconf.ctrl.js"></script>
-	<script src="app/contents/99sy/sy03RePwdReg/services/sy.RePwdReg.svc.js"></script>
-	
-	<script src="app/contents/99sy/sy04UserJoin/sy.UserJoin.app.js"></script>
-	<script src="app/contents/99sy/sy04UserJoin/controllers/sy.UserJoin.ctrl.js"></script>
-	<script src="app/contents/99sy/sy04UserJoin/services/sy.UserJoin.svc.js"></script>
-	
-	<script src="app/contents/99sy/sy05MyInfo/sy.MyInfo.app.js"></script>
-	<script src="app/contents/99sy/sy05MyInfo/controllers/sy.MyInfo.ctrl.js"></script>
-	<script src="app/contents/99sy/sy05MyInfo/services/sy.MyInfo.svc.js"></script>
-	
-	<script src="app/contents/99sy/sy06CInfo/sy.CInfo.app.js"></script>
-	<script src="app/contents/99sy/sy06CInfo/controllers/sy.CInfo.ctrl.js"></script>
-	<script src="app/contents/99sy/sy06CInfo/services/sy.CInfo.svc.js"></script>
-	
-	<script src="app/contents/99sy/sy07User/sy.User.app.js"></script>
-	<script src="app/contents/99sy/sy07User/controllers/sy.UserList.ctrl.js"></script>
-	<script src="app/contents/99sy/sy07User/controllers/sy.UserInfo.ctrl.js"></script>
-	<script src="app/contents/99sy/sy07User/services/sy.UserList.svc.js"></script>
-	<script src="app/contents/99sy/sy07User/services/sy.UserInfo.svc.js"></script>
-	
-	<script src="app/contents/99sy/sy08Atrt/sy.Atrt.app.js"></script>
-	<script src="app/contents/99sy/sy08Atrt/controllers/sy.Atrt.ctrl.js"></script>
-	<script src="app/contents/99sy/sy08Atrt/controllers/sy.AtrtMenu.ctrl.js"></script>
-	<script src="app/contents/99sy/sy08Atrt/services/sy.Atrt.svc.js"></script>
-	
-	<script src="app/contents/99sy/sy09Mrk/sy.Mrk.app.js"></script>
-	<script src="app/contents/99sy/sy09Mrk/controllers/sy.Mrk.ctrl.js"></script>
-	<script src="app/contents/99sy/sy09Mrk/services/sy.Mrk.svc.js"></script>
-	
-	<script src="app/contents/99sy/sy10Code/sy.Code.app.js"></script>
-	<script src="app/contents/99sy/sy10Code/controllers/sy.Code.ctrl.js"></script>
-	<script src="app/contents/99sy/sy10Code/controllers/sy.CodeCustom.ctrl.js"></script>
-	<script src="app/contents/99sy/sy10Code/controllers/sy.CodeSystem.ctrl.js"></script>
-	<script src="app/contents/99sy/sy10Code/services/sy.Code.svc.js"></script>
-	
-	<script src="app/contents/99sy/sy12Dept/sy.Dept.app.js"></script>
-	<script src="app/contents/99sy/sy12Dept/controllers/sy.Dept.ctrl.js"></script>
-	<script src="app/contents/99sy/sy12Dept/services/sy.Dept.svc.js"></script>
-	
-	<script src="app/contents/99sy/sy13Menu/sy.Menu.app.js"></script>
-	<script src="app/contents/99sy/sy13Menu/controllers/sy.Menu.ctrl.js"></script>
-	<script src="app/contents/99sy/sy13Menu/services/sy.Menu.svc.js"></script>
-	
-	<script src="app/contents/99sy/sy14Notice/sy.Notice.app.js"></script>
-	<script src="app/contents/99sy/sy14Notice/controllers/sy.Notice.ctrl.js"></script>
-	<script src="app/contents/99sy/sy14Notice/services/sy.Notice.svc.js"></script>
-	
-	<script src="app/contents/99sy/sy15Pars/sy.Pars.app.js"></script>
-	<script src="app/contents/99sy/sy15Pars/controllers/sy.Pars.ctrl.js"></script>
-	<script src="app/contents/99sy/sy15Pars/services/sy.Pars.svc.js"></script>
-	
-	<script src="app/contents/99sy/sy16Qa/sy.Qa.app.js"></script>
-	<script src="app/contents/99sy/sy16Qa/controllers/sy.Qa.ctrl.js"></script>
-	<script src="app/contents/99sy/sy16Qa/services/sy.Qa.svc.js"></script>
-	
-	<script src="app/contents/99sy/sy17Itl/sy.Itl.app.js"></script>
-	<script src="app/contents/99sy/sy17Itl/controllers/sy.Itl.ctrl.js"></script>
-	<script src="app/contents/99sy/sy17Itl/services/sy.Itl.svc.js"></script>	
-	<!-- endbuild-->
-	
-	<!-- build:mainCOMJS assets/js/main.min.com.js -->
-<!-- components -->
-	<script src="app/shared/components/dateSearchGroup/dateSearchGroup.div.js"></script>
-	<script src="app/shared/components/inlinePeriodSearch/inlinePeriodSearchDiv.js"></script>
-	<script src="app/shared/components/jui/jui-complex-chart.div.js"></script>
-	<script src="app/shared/components/jqueryDate/jqueryDateDiv.js"></script>
-	<script src="app/shared/components/jqueryDatetimepicker/jqueryDatetimepicker.div.js"></script>
-	<script src="app/shared/components/selectColumns/selectColumnsDiv.js"></script>
-	<script src="app/shared/components/simpleMonthSearch/simpleMonthSearchDiv.js"></script>
-	<script src="app/shared/components/tree/edt.angular.tree.js"></script>
-	<script src="app/shared/components/uiFileView/uiFileView.div.js"></script>
-    <script src="app/shared/components/listDrag/list-drag.div.js"></script>
-    <script src="app/shared/components/co01Mcbox/co01Mcbox.div.js"></script>
-    <script src="app/shared/components/co02Filebox/co02Filebox.div.js"></script>
-    <script src="app/shared/components/co03Imagetag/co03Imagetag.div.js"></script>
-    <script src="app/shared/components/co04CdToNm/co04CdToNm.div.js"></script>
-    <script src="app/shared/components/co05ParsToNm/co05ParsToNm.div.js"></script>
-    <script src="app/shared/components/co06DateFormat/co06DateFormat.div.js"></script>
-    <script src="app/shared/components/co07MenualShwWrn/co07MenualShwWrn.div.js"></script>
-	<script src="app/shared/components/inputboxFocus/focus.evt.js"></script>
-	
-<!-- element -->
-	<script src="app/shared/element/ae-input-click-focus.js"></script>
-	<script src="app/shared/element/edenFrom.js"></script>
-	<script src="app/shared/element/form.div.js"></script>
-<!-- layout -->
-	<script src="app/shared/layout/header/header.div.js"></script>
-	<script src="app/shared/layout/navigation/navigation.div.js"></script>
-	<script src="app/shared/layout/contents/content-box-layer-div.js"></script>
-	<script src="app/shared/layout/contents/content-search-layer-div.js"></script>
-<!-- filter -->
-	<script src="app/filter/date.filter.js"></script>
-	<script src="app/filter/number.filter.js"></script>
-	<script src="app/filter/yn.filter.js"></script>
-<!-- modal -->
-	<script src="app/shared/modal/searchCompany/modal.searchCompany.ctrl.js"></script>
-	<script src="app/shared/modal/searchCompany/modal.insertCompany.ctrl.js"></script>
-	<script src="app/shared/modal/searchMember/modal.searchMember.ctrl.js"></script>
-	<script src="app/shared/modal/selectColumns/modal.selectColumns.ctrl.js"></script>
-	<script src="app/shared/modal/searchCompany/modal.searchCuInCharge.ctrl.js"></script>
-	<script src="app/shared/modal/searchCompany/modal.insertCuInCharge.ctrl.js"></script>
-	<script src="app/shared/modal/searchUser/modal.searchUser.ctrl.js"></script>
-	<script src="app/shared/modal/searchUser/modal.searchUser.svc.js"></script>
-	<script src="app/shared/modal/eqm/modal.searchChangeEqmNo.ctrl.js"></script>
-	<script src="app/shared/modal/eqm/modal.searchEqm.ctrl.js"></script>
-	<script src="app/shared/modal/emp/modal.searchEmp.ctrl.js"></script>
-	<script src="app/shared/modal/commonDetail/modal.detail.ctrl.js"></script>
-	<script src="app/shared/modal/searchAddress/modal.searchAddress.ctrl.js"></script>
-	<script src="app/shared/modal/mo01Cla/modal.mo01Cla.ctrl.js"></script>
-	<script src="app/shared/modal/mo02UserJoin/modal.mo02UserJoin.ctrl.js"></script>
-	<script src="app/shared/modal/mo03RePwd/modal.mo03RePwd.ctrl.js"></script>
-	<script src="app/shared/modal/mo04NewGroupSave/modal.mo04NewGroupSave.ctrl.js"></script>
-	<script src="app/shared/modal/mo04NewGroupSave/modal.mo04NewGroupSave.svc.js"></script>
-	<script src="app/shared/modal/mo05ChangeNm/modal.mo05ChangeNm.ctrl.js"></script>
-	<script src="app/shared/modal/mo05ChangeNm/modal.mo05ChangeNm.svc.js"></script>
-	<script src="app/shared/modal/mo06ItemSearch/modal.searchItemCopy.ctrl.js"></script>
-	<script src="app/shared/modal/mo07CodeUpdate/modal.openCodeUpdate.ctrl.js"></script>
-	<script src="app/shared/modal/mo08BasicItemOpt/modal.basicOptGet002.ctrl.js"></script>
-	<script src="app/shared/modal/mo08BasicItemOpt/modal.basicOptGet003.ctrl.js"></script>
-	<script src="app/shared/modal/mo09CopyItemOpt/modal.CopyOpt.ctrl.js"></script>
-	<script src="app/shared/modal/mo09CopyItemOpt/modal.CopyOpt002.ctrl.js"></script>
-	<script src="app/shared/modal/mo09CopyItemOpt/modal.CopyOpt003.ctrl.js"></script>
-	<script src="app/shared/modal/mo10ItemPreview/modal.itemPreview.ctrl.js"></script>
-	<script src="app/shared/modal/it01ItemCfct/modal.ItemCfct.ctrl.js"></script>
-	<script src="app/shared/modal/mo11SaleSiteDetail/modal.saleSiteDetail.ctrl.js"></script>
-	<script src="app/shared/modal/address/search.js"></script>
-	<!-- endbuild -->
+ </script>
 </body>
-
 </html>

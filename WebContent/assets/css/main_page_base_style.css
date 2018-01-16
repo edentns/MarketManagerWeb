@@ -1,0 +1,47 @@
+@charset "utf-8";
+
+/* Noto */
+@import url(https://fonts.googleapis.com/earlyaccess/notosanskr.css);
+
+
+/* default */
+body{font-family:'Noto Sans KR', sans-serif; color:#171717; font-size:14px; font-weight:400; padding:0px; margin:0px; line-height:24px;}
+
+html{overflow-y:scroll;}
+html, body{width:100%;}
+
+div, p, ul, li,ol, table, th, td, textarea, input, span, form, h1, h2, h3, h4, h5, h6, dt, dl, dd, em, sup {padding:0px; margin:0px; vertical-align:top; font-weight:400;}
+ul, ol, dl, dd, dt, li {list-style-type:none;}
+form, fieldset{margin:0; padding:0; border:0;}
+table, tbody, tfoot, thead, tr, th, td{border-collapse:collapse; border-spacing:0;} 
+
+/*border:none; separate*/
+/* 6 */* html table, tbody, tfoot, thead, tr, th, td {border-collapse:collapse;}
+/* 7 */* + html table, tbody, tfoot, thead, tr, th, td {border-collapse:collapse;}
+
+legend{display:none; position:absolute; visibility:hidden}
+caption{visibility:hidden; width:0px; height:0px; overflow:hidden; font-size:0px; margin:0px; padding:0px; line-height:0px;}
+img {border:0; vertical-align:middle; outline:none}
+optgroup {font-style:normal; font-size:0px; height:0px; line-height:0px}
+input {vertical-align:middle;}
+select {vertical-align:middle;}
+textarea {font-size:14px; font-weight:400;}
+label {}
+img, fieldset {border:0 none transparent;/*'transparent' for Opera7*/}
+i, em {font-style:normal;}
+span{letter-spacing:normal}
+
+/* html5 ie9 else */
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+   display:block;
+   padding:0;
+   margin:0
+}
+input[type="radio"]{border:none transparent}
+input[type="text"]{border:1px solid #ddd}
+input[type="password"]{border:1px solid #ddd}
+
+/* a링크 */
+a {text-decoration:none; cursor:pointer;color:#000}
+a:link, a:visited {text-decoration:none;}
+a:hover, a:focus, a:active {text-decoration:none; color:#0066b3}
