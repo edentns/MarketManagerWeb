@@ -97,6 +97,7 @@
 							search = $location.search();
 
 							if (search.menu) {
+								$rootScope.$emit("event:logout");
 								replaceUrl = $location.$$path.replace('/list', '');
 								$rootScope.$emit('event:setNO_M', replaceUrl);
 							} else {
