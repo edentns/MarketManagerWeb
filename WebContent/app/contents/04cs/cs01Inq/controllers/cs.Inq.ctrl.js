@@ -7,33 +7,10 @@
      * C/S관리
      */
     angular.module("cs.Inq.controller")
-        .controller("cs.InqCtrl", ["$scope", "$http", "$q", "$log", "cs.InqSvc", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "MenuSvc",
-            function ($scope, $http, $q, $log, csInqSvc, APP_CODE, $timeout, resData, Page, UtilSvc, MenuSvc) {
+        .controller("cs.InqCtrl", ["$scope", "$http", "$q", "$log", "cs.InqSvc", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "MenuSvc", "Util03saSvc",
+            function ($scope, $http, $q, $log, csInqSvc, APP_CODE, $timeout, resData, Page, UtilSvc, MenuSvc, Util03saSvc) {
 	            var page  = $scope.page = new Page({ auth: resData.access }),
 		            today = edt.getToday();	            
-
-	            //주문 상태 드랍 박스 실행	
-	            var connSetting2 = (function(){
-    				var param = {
-    					procedureParam: "MarketManager.USP_SY_10CODE02_GET&lnomngcdhd@s|lcdcls@s",
-    					lnomngcdhd: "SYCH00069",
-    					lcdcls: "CS_000001"
-    				};
-        			UtilSvc.getList(param).then(function (res) {
-        				if(res.data.results[0].length >= 1){
-        					csDataVO.csStatusOp = res.data.results[0];
-        				}
-        			});		
-	            	}()),
-	            	
-	            	//마켓명 드랍 박스 실행		            	
-		            connSetting3 = (function(){
-		            	csInqSvc.csMrkList().then(function (res) {
-	        				if(res.data.length >= 1){
-	        					csDataVO.csMrkNameOp = res.data;
-	        				}
-	        			});		
-		            }());
 	            
 	            var csDataVO = $scope.csDataVO = {
 	            	boxTitle : "C/S 관리",
@@ -63,22 +40,55 @@
 	        		resetAtGrd:"",
 	        		param : "",
 	        		popupDisAble: "k-textbox"
-	            };	            
+	            };	        
+	            
+	            csDataVO.initLoad = function(){
+	            	var me = this;
+	            	var ordArg = {
+	            			procedureParam: "MarketManager.USP_SY_10CODE02_GET&lnomngcdhd@s|lcdcls@s",
+	    					lnomngcdhd: "SYCH00069",
+	    					lcdcls: "CS_000001"
+	            		};
+	            	$q.all([
+						UtilSvc.getList(ordArg).then(function (res) {
+							if(res.data.results[0].length >= 1){
+								return res.data.results[0]; 
+							}
+						}),	
+						//마켓명 드랍 박스 실행
+						csInqSvc.csMrkList().then(function (res) {
+							if(res.data.length >= 1){
+								return res.data; 
+							}
+						})		
+	            	]).then(function(result){
+	            		me.csStatusOp = result[0];
+	            		me.csMrkNameOp = result[1];
+	            		
+	            		$timeout(function(){
+            				Util03saSvc.storedQuerySearchPlay(me, "csDataVO");
+                        },0);  
+	            	});
+	            };
 	            
 	            //조회
 	            csDataVO.inQuiry = function(){	
 	            	var me = this;
 	            	me.param = {
     					I_NO_MRK: me.csMrkNameMo,
-    					I_NM_MRKITEM: me.procName.value.trim(),                                    	
+    					I_NM_MRKITEM: me.procName.value,                                    	
     					I_CD_INQSTAT: me.csStatusMo,
-    					I_NM_INQCLFT: me.csQuestionCodeMo.value.trim(),
-    					I_NM_INQ: me.buyerName.value.trim(),
-    					I_NO_MRKORD: me.orderNo.value.trim(),
+    					I_NM_INQCLFT: me.csQuestionCodeMo.value,
+    					I_NM_INQ: me.buyerName.value,
+    					I_NO_MRKORD: me.orderNo.value,
     					I_DTS_INQREG_F: new Date(me.datesetting.period.start.y, me.datesetting.period.start.m-1, me.datesetting.period.start.d).dateFormat("Ymd"),
-    					I_DTS_INQREG_T: new Date(me.datesetting.period.end.y, me.datesetting.period.end.m-1, me.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis")
+    					I_DTS_INQREG_T: new Date(me.datesetting.period.end.y, me.datesetting.period.end.m-1, me.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis"),
+    					CS_NM_MRK_SELCT_INDEX : me.csMrkNameOp.allSelectNames,
+    					CS_NM_ORDSTAT_SELCT_INDEX : me.csStatusOp.allSelectNames,
+    					DTS_SELECTED : me.datesetting.selected,
+    					CASH_PARAM : "csDataVO"
                     };   
-    				if($scope.readValidation(csDataVO.param)){
+    				if(Util03saSvc.readValidation(csDataVO.param)){
     					$scope.cskg.dataSource.data([]);
     	            	$scope.cskg.dataSource.page(1);
     	            	//$scope.cskg.dataSource.read();
@@ -118,18 +128,8 @@
 	            		$scope.cskg.resize();
 	            		if(csDataVO.param !== "") gridCsVO.dataSource.pageSize(25);
 	            	}
-	            };	            
+	            };	    
 	            
-	            //popup insert & update Validation
-	            $scope.readValidation = function(idx){
-	            	var result = true;	            	
-            		if(idx.I_NO_MRK === null || idx.I_NO_MRK === ""){ alert("마켓명을 입력해 주세요."); result = false; return; };
-            		if(idx.I_CD_INQSTAT === null || idx.I_CD_INQSTAT === ""){ alert("상태값을 입력해 주세요."); result = false; return;};
-            		//LIKE 로 바뀌면서 필수값에서 해제 됨
-            		//if(idx.I_NM_INQCLFT === null || idx.I_NM_INQCLFT === ""){ $scope.showPopup("문의 구분을 입력해 주세요."); result = false; return;};
-            		if(idx.I_DTS_INQREG_F > idx.I_DTS_INQREG_T){ alert("문의일자를 올바르게 입력해 주세요."); result = false; return;};            		
-	            	return result;
-	            };	               
 	            //cs 검색 그리드
                 var gridCsVO = $scope.gridCsVO = {
                 		autoBind: false,
@@ -433,5 +433,6 @@
                 	return false;
                 };                
                 
+                csDataVO.initLoad();
             }]);
 }());

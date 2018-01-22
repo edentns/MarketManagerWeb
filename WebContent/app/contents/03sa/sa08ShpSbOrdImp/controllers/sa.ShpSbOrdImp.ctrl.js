@@ -279,7 +279,7 @@
 		                                    dataSource: db,
 		                                    change : function(e){
 		                                    	if(this.text() === "택배사 등록" && this.selectedIndex === 1){
-		                                    		$window.open("/#/99sy/syPars?menu=true","_self");
+		                                    		$state.go("app.syPars", { menu: true, ids: null });
 		                                    	}
 		                                    }
 		                                });		

@@ -118,13 +118,13 @@
 					    DTS_CHK : me.betweenDateOptionMo,  
 					    DTS_FROM : new Date(me.datesetting.period.start.y, me.datesetting.period.start.m-1, me.datesetting.period.start.d, "00", "00", "00").dateFormat("YmdHis"),           
 					    DTS_TO : new Date(me.datesetting.period.end.y, me.datesetting.period.end.m-1, me.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis"),
-					    DTS_SELECTED : me.datesetting.selected
+					    DTS_SELECTED : me.datesetting.selected,
+					    CASH_PARAM : "shpStdbyOrdSerchParam"
                     };   
     				if(Util03saSvc.readValidation(me.param)){
     					$scope.shpbyordkg.dataSource.data([]);
-        				$scope.shpbyordkg.dataSource.page(1);
-    				};
-    				Util03saSvc.localStorage.setItem("shpStdbyOrdSerchParam" ,me.param);    					
+        				$scope.shpbyordkg.dataSource.page(1); 
+    				}; 					
 	            };	            
 	            
 	            //초기화버튼
@@ -631,7 +631,7 @@
 		                                    dataSource: db,
 		                                    change : function(e){
 		                                    	if(this.text() === "택배사 등록" && this.selectedIndex === 1){
-		                                    		$window.open("/#/99sy/syPars?menu=true","_self");
+		                                    		$state.go("app.syPars", { menu: true, ids: null });
 		                                    	}
 		                                    }
 		                                });		                            	

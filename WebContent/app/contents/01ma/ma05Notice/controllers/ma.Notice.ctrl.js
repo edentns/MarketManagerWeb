@@ -28,6 +28,19 @@
         				}
         			});
 	            }());
+	            	            
+	            //팝업 파일 리스트
+	            var fileList = (function(no){
+	            	var param = {
+    					procedureParam: "MarketManager.USP_MA_05NOTICE_FILELIST_GET&no@s",
+    					no: no
+    				};
+            		UtilSvc.getList(param).then(function (res) {
+        				if(res.data.results[0].length >= 1){
+        					$scope.noticeDataVO.fileDataVO.currentDataList = res.data.results[0];
+        				}
+        			});
+	            });	       
 	            
 	            //공지 대상
 	            var connSetting2 = (function(proparam, e, seq, view){
@@ -53,25 +66,7 @@
 	                multiSelect.dataSource.data(multiData);    
 	            	multiSelect.value(["*"]);
 	            	multiSelect.trigger("change"); //트리거를 안하면 모델에 안들어감!
-	            });
-	            	            
-	            //팝업 파일 리스트
-	            var fileList = (function(no){
-	            	var param = {
-    					procedureParam: "MarketManager.USP_MA_05NOTICE_FILELIST_GET&no@s",
-    					no: no
-    				};
-            		UtilSvc.getList(param).then(function (res) {
-        				if(res.data.results[0].length >= 1){
-        					$scope.noticeDataVO.fileDataVO.currentDataList = res.data.results[0];
-        				}
-        			});
-	            });	            
-
-	            var stopEvent = function(e){
-	            	e.preventDefault();
-	            	e.stopPropagation();
-                };               
+	            });     
 	            
 	            var noticeDataVO = $scope.noticeDataVO = {
 	            	boxTitle : "검색",
@@ -93,7 +88,7 @@
                     contentText: { value: "" , focus: false},			//제목/내용
                     noticeCdModel : "*",								//공지구분	                    
                     noticeTargetModel : ["*"],			   				//공지대상                    
-                    allSelectTargetModel : [],							//전체 선택시 공지대상자들 아이디를 담아 놓는 모델 
+                    allSelectTargetModel : ["*"],							//전체 선택시 공지대상자들 아이디를 담아 놓는 모델 
                     noticeCdVO : [],		 							//조회시 필요한 공지구분 드랍다운
                     noticeTargetVO : {									//조회시 필요한 공지대상 드랍다운
                     	tagTemplate: kendo.template($.trim($("#ma-notice-select-template").html())),
@@ -126,7 +121,11 @@
     				},	 
     				dataTotal : 0,
              	    resetAtGrd : "",
-             	    deleteOrdUpdate : ""
+             	    deleteOrdUpdate : "",
+             	    stopEvent : function(e){
+    	            	e.preventDefault();
+    	            	e.stopPropagation();
+                    }
 		        };
 
 	            UtilSvc.gridtooltipOptions.filter = "td";
@@ -220,7 +219,7 @@
                 	me.contentText.value = "";
                 	
                 	me.noticeTargetModel = ["*"];
-                	me.allSelectTargetModel = [];
+                	me.allSelectTargetModel = ["*"];
                 	me.fileDataVO.currentDataList = [];
                 	
                 	me.noticeCdVO.bReset = true;
@@ -279,9 +278,12 @@
 	            noticeDataVO.paramFunc =  function(param){
 					var inputParam = angular.copy(param);
 					
-					if(param.data[0].ARR_NO_C.indexOf('*') > -1){
-						inputParam.data[0].ARR_NO_C = $scope.noticeDataVO.allSelectTargetModel;    
-						$scope.noticeDataVO.allSelectTargetModel = [];
+					if(!param.data[0].ARR_NO_C || param.data[0].ARR_NO_C.indexOf('*') > -1){
+						inputParam.data[0].ARR_NO_C = $scope.noticeDataVO.allSelectTargetModel;
+						inputParam.data[0].YN_ALLSEL = 'Y';
+						$scope.noticeDataVO.allSelectTargetModel = ['*'];
+					}else{
+						inputParam.data[0].YN_ALLSEL = 'N';
 					}
 					inputParam.data[0].NO_WRITE = $scope.userInfo.NO_EMP;
 					return inputParam;
@@ -290,7 +292,7 @@
 	            //마켓 검색 그리드
                 var gridNoticeVO = $scope.gridNoticeVO = {
                 		autoBind: false,
-                        messages: {                        	
+                        messages: {
                             requestFailed: "마켓정보를 가져오는 중 오류가 발생하였습니다.",
                             commands: {
                                 update: "저장",
@@ -313,35 +315,64 @@
                 						}else{
                 							e.error([]);
                 						}
-                					});                					
+                					}, function() {
+    	                				e.error([]); 
+        			        			alert('조회 실패하였습니다.');
+        			        		});                					
                     			},
                     			create: function(e) {
     	                			var defer = $q.defer(),
-    	                			    param = { data: [e.data.models[0]]}, //왜  리스트만 인식할까?    	
-    	                			    paramFunction =  noticeDataVO.paramFunc(param);
-    	                			
-    	                			MaNoticeSvc.noticeInsert(paramFunction).then(function(res) {
-    	                				if(res.data) {
-    	                					if(noticeDataVO.fileDataVO.dirty) {
-	                							noticeDataVO.fileDataVO.CD_REF1 = res.data;
-	                							noticeDataVO.fileDataVO.doUpload(function(){
-	                			        			alert('저장 되었습니다.');
-	                			        		}, function() {
-	                			        			alert('첨부파일업로드 실패하였습니다.');
-	                			        		});
-	                		        		}else{
-	                		        			alert('저장 되었습니다.');
-	                		        		}    	                					
-    	                					noticeDataVO.afterSaveQuery(param.data[0]); // 저장값으로 조회             		
-    	                				}else{
-    	                					e.error([]);
-    	                					alert(res.data);
-    	                					alert("저장 실패 하였습니다 새 글을 써주세요.");
-    	                				}    	                				
-    	                				defer.resolve(); 
-    	                			},function(err){
-    	                				e.error([]);
-    	                			});
+    	                			    param = { data: [e.data.models[0]]}; //왜  리스트만 인식할까?
+
+                    		        if(!param.data[0].NO_NOTICE){
+                    		        	var getUrl = location.href.toString(),
+                    			    	    seqParam = { data : getUrl };
+                    			
+    		                			MaNoticeSvc.noticeGetseq(seqParam).then(function(res) {
+    		                				if(res.data) {
+    		                					param.data[0].NO_NOTICE = res.data;	
+
+    		    	                			MaNoticeSvc.noticeInsert(noticeDataVO.paramFunc(param)).then(function(res) {
+    		    	                				if(res.data) {
+    		    	                					if(noticeDataVO.fileDataVO.dirty) {
+    			                							noticeDataVO.fileDataVO.CD_REF1 = res.data;
+    			                							noticeDataVO.fileDataVO.doUpload(function(){
+    			            	                				defer.resolve(); 
+    			                			        			alert('저장 되었습니다.');
+    			        	                					noticeDataVO.afterSaveQuery(param.data[0]); // 저장값으로 조회       
+    			                			        		}, function() {
+    			            	                				e.error([]);
+    			            	                				defer.reject();  
+    			                			        			alert('첨부파일업로드 실패하였습니다.');
+    			                			        		});
+    			                		        		}else{
+    			        	                				defer.resolve();
+    			                		        			alert('저장 되었습니다.');
+    			    	                					noticeDataVO.afterSaveQuery(param.data[0]); // 저장값으로 조회  
+    			                		        		}
+    		    	                				}else{
+    		    	                					e.error([]);
+    		        	                				defer.reject();      
+    		    	                					alert("저장 실패 하였습니다 새 글을 써주세요.");
+    		    	                				}    	                		
+    		    	                			},function(err){
+    		    	                				e.error([]);
+    		    	                				defer.reject();      
+    			                					alert("저장 실패 하였습니다 새 글을 써주세요.");
+    		    	                			});
+    		                				}else{
+		    	                				e.error([]);
+		    	                				defer.reject(); 
+    		                					alert("공지사항 등록 창을 다시 열어 주세요.");
+    		                				}
+    		                			},
+    	            				    function(err) {
+	    	                				e.error([]);
+	    	                				defer.reject(); 
+    		                				alert("공지사항 등록 창을 다시 열어 주세요.");
+    	            				    });             
+                    		        };
+                    		        $scope.noticeDataVO.fileDataVO.currentDataList = []; 
     	                			return defer.promise;     	                			        				
     	            			},
                     			update: function(e) {
@@ -352,52 +383,57 @@
                     					
                     					MaNoticeSvc.noticeDelete(param).then(function(res) {
                     						if(res.data){
+                    							alert("삭제 성공하였습니다.");
         	    	                			$scope.gridNoticeVO.dataSource.read();
+        	    	                			defer.resolve();
                     						}else{
-                	                			e.error([]);                	                			
+                	                			e.error([]);
+            	                				defer.reject();
+            	                				alert("삭제 실패하였습니다.!! 연구소에 문의 부탁드립니다.");
                     						}
-    	    	                			defer.resolve();	
+        	                			},function(){
+        	                				e.error([]);
+        	                				defer.reject(); 
+    	                					alert("삭제 실패하였습니다.!! 연구소에 문의 부탁드립니다.");
         	                			});
                     					noticeDataVO.deleteOrdUpdate = "";
                     				}else{
                     					var param = {data: [e.data.models[0]]},
 	                						paramFunction =  noticeDataVO.paramFunc(param);
                     					
-        	                			MaNoticeSvc.noticeUpdate(paramFunction).then(function(res) {   	                				
+        	                			MaNoticeSvc.noticeUpdate(paramFunction).then(function(res) { 	                				
         	                				if(res.data) {
         	                					if(noticeDataVO.fileDataVO.dirty) {
     	                							noticeDataVO.fileDataVO.CD_REF1 = param.data[0].NO_NOTICE;
     	                							noticeDataVO.fileDataVO.doUpload(function(){
     	                			        			alert("수정 되었습니다.");
-    	                			        		}, function() {
+    	            	                				defer.resolve(); 
+    	                			        		}, function() {    	                			        			
     	                			        			alert('첨부파일업로드 실패하였습니다.');
+    	                			        			e.error([]);
+    	                			        			defer.reject(); 
     	                			        		});
     	                		        		}else{
-    	                		        			alert('성공하였습니다.');
-    	                		        		}   	          
-        	                					
+    	                		        			alert("수정 되었습니다.");
+    	        	                				defer.resolve(); 
+    	                		        		}   	                  	                					
         	                					$scope.gridNoticeVO.dataSource.read();	        	                		
         	                				}else{
         	                					e.error([]);
+                			        			defer.reject(); 
         	                					alert("수정 실패하였습니다.!! 연구소에 문의 부탁드립니다.");
         	                				}
-        	                				defer.resolve(); 
-        	                			});
-                    				}                    				
+        	                			},function(){
+        	                				e.error([]);
+        	                				defer.reject(); 
+    	                					alert("수정 실패하였습니다.!! 연구소에 문의 부탁드립니다.");
+        	                			});        	                			
+                    				}                    	
+                    				$scope.noticeDataVO.fileDataVO.currentDataList = [];  
     	                			return defer.promise;			
                     			},
                     			/*destroy: function(e) 
                     				//단일 로우만 타는 것 같음
-                    				var defer = $q.defer(),
-	                			 			param = {
-	                			 				data: e.data.models
-	                			 			};
-                    					
-                					MaNoticeSvc.noticeDelete(param).then(function(res) {
-	    	                			$scope.gridNoticeVO.dataSource.read();
-	    	                			defer.resolve();
-    	                			});                   				
-                					return defer.promise;	
                     			},   */ 	                		
                     			parameterMap: function(e, operation) {
                     				if(operation !== "read" && e.models) {
@@ -406,8 +442,16 @@
                     			}
                     		},
                     		change: function(e){
-                    			var data = this.data();
-                    			noticeDataVO.dataTotal = data.length;
+                    			var data = this.data(),
+	             			   	   	   i = 0,
+		             			   	 sum = 0;
+                    			
+                    			noticeDataVO.dataTotal = data.length;                    			
+	             			   	   
+		     					for(i; i<data.length; i+=1){
+		     						sum += 1;
+		     						data[i].ROW_NUM = sum;
+		     					};
                     		},
                     		pageSize: 20,
                     		batch: true,
@@ -415,7 +459,7 @@
                     			model: {
                         			id: "NO_NOTICE",
                     				fields: {
-                    					ROW_CHK: 		   {	
+                    					ROW_CHK: 		   {
 					                    						type: "boolean", 
 																editable: true,  
 																nullable: false
@@ -424,7 +468,12 @@
                     											type: "string", 
                 												editable: false, 
                 												nullable: false
-            											   },                    					
+            											   },   
+                    					YN_ALLSEL:		   {	
+                    											type: "string", 
+                												editable: false, 
+                												nullable: false
+            											   },                        					
                     					NO_NOTICE:		   {	
                     											type: "string", 
                     											editable: true, 
@@ -439,9 +488,9 @@
 																	}
 																}
                     									   },
-                    				    ARR_NO_C: 		   {	
+                    				    ARR_NO_C: 		   {
 																type: "array", 
-																editable: true, 
+																editable: true,
 																nullable: true,
 																validation: {
 																	arr_no_cvalidation: function (input) {																		
@@ -590,6 +639,7 @@
             		            {
             		        	   field: "DC_HTMLCONTENT",
             		               title: "공지내용",
+            		               width: 400,
             		               headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}
             		            },
             		            {
@@ -686,24 +736,8 @@
                 		        	console.log($scope.gridNoticeVO.dataSource.data()[0].NO_NOTICE);
                 		        }); */              		        
                 		        
-                		        if(!e.model.NO_NOTICE){
-                		        	var getUrl = location.href.toString(),
-                			    	    param = { data : getUrl };
-                			
-		                			MaNoticeSvc.noticeGetseq(param).then(function(res) {
-		                				if(res.data) {
-		                					e.model.NO_NOTICE = res.data;	
-		                					e.model.dirty = true;
-		                				}else{
-		                					alert("공지사항 등록 창을 다시 열어 주세요.");
-		                				}    	           
-		                			},
-	            				    function(err) {
-		                				alert("공지사항 등록 창을 다시 열어 주세요.");
-	            				    });             
-                		        }
                 		    //수정 할 글일때
-                		    }else{                		    	                		    	
+                		    }else{
                 		    	$(".k-grid-update").text("수정");
                 		    	$(".k-window-title").text("공지 사항 수정");
                 		    	
@@ -714,29 +748,27 @@
                 		    	// 공지사항 수정시 역으로 공지대상 설정
                 		    	var multiSelect = angular.element(document.querySelector("#pnkms")).data("kendoMultiSelect"),
                 		    	    multiData = multiSelect.dataSource.data(),
-                		    	    arraySplit = e.model.NO_C.split(",");    
+                		    	    arraySplit = !e.model.NO_C ? "*" : e.model.NO_C.split(",");    
                 		    	
-                		    	multiSelect.dataSource.data([]);
-                                
-                                for (var i = 0; i < arraySplit.length; i++) {                             	
+                		    	multiSelect.dataSource.data([]);                                
+                		    	
+            		    		for (var i = 0; i < arraySplit.length; i++) {                             	
                                     multiData.push({ "NM": arraySplit[i], "NO_C": arraySplit[i]});
-                                };
+                                };                            
                                 
                                 multiSelect.dataSource.data(multiData);
                                 multiSelect.dataSource.filter({});
                                 multiSelect.value(arraySplit);
                                 multiSelect.trigger("change");
                                 
-
-                                $scope.memSearchPopGrd.repeaterItems = e.model.NM_C.split(",");
-                               
-                                $timeout(function () {
-                                	if(!page.isWriteable()) {
-                                		$(".k-grid-update").addClass("k-state-disabled");
-                                		$(".k-grid-update").click(stopEvent);
-                                	}
-                                });
+                                $scope.memSearchPopGrd.repeaterItems = (e.model.YN_ALLSEL === 'Y') ? '*' : e.model.NM_C.split(",");
                 		    }
+                		    $timeout(function () {
+                            	if(!page.isWriteable()) {
+                            		$(".k-grid-update").addClass("k-state-disabled");
+                            		$(".k-grid-update").click(noticeDataVO.stopEvent);
+                            	}
+                            });
                     	},
                     	cancel: function(e) { //pop up 창 닫힐때 작동됨  
                     		// 파일 리스트 출력 초기화 
@@ -748,12 +780,9 @@
                     	},
                     	resizable: true,
                     	rowTemplate: kendo.template($.trim($("#ma_notice_template").html())),
-                    	altRowTemplate: kendo.template($.trim($("#alt_ma_notice_template").html())),
-                    	height: 657                    	
+                    	altRowTemplate: kendo.template($.trim(angular.element(document.querySelector("#ma_notice_template")).html()).replace("class=\"k-grid-row\"","class=\"k-alt\"")),
+                    	height: 657
         		};
-                
-                //$scope.checkedIds = [];
-                //$scope.deStroyCheck = false;
                 
                 //체크박스 옵션
                 $scope.onNoticeGrdClick = function(e){
@@ -764,7 +793,7 @@
 	                	grid = $scope.nkg,
 	                	dataItem = grid.dataItem(row);
 	
-	               // $scope.checkedIds[dataItem.ROW_NUM] = checked;	                	                
+	                //$scope.checkedIds[dataItem.ROW_NUM] = checked;	                	                
 	                dataItem.ROW_CHK = checked;
 	                dataItem.dirty = checked;
 	                
@@ -810,10 +839,10 @@
         			searchValue : "",
         			modal: true,
         			visible: false,
-        			height: "500",
+        			height: "520",
         			width: "400",
         			title: "가입자 검색",
-        			show: function(e){        		           
+        			show: function(e){
                        angular.element(document.querySelector("#memberSearchMain")).focus();    
                        
                        if(noticeDataVO.noticeTargetModel.indexOf("*") > -1){
@@ -923,17 +952,24 @@
         			modal: true,
         			visible: false,
         			actionChk : 'h',
-        			height: "500",
+        			height: "520",
         			width: "400",
         			title: "가입자 검색",
         			show: function(e){        		           
         				angular.element(document.querySelector("#memberSearchSub")).focus();
-        			        				        				
-    					$scope.treeViewPop.element.find(".k-checkbox").removeAttr("checked").trigger("change");
-                        for (var i = 0; i < $scope.memSearchPopGrd.repeaterItems.length; i++) {
-                        	var item = $scope.treeViewPop.findByText($scope.memSearchPopGrd.repeaterItems[i]);
-                            item.find(".k-checkbox").first().click();
-                        };        				          	    
+        			        
+        				$scope.treeViewPop.element.find(".k-checkbox").removeAttr("checked").trigger("change");
+                        if($scope.memSearchPopGrd.repeaterItems === "*"){
+                            for (var i = 0; i < $scope.memSearchPopGrd.dataSource.data().length; i++) {
+                         		var item = $scope.treeViewPop.findByText($scope.memSearchPopGrd.dataSource.data()[i]["NM"]);
+                         		item.find(".k-checkbox").first().click();
+                            };
+                        }else{
+                            for (var i = 0; i < $scope.memSearchPopGrd.repeaterItems.length; i++) {
+                            	var item = $scope.treeViewPop.findByText($scope.memSearchPopGrd.repeaterItems[i]);
+                                item.find(".k-checkbox").first().click();
+                            };
+                        };
         			},
         			searchKeyUp: function(keyEvent){
         				var scopeTreeView = $scope.treeViewPop;
@@ -950,7 +986,7 @@
         	                    {
         	                	   text: '확인',
         	                	   action: function () {
-        	                            $scope.$apply(function (e) {                            	
+        	                            $scope.$apply(function (e) {
         	                            	var view = $scope.memSearchPopGrd; 
         	                            	view.repeaterItems = getCheckedItems($scope.treeViewPop, view);
         	                            	
@@ -1090,8 +1126,8 @@
             	   if(!page.isWriteable()) {
             		   $(".k-grid-add").addClass("k-state-disabled");
             		   $(".k-grid-delete").addClass("k-state-disabled");
-       				   $(".k-grid-add").click(stopEvent);
-       				   $(".k-grid-delete").click(stopEvent);
+       				   $(".k-grid-add").click(noticeDataVO.stopEvent);
+       				   $(".k-grid-delete").click(noticeDataVO.stopEvent);
        				}
 
             	   initCdTarget();            	  

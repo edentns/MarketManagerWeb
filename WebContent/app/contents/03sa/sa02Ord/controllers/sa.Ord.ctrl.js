@@ -226,12 +226,12 @@
 					    DTS_CHK : me.betweenDateOptionMo,  
 					    DTS_FROM : new Date(me.datesetting.period.start.y, me.datesetting.period.start.m-1, me.datesetting.period.start.d, "00", "00", "00").dateFormat("YmdHis"),           
 					    DTS_TO : new Date(me.datesetting.period.end.y, me.datesetting.period.end.m-1, me.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis"),
-					    DTS_SELECTED : me.datesetting.selected					    
+					    DTS_SELECTED : me.datesetting.selected,			
+					    CASH_PARAM : "ordSerchParam"
                     };
     				if(Util03saSvc.readValidation(me.param)){
     					$scope.ordkg.dataSource.read();
-    				};
-    				Util03saSvc.localStorage.setItem("ordSerchParam" ,me.param);     					    				
+    				};     					    				
 	            };
 	            
 	            //초기화버튼

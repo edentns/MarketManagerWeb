@@ -339,14 +339,14 @@
 					    NM_MRK_SELCT_INDEX : me.ordMrkNameOp.allSelectNames,
 					    NM_ORDSTAT_SELCT_INDEX : me.ordStatusOp.allSelectNames,
 					    CD_CCLSTAT_SELCT_INDEX : me.cancelStatusOp.allSelectNames,
-					    DTS_SELECTED : me.datesetting.selected			
+					    DTS_SELECTED : me.datesetting.selected,			
+					    CASH_PARAM : "ordCancelParam"
                     }; 
     				if(Util03saSvc.readValidation(me.param)){
     					$scope.ordCancelManagementkg.dataSource.data([]);
     	            	$scope.ordCancelManagementkg.dataSource.page(1);
     	            	//$scope.ordCancelManagementkg.dataSource.read();
     				};	     
-        			Util03saSvc.localStorage.setItem("ordCancelParam" ,me.param);	
 	            };
 	            		        
 	            //초기화버튼
@@ -577,7 +577,7 @@
                                         				e.sender.element.closest("tr").find("div.k-invalid-msg").hide();
                                         			}
                                         			if(this.text() === "택배사 등록" && this.selectedIndex === 1){
-    		                                    		$window.open("/#/99sy/syPars?menu=true","_self");
+                                        				$state.go("app.syPars", { menu: true, ids: null });
     		                                    		$scope.ordCancelManagementkg.cancelRow();
     		                                    	}
                                         		}

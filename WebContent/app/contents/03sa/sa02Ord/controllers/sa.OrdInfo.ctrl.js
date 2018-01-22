@@ -75,7 +75,7 @@
 		        	                			e.success(res.data);
 		        	                		}else{
 		        	                			if(confirm("택배사를 등록해 주세요.\n확인을 누르시면 택배사 관리페이지로 이동합니다.")){
-		        	                				$window.open("/#/99sy/syPars?menu=true","_self");
+		        	                				$state.go("app.syPars", { menu: true, ids: null });
 		        	                			}else{
 		        	                				e.success([]);
 		        	                				e.success([{NM_PARS_TEXT : "택배사 등록", CD_PARS : ""}]);
@@ -97,7 +97,7 @@
                     	optionLabel : "-- 택배사를 선택해 주세요 --",
                         change : function(e){
                         	if(this.text() === "택배사 등록" && this.selectedIndex === 1){
-                        		$window.open("/#/99sy/syPars?menu=true","_self");
+                        		$state.go("app.syPars", { menu: true, ids: null });
                         	}
                         }
 	        		},

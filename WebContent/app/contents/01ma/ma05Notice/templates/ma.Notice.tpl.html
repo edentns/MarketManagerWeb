@@ -91,20 +91,23 @@
 <!-- 가입자 검색 그리드(조회용) -->
 <div kendo-dialog="dialog" k-options="memSearchGrd">
     <div class='k-textbox k-space-right search-wrapper'>
-        <input id="memberSearchMain" class="memberSearch" type='text' ng-model="memSearchGrd.searchValue" ng-keyup="memSearchGrd.searchKeyUp($event)" ng-keydown="memSearchGrd.searchKeyUp($event)"
+        <input id="memberSearchMain" class="memberSearch" type='text' 
+        	ng-model="memSearchGrd.searchValue" 
+        	ng-keyup="memSearchGrd.searchKeyUp($event)" 
+        	ng-keydown="memSearchGrd.searchKeyUp($event)"
             placeholder='검색할 가입자를 입력하세요'/><span class='k-icon k-i-search'></span>
     </div>
     <div class='select-all-wrapper'>
-        <input type='checkbox' class='k-checkbox' ng-change="memSearchGrd.selectAllItems()" ng-model="memSearchGrd.selectAll" id='selectAllInput'/>
+        <input type='checkbox' class='k-checkbox' 
+        	ng-change="memSearchGrd.selectAllItems()" 
+        	ng-model="memSearchGrd.selectAll" 
+        	id='selectAllInput'/>
         <label class='k-checkbox-label' for='selectAllInput'>전체 선택</label>
-        <span class='selected-count'>{{memSearchGrd.selectedCount}} 명 선택</span>
+        <span class='selected-count'>{{memSearchGrd.selectedCount}} 명 선택 </span>
     </div>
     <div kendo-tree-view="treeView" k-options="memSearchGrd">
         <span k-template data-color-matches="memSearchGrd.searchValue" data-value="{{dataItem.NM}}">
         </span>        
-    </div>
-    <div data-ng-if="!(dataItem.NM)" style="width:100; text-align:center; margin-top:5px;">
-    	<span>조회된 데이터가 없습니다.</span>
     </div>
 </div>
 
@@ -127,134 +130,70 @@
 
 <!-- 공지사항 조회 그리드 -->
 <script id="ma_notice_template" type="text/x-kendo-template">		
-     <tr data-uid="#= uid #">
+     <tr class="k-grid-row" data-uid="#= uid #">
         <td class="ta-c">            
 			<input class='k-checkbox' data-role='checkbox' type='checkbox' ng-click='onNoticeGrdClick($event)' id='#= uid #_chk'>
 			<label class='k-checkbox-label k-no-text' for='#= uid #_chk'></label>
         </td>
 		<td class="ta-r">
             <span class="seq ells">
-				# if(ROW_NUM !== ""){ 	# 
-				#: ROW_NUM 				# 
-				# } 					#
+				# if(ROW_NUM){ 	# 
+				#: ROW_NUM 		# 
+				# } 			#
 			</span>
         </td>
-		<td class="ta-l">
+		<td class="ta-c">
             <span class="ells">
-				# if(NO_C !== ""){ 		# 
-				#: NO_C 				# 
-				# } 					#
+				# if(NO_C){ 		# 
+				#: NO_C 			# 
+				# }else{   			#
+					전체
+				# } 				#
 			</span>
         </td>
 		<td class="ta-c">
             <span class="ells cd-notice">
-				# if(CD_NOTICE !== ""){ #
+				# if(CD_NOTICE){ 		#
 				<co04-cd-to-nm cd="#:CD_NOTICE#" nm-box="noticeDataVO.noticeCdVO">                               
                 # } 					#
 			</span>
         </td>
 		<td class="ta-l">
-            <span class="ells"># if(NM_SUBJECT !== ""){ #
-                               #: NM_SUBJECT # 
-                               # } #
-			</span>
-        </td>
-		<td class="ta-l">
-            <span class="ells"># if(SY_FILES === "있음") { #
-							      <img src="/assets/img/common/file.png"/>
-                               # } #
-                               # if(DC_CONTENT !== ""){ #
-							   #: DC_CONTENT #
-							   #} #
-			</span>
-        </td>
-		<td class="ta-c">
-            <span class="ells"># if(DTS_INSERT !== ""){ #
-							   #: DTS_INSERT #
-      						   # } #
-			</span>
-        </td>
-		<td class="ta-c">
-            <span class="ells"># if(NO_WRITE !== ""){ #
-					    	   #: NO_WRITE #
- 							   # } #
-			</span>
-        </td>
-		<td class="ta-r">
-            <span class="ells"># if(SQ_NOTICE !== ""){ #
-							   #: SQ_NOTICE #
-							   # } #
-			</span>
-        </td>
-		<td class="ta-l">
             <span class="ells">
-				<a class="k-button k-button-icontext k-grid-edit" href="\#">
-                	<span class="k-icon k-i-edit"></span>수정
-            	</a>
-			</span>
-        </td> 
-	</tr>
-</script>
-
-<!-- 공지사항 조회 그리드 -->
-<script id="alt_ma_notice_template" type="text/x-kendo-template">		
-     <tr class="k-alt" data-uid="#= uid #">
-        <td class="ta-c">            
-			<input class='k-checkbox' data-role='checkbox' type='checkbox' ng-click='onNoticeGrdClick($event)' id='#= uid #_alt_chk'>
-			<label class='k-checkbox-label k-no-text' for='#= uid #_alt_chk'></label>
-        </td>
-		<td class="ta-r">
-            <span class="seq ells">
-				# if(ROW_NUM !== ""){ 	# 
-				#: ROW_NUM 				# 
-				# } 					#
-			</span>
-        </td>
-		<td class="ta-l">
-            <span class="ells">
-				# if(NO_C !== ""){ 		# 
-				#: NO_C 				# 
-				# } 					#
-			</span>
-        </td>
-		<td class="ta-c">
-            <span class="ells cd-notice">
-				# if(CD_NOTICE !== ""){ #
-				<co04-cd-to-nm cd="#:CD_NOTICE#" nm-box="noticeDataVO.noticeCdVO">                               
+				# if(NM_SUBJECT){ 		#
+				#: NM_SUBJECT 			# 
                 # } 					#
 			</span>
         </td>
 		<td class="ta-l">
-            <span class="ells"># if(NM_SUBJECT !== ""){ #
-                               #: NM_SUBJECT # 
-                               # } #
-			</span>
-        </td>
-		<td class="ta-l">
-            <span class="ells"># if(SY_FILES === "있음") { #
-							      <img src="/assets/img/common/file.png"/>
-                               # } #
-                               # if(DC_CONTENT !== ""){ #
-							   #: DC_CONTENT #
-							   #} #
+            <span class="ells">
+				# if(SY_FILES === "있음") { 	#
+			      <img src="/assets/img/common/file.png"/>
+				# } 						#
+                # if(DC_CONTENT){ 			#
+				#: DC_CONTENT 				#
+				#} 							#
 			</span>
         </td>
 		<td class="ta-c">
-            <span class="ells"># if(DTS_INSERT !== ""){ #
-							   #: DTS_INSERT #
-      						   # } #
+            <span class="ells">
+				# if(DTS_INSERT){ 			#
+				#: DTS_INSERT 				#
+      			# } 						#
 			</span>
         </td>
 		<td class="ta-c">
-            <span class="ells"># if(NO_WRITE !== ""){ #
-					    	   #: NO_WRITE #
- 							   # } #
+            <span class="ells">
+				# if(NO_WRITE){ 			#
+				#: NO_WRITE 				#
+ 				# } 						#
 			</span>
         </td>
 		<td class="ta-r">
-            <span class="ells"># if(SQ_NOTICE !== ""){ #
-							   #: SQ_NOTICE #
-							   # } #
+            <span class="ells">
+				# if(SQ_NOTICE){ 			#
+				#: SQ_NOTICE 				#
+				# } 						#
 			</span>
         </td>
 		<td class="ta-l">
@@ -476,11 +415,6 @@
 	display:inline-block; 
 	vertical-align:middle; 
 	text-align:right;
-}
-.ells{
-	text-overflow: ellipsis; 
-	white-space: nowrap; 
-	overflow:hidden;
 }
 .k-editor-toolbar-wrap{
 	text-align: left;

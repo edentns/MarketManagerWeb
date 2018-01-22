@@ -255,14 +255,14 @@
 					    DTS_TO : new Date(shippingDataVO.datesetting.period.end.y, shippingDataVO.datesetting.period.end.m-1, shippingDataVO.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis"),
 					    DTS_SELECTED : me.datesetting.selected,
 					    NM_MRK_SELCT_INDEX : me.ordMrkNameOp.allSelectNames,
-					    NM_ORDSTAT_SELCT_INDEX : me.ordStatusOp.allSelectNames
+					    NM_ORDSTAT_SELCT_INDEX : me.ordStatusOp.allSelectNames,
+					    CASH_PARAM : "shippingParam"
                     };   
     				if(Util03saSvc.readValidation(me.param)){
     					$scope.shippingkg.dataSource.data([]);  
     	            	$scope.shippingkg.dataSource.page(1);  // 페이지 인덱스 초기화              
-    	            	//$scope.shippingkg.dataSource.read();
-    				};    				
-    				Util03saSvc.localStorage.setItem("shippingParam" ,me.param);    						
+    	            	//$scope.shippingkg.dataSource.read();			        				  
+    				};
 	            };
 	            		        
 	            //초기화버튼

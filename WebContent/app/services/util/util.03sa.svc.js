@@ -6,17 +6,54 @@
 	 * @description
 	 * 상품 유틸 서비스
 	 */
-	angular.module('edtApp.common.service').service('Util03saSvc', ['$rootScope', '$state', '$window', '$http', '$timeout', 'APP_CONFIG', 'MenuSvc', 'UtilSvc',
-		function ($rootScope, $state, $window, $http, $timeout, APP_CONFIG, MenuSvc, UtilSvc) {
+	angular.module('edtApp.common.service').service('Util03saSvc', ['$rootScope', '$state', '$window', '$http', '$timeout', 'APP_CONFIG', 'MenuSvc', 'UtilSvc', "$log",
+		function ($rootScope, $state, $window, $http, $timeout, APP_CONFIG, MenuSvc, UtilSvc, $log) {
 		
 			//popup insert & update Validation
             this.readValidation = function(idx){
-            	var result = true;
-        		if(!idx.NM_MRK_SELCT_INDEX.length){ alert("마켓명을 입력해 주세요."); result = false; return; };
-        		if(idx.CD_ORDSTAT === null || idx.CD_ORDSTAT === ""){ alert("주문상태를 입력해 주세요."); result = false; return;};
-        		if(idx.DTS_CHK === null || idx.DTS_CHK === ""){ alert("기간을 선택해 주세요."); result = false; return;};			 
-        		if(idx.DTS_TO < idx.DTS_FROM){ alert("조회기간을 올바르게 선택해 주세요."); result = false; return;};	
-        		if(idx.CD_CCLSTAT === null || idx.CD_CCLSTAT === ""){ alert("취소상태를 선택해 주세요."); return false;};
+            	var result = true,
+            		cashParam = angular.copy(idx);
+            	
+        		for(var w in idx){
+        			if(w === "NM_MRK_SELCT_INDEX"){
+        				var c = idx[w].length;
+        				if(!c){
+        					alert("마켓명을 입력해 주세요.");
+                			if(confirm("마켓등록 페이지로 이동할까요?")){
+                				$state.go("app.syMrk", { menu: true, ids: null });
+                			};
+                			result = false;
+                			return false;
+        				}
+        			}
+        			if(w === "CD_ORDSTAT"){
+        				if(!idx[w]){ alert("주문상태를 입력해 주세요."); result = false; return false;};
+        			}
+        			if(w === "DTS_CHK"){
+        				if(!idx[w]){ alert("기간을 선택해 주세요."); result = false; return false;};
+        			}
+        			if(w === "CD_CCLSTAT"){
+        				if(!idx[w]){ alert("취소상태를 선택해 주세요."); result = false; return false;};
+        			}
+        			if(w === "I_CD_INQSTAT"){
+        				if(!idx[w]){ alert("상태값을 입력해 주세요."); result = false; return false;};
+        			}
+        			if(w === "I_DTS_INQREG_F"){
+        				if(idx.I_DTS_INQREG_F > idx.I_DTS_INQREG_T){ alert("문의일자를 올바르게 입력해 주세요."); result = false; return;};    
+        			}
+        			if(w === "DTS_FROM"){
+        				if(idx.DTS_TO < idx.DTS_FROM){ alert("조회기간을 올바르게 선택해 주세요."); result = false; return false;};	
+        			}
+        		};
+        		if(result){
+        			this.localStorage.setItem(idx.CASH_PARAM, cashParam);
+            		//값이 너무 길어서 안넘어 가는듯.. 조회전에 다 짤라줌
+            		idx.NM_MRK_SELCT_INDEX = "";
+            		idx.NM_ORDSTAT_SELCT_INDEX = "";
+            		idx.CD_CCLSTAT_SELCT_INDEX = "";        		
+            		//idx.DTS_SELECTED = "";        			
+        		}        		
+        		
             	return result;
             };
             
@@ -91,46 +128,76 @@
         			var me = vo,
 				    	df = getParam.DTS_FROM,
 				    	dt = getParam.DTS_TO;
-				   			
-					me.datesetting.selected = getParam.DTS_SELECTED;
-    				me.betweenDateOptionMo = getParam.DTS_CHK;
-    				
-			   		me.ordMrkNameOp.setSelectNames = getParam.NM_MRK_SELCT_INDEX;
-        			me.ordStatusOp.setSelectNames = getParam.NM_ORDSTAT_SELCT_INDEX;
-
-			   		me.ordMrkNameOp.allSelectNames = getParam.NM_MRK_SELCT_INDEX;
-        			me.ordStatusOp.allSelectNames = getParam.NM_ORDSTAT_SELCT_INDEX;
-        			//me.setting.allCheckYn = 'N';
         			
-    				me.ordMrkNameMo = getParam.NM_MRK || getParam.NO_MRK; 
-        			me.ordStatusMo = getParam.CD_ORDSTAT;        			                			
-    				me.procName.value = getParam.NM_MRKITEM;
-        			me.orderNo.value = getParam.NO_MRKORD;
-        			me.buyerName.value = getParam.NM_PCHR || getParam.NM_CONS; 
-        			
-    				//me.datesetting.period.start.y = df.substring(0,4);
-        			//me.datesetting.period.start.m = df.substring(4,6);
-        			//me.datesetting.period.start.d = df.substring(6,8); 					    
-        			//me.datesetting.period.end.y = dt.substring(0,4);
-				   	//me.datesetting.period.end.m = dt.substring(4,6); 
-				   	//me.datesetting.period.end.d = dt.substring(6,8);
-				   	
-				   	if(me.admin){
-				   		var a = me.admin; 
-				   		a.value = (!getParam.NO_ORDDTRM) ? "" : getParam.NO_ORDDTRM;
-				   	};
-				   	if(me.cancelStatusMo){
-				   		me.cancelStatusMo = getParam.CD_CCLSTAT;
-				   		me.cancelStatusOp.setSelectNames = getParam.CD_CCLSTAT_SELCT_INDEX;
-				   		me.cancelStatusOp.allSelectNames = getParam.CD_CCLSTAT_SELCT_INDEX;
-				   	}
-				   	if(me.echgStatusMo){
-				   		me.echgStatusMo = getParam.CD_ECHGSTAT;
-				   	}
-				   	if(me.cdTkbkstatMo){
-				   		me.cdTkbkstatMo = getParam.CD_TKBKSTAT;
-				   	}
-				   	
+        			for(var w in me){
+        				if(w === "datesetting"){
+        					me[w].selected = getParam.DTS_SELECTED;
+        				}
+        				if(w === "betweenDateOptionMo" ){
+        					me[w] = getParam.DTS_CHK;
+        				}
+        				if(w === "ordMrkNameOp"){
+        			   		me[w].setSelectNames = getParam.NM_MRK_SELCT_INDEX;
+        			   		me[w].allSelectNames = getParam.NM_MRK_SELCT_INDEX;
+        				}
+        				if(w === "ordStatusOp"){
+                			me[w].setSelectNames = getParam.NM_ORDSTAT_SELCT_INDEX;
+        					me[w].allSelectNames = getParam.NM_ORDSTAT_SELCT_INDEX;
+        				}
+        				if(w === "ordMrkNameMo"){
+        					me[w] = getParam.NM_MRK || getParam.NO_MRK; 
+        				}
+        				if(w === "ordStatusMo"){
+        					me[w] = getParam.CD_ORDSTAT; 
+        				}
+        				if(w === "procName"){
+        					var v = getParam.NM_MRKITEM || getParam.I_NM_MRKITEM || "";
+        					me[w].value = v.trim();
+        				}
+        				if(w === "orderNo"){
+        					var v = getParam.NO_MRKORD || getParam.I_NO_MRKORD || "";
+        					me[w].value = v.trim();
+        				}
+        				if(w === "buyerName"){
+        					var v = getParam.NM_PCHR || getParam.NM_CONS || getParam.I_NM_INQ || "";
+        					me[w].value = v.trim();        					
+        				}
+        				if(w === "admin"){
+        					var v = (!getParam.NO_ORDDTRM) ? "" : getParam.NO_ORDDTRM;
+        					me[w].value = v.trim();
+        				}
+        				if(w === "cancelStatusMo"){
+        					me[w] = getParam.CD_CCLSTAT;
+        				}
+        				if(w === "cancelStatusOp"){
+    				   		me[w].setSelectNames = getParam.CD_CCLSTAT_SELCT_INDEX;
+    				   		me[w].allSelectNames = getParam.CD_CCLSTAT_SELCT_INDEX;
+        				}
+        				if(w === "echgStatusMo"){
+        					me[w] = getParam.CD_ECHGSTAT;
+        				}
+        				if(w === "cdTkbkstatMo"){
+        					me[w] = getParam.CD_TKBKSTAT;
+        				}
+        				if(w === "csMrkNameMo"){
+        					me[w] = getParam.I_NO_MRK;
+        				}        				
+        				if(w === "csStatusMo"){
+        					me[w] = getParam.I_CD_INQSTAT;
+        				}      				
+        				if(w === "csQuestionCodeMo"){
+        					me[w].value = getParam.I_NM_INQCLFT;
+        				}
+        				if(w === "csMrkNameOp"){
+        					me[w].setSelectNames = getParam.CS_NM_MRK_SELCT_INDEX;
+        			   		me[w].allSelectNames = getParam.CS_NM_MRK_SELCT_INDEX;
+        				}
+        				if(w === "csStatusOp"){
+        					me[w].setSelectNames = getParam.CS_NM_ORDSTAT_SELCT_INDEX;
+        					me[w].allSelectNames = getParam.CS_NM_ORDSTAT_SELCT_INDEX;
+        				}        				
+            			//me.setting.allCheckYn = 'N';
+        			}
     				me.inQuiry();
         		};
 			};
@@ -169,7 +236,7 @@
 			
 			this.storedDatesettingLoad = function(name, vo){
 				var storedData = this.localStorage.getItem(name);
-				
+								
 				if(storedData){					
 					return storedData.DTS_SELECTED; 
 				}else{

@@ -132,37 +132,37 @@
                         me.betweenDateOptionMo = result[2][0].CD_DEF; //처음 로딩 때 초기 인덱스를 위하여
                         
                         $timeout(function(){
-            				Util03saSvc.storedQuerySearchPlay(me, "ordAllDataVO");
-                        },0);    
+            				Util03saSvc.storedQuerySearchPlay(me, "ordAllDataVO", $scope.ordallkg);
+                        });    
                     });
                 };
 
 	            //조회
 	            ordAllDataVO.inQuiry = function(){
 	            	var me = this;
-	            	me.param = {
-    				    NM_MRKITEM : me.procName.value,
-					    NO_MRK : me.ordMrkNameMo, 
-					    CD_ORDSTAT : me.ordStatusMo,
-					    NO_MRKORD : me.orderNo.value,      
-					    NM_PCHR : me.buyerName.value,
-					    DTS_CHK : me.betweenDateOptionMo,  
-					    DTS_FROM : new Date(me.datesetting.period.start.y, me.datesetting.period.start.m-1, me.datesetting.period.start.d, "00", "00", "00").dateFormat("YmdHis"),           
-					    DTS_TO : new Date(me.datesetting.period.end.y, me.datesetting.period.end.m-1, me.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis"),
-					    NM_MRK_SELCT_INDEX : me.ordMrkNameOp.allSelectNames,
-					    NM_ORDSTAT_SELCT_INDEX : me.ordStatusOp.allSelectNames,
-					    DTS_SELECTED : me.datesetting.selected	
-                    };
+            		me.param = {
+        				    NM_MRKITEM : me.procName.value,
+    					    NO_MRK : me.ordMrkNameMo, 
+    					    CD_ORDSTAT : me.ordStatusMo,
+    					    NO_MRKORD : me.orderNo.value,      
+    					    NM_PCHR : me.buyerName.value,
+    					    DTS_CHK : me.betweenDateOptionMo,  
+    					    DTS_FROM : new Date(me.datesetting.period.start.y, me.datesetting.period.start.m-1, me.datesetting.period.start.d, "00", "00", "00").dateFormat("YmdHis"),           
+    					    DTS_TO : new Date(me.datesetting.period.end.y, me.datesetting.period.end.m-1, me.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis"),
+    					    NM_MRK_SELCT_INDEX : me.ordMrkNameOp.allSelectNames,
+    					    NM_ORDSTAT_SELCT_INDEX : me.ordStatusOp.allSelectNames,
+    					    DTS_SELECTED : me.datesetting.selected,
+    					    CASH_PARAM : "ordAllDataVO"
+                        };
     				if(Util03saSvc.readValidation(me.param)){
     					$scope.ordallkg.dataSource.data([]); // 페이지 인덱스 초기화가 제대로 안되서 일케함	
     	            	$scope.ordallkg.dataSource.page(1);
-    	            	//$scope.ordallkg.dataSource.read();
-    				}	         				
-    				Util03saSvc.localStorage.setItem("ordAllDataVO" ,me.param);
+    	            	//$scope.ordallkg.dataSource.read();	      
+    				}	            	
 	            };
 	            
 	            //초기화버튼
-	            ordAllDataVO.inIt = function(){      	
+	            ordAllDataVO.inIt = function(){
             		var me  = this;
                 	
 	            	me.procName.value = "";

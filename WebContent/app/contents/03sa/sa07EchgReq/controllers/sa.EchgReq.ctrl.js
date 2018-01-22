@@ -288,13 +288,13 @@
     					    DTS_TO : new Date(self.datesetting.period.end.y, self.datesetting.period.end.m-1, self.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis"),
     					    NM_MRK_SELCT_INDEX : self.ordMrkNameOp.allSelectNames,
     					    NM_ORDSTAT_SELCT_INDEX : self.ordStatusOp.allSelectNames,
-    					    DTS_SELECTED : self.datesetting.selected	
+    					    DTS_SELECTED : self.datesetting.selected,
+    					    CASH_PARAM : "echgDataVO"
 	            	};
 	            	if(Util03saSvc.readValidation(self.param)){
 	            		$scope.echgkg.dataSource.data([]);
 		            	$scope.echgkg.dataSource.page(1);
-        			};
-    				Util03saSvc.localStorage.setItem("echgDataVO" ,self.param);    	         			
+        			};    	         			
 	            };
 		            
 	            //초기화버튼
@@ -456,7 +456,7 @@
 	                		},
                             change : function(e){
                             	if(this.text() === "택배사 등록" && this.selectedIndex === 1){
-                            		$window.open("/#/99sy/syPars?menu=true","_self");
+                            		$state.go("app.syPars", { menu: true, ids: null });
                             		$scope.echgkg.cancelRow();
                             	}
                             }
