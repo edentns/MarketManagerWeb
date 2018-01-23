@@ -28,8 +28,8 @@
 	        		},
 	            	datesetting : {
 	        			dateType   : 'market',
-						buttonList : ['current', '1Day', '1Week', '1Month'],
-						selected   : '1Week',
+						buttonList : ['current', '1Day', '1Week', '1Month', 'range'],
+						selected   : resData.selected,
 						period : {
 							start : resData.start,
 							end   : resData.end
@@ -40,6 +40,16 @@
                     stJobModel  : resData.stJobModel,                   //작업상태 모델
                     stJobBind   : resData.stJobData                     //작업상태 옵션
 		        };
+	            
+	            itlDataVO.reset = function() {
+	            	var self = this;
+	            	self.datesetting.period.start = angular.copy(edt.getToday());
+	            	self.datesetting.period.end   = angular.copy(edt.getToday());
+	            	self.datesetting.selected = '1Week';
+	            	
+	            	self.mngMrkBind.bReset = true;                    
+	            	self.stJobBind.bReset = true;
+	            };
 	            
 	            itlDataVO.init = function() {
 		            angular.forEach($scope.gridMidVO, function (gridMidLocalVO, iIndex) {

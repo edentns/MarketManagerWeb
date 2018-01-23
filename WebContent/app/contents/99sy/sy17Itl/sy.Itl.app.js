@@ -39,12 +39,14 @@
         				            		resData.stJobData.setSelectNames  = history.stJobBindSelect;
         				            		resData.start                     = history.start;
         				            		resData.end                       = history.end;
+        				            		resData.selected                  = 'range';
         				            	}
         				            	else {
         				            		resData.mngMrkModel = "*";
         				            		resData.stJobModel  = "*";
         				            		resData.start = angular.copy(edt.getToday());
         				            		resData.end   = angular.copy(edt.getToday());
+        				            		resData.selected                  = '1Week';
         				            	}
         				            		
         		    					defer.resolve(resData);

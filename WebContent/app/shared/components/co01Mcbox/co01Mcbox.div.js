@@ -154,6 +154,8 @@
 				    });
                 	
                 	$scope.$watch('options', function (newValue, oldValue) {
+                		if($scope.options.setSelectNames) return;
+                		
                 		$scope.selectAll();
                 		if($scope.setting.allCheckYn) {
                 			if($scope.setting.allCheckYn == "n" || $scope.setting.allCheckYn == "N") {
