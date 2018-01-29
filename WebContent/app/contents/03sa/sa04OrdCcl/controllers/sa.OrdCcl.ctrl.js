@@ -182,8 +182,8 @@
             		boxTitle : "주문취소관리",
 	            	datesetting : {
 	        			dateType   : 'market',
-						buttonList : ['current', '1Day', '1Week', '1Month'],
-						selected   : Util03saSvc.storedDatesettingLoad("ordCancelParam"),
+						buttonList : ['current', '1Day', '1Week', '1Month', 'range'],
+						selected   : resData.selected,
 						period : {
 							start : angular.copy(today),
 							end   : angular.copy(today)
@@ -317,7 +317,7 @@
                         me.cancelStatusOp = result[5];
                         
                         $timeout(function(){
-            				Util03saSvc.storedQuerySearchPlay(me, "ordCancelParam");
+            				Util03saSvc.storedQuerySearchPlay(me, resData.storage);
                         },0);    
                     });
                 };
@@ -339,8 +339,10 @@
 					    NM_MRK_SELCT_INDEX : me.ordMrkNameOp.allSelectNames,
 					    NM_ORDSTAT_SELCT_INDEX : me.ordStatusOp.allSelectNames,
 					    CD_CCLSTAT_SELCT_INDEX : me.cancelStatusOp.allSelectNames,
-					    DTS_SELECTED : me.datesetting.selected,			
-					    CASH_PARAM : "ordCancelParam"
+					    DTS_SELECTED : me.datesetting.selected,	
+    					DTS_STORAGE_FROM: me.datesetting.period.start,
+    					DTS_STORAGE_TO: me.datesetting.period.end,		
+					    CASH_PARAM : resData.storageKey
                     }; 
     				if(Util03saSvc.readValidation(me.param)){
     					$scope.ordCancelManagementkg.dataSource.data([]);

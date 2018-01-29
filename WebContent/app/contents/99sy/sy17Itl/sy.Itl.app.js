@@ -22,36 +22,45 @@
                             AuthSvc.isAccess().then(function (result) {
                                 resData.access = result[0];
                                 
-                                UtilSvc.csMrkList().then(function (res) {
-                                	resData.mngMrkData = res.data;
-                                	
-                                	var param = {
-        		    					procedureParam: "MarketManager.USP_MA_07ITL_CODE_GET",
-        		    				};
-        		    				UtilSvc.getList(param).then(function (res) {
-        		    					resData.stJobData  = res.data.results[3];
-        		    					
-        		    					var history = UtilSvc.grid.getInquiryParam(self.self.name);
-        				            	if(history){
-        				            		resData.mngMrkModel               = history.mngMrkModel;
-        				            		resData.mngMrkData.setSelectNames = history.mngMrkBindSelect;
-        				            		resData.stJobModel                = history.stJobModel;
-        				            		resData.stJobData.setSelectNames  = history.stJobBindSelect;
-        				            		resData.start                     = history.start;
-        				            		resData.end                       = history.end;
-        				            		resData.selected                  = 'range';
-        				            	}
-        				            	else {
-        				            		resData.mngMrkModel = "*";
-        				            		resData.stJobModel  = "*";
-        				            		resData.start = angular.copy(edt.getToday());
-        				            		resData.end   = angular.copy(edt.getToday());
-        				            		resData.selected                  = '1Week';
-        				            	}
-        				            		
-        		    					defer.resolve(resData);
-        							});
-                    			})
+                                var param = {
+    		    					procedureParam: "MarketManager.USP_MA_07ITL_CODE_GET",
+    		    				};
+                            
+                                $q.all([
+                            		UtilSvc.csMrkList().then(function (res) {
+                            	    	return res.data;
+                            		}),
+                            		UtilSvc.getList(param).then(function (res) {
+                            			return res.data.results[3];
+                            		}),
+                            		UtilSvc.grid.getInquiryParam().then(function (res) {
+                            			return res.data;
+                            		})
+                                ]).then(function (result) {
+                                	resData.mngMrkData = result[0];
+                                	resData.stJobData  = result[1];
+                        			
+                        			var history = result[2];
+                        			
+                        			if(history){
+    				            		resData.mngMrkModel               = history.mngMrkModel;
+    				            		resData.mngMrkData.setSelectNames = history.mngMrkBindSelect;
+    				            		resData.stJobModel                = history.stJobModel;
+    				            		resData.stJobData.setSelectNames  = history.stJobBindSelect;
+    				            		resData.start                     = history.start;
+    				            		resData.end                       = history.end;
+    				            		resData.selected                  = 'range';
+    				            	}
+    				            	else {
+    				            		resData.mngMrkModel = "*";
+    				            		resData.stJobModel  = "*";
+    				            		resData.start       = angular.copy(edt.getToday());
+    				            		resData.end         = angular.copy(edt.getToday());
+    				            		resData.selected    = '1Week';
+    				            	}
+    				            		
+    		    					defer.resolve(resData);
+                                });
                             });
 
                             return defer.promise;

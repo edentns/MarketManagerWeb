@@ -14,16 +14,24 @@
                     templateUrl	: "app/contents/04cs/cs01Inq/templates/cs.Inq.tpl.html",
                     controller  : "cs.InqCtrl",
                     resolve		: {
-                        resData: ["AuthSvc", "$q", function (AuthSvc, $q) {
+                        resData: ["AuthSvc", "$q", "Util03saSvc", function (AuthSvc, $q, Util03saSvc) {
                             var defer 	= $q.defer(),
-                                resData = {};
-
-                            AuthSvc.isAccess().then(function (result) {
-                                resData.access = result[0];
-                                defer.resolve(resData);
-                            });
-
-                            return defer.promise;
+	                            resData = {},
+	                            storageKey = "csDataVO";
+	
+	                        AuthSvc.isAccess().then(function (result) {
+	                            resData.access = result[0];
+	
+	                            Util03saSvc.storedDatesettingLoad(storageKey).then(function(res) {
+	                            	resData.selected   = res.selected;
+	                        		resData.storage    = res.storage;
+	                        		resData.storageKey = storageKey;
+	                        		
+	                        		defer.resolve(resData);
+	                            });
+	                        });
+	
+	                        return defer.promise;
                         }]
                     }
                 }

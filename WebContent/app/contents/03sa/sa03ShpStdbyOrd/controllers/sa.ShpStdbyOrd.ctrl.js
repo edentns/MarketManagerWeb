@@ -22,8 +22,8 @@
 	        		},
 	            	datesetting : {
 	        			dateType   : 'market',
-						buttonList : ['current', '1Day', '1Week', '1Month'],
-						selected   : Util03saSvc.storedDatesettingLoad("shpStdbyOrdSerchParam"),
+						buttonList : ['current', '1Day', '1Week', '1Month', 'range'],
+						selected   : resData.selected,
 						period : {
 							start : angular.copy(today),
 							end   : angular.copy(today)
@@ -99,7 +99,7 @@
     					});
                         
                         $timeout(function(){
-            				Util03saSvc.storedQuerySearchPlay(me, "shpStdbyOrdSerchParam");
+            				Util03saSvc.storedQuerySearchPlay(me, resData.storage);
                         },0);    
                     });
                 };
@@ -119,7 +119,9 @@
 					    DTS_FROM : new Date(me.datesetting.period.start.y, me.datesetting.period.start.m-1, me.datesetting.period.start.d, "00", "00", "00").dateFormat("YmdHis"),           
 					    DTS_TO : new Date(me.datesetting.period.end.y, me.datesetting.period.end.m-1, me.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis"),
 					    DTS_SELECTED : me.datesetting.selected,
-					    CASH_PARAM : "shpStdbyOrdSerchParam"
+    					DTS_STORAGE_FROM: me.datesetting.period.start,
+    					DTS_STORAGE_TO: me.datesetting.period.end,
+					    CASH_PARAM : resData.storageKey
                     };   
     				if(Util03saSvc.readValidation(me.param)){
     					$scope.shpbyordkg.dataSource.data([]);

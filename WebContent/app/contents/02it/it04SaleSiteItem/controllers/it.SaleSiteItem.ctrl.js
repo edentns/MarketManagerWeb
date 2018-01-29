@@ -32,11 +32,11 @@
 	        		},
 	        		datesetting : {
 	        			dateType   : 'market',
-						buttonList : ['current', '1Day', '1Week', '1Month'],
-						selected   : 'current',
+						buttonList : ['current', '1Day', '1Week', '1Month', 'range'],
+						selected   : resData.selected,
 						period : {
-							start : angular.copy(today),
-							end   : angular.copy(today)
+							start : resData.start,
+							end   : resData.end
 						}
 	        		},
 	        		itemCtgrList1 : [],
@@ -45,50 +45,35 @@
 	        		selectedCtgr2 : {ID_CTGR : "", NM_CTGR: ""},
 	        		itemCtgrList3 : [],
 	        		selectedCtgr3 : {ID_CTGR : "", NM_CTGR: ""},
-	        		signItem : { value: "" , focus: false },
-	        		nmItem   : { value: "" , focus: false },
+	        		signItem : { value: resData.signItemValue , focus: false },
+	        		nmItem   : { value: resData.nmItemValue , focus: false },
 	        		nmMnfr   : { value: "" , focus: false },
 	        		taxClftList   : [],
 	        		taxClftIds    : "*",
-	        		iStatList     : [],
-	        		iStatIds      : "*",
-	        		cmrkList      : [],
-	        		cmrkIds       : "*",
+	        		iStatList     : resData.iStatList,
+	        		iStatIds      : resData.iStatIds,
+	        		cmrkList      : resData.cmrkList,
+	        		cmrkIds       : resData.cmrkIds,
 	        		iCtgrId       : "",
 	        		dataTotal     : 0
 	            };	            
 	            
 	            //처음 화면들어왓을때
 	            saleItemDataVO.doQuiry = function(){
-	            	saleItemDataVO.taxClftList = resData.taxCodeList;
-	            	saleItemDataVO.iStatList   = resData.iStatCodeList;
-	            	saleItemDataVO.itemCtgrList1   = resData.itCtgrList;
-	            	saleItemDataVO.cmrkList    = resData.cmrkList;
-	            	
 	            	$timeout(function() {
 		            	// 이전에 검색조건을 세션에 저장된 것을 가져옴
-	            		var history = UtilSvc.grid.getInquiryParam();
-		            	if(history){
-		            		saleItemDataVO.signItem.value = history.CD_SIGNITEM;
-	    					saleItemDataVO.nmItem.value = history.NM_ITEM;
-	    					saleItemDataVO.cmrkIds = history.NO_MRK;
-	    					saleItemDataVO.cmrkList.setSelectNames = history.NO_MRK_SELECT_INDEX;
-	    					saleItemDataVO.iStatIds = history.CD_ITEMSTAT;
-	    					saleItemDataVO.iStatList.setSelectNames = history.CD_ITEMSTAT_SELECT_INDEX;
-	    					saleItemDataVO.selectedCtgr1.ID_CTGR = history.CD_ITEMCTGR1;
-	    					saleItemDataVO.selectedCtgr1.NM_CTGR = history.NM_ITEMCTGR1;
+	            		if(resData.CD_ITEMCTGR1 !== "") {
+	    					saleItemDataVO.selectedCtgr1.ID_CTGR = resData.CD_ITEMCTGR1;
+	    					saleItemDataVO.selectedCtgr1.NM_CTGR = resData.NM_ITEMCTGR1;
 	    					saleItemDataVO.ctgrChange(0);
-	    					saleItemDataVO.selectedCtgr2.ID_CTGR = history.CD_ITEMCTGR2;
-	    					saleItemDataVO.selectedCtgr2.NM_CTGR = history.NM_ITEMCTGR2;
+	    					saleItemDataVO.selectedCtgr2.ID_CTGR = resData.CD_ITEMCTGR2;
+	    					saleItemDataVO.selectedCtgr2.NM_CTGR = resData.NM_ITEMCTGR2;
 	    					saleItemDataVO.ctgrChange(1);
-	    					saleItemDataVO.selectedCtgr3.ID_CTGR = history.CD_ITEMCTGR3;
-	    					saleItemDataVO.selectedCtgr3.NM_CTGR = history.NM_ITEMCTGR3;
+	    					saleItemDataVO.selectedCtgr3.ID_CTGR = resData.CD_ITEMCTGR3;
+	    					saleItemDataVO.selectedCtgr3.NM_CTGR = resData.NM_ITEMCTGR3;
 	    					saleItemDataVO.ctgrChange(2);
-							saleItemDataVO.datesetting.period.start = history.DATE_FROM;
-		                	saleItemDataVO.datesetting.period.end = history.DATE_TO;
-		            		
-		            		$scope.gridSaleVO.dataSource.read();
-		            	}
+	            		}
+	            		$scope.gridSaleVO.dataSource.read();
 	            	},1000);
 	            };
 	            

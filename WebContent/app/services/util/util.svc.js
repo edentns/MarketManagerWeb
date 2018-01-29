@@ -21,6 +21,31 @@
 				last: "마지막 페이지"
 			};
 			
+			// 모듈이든 서비스든 저장을 해주세요
+			this.CachedPromise = function(promiseInvoker) {
+			  var cached;
+
+			  // cached 값이 
+			  return function invokeCachedPromise() {
+			    return typeof cached !== 'undefined' ? 
+			      // { then: } 이런 형식 대신, 직접 프로미스 오브젝트를 사용하는 이유는
+			      // callback에서 exception이 날라다녀도, promise가 catch해서 
+			      // .catch 메소드로 볼 수 있기 때문입니다.
+			      $q(function (resolve, reject) {
+			        resolve(cached);
+			      }) : 
+			      promiseInvoker.apply(null, arguments)
+			      .then(function (res) {
+			        // cached assignment 
+			        cached = res.data;
+			        
+			        // Promise 라이브러리 마다 좀 다르지만, 보통은 값을 리턴 해주셔야, 
+			        // 다음 then 메소드로 받아서 처리 하실 수 있습니다.
+			        return cached;
+			      });
+			  }
+			};
+			
 	        this.gridtooltipOptions = {
         		filter: "td",
         		position: "right",
@@ -636,20 +661,31 @@
 				 * @param {string=} psUrl
 				 */
 				setInquiryParam: function (poJson, psKind, psUrl) {
-					var fixKey = user.NO_C +''+ user.DC_ID,
-						key;
-
-					if (psUrl) {
-						key = fixKey +''+ MenuSvc.getNO_M(psUrl) +'Inquiry';
-					} else {
-						key = fixKey +''+ MenuSvc.getNO_M($state.current.name) +'Inquiry';
-					}
+					var strkey = 'menu';
 
 					if (angular.isString(psKind)) {
-						key += psKind;
+						strkey += psKind;
 					}
-					//console.log(poJson);
-					$window.localStorage.setItem(key, JSON.stringify(poJson));
+					
+					// 저장
+					var param = {
+						ID_KEY: strkey,
+						DC_VAL: JSON.stringify(poJson)
+    				};
+					
+					return $http({
+						method	: "POST",
+						url		: APP_CONFIG.domain +"/ut08Storage/",
+						headers	: { "Content-Type": "application/x-www-form-urlencoded; text/plain; */*; charset=utf-8" },
+						data	: $.param(param)
+					}).success(function (data, status, headers, config) {
+						if(data !== "저장 성공") {
+							alert("저장에 실패하였습니다.!! 연구소에 문의 부탁드립니다.\n("+data.errors[0].LMSG+")");
+							return;
+						}
+					}).error(function (data, status, headers, config) {
+						console.log("error",data,status,headers,config);
+					});
 				},
 
 				/**
@@ -660,20 +696,25 @@
 				getInquiryParam: function (psKind) {
 					if(user === null || user === undefined) return '';
 					
-					var fixKey = user.NO_C +''+ user.DC_ID,
-						key = fixKey +''+ MenuSvc.getNO_M($state.current.name) +'Inquiry',
-						rtnData;
+					var strkey = 'menu';
 
 					if (angular.isString(psKind)) {
-						//key += psKind;
-						key = fixKey +''+ MenuSvc.getNO_M(psKind) +'Inquiry'
+						strkey += psKind;
 					}
-					rtnData = $window.localStorage.getItem(key);
-
-					if (rtnData) {
-						rtnData = JSON.parse(rtnData);
-					}
-					return rtnData;
+					
+					// 저장
+					var param = {
+						ID_KEY: strkey,
+    				};
+					
+					return $http({
+						method	: "GET",
+						url		: APP_CONFIG.domain +"/ut08Storage?"+ $.param(param)
+					}).success(function (data, status, headers, config) {
+						//console.log("success",data,status,headers,config);
+					}).error(function (data, status, headers, config) {
+						console.log("error",data,status,headers,config);
+					});
 				},
 
 				/**

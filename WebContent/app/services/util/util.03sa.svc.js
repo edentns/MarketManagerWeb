@@ -6,8 +6,8 @@
 	 * @description
 	 * 상품 유틸 서비스
 	 */
-	angular.module('edtApp.common.service').service('Util03saSvc', ['$rootScope', '$state', '$window', '$http', '$timeout', 'APP_CONFIG', 'MenuSvc', 'UtilSvc', "$log",
-		function ($rootScope, $state, $window, $http, $timeout, APP_CONFIG, MenuSvc, UtilSvc, $log) {
+	angular.module('edtApp.common.service').service('Util03saSvc', ['$rootScope', '$state', '$window', '$http', '$timeout', 'APP_CONFIG', 'MenuSvc', 'UtilSvc', "$log", "$q", 
+		function ($rootScope, $state, $window, $http, $timeout, APP_CONFIG, MenuSvc, UtilSvc, $log, $q) {
 		
 			//popup insert & update Validation
             this.readValidation = function(idx){
@@ -121,17 +121,17 @@
 			};
             
 			//검색어 저장 후 조회기능
-			this.storedQuerySearchPlay = function(vo, param, grd){
-				var getParam = this.localStorage.getItem(param);
-            	
-        		if(getParam){        			        			
-        			var me = vo,
-				    	df = getParam.DTS_FROM,
-				    	dt = getParam.DTS_TO;
+			this.storedQuerySearchPlay = function(vo, storage, grd){
+				var getParam = storage,
+					me = vo;
+			
+				if(getParam){        			        			
         			
-        			for(var w in me){
+        			for(var w in me) {
         				if(w === "datesetting"){
-        					me[w].selected = getParam.DTS_SELECTED;
+        					me[w].selected     = "range";
+        					me[w].period.start = getParam.DTS_STORAGE_FROM;
+        					me[w].period.end   = getParam.DTS_STORAGE_TO;
         				}
         				if(w === "betweenDateOptionMo" ){
         					me[w] = getParam.DTS_CHK;
@@ -198,8 +198,9 @@
         				}        				
             			//me.setting.allCheckYn = 'N';
         			}
-    				me.inQuiry();
-        		};
+        		}
+				
+				me.inQuiry();
 			};
 			
 			//로컬 스토리지			
@@ -209,21 +210,43 @@
 						noC = user.NO_C,
 						noEmp = user.NO_EMP,
 						key = noC+noEmp+name;
-					$window.localStorage.setItem(key, JSON.stringify(data));
+					
+					// 저장
+					var param = {
+						ID_KEY: name,
+						DC_VAL: JSON.stringify(data)
+    				};
+					
+					return $http({
+						method	: "POST",
+						url		: APP_CONFIG.domain +"/ut08Storage/",
+						headers	: { "Content-Type": "application/x-www-form-urlencoded; text/plain; */*; charset=utf-8" },
+						data	: $.param(param)
+					}).success(function (data, status, headers, config) {
+						if(data !== "저장 성공") {
+							alert("저장에 실패하였습니다.!! 연구소에 문의 부탁드립니다.\n("+data.errors[0].LMSG+")");
+							return;
+						}
+					}).error(function (data, status, headers, config) {
+						console.log("error",data,status,headers,config);
+					});
+					
+					//$window.localStorage.setItem(key, JSON.stringify(data));
 				},				
 				getItem: function(name) {					
-					var user = $rootScope.webApp.user,
-						noC = user.NO_C,
-					    noEmp = user.NO_EMP,
-					    key = noC+noEmp+name,
-						result = $window.localStorage.getItem(key);
-					if (!user){
-						return '';
+					var user = $rootScope.webApp.user;
+					
+					// 저장
+					var param = {
+						ID_KEY: name,
 					};
-					if (result) {
-						result = JSON.parse(result);
-					}					
-					return result;
+					
+					return $http({
+						method	: "GET",
+						url		: APP_CONFIG.domain +"/ut08Storage?"+ $.param(param)
+					}).success(function (data, status, headers, config) {
+					}).error(function (data, status, headers, config) {
+					});
 				},                
                 removeItem: function(name) {  
                 	var user = $rootScope.webApp.user,
@@ -235,13 +258,19 @@
 			};
 			
 			this.storedDatesettingLoad = function(name, vo){
-				var storedData = this.localStorage.getItem(name);
-								
-				if(storedData){					
-					return storedData.DTS_SELECTED; 
-				}else{
-					return "1Week";
-				}
+				return this.localStorage.getItem(name).then(function(res) {
+					var rtnData = [];
+					
+					if(res.data) {
+						rtnData.selected = res.data.DTS_SELECTED;
+						rtnData.storage = res.data;
+					}
+					else {
+						rtnData.selected = "1Week";
+						rtnData.storage = "";
+					}
+					return rtnData;
+				});
 			};
 		}
 	]);

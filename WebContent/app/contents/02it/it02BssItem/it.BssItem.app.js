@@ -43,76 +43,117 @@
                     					L_CD_AT_4: "006"
                                     };
                                 $q.all([
-                                        SyCodeSvc.getSubcodeList({cd: "SY_000007", search: "all"}).then(function (result) {
-                                            return result.data;
-                                        }),
-                                        SyCodeSvc.getSubcodeList({cd: "SY_000006", search: "all"}).then(function (result) {
-                                            return result.data;
-                                        }),
-                                        SyCodeSvc.getSubcodeList({cd: "IT_000005", search: "all"}).then(function (result) {
-                                            return result.data;
-                                        }),
-                                        SyCodeSvc.getSubcodeList({cd: "IT_000002", search: "all"}).then(function (result) {
-                                            return result.data;
-                                        }),
-                                        UtilSvc.getList(param).then(function (res) {
-                	    					return res.data.results[0];
-                                        }),
-                                        SyCodeSvc.getSubcodeList({cd: "IT_000009", search: "all"}).then(function (result) {
-                                            return result.data;
-                                        }),
-                                        SyCodeSvc.getSubcodeList({cd: "SY_000027", search: "all"}).then(function (result) {
-                                            return result.data;
-                                        }),
-                                        SyCodeSvc.getSubcodeList({cd: "SY_000028", search: "all"}).then(function (result) {
-                                            return result.data;
-                                        }),
-                                        SyCodeSvc.getSubcodeList({cd: "SA_000003", search: "all"}).then(function (result) {
-                                            return result.data;
-                                        }),
-                                        SyCodeSvc.getSubcodeList({cd: "SA_000006", search: "all"}).then(function (result) {
-                                            return result.data;
-                                        }),
-                                        SyCodeSvc.getSubcodeList({cd: "IT_000012", search: "all"}).then(function (result) {
-                                            return result.data;
-                                        }),
-                                        SyCodeSvc.getSubcodeList({cd: "IT_000013", search: "all"}).then(function (result) {
-                                            return result.data;
-                                        }),
-                                        SyCodeSvc.getSubcodeList({cd: "IT_000007", search: "all"}).then(function (result) {
-                                            return result.data;
-                                        }),
-                                        SyCodeSvc.getSubcodeList({cd: "IT_000011", search: "all"}).then(function (result) {
-                                            return result.data;
-                                        }),
-                                        UtilSvc.getList(fileParam).then(function (res) {
-                	    					return res.data.results;
-                                        })
-                                    ]).then(function (result) {
-                                        resData.taxCodeList   = result[0];
-                                        resData.iClftCodeList = result[1];
-                                        resData.iKindCodeList = result[2];
-                                        resData.iStatCodeList = result[3];
-                                        resData.adulYnList    = [{CD_DEF: "Y",NM_DEF: "인증"},{CD_DEF: "N",NM_DEF: "비인증"}];
-                                        resData.itCtgrList    = result[4];
-                                        resData.pcsCodeList   = result[5];
-                                        resData.conCodeList   = result[6];
-                                        resData.wetCodeList   = result[7];
-                                        resData.dmstCodeList  = result[8];
-                                        resData.shptpCodeList = result[9];
-                                        resData.ctfCodeList   = result[10];
-                                        resData.ctfInCodeList = result[11];
-                                        resData.optTypeCodeList = result[12];
-                                        resData.optClftCodeList = result[13];
-                    					
-                                    	if($stateParams.kind == "detail"){
-                	    					resData.fileMainVOcurrentData = result[14][0][0];
-                	        				resData.fileSmallVOcurrentData = result[14][1][0];
-                	        				resData.fileDExVOcurrentDataList = result[14][2];
-                	        				resData.fileDImageVOcurrentDataList = result[14][3];
-                                        }
-                                        defer.resolve( resData );
-                                    });
+                                    SyCodeSvc.getSubcodeList({cd: "SY_000007", search: "all"}).then(function (result) {
+                                        return result.data;
+                                    }),
+                                    SyCodeSvc.getSubcodeList({cd: "SY_000006", search: "all"}).then(function (result) {
+                                        return result.data;
+                                    }),
+                                    SyCodeSvc.getSubcodeList({cd: "IT_000005", search: "all"}).then(function (result) {
+                                        return result.data;
+                                    }),
+                                    SyCodeSvc.getSubcodeList({cd: "IT_000002", search: "all"}).then(function (result) {
+                                        return result.data;
+                                    }),
+                                    UtilSvc.getList(param).then(function (res) {
+            	    					return res.data.results[0];
+                                    }),
+                                    SyCodeSvc.getSubcodeList({cd: "IT_000009", search: "all"}).then(function (result) {
+                                        return result.data;
+                                    }),
+                                    SyCodeSvc.getSubcodeList({cd: "SY_000027", search: "all"}).then(function (result) {
+                                        return result.data;
+                                    }),
+                                    SyCodeSvc.getSubcodeList({cd: "SY_000028", search: "all"}).then(function (result) {
+                                        return result.data;
+                                    }),
+                                    SyCodeSvc.getSubcodeList({cd: "SA_000003", search: "all"}).then(function (result) {
+                                        return result.data;
+                                    }),
+                                    SyCodeSvc.getSubcodeList({cd: "SA_000006", search: "all"}).then(function (result) {
+                                        return result.data;
+                                    }),
+                                    SyCodeSvc.getSubcodeList({cd: "IT_000012", search: "all"}).then(function (result) {
+                                        return result.data;
+                                    }),
+                                    SyCodeSvc.getSubcodeList({cd: "IT_000013", search: "all"}).then(function (result) {
+                                        return result.data;
+                                    }),
+                                    SyCodeSvc.getSubcodeList({cd: "IT_000007", search: "all"}).then(function (result) {
+                                        return result.data;
+                                    }),
+                                    SyCodeSvc.getSubcodeList({cd: "IT_000011", search: "all"}).then(function (result) {
+                                        return result.data;
+                                    }),
+                                    UtilSvc.getList(fileParam).then(function (res) {
+            	    					return res.data.results;
+                                    })
+                                ]).then(function (result) {
+                                    resData.taxCodeList   = result[0];
+                                    resData.iClftCodeList = result[1];
+                                    resData.iKindCodeList = result[2];
+                                    resData.iStatCodeList = result[3];
+                                    resData.adulYnList    = [{CD_DEF: "Y",NM_DEF: "인증"},{CD_DEF: "N",NM_DEF: "비인증"}];
+                                    resData.itCtgrList    = result[4];
+                                    resData.pcsCodeList   = result[5];
+                                    resData.conCodeList   = result[6];
+                                    resData.wetCodeList   = result[7];
+                                    resData.dmstCodeList  = result[8];
+                                    resData.shptpCodeList = result[9];
+                                    resData.ctfCodeList   = result[10];
+                                    resData.ctfInCodeList = result[11];
+                                    resData.optTypeCodeList = result[12];
+                                    resData.optClftCodeList = result[13];
+                					
+                                	if($stateParams.kind == "detail"){
+            	    					resData.fileMainVOcurrentData = result[14][0][0];
+            	        				resData.fileSmallVOcurrentData = result[14][1][0];
+            	        				resData.fileDExVOcurrentDataList = result[14][2];
+            	        				resData.fileDImageVOcurrentDataList = result[14][3];
+            	        				defer.resolve( resData );
+                                    }
+                                	else {
+                                		UtilSvc.grid.getInquiryParam().then(function (res) {
+                                			var history = res.data;
+                                			
+                                			if(history){
+                    		            		resData.signItemValue = history.CD_CLFT;	
+                    		            		resData.nmItemValue   = history.NM_ITEM;
+                    		            		resData.nmMnfrValue   = history.NM_MNFR;
+                    		            		resData.adulYnIds     = history.YN_ADULCTFC;
+                    		            		resData.taxClftIds    = history.CD_TAXCLFT;
+                    		            		resData.iClftIds      = history.CD_ITEMCLFT;
+                    		            		resData.iKindIds      = history.CD_ITEMKIND;
+                    		            		resData.iStatIds      = history.CD_ITEMSTAT;
+                    		            		resData.adulYnList.setSelectNames    = history.YN_ADULCTFC_SELECT_INDEX;
+                    		            		resData.taxCodeList.setSelectNames   = history.CD_TAXCLFT_SELECT_INDEX;
+                    		            		resData.iClftCodeList.setSelectNames = history.CD_ITEMCLFT_SELECT_INDEX;
+                    		            		resData.iKindCodeList.setSelectNames = history.CD_ITEMKIND_SELECT_INDEX;
+                    		            		resData.iStatCodeList.setSelectNames = history.CD_ITEMSTAT_SELECT_INDEX;
+                    		            		resData.selectedDateOption = history.DATEOPT;
+                    		            		resData.start    = history.DATE_FROM;
+                    		            		resData.end      = history.DATE_TO;
+            				            		resData.selected = 'range';
+                    		            	}
+                                			else {
+                    		            		resData.signItemValue = "";	
+                    		            		resData.nmItemValue   = "";
+                    		            		resData.nmMnfrValue   = "";
+                    		            		resData.adulYnIds     = "*";
+                    		            		resData.taxClftIds    = "*";
+                    		            		resData.iClftIds      = "*";
+                    		            		resData.iKindIds      = "*";
+                    		            		resData.iStatIds      = "*";
+                    		            		resData.selectedDateOption = "001";
+                    		            		resData.start = angular.copy(edt.getToday());
+                    		            		resData.end   = angular.copy(edt.getToday());    
+            				            		resData.selected = 'current';                              				
+                                			}
+                                			
+                	        				defer.resolve( resData );
+                                		})
+                                	}
+                                });
                             });
 
                             return defer.promise;

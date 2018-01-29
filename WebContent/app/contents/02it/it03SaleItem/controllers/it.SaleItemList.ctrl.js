@@ -44,8 +44,7 @@
                     	}
                 	}
 				};
-                
-	            	            
+                	            
 	            var saleItemDataVO = $scope.saleItemDataVO = {
 	            	boxTitle : "검색",
 	            	setting : {
@@ -58,56 +57,30 @@
 	        			name: "NM_MRK",
 	        			maxNames: 2
 	        		},
-	        		signItem : { value: "" , focus: false },
-	        		nmItem   : { value: "" , focus: false },
-	        		nmMnfr   : { value: "" , focus: false },
-	        		adulYnList    : [],
-	        		adulYnIds     : "*",
-	        		taxClftList   : [],
-	        		taxClftIds    : "*",
-	        		iClftList     : [],
-	        		iClftIds      : "*",
-	        		iKindList     : [],
-	        		iKindIds      : "*",
-	        		iStatList     : [],
-	        		iStatIds      : "*",
-	        		cmrkList      : [],
-	        		cmrkIds       : "*",
+	        		signItem : { value: resData.signItemValue, focus: false },
+	        		nmItem   : { value: resData.nmItemValue  , focus: false },
+	        		nmMnfr   : { value: resData.nmMnfrValue  , focus: false },
+	        		adulYnList    : resData.adulYnList,
+	        		adulYnIds     : resData.adulYnIds,
+	        		taxClftList   : resData.taxCodeList,
+	        		taxClftIds    : resData.taxClftIds,
+	        		iClftList     : resData.iClftCodeList,
+	        		iClftIds      : resData.iClftIds,
+	        		iKindList     : resData.iKindCodeList,
+	        		iKindIds      : resData.iKindIds,
+	        		cmrkList      : resData.cmrkList,
+	        		cmrkIds       : resData.cmrkIds,
 	        		dataTotal     : 0
 	            };	            
 	            
 	            //처음 화면들어왓을때
 	            saleItemDataVO.doQuiry = function(){
-	            	saleItemDataVO.adulYnList  = resData.adulYnList;
-	            	saleItemDataVO.taxClftList = resData.taxCodeList;
-	            	saleItemDataVO.iClftList   = resData.iClftCodeList;
-	            	saleItemDataVO.iKindList   = resData.iKindCodeList;
-	            	saleItemDataVO.iStatList   = resData.iStatCodeList;
-	            	saleItemDataVO.cmrkList    = resData.cmrkList;
-	            	
 	            	$timeout(function() {
 	            		if(!page.isWriteable()){
 	    					$("#divSaleVO .k-grid-toolbar").hide();
 	    				}
-	            		// 이전에 검색조건을 세션에 저장된 것을 가져옴
-	            		var history = UtilSvc.grid.getInquiryParam();
-		            	if(history){
-		            		saleItemDataVO.signItem.value = history.CD_SIGNITEM;	
-		            		saleItemDataVO.nmItem.value = history.NM_ITEM;
-		            		saleItemDataVO.nmMnfr.value = history.NM_MNFR;
-		            		saleItemDataVO.adulYnIds = history.YN_ADULCTFC;
-		            		saleItemDataVO.taxClftIds = history.CD_TAXCLFT;
-		            		saleItemDataVO.iClftIds = history.CD_ITEMCLFT;
-		            		saleItemDataVO.iKindIds = history.CD_ITEMKIND;
-		            		saleItemDataVO.cmrkIds = history.NO_MRK;
-		            		saleItemDataVO.adulYnList.setSelectNames = history.YN_ADULCTFC_SELECT_INDEX;
-		            		saleItemDataVO.taxClftList.setSelectNames = history.CD_TAXCLFT_SELECT_INDEX;
-		            		saleItemDataVO.iClftList.setSelectNames = history.CD_ITEMCLFT_SELECT_INDEX;
-		            		saleItemDataVO.iKindList.setSelectNames = history.CD_ITEMKIND_SELECT_INDEX;
-		            		saleItemDataVO.cmrkList.setSelectNames = history.NO_MRK_SELECT_INDEX;
-		            		
-		            		$scope.gridSaleVO.dataSource.read();
-		            	}
+
+	            		$scope.gridSaleVO.dataSource.read();
         			});
 	            };
 	            

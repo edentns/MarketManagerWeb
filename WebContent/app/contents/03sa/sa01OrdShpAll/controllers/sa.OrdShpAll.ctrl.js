@@ -82,8 +82,8 @@
 	        		},
 	            	datesetting : {
 	        			dateType   : 'market',
-						buttonList : ['current', '1Day', '1Week', '1Month'],
-						selected   : Util03saSvc.storedDatesettingLoad("ordAllDataVO"),
+						buttonList : ['current', '1Day', '1Week', '1Month', 'range'],
+						selected   : resData.selected,
 						period : {
 							start : angular.copy(today),
 							end   : angular.copy(today)
@@ -132,7 +132,7 @@
                         me.betweenDateOptionMo = result[2][0].CD_DEF; //처음 로딩 때 초기 인덱스를 위하여
                         
                         $timeout(function(){
-            				Util03saSvc.storedQuerySearchPlay(me, "ordAllDataVO", $scope.ordallkg);
+            				Util03saSvc.storedQuerySearchPlay(me, resData.storage, $scope.ordallkg);
                         });    
                     });
                 };
@@ -152,7 +152,9 @@
     					    NM_MRK_SELCT_INDEX : me.ordMrkNameOp.allSelectNames,
     					    NM_ORDSTAT_SELCT_INDEX : me.ordStatusOp.allSelectNames,
     					    DTS_SELECTED : me.datesetting.selected,
-    					    CASH_PARAM : "ordAllDataVO"
+        					DTS_STORAGE_FROM: me.datesetting.period.start,
+        					DTS_STORAGE_TO: me.datesetting.period.end,
+    					    CASH_PARAM : resData.storageKey
                         };
     				if(Util03saSvc.readValidation(me.param)){
     					$scope.ordallkg.dataSource.data([]); // 페이지 인덱스 초기화가 제대로 안되서 일케함	

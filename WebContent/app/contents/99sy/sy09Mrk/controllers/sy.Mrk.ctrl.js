@@ -19,8 +19,8 @@
                  */
                 var dateVO = $scope.dateVO = {
                     boxTitle : "검색",
-                    selectedMrkIds     : '*',
-                    selectedItlStatIds : '*',
+                    selectedMrkIds     : resData.selectedMrkIds,
+                    selectedItlStatIds : resData.selectedItlStatIds,
                     settingMrk : {
 	        			id: "NO_MNGMRK",
 	        			name: "NM_MRK",
@@ -31,7 +31,7 @@
 	        			name: "NM_DEF",
 	        			maxNames: 2,
 	        		},
-	        		MrkCodeList    : [],
+	        		MrkCodeList    : resData.MrkCodeList,
 	        		cdMrkDftDataSource : resData.cdMrkDftDataSource,
 	        		cdNtDataSource : resData.cdNtDataSource,
 	        		ynUseDataSource : [{
@@ -41,46 +41,26 @@
 						"NM_DEF": '사용안함',
 						"CD_DEF": 'N'
 	                }],
-	        		ItlStatCodeList: [],
+	        		ItlStatCodeList: resData.ItlStatCodeList,
 	        		datesetting : {
 	        			dateType   : 'market',
-						buttonList : ['current', '1Day', '1Week', '1Month'],
-						selected   : '1Day',
+						buttonList : ['current', '1Day', '1Week', '1Month', 'range'],
+						selected   : resData.selected,
 						period : {
-							start : angular.copy(today),
-							end   : angular.copy(today)
+							start : resData.start,
+							end   : resData.end
 						}
 	        		}
                 };
                 
                 dateVO.doInit = function() {
-					var param = {
-                            procedureParam: "USP_SY_09MRK01_GET"
-                    	};
-					dateVO.getSubCodeList( {cd: "SY_000017", search: "all"} );
-					dateVO.getSubCodeList( param );
-					
-					// 이전에 검색조건을 세션에 저장된 것을 가져옴
-            		var history = UtilSvc.grid.getInquiryParam();
-					
             		$timeout(function() {
 	            		if(!page.isWriteable()){
 	    					$("#mrkKg .k-grid-toolbar").hide();
 	    				}
         			});
 					
-            		$timeout(function() {
-						if(history){
-		            		dateVO.selectedMrkIds = history.MRK_LIST;
-	            			dateVO.MrkCodeList.setSelectNames = history.MRK_SELECT_INDEX;
-							dateVO.selectedItlStatIds = history.STAT_LIST;
-							dateVO.ItlStatCodeList.setSelectNames = history.STAT_SELECT_INDEX;
-							dateVO.datesetting.period.start = history.START_DATE;
-							dateVO.datesetting.period.end = history.END_DATE;
-		            		
-							$scope.gridMrkVO.dataSource.read();
-		            	}
-            		},1000);
+					$scope.gridMrkVO.dataSource.read();
 				};
 				
 				dateVO.reset = function() {
@@ -110,20 +90,7 @@
 	            		gridMrkVO.dataSource.pageSize(24);
 	            	}
 	            };
-	                  
-				dateVO.getSubCodeList = function (param) {
-                    var self = this;
-                    SyCodeSvc.getSubcodeList(param).then(function (result) {
-                    	if(param.cd == "SY_000017"){
-                    		self.ItlStatCodeList = result.data;
-                    	}else if(param.procedureParam == "USP_SY_09MRK01_GET"){
-                    		UtilSvc.getList(param).then(function (result) {
-                                self.MrkCodeList = result.data.results[0];
-                            });
-                    	}
-                    });
-                };
-                
+	              
                 dateVO.doInquiry = function () {// 검색조건에 해당하는 유저 정보를 가져온다.
                 	gridMrkVO.dataSource.read();
                 	var param = {

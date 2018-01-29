@@ -146,8 +146,8 @@
 	        		},
 	            	datesetting : {
 	        			dateType   : 'market',
-						buttonList : ['current', '1Day', '1Week', '1Month'],
-						selected   : Util03saSvc.storedDatesettingLoad("shippingParam"),
+						buttonList : ['current', '1Day', '1Week', '1Month', 'range'],
+						selected   : resData.selected,
 						period : {
 							start : angular.copy(today),
 							end   : angular.copy(today)
@@ -236,7 +236,7 @@
                         me.shipStatusOp = result[3];
                         
                         $timeout(function(){
-            				Util03saSvc.storedQuerySearchPlay(me, "shippingParam");
+            				Util03saSvc.storedQuerySearchPlay(me, resData.storage);
                         },0);    
                     });
                 };
@@ -254,6 +254,8 @@
 					    DTS_FROM : new Date(shippingDataVO.datesetting.period.start.y, shippingDataVO.datesetting.period.start.m-1, shippingDataVO.datesetting.period.start.d, "00", "00", "00").dateFormat("YmdHis"),           
 					    DTS_TO : new Date(shippingDataVO.datesetting.period.end.y, shippingDataVO.datesetting.period.end.m-1, shippingDataVO.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis"),
 					    DTS_SELECTED : me.datesetting.selected,
+    					DTS_STORAGE_FROM: me.datesetting.period.start,
+    					DTS_STORAGE_TO: me.datesetting.period.end,
 					    NM_MRK_SELCT_INDEX : me.ordMrkNameOp.allSelectNames,
 					    NM_ORDSTAT_SELCT_INDEX : me.ordStatusOp.allSelectNames,
 					    CASH_PARAM : "shippingParam"

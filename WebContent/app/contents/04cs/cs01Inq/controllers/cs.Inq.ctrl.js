@@ -21,8 +21,8 @@
 	        		},
 	            	datesetting : {
 	        			dateType   : 'market',
-						buttonList : ['current', '1Day', '1Week', '1Month'],
-						selected   : '1Week',
+						buttonList : ['current', '1Day', '1Week', '1Month', 'range'],
+						selected   : resData.selected,
 						period : {
 							start : angular.copy(today),
 							end   : angular.copy(today)
@@ -66,7 +66,7 @@
 	            		me.csMrkNameOp = result[1];
 	            		
 	            		$timeout(function(){
-            				Util03saSvc.storedQuerySearchPlay(me, "csDataVO");
+            				Util03saSvc.storedQuerySearchPlay(me, resData.storage);
                         },0);  
 	            	});
 	            };
@@ -86,7 +86,9 @@
     					CS_NM_MRK_SELCT_INDEX : me.csMrkNameOp.allSelectNames,
     					CS_NM_ORDSTAT_SELCT_INDEX : me.csStatusOp.allSelectNames,
     					DTS_SELECTED : me.datesetting.selected,
-    					CASH_PARAM : "csDataVO"
+    					DTS_STORAGE_FROM: me.datesetting.period.start,
+    					DTS_STORAGE_TO: me.datesetting.period.end,
+    					CASH_PARAM : resData.storageKey
                     };   
     				if(Util03saSvc.readValidation(csDataVO.param)){
     					$scope.cskg.dataSource.data([]);

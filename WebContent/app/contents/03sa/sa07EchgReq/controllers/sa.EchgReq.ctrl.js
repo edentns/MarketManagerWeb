@@ -154,8 +154,8 @@
 	        		},
 	            	datesetting : {
 	        			dateType   : 'market',
-						buttonList : ['current', '1Day', '1Week', '1Month'],
-						selected   : Util03saSvc.storedDatesettingLoad("echgDataVO"),
+						buttonList : ['current', '1Day', '1Week', '1Month', 'range'],
+						selected   : resData.selected,
 						period : {
 							start : angular.copy(today),
 							end   : angular.copy(today)
@@ -268,7 +268,7 @@
                         me.echgStatusMo = result[5][0].CD_DEF;
                                                 
                         $timeout(function(){
-            				Util03saSvc.storedQuerySearchPlay(me, "echgDataVO");
+            				Util03saSvc.storedQuerySearchPlay(me, resData.storage);
                         },0);    
                     });
                 };	            
@@ -289,7 +289,9 @@
     					    NM_MRK_SELCT_INDEX : self.ordMrkNameOp.allSelectNames,
     					    NM_ORDSTAT_SELCT_INDEX : self.ordStatusOp.allSelectNames,
     					    DTS_SELECTED : self.datesetting.selected,
-    					    CASH_PARAM : "echgDataVO"
+        					DTS_STORAGE_FROM: self.datesetting.period.start,
+        					DTS_STORAGE_TO: self.datesetting.period.end,
+    					    CASH_PARAM : resData.storageKey
 	            	};
 	            	if(Util03saSvc.readValidation(self.param)){
 	            		$scope.echgkg.dataSource.data([]);

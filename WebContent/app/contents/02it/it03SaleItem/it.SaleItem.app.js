@@ -117,8 +117,42 @@
                 	        				resData.fileSmallVOcurrentData = result[14][1][0];
                 	        				resData.fileDExVOcurrentDataList = result[14][2];
                 	        				resData.fileDImageVOcurrentDataList = result[14][3];
+                	        				
+                	        				defer.resolve( resData );
                                         }
-                                        defer.resolve( resData );
+                                    	else {
+                                    		UtilSvc.grid.getInquiryParam().then(function (res) {
+                                    			var history = res.data;
+
+                                    			if(history){
+                        		            		resData.signItemValue = history.CD_SIGNITEM;	
+                        		            		resData.nmItemValue   = history.NM_ITEM;
+                        		            		resData.nmMnfrValue   = history.NM_MNFR;
+                        		            		resData.adulYnIds     = history.YN_ADULCTFC;
+                        		            		resData.taxClftIds    = history.CD_TAXCLFT;
+                        		            		resData.iClftIds      = history.CD_ITEMCLFT;
+                        		            		resData.iKindIds      = history.CD_ITEMKIND;
+                        		            		resData.cmrkIds       = history.NO_MRK;
+                        		            		resData.adulYnList.setSelectNames    = history.YN_ADULCTFC_SELECT_INDEX;
+                        		            		resData.taxCodeList.setSelectNames   = history.CD_TAXCLFT_SELECT_INDEX;
+                        		            		resData.iClftCodeList.setSelectNames = history.CD_ITEMCLFT_SELECT_INDEX;
+                        		            		resData.iKindCodeList.setSelectNames = history.CD_ITEMKIND_SELECT_INDEX;
+                        		            		resData.cmrkList.setSelectNames      = history.NO_MRK_SELECT_INDEX;
+                        		            	}
+                                    			else {
+                        		            		resData.signItemValue = "";	
+                        		            		resData.nmItemValue   = "";
+                        		            		resData.nmMnfrValue   = "";
+                        		            		resData.adulYnIds     = "*";
+                        		            		resData.taxClftIds    = "*";
+                        		            		resData.iClftIds      = "*";
+                        		            		resData.iKindIds      = "*";
+                        		            		resData.cmrkIds       = "*";                      				
+                                    			}
+                                    			
+                    	        				defer.resolve( resData );
+                                    		});
+                                    	}
                                     });
                             });
 

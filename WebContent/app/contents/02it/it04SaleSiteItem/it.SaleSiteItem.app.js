@@ -38,13 +38,46 @@
                                         }),
                                         UtilSvc.getList(cmrkParam).then(function (res) {
                 	    					return res.data.results[0];
+                                        }),
+                                        UtilSvc.grid.getInquiryParam().then(function (res) {
+                                        	return res.data;
                                         })
                                     ]).then(function (result) {
                                         resData.taxCodeList   = result[0];
                                         resData.iStatCodeList = result[1];
                                         resData.itCtgrList    = result[2];
                                         resData.cmrkList      = result[3];
-                    					
+                                        
+                                        var history = result[4];
+
+                                        if(history){
+                                        	resData.signItemValue = history.CD_SIGNITEM;
+                                        	resData.nmItemValue   = history.NM_ITEM;
+                                        	resData.cmrkIds       = history.NO_MRK;
+                                        	resData.cmrkList.setSelectNames  = history.NO_MRK_SELECT_INDEX;
+                                        	resData.iStatIds                 = history.CD_ITEMSTAT;
+                                        	resData.iStatList.setSelectNames = history.CD_ITEMSTAT_SELECT_INDEX;
+                                        	resData.CD_ITEMCTGR1 = history.CD_ITEMCTGR1;
+                                        	resData.NM_ITEMCTGR1 = history.NM_ITEMCTGR1;
+                                        	resData.CD_ITEMCTGR2 = history.CD_ITEMCTGR2;
+                                        	resData.NM_ITEMCTGR2 = history.NM_ITEMCTGR2;
+                                        	resData.CD_ITEMCTGR3 = history.CD_ITEMCTGR3;
+                                        	resData.NM_ITEMCTGR3 = history.NM_ITEMCTGR3;
+                                        	resData.start                = history.DATE_FROM;
+                                        	resData.end                  = history.DATE_TO;
+        				            		resData.selected             = 'range';
+                		            	}
+                                        else {
+                                        	resData.signItemValue = "";
+                                        	resData.nmItemValue   = "";
+                                        	resData.cmrkIds       = "*";
+                                        	resData.iStatIds      = "*";
+                                        	resData.CD_ITEMCTGR1  = "";
+                                        	resData.start = angular.copy(edt.getToday());
+                                        	resData.end   = angular.copy(edt.getToday());
+        				            		resData.selected      = 'current';
+                                        }
+                                        
                                         defer.resolve( resData );
                                     });
                             });

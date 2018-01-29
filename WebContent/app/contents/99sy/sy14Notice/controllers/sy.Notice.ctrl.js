@@ -14,20 +14,6 @@
 	            
 	            $scope.userInfo = JSON.parse($window.localStorage.getItem("USER"));
   		      
-	            //공지사항 구분 드랍 박스 실행	
-	            var connSetting = (function(){
-    				var param = {
-    					procedureParam: "MarketManager.USP_SY_10CODE02_GET&lnomngcdhd@s|lcdcls@s",
-    					lnomngcdhd: "SYCH00014",
-    					lcdcls: "SY_000014"
-    				};
-        			UtilSvc.getList(param).then(function (res) {
-        				if(res.data.results[0].length >= 1){
-        					noticeDataVO.noticeCdVO = res.data.results[0];
-        				}
-        			});		
-	            }());
-	            
 	            var noticeDataVO = $scope.noticeDataVO = {
 		            	boxTitle : "검색",
 		            	setting : {
@@ -37,16 +23,16 @@
 		        		},
 		            	datesetting : {
 		        			dateType   : 'market',
-							buttonList : ['current', '1Day', '1Week', '1Month'],
-							selected   : 'current',
+							buttonList : ['current', '1Day', '1Week', '1Month', 'range'],
+							selected   : resData.selected,
 							period : {
-								start : angular.copy(today),
-								end   : angular.copy(today)
+								start : resData.start,
+								end   : resData.end
 							}
 		        		},
-	                    contentText: { value: "" , focus: false},			//제목/내용
-	                    noticeCdModel : "*",								//공지구분	
-	                    noticeCdVO : [],
+	                    contentText: { value: resData.contentTextValue , focus: false},			//제목/내용
+	                    noticeCdModel : resData.noticeCdModel,								//공지구분	
+	                    noticeCdVO : resData.noticeCdVO,
 	    				dataTotal : 0,
 	             	    resetAtGrd : ""
 		        };
@@ -55,17 +41,8 @@
 	            noticeDataVO.initLoad = function(){
 	            	$timeout(function() {
 	                    // 이전에 검색조건을 세션에 저장된 것을 가져옴
-	            		var history = UtilSvc.grid.getInquiryParam();
-		            	if(history){
-		            		noticeDataVO.contentText.value = history.SEARCH_;
-                        	noticeDataVO.noticeCdModel = history.ARR_CD_NO;
-                        	noticeDataVO.noticeCdVO.setSelectNames = history.ARR_CD_NO_SELECT_INDEX;
-                        	noticeDataVO.datesetting.period.start = history.START_DATE;
-                        	noticeDataVO.datesetting.period.end = history.END_DATE;
-		            		
-                        	$scope.nkg.dataSource.read();
-		            	}
-                    },1000);
+	            		$scope.nkg.dataSource.read();
+                    },0);
 	            };	  
 	            
 	            //조회

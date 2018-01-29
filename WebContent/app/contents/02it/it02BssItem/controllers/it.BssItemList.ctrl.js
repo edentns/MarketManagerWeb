@@ -50,71 +50,41 @@
 	        		},
 	        		datesetting : {
 	        			dateType   : 'market',
-						buttonList : ['current', '1Day', '1Week', '1Month'],
-						selected   : 'current',
+						buttonList : ['current', '1Day', '1Week', '1Month', 'range'],
+						selected   : resData.selected,
 						period : {
-							start : angular.copy(today),
-							end   : angular.copy(today)
+							start : resData.start,
+							end   : resData.end
 						}
 	        		},
 	        		dateOption    : [{CD_DEF : "001" , NM_DEF : "등록일시"},
 	        		                 {CD_DEF : "002" , NM_DEF : "유효일시"}
 	        						],
-	        		selectedDateOption : "001",
-	        		signItem      : { value: "" , focus: false },
-	        		nmItem        : { value: "" , focus: false },
-	        		nmMnfr        : { value: "" , focus: false },
-	        		adulYnList    : [],
-	        		adulYnIds     : "*",
-	        		taxClftList   : [],
-	        		taxClftIds    : "*",
-	        		iClftList     : [],
-	        		iClftIds      : "*",
-	        		iKindList     : [],
-	        		iKindIds      : "*",
-	        		iStatList     : [],
-	        		iStatIds      : "*",
+	        		selectedDateOption : resData.selectedDateOption,
+	        		signItem      : { value: resData.signItemValue, focus: false },
+	        		nmItem        : { value: resData.nmItemValue  , focus: false },
+	        		nmMnfr        : { value: resData.nmMnfrValue  , focus: false },
+	        		adulYnList    : resData.adulYnList,
+	        		adulYnIds     : resData.adulYnIds,
+	        		taxClftList   : resData.taxCodeList,
+	        		taxClftIds    : resData.taxClftIds,
+	        		iClftList     : resData.iClftCodeList,
+	        		iClftIds      : resData.iClftIds,
+	        		iKindList     : resData.iKindCodeList,
+	        		iKindIds      : resData.iKindIds,
+	        		iStatList     : resData.iStatCodeList,
+	        		iStatIds      : resData.iStatIds,
 	        		dataTotal     : 0
 	            };	            
-	            
+        		
 	            //처음 화면들어왓을때
 	            bssItemDataVO.doQuiry = function(){
-	            	bssItemDataVO.adulYnList  = resData.adulYnList;
-	            	bssItemDataVO.taxClftList = resData.taxCodeList;
-	            	bssItemDataVO.iClftList   = resData.iClftCodeList;
-	            	bssItemDataVO.iKindList   = resData.iKindCodeList;
-	            	bssItemDataVO.iStatList   = resData.iStatCodeList;
-	            	
-	            	bssItemDataVO.signItem.value = "";
-	            	bssItemDataVO.nmItem.value   = "";
-	            	bssItemDataVO.nmMnfr.value   = "";
-	            	
 	            	$timeout(function() {
 	            		if(!page.isWriteable()){
 	    					$("#divBssVO .k-grid-toolbar").hide();
 	    				}
-	            		// 이전에 검색조건을 세션에 저장된 것을 가져옴
-	            		var history = UtilSvc.grid.getInquiryParam();
-		            	if(history){
-		            		bssItemDataVO.signItem.value = history.CD_CLFT;	
-		            		bssItemDataVO.nmItem.value = history.NM_ITEM;
-		            		bssItemDataVO.nmMnfr.value = history.NM_MNFR;
-		            		bssItemDataVO.adulYnIds = history.YN_ADULCTFC;
-		            		bssItemDataVO.taxClftIds = history.CD_TAXCLFT;
-		            		bssItemDataVO.iClftIds = history.CD_ITEMCLFT;
-		            		bssItemDataVO.iKindIds = history.CD_ITEMKIND;
-		            		bssItemDataVO.iStatIds = history.CD_ITEMSTAT;
-		            		bssItemDataVO.adulYnList.setSelectNames = history.YN_ADULCTFC_SELECT_INDEX;
-		            		bssItemDataVO.taxClftList.setSelectNames = history.CD_TAXCLFT_SELECT_INDEX;
-		            		bssItemDataVO.iClftList.setSelectNames = history.CD_ITEMCLFT_SELECT_INDEX;
-		            		bssItemDataVO.iKindList.setSelectNames = history.CD_ITEMKIND_SELECT_INDEX;
-		            		bssItemDataVO.iStatList.setSelectNames = history.CD_ITEMSTAT_SELECT_INDEX;
-		            		bssItemDataVO.selectedDateOption = history.DATEOPT;
-		            		bssItemDataVO.datesetting.period.start = history.DATE_FROM;
-		            		bssItemDataVO.datesetting.period.end = history.DATE_TO;
-		            		
-		            		$scope.gridBssVO.dataSource.read();
-		            	}
+	            		
+	            		$scope.gridBssVO.dataSource.read();
         			});
 	            };
 	            
