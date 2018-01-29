@@ -10,7 +10,7 @@
     angular.module("te.OtherKendo.service")
         .factory("te.OtherKendoSvc", TeOtherKendoSvc)
             
-        TeOtherKendoSvc.$inject = [ 'ModalSvc', 'APP_CODE', '$http'];
+        TeOtherKendoSvc.$inject = [ 'ModalSvc', 'APP_CONFIG', '$http'];
         	function TeOtherKendoSvc(ModalSvc, APP_CONFIG, $http) {
 				
         	return {
@@ -87,6 +87,18 @@
                         method : "POST",
                         url    : APP_CONFIG.domain +"/dept",
                         data   : oParam
+                    });
+                },
+                
+                /**
+                 * 택배사 조회
+                 * */
+                
+                parcelUpdate: function(param){
+                	return $http({
+                        method : "POST",
+                        url    : APP_CONFIG.domain +"/parcel/chk",
+                        data   : param
                     });
                 }
             };

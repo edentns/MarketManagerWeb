@@ -7,12 +7,13 @@
      * 부서관리
      */
     angular.module("te.OtherKendo.controller", [ 'kendo.directives', 'ngGrid' ])
-        .controller("te.OtherKendoCtrl", ["$scope", "$q", "sy.CodeSvc", "te.OtherKendoSvc", "resData", "Page", "$state", 'MenuSvc', "$location", "$window", "UtilSvc", "APP_CODE", 
-            function ($scope, $q, SyCodeSvc, TeOtherKendoSvc, resData, Page, $state, MenuSvc, $location, window, UtilSvc, APP_CODE) {
+        .controller("te.OtherKendoCtrl", ["$timeout", "$log", "APP_CONFIG", "$http", "$scope", "$q", "sy.CodeSvc", "te.OtherKendoSvc", "resData", "Page", "$state", 'MenuSvc', "$location", "$window", "UtilSvc", "APP_CODE", "sa.ShpSbOrdImpSvc", "Util03saSvc", 
+            function ($timeout, $log, APP_CONFIG, $http, $scope, $q, SyCodeSvc, TeOtherKendoSvc, resData, Page, $state, MenuSvc, $location, window, UtilSvc, APP_CODE, saShpSbOrdImpSvc, Util03saSvc) {
 	        	var page  = $scope.page = new Page({ auth: resData.access }),
 	            today = edt.getToday();
 
 	        	var otherKendoVO1 = $scope.otherKendoVO1 = {
+	        		menualShwWrn : "",	
 	        		boxTitle : "검색",
 	        		mcb01Data : [],
 	        		mcb01Model : "",
@@ -172,6 +173,15 @@
 						otherKendoVO1.mcb01Data = res.data.results[0];
 						otherKendoVO1.mcb02Data = res.data.results[0];
 					});
+					
+					var parcelParam = {
+							procedureParam:"USP_TE_OTHERKENDO04_GET"
+						};
+					UtilSvc.getList(parcelParam).then(function (res) {
+						otherKendoVO1.mcb03Data = res.data.results[0].filter(function(ele){
+							return (ele.DC_RMK2);
+						});
+					});
 	        	};
 	        	
 	        	otherKendoVO1.inquiry = function() {
@@ -291,7 +301,177 @@
 	        			altRowTemplate: '<tr class="k-alt"><td rowspan="2"><input type="checkbox" name="#=DC_CHECK#" value="0" id="#=DC_CHECK#"></td><td>#=NO_C#</td><td>#=CD_CLS#</td></tr><tr class="k-alt"><td>#=CD_DEF#</td><td>#=NM_DEF#</td></tr>',
 	        			height: 450
 		        	};
-
+	        	
+	        	var tstShpVo = $scope.tstShpVo = {
+            		//autoBind: true,
+                    messages: {                        	
+                        requestFailed: "주문정보를 가져오는 중 오류가 발생하였습니다.",
+                        commands: {
+                            save: "저장",
+                            canceledit: "닫기",
+                            create : "추가"
+                        }
+                        ,noRecords: "검색된 데이터가 없습니다."
+                    },
+                	boxTitle : "주문 목록",           
+                    collapse: function(e) {
+                        this.cancelRow();
+                    },
+                    pageable: true,
+                    scrollable: false,
+                    persistSelection: true,
+                    sortable: true,                    
+                	resizable: true,
+                    editable: true,
+                	height: 300,
+                	navigatable: true, //키보드로 그리드 셀 이동 가능
+                	toolbar: ["create","save","cancel"],
+                	dataSource: new kendo.data.DataSource({
+                		transport: {
+                		/*	read: function(e){
+                				var db = [{NO_ORD: "", CD_PARS: {NM_DEF : "", DC_RMK2 : ""}, NO_INVO : ""}, 
+                     			          {NO_ORD: "", CD_PARS: {NM_DEF : "", DC_RMK2 : ""}, NO_INVO : ""}, 
+                    			          {NO_ORD: "", CD_PARS: {NM_DEF : "", DC_RMK2 : ""}, NO_INVO : ""}];
+                				e.success(db);
+                			},     */         		
+                			read: function(e){
+                				e.success([]);
+                			},
+                			create : function(e){
+                				var param = [],
+	            					startTime = new Date(),
+	            					defer = $q.defer();		
+                				
+                				param = e.data.models.filter(function(ele){
+                					return otherKendoVO1.selectedSequance.indexOf(ele.NO_ORD) > -1;
+                				});                				
+                				
+            					TeOtherKendoSvc.parcelUpdate(param).then(function (res) {                 						
+            						var rtn = res.data,
+            							f = [], t=[];
+            						
+            						angular.forEach(rtn, function(item, index){
+            							if(item.result === 'Y'){
+            								 t.push(angular.copy(item.noOrd))
+            							}else{
+            								 f.push(angular.copy(item.noOrd))
+            							}
+            						});
+            						
+            						alert("성공 번호 = "+t+" 실패 번호 = "+f);
+            						
+            						var endTime = new Date(),
+    						    		crTime = (endTime - startTime)/1000;
+            					
+	            					$log.info("경과시간 = "+crTime+"초");
+	            					alert("경과시간 = "+crTime+"초");
+	            					
+	                				e.success([]);
+	                			}, function(err){
+	                				if(err.status !== 412){
+                                    	alert(err.data);
+                                   	} 
+                                   	$log.error(err.data);
+            						e.error([]);
+            					});  
+	            				return defer.promise;
+                			},  
+                			parameterMap: function(e, operation) {
+                				if(operation !== "read" && e.models) {
+                					return {models:kendo.stringify(e.models)};
+                				}
+                			}
+                		},
+                		batch: true,
+                        change: function(e){
+                        	var data = this.data(),
+         			   	   		i = 0,
+         			   	   		sum = 0;
+         			
+		 					for(i; i<data.length; i+=1){
+		 						sum += 1;
+		 						data[i].NO_ORD = sum;
+		 					};		   
+                        },
+                		schema: {
+                			model: {
+                    			id: "NO_ORD",
+                				fields: {   
+                					NO_ORD : 		   {
+                											type : "string",
+                											editable: false,
+															nullable: false,
+                									   },
+                				    CD_PARS: 	   	   {
+					                				    	type: "array",
+															editable: true,
+															nullable: false,
+															defaultValue : {NM_DEF : "", DC_RMK2 : ""}
+								    				   },
+			    				    NO_INVO: 	       {
+					                				    	type: "string", 
+															editable: true,
+															nullable: false,
+															validation: {
+																no_invo_non_blank_validation: function (input) {
+																	if (input.is("[name='NO_INVO']")) {
+																		return Util03saSvc.NoINVOValidation(input, 'NO_INVO', 'no_invo_non_blank_validation');
+																	};
+																	return true;
+				  									    	  	}
+															}
+															
+								    				   }
+                				}
+                			}
+                		},
+                	}),
+                	change: function(e){
+                      	$log.info("The selected product ids are: [" + this.selectedKeyNames().join(", ") + "]");
+                      	otherKendoVO1.selectedSequance = this.selectedKeyNames().join(", ");
+                	},
+                	columns: [	
+                	          	{ 
+                	          		selectable: true, 
+                	          		width: "30px" 
+                	          	},
+                	          	{
+                	          		field: "NO_ORD",
+                                    title: "번호",
+                                    width: 50,
+			                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
+                	          	},	
+                                {
+		                        	field: "CD_PARS",
+		                            title: "<span class='form-required'>*</span>택배사",
+		                            width: 100,
+		                            editor: function shipCategoryDropDownEditor(container, options) {		                            	
+		                            	$('<input name="' + options.field + '" data-bind="value:' + options.field + '"/>').appendTo(container).kendoDropDownList({
+		                                    dataTextField: "NM_DEF",
+		                                    dataValueField: "DC_RMK2",
+		                                    valuePrimitive: false,
+		                                    optionLabel : "택배사를 선택해 주세요 ",
+		                                    dataSource: otherKendoVO1.mcb03Data
+		                                });
+		                            },
+		                            template : "#=CD_PARS.NM_DEF#",
+		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
+		                        },
+                               	{
+                                    field: "NO_INVO",
+                                    title: "<span class='form-required'>*</span>송장번호",
+                                    width: 150,
+                                    attributes: {                                    	
+                                    	"menual-shw-wrn" : "otherKendoVO1.menualShwWrn" 
+                                    }, 
+                                    editor: function(container, options){
+                                    	$('<input class="k-textbox" name="' + options.field + '" data-bind="value: NO_INVO" autocomplete=off />').appendTo(container);                                    	
+                                    },
+			                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}                  
+		                        }  
+                    ]                	          	
+	        	};     
+	        	
 	        	function testDropDownEditor(container, options) {
 	        		$('<input required name="' + options.field + '"/>')
                     .appendTo(container)
@@ -308,7 +488,7 @@
         						};
         						UtilSvc.getList(param).then(function (res) {
         							e.success(res.data.results[0]);
-        						})
+        						});
         					},
         					schema: {
         						model: {
@@ -319,7 +499,6 @@
                         }
                     });
 	        	}
-	        	
 	        	otherKendoVO1.initLoad();
         	}
         ]);
