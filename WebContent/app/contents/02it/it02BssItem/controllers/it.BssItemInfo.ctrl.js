@@ -173,7 +173,7 @@
 	                		transport: {
 	                			read: function(e) {
 	                				var param = {
-                						procedureParam:"MarketManager.USP_IT_02BSSITEMOPT_GET&L_CD_ITEM@s|L_FLAG@s",
+                						procedureParam:"USP_IT_02BSSITEMOPT_GET&L_CD_ITEM@s|L_FLAG@s",
                 						L_CD_ITEM  :  bssInfoDataVO.ids,
                 						L_FLAG     :  "1"
                 					};
@@ -305,7 +305,7 @@
 	                		transport: {
 	                			read: function(e) {
 	                				var param = {
-                						procedureParam:"MarketManager.USP_IT_02BSSITEMOPT_GET&L_CD_ITEM@s|L_FLAG@s",
+                						procedureParam:"USP_IT_02BSSITEMOPT_GET&L_CD_ITEM@s|L_FLAG@s",
                 						L_CD_ITEM  :  bssInfoDataVO.ids,
                 						L_FLAG     :  "2"
                 					};
@@ -448,7 +448,7 @@
 	            	bssInfoDataVO.duplFlag = true;
 	            	var self = this,
 	            		param = {
-    					procedureParam: "MarketManager.USP_IT_02BSSITEMINFO01_GET&L_CD_ITEM@s",
+    					procedureParam: "USP_IT_02BSSITEMINFO01_GET&L_CD_ITEM@s",
     					L_CD_ITEM: self.ids
     				};	            	
         			UtilSvc.getList(param).then(function (res) {
@@ -526,7 +526,7 @@
 	            bssInfoDataVO.ctgrChange = function(flag){
 	            	var self = this,
 	            	    param = {
-        					procedureParam: "MarketManager.USP_IT_01ITEMCFCT02_GET&IT_ID_CTGR@s",
+        					procedureParam: "USP_IT_01ITEMCFCT02_GET&IT_ID_CTGR@s",
         					IT_ID_CTGR: ""
         					};
 	            	if(flag == 0){
@@ -667,7 +667,7 @@
 	            bssInfoDataVO.itemCopyModal = function(){
 	            	itBssItemSvc.itemCopyModal().then(function(it_num) {
 	            		var param = {
-	    					procedureParam: "MarketManager.USP_IT_02BSSITEMCOPY_GET&L_CD_ITEM@s",
+	    					procedureParam: "USP_IT_02BSSITEMCOPY_GET&L_CD_ITEM@s",
 	    					L_CD_ITEM: it_num
 	    				};	            	
 	        			UtilSvc.getList(param).then(function (res) {
@@ -814,7 +814,7 @@
 	            		$timeout(function() {
 		            		if(res.CD_OPTTP == "002"){
 		            			var param = {
-		        						procedureParam:"MarketManager.USP_IT_02BSSITEMOPT_GET&L_CD_ITEM@s|L_FLAG@s",
+		        						procedureParam:"USP_IT_02BSSITEMOPT_GET&L_CD_ITEM@s|L_FLAG@s",
 		        						L_CD_ITEM  :  res.CD_ITEM,
 		        						L_FLAG     :  "1"
 		        					};
@@ -827,7 +827,7 @@
 		        					});
 		            		}else if(res.CD_OPTTP == "003"){
 		            			var param = {
-		        						procedureParam:"MarketManager.USP_IT_02BSSITEMOPT_GET&L_CD_ITEM@s|L_FLAG@s",
+		        						procedureParam:"USP_IT_02BSSITEMOPT_GET&L_CD_ITEM@s|L_FLAG@s",
 		        						L_CD_ITEM  :  res.CD_ITEM,
 		        						L_FLAG     :  "2"
 		        					};

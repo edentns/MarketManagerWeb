@@ -21,10 +21,10 @@
                             AuthSvc.isAccess().then(function (result) {
                                 resData.access = result[0];
                                 var param = {
-	                					procedureParam: "MarketManager.USP_IT_01ITEMCFCT01_GET"
+	                					procedureParam: "USP_IT_01ITEMCFCT01_GET"
                 					},
                 					cmrkParam = {
-                                		procedureParam: "MarketManager.USP_IT_03SALEITEM_CMRK_GET"
+                                		procedureParam: "USP_IT_03SALEITEM_CMRK_GET"
                                 	};
                                 $q.all([
                                         SyCodeSvc.getSubcodeList({cd: "SY_000007", search: "all"}).then(function (result) {

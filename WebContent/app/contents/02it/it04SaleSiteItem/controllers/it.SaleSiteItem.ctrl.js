@@ -369,7 +369,7 @@
                 saleItemDataVO.ctgrChange = function(flag){
 	            	var self = this,
 	            	    param = {
-        					procedureParam: "MarketManager.USP_IT_01ITEMCFCT02_GET&IT_ID_CTGR@s",
+        					procedureParam: "USP_IT_01ITEMCFCT02_GET&IT_ID_CTGR@s",
         					IT_ID_CTGR: ""
         					};
 	            	if(flag == 0){

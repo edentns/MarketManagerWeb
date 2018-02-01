@@ -88,7 +88,7 @@
 	            	modal: function() {   // 팝업 버튼
 	            		 var NO_MNGMRK,
 	            		     param = {
-		    					procedureParam: "MarketManager.USP_MA_04MNGMRK01_GET"
+		    					procedureParam: "USP_MA_04MNGMRK01_GET"
 		    				 };
 	            		 UtilSvc.getList(param).then(function (res) {
 	    					 NO_MNGMRK = res.data.results[0][0].NO_MNGMRK;
@@ -387,7 +387,7 @@
 	            	var self = this,
 	            		nextIndex = iIndex+1;
 	            	var param = {
-    					procedureParam: "MarketManager.USP_IT_01ITEMCFCT02_GET&IT_ID_CTGR@s",
+    					procedureParam: "USP_IT_01ITEMCFCT02_GET&IT_ID_CTGR@s",
     					IT_ID_CTGR: strIdCtgr
     					};
 		            	

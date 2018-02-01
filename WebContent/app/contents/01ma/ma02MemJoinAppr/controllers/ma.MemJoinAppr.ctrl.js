@@ -44,7 +44,7 @@
 	            	var me  = this;
                 	
                 	me.param = {
-                    	procedureParam: "MarketManager.USP_MA_02JOINSEARCH01_GET&NM@s|YL@s|IL@s|RMK@s|RMKTO@s|RMKFROM@s",      	
+                    	procedureParam: "USP_MA_02JOINSEARCH01_GET&NM@s|YL@s|IL@s|RMK@s|RMKTO@s|RMKFROM@s",      	
                     	NM:joinerDataVO.searchText.value,
                     	YL:joinerDataVO.joinerStatusDt,
                     	IL:joinerDataVO.joinerProcNameDt,
@@ -101,7 +101,7 @@
 			        //가입자 상태
 		        	joinerStatusDt : function(){
 					        			var param = {
-					    					procedureParam: "MarketManager.USP_SY_10CODE02_GET&lnomngcdhd@s|lcdcls@s",
+					    					procedureParam: "USP_SY_10CODE02_GET&lnomngcdhd@s|lcdcls@s",
 					    					lnomngcdhd: "SYCH00002",
 					    					lcdcls: "SY_000002"
 					    				};            			
@@ -112,7 +112,7 @@
 		            //상품명
 		            joinerProcNameDt : function(){
 						            	var param = {
-					    					procedureParam: "MarketManager.USP_SY_10CODE02_GET&lnomngcdhd@s|lcdcls@s",
+					    					procedureParam: "USP_SY_10CODE02_GET&lnomngcdhd@s|lcdcls@s",
 					    					lnomngcdhd: "SYCH00001",
 					    					lcdcls: "SY_000001"
 					    				};            			
@@ -123,7 +123,7 @@
 		            //가입 기간
 		            joinerBetweenDate : function(){
 						            	var param = {
-					    					procedureParam: "MarketManager.USP_SY_10CODE02_GET&lnomngcdhd@s|lcdcls@s",
+					    					procedureParam: "USP_SY_10CODE02_GET&lnomngcdhd@s|lcdcls@s",
 					    					lnomngcdhd: "SYCH00015",
 					    					lcdcls: "SY_000015"
 					    				};            			

@@ -45,7 +45,7 @@
 	            csDataVO.initLoad = function(){
 	            	var me = this;
 	            	var ordArg = {
-	            			procedureParam: "MarketManager.USP_SY_10CODE02_GET&lnomngcdhd@s|lcdcls@s",
+	            			procedureParam: "USP_SY_10CODE02_GET&lnomngcdhd@s|lcdcls@s",
 	    					lnomngcdhd: "SYCH00069",
 	    					lcdcls: "CS_000001"
 	            		};

@@ -17,7 +17,7 @@
 	            //공지사항 구분 드랍 박스 실행	
 	            var connSetting = (function(){
     				var param = {
-    					procedureParam: "MarketManager.USP_SY_10CODE02_GET&lnomngcdhd@s|lcdcls@s",
+    					procedureParam: "USP_SY_10CODE02_GET&lnomngcdhd@s|lcdcls@s",
     					lnomngcdhd: "SYCH00014",
     					lcdcls: "SY_000014"
     				};
@@ -32,7 +32,7 @@
 	            //팝업 파일 리스트
 	            var fileList = (function(no){
 	            	var param = {
-    					procedureParam: "MarketManager.USP_MA_05NOTICE_FILELIST_GET&no@s",
+    					procedureParam: "USP_MA_05NOTICE_FILELIST_GET&no@s",
     					no: no
     				};
             		UtilSvc.getList(param).then(function (res) {
@@ -162,7 +162,7 @@
                         transport: {
                         	  read: function(e){
                         		  var param = {
-                        			  procedureParam: "MarketManager.USP_MA_05NOTICE_FILELIST_GET&no@s",
+                        			  procedureParam: "USP_MA_05NOTICE_FILELIST_GET&no@s",
               	    				  no: noticeDataVO.kEditor.noNotice
               	    			  };
           	            		  UtilSvc.getList(param).then(function (res) {
@@ -193,7 +193,7 @@
 	            noticeDataVO.inQuiry = function(){
 	            	var me = this;
 	            	me.param = {
-                    	procedureParam: "MarketManager.USP_MA_05NOTICE_SEARCH01_GET&NO_WR@s|ARR_CD_NO@s|ARR_NO_C@s|SB_NM@s|NOTI_TO@s|NOTI_FROM@s",    
+                    	procedureParam: "USP_MA_05NOTICE_SEARCH01_GET&NO_WR@s|ARR_CD_NO@s|ARR_NO_C@s|SB_NM@s|NOTI_TO@s|NOTI_FROM@s",    
                     	NO_WR: noticeDataVO.writeText.value,
                     	ARR_CD_NO: noticeDataVO.noticeCdModel,                                    	
                     	ARR_NO_C: noticeDataVO.noticeTargetModel.toString().replace(/,/g,'^'),
@@ -262,7 +262,7 @@
 	            	var me = this;
 	            		            		            	
 	            	me.param = {
-                    	procedureParam: "MarketManager.USP_MA_05NOTICE_SEARCH01_GET&NO_WR@s|ARR_CD_NO@s|ARR_NO_C@s|SB_NM@s|NOTI_TO@s|NOTI_FROM@s",    
+                    	procedureParam: "USP_MA_05NOTICE_SEARCH01_GET&NO_WR@s|ARR_CD_NO@s|ARR_NO_C@s|SB_NM@s|NOTI_TO@s|NOTI_FROM@s",    
                     	NO_WR: $scope.userInfo.NO_EMP,
                     	ARR_CD_NO: param.CD_NOTICE,                                    	
                     	ARR_NO_C: param.ARR_NO_C.toString().replace(/,/g,'^'),
@@ -890,7 +890,7 @@
         		    dataSource : new kendo.data.HierarchicalDataSource ({ 
         		    	transport : {
         		    		read : function(e){
-        		    			connSetting2("MarketManager.USP_MA_05MEMBERSEARCH01_GET", e, "noticeGet", $scope.memSearchGrd); 
+        		    			connSetting2("USP_MA_05MEMBERSEARCH01_GET", e, "noticeGet", $scope.memSearchGrd); 
         		    		}
         		    	},
         		    	schema: {
@@ -1018,7 +1018,7 @@
         	        dataSource: new kendo.data.HierarchicalDataSource ({ 
         		    	transport : {
         		    		read : function(e){
-        		    			connSetting2("MarketManager.USP_MA_05MEMBERSEARCH01_GET", e, "noticeGet", $scope.memSearchPopGrd);
+        		    			connSetting2("USP_MA_05MEMBERSEARCH01_GET", e, "noticeGet", $scope.memSearchPopGrd);
         		    		}
         		    	}
         		    }),

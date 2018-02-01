@@ -23,7 +23,7 @@
                                 resData.access = result[0];
                                 
                                 var param = {
-    		    					procedureParam: "MarketManager.USP_MA_07ITL_CODE_GET",
+    		    					procedureParam: "USP_MA_07ITL_CODE_GET",
     		    				};
                             
                                 $q.all([

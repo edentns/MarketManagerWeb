@@ -186,7 +186,7 @@
 	                        transport: {
 	                        	  read: function(e){
 	                        		  var param = {
-	                        			  procedureParam: "MarketManager.USP_MA_05NOTICE_FILELIST_GET&no@s",
+	                        			  procedureParam: "USP_MA_05NOTICE_FILELIST_GET&no@s",
 	              	    				  no: noticeDataVO.kEditor.noNotice
 	              	    			  };
 	          	            		  UtilSvc.getList(param).then(function (res) {

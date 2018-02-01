@@ -620,7 +620,7 @@
         		    dataSource : new kendo.data.HierarchicalDataSource ({ 
         		    	transport : {
         		    		read : function(e){
-        		    			qaDataVO.qaTgtBind("MarketManager.USP_MA_05MEMBERSEARCH01_GET", e, "noticeGet", $scope.memSearchGrd); 
+        		    			qaDataVO.qaTgtBind("USP_MA_05MEMBERSEARCH01_GET", e, "noticeGet", $scope.memSearchGrd); 
         		    		}
         		    	},
         		    	schema: {

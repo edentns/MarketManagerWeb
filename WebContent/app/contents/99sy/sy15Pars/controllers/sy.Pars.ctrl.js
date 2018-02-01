@@ -173,7 +173,7 @@
 	        					read: function(e) {
 	        						var ls = localSelf;
         							var	param = {
-        			                    	procedureParam: "MarketManager.USP_SY_15PARS01_GET&NO_MRK@s|L_FLAG@s",
+        			                    	procedureParam: "USP_SY_15PARS01_GET&NO_MRK@s|L_FLAG@s",
         			                    	NO_MRK:$scope.mrkName.mngMrkMd,
         			                    	L_FLAG : String(ls.iIndex)
         			                    };

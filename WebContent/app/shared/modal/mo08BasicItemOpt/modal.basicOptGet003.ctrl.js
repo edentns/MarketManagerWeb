@@ -32,7 +32,7 @@
             		transport: {
             			read: function(e) {
             				var param = {
-                					procedureParam:"MarketManager.USP_IT_02BSSITEMBSSOPT_SEARCH&L_SEARCH_TYPE@s|L_SEARCH_WORD@s|L_FLAG@s",
+                					procedureParam:"USP_IT_02BSSITEMBSSOPT_SEARCH&L_SEARCH_TYPE@s|L_SEARCH_WORD@s|L_FLAG@s",
                 					L_SEARCH_TYPE :	bssOpt003VO.selectedCode,
                 					L_SEARCH_WORD : bssOpt003VO.searchWord,
                 					L_FLAG: "002"

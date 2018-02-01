@@ -31,11 +31,11 @@
                             AuthSvc.isAccess().then(function (result) {
                                 resData.access = result[0];
                                 var param = {
-	                					procedureParam: "MarketManager.USP_IT_01ITEMCFCT02_GET&IT_ID_CTGR@s",
+	                					procedureParam: "USP_IT_01ITEMCFCT02_GET&IT_ID_CTGR@s",
 	                					IT_ID_CTGR: ""
                 					},
                 					fileParam = {
-                                		procedureParam: "MarketManager.USP_IT_02BSSITEMFILE_GET&L_CD_ITEM@s|L_CD_AT_1@s|L_CD_AT_2@s|L_CD_AT_3@s|L_CD_AT_4@s",
+                                		procedureParam: "USP_IT_02BSSITEMFILE_GET&L_CD_ITEM@s|L_CD_AT_1@s|L_CD_AT_2@s|L_CD_AT_3@s|L_CD_AT_4@s",
                     					L_CD_ITEM: $stateParams.ids,
                     					L_CD_AT_1: "004",
                     					L_CD_AT_2: "007",
@@ -43,7 +43,7 @@
                     					L_CD_AT_4: "006"
                                     },
                                     cmrkParam = {
-                                		procedureParam: "MarketManager.USP_IT_03SALEITEM_CMRK_GET"
+                                		procedureParam: "USP_IT_03SALEITEM_CMRK_GET"
                                 	};
                                 $q.all([
                                         SyCodeSvc.getSubcodeList({cd: "SY_000007", search: "all"}).then(function (result) {

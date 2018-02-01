@@ -865,7 +865,7 @@
                     	transport: {
                 			read: function(e) {
                 				var param = {
-                					procedureParam: "MarketManager.USP_SY_10CODE99_GET&L_CD_CLS@s",
+                					procedureParam: "USP_SY_10CODE99_GET&L_CD_CLS@s",
                 					L_CD_CLS: strCdCls
                 	            }, pAll = {'CD_DEF':'','NM_DEF':'전체'};
                 				

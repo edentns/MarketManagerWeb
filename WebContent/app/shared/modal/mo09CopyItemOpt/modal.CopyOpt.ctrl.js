@@ -47,7 +47,7 @@
                     enableRowSelection	    : true,
                     enableRowHeaderSelection: false,
                     change: rowClick,
-                    procedureParam: "MarketManager.USP_IT_02BSSITEM_SEARCH&L_SEARCH_TYPE@s|L_SEARCH_WORD@s",
+                    procedureParam: "USP_IT_02BSSITEM_SEARCH&L_SEARCH_TYPE@s|L_SEARCH_WORD@s",
             		dataSource: new kendo.data.DataSource({
                 		batch: true,
                 		schema: {
@@ -106,7 +106,7 @@
                     inquiryAll: function( oItemParam ) {
                     	if(oItemParam.CD_OPTTP == "002"){
                     		var param = {
-            						procedureParam:"MarketManager.USP_IT_02BSSITEMOPT_GET&L_CD_ITEM@s|L_FLAG@s",
+            						procedureParam:"USP_IT_02BSSITEMOPT_GET&L_CD_ITEM@s|L_FLAG@s",
             						L_CD_ITEM  :  oItemParam.CD_ITEM,
             						L_FLAG     :  "1"
             					};
@@ -116,7 +116,7 @@
     	                    });
                     	}else if (oItemParam.CD_OPTTP == "003"){
                     		var param = {
-            						procedureParam:"MarketManager.USP_IT_02BSSITEMOPT_GET&L_CD_ITEM@s|L_FLAG@s",
+            						procedureParam:"USP_IT_02BSSITEMOPT_GET&L_CD_ITEM@s|L_FLAG@s",
             						L_CD_ITEM  :  oItemParam.CD_ITEM,
             						L_FLAG     :  "2"
             					};

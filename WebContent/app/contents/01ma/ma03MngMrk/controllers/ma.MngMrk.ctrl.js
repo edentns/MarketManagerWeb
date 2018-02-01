@@ -17,7 +17,7 @@
 	            
 	            var subCodeSetting = function (subcode1, subcode2, e){
 					var param = {
-    					procedureParam: "MarketManager.USP_SY_10CODE02_GET&lnomngcdhd@s|lcdcls@s",
+    					procedureParam: "USP_SY_10CODE02_GET&lnomngcdhd@s|lcdcls@s",
     					lnomngcdhd: subcode1,
     					lcdcls: subcode2
     				};
@@ -64,7 +64,7 @@
 	            mngMrkDateVO.doInquiry = function () {
 		        	var me  = this;                	
                 	me.param = {
-                    	procedureParam: "MarketManager.USP_MA_03SEARCH01_GET&NO_M@s|MA_NM_MRK@s|MA_CD_ITLWY@s|MA_DT_START@s|MA_DT_END@s",
+                    	procedureParam: "USP_MA_03SEARCH01_GET&NO_M@s|MA_NM_MRK@s|MA_CD_ITLWY@s|MA_DT_START@s|MA_DT_END@s",
                     	NO_M: menuId,
                     	MA_NM_MRK: mngMrkDateVO.searchText.value,
                     	MA_CD_ITLWY: mngMrkDateVO.methodDataCode,

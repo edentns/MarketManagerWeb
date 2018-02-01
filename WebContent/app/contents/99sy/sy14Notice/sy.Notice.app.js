@@ -22,7 +22,7 @@
                                 resData.access = result[0];
                                 
                                 var paramNoticeCd = {
-                                		procedureParam: "MarketManager.USP_SY_10CODE02_GET&lnomngcdhd@s|lcdcls@s",
+                                		procedureParam: "USP_SY_10CODE02_GET&lnomngcdhd@s|lcdcls@s",
                     					lnomngcdhd: "SYCH00014",
                     					lcdcls: "SY_000014"
                     				};
