@@ -1,10 +1,113 @@
-<div id="app-content" class="col-xs-12 col-sm-10">
+<div class="modal-header">
+	<h3 class="modal-title" style="text-align:center;">Market Manager | 회원가입</h3>
+</div>
+<div class="modal-body" style="margin-left:20px; margin-right:20px;">
+    <!-- 유저등록 -->
     <div class="row">
-        <div id="app-content-header">
-            <ol class="breadcrumb">
-                <li><a href="#99sy/syDashboard"><i class="fa fa-home fa-2x"></i></a></li>
-                <li><a href="#99sy/syUserJoin">회원가입</a></li>
-            </ol>
+        <div class="content-area-container col-xs-12">
+            <form class="form-type1" id="userForm" name="userForm" novalidate>
+                <table>
+                    <colgroup>
+                        <col style="width: 12%">
+                        <col style="width: 38%">
+                        <col style="width: 12%">
+                        <col style="width: 38%">
+                    </colgroup>
+                    <tbody>
+                    <tr>
+                        <th>사업자명<span class="form-required"> *</span></th>
+                        <td>
+                            <input class="form-control wid-x12" type="text" id="joinNmC" name="joinNmC" title="사업자명 입력"
+                                       maxlength="20" data-ng-model="userJoinVO.param.NM_C" data-ng-change="userJoinVO.isChangeNmC()">
+                        </td>
+                        <th>이메일<span class="form-required"> *</span></th>
+                        <td>
+                            <input type="text" class="form-control wid-x8" id="joinEmiAddr" name="joinEmiAddr" title="이메일 입력"
+                                       maxlength="40" data-ng-model="userJoinVO.param.DC_EMIADDR" data-ng-change="userJoinVO.isChangeNmC()">
+                            <button class="btn btn-primary" id="btnDupCheck" title="중복확인" data-ng-click="userJoinVO.dupCheck()" data-ng-disabled="userJoinVO.ynChkDup">중복확인</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>사업자구분<span class="form-required"> *</span></th>
+                        <td>
+                            <input type="radio" data-ng-model="userJoinVO.param.CD_BSNSCLFT" name="joinCdBsnsClft" value="001">법인</input>
+                            <input type="radio" data-ng-model="userJoinVO.param.CD_BSNSCLFT" name="joinCdBsnsClft" value="002">개인</input>
+                            <input type="radio" data-ng-model="userJoinVO.param.CD_BSNSCLFT" name="joinCdBsnsClft" value="003">간이</input>
+                            <input type="radio" data-ng-model="userJoinVO.param.CD_BSNSCLFT" name="joinCdBsnsClft" value="999">기타</input>
+                        </td>
+                        <th>아이디<span class="form-required"> *</span></th>
+                        <td>
+                            <input class="form-control wid-12" style="width:100%;" type="text" id="joinDcId" name="joinDcId" title="아이디 입력"
+                                       maxlength="15" data-ng-model="userJoinVO.param.DC_ID">
+                        </td>
+                    </tr>
+                    <tr>
+                    	<th>사업자번호</th>
+                        <td>
+                            <input type="text" class="form-control wid-x12" id="joinNoBsnsClft" name="joinNoBsnsClft" title="사업자번호 입력" placeholder="'012-34-56789' 포멧으로 입력해주세요." 
+                                       maxlength="13" data-ng-model="userJoinVO.param.NO_BSNSRGTT">
+                        </td>
+                        <th>비밀번호<span class="form-required"> *</span></th>
+                        <td>
+                            <input type="password" class="form-control wid-x12" id="joinPwd" name="joinPwd" title="비밀번호 입력"
+                                   maxlength="14"
+                                   data-ng-model="userJoinVO.param.DC_PWD"
+                                   data-ng-change="userJoinVO.isCheckPassword()">
+                            <div><span class="checkMsg">비밀번호를 입력해주세요.(8자리이상 ~ 15자리이하)</span></div>
+                        </td>
+                    </tr>
+                    <tr>
+                    	<th>통신사업자신고상태<span class="form-required"> *</span></th>
+                        <td>
+                            <input type="radio" data-ng-model="userJoinVO.param.YN_COMMSALEREG" name="joinYnCommSaleReg" value="Y">신고</input>
+                            <input type="radio" data-ng-model="userJoinVO.param.YN_COMMSALEREG" name="joinYnCommSaleReg" value="N">미신고</input>
+                        </td>
+                        <th>비밀번호 확인<span class="form-required"> *</span></th>
+                        <td colspan="3">
+                            <input type="password" class="form-control wid-x12" id="joinChkPwd" name="joinChkPwd" title="비밀번호확인 입력"
+                                   maxlength="14"
+                                   data-ng-model="userJoinVO.param.DC_REPWD"
+                                   data-ng-change="userJoinVO.isCheckPassword()">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>통신사업자신고번호</th>
+                        <td>
+                            <input type="text" class="form-control wid-x12" id="joinNoCommSaleReg" name="joinNoCommSaleReg" title="통신사업자신고번호 입력"
+                                   maxlength="24"
+                                   data-ng-model="userJoinVO.param.NO_COMMSALEREG">
+                        </td>
+                        <th></th>
+                        <td>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div class="btn-group1 mt-10">
+                    <input type="checkbox" name="ynCla" id="ynCla" title="이용약관동의" data-ng-model="userJoinVO.ynCla">이용약관 동의</input>
+                    <button type="button" class="btn btn-primary" style="width:100px" title="약관보기" data-ng-click="userJoinVO.popCla()">약관보기</button>
+                </div>
+                <div class="btn-group1 mt-1">
+                    <button type="button" class="btn btn-primary" style="width:30%" title="회원가입 신청" data-ng-click="userJoinVO.doUserJoin()">회원가입 신청</button>
+                </div>
+                <div class="btn-group1 mt-1">
+                    <button type="button" class="btn btn-danger" style="width:30%" title="닫기" data-ng-click="userJoinVO.doClose()">닫기</button>
+                </div>
+                <div class="btn-group1 mt-10">
+                	<span>등록하신 이메일로<span class="checkMsg">(본인확인 메일)</span>이 발송됩니다.</span>
+                	<span>회원가입을 요청해주셔서 감사합니다.</span>
+                </div>
+            </form>
         </div>
     </div>
 </div>
+
+<style>
+body {
+	font-family: "Noto Sans KR", sans-serif;
+    font-size: 12px;
+    color: #222;
+	background:#ffffff;
+}
+</style>

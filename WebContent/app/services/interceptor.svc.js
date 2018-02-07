@@ -83,7 +83,7 @@
 							defer.reject(config);
 							break;
 						case 401:// 로그인 상태가 아닐경우
-							if ($location.$$path !== '/99sy/syLogin') {
+							if ($location.$$path !== '/99sy/syLogin' && $location.$$path !== '/99sy/syUserJoin') {
 								alert('[' + config.status + '] 로그인 상태가 아닙니다.');
 								init();
 								$location.url('/99sy/syLogin');
