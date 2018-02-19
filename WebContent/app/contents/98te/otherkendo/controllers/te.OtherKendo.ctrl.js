@@ -159,6 +159,10 @@
 //	        		}
 	        	};
 	        	
+	        	otherKendoVO1.kEditor = UtilSvc.kendoEditor("010");
+	        	otherKendoVO1.kEditor_test = UtilSvc.kendoEditor("011");
+	        	otherKendoVO1.kEditor.tools = ["insertImage"];
+        	
 	        	otherKendoVO1.initLoad = function() {
 	        		var self = this;
 	        		self.inquiry();

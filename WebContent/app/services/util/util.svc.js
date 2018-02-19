@@ -12,6 +12,112 @@
 				menu = $rootScope.webApp.menu,
 				gridHeaderAttributes = {"class": "table-header-cell", style: "text-align: center; font-size: 12px"};
 			
+			this.kendoEditor = function(cd_at) {
+				var self = this,
+				    retVal = {};
+				
+				if(cd_at === undefined || cd_at === "") {
+					cd_at = "010";
+				}
+				
+				var retVal = {
+	            	noNotice : "",
+	                path: "",
+	                tools: [
+	         	    	"insertImage",
+	      	    	    "bold",
+	                    "italic",
+	                    "underline",
+	                    "strikethrough",
+	                    "justifyLeft",
+	                    "justifyCenter",
+	                    "justifyRight",
+	                    "justifyFull",
+	                    "insertUnorderedList",
+	                    "insertOrderedList",
+	                    "indent",
+	                    "outdent"
+	                ],
+	                imageBrowser: {
+	                	messages: {
+	                		dropFilesHere: "드래그 한 파일을 여기에 놓아 주세요.",
+	                        empty: "비었음",
+	                        uploadFile: "업로드",
+	                        search: "검색",
+	                        deleteFile: "[{0}] 삭제 하시겠습니까?",
+	                        overwriteFile: "[{0}] 이름의 이미지는 이미 존재합니다. 저장하시겠습니까?",
+	                        invalidFileType: "선택된 파일 [{0}]은 이미지 파일이 아닙니다. 확인 바랍니다.",
+	                        orderBy: "정렬방식",
+	                        orderByName: "이름",
+	                        orderBySize: "파일크기",
+	                        insertImage: "이미지 추가"
+	                    },
+	                    transport: {
+	                    	read: function(e){
+	                    		var path  = (e.data.path.length > 0)?e.data.path.substring(0, e.data.path.length-1):"";
+	                    		var param = {
+		                    		procedureParam: "USP_SY_THNFD_GET&NM_THNFD@s|CD_AT@s",
+		                    		NM_THNFD      : path,
+		                    		CD_AT         : cd_at
+		                    	};
+		                    	self.getList(param).then(function (res) {
+		                    		if(res.data.results[0].length >= 1){
+		                    			e.success(res.data.results[0]);		  
+		                    		}else{
+		                    			e.success([]);          	            				  
+		                    		}
+		                    	});
+		                    },
+                    		create: {
+	                    		url : APP_CONFIG.domain + "/ut05FileUploadThnFd",
+	                    		type: "POST",
+	                    		data: function(iData) {
+		                    		var param = {
+			                    		NM_THNFD    : iData.name,
+			                    		NM_HRNKTHNFD: iData.path,
+			                    		CD_AT       : cd_at
+		                    		};
+		                    		
+		                    		return param;
+		                    	}
+	                    	},
+	                    	destroy: {
+	                    		url : function(options) {
+		                    		return APP_CONFIG.domain + "/ut05FileUploadThn?" + $.param({NO_AT:options.NO_AT}) + 
+		                    		"&" + $.param({path:options.path + options.name}) + 
+		                    		"&" + $.param({type:options.type}) +
+		                    		"&" + $.param({CD_AT:cd_at});
+	                    		},
+	                    		type: "DELETE"
+	                    	},
+                    		uploadUrl : APP_CONFIG.domain + "/ut05FileUploadThn",
+                    		thumbnailUrl: function(e, file){
+                    			return decodeURIComponent(e.get("src"));
+                    		},
+                    		imageUrl: function(e){
+                    			return decodeURIComponent(e.get("src"));
+                    		}
+	                    },
+	                    _fileUpload : function(self) {
+	                    	var path = self.upload.options.upload.arguments[0].data.path;
+	                    	self.upload.options.upload.arguments[0].data = {
+	                			"cd_at"   : cd_at,
+	                        	"cd_ref1" : "",
+	                        	"cd_ref2" : "",
+	                        	"cd_ref3" : "",
+	                        	"cd_ref4" : "",
+	                        	"cd_ref5" : "",
+	                        	"bimage"  : true,
+	                        	"path"    : path
+	                    	};
+	                    	return self;
+	                    }
+	                }
+				};
+				
+				return retVal;
+			};
+			
 			this.gridPageableMessages = {
 				display: "총 {2}건 중 {0}-{1}건",
 				empty: "표시할 데이터가 없습니다.",

@@ -5,7 +5,7 @@
 
     edtApp.constant('APP_CONFIG', {
         bsCd    : '00000',
-		domain  : '/MarketManagerServer', // 운영
+		domain  : '/MarketManagerServer_Mi', // 운영
         version : 'V 0.1.0',
         encrypt : true 
     });
