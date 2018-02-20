@@ -1,0 +1,198 @@
+<div id="app-content" class="col-xs-12 col-sm-10">
+    <div class="row">
+        <div id="app-content-header">
+            <ol class="breadcrumb">
+                <li><a href="#99sy/syDashboard"><i class="fa fa-home fa-2x"></i></a></li>
+                <li><a href="#98te/teMobile">모바일샘플화면</a></li>
+            </ol>
+        </div>
+    </div>
+    
+    <div class="row">
+    	<div id="forms" data-role="view" data-use-native-scrolling="false">	   
+	        <ul data-role="listview" data-style="inset">
+	            <li>
+	                <label class="km-required km-label-above">First Name
+	                    <input value="Eduardo" type="text" />
+	                </label>
+	            </li>
+	            <li>
+	                <label class="km-label-above">Last Name
+	                    <input value="Batista" type="text" />
+	                </label>
+	            </li>
+	            <li>
+	                <label class="km-label-above">Company
+	                    <input value="Telerik" type="text" />
+	                </label>
+	            </li>
+	             
+	            <li>
+	                <fieldset>
+	                    <legend><a href="#" class="km-legend-button">+ Phone</a></legend>
+	                        <label class="km-inline-field km-label-above km-required" style="width: 200px;">
+	                        Phone Number
+	                        <input type="text" value="+359 555 5555" />
+	                        </label>
+	                        <label class="km-inline-field km-label-above" style="width: 200px;">
+	                            Type
+	                            <select id="phone-type">
+	                                <option value="First Option">Mobile</option>
+	                                <option value="Second Option">Stationary</option>
+	                                <option value="Third Option">iPhone</option>
+	                            </select>
+	                      </label>  
+	                </fieldset>                   
+	            </li>
+	            <li>
+	                <fieldset>
+	                    <legend><a href="#" class="km-legend-button">+ Email</a></legend>
+	                    <input type="text" value="barista@telerik.com" />
+	                </fieldset>
+	            </li>
+	             <li>
+	
+	                    <label class="km-icon-label k-i-calendar km-required">
+	                        <input value="Meeting" type="text" />
+	                    </label>
+	                </li>
+	                <li>
+	                    <label class="km-icon-label k-i-clock">
+	                        <select id="dropdown">
+	                            <option value="First Option">Meeting Room 1</option>
+	                            <option value="Second Option">Meeting Room 2</option>
+	                            <option value="Third Option">Meeting 3</option>
+	                        </select>
+	                    </label>
+	                </li>
+	                 
+	             <li>
+	                <label class="km-required">Title
+	                    <input value="Meeting" type="text" />
+	                </label>
+	            </li>
+	            <li>
+	                <label>Location
+	                    <select id="meeting_room">
+	                            <option value="First Option">Meeting Room 1</option>
+	                            <option value="Second Option">Meeting Room 2</option>
+	                            <option value="Third Option">Meeting 3</option>
+	                        </select>
+	                </label>
+	            </li>            
+	            <li>
+	                <fieldset>
+	                    <legend>Volume</legend>
+	                    <input data-role="slider" id="slider" max="100" class="km-full-width-slider" />
+	                </fieldset>
+	            </li>
+	            <li>
+	                <fieldset>
+	                    <legend>Notes</legend>
+	                    <textarea style="height: 100px;"> Your notes here</textarea>
+	                </fieldset>
+	            </li>          
+	        </ul>
+		</div>
+    </div>
+    
+    <div class="row">
+        <div class="content-area-container col-xs-12">
+        	<div data-content-box-layer data-box-title="teMobileVO.boxTitle">
+	   			<form class="search-type1" id="myForm">
+                	<table>
+                        <colgroup>
+                            <col style="width: 7%;">
+                            <col style="width: 18%;">
+                            <col style="width: 7%;">
+                            <col style="width: 23%;">
+                            <col style="width: 7%;">
+                            <col style="width: 18%;">
+                            <col style="width: 7%;">
+                            <col style="width: 18%;">
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th>마켓명</th>
+                            <td>
+                            	<co01-mcbox title="마켓명" model="teMobileVO.ordMrkNameMo" options="teMobileVO.ordMrkNameOp" setting="teMobileVO.setting" style="width:100%;">
+        						</co01-mcbox> 
+                            </td>
+                            <th>상품명</th>
+                            <td>
+                            	<input data-ng-model="teMobileVO.procName.value"
+                            			focus="teMobileVO.procName.focus"
+                            			title="상품명"
+                            			data-eden-type="kor" 
+                            			type="text" 
+                            			class="form-control" style="width:100%;"/>
+                            </td>		
+                            <th>주문상태</th>
+                            <td>            
+       							<co01-mcbox id="shpbyord-status" title="주문상태" model="teMobileVO.ordStatusMo" options="teMobileVO.ordStatusOp" setting="teMobileVO.setting"  style="width:100%;">
+        						</co01-mcbox>        						
+                            </td>   
+                            <th>주문번호</th>
+                            <td>     
+					            <input data-ng-model="teMobileVO.orderNo.value"
+                            			focus="teMobileVO.orderNo.focus"
+                            			title="주문번호"
+                            			data-eden-type="kor" 
+                            			type="text" 
+                            			class="form-control" style="width:100%;"/>
+                            </td>         
+                        </tr>
+                        <tr>
+                            <th>구매자/수취인</th>
+                            <td>                            	              	
+                            	<input data-ng-model="teMobileVO.buyerName.value"
+                            			focus="teMobileVO.buyerName.focus"
+                            			title="구매자/수취인"
+                            			data-eden-type="kor" 
+                            			type="text" 
+                            			class="form-control" style="width:100%;"/>
+                            </td>
+                            <th></th>
+                            <td></td>
+                            <th></th>
+                            <td></td>
+                            <th></th>
+                            <td></td>                            
+                        </tr>
+                        <tr>
+                            <th>기간</th>                            
+                            <td>
+                            	<select ng-model="teMobileVO.betweenDateOptionMo"
+        								ng-options="option.CD_DEF as option.NM_DEF for option in teMobileVO.betweenDateOptionOp"
+        								class="form-control"
+        								style="width: 100%">
+        						</select>	
+                            </td>
+                            <td colspan="6">                            	              	
+                            	<div class="frm-group" data-date-search-group="teMobileVO.datesetting" style="display:inline-block;"></div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>         		     
+                    <div class="btn-group1 mt-10">
+                        <kendo-button type="submit" class="k-primary" title="검색" data-ng-click="teMobileVO.inQuiry()" style="width:70px;">검색</kendo-button>
+                        <kendo-button type="botton" title="초기화" data-ng-click="teMobileVO.inIt()" style="width:70px;">초기화</kendo-button>
+                    </div>
+                </form>
+	    	</div>
+        </div>
+    </div>
+    
+    <div class="row">
+       	<div id="divTeGrd" kendo-grid="tekg" options="teMobileVO.kGird">
+       	</div>
+	</div>
+</div>
+
+<!-- 주문 배송 종합 그리드 툴바 템플릿  -->
+<script id="ordall_toolbar_template" type="text/x-kendo-template">
+	<a class="k-button k-button-icontext k-grid-ordall-delay"><span class="k-icon k-i-check"></span>배송지연</a>
+	<a class="k-button k-button-icontext k-grid-ordall-cencel"><span class="k-icon k-i-check"></span>주문취소</a>
+	<a class="k-button k-button-icontext k-grid-ordall-output"><span class="k-icon k-i-check"></span>송장출력</a>            
+	<a class="k-button k-button-icontext k-grid-ordall-send"><span class="k-icon k-i-check"></span>배송정보 전송하기</a>	
+</script>
