@@ -914,7 +914,7 @@
 	                				switch(arg){
 	                					case 1 : {
 	                						if(['170104','170102','170902'].indexOf(grdItem.CODE) > -1){
-	    			                    		alert("지마켓, 옥션, 쿠팡은 교환처리 기능을  사용할 수 없습니다.");
+	    			                    		alert("지마켓, 옥션, 쿠팡은 교환처리, 교환거부 기능을  사용할 수 없습니다.");
 	    			                    		return false;
 	    			                    	};
 	    			                    	if(!(['004','005'].indexOf(grdItem.CD_ORDSTAT) > -1 && grdItem.CD_ECHGSTAT === '001')){			                				
