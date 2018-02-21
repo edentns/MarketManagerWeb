@@ -214,6 +214,7 @@
                     				    CD_JOINITEM: 		   {type: "string", editable: false, nullable: true},
                     				    DTS_JOIN: 			   {type: "string", editable: false, nullable: true},
                     				    DTS_JOINREQ: 		   {type: "string", editable: false, nullable: true}, 
+                    				    DTS_LASTLOGIN: 		   {type: "string", editable: false, nullable: true}, 
                     				    CNT_CMRKREG:		   {type: "string", editable: false, nullable: true},
                     				    CNT_PARSREG: 		   {type: "string", editable: false, nullable: true} 
                     				}
@@ -277,16 +278,10 @@
             		               title: "전화번호",
             		               width: 100,
             		               headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
-            		            },
-            		            {
-            		        	   field: "DC_NEWADDR_DC_OLDADDR",
-            		        	   title: "주소1",
-            		        	   headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
-           		        	    },          		           
+            		            },         		           
            		        	    {
 	         		        	   field: "DC_REPREMI",
 	         		        	   title: "이메일",
-	         		        	   width: 200,
 	         		        	   headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
 	        		            }, 
 	        		            {
@@ -302,17 +297,23 @@
 	         		        	   headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
 	        		        	}, 
         		        	    {
+             		        	   field: "DTS_JOINREQ",
+             		        	   title: "가입요청일시",
+             		        	   width: 120,
+             		        	   headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
+	            		        }, 
+        		        	    {
              		        	   field: "DTS_JOIN",
              		        	   title: "가입일",
              		        	   width: 120,
              		        	   headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
             		        	}, 
         		        	    {
-             		        	   field: "DTS_JOINREQ",
-             		        	   title: "가입요청일시",
-             		        	   width: 120,
-             		        	   headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
-            		        	}, 
+               		        	   field: "DTS_LASTLOGIN",
+               		        	   title: "마지막로그인일시",
+               		        	   width: 120,
+               		        	   headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
+              		        	}, 
         		        	    {
               		        	   field: "CNT_CMRKREG",
               		        	   title: "마켓등록건수",
