@@ -3,8 +3,29 @@
 
 	<div id="app-main" class="container-fluid">
 		<div class="row">
-			<menu-navigation id="sidebar-left" class="col-xs-2 col-sm-2" menu-config="menu"></menu-navigation>
-			<div data-ui-view="contentView"></div>
+			<div id="menuMain" class="col-xs-2 col-sm-2" style="height:918px;">
+				<div id="menuView" style="padding:0 15px; width:100%;">
+					<menu-navigation menu-config="menu"></menu-navigation>
+				</div>
+				<div id="advView" style="border-width: 1px;border-style: double;margin: 0px;padding-left: 10px; background-color:white;">
+					광고4
+				</div>
+			</div>
+			<!-- <menu-navigation id="sidebar-left" class="col-xs-2 col-sm-2" menu-config="menu" menu-height="menuHeight"></menu-navigation> -->
+			<!-- <div data-ui-view="contentView"></div> -->
+			<div id="contentMain" class="col-xs-10 col-sm-10" style="width:91%; height:918px; margin:0; padding:0;">
+				<div id="conView">
+					<div data-ui-view="contentView"></div>
+				</div>
+				<div id="helpView"><font style="font-size: 25px; color: #b7472a;">도움말</font></div>
+			</div>
 		</div>
 	</div>
 </div>
+
+<style>
+.k-widget, .k-widget * {
+    -webkit-box-sizing:border-box;
+    box-sizing:border-box;
+}
+</style>

@@ -3,7 +3,7 @@
 			<li style="height: 34px" ng-click="onFavorites()">즐겨찾기</li>
 			<li class="k-state-active" style="height: 34px;" ng-click="onMenu()">메&nbsp뉴</li>
 		</ul>
-		<div style="padding: 1em; height: 800px; overflow:visible;">
+		<div style="padding: 1em; height: 598px; overflow:visible;">
 			<ul class="nav main-menu">
 				<li ng-repeat="menu in favoritesList" ng-class="{'dropdown': menu._children.length > 0, opened: menu.active}">
 					<a ng-if="menu._children.length == 0" 
@@ -29,7 +29,7 @@
 				</li>
 			</ul>
 		</div>
-		<div style="padding: 1em; height: 800px; overflow:visible;">
+		<div style="padding: 1em; height: 598px; overflow:visible;">
 			<ul class="nav main-menu">
 				<li ng-repeat="menu in menuList" ng-class="{'dropdown': menu._children.length > 0, opened: menu.active}">
 					<!-- <div class="{{menu.hasMenu}}" id="{{menu.entity.NO_M}}"> -->

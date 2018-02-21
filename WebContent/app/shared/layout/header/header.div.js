@@ -16,7 +16,7 @@
 				restrict: "AE",
 				transclude: true,
 				scope: true,
-				controller: ["$rootScope", "$scope", "$state", "sy.LoginSvc", function ($rootScope, $scope, $state, SyLoginSvc) {
+				controller: ["$rootScope", "$scope", "$state", "sy.LoginSvc", "UtilSvc", function ($rootScope, $scope, $state, SyLoginSvc, UtilSvc) {
 					var headerIconVO = $scope.headerIconVO = {
 						isShowDropdown : false
 					};
@@ -26,6 +26,12 @@
 						this.isShowDropdown = !this.isShowDropdown;
 					};
 
+					headerIconVO.helpToggle = function () {
+						var splitterElement = $("#contentMain");
+						
+						UtilSvc.splitter.toggle(splitterElement.children(".k-pane")[1], $(splitterElement.children(".k-pane")[1]).width() <= 0);
+					};
+					
 					headerIconVO.initLoad = function () {
 						headerIconVO.toggleSidebar();
 					};
