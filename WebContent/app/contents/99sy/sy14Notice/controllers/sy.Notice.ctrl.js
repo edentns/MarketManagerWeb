@@ -24,10 +24,10 @@
 		            	datesetting : {
 		        			dateType   : 'market',
 							buttonList : ['current', '1Day', '1Week', '1Month', 'range'],
-							selected   : resData.selected,
+							selected   : resData.selectDate.selected,
 							period : {
-								start : resData.start,
-								end   : resData.end
+								start : resData.selectDate.start,
+								end   : resData.selectDate.end
 							}
 		        		},
 	                    contentText: { value: resData.contentTextValue , focus: false},			//제목/내용
@@ -56,6 +56,7 @@
 							SEARCH_: noticeDataVO.contentText.value,
                         	ARR_CD_NO: noticeDataVO.noticeCdModel,
                         	ARR_CD_NO_SELECT_INDEX : noticeDataVO.noticeCdVO.allSelectNames,
+                        	SELECTED_DATE: noticeDataVO.datesetting.selected,
                         	START_DATE: noticeDataVO.datesetting.period.start,
                         	END_DATE: noticeDataVO.datesetting.period.end
 		                };

@@ -23,10 +23,10 @@
 	            	datesetting : {
 	        			dateType   : 'market',
 						buttonList : ['current', '1Day', '1Week', '1Month', 'range'],
-						selected   : resData.selected,
+						selected   : resData.selectDate.selected,
 						period : {
-							start : resData.start,
-							end   : resData.end
+							start : resData.selectDate.start,
+							end   : resData.selectDate.end
 						}
 	        		},
                     contentText: { value: resData.contentTextValue, focus: false},			//제목,내용
@@ -77,6 +77,7 @@
 	    						L_CONT: syQaDataVO.contentText.value,
 	    						L_CD_ANSSTAT : syQaDataVO.answerStatusModel,
 	    						L_CD_ANSSTAT_INDEX : syQaDataVO.answerStatusBind.allSelectNames,
+	    						L_SELECTED_DATE: syQaDataVO.datesetting.selected,
 	    						L_START_DATE  : syQaDataVO.datesetting.period.start,
 	    						L_END_DATE    : syQaDataVO.datesetting.period.end
 	    	                };

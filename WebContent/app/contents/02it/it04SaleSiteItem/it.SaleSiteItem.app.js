@@ -16,7 +16,8 @@
                     resolve		: {
                         resData: ["AuthSvc", "$q", "sy.CodeSvc", "UtilSvc", function (AuthSvc, $q, SyCodeSvc, UtilSvc) {
                             var defer 	= $q.defer(),
-                                resData = {};
+                                resData = {},
+                                today   = edt.getToday();
 
                             AuthSvc.isAccess().then(function (result) {
                                 resData.access = result[0];
@@ -63,9 +64,16 @@
                                         	resData.NM_ITEMCTGR2 = history.NM_ITEMCTGR2;
                                         	resData.CD_ITEMCTGR3 = history.CD_ITEMCTGR3;
                                         	resData.NM_ITEMCTGR3 = history.NM_ITEMCTGR3;
-                                        	resData.start                = history.DATE_FROM;
-                                        	resData.end                  = history.DATE_TO;
-        				            		resData.selected             = 'range';
+                                        	if(history.DATE_SELECTED === "current") {
+                		            			resData.selected = history.DATE_SELECTED
+                		            			resData.start    = angular.copy(today);
+                    		            		resData.end      = angular.copy(today);
+                		            		}
+                		            		else {
+                		            			resData.selected = 'range';
+                    		            		resData.start    = history.DATE_FROM;
+                    		            		resData.end      = history.DATE_TO;
+                		            		}
                 		            	}
                                         else {
                                         	resData.signItemValue = "";

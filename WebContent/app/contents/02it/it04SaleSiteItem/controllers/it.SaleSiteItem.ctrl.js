@@ -93,6 +93,7 @@
         					NM_ITEMCTGR2 : saleItemDataVO.selectedCtgr2.NM_CTGR,
         					CD_ITEMCTGR3 : saleItemDataVO.selectedCtgr3.ID_CTGR,
         					NM_ITEMCTGR3 : saleItemDataVO.selectedCtgr3.NM_CTGR,
+							DATE_SELECTED: saleItemDataVO.datesetting.selected,
 							DATE_FROM    : saleItemDataVO.datesetting.period.start,
 		                	DATE_TO      : saleItemDataVO.datesetting.period.end
 		                };

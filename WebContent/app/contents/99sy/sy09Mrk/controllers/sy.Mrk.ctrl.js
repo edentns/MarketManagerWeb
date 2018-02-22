@@ -45,10 +45,10 @@
 	        		datesetting : {
 	        			dateType   : 'market',
 						buttonList : ['current', '1Day', '1Week', '1Month', 'range'],
-						selected   : resData.selected,
+						selected   : resData.selectDate.selected,
 						period : {
-							start : resData.start,
-							end   : resData.end
+							start : resData.selectDate.start,
+							end   : resData.selectDate.end
 						}
 	        		}
                 };
@@ -98,11 +98,12 @@
                 			MRK_SELECT_INDEX : dateVO.MrkCodeList.allSelectNames,
     						STAT_LIST    : dateVO.selectedItlStatIds,
     						STAT_SELECT_INDEX : dateVO.ItlStatCodeList.allSelectNames,
+    						SELECTED_DATE: dateVO.datesetting.selected,
     						START_DATE   : dateVO.datesetting.period.start,
     						END_DATE     : dateVO.datesetting.period.end
     	                };
             			// 검색조건 세션스토리지에 임시 저장
-            			UtilSvc.grid.setInquiryParam(param);
+            		UtilSvc.grid.setInquiryParam(param);
                 };
 		        
                 //새로 저장시 유효성 검사 (수정 할 땐 비밀번호를 따로 입력할 필요할 없어서 required 하지 않아서 저장시 따로 함수를 만듦 kendo로는  editable true 일때만 됨)

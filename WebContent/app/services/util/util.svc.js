@@ -759,7 +759,30 @@
 					return root;
 				},
 
-
+				/**
+				 * 검색조건 중 날짜 체크하여 변환
+				 * @param {Object} poJson
+				 * @param {string=} psKind
+				 * @param {string=} psUrl
+				 */
+				getSelectDate: function (selected, start, end) {
+					var rtnSelectDate = {},
+					    today = edt.getToday();
+					
+					if(selected === "current") {
+						rtnSelectDate.selected = selected;
+						rtnSelectDate.start    = angular.copy(today);
+						rtnSelectDate.end      = angular.copy(today);
+            		}
+            		else {
+            			rtnSelectDate.selected = 'range';
+            			rtnSelectDate.start    = start;
+            			rtnSelectDate.end      = end;
+            		}
+					
+					return rtnSelectDate;
+				},
+				
 				/**
 				 * 검색조건을 세션에 저장한다.
 				 * @param {Object} poJson

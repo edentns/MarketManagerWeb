@@ -16,7 +16,8 @@
                     resolve		: {
                         resData: ["AuthSvc", "$q", "UtilSvc", function (AuthSvc, $q, UtilSvc) {
                             var defer 	= $q.defer(),
-                                resData = {};
+                                resData = {},
+                                today   = edt.getToday();
 
                             AuthSvc.isAccess().then(function (result) {
                                 resData.access = result[0];
@@ -42,9 +43,7 @@
     				            		resData.contentTextValue  = history.L_CONT;
     				            		resData.answerStatusModel = history.L_CD_ANSSTAT;
     				            		resData.answerStatusBind.setSelectNames = history.L_CD_ANSSTAT_INDEX;
-    				            		resData.start             = history.L_START_DATE;
-    				            		resData.end               = history.L_END_DATE;
-    				            		resData.selected          = 'range';
+    				            		resData.selectDate        = UtilSvc.grid.getSelectDate(history.L_SELECTED_DATE, history.L_START_DATE, history.L_END_DATE);
     				            	}
     				            	else {
     				            		resData.contentTextValue  = "";

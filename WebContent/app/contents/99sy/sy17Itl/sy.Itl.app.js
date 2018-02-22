@@ -17,7 +17,8 @@
                         resData: ["AuthSvc", "$q", "UtilSvc", '$state', function (AuthSvc, $q, UtilSvc, $state) {
                             var defer 	= $q.defer(),
                                 resData = {},
-                                self = this;
+                                self    = this,
+                                today   = edt.getToday();
 
                             AuthSvc.isAccess().then(function (result) {
                                 resData.access = result[0];
@@ -47,9 +48,7 @@
     				            		resData.mngMrkData.setSelectNames = history.mngMrkBindSelect;
     				            		resData.stJobModel                = history.stJobModel;
     				            		resData.stJobData.setSelectNames  = history.stJobBindSelect;
-    				            		resData.start                     = history.start;
-    				            		resData.end                       = history.end;
-    				            		resData.selected                  = 'range';
+    				            		resData.selectDate                = UtilSvc.grid.getSelectDate(history.selected, history.start, history.end);
     				            	}
     				            	else {
     				            		resData.mngMrkModel = "*";

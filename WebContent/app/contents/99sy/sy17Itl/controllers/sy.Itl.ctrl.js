@@ -29,10 +29,10 @@
 	            	datesetting : {
 	        			dateType   : 'market',
 						buttonList : ['current', '1Day', '1Week', '1Month', 'range'],
-						selected   : resData.selected,
+						selected   : resData.selectDate.selected,
 						period : {
-							start : resData.start,
-							end   : resData.end
+							start : resData.selectDate.start,
+							end   : resData.selectDate.end
 						}
 	        		},
                     mngMrkModel : resData.mngMrkModel,                  //마켓명 모델

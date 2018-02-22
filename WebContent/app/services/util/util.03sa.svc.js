@@ -129,9 +129,14 @@
         			
         			for(var w in me) {
         				if(w === "datesetting"){
-        					me[w].selected     = "range";
-        					me[w].period.start = getParam.DTS_STORAGE_FROM;
-        					me[w].period.end   = getParam.DTS_STORAGE_TO;
+        					if(getParam.DTS_SELECTED === "current") {
+        						me[w].selected = getParam.DTS_SELECTED;
+        					}
+        					else {
+	        					me[w].selected     = "range";
+	        					me[w].period.start = getParam.DTS_STORAGE_FROM;
+	        					me[w].period.end   = getParam.DTS_STORAGE_TO;
+        					}
         				}
         				if(w === "betweenDateOptionMo" ){
         					me[w] = getParam.DTS_CHK;

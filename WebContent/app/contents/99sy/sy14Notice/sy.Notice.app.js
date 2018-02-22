@@ -43,9 +43,7 @@
     				            		resData.contentTextValue          = history.SEARCH_;
     				            		resData.noticeCdModel             = history.ARR_CD_NO;
     				            		resData.noticeCdVO.setSelectNames = history.ARR_CD_NO_SELECT_INDEX;
-    				            		resData.start                     = history.START_DATE;
-    				            		resData.end                       = history.END_DATE;
-    				            		resData.selected                  = 'range';
+    				            		resData.selectDate                = UtilSvc.grid.getSelectDate(history.SELECTED_DATE, history.START_DATE, history.END_DATE);
     				            	}
     				            	else {
     				            		resData.contentTextValue = "";

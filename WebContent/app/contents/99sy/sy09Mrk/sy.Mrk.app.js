@@ -45,9 +45,7 @@
     				            		resData.MrkCodeList.setSelectNames     = history.MRK_SELECT_INDEX;
     				            		resData.selectedItlStatIds             = history.STAT_LIST;
     				            		resData.ItlStatCodeList.setSelectNames = history.STAT_SELECT_INDEX;
-    				            		resData.start                          = history.START_DATE;
-    				            		resData.end                            = history.END_DATE;
-    				            		resData.selected                       = 'range';
+    				            		resData.selectDate                     = UtilSvc.grid.getSelectDate(history.SELECTED_DATE, history.START_DATE, history.END_DATE);
     				            	}
     				            	else {
     				            		resData.selectedMrkIds     = "*";

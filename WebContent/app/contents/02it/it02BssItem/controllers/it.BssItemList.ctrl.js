@@ -106,6 +106,7 @@
 						CD_ITEMKIND_SELECT_INDEX : bssItemDataVO.iKindList.allSelectNames,
 						CD_ITEMSTAT_SELECT_INDEX : bssItemDataVO.iStatList.allSelectNames,
 						DATEOPT     : bssItemDataVO.selectedDateOption,
+						DATE_SELECTED: bssItemDataVO.datesetting.selected,
 						DATE_FROM   : bssItemDataVO.datesetting.period.start,
 	                	DATE_TO     : bssItemDataVO.datesetting.period.end
 	                };

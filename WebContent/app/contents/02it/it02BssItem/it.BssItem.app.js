@@ -26,7 +26,8 @@
                     resolve		: {
                         resData: ["AuthSvc", "$q", "sy.CodeSvc", "UtilSvc","$stateParams", function (AuthSvc, $q, SyCodeSvc, UtilSvc, $stateParams) {
                             var defer 	= $q.defer(),
-                                resData = {};
+                                resData = {},
+                                today   = edt.getToday();
 
                             AuthSvc.isAccess().then(function (result) {
                                 resData.access = result[0];
@@ -131,9 +132,16 @@
                     		            		resData.iKindCodeList.setSelectNames = history.CD_ITEMKIND_SELECT_INDEX;
                     		            		resData.iStatCodeList.setSelectNames = history.CD_ITEMSTAT_SELECT_INDEX;
                     		            		resData.selectedDateOption = history.DATEOPT;
-                    		            		resData.start    = history.DATE_FROM;
-                    		            		resData.end      = history.DATE_TO;
-            				            		resData.selected = 'range';
+                    		            		if(history.DATE_SELECTED === "current") {
+                    		            			resData.selected = history.DATE_SELECTED
+                    		            			resData.start    = angular.copy(today);
+                        		            		resData.end      = angular.copy(today);
+                    		            		}
+                    		            		else {
+                    		            			resData.selected = 'range';
+                        		            		resData.start    = history.DATE_FROM;
+                        		            		resData.end      = history.DATE_TO;
+                    		            		}
                     		            	}
                                 			else {
                     		            		resData.signItemValue = "";	
