@@ -124,7 +124,7 @@
 </div>
 <table class="table signal" data-uid="#= uid #">
 	<colgroup>
-      <col style="width: 14%;">
+      <col style="width: 16%;">
       <col style="width: 30%;">
       <col style="width: 14%;">
       <col style="width: 30%;">
@@ -202,7 +202,7 @@
 		
 		<tr class="border-bottom-line" data-ng-if="tkbkDataVO.updateChange === '001'">
 			<td class="active border-right-line">
-				접수자
+				반품완료자
 			</td>
 			<td>
 				{{tkbkDataVO.userInfo}}
@@ -212,7 +212,7 @@
 		</tr>
 		<tr class="border-bottom-line" data-ng-if="tkbkDataVO.updateChange === '001'">
 			<td class="active border-right-line">
-				<code>*</code>접수일자
+				<code>*</code>반품완료일자
 			</td>
 			<td class="ta-l" colspan="3">
 				<input kendo-date-time-picker				
@@ -314,7 +314,6 @@
 		</tr>		
 
 
-
 		<tr class="border-bottom-line" data-ng-if="tkbkDataVO.updateChange === '003' && ngIfdata(tkbkDataVO.cCode, '#: CODE #')">
 			<td class="active border-right-line">
 				<code>*</code>환불동시 진행여부
@@ -328,10 +327,9 @@
 		</tr>
 
 
-
 		<tr class="border-bottom-line" data-ng-show="tkbkDataVO.updateChange === '003' && ngIfdata(tkbkDataVO.sCode, '#: CODE #')">
 			<td class="active border-right-line">
-				<code>*</code>택배사<br/>
+				<code>*</code>회수 택배사<br/>
 			</td>
 			<td>
 				<select
@@ -345,7 +343,7 @@
 		</tr>
 		<tr class="border-bottom-line" data-ng-show="tkbkDataVO.updateChange === '003' && ngIfdata(tkbkDataVO.sCode, '#: CODE #')">
 			<td class="active border-right-line">
-				<code>*</code>송장번호
+				<code>*</code>회수 송장번호
 			</td>
 			<td colspan="3" menual-shw-wrn="tkbkDataVO.menualShwWrn">			
 				<input class="k-textbox" name="NO_INVO" data-bind="value: NO_INVO"

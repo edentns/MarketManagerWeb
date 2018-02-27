@@ -7,8 +7,8 @@
      * 상품분류관리
      */
     angular.module("sa.EchgReq.controller")
-        .controller("sa.EchgReqCtrl", ["$scope", "$http", "$q", "$log", "sa.EchgReqSvc", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "MenuSvc", "$window",  "Util03saSvc",   
-            function ($scope, $http, $q, $log, saEchgReqSvc, APP_CODE, $timeout, resData, Page, UtilSvc, MenuSvc, $window, Util03saSvc) {
+        .controller("sa.EchgReqCtrl", ["$scope", "$state", "$http", "$q", "$log", "sa.EchgReqSvc", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "MenuSvc", "$window",  "Util03saSvc",   
+            function ($scope, $state, $http, $q, $log, saEchgReqSvc, APP_CODE, $timeout, resData, Page, UtilSvc, MenuSvc, $window, Util03saSvc) {
 	            var page  = $scope.page = new Page({ auth: resData.access }),
 		            today = edt.getToday();
 	           
@@ -36,6 +36,7 @@
                     DC_SHPWAY     	: { type: "string"    , editable: false, nullable: false },
                     DTS_ORD       	: { type: "string"    , editable: false, nullable: false },                    
                     DTS_ECHGREQ   	: { type: "string"    , editable: false, nullable: false },
+                    DTS_ECHGCPLT  	: { type: "string"    , editable: false, nullable: false },
                     DT_SND        	: { type: "string"    , editable: false, nullable: false },
                     DTS_ECHGAPPRRJT : { type: "string"    , editable: false, nullable: false },
                     NO_ECHGAPPRRJT  : { type: "string"    , editable: false, nullable: false },
@@ -55,13 +56,14 @@
         			NO_INVO			: { type: "string"	  , editable: false, nullable: false },
         			CD_PARS_ECHG	: { type: "string"	  , editable: false, nullable: false },
         			NO_INVO_ECHG	: { type: "string"	  , editable: false, nullable: false },
+        			RECEIVE_SET     : { type: "string"	  , editable: true, nullable: false },
                     CD_ECHGRJTRSN 	: {
                     					 type: "string"    
                     					,editable: true
                     					,nullable: false
                     					,validation: {
 											cd_echgrjtrsnvalidation: function (input) {
-												if(echgDataVO.rejectShowCode.indexOf(echgDataVO.updateChange) > -1 && echgDataVO.curCode === '170106'){
+												if(echgDataVO.rejectShowCode.indexOf(echgDataVO.updateChange) > -1 && ["170106","170902"].indexOf(echgDataVO.curCode) > -1){
 													if (input.is("[name='CD_ECHGRJTRSN']") && input.val() === "") {
 														input.attr("data-cd_echgrjtrsnvalidation-msg", "교환거부코드를 입력해 주세요.");
 													    return false;
@@ -118,6 +120,9 @@
 											    	if (input.is("[name='CD_PARS']") && input.val() === "") {
 					                                	input.attr("data-cd_pars_inputvalidation-msg", "택배사를 입력해 주세요.");
 					                                    return false;
+					                                }
+											    	if (input.is("[name='CD_PARS']") && input.val()) {
+												    	echgDataVO.manualDataBind(input, "CD_PARS_INPUT");
 					                                }
 					                		   };
 					                		   return true;
@@ -180,9 +185,38 @@
                         enable: false,
 	                    valuePrimitive: true
 	        		},
+	        		cdParsDDL : {
+	        			dataSource : [],
+	        			autoBind: false,
+                		dataTextField : "NM_PARS_TEXT",
+                		dataValueField : "CD_DEF",
+                		optionLabel : "택배사를 선택해 주세요 ",
+                		select : function(e){
+                			var me = this;
+                			$timeout(function(){
+                				if(me.selectedIndex > 0){
+	                				me.element.parents("table").find(".k-invalid-msg").hide();
+	                			}
+                			},0);
+                		},
+                        change : function(e){
+                        	if(this.text() === "택배사 등록" && this.selectedIndex === 1){
+                        		$state.go("app.syPars", { menu: true, ids: null });
+                        		$scope.echgkg.cancelRow();
+                        	}
+                        }
+	        		},
+	        		rjtDDL : {
+	        			dataSource : [],
+	        			autoBind: false,
+	        			dataTextField:"NM_DEF",
+	                    dataValueField:"CD_DEF",
+                		optionLabel : "교환거부코드를 선택해 주세요 ",	                    
+	                    valuePrimitive: true
+	        		},
 	        		cdEchgrjtOp: [],
 	        		dateOptions : {										//DATE PICKER
-	        			parseFormats: ["yyyyMMddHHmmss"], 				//이거 없으면 값이 바인딩 안됨
+	        			parseFormats: ["yyyyMMddHHmmss"], 				
         	            animation: {
         	                close: {
         	                    effects: "fadeOut zoom:out",
@@ -193,6 +227,7 @@
         	                    duration: 300
         	                }
         	            },
+        	            value : new Date()
 	        		},
 	        		userInfo : JSON.parse($window.localStorage.getItem("USER")).NM_EMP,
 	        		updateChange : "",
@@ -200,18 +235,34 @@
 	        		resetAtGrd : "",
 	        		param : "",	        		
 	        		rejectDetailShowMrkCode : ['170106','170103'],
-	        		rejectDivShowMrkCode : ['170106'],
+	        		rejectDivShowMrkCode : ['170106','170902'],
 	        		rejectShowCode : ['002'],
-	        		procShowMrkCode : ['170106','170103','170104','170102'],
+	        		procShowMrkCode : ['170103','170104','170102','170902'],
 	        		procShowCode : ['001','003'],
-	        		completeShowMrkCode : ['170104','170102','170106','170103'],
+	        		completeShowMrkCode : ['170104','170102','170106','170103','170902'],
 	        		completeShowCode : ['003'],
+	        		receiveShowMrkCode : ['170902'],
+	        		receiveChk : false,
 	        		shpList : "",
 	        		curCode : "",
 	        		menualShwWrn : ""
 	            };
-			       
-	            echgDataVO.initLoad = function () {
+	            
+	            echgDataVO.ngIfdata = function(showCode, eqCode, inCode){
+	            	var me = this,
+	            	    shkChk = false,
+	            	    eqChk = false;	            	   
+	            	
+	            	shkChk = showCode.indexOf(me.updateChange) > -1;
+	            	eqChk = eqCode.indexOf(inCode) > -1;
+
+	            	if(!echgDataVO.receiveChk && inCode === "170902" && me.updateChange !== "002"){
+	            		return false;
+	            	};	         
+	            	return (shkChk && eqChk);
+	            };  
+	            
+	            echgDataVO.initLoad = function (){
 	            	var me = this;
                 	var ordParam = {
                 			lnomngcdhd: "SYCH00048",
@@ -266,7 +317,7 @@
                         me.cdEchgrjtOp = result[4];
                         me.echgStatusOp = result[5];
                         me.echgStatusMo = result[5][0].CD_DEF;
-                                                
+                        
                         $timeout(function(){
             				Util03saSvc.storedQuerySearchPlay(me, "echgDataVO");
                         },0);    
@@ -313,6 +364,7 @@
                 	        			
                 	me.ordStatusOp.bReset = true;
                 	me.ordMrkNameOp.bReset = true;
+					me.receiveChk = false;
                 			        
                 	angular.element($("#grd_chk_master")).prop("checked",false);
                 	me.dataTotal = 0;
@@ -336,16 +388,6 @@
 	            	}
 	            };
 	            
-	            echgDataVO.ngIfdata = function(showCode, eqCode, inCode){
-	            	var me = this,
-	            	   shkChk = false,
-	            	   eqChk = false;
-	            	
-	            	shkChk = showCode.indexOf(me.updateChange) > -1;
-	            	eqChk = eqCode.indexOf(inCode) > -1;
-	            	
-	            	return (shkChk && eqChk);
-	            };
 	            
 	            //팝업에 입력창들이 NG-IF 인하여 데이터 바인딩이 안되서 수동으로 데이터 바인딩을 함
 	            echgDataVO.manualDataBind = function(input, target){
@@ -364,12 +406,104 @@
 	            	}else if(target === "NOW_YN"){
 	            		dataItem[target] = input.is(":checked");
 	            	}else if(target === "RECEIVE_SET"){
-	            		dataItem[target] = $("#receive-group").find("[type=radio]:checked").val();
+	            		dataItem[target] = $("#receive-echg-group").find("[type=radio]:checked").val();
 	            	}else{
 	            		dataItem[target] = input.val();
 	            	};
 	            };	 
-	                
+	            
+	            echgDataVO.receiveChkClkEvt = function(e){
+	            	var element = $(e.currentTarget),
+            			checked = element.val();
+            	
+	            	if(checked === 'N'){
+	            		echgDataVO.receiveChk = false;
+	            	}else{
+	            		echgDataVO.receiveChk = true; 
+	            	};
+	            };
+		        
+	            //kendo grid 체크박스 옵션
+                $scope.onOrdGrdCkboxClick = function(e){
+                	UtilSvc.grdCkboxClick(e, $scope.echgkg);
+                };
+                
+                //kendo grid 체크박스 all click
+                $scope.onOrdGrdCkboxAllClick = function(e){
+                	UtilSvc.grdCkboxAllClick(e, $scope.echgkg);
+                };		
+                
+                $scope.popupUtil = function(e){
+                	Util03saSvc.popupUtil.blur(e);
+                };
+                
+	            $scope.$on("kendoWidgetCreated", function(event, widget){
+                	var grd = $scope.echgkg;
+                	
+	                if (widget === grd){	                	
+	                	widget.element.find(".k-grid-echg").on("click", function(e){         				
+	                		if(grd.element.find(".k-grid-content input:checked").length != 1){
+	                			alert("한 건의 주문을 선택해 주세요");
+	                			return false;
+	                		};	      	                		
+	                		var	chked = grd.element.find(".k-grid-content input:checked"),
+                				grdItem = grd.dataItem(chked.closest("tr")),
+	                			vali = function (arg){
+	                				switch(arg){
+	                					case 1 : {
+	                						if(['170104','170102','170902'].indexOf(grdItem.CODE) > -1){
+	    			                    		alert("지마켓, 옥션, 쿠팡은 교환처리 기능을 사용할 수 없습니다.");
+	    			                    		return false;
+	    			                    	};
+	    			                    	if(!(['004','005'].indexOf(grdItem.CD_ORDSTAT) > -1 && grdItem.CD_ECHGSTAT === '001')){			                				
+	    		                				alert("교환요청 된 주문만 처리 할 수 있습니다.");
+	    		                				return false;
+	    		                			};
+	    		                			return true;
+	    		                			break;
+	                					};
+	                					case 2 : {
+	                						if(['170104','170102'].indexOf(grdItem.CODE) > -1){
+	    			                    		alert("지마켓, 옥션은 교환거부 기능을 사용할 수 없습니다.");
+	    			                    		return false;
+	    			                    	};
+	    			                    	if(!(['004','005'].indexOf(grdItem.CD_ORDSTAT) > -1 && grdItem.CD_ECHGSTAT === '001')){			                				
+	    		                				alert("교환요청 된 주문만 처리 할 수 있습니다.");
+	    		                				return false;
+	    		                			};
+	    		                			return true;
+	    		                			break;
+	                					};
+	                					default : {	                						
+	                						break; 
+	                					}
+	                				}
+	                			}, 
+	                			proc = function (px, curCode){
+	                				grd.options.editable.window.width = px;
+		                			echgDataVO.updateChange = curCode;
+				                    grd.editRow(chked.closest("tr"));	
+	                			};
+	                		
+		                    if($(this).hasClass("confirm") && vali(1)){	//교환 처리		                    	
+		                    	proc("550px", "001");	
+		                    };
+		                    if($(this).hasClass("reject") && vali(2)){ 	//교환거부	
+		                    	proc("550px", "002");		
+		                    };
+		                    if($(this).hasClass("complete")){			//교환완료		                    	
+		                    	if((grdItem.CD_ORDSTAT === "009" && grdItem.CD_ECHGSTAT === "002") || (['004','005'].indexOf(grdItem.CD_ORDSTAT) > -1 && grdItem.CD_ECHGSTAT === "001" && ['170104','170102','170902'].indexOf(grdItem.CODE) > -1)){				                			
+		                    		grdItem.DTS_RECER = new Date();
+		                    		proc("620px", "003");
+		                		}else{
+		                			alert("마켓 및 주문 상태를 확인해 주세요.");
+		                			return false;
+		                		};
+		                    };                		                			
+	                	});
+	                }
+                });    
+	            
                 //검색 그리드
 	            var grdEchgVO = $scope.grdEchgVO = {
             		autoBind: false,
@@ -378,8 +512,8 @@
                         commands: {
                             update: "저장",
                             canceledit: "닫기"
-                        }
-                        ,noRecords: "검색된 데이터가 없습니다."
+                        },
+                        noRecords: "검색된 데이터가 없습니다."
                     },
                 	boxTitle : "주문 목록",
                 	pageable: {
@@ -401,69 +535,45 @@
                 		confirmation: false
                     },
                     edit: function(e){                    	
-                    	var cntnr = e.container,
-                    		dsModel = e.model,
-                    		cdpars = cntnr.find("select[name=CD_PARS]"),
-                    		cdechgrjtrsn = cntnr.find("select[name=CD_ECHGRJTRSN]"),
-                    		chosenDS = "";
-                 
-                    	echgDataVO.curCode = dsModel.CODE;
-                    	
+                    	var filterDsFunc = function(code){
+        					var ds = "";
+        					
+                			if(code === 'rjt'){
+                				ds = echgDataVO.cdEchgrjtOp.filter(function(ele){
+        	            			return (ele.DC_RMK1 === e.model.NO_MNGMRK);
+        	            		});
+                    			echgDataVO.rjtDDL.dataSource = ds;
+                			}else{
+                				ds = echgDataVO.shpList.filter(function(ele){
+	    	            			return (ele.DC_RMK1 === e.model.NO_MRK && ele.DC_RMK3 === code);
+	    	            		});
+                        		echgDataVO.cdParsDDL.dataSource = !ds.length ? [{NM_PARS_TEXT : "택배사 등록", CD_PARS : ""}] : ds;
+                			}
+                		};
+                		
                     	switch(echgDataVO.updateChange) {
                     		case "001" : {
-                    			chosenDS = echgDataVO.shpList.filter(function(ele){
-        	            			return (ele.DC_RMK1 === e.model.NO_MRK && ele.DC_RMK3 === '002');
-        	            		});                    			
+                    			filterDsFunc('002');
                     			break;
-                    		} 
+                    		}
                     		case "002" : {
-                    			chosenDS = echgDataVO.cdEchgrjtOp.filter(function(ele){
-        	            			return (ele.DC_RMK1 === e.model.NO_MNGMRK);
-        	            		});                           			
+                    			filterDsFunc('rjt');  
                     			break;
                     		}
                     		case "003" : {
-                    			chosenDS = echgDataVO.shpList.filter(function(ele){
-        	            			return (ele.DC_RMK1 === e.model.NO_MRK && ele.DC_RMK3 === '003');
-        	            		});
+                    			filterDsFunc('003');
                     			break;
                     		}
                     		default : {
                     			break;
-                    		}                    		
-                    	};             	
+                    		}	
+                    	};
                     	
-                    	cdechgrjtrsn.kendoDropDownList({
-	            			dataSource : chosenDS,
-		        			dataTextField:"NM_DEF",
-		                    dataValueField:"CD_DEF",
-	                		optionLabel : "교환거부코드를 선택해 주세요 ",	                    
-		                    valuePrimitive: true
-	            		});
-                    	
-                    	cdpars.kendoDropDownList({
-	            			dataSource : !chosenDS.length ? [{NM_PARS_TEXT : "택배사 등록", CD_PARS : ""}] : chosenDS,
-	                		dataTextField : "NM_PARS_TEXT",
-	                		dataValueField : "CD_DEF",
-	                		optionLabel : "택배사를 선택해 주세요 ",
-	                		select : function(e){
-	                			var me = this;
-	                			$timeout(function(){
-	                				if(me.selectedIndex > 0){
-    	                				me.element.parents("table").find(".k-invalid-msg").hide();
-    	                			}
-	                			},0);
-	                		},
-                            change : function(e){
-                            	if(this.text() === "택배사 등록" && this.selectedIndex === 1){
-                            		$state.go("app.syPars", { menu: true, ids: null });
-                            		$scope.echgkg.cancelRow();
-                            	}
-                            }
-	            		});
+                    	echgDataVO.curCode = e.model.CODE;
                     },
                     cancel: function(e){
                     	angular.element($(".k-checkbox:eq(0)")).prop("checked",false);
+                    	echgDataVO.receiveChk = false;
                     },
                 	scrollable: true,
                 	resizable: true,
@@ -480,8 +590,7 @@
             						echgDataVO.shpList = res.data.queryShipList;
             					}, function(err){
             						e.error([]);
-            					});
-                				
+            					});                				
                 			},
                 			update: function(e){
                 				var whereIn = ['004','005'],
@@ -493,14 +602,16 @@
 	            							var defer = $q.defer(),
 	            								param = e.data.models.filter(function(ele){
 	            									return (ele.ROW_CHK === true && whereIn.indexOf(ele.CD_ORDSTAT) > -1 && ele.CD_ECHGSTAT === "001" && (ele.NO_ORD) && ele.NO_ORD !== "");
-	            								}); 
+	            								}),
+	            								storefarmCode = param[0].CODE; 
 	            							
 	            							if(e.data.models.length !== param.length){
 	            								alert("배송처리 된 교환요청 주문만 승인 처리 할 수 있습니다.");
 	                    						return;
 	            							};
-	            							
-	            							alert("송장번호 체크로 인하여 처리시간이 다소 소요 될수 있습니다.");	            							
+	            							if(storefarmCode === "170103"){
+	            								alert("송장번호 체크로 인하여 처리시간이 다소 소요 될수 있습니다.");		            								
+	            							}            							
 	            							
 	            							saEchgReqSvc.echgConfirm(param[0]).then(function (res) {
 	                    						var rtnV = res.data,
@@ -508,25 +619,40 @@
 	    	        							    trueV = rtnV.trueNoOrd,	    	        							    
 	    	        							    falseV = rtnV.falseNoOrd;
 	                    						
-	                    						if(!rtnV){
-                        							alert("실패하였습니다.");
-                        							e.error([]);
-                        							return false;
-                        						};
-                        						
-	    	        	            			if(trueV.length > 0){
-	    	        	            				alert("교환승인 하였습니다.");
-	    	        	            				defer.resolve();		         
-	                    							Util03saSvc.storedQuerySearchPlay(echgDataVO, "echgDataVO");
-	    	        	            			}else if(falseV.length > 0){
-	    	        	            				echgDataVO.menualShwWrn = falseV;
-	    	        	            				e.error([]);
-	    	        	            				defer.resolve();            		
-	    	        	            			}else if(allV.length < 1){
-	    	        	            				alert("교환승인을 실패하였습니다.");
-	                    							e.error();
-	    	        	            				defer.resolve();            		
-	    	        	            			};		                    		
+	                    						if(storefarmCode === "170103"){
+	                    							if(!rtnV){
+	                        							alert("실패하였습니다.");
+	                        							e.error([]);
+	                        							defer.reject(); 
+	                        							return false;
+	                        						};
+	                        						
+		    	        	            			if(trueV.length > 0){
+		    	        	            				alert("교환승인 하였습니다.");
+		    	        	            				defer.resolve();		         
+		                    							Util03saSvc.storedQuerySearchPlay(echgDataVO, "echgDataVO");
+		    	        	            			}else if(falseV.length > 0){
+		    	        	            				echgDataVO.menualShwWrn = falseV;
+		    	        	            				e.error([]);
+		    	        	            				defer.resolve();            		
+		    	        	            			}else if(allV.length < 1){
+		    	        	            				alert("교환승인을 실패하였습니다.");
+		                    							e.error([]);
+		    	        	            				defer.reject();            		
+		    	        	            			};	
+	                    						}else{
+	                    							if(rtnV === "success"){
+	                    								alert("교환승인 하였습니다.");
+		    	        	            				defer.resolve();		         
+		                    							Util03saSvc.storedQuerySearchPlay(echgDataVO, "echgDataVO");
+	                    							}else{
+	                    								alert("교환승인을 실패하였습니다.");
+		                    							e.error([]);
+		    	        	            				defer.reject();      
+	                    							}
+	                    						}	                    						
+
+	    	        							echgDataVO.receiveChk = false;
 	                    					}, function(err){
 	                    						e.error([]);
 	                    					});  
@@ -535,7 +661,7 @@
 	            							echgGrd.cancelRow();
 	            							angular.element($(".k-checkbox:eq(0)")).prop("checked",false);
 	            							return false;
-	            						};	
+	            						};
 	            						break;
 	            					}; 
                 					case '002' : {
@@ -547,7 +673,7 @@
                         					if(param.length !== 1){
                         						alert("배송처리 된 교환 요청 주문만 거부 처리 할 수 있습니다.");
                         						return;
-                        					};     
+                        					};
                         					saEchgReqSvc.echgReject(param[0]).then(function (res) {
                         						defer.resolve();
                         						if(res.data === "success"){
@@ -557,6 +683,7 @@
                         							alert("교환거부를 실패하였습니다.");
                         							e.error();
                         						}
+                    							echgDataVO.receiveChk = false;
                         					}, function(err){
                         						alert("실패하였습니다.");
                         						e.error([]);
@@ -565,7 +692,7 @@
                 						}else{
 	            							echgGrd.cancelRow();
 	            							angular.element($(".k-checkbox:eq(0)")).prop("checked",false);
-	            						};  
+	            						};
                 						break;
                 					};        
                 					case '003' : {
@@ -576,12 +703,18 @@
         	                			 	    });                        					
                         					if(param.length !== 1){
                         						alert("마켓 및 주문 상태를 확인해 주세요.");
+                        						echgGrd.cancelChanges();
                         						return;
-                        					};        
+                        					};
+                        					if(param[0].CODE === "170902" && param[0].RECEIVE_SET !== 'Y'){
+                        						alert("상품을 회수되지 않으면 교환이 진행되지 않습니다.");
+                        						e.error();
+                        						return;
+                        					};                        					
+
+                							alert("송장번호 체크로 인하여 처리시간이 다소 소요 될수 있습니다.");
                         					
                         					param[0].DTS_RECER = kendo.toString(new Date(param[0].DTS_RECER), "yyyyMMddHHmmss");
-                        					
-                        					alert("송장번호 체크로 인하여 처리시간이 다소 소요 될수 있습니다.");
                         					
                         					saEchgReqSvc.echgCompleted(param[0]).then(function (res) {
                         						var rtnV = res.data,
@@ -593,8 +726,7 @@
                         							alert("실패하였습니다.");
                         							e.error([]);
                         							return false;
-                        						};
-	    	        	            			
+                        						};	    	        	            			
 	    	        	            			if(trueV.length > 0){
                         							alert("교환완료 하였습니다.");
 	    	        	            				defer.resolve();		         
@@ -606,8 +738,9 @@
 	    	        	            			}else if(!allV.length < 1){
                         							alert("교환완료를 실패하였습니다.");
 	                    							e.error();
-	    	        	            				defer.resolve();            		
-	    	        	            			};		   
+	    	        	            				defer.resolve();	
+	    	        	            			};
+	    	        							echgDataVO.receiveChk = false;
                         					}, function(err){
                         						alert("실패하였습니다.");
                         						e.error([]);
@@ -624,6 +757,7 @@
                 						break;
                 					};
                 				};
+    							echgDataVO.receiveChk = false;
                 			},
                 			parameterMap: function(e, operation) {
                 				if(operation !== "read" && e.models) {
@@ -635,7 +769,7 @@
                 			var data = this.data();
                 			echgDataVO.dataTotal = data.length;
                 			angular.element($(".k-checkbox:eq(0)")).prop("checked",false);
-                		},                		
+                		},
                 		pageSize: 9,
                 		batch: true,
                 		schema: {
@@ -758,7 +892,7 @@
 	                            columns : [
 											{
 												field: "NO_INVO_ECHG",
-												title: "송장번호",
+												title: "반품송장번호",
 												width: 100,
 												headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
 											}	
@@ -822,13 +956,13 @@
 	                        },
                            	{
                                 field: "DT_SND",
-                                title: "배송일자",
+                                title: "재배송일자",
                                 width: 100,
 		                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
 		                        columns : [
 											{
 												field: "DTS_ECHGAPPRRJT",
-												title: "교환상품접수일",
+												title: "교환요청 처리일시",
 												width: 100,
 												headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
 											}	
@@ -842,7 +976,7 @@
 		                        columns : [
 											{
 												field: "NO_INVO",
-												title: "송장번호",
+												title: "재배송 송장번호",
 												width: 100,
 												headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
 											}	
@@ -850,13 +984,13 @@
                             },  
                            	{
                                 field: "NO_ECHGCPLT",
-                                title: "접수확인자",
+                                title: "교환완료자",
                                 width: 90,
 		                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
 		                        columns : [
 											{
-												field: "CD_ECHGSTAT",
-												title: "교환상태",
+												field: "DTS_ECHGCPLT",
+												title: "교환완료일시",
 												width: 100,
 												headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
 											}
@@ -869,8 +1003,8 @@
 	                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
 		                        columns : [
 											{
-												field: "",
-												title: "",
+												field: "CD_ECHGSTAT",
+												title: "교환상태",
 												width: 100,
 												headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
 											}	
@@ -881,84 +1015,6 @@
 
 	            UtilSvc.gridtooltipOptions.filter = "td div";
 	            grdEchgVO.tooltipOptions = UtilSvc.gridtooltipOptions;
-		        
-	            //kendo grid 체크박스 옵션
-                $scope.onOrdGrdCkboxClick = function(e){
-                	UtilSvc.grdCkboxClick(e, $scope.echgkg);
-                };
-                
-                //kendo grid 체크박스 all click
-                $scope.onOrdGrdCkboxAllClick = function(e){
-                	UtilSvc.grdCkboxAllClick(e, $scope.echgkg);
-                };		
-                
-                $scope.popupUtil = function(e){
-                	Util03saSvc.popupUtil.blur(e);
-                };
-                
-	            $scope.$on("kendoWidgetCreated", function(event, widget){
-                	var grd = $scope.echgkg;
-                	
-	                if (widget === grd){
-	                	
-	                	widget.element.find(".k-grid-echg").on("click", function(e){         				
-	                		if(grd.element.find(".k-grid-content input:checked").length != 1){
-	                			alert("한 건의 주문을 선택해 주세요");
-	                			return false;
-	                		};	      	                		
-	                		var	chked = grd.element.find(".k-grid-content input:checked"),
-                				grdItem = grd.dataItem(chked.closest("tr")),
-	                			vali = function (arg){
-	                				switch(arg){
-	                					case 1 : {
-	                						if(['170104','170102','170902'].indexOf(grdItem.CODE) > -1){
-	    			                    		alert("지마켓, 옥션, 쿠팡은 교환처리 기능을  사용할 수 없습니다.");
-	    			                    		return false;
-	    			                    	};
-	    			                    	if(!(['004','005'].indexOf(grdItem.CD_ORDSTAT) > -1 && grdItem.CD_ECHGSTAT === '001')){			                				
-	    		                				alert("교환요청 된 주문만  처리 할 수 있습니다.");
-	    		                				return false;
-	    		                			};
-	    		                			return true;
-	    		                			break;
-	                					};
-	                					case 2 : {
-	                						if('170902' === grdItem.CODE){
-	    			                    		alert("쿠팡은 교환 완료 기능을  사용할 수 없습니다.");
-	    			                    		return false;
-	    			                    	};
-	    			                    	return true;
-	    			                    	break;
-	                					};
-	                					default : {	                						
-	                						break; 
-	                					}
-	                				}
-	                			}, 
-	                			proc = function (px, curCode){
-	                				grd.options.editable.window.width = px;
-		                			echgDataVO.updateChange = curCode;
-				                    grd.editRow(chked.closest("tr"));	
-	                			};
-	                		
-		                    if($(this).hasClass("confirm") && vali(1)){	//교환 처리		                    	
-		                    	proc("550px", "001");	
-		                    };
-		                    if($(this).hasClass("reject") && vali(1)){ 	//교환거부	
-		                    	proc("550px", "002");		
-		                    };
-		                    if($(this).hasClass("complete") && vali(2)){//교환완료		                    	
-		                    	if((grdItem.CD_ORDSTAT == "009" && grdItem.CD_ECHGSTAT == "002") || (['004','005'].indexOf(grdItem.CD_ORDSTAT) > -1 && grdItem.CD_ECHGSTAT === "001" && ['170104','170102'].indexOf(grdItem.CODE) > -1)){				                			
-		                    		grdItem.DTS_RECER = new Date();
-		                    		proc("550px", "003");		
-		                		}else{
-		                			alert("마켓 및 주문 상태를 확인해 주세요.");
-		                			return false;
-		                		};
-		                    };                		                			
-	                	});
-	                }
-                });    
 	            
 	            echgDataVO.initLoad();
             }]);

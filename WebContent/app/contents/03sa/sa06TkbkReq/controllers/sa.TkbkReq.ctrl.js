@@ -7,8 +7,8 @@
      * 상품분류관리
      */
     angular.module("sa.TkbkReq.controller")
-        .controller("sa.TkbkReqCtrl", ["$scope", "$http", "$q", "$log", "sa.TkbkReqSvc", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "MenuSvc", "$window", "Util03saSvc", "APP_SA_MODEL",
-            function ($scope, $http, $q, $log, saTkbkReqSvc, APP_CODE, $timeout, resData, Page, UtilSvc, MenuSvc, $window, Util03saSvc, APP_SA_MODEL) {
+        .controller("sa.TkbkReqCtrl", ["$scope", "$state", "$http", "$q", "$log", "sa.TkbkReqSvc", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "MenuSvc", "$window", "Util03saSvc", "APP_SA_MODEL",
+            function ($scope, $state, $http, $q, $log, saTkbkReqSvc, APP_CODE, $timeout, resData, Page, UtilSvc, MenuSvc, $window, Util03saSvc, APP_SA_MODEL) {
 	            var page  = $scope.page = new Page({ auth: resData.access }),
 		            today = edt.getToday();
 
@@ -54,6 +54,8 @@
                     NO_INVO_TKBK	 	: { type: "string"								, editable: false, nullable: false },
                     AM_TKBKSHP			: { type: "number"								, editable: false, nullable: false },
 				    NOW_YN		 		: { type: "boolean"								, editable: true,  nullable: false },
+				    DTS_RECE	 		: { type: "string"								, editable: false, nullable: false },
+				    NO_RECER	 		: { type: "string"								, editable: false, nullable: false },
 				    RECEIVE_SET  		: {
 							                   	 type: "string"
 							                   	,editable: true
@@ -128,9 +130,6 @@
 							                                	input.attr("data-cd_parsvalidation-msg", "택배사를 입력해 주세요.");
 							                                    return false;
 							                                }
-													    	/*if(input.is("[name='CD_PARS']") && input.val() != ""){					    		
-													    		manualDataBind(input, "CD_PARS");
-													    	};*/
 							                		   };
 							                		   return true;
 											    	}
@@ -166,9 +165,6 @@
 							                                	input.attr("data-cd_holdvalidation-msg", "보류사유를 입력해 주세요.");
 							                                    return false;
 							                                };
-													    	/*if(input.is("[name='CD_HOLD']") && input.val() != ""){										    		
-													    		manualDataBind(input, "CD_HOLD");
-													    	};*/
 									        		   };
 									        		   return true;
 											    	}
@@ -185,9 +181,6 @@
 							                                	input.attr("data-cd_hold_feevalidation-msg", "반품비를 입력해 주세요.");
 							                                    return false;
 							                               };
-													      /* if(input.is("[name='CD_HOLD_FEE']") && input.val() != 0 && input.val()){										    		
-													    		manualDataBind(input, "CD_HOLD_FEE");
-													       };*/
 								            		   };
 												    	return true;
 											    	}
@@ -341,10 +334,10 @@
                     });
                 };
 
-                APP_SA_MODEL.CD_TKBKRSN.fNm  = "tkbkDataVO.cdTkbkrsnOp.dataSource";
-                APP_SA_MODEL.CD_ORDSTAT.fNm  = "tkbkDataVO.ordStatusOp";
+                APP_SA_MODEL.CD_TKBKRSN.fNm = "tkbkDataVO.cdTkbkrsnOp.dataSource";
+                APP_SA_MODEL.CD_ORDSTAT.fNm = "tkbkDataVO.ordStatusOp";
                 APP_SA_MODEL.CD_TKBKSTAT.fNm = "tkbkDataVO.cdTkbkstat";
-                APP_SA_MODEL.CD_PARS_TKBK.fNm  = "tkbkDataVO.shipList";
+                APP_SA_MODEL.CD_PARS_TKBK.fNm = "tkbkDataVO.shipList";
                 
                 var grdCol = [[APP_SA_MODEL.ROW_CHK],
                               [APP_SA_MODEL.NO_ORD           ,[APP_SA_MODEL.NO_APVL, APP_SA_MODEL.NO_MRKORD]],
@@ -360,7 +353,7 @@
                               [APP_SA_MODEL.CD_ORDSTAT       , APP_SA_MODEL.DC_SHPWAY     ],
                               [APP_SA_MODEL.DTS_ORD          , APP_SA_MODEL.DTS_TKBKREQ   ],
                               [APP_SA_MODEL.DTS_TKBKAPPRRJT  , APP_SA_MODEL.NO_TKBKAPPRRJT],
-                              [APP_SA_MODEL.DTS_TKBKCPLT_VIEW, APP_SA_MODEL.NO_TKBKCPLT   ],
+                              [APP_SA_MODEL.DTS_RECE		 , APP_SA_MODEL.NO_RECER   	  ],
                               [APP_SA_MODEL.YN_CONN          , APP_SA_MODEL.CD_TKBKSTAT   ]
                              ],
                     grdDetOption      = {},

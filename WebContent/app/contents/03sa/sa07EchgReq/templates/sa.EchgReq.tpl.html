@@ -114,7 +114,7 @@
 <!-- 교환 팝업 -->
 <script id="echg_popup_template" type="text/x-kendo-template">
 <div class="not_pop_title" ng-if="echgDataVO.updateChange === '001'">
-	<h4>교환상품접수</h4>
+	<h4>교환처리</h4>
 </div>
 <div class="not_pop_title" ng-if="echgDataVO.updateChange === '002'">
 	<h4>교환거부 </h4>
@@ -124,10 +124,10 @@
 </div>
 <table class="table signal" data-uid="#= uid #">
 	<colgroup>
-      <col style="width: 14%;">
-      <col style="width: 30%;">
-      <col style="width: 14%;">
-      <col style="width: 30%;">
+      <col style="width: 17%;">
+      <col style="width: 27%;">
+      <col style="width: 17%;">
+      <col style="width: 27%;">
     </colgroup>
     <tbody>	
 	<tr class="border-bottom-line border-top-line">	
@@ -207,7 +207,7 @@
 		<td class="active border-right-line">
 			교환사유코드
 		</td>
-		<td>
+		<td colspan="2">
 			<select kendo-drop-down-list 
 				k-options="echgDataVO.cdEchgrsnOp"
 				name="CD_ECHGRSN"
@@ -215,7 +215,7 @@
                 style="width: 100%">
 			</select>
 		</td>
-		<td colspan="2">
+		<td>
 		</td> 
 	</tr>
 	<tr class="border-bottom-line">
@@ -224,15 +224,37 @@
 		</td>
 		<td colspan="3">			
 			<textarea class="k-textbox k-state-disabled" name="DC_ECHGRSNCTT" data-bind="value: DC_ECHGRSNCTT" disabled="disabled" style="width:100%; height:150px; overflow-y: scroll;"></textarea>
-		</td> 
+		</td>
 	</tr>
 		
-	<tr class="border-bottom-line" data-ng-show="echgDataVO.ngIfdata(echgDataVO.procShowCode, echgDataVO.procShowMrkCode, '#: CODE #')">
+	<tr class="border-bottom-line" data-ng-if="echgDataVO.updateChange === '003' && '#: CODE #' == '170902'">
 		<td class="active border-right-line">
-			<code>*</code>택배사<br/>
+			<code>*</code>교환상품<br/>회수 여부<br/>
 		</td>
 		<td>
-			<select
+			<ul id="receive-echg-group">
+				<li style="float:left; margin-right: 5px;">
+              		<input type="radio" name="RECEIVE_SET" id="receive-y" class="k-radio" required data-bind="checked: RECEIVE_SET" data-type="string" value="Y" data-ng-click="echgDataVO.receiveChkClkEvt($event)">
+              		<label class="k-radio-label" for="receive-y">예 </label>
+				</li>
+          		<li style="float:left">
+              		<input type="radio" name="RECEIVE_SET" id="receive-n" class="k-radio" checked="checked" required data-bind="checked: RECEIVE_SET" data-type="string" value="N" data-ng-click="echgDataVO.receiveChkClkEvt($event)">
+             		<label class="k-radio-label" for="receive-n">아니오</label>
+				</li>
+			</ul>	
+		</td>
+		<td colspan="2">
+		</td>
+	</tr>
+
+	<tr class="border-bottom-line" data-ng-if="echgDataVO.updateChange === '001' && echgDataVO.ngIfdata(echgDataVO.procShowCode, echgDataVO.procShowMrkCode, '#: CODE #')">
+		<td class="active border-right-line">
+			<code>*</code>회수 택배사<br/>
+		</td>
+		<td>
+			<select kendo-drop-down-list 
+				k-options="echgDataVO.cdParsDDL"
+				k-data-source="echgDataVO.cdParsDDL.dataSource"
 				name="CD_PARS"
 				data-bind="value: CD_PARS_INPUT"
              	style="width: 100%">
@@ -242,54 +264,90 @@
 		</td>
 	</tr>
 
-	<tr class="border-bottom-line" data-ng-show="echgDataVO.ngIfdata(echgDataVO.procShowCode, echgDataVO.procShowMrkCode, '#: CODE #')">
+	<tr class="border-bottom-line" data-ng-if="echgDataVO.updateChange === '003' && echgDataVO.ngIfdata(echgDataVO.completeShowCode, echgDataVO.completeShowMrkCode, '#: CODE #')">
 		<td class="active border-right-line">
-			<code>*</code>송장번호
+			<code>*</code>재발송 택배사<br/>
+		</td>
+		<td>
+			<select kendo-drop-down-list 
+				k-options="echgDataVO.cdParsDDL"
+				k-data-source="echgDataVO.cdParsDDL.dataSource"
+				name="CD_PARS"
+				data-bind="value: CD_PARS_INPUT"
+             	style="width: 100%">
+			</select>
+		</td>
+		<td colspan="2">
+		</td>
+	</tr>
+
+	<tr class="border-bottom-line" data-ng-if="echgDataVO.updateChange === '001' && echgDataVO.ngIfdata(echgDataVO.procShowCode, echgDataVO.procShowMrkCode, '#: CODE #')">
+		<td class="active border-right-line">
+			<code>*</code>회수 송장번호
 		</td>
 		<td colspan="3" menual-shw-wrn="echgDataVO.menualShwWrn">			
 			<input class="k-textbox" name="NO_INVO" data-bind="value: NO_INVO_INPUT" 
+				data-ng-trim="true"
+				placeholder="송장번호는  숫자 또는 숫자와 '-'(특수문자) 조합으로만 가능합니다."
+				autocomplete="off"
+			    style="width:100%;"/>
+		</td>
+	</tr>
+
+	<tr class="border-bottom-line" data-ng-if="echgDataVO.updateChange === '003' && echgDataVO.ngIfdata(echgDataVO.completeShowCode, echgDataVO.completeShowMrkCode, '#: CODE #')">
+		<td class="active border-right-line">
+			<code>*</code>재발송 송장번호
+		</td>
+		<td colspan="3" menual-shw-wrn="echgDataVO.menualShwWrn">			
+			<input class="k-textbox" name="NO_INVO" data-bind="value: NO_INVO_INPUT" 
+				data-ng-trim="true"
 				placeholder="송장번호는  숫자 또는 숫자와 '-'(특수문자) 조합으로만 가능합니다."
 				autocomplete="off"
 			    style="width:100%;"/>
 		</td> 
 	</tr>
 	
-	<tr class="border-bottom-line" data-ng-show="echgDataVO.ngIfdata(echgDataVO.completeShowCode, echgDataVO.completeShowMrkCode, '#: CODE #')">
+	<tr class="border-bottom-line" data-ng-if="echgDataVO.ngIfdata(echgDataVO.completeShowCode, echgDataVO.completeShowMrkCode, '#: CODE #')">
 		<td class="active border-right-line">
-			접수자
+			교환완료자
 		</td>
 		<td class="ta-l">
 			{{echgDataVO.userInfo}}
 		</td>
-		<td class="active border-right-line">
-			<code>*</code>접수일자
+		<td class="active border-right-line"> 
+			<code>*</code> 
+			<span data-ng-if="'#: CODE #' === '170106' || '#: CODE #' === '170103'">교환완료일자</span>
+			<span data-ng-if="'#: CODE #' === '170104' || '#: CODE #' === '170102' || '#: CODE #' === '170902'">회수상품 접수일</span> 
 		</td>
 		<td class="ta-l">
-			<input kendo-date-time-picker				
+			<input kendo-date-time-picker
 		 		id="DTS_RECER"
 		 		name="DTS_RECER"
 		 		k-options="echgDataVO.dateOptions"
            		data-bind="value: DTS_RECER"
-				data-ng-blur="popupUtil($event)"  
+				data-ng-blur="popupUtil($event)"
            		style="width: 100%;" />
 		</td> 
 	</tr>
 
-	<tr class="border-bottom-line" data-ng-show="echgDataVO.ngIfdata(echgDataVO.rejectShowCode, echgDataVO.rejectDivShowMrkCode, '#: CODE #')">
+	<tr class="border-bottom-line" data-ng-if="echgDataVO.updateChange === '002' && echgDataVO.ngIfdata(echgDataVO.rejectShowCode, echgDataVO.rejectDivShowMrkCode, '#: CODE #')">
 		<td class="active border-right-line">
-			<code>*</code>교환요청 거부코드
+			<code>*</code>교환요청<br/>거부코드
 		</td>
-		<td>
-			<select 
+		<td colspan="2">
+			<select kendo-drop-down-list 
+				k-options="echgDataVO.rjtDDL"
+				k-data-source="echgDataVO.rjtDDL.dataSource"
 				name="CD_ECHGRJTRSN"
 				data-bind="value: CD_ECHGRJTRSN"
                 style="width: 100%">
 			</select>
 		</td>
-		<td colspan="2">
+		<td>
 		</td> 
 	</tr>
-	<tr class="border-bottom-line" data-ng-show="echgDataVO.ngIfdata(echgDataVO.rejectShowCode, echgDataVO.rejectDetailShowMrkCode, '#: CODE #')">
+
+	<tr class="border-bottom-line" data-ng-if="echgDataVO.updateChange === '002' && echgDataVO.ngIfdata(echgDataVO.rejectShowCode, echgDataVO.rejectDetailShowMrkCode, '#: CODE #')">
 		<td class="active border-right-line">
 			<code>*</code>교환요청 거부사유
 		</td>
@@ -301,7 +359,6 @@
 	</tbody>
 </table>
 </script>
-
 
  <!-- 주문 조회 그리드 -->
  <script id="echg_template" type="text/x-kendo-template">
@@ -406,7 +463,7 @@
  				# }	 					#
  			</div>
        	</td>
-		<td class="ta-l" style="padding:0">
+		<td class="ta-c" style="padding:0">
            	<div class="custom-style">
  				# if(CD_PARS_ECHG){		#
  				#: CD_PARS_ECHG 		#
@@ -442,7 +499,7 @@
  				# }	 	 				#
  			</div>
        	</td>
- 		<td class="ta-l" style="padding:0">
+ 		<td class="ta-c" style="padding:0">
  			<div class="custom-style">
  				# if(CD_ORDSTAT){ 		#
  				<co04-cd-to-nm cd="#:CD_ORDSTAT#" nm-box="echgDataVO.ordStatusOp">
@@ -474,7 +531,7 @@
  			</div>
  			<div class="ta-c custom-style">				 
  				# if(DTS_ECHGAPPRRJT){	#
- 				#: DTS_ECHGAPPRRJT		#
+				<co06-date-format origin-date="'#:DTS_ECHGAPPRRJT#'">   
  				# }	 					#
  			</div>
        	</td>
@@ -497,9 +554,9 @@
  				# } 					# 
  			</div>
  			<div class="ta-c custom-style">
- 				# if(CD_ECHGSTAT){  	# 
- 				<co04-cd-to-nm cd="#:CD_ECHGSTAT#" nm-box="echgDataVO.echgStatusOp">
- 				# }						# 
+				# if(DTS_ECHGCPLT){	#
+				<co06-date-format origin-date="'#: DTS_ECHGCPLT #'">   
+ 				# }	 					#
  			</div>
        	</td>
  		<td style="padding:0">
@@ -511,6 +568,9 @@
 			 	# }						#
  			</div>
  			<div class="ta-c custom-style">
+				# if(CD_ECHGSTAT){  	# 
+ 				<co04-cd-to-nm cd="#:CD_ECHGSTAT#" nm-box="echgDataVO.echgStatusOp">
+ 				# }						# 
  			</div>
        	</td>
  	</tr>			

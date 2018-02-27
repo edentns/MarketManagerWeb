@@ -7,8 +7,8 @@
      * 상품분류관리
      */
     angular.module("sa.OrdCcl.controller")
-        .controller("sa.OrdCclCtrl", ["$scope", "$window", "$http", "$q", "$log", "sa.OrdCclSvc", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "MenuSvc", "Util03saSvc", "APP_SA_MODEL",
-            function ($scope, $window, $http, $q, $log, saOrdCclSvc, APP_CODE, $timeout, resData, Page, UtilSvc, MenuSvc, Util03saSvc, APP_SA_MODEL) {
+        .controller("sa.OrdCclCtrl", ["$scope", "$state", "$window", "$http", "$q", "$log", "sa.OrdCclSvc", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "MenuSvc", "Util03saSvc", "APP_SA_MODEL",
+            function ($scope, $state, $window, $http, $q, $log, saOrdCclSvc, APP_CODE, $timeout, resData, Page, UtilSvc, MenuSvc, Util03saSvc, APP_SA_MODEL) {
 	            var page = $scope.page = new Page({ auth: resData.access }),
 		            today = edt.getToday();		            
 	            	            
@@ -47,7 +47,7 @@
                     
                     DTS_ORD       : { type: APP_SA_MODEL.DTS_ORD.type        , editable: false, nullable: false },
                     YN_CONN       : { type: APP_SA_MODEL.YN_CONN.type        , editable: false, nullable: false },
-                    NO_UPDATE     : { type: APP_SA_MODEL.NO_UPDATE.type      , editable: false, nullable: false },
+                    CCL_NO_UPDATE : { type: APP_SA_MODEL.CCL_NO_UPDATE.type  , editable: false, nullable: false },
                     DTS_CCLREQ    : { type: APP_SA_MODEL.DTS_CCLREQ.type     , editable: false, nullable: false },
                     NO_CCLREQ     : { type: APP_SA_MODEL.NO_CCLREQ.type      , editable: false, nullable: false },
                     DTS_CCLAPPRRJT: { type: APP_SA_MODEL.DTS_CCLAPPRRJT.type , editable: false, nullable: false },                    
@@ -69,13 +69,13 @@
 										}
                     				},
                     DTS_RECER 	  : {
-				                    	type: APP_SA_MODEL.DTS_RECER.type  
+				                    	type: "string"  
 				     				   ,editable: true
 				     				   ,nullable: false
 				     				   ,validation: {
 											dts_recervalidation: function (input) {
 												if (input.is("[data-role=datepicker]")) {
-													input.attr("data-dts_recervalidation-msg", "접수일자를 정확히 입력해 주세요.");
+													input.attr("data-dts_recervalidation-msg", "발송일을 정확히 입력해 주세요.");
 													saOrdCclSvc.manualDataBind(input, "DTS_RECER", $scope.ordCancelManagementkg);
 												    return input.data("kendoDatePicker").value();
 												};
@@ -165,7 +165,7 @@
                               [APP_SA_MODEL.NM_CCLHRNKRSN  , APP_SA_MODEL.DC_CONSNEWADDR],
                               [APP_SA_MODEL.CD_ORDSTAT     , APP_SA_MODEL.DC_SHPWAY     ],
                               [APP_SA_MODEL.DTS_ORD        , APP_SA_MODEL.DTS_CCLREQ    ],
-                              [APP_SA_MODEL.DTS_CCLAPPRRJT , APP_SA_MODEL.NO_UPDATE     ],                              
+                              [APP_SA_MODEL.DTS_CCLAPPRRJT , APP_SA_MODEL.CCL_NO_UPDATE ],                              
                               [APP_SA_MODEL.YN_CONN 	   , APP_SA_MODEL.CD_CCLSTAT]
                              ],
                     grdDetOption      = {},

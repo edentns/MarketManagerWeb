@@ -267,6 +267,7 @@
 					<input type="text" 
 						   class="k-textbox" 
                            name="NO_INVO" 
+						   placeholder="송장번호는  숫자 또는 숫자와 '-'(특수문자) 조합으로만 가능합니다."
 						   autocomplete="off"
                            data-bind="value: NO_INVO"
                            data-ng-blur="popupUtil($event)"  />
@@ -287,7 +288,7 @@
 			</tr>
 			<tr class="border-bottom-line" data-ng-if="ngIfdata(ordCancelManagementDataVO.cancelRjCdEq)">
 				<td class="active border-right-line">
-					<code>*</code>접수일자<br/>
+					<code>*</code>발송일<br/>
 				</td>
 				<td colspan="3" class="ta-l">
 					<input kendo-date-picker		

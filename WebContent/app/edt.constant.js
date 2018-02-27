@@ -151,7 +151,7 @@
         NO_CONSPHNE   		: { field: "NO_CONSPHNE"  		 , type: "string" , width: "100px", textAlign: "center"		, title: "수취인 전화번호"},
         DTS_ECHGREQ   		: { field: "DTS_ECHGREQ"  		 , type: "string" , width: "100px", textAlign: "center"		, title: "교환요청일시"},
         DTS_ECHGAPPRRJT 	: { field: "DTS_ECHGAPPRRJT"	 , type: "string" , width: "100px", textAlign: "center"		, title: "교환상품접수일"},
-        NO_ECHGAPPRRJT		: { field: "NO_ECHGAPPRRJT"	 	 , type: "string" , width: "100px", textAlign: "center"		, title: "교환상품접수자"},
+        NO_ECHGAPPRRJT		: { field: "NO_ECHGAPPRRJT"	 	 , type: "string" , width: "100px", textAlign: "center"		 , title: "교환상품접수자"},
         NO_ECHGCPLT   		: { field: "NO_ECHGCPLT"  		 , type: "string" , width: "100px", textAlign: "center"		, title: "접수확인자"},
         CD_ECHGSTAT   		: { field: "CD_ECHGSTAT"  		 , type: "string" , width: "100px", textAlign: "center"		, title: "교환상태"},
         NO_ECHGREQ    		: { field: "NO_ECHGREQ"   		 , type: "string" , width: "100px", textAlign: "center"		, title: ""},

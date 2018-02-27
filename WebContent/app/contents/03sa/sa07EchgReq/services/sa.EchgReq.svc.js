@@ -51,8 +51,7 @@
 						url		: APP_CONFIG.domain +"/echg/completed",
 						data	: param 
 					});
-				},
-            
+				}
             };
         }]);
 }());
