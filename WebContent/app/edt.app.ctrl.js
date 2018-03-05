@@ -3,7 +3,7 @@
 'use strict';
 
 angular.module('edtApp')
-	.controller('AppCtrl', ['MenuSvc', 'APP_AUTH', '$scope', '$state', "UtilSvc", function (MenuSvc, APP_AUTH, $scope, $state, UtilSvc) {
+	.controller('AppCtrl', ['MenuSvc', 'APP_AUTH', '$rootScope', '$scope', '$state', "UtilSvc", function (MenuSvc, APP_AUTH, $rootScope, $scope, $state, UtilSvc) {
 		MenuSvc.activeMenu($state.current.name);
 		$scope.menu = {
 			data: MenuSvc.getNavigation()
@@ -11,6 +11,12 @@ angular.module('edtApp')
 		
 		$scope.menuHeight = $(window).height() - 91;
 		$scope.menuConHeight = $(window).height() - 56;
+		
+		var editor = $("#helpEditor");
+		editor.kendoEditor({tools:[], value:""});
+		
+		// make readonly
+		$(editor.data("kendoEditor").body).removeAttr("contenteditable").find("a").on("click.readonly", false);
 
 		var splitterElement = $("#contentMain");
 		var menuSplitterEle = $("#menuMain");
