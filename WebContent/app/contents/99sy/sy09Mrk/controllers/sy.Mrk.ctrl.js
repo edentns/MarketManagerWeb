@@ -12,7 +12,7 @@
 	            var page  = $scope.page = new Page({ auth: resData.access }),
 		            today = edt.getToday(),
 		            gridHeaderAttributes = {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
-		            bgColor = "\\#d5f0f7";
+		            bgColor = "\\#e6f2f8";
                 /**
                  * searchVO
                  * # 검색과 관련된 정보.
