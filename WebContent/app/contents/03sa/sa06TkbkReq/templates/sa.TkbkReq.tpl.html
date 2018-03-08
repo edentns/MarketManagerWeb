@@ -229,22 +229,30 @@
 				반품사유코드
 			</td>
 			<td>
-				<select kendo-drop-down-list 
-					k-options="tkbkDataVO.cdTkbkrsnOp"
-					name="CD_TKBKHRNKRSN"
-					data-bind="value: CD_TKBKHRNKRSN"
-                	style="width: 100%">
+				<select kendo-drop-down-list options="tkbkDataVO.ddlDefaultOp" name="NM_TKBKHRNKRSN" style="width: 100%">
+					<option>#: NM_TKBKHRNKRSN #</option>
 				</select>
 			</td>
-			<td colspan="2">
-			</td> 
+			#if(NO_MNGMRK === 'SYMM170901_00001'){#
+			<td class="active border-right-line">
+				반품사유 상세코드 
+			</td>
+				<td>
+					<select kendo-drop-down-list options="tkbkDataVO.ddlDefaultOp" name="NM_TKBKLRKRSN" style="width: 100%">
+						<option>#: NM_TKBKLRKRSN #</option>
+					</select>
+				</td>
+			#}else{#
+				<td colspan="2">
+				</td>	
+			#}#	
 		</tr>
 		<tr class="border-bottom-line" data-ng-if="['002','003'].indexOf(tkbkDataVO.updateChange) > -1">
 			<td class="active border-right-line">
 				반품사유
 			</td>
 			<td colspan="3">			
-				<textarea class="k-textbox k-state-disabled" name="NM_TKBKHRNKRSN" data-bind="value: NM_TKBKHRNKRSN" disabled="disabled" style="width:100%; height:150px; overflow-y: scroll;"></textarea>
+				<textarea class="k-textbox k-state-disabled" name="DC_TKBKRSNCTT" data-bind="value: DC_TKBKRSNCTT" disabled="disabled" style="width:100%; height:150px; overflow-y: scroll;"></textarea>
 			</td> 
 		</tr>
 

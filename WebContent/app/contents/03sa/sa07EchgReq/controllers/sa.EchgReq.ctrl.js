@@ -56,7 +56,7 @@
         			NO_INVO			: { type: "string"	  , editable: false, nullable: false },
         			CD_PARS_ECHG	: { type: "string"	  , editable: false, nullable: false },
         			NO_INVO_ECHG	: { type: "string"	  , editable: false, nullable: false },
-        			RECEIVE_SET     : { type: "string"	  , editable: true, nullable: false },
+        			RECEIVE_SET     : { type: "string"	  , editable: true,  nullable: false },        			
                     CD_ECHGRJTRSN 	: {
                     					 type: "string"    
                     					,editable: true
@@ -245,7 +245,10 @@
 	        		receiveChk : false,
 	        		shpList : "",
 	        		curCode : "",
-	        		menualShwWrn : ""
+	        		menualShwWrn : "",
+	        		ddlDefaultOp : {
+	        			enable : false
+	        		}
 	            };
 	            
 	            echgDataVO.ngIfdata = function(showCode, eqCode, inCode){

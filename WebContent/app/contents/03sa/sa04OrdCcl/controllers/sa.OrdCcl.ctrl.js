@@ -54,6 +54,7 @@
                     CD_CCLSTAT    : { type: APP_SA_MODEL.CD_CCLSTAT.type     , editable: false, nullable: false },
                     CD_CCLHRNKRSN : { type: "array"  					 	 , editable: false, nullable: false },
                     NM_CCLHRNKRSN : { type: APP_SA_MODEL.NM_CCLHRNKRSN.type  , editable: false, nullable: false },
+                    NM_CCLLRKRSN  : { type: APP_SA_MODEL.NM_CCLHRNKRSN.type  , editable: false, nullable: false }, 
                     cancel_reject_code : {	
 				                    	type: "array"  
 				     				   ,editable: true
@@ -218,13 +219,13 @@
 	        		cancelCodeOp : {
     					dataSource: [],
     					dataTextField: "NM_DEF",
-                        dataValueField: "CD_DEF",
+                        dataValueField: "NM_DEF",
                         enable: false
     				},   
     				cancelLowCodeOp : {
     					dataSource: [],
     					dataTextField: "NM_DEF",
-                        dataValueField: "CD_DEF",
+                        dataValueField: "NM_DEF",
                         enable: false
     				},   
     				dateOptions : {										//DATE PICKER
@@ -262,8 +263,8 @@
         					lcdcls: "SA_000007"
         				},
         				betParam = {
-        					lnomngcdhd: "SYCH00055",
-        					lcdcls: "SA_000014"
+        					lnomngcdhd: "SYCH00072",
+        					lcdcls: "SA_000028"
         				},
         				cclCodeParam = {
                 			lnomngcdhd: "SYCH00056",
@@ -310,7 +311,7 @@
                         me.cancelCodeOp.dataSource = result[3].filter(function(ele){
     						return (!ele.DC_RMK2);
     					});
-                        me.cancelCodeLowOp = result[3].filter(function(ele){
+                        me.cancelLowCodeOp.dataSource = result[3].filter(function(ele){
     						return (ele.DC_RMK2);
     					});
                         me.cancelRejectCodeOp = result[4];
@@ -517,8 +518,8 @@
                 			cdPars = e.model.CD_PARS,
                 			noInvo = e.model.NO_INVO,
                 			ddlRejectCodeSel = e.container.find("select[name=cancel_reject_code]"),
-                			ddlCancelReason = e.container.find("select[name=CD_CCLHRNKRSN]").data("kendoDropDownList"),
-                			ddlCancelLowReason = e.container.find("select[name=CD_CCLLRKRSN]").data("kendoDropDownList"),
+                			ddlCancelReason = e.container.find("select[name=NM_CCLHRNKRSN]").data("kendoDropDownList"),
+                			ddlCancelLowReason = e.container.find("select[name=NM_CCLLRKRSN]").data("kendoDropDownList"),
                 			inputDataSource = "",
                 			rejectCodeDS = "";
                 		                		
@@ -539,8 +540,8 @@
         					dclr.data(dataVo.cancelLowCodeOp.dataSource.filter(function(ele){
                     			return ele.DC_RMK1 === noMngmrk;
                     		}));
-        				}	        				   
-                		
+        				};
+        				
                 		inputDataSource = dataVo.shipList.filter(function(ele){
                 			return ele.DC_RMK1 === noMrk;
                 		});

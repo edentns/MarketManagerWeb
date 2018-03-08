@@ -48,6 +48,9 @@
                     DTS_TKBKAPPRRJT 	: { type: APP_SA_MODEL.DTS_TKBKAPPRRJT.type		, editable: false, nullable: false },
                     NO_TKBKAPPRRJT 		: { type: APP_SA_MODEL.NO_TKBKAPPRRJT.type		, editable: false, nullable: false },
                     DTS_TKBKCPLT_VIEW 	: { type: APP_SA_MODEL.DTS_TKBKCPLT.type		, editable: false, nullable: false },
+                    NM_TKBKHRNKRSN 		: { type: "string"								, editable: false, nullable: false },
+                    NM_TKBKLRKRSN 		: { type: "string"								, editable: false, nullable: false },
+                    DC_TKBKRSNCTT 		: { type: "string"								, editable: false, nullable: false },
                     CODE			 	: { type: "string"								, editable: false, nullable: false },
                     NO_MNGMRK		 	: { type: "string"								, editable: false, nullable: false },
                     CD_PARS_TKBK	 	: { type: "string"								, editable: false, nullable: false },
@@ -263,7 +266,10 @@
 		        		gHoldCode : "",
 		        		receiveCheckCode : 'Y',
 		        		marketDivisionCode : "",
-		        		menualShwWrn: ""
+		        		menualShwWrn: "",
+		        		ddlDefaultOp : {
+		        			enable : false
+		        		}
 		        };   
 	            
 	            tkbkDataVO.initLoad = function () {
@@ -286,7 +292,8 @@
 	    					customnoc: "00000"    
                 		},gHoldCodeParm = {
         					lnomngcdhd: "SYCH00074",
-        					lcdcls: "SA_000029"
+        					lcdcls: "SA_000029",
+	    					customnoc: "00000"
                 		},cdTkbkstat = {
         					lnomngcdhd: "SYCH00066",
         					lcdcls: "SA_000025"

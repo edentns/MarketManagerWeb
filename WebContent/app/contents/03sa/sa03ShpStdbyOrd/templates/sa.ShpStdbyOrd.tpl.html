@@ -100,6 +100,20 @@
 	        <div id="divShpbyordGrd" kendo-grid="shpbyordkg" options="grdShpbyordVO">
 	        </div>	            
         </div>
+        
+        <div id="dialog-alert" kendo-dialog="win2" k-title="'주문상태 변경 오류'"
+        	k-on-close="dialogVisible = false" k-width="450"
+        	k-on-open="dialogVisible = true"
+            k-width="600" k-height="200" k-visible="false">
+            <div>
+            	<span data-ng-repeat="item in shpbyordDataVO.chkOrdStatList">
+            		({{item.NM_MRK}}) 의 주문번호 {{item.NO_ORD}} 상품명 {{item.NM_MRKITEM}}<span ng-if="!$last && shpbyordDataVO.chkOrdStatList.length > 1">,</span>
+            	</span>
+            	<br/>
+				<span>의 주문상태가 변경 되어 배송정보등록이 처리 되지 않았습니다. </span><br/>
+				<span>주문·배송종합 메뉴에서 해당 주문들의 주문상태를 확인 후 다시 처리해 주세요. </span><br/>
+			</div>  
+        </div>
     </div>
 </div>
 
@@ -123,6 +137,9 @@
 </script>
 
 <style>
+#dialog-alert{
+	overflow : auto !important;
+}
 .k-edit-form-container{
     width: 900px;
 }

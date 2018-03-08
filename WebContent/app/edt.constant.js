@@ -123,6 +123,7 @@
         ITF_CHK       		: { field: "ITF_CHK"      		 , type: "string" , width: "100px", textAlign: "center"		, title: "전송상태"},
         DT_SND        		: { field: "DT_SND"       		 , type: "string" , width: "100px", textAlign: "center"		, title: "배송일자"},
         CD_SHPSTAT    		: { field: "CD_SHPSTAT"   		 , type: "string" , width: "100px", textAlign: "center"		, title: "배송상태"},
+        ITF_RST		        : { field: "ITF_RST"   			 , type: "string" , width: "100px", textAlign: "center"		},
         
         CD_SHPDLY     		: { field: "CD_SHPDLY"    		 , type: "string" , width: "100px", textAlign: "center"		},
         DC_SHPDLYRSN  		: { field: "DC_SHPDLYRSN" 		 , type: "string" , width: "100px", textAlign: "center"		},
