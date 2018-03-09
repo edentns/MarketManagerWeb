@@ -420,7 +420,6 @@
                 				 	defer = $q.defer();
                 				
         						if(confirm("취소거부 하시겠습니까?")){  
-        							alert("송장번호 체크로 인하여 처리시간이 다소 소요 될수 있습니다.");
         							var param = e.data.models[0],
                 						viewName = "",
                 						rejectCode = param.cancel_reject_code.CD_DEF,
@@ -440,6 +439,8 @@
         							};   
                 					 
                                     if(param.CD_PARS){
+            							alert("송장번호 체크로 인하여 처리시간이 다소 소요 될수 있습니다.");
+            							
                                     	saOrdCclSvc[viewName](param).then(function (res) {
                                     		if(res.data === "success"){
                     							alert("취소거부 처리 되었습니다.");
