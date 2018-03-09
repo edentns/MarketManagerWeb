@@ -2,7 +2,7 @@
     "use strict";
 
     angular.module("edtApp.common.directive")
-        .directive("co01Mcbox", ["$timeout", '$document', "$log",function ( $timeout, $document, $log) {
+        .directive("co01Mcbox", ["$timeout", '$document', "$log", function ( $timeout, $document, $log) {
         	return {
                 restrict: 'E',
                 scope: {
@@ -56,7 +56,6 @@
                 	
                 	$scope.$watch('options.setSelectNames', function (newValue) {
             			if(newValue) {
-            				//var tmpModelMaxLength = newValue[0],
             				var	tmpModel = newValue,
             					id = $scope.co01McboxVO.id,
             					name = $scope.co01McboxVO.name,
@@ -64,47 +63,15 @@
             				 	opMo = angular.copy($scope.options),
             				 	rtnTemp = [];     
             				
-            				/*if(!tmpModelMaxLength){
-            					$scope.selectAll();
-            					return;
-            				}*/
-            				
-            				/*if(opLg !== tmpModelMaxLength.maxLength){
-            					$scope.selectAll();
-            				}else{
-                            	$scope.co01McboxVO.selectNames = "";    	                        
-                            	$scope.model = "";
-                            	
-                            	for(var i=0; i<opLg; i++){
-                            		for(var j=1; j<tmpModel.length; j++){
-                            			if(opMo[i][name] === tmpModel[j][name]){
-                            				if(rtnTemp.length === 0) {
-            	                        		$scope.co01McboxVO.selectNames = opMo[i][name];
-            	                        		$scope.model = opMo[i][id];
-            	                        	}else if(rtnTemp.length >= $scope.co01McboxVO.maxNames) {
-            	                        		if(rtnTemp.length === $scope.co01McboxVO.maxNames) {
-            	                        			$scope.co01McboxVO.selectNames += "...";
-            	                        		}
-            	                        		$scope.model += "^" + opMo[i][id];
-            		                        }else{
-            		                        	$scope.co01McboxVO.selectNames += ", " +  opMo[i][name];
-            	                        		$scope.model += "^" +  opMo[i][id];
-            	                        	};    	                        
-            	                        	rtnTemp.push(angular.copy(opMo[i]));
-                            			}
-                            		}
-                            	}
-                            	
-                            	if(rtnTemp.length === opLg){
-                            		$scope.co01McboxVO.selectNames = "전체";    	                        
-                                	$scope.model = "*";
-                            	}
-                            	$scope.co01McboxVO.arrayModel = angular.copy(rtnTemp);
-                            	rtnTemp.unshift({ maxLength : $scope.options.length });
-                                $scope.options.allSelectNames = angular.copy(rtnTemp);
-                            };	   */   
             				$scope.co01McboxVO.selectNames = "";    	                        
                         	$scope.model = "";
+                        	
+                        	if(tmpModel[0] === '*'){
+                        		$scope.co01McboxVO.arrayModel = angular.copy(opMo);
+                        		$scope.co01McboxVO.selectNames = "전체";    	                        
+                            	$scope.model = "*";
+                        		return true;
+                        	}
                         	
                         	for(var i=0; i<opLg; i++){
                         		for(var j=0; j<tmpModel.length; j++){
@@ -130,7 +97,7 @@
                         		$scope.co01McboxVO.selectNames = "전체";    	                        
                             	$scope.model = "*";
                         	}
-                        	  if(rtnTemp.length === 0 && opLg > 0){
+                        	if(rtnTemp.length === 0 && opLg > 0){
                               	$scope.selectAll();
                               	return true;
                           	}
@@ -166,11 +133,6 @@
                 	
                     $scope.openDropdown = function () {
                         $scope.open = !$scope.open;
-                        //if($scope.open) {
-                        	//$("#dropdownid")[0].tabIndex=0;
-                        	//$("#dropdownid")[0].focus();
-                        	//$document[0].getElementById('dropdownid').focus();
-                        //}
                     };
                     
                     $scope.onBlur = function () {
@@ -193,10 +155,10 @@
                         	loItem[self.co01McboxVO.id]   = item[self.co01McboxVO.id];
                         	loItem[self.co01McboxVO.name] = item[self.co01McboxVO.name];
                         	
-                        	self.co01McboxVO.arrayModel.push(loItem);
-                        	$scope.options.allSelectNames.push(loItem);
+                        	self.co01McboxVO.arrayModel.push(loItem);                        	
                         });
                         
+                        $scope.options.allSelectNames = ["*"];
                         $scope.model                 = "*";
                         self.co01McboxVO.selectNames = "전체";
                         //$scope.options.allSelectNames.unshift({ maxLength : $scope.options.length });
@@ -224,24 +186,28 @@
                                 intIndex = index;
                             }
                         });
+                        if($scope.options.allSelectNames[0] === "*"){
+                        	$scope.options.allSelectNames = angular.copy(self.co01McboxVO.arrayModel);
+                        }
                         
                         if(intIndex >= 0){
                         	self.co01McboxVO.arrayModel.splice(intIndex, 1);
-                        	$scope.options.allSelectNames.splice(intIndex, 1);
+                        	$scope.options.allSelectNames.splice(intIndex, 1);                        	
                         }else{
                         	loItem[id]   = option[id];
                         	loItem[name] = option[name];
                         	self.co01McboxVO.arrayModel.push(loItem);
                         	$scope.options.allSelectNames.push(loItem);
-                        }
+                        };
 
                         if(self.options.length === self.co01McboxVO.arrayModel.length) {
                             self.co01McboxVO.selectNames = "전체";
 	                        $scope.model                 = "*";
+	                        $scope.options.allSelectNames = ["*"];
                         }else {
 	                        self.co01McboxVO.selectNames = "";
-
 	                        $scope.model       = "";
+	                        
 	                        angular.forEach(self.co01McboxVO.arrayModel, function (item, index) {
 	                        	if(index === 0) {
 	                        		$scope.model                 = item[id];
@@ -257,6 +223,9 @@
 	                        	}
 	                        });
                         } 
+                        
+                        $log.info("model"+$scope.model);
+                        $log.info("allSelectNames"+$scope.options.allSelectNames);    
                     };
 
                     $scope.getClassName = function (option) {
