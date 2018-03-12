@@ -222,10 +222,7 @@
 	                        		$scope.model += "^" +  item[id];
 	                        	}
 	                        });
-                        } 
-                        
-                        $log.info("model"+$scope.model);
-                        $log.info("allSelectNames"+$scope.options.allSelectNames);    
+                        }    
                     };
 
                     $scope.getClassName = function (option) {

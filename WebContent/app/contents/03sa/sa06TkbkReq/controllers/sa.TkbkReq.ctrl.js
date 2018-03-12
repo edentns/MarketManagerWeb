@@ -280,7 +280,8 @@
         				},
         				betParam = {
         					lnomngcdhd: "SYCH00064",
-        					lcdcls: "SA_000023"
+        					lcdcls: "SA_000023",
+	    					customnoc: "00000"   
         				},
         				cdTkbkrsnParm = {
         					lnomngcdhd: "SYCH00050",
