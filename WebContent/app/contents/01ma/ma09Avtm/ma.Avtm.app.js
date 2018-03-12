@@ -21,15 +21,6 @@
                             AuthSvc.isAccess().then(function (result) {
                                 resData.access = result[0];
                                 defer.resolve(resData);
-//                                var param = {
-//        		    					procedureParam: "USP_MA_07Avtm_CODE_GET",
-//        		    				};
-//    		    				UtilSvc.getList(param).then(function (res) {
-//    		    					resData.mngMrkData = res.data.results[0];
-//    		    					resData.nmJobData  = res.data.results[1];
-//    		    					resData.stJobData  = res.data.results[2];
-//    		    					defer.resolve(resData);
-//    							});
                             });
 
                             return defer.promise;

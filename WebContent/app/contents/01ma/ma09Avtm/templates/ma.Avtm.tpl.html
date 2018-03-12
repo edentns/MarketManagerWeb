@@ -3,54 +3,203 @@
         <div id="app-content-header">
             <ol class="breadcrumb">
                 <li><a href="#01ma/maDashboard"><i class="fa fa-home fa-2x"></i></a></li>
-                <li><a href="#01ma/maAvtm">화면도움창</a></li>
+                <li><a href="#01ma/maAvtm">광고창관리</a></li>
             </ol>
         </div>
     </div>
     
     <div class="row">
-        <!-- 검색 -->
+        <!-- 광고구분 -->
         <div class="content-area-container col-xs-4">
-        	<div data-content-box-layer data-box-title="helpMenuVO.boxTitle">
-                <kendo-tooltip options="helpMenuVO.tooltipOptions">		
-			        <div id="divMenuGrd" kendo-grid="menukg" options="gridMenuVO">
+        	<div data-content-box-layer data-box-title="avtmClftVO.boxTitle">
+                <kendo-tooltip options="avtmClftVO.tooltipOptions">		
+			        <div id="divAvtmClftGrd" kendo-grid="avtmClftkg" options="gridAvtmClftVO">
 			        </div>	            
 			    </kendo-tooltip>
             </div>
         </div>
                 
-        <!-- qa 리스트 -->          
+        <!-- 광고 -->          
 		<div class="content-area-container col-xs-8">		
-			<div data-content-box-layer>
-        		<form class="search-type1">
-	                <table>
-	                	<colgroup>
-	                		<col style="width: 16%;">
-	                		<col style="width: 34%;">
-	                		<col style="width: 16%;">
-	                		<col style="width: 34%;">
-	                	</colgroup>
-	                	<tbody>
-	                		<tr>
-	                			<th>작성자</th>
-	                			<td>관리자</td>
-	                			<th>작성일시</th>
-	                			<td>2018-02-27 00:00</td>
-	                		</tr>
-	                		<tr>
-	                			<th>도움내용</th>
-	                			<td colspan='3'>
-	                				<textarea kendo-editor id="kEditAvtm" name="DC_HTMLCONTENT" k-ng-model="editorAvtmVO.DC_HTMLCONTENT" k-options="editorAvtmVO.kEditor" style="text-align:left; height:700px;"></textarea>
-	                			</td>
-	                	</tbody>
-	        		</table>
-	        	</form>
-	        	
-				<div class="btn-group1 mt-10">
-					<kendo-button data-ng-if="page.isWriteable()" type="botton" data-ng-click="editorAvtmVO.saveEditor()" title="저장" style="width:80px;"><span class="k-icon k-i-save"></span>저장</kendo-button>
-					<kendo-button type="botton" data-ng-click="editorAvtmVO.initEditor()" title="초기화" style="width:80px;"><span class="k-icon k-i-undo"></span>초기화</kendo-button>
-				</div>
-	        </div>
+			<div data-content-box-layer data-box-title="avtmVO.boxTitle">
+                <kendo-tooltip options="avtmVO.tooltipOptions">		
+			        <div id="divAvtmGrd" kendo-grid="avtmkg" options="gridAvtmVO">
+			        </div>	            
+			    </kendo-tooltip>
+            </div>
         </div>
     </div>
 </div>
+
+<!-- 그리드 툴바 템플릿 -->
+<script id="ma-avtm-toolbar-template" type="text/x-kendo-template">
+	<a class="k-button k-button-icontext k-grid-add"><span class="k-icon k-i-add"></span>추가</a>    
+    <a class="k-button k-button-icontext k-grid-delete" data-ng-click="onDeleteGrd()"><span class="k-icon k-i-delete"></span>삭제</a>
+</script>
+
+<!-- 광고그리드 -->
+<script id="ma_avtm_template" type="text/x-kendo-template">
+    <tr class="k-grid-row">
+        <td class="ta-c">            
+			<input class='k-checkbox' data-role='checkbox' type='checkbox' ng-click='editorAvtmVO.onAvtmGrdClick($event)' id='#= uid #_chk'>
+			<label class='k-checkbox-label k-no-text' for='#= uid #_chk'></label>
+        </td>
+		<td class="ta-r">
+            <span class="seq ells">
+				# if(ROW_NUM){ #
+                #: ROW_NUM     # 
+                # }            #
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells">
+				# if(NM_AVTM){ #
+                #: NM_AVTM     # 
+                # }            #
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells">
+				# if(NM_AVTR){ #
+                #: NM_AVTR     # 
+                # }            #
+			</span>
+        </td>
+		<td class="ta-r">
+            <span class="ells">
+				# if(SQ_AVTM){ #
+                #: SQ_AVTM     # 
+                # }            #
+			</span>
+        </td>
+		<td class="ta-c">
+            <span class="ells">
+				# if(DTS_AVTMSTRT){ #
+                #: DTS_AVTMSTRT     # 
+                # }                 #
+			</span>
+        </td>
+		<td class="ta-c">
+            <span class="ells">
+				# if(DTS_AVTMEND){ #
+                #: DTS_AVTMEND     # 
+                # }                #
+			</span>
+        </td>
+		<td class="ta-r">
+            <span class="ells">
+				# if(AM_AVTM){ #
+                #: AM_AVTM     # 
+                # }            #
+			</span>
+        </td>
+		<td class="ta-l">
+            <span class="ells">
+				<a class="k-button k-button-icontext k-grid-edit" href="\#">
+                	<span class="k-icon k-i-edit"></span>수정
+            	</a>
+			</span>
+        </td> 
+	</tr>
+</script>
+
+<!-- 공지사항 추가,삭제 팝업 그리드 -->
+<script id="ma_avtm_popup_template" type="text/x-kendo-template">
+<div class="not_pop_title"><h3>광고내용</h3></div>
+<table class="signal">
+	<colgroup>
+      <col style="width: 8%;">
+      <col style="width: 20%;">
+      <col style="width: 8%;">
+      <col style="width: 31%;">
+      <col style="width: 8%;">
+      <col style="width: 23%;">
+    </colgroup>
+    <tbody data-uid="#= uid #">	
+	<tr class="border-bottom-line border-top-line">	
+		<td class="border-right-line">
+			광고구분명
+		</td>
+		<td class="border-right-line">
+			<input type="text" data-bind="value: NM_AVTMCLFT" class="k-textbox" readonly="readonly" disabled="disabled"> 
+		</td>
+		<td class="border-right-line">
+			넓이(px)
+		</td>
+		<td class="border-right-line">
+			<input type="text" data-bind="value: VAL_WIDTH" class="k-textbox" readonly="readonly" disabled="disabled">
+		</td>
+		<td class="border-right-line">
+			높이(px)
+		</td>
+		<td>
+			<input type="text" data-bind="value: VAL_HEIGHT" class="k-textbox" readonly="readonly" disabled="disabled">
+		</td> 
+	</tr>
+	<tr class="border-bottom-line">
+		<td class="border-right-line">
+			광고명
+		</td>
+		<td class="border-right-line">
+			<input type="text" class="k-textbox" data-bind="value: NM_AVTM">
+		</td>
+		<td class="border-right-line">
+			광고금액(천원)
+		</td>
+		<td class="border-right-line">
+			<input data-role="numerictextbox"
+				   data-decimals="0"
+				   data-format="c"
+   	               data-min="1"
+                   data-max="9999999999"
+                   data-bind="value: AM_AVTM"
+                   style="width: 100%;"/>
+		</td>
+		<td class="border-right-line">
+			광고주
+		</td>
+		<td>
+			<input type="text" class="k-textbox" data-bind="value: NM_AVTR">
+		</td> 
+	</tr>
+	<tr class="border-bottom-line">
+		<td class="border-right-line">
+			광고순위
+		</td>
+		<td class="border-right-line">
+			<input data-role="numerictextbox"
+				   data-decimals="0"
+				   data-format="{0:0}"
+   	               data-min="1"
+                   data-max="9999999999"
+                   data-bind="value: SQ_NOTICE"
+                   style="width: 100%;"/>
+		</td> 
+		<td class="border-right-line">
+			시작일시
+		</td>
+		<td class="border-right-line">
+			<input kendo-date-time-picker
+                   k-options=editorAvtmVO.dateOptions"
+                   data-bind="value: DTS_AVTMSTRT"/>
+		</td> 
+		<td class="border-right-line">
+			종료일시
+		</td>
+		<td class="border-right-line">
+			<input kendo-date-time-picker
+                   k-options=editorAvtmVO.dateOptions"
+                   data-bind="value: DTS_AVTMEND"/>
+		</td> 
+	</tr>
+	<tr class="border-bottom-line">
+		<td class="border-right-line">
+			광고내용
+		</td>
+		<td colspan="5">
+			<textarea kendo-editor id="k-edi" name="DC_HTMLCONTENT" data-bind="value: DC_HTMLCONTENT" k-options="editorAvtmVO.kEditor" style="text-align:left;"></textarea>
+		</td> 
+	</tr>
+	</tbody>
+</table>
+</script>
