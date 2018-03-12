@@ -71,16 +71,18 @@
         			});
 					
             		$timeout(function() {
-						if(history){
-		            		dateVO.selectedMrkIds = history.MRK_LIST;
-	            			dateVO.MrkCodeList.setSelectNames = history.MRK_SELECT_INDEX;
-							dateVO.selectedItlStatIds = history.STAT_LIST;
-							dateVO.ItlStatCodeList.setSelectNames = history.STAT_SELECT_INDEX;
-							dateVO.datesetting.period.start = history.START_DATE;
-							dateVO.datesetting.period.end = history.END_DATE;
-		            		
-							$scope.gridMrkVO.dataSource.read();
-		            	}
+            			$scope.gridMrkVO.dataSource.read();
+            			
+//						if(history){
+//		            		dateVO.selectedMrkIds = history.MRK_LIST;
+//	            			dateVO.MrkCodeList.setSelectNames = history.MRK_SELECT_INDEX;
+//							dateVO.selectedItlStatIds = history.STAT_LIST;
+//							dateVO.ItlStatCodeList.setSelectNames = history.STAT_SELECT_INDEX;
+//							dateVO.datesetting.period.start = history.START_DATE;
+//							dateVO.datesetting.period.end = history.END_DATE;
+//		            		
+//							$scope.gridMrkVO.dataSource.read();
+//		            	}
             		},1000);
 				};
 				
