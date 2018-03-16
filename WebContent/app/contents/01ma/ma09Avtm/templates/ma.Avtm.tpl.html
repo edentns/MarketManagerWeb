@@ -33,23 +33,17 @@
 
 <!-- 그리드 툴바 템플릿 -->
 <script id="ma-avtm-toolbar-template" type="text/x-kendo-template">
-	<a class="k-button k-button-icontext k-grid-add"><span class="k-icon k-i-add"></span>추가</a>    
+	<a class="k-button k-button-icontext k-grid-add"><span class="k-icon k-i-add"></span>추가</a>
     <a class="k-button k-button-icontext k-grid-delete" data-ng-click="onDeleteGrd()"><span class="k-icon k-i-delete"></span>삭제</a>
+    <!--a class="k-button k-button-icontext k-grid-preview" data-ng-click="onPreview()"><span class="k-icon k-i-window"></span>미리보기</a-->
 </script>
 
 <!-- 광고그리드 -->
 <script id="ma_avtm_template" type="text/x-kendo-template">
-    <tr class="k-grid-row">
+    <tr class="k-grid-row" data-uid="#= uid #">
         <td class="ta-c">            
 			<input class='k-checkbox' data-role='checkbox' type='checkbox' ng-click='editorAvtmVO.onAvtmGrdClick($event)' id='#= uid #_chk'>
 			<label class='k-checkbox-label k-no-text' for='#= uid #_chk'></label>
-        </td>
-		<td class="ta-r">
-            <span class="seq ells">
-				# if(ROW_NUM){ #
-                #: ROW_NUM     # 
-                # }            #
-			</span>
         </td>
 		<td class="ta-l">
             <span class="ells">
@@ -95,7 +89,7 @@
         </td>
 		<td class="ta-l">
             <span class="ells">
-				<a class="k-button k-button-icontext k-grid-edit" href="\#">
+				<a class="k-button k-button-icontext k-grid-edit">
                 	<span class="k-icon k-i-edit"></span>수정
             	</a>
 			</span>
@@ -172,23 +166,23 @@
 				   data-format="{0:0}"
    	               data-min="1"
                    data-max="9999999999"
-                   data-bind="value: SQ_NOTICE"
+                   data-bind="value: SQ_AVTM"
                    style="width: 100%;"/>
 		</td> 
 		<td class="border-right-line">
 			시작일시
 		</td>
-		<td class="border-right-line">
+		<td class="border-right-line" style="text-align:left;">
 			<input kendo-date-time-picker
-                   k-options=editorAvtmVO.dateOptions"
+                   k-options="editorAvtmVO.dateOptions"
                    data-bind="value: DTS_AVTMSTRT"/>
 		</td> 
 		<td class="border-right-line">
 			종료일시
 		</td>
-		<td class="border-right-line">
+		<td class="border-right-line" style="text-align:left;">
 			<input kendo-date-time-picker
-                   k-options=editorAvtmVO.dateOptions"
+                   k-options="editorAvtmVO.dateOptions"
                    data-bind="value: DTS_AVTMEND"/>
 		</td> 
 	</tr>
@@ -197,9 +191,103 @@
 			광고내용
 		</td>
 		<td colspan="5">
-			<textarea kendo-editor id="k-edi" name="DC_HTMLCONTENT" data-bind="value: DC_HTMLCONTENT" k-options="editorAvtmVO.kEditor" style="text-align:left;"></textarea>
+			<textarea kendo-editor id="k-edi" name="DC_HTMLCONTENT" data-bind="value: DC_HTMLCONTENT" k-options="editorAvtmVO.kEditor" style="text-align:left; width:#: VAL_WIDTH #px; height:#: VAL_HEIGHT #px;"></textarea>
 		</td> 
 	</tr>
 	</tbody>
 </table>
 </script>
+
+<style>
+
+
+.not_pop_title{
+	padding: 10px;
+}
+/*
+    Increase the width of the edit form.
+    The default one is 400px.
+*/
+.k-edit-form-container{
+    width: 900px;
+}
+/*
+    Decrease the width of the edit form labels. The default one is 30%.
+    The new width should depend on the column titles.
+    Switch the text alignment to the left. By default, it is to the right.
+*/
+.k-popup-edit-form .k-edit-label{
+    width: 20%;
+    text-align: left;
+}
+/*
+    Increase the width of the textbox containers. The default one is 60%.
+    The sum of label and editor percentage widths should be around 90%, to make up for existing paddings.
+*/
+.k-popup-edit-form .k-edit-field{
+    width: 70%;
+}
+/*
+    Expand the edit textboxes and any other Kendo UI widgets.
+    In case of unexpected side effects, use widget-specific classes, instead of .k-widget.
+*/
+.k-popup-edit-form .k-edit-field > .k-textbox,
+.k-popup-edit-form .k-edit-field > .k-widget:not(.k-tooltip){
+    width: 98%;
+}
+.signal{    
+    width: 99%;
+    margin: 5px;
+}
+.k-edit-form-container .k-edit-buttons{
+	border-style: none;
+}
+#example{
+    min-height: 200px;
+}
+#example .title {
+    font-weight: bold;
+    margin-bottom: 25px;
+}
+.search-wrapper {
+    width: 100%;
+}
+.query-match {
+	color: red;
+}
+.select-all-wrapper {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.selected-count {
+    float: right;
+    color: #aaa;
+}
+.k-treeview {
+    border-width: 1px!important;
+    padding: 5px;
+}
+.selectedName {
+    padding: 5px 10px;
+    background: #aaa;
+    color: white;
+    float: left;
+    margin-right: 5px;
+    margin-bottom: 5px;
+    border-radius: 10px;
+} 
+.class-target-dropdown{
+	width:65%; 
+	display:inline-block; 
+	vertical-align:middle;
+}
+.class-target-button{
+	width:33%; 
+	display:inline-block; 
+	vertical-align:middle; 
+	text-align:right;
+}
+.k-editor-toolbar-wrap{
+	text-align: left;
+};
+</style>

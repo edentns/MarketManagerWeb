@@ -12,14 +12,24 @@
 				/**
 				 * qa를 업데이트 한다.
 				 */
-            	avtmUpt : function (param) {					
+            	avtmUpt : function (param, CUD) {
 					return $http({
 						method	: "POST",
 						data 	: param,
-						url		: APP_CONFIG.domain +"/avtm/upt"
+						url		: APP_CONFIG.domain+"/avtm/"+CUD
+					});
+				},
+				
+				/**
+				 * qa를 업데이트 한다.
+				 */
+            	avtmDelete : function (param, CUD) {
+					return $http({
+						method	: "POST",
+						data 	: param,
+						url		: APP_CONFIG.domain+"/avtmDel"
 					});
 				}
-            	
             };
         }]);
 }());

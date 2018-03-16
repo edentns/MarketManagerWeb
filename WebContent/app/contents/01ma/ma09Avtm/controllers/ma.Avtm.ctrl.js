@@ -26,7 +26,7 @@
 	            //toolTip
 	            UtilSvc.gridtooltipOptions.filter = "td";
 	            avtmClftVO.tooltipOptions = UtilSvc.gridtooltipOptions;
-	            avtmVO.tooltipOptions     = avtmVO.gridtooltipOptions;
+	            avtmVO.tooltipOptions     = UtilSvc.gridtooltipOptions;
 
 	            var editorAvtmVO = $scope.editorAvtmVO = {
 	            	kEditor: UtilSvc.kendoEditor("010")
@@ -53,7 +53,7 @@
 	                
 	                var checked = element.is(':checked'),
 	                	row = element.closest("tr"),
-	                	grid = $scope.avtmkg,
+	                	grid = $("#divAvtmGrd").data("kendoGrid"),
 	                	dataItem = grid.dataItem(row);
 	
 	                //$scope.checkedIds[dataItem.ROW_NUM] = checked;	                	                
@@ -68,7 +68,8 @@
 	            };
 	            
 	            editorAvtmVO.dateOptions = {
-	            	parseFormats: ["yyyyMMddHHmmss"], 				 
+	            	parseFormats: ["yyyyMMddHHmmss"], 
+	            	format: "yyyy-MM-dd HH:mm",
 	            	animation: { 
 	            		close: { 
 	            			effects: "fadeOut zoom:out", 
@@ -82,6 +83,29 @@
 	            	value : new Date()
 	            };
 	            
+                $scope.onDeleteGrd = function(){
+                	var grid = $("#divAvtmGrd").data("kendoGrid"),
+                		chked = grid.element.find("input:checked"),
+                		chkedLeng = grid.element.find("input:checked").length,
+                		row = chked.closest('tr');
+                	
+                	if(!page.isWriteable()){
+                		return;
+                	}                	
+                	if(chkedLeng < 1){
+                		alert("삭제할 데이터를 선택해 주세요.");
+                		return false;
+                	};
+                	                	
+                	if(confirm(chkedLeng+"개 의 데이터를 삭제 하시겠습니까?")){       
+                		grid.dataSource.fetch(function(){
+                			editorAvtmVO.deleteOrdUpdate = "d";
+                			grid.dataSource.remove(grid.dataItems(row));
+                			grid.dataSource.sync();
+            			});
+                	};
+                };
+                
 	            var gridAvtmClftVO = $scope.gridAvtmClftVO = {
 	            	autoBind: false,
 	            	messages: {                        	
@@ -120,15 +144,16 @@
 	                	}
 	            	}),
 	            	change : function(e) {
-                		var dataItem = this.dataItem(this.select());
-            			var param = {
-    						procedureParam: "USP_MA_09AVTM01_GET&L_NO_AVTMCLFT@s",
-    						L_NO_AVTMCLFT: dataItem.NO_AVTMCLFT
+            			var data = this.dataSource.data(),
+     			   	        i = 0,
+     			   	        sum = 0;
+            			
+    					for(i; i<data.length; i+=1){
+    						sum += 1;
+    						data[i].ROW_NUM = sum;
     					};
-    					UtilSvc.getList(param).then(function (res) {
-    						$scope.gridAvtmVO.dataSource.data(res.data.results[0]);
-    					});
-	                	//$scope.gridAvtmClftVO.dataSource.read();
+    					
+    					$scope.gridAvtmVO.dataSource.read();
                 	},
                 	dataBound: function(e) {
                 		e.sender.select("tr:eq(0)");
@@ -159,19 +184,80 @@
 	            	dataSource: new kendo.data.DataSource({
 	            		transport: {
                     		read: function(e) {
-//                    			var grid = $("#divAvtmClftGrd").data("kendoGrid");
-//                        		var dataItem = grid.dataItem(grid.select());
-//                    			var param = {
-//            						procedureParam: "USP_MA_09AVTM01_GET&L_NO_AVTMCLFT@s",
-//            						L_NO_AVTMCLFT: dataItem.NO_AVTMCLFT
-//            					};
-//            					UtilSvc.getList(param).then(function (res) {
-//            						e.success(res.data.results[0]);
-//            					});
+                    			var grid = $("#divAvtmClftGrd").data("kendoGrid"),
+                    			    dataItem = grid.dataItem(grid.select()),
+                    			    param = {
+	            						procedureParam: "USP_MA_09AVTM01_GET&L_NO_AVTMCLFT@s",
+	            						L_NO_AVTMCLFT: dataItem.NO_AVTMCLFT
+	            					};
+                    			
+            					UtilSvc.getList(param).then(function (res) {
+            						e.success(res.data.results[0]);
+            					});
                     		},
                     		create: function(e) {
+                    			var defer = $q.defer(),
+	                    			grid = $("#divAvtmClftGrd").data("kendoGrid"),
+	                			    dataItem = grid.dataItem(grid.select()),
+	                			    param = {};
+                    			
+                    			e.data.models[0].NO_AVTMCLFT = dataItem.NO_AVTMCLFT;
+ 
+                    			param = e.data.models[0];
+            					param.DTS_AVTMSTRT = kendo.toString(new Date(param.DTS_AVTMSTRT), "yyyyMMddHHmmss");        
+            					param.DTS_AVTMEND  = kendo.toString(new Date(param.DTS_AVTMEND) , "yyyyMMddHHmmss");
+            					
+                    			MaAvtmSvc.avtmUpt(param, 'I').then(function(res) {
+                    				if(!res.data) {
+                    					e.error([]);
+                    					defer.reject();
+                    					alert("저장에 실패하였습니다");
+                    				}
+                    				
+                    				defer.resolve();
+                    				alert("저장되었습니다");
+                					$scope.gridAvtmVO.dataSource.read();
+                    			});
                     		},
                     		update: function(e) {
+                    			var defer = $q.defer();
+                			    
+                    			if(editorAvtmVO.deleteOrdUpdate === "d") {
+                    				MaAvtmSvc.avtmDelete(e.data.models).then(function(res) {
+                    					if(res.data) {
+                							alert("삭제 성공하였습니다.");
+    	    	                			$scope.gridAvtmVO.dataSource.read();
+    	    	                			defer.resolve();
+                						} else {
+            	                			e.error([]);
+        	                				defer.reject();
+        	                				alert("삭제 실패하였습니다.!! 연구소에 문의 부탁드립니다.");
+                						}
+                    				}, function() {
+                    					e.error([]);
+    	                				defer.reject(); 
+	                					alert("삭제 실패하였습니다.!! 연구소에 문의 부탁드립니다.");
+                    				});
+                    				editorAvtmVO.deleteOrdUpdate = "";
+                    			}
+                    			else {
+			                    	var param = e.data.models[0];
+
+	            					param.DTS_AVTMSTRT = kendo.toString(new Date(param.DTS_AVTMSTRT), "yyyyMMddHHmmss");        
+	            					param.DTS_AVTMEND  = kendo.toString(new Date(param.DTS_AVTMEND) , "yyyyMMddHHmmss");
+	            					
+			                    	MaAvtmSvc.avtmUpt(param, 'U').then(function(res) {
+	                    				if(!res.data) {
+	                    					e.error([]);
+	                    					defer.reject();
+	                    					alert("수정에 실패하였습니다");
+	                    				}
+	                    				
+	                    				defer.resolve();
+	                    				alert("수정되었습니다");
+	                					$scope.gridAvtmVO.dataSource.read();
+	                    			});
+			                    }
                     		},
                     		parameterMap: function(e, operation) {
                 				if(operation !== "read" && e.models) {
@@ -182,67 +268,74 @@
                 		batch: true,
                 		schema: {
                 			model: { 
-                    			id: "NO_AVTMCLFT",
+                    			id: "NO_AVTM",
                 				fields: {
                 					ROW_CHK       : {type: "boolean", editable: true , nullable: false},
-                					ROW_NUM       : {type: "number" , editable: false, nullable: false},
+                					NM_AVTMCLFT   : {type: "string" , editable: true , nullable: false},
                 					NO_AVTM       : grdScmSelectAttr,
-                					NM_AVTM       : grdScmSelectAttr,
-							        NM_AVTR       : grdScmSelectAttr,
-							        NO_AVTMCLFT   : grdScmSelectAttr,
-							        SQ_AVTM       : grdScmSelectAttr,
-							        DTS_AVTMSTRT  : grdScmSelectAttr,
-							        DTS_AVTMEND   : grdScmSelectAttr,
-							        AM_AVTM       : grdScmSelectAttr,
-							        DC_HTMLCONTENT: grdScmSelectAttr,
-							        NM_AVTMCLFT   : grdScmSelectAttr,
-							        VAL_HEIGHT    : grdScmSelectAttr,
-							        VAL_WIDTH     : grdScmSelectAttr
+                					NM_AVTM       : {type: "string" , editable: true , nullable: false},
+							        NM_AVTR       : {type: "string" , editable: true , nullable: false},
+							        NO_AVTMCLFT   : {type: "string" , editable: true , nullable: false},
+							        SQ_AVTM       : {type: "string" , editable: true , nullable: false},
+							        DTS_AVTMSTRT  : {type: "string" , editable: true , nullable: false},
+							        DTS_AVTMEND   : {type: "string" , editable: true , nullable: false},
+							        AM_AVTM       : {type: "string" , editable: true , nullable: false},
+							        DC_HTMLCONTENT: {type: "string" , editable: true , nullable: false},
+							        VAL_HEIGHT    : {type: "string" , editable: true, nullable: false},
+							        VAL_WIDTH     : {type: "string" , editable: true, nullable: false}
 	                			}
 	                		}
 	                	}
 	            	}),
-                	dataBound: function(e) {
-                		e.sender.select("tr:eq(0)");
-                	}, 
                 	navigatable: true, //키보드로 그리드 셀 이동 가능
                 	toolbar: [{template: kendo.template($.trim($("#ma-avtm-toolbar-template").html()))}],
                 	columns: [
                 	    {field: "ROW_CHK"     , headerAttributes: gHeadAttribute, width: 40, title: "선택"}, 
-                	    {field: "ROW_NUM"     , headerAttributes: gHeadAttribute, type: "number", width: iNumWidth, attributes: {class:"ta-r"}, title: "번호"},
       	                {field: "NM_AVTM"     , headerAttributes: gHeadAttribute, attributes: {class:"ta-l"}, title: "광고명"},
-      	                {field: "NM_AVTR"     , headerAttributes: gHeadAttribute, width: "100px", attributes: {class:"ta-r"}, title: "광고주"},
-      	                {field: "SQ_AVTM"     , headerAttributes: gHeadAttribute, type: "number", width: iNumWidth, attributes: {class:"ta-r"}, title: "광고순위"},
+      	                {field: "NM_AVTR"     , headerAttributes: gHeadAttribute, width: "100px", attributes: {class:"ta-c"}, title: "광고주"},
+      	                {field: "SQ_AVTM"     , headerAttributes: gHeadAttribute, type: "number", width: "80px", attributes: {class:"ta-r"}, title: "광고순위"},
       	                {field: "DTS_AVTMSTRT", headerAttributes: gHeadAttribute, width: "140px", attributes: {class:"ta-c"}, title: "시작일시"},
       	                {field: "DTS_AVTMEND" , headerAttributes: gHeadAttribute, width: "140px", attributes: {class:"ta-c"}, title: "종료일시"},
-      	                {field: "AM_AVTM"     , headerAttributes: gHeadAttribute, type: "number", width: iNumWidth, attributes: {class:"ta-r"}, title: "금액(만원)"}
+      	                {field: "AM_AVTM"     , headerAttributes: gHeadAttribute, type: "number", width: "100px", attributes: {class:"ta-r"}, title: "금액(만원)"},
+      	                {command: ["edit"], width: 100 }
                 	],
-                	selectable: "row",
                     collapse: function(e) {
                         this.cancelRow();
                     },      	
                 	editable: {
                 		mode: "popup",
-                		window : {
-                	        title: "광고내용"
-                	    },
+                		window : {title: "광고내용"},
                 		template: kendo.template($.trim($("#ma_avtm_popup_template").html())),
-                		confirmation: false
+                		confirmation: true
                 	},
                 	edit: function (e) {
+        		        $(".k-window-titlebar").css("height","30px");
+        		        $(".k-popup-edit-form").css("margin-top","16px");
             		    //새 글 일때
-            		    if (e.model.isNew()) { 		    	
+            		    if (e.model.isNew()) { 	
+            		    	var grid = $("#divAvtmClftGrd").data("kendoGrid"),
+            			        dataItem = grid.dataItem(grid.select());
+            		    	
             		        $(".k-grid-update").text("저장");
-            		        $(".k-window-title").text("광고 등록");            		        
+            		        $(".k-window-title").text("광고 등록");
+
+                    		e.model.set("NM_AVTMCLFT", dataItem.NM_AVTMCLFT);
+                    		e.model.set("VAL_WIDTH"  , dataItem.VAL_WIDTH  );
+                    		e.model.set("VAL_HEIGHT" , dataItem.VAL_HEIGHT );
             		    //수정 할 글일때
             		    }else{
             		    	$(".k-grid-update").text("수정");
             		    	$(".k-window-title").text("광고 수정");
+
+                    		//e.model.set("DTS_AVTMSTRT", today);
+                    		//e.model.set("DTS_AVTMEND" , today);        
             		    }
+        		        $(".k-grid-cancel").text("취소");    
+        		        
             		    $timeout(function () {
                         	if(!page.isWriteable()) {
-                        		$(".k-grid-update").addClass("k-state-disabled");
-                        		$(".k-grid-update").click(noticeDataVO.stopEvent);
+                        		//$(".k-grid-update").addClass("k-state-disabled");
+                        		//$(".k-grid-update").click(noticeDataVO.stopEvent);
                         	}
                         });
                 	},
