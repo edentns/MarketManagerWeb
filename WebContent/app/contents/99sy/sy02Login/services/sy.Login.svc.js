@@ -143,6 +143,19 @@
 						url		: APP_CONFIG.domain +"/saveUserJoin",
 						data    : userJoinVO
 					});
+				},
+				
+				/**
+				 * 광고조회
+				 * @param {{NM_C:string}} NO_AVTMCLFT
+				 * @returns {*}
+				 */
+				selectAvtm : function (NO_AVTMCLFT) {
+					return $http({
+						method	: "GET",
+						url		: APP_CONFIG.domain +"/ut09Avtm?NO_AVTMCLFT="+NO_AVTMCLFT,
+						headers	: { "Content-Type": "application/x-www-form-urlencoded; text/plain; */*; charset=utf-8" }
+					});
 				}
 			};
 		}]);

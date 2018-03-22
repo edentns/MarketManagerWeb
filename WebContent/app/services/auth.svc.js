@@ -25,7 +25,7 @@
 		    				};
 							UtilSvc.getList(param).then(function (res) {
 								var helpContent = '';
-								if(res.data.results[0].length !== 0) {
+								if(res.data.results[0].length !== 0 && $("#helpEditor").data("kendoEditor") !== undefined) {
 									$("#helpEditor").data("kendoEditor").value(res.data.results[0][0].DC_HTMLCONTENT);
 								}
 								
