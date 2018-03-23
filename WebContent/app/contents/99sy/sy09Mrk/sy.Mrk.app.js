@@ -50,9 +50,10 @@
     				            	else {
     				            		resData.selectedMrkIds     = "*";
     				            		resData.selectedItlStatIds = "*";
-    				            		resData.start              = angular.copy(edt.getToday());
-    				            		resData.end                = angular.copy(edt.getToday());
-    				            		resData.selected           = '1Day';
+    				            		resData.selectDate = {};
+    				            		resData.selectDate.start              = angular.copy(edt.getToday());
+    				            		resData.selectDate.end                = angular.copy(edt.getToday());
+    				            		resData.selectDate.selected           = '1Day';
     				            	}
     				            		
     		    					defer.resolve(resData);

@@ -8,8 +8,7 @@
 	 */
 	angular.module('edtApp.common.service').service('UtilSvc', ['$rootScope', '$state', '$window', '$http', 'APP_CONFIG', 'MenuSvc', '$q',
 		function ($rootScope, $state, $window, $http, APP_CONFIG, MenuSvc, $q) {
-			var user = $rootScope.webApp.user,
-				menu = $rootScope.webApp.menu,
+			var menu = $rootScope.webApp.menu,
 				gridHeaderAttributes = {"class": "table-header-cell", style: "text-align: center; font-size: 12px"};
 			
 			this.kendoEditor = function(cd_at) {
@@ -686,6 +685,8 @@
 				 * @param {string=} psKind
 				 */
 				setColumns: function (poJson, psKind) {
+					var user = $rootScope.webApp.user;
+					
 					var fixKey = user.NO_C +''+ user.CD,
 						key = fixKey +''+ MenuSvc.getNO_M($state.current.name) +'Columns';
 
@@ -702,6 +703,7 @@
 				 * @returns {Object}
 				 */
 				getColumns: function (psKind) {
+					var user = $rootScope.webApp.user;
 					var fixKey = user.NO_C +''+ user.CD,
 						key = fixKey +''+ MenuSvc.getNO_M($state.current.name) +'Columns',
 						rtnData;
@@ -723,7 +725,8 @@
 						fk = config.parentKey,
 						dataList = self.sortAsc(config.deptData, pk),
 						root = [],
-						keys = {};
+						keys = {},
+						user = $rootScope.webApp.user;
 
 					angular.forEach(dataList, function (data) {
 						var pko =  keys[data[pk]] = {
@@ -823,6 +826,7 @@
 				 * @returns {Object}
 				 */
 				getInquiryParam: function (psKind) {
+					var user = $rootScope.webApp.user;
 					if(user === null || user === undefined) return '';
 					
 					var strkey = 'menu';
@@ -904,6 +908,7 @@
 
 			this.localStorage = {
 				setItem: function(name, data) {
+					var user = $rootScope.webApp.user;
 					var fixKey 	= user.NO_C +''+ user.NO_EMP,
 						key 	= fixKey +''+ MenuSvc.getNO_M($state.current.name) +'-'+ name;
 
@@ -911,6 +916,7 @@
 				},
 				
 				getItem: function(name) {
+					var user = $rootScope.webApp.user;
 					if(user === null || user === undefined) return '';
 					
 					var fixKey 	= user.NO_C +''+ user.NO_EMP,
@@ -927,6 +933,7 @@
 				},
                 
                 removeItem: function(name) {
+                	var user = $rootScope.webApp.user;
                     var fixKey 	= user.NO_C +''+ user.NO_EMP,
                         key 	= fixKey +''+ MenuSvc.getNO_M($state.current.name) +'-'+ name;
                     
