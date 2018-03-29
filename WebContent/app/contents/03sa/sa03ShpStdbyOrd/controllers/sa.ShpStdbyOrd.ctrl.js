@@ -352,7 +352,7 @@
         	                		 	    	return ele.ROW_CHK === true;
         	                		 	    }),
         	                		 	    itfRst = param.filter(function(ele){
-        	                		 	    	return ele.ITF_RST === '0';
+        	                		 	    	return ele.ITF_RST !== '1' && ele.ITF_RST !== 1;
         	                		 	    }),
         	                		 	    startTime = new Date();                        			
                         				
@@ -361,7 +361,7 @@
                         					return false;
                         				}       
                         				
-                        				if(itfRst){
+                        				if(itfRst.length > 0){
 	                    					if(!confirm("주문확정에 대한 연동결과가 없는 주문이 있습니다.\n계속 진행하시겠습니까?\n연동결과가 없는 주문은 해당마켓과 주문상태가 차이 날 수도 있습니다.")){
 	                        					e.success();
 	                        					return false;
