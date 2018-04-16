@@ -59,6 +59,25 @@
 						url		: APP_CONFIG.domain +"/tkbk/completed",
 						data	: param 
 					});
+				},
+				
+				popupHeaderTitle : function(code){
+					var name = {
+							complete : "반품완료 입력",
+							reject : "반품거부 입력",
+							process : "반품처리 입력",
+							change : "교환으로 처리"
+						};
+					
+					if(code === "001"){
+						return name.complete;
+					}else if(code === "002"){
+						return name.reject;
+					}else if(code === "003"){
+						return name.process;
+					}else if(code === "004"){
+						return name.change;
+					}
 				}
             };
         }]);

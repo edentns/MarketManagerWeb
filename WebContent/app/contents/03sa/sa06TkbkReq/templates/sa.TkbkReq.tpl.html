@@ -113,18 +113,13 @@
 
 <!-- 주문 취소 팝업 -->
 <script id="tkbk_popup_template" type="text/x-kendo-template">
-<div class="not_pop_title" ng-if="tkbkDataVO.updateChange === '001'">
-	<h4>반품완료 입력</h4>
+<div class="not_pop_title">
+	<h4>{{tkbkDataVO.inputPopupHeaderTitle}}</h4>
 </div>
-<div class="not_pop_title" ng-if="tkbkDataVO.updateChange === '002'">
-	<h4>반품거부 입력</h4>
-</div>
-<div class="not_pop_title" ng-if="tkbkDataVO.updateChange === '003'">
-	<h4>반품처리 입력</h4>
-</div>
+
 <table class="table signal" data-uid="#= uid #">
 	<colgroup>
-      <col style="width: 14%;">
+      <col style="width: 16%;">
       <col style="width: 30%;">
       <col style="width: 14%;">
       <col style="width: 30%;">
@@ -202,7 +197,7 @@
 		
 		<tr class="border-bottom-line" data-ng-if="tkbkDataVO.updateChange === '001'">
 			<td class="active border-right-line">
-				접수자
+				반품완료자
 			</td>
 			<td>
 				{{tkbkDataVO.userInfo}}
@@ -212,7 +207,7 @@
 		</tr>
 		<tr class="border-bottom-line" data-ng-if="tkbkDataVO.updateChange === '001'">
 			<td class="active border-right-line">
-				<code>*</code>접수일자
+				<code>*</code>반품완료일자
 			</td>
 			<td class="ta-l" colspan="3">
 				<input kendo-date-time-picker				
@@ -229,22 +224,30 @@
 				반품사유코드
 			</td>
 			<td>
-				<select kendo-drop-down-list 
-					k-options="tkbkDataVO.cdTkbkrsnOp"
-					name="CD_TKBKHRNKRSN"
-					data-bind="value: CD_TKBKHRNKRSN"
-                	style="width: 100%">
+				<select kendo-drop-down-list options="tkbkDataVO.ddlDefaultOp" name="NM_TKBKHRNKRSN" style="width: 100%">
+					<option>#: NM_TKBKHRNKRSN #</option>
 				</select>
 			</td>
-			<td colspan="2">
-			</td> 
+			#if(NO_MNGMRK === 'SYMM170901_00001'){#
+			<td class="active border-right-line">
+				반품사유 상세코드 
+			</td>
+				<td>
+					<select kendo-drop-down-list options="tkbkDataVO.ddlDefaultOp" name="NM_TKBKLRKRSN" style="width: 100%">
+						<option>#: NM_TKBKLRKRSN #</option>
+					</select>
+				</td>
+			#}else{#
+				<td colspan="2">
+				</td>	
+			#}#	
 		</tr>
 		<tr class="border-bottom-line" data-ng-if="['002','003'].indexOf(tkbkDataVO.updateChange) > -1">
 			<td class="active border-right-line">
 				반품사유
 			</td>
 			<td colspan="3">			
-				<textarea class="k-textbox k-state-disabled" name="NM_TKBKHRNKRSN" data-bind="value: NM_TKBKHRNKRSN" disabled="disabled" style="width:100%; height:150px; overflow-y: scroll;"></textarea>
+				<textarea class="k-textbox k-state-disabled" name="DC_TKBKRSNCTT" data-bind="value: DC_TKBKRSNCTT" disabled="disabled" style="width:100%; height:150px; overflow-y: scroll;"></textarea>
 			</td> 
 		</tr>
 
@@ -314,7 +317,6 @@
 		</tr>		
 
 
-
 		<tr class="border-bottom-line" data-ng-if="tkbkDataVO.updateChange === '003' && ngIfdata(tkbkDataVO.cCode, '#: CODE #')">
 			<td class="active border-right-line">
 				<code>*</code>환불동시 진행여부
@@ -328,10 +330,9 @@
 		</tr>
 
 
-
 		<tr class="border-bottom-line" data-ng-show="tkbkDataVO.updateChange === '003' && ngIfdata(tkbkDataVO.sCode, '#: CODE #')">
 			<td class="active border-right-line">
-				<code>*</code>택배사<br/>
+				<code>*</code>회수 택배사<br/>
 			</td>
 			<td>
 				<select
@@ -345,7 +346,7 @@
 		</tr>
 		<tr class="border-bottom-line" data-ng-show="tkbkDataVO.updateChange === '003' && ngIfdata(tkbkDataVO.sCode, '#: CODE #')">
 			<td class="active border-right-line">
-				<code>*</code>송장번호
+				<code>*</code>회수 송장번호
 			</td>
 			<td colspan="3" menual-shw-wrn="tkbkDataVO.menualShwWrn">			
 				<input class="k-textbox" name="NO_INVO" data-bind="value: NO_INVO"
@@ -363,7 +364,8 @@
 <script id="tkbk_toolbar_template" type="text/x-kendo-template">
 	<a class="k-button k-button-icontext k-grid-tkbk-confirm"><span class="k-icon k-i-custom"></span>반품처리</a>
 	<a class="k-button k-button-icontext k-grid-tkbk-reject"><span class="k-icon k-i-cancel"></span>반품거부</a>
-	<a class="k-button k-button-icontext k-grid-tkbk-accept"><span class="k-icon k-i-check"></span>반품완료</a> 
+	<a class="k-button k-button-icontext k-grid-tkbk-accept"><span class="k-icon k-i-check"></span>반품완료</a>
+	<a class="k-button k-button-icontext k-grid-tkbk-change"><span class="k-icon k-i-undo"></span>교환으로 변경</a>  
 </script>
 
 <style>
@@ -385,7 +387,7 @@
 	border-bottom: solid 1px #bbdceb;	
 }
 .not_pop_title{
-	padding: 10px;
+	padding: 5px;
 }
 .signal{
     width: 99%;

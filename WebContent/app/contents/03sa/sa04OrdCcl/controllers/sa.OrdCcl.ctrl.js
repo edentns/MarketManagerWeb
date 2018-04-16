@@ -7,8 +7,8 @@
      * 상품분류관리
      */
     angular.module("sa.OrdCcl.controller")
-        .controller("sa.OrdCclCtrl", ["$scope", "$window", "$http", "$q", "$log", "sa.OrdCclSvc", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "MenuSvc", "Util03saSvc", "APP_SA_MODEL",
-            function ($scope, $window, $http, $q, $log, saOrdCclSvc, APP_CODE, $timeout, resData, Page, UtilSvc, MenuSvc, Util03saSvc, APP_SA_MODEL) {
+        .controller("sa.OrdCclCtrl", ["$scope", "$state", "$window", "$http", "$q", "$log", "sa.OrdCclSvc", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "MenuSvc", "Util03saSvc", "APP_SA_MODEL",
+            function ($scope, $state, $window, $http, $q, $log, saOrdCclSvc, APP_CODE, $timeout, resData, Page, UtilSvc, MenuSvc, Util03saSvc, APP_SA_MODEL) {
 	            var page = $scope.page = new Page({ auth: resData.access }),
 		            today = edt.getToday();		            
 	            	            
@@ -47,13 +47,14 @@
                     
                     DTS_ORD       : { type: APP_SA_MODEL.DTS_ORD.type        , editable: false, nullable: false },
                     YN_CONN       : { type: APP_SA_MODEL.YN_CONN.type        , editable: false, nullable: false },
-                    NO_UPDATE     : { type: APP_SA_MODEL.NO_UPDATE.type      , editable: false, nullable: false },
+                    CCL_NO_UPDATE : { type: APP_SA_MODEL.CCL_NO_UPDATE.type  , editable: false, nullable: false },
                     DTS_CCLREQ    : { type: APP_SA_MODEL.DTS_CCLREQ.type     , editable: false, nullable: false },
                     NO_CCLREQ     : { type: APP_SA_MODEL.NO_CCLREQ.type      , editable: false, nullable: false },
                     DTS_CCLAPPRRJT: { type: APP_SA_MODEL.DTS_CCLAPPRRJT.type , editable: false, nullable: false },                    
                     CD_CCLSTAT    : { type: APP_SA_MODEL.CD_CCLSTAT.type     , editable: false, nullable: false },
                     CD_CCLHRNKRSN : { type: "array"  					 	 , editable: false, nullable: false },
                     NM_CCLHRNKRSN : { type: APP_SA_MODEL.NM_CCLHRNKRSN.type  , editable: false, nullable: false },
+                    NM_CCLLRKRSN  : { type: APP_SA_MODEL.NM_CCLHRNKRSN.type  , editable: false, nullable: false }, 
                     cancel_reject_code : {	
 				                    	type: "array"  
 				     				   ,editable: true
@@ -69,13 +70,13 @@
 										}
                     				},
                     DTS_RECER 	  : {
-				                    	type: APP_SA_MODEL.DTS_RECER.type  
+				                    	type: "string"  
 				     				   ,editable: true
 				     				   ,nullable: false
 				     				   ,validation: {
 											dts_recervalidation: function (input) {
 												if (input.is("[data-role=datepicker]")) {
-													input.attr("data-dts_recervalidation-msg", "접수일자를 정확히 입력해 주세요.");
+													input.attr("data-dts_recervalidation-msg", "발송일을 정확히 입력해 주세요.");
 													saOrdCclSvc.manualDataBind(input, "DTS_RECER", $scope.ordCancelManagementkg);
 												    return input.data("kendoDatePicker").value();
 												};
@@ -165,7 +166,7 @@
                               [APP_SA_MODEL.NM_CCLHRNKRSN  , APP_SA_MODEL.DC_CONSNEWADDR],
                               [APP_SA_MODEL.CD_ORDSTAT     , APP_SA_MODEL.DC_SHPWAY     ],
                               [APP_SA_MODEL.DTS_ORD        , APP_SA_MODEL.DTS_CCLREQ    ],
-                              [APP_SA_MODEL.DTS_CCLAPPRRJT , APP_SA_MODEL.NO_UPDATE     ],                              
+                              [APP_SA_MODEL.DTS_CCLAPPRRJT , APP_SA_MODEL.CCL_NO_UPDATE ],                              
                               [APP_SA_MODEL.YN_CONN 	   , APP_SA_MODEL.CD_CCLSTAT]
                              ],
                     grdDetOption      = {},
@@ -218,13 +219,13 @@
 	        		cancelCodeOp : {
     					dataSource: [],
     					dataTextField: "NM_DEF",
-                        dataValueField: "CD_DEF",
+                        dataValueField: "NM_DEF",
                         enable: false
     				},   
     				cancelLowCodeOp : {
     					dataSource: [],
     					dataTextField: "NM_DEF",
-                        dataValueField: "CD_DEF",
+                        dataValueField: "NM_DEF",
                         enable: false
     				},   
     				dateOptions : {										//DATE PICKER
@@ -262,8 +263,8 @@
         					lcdcls: "SA_000007"
         				},
         				betParam = {
-        					lnomngcdhd: "SYCH00055",
-        					lcdcls: "SA_000014"
+        					lnomngcdhd: "SYCH00072",
+        					lcdcls: "SA_000028"
         				},
         				cclCodeParam = {
                 			lnomngcdhd: "SYCH00056",
@@ -310,7 +311,7 @@
                         me.cancelCodeOp.dataSource = result[3].filter(function(ele){
     						return (!ele.DC_RMK2);
     					});
-                        me.cancelCodeLowOp = result[3].filter(function(ele){
+                        me.cancelLowCodeOp.dataSource = result[3].filter(function(ele){
     						return (ele.DC_RMK2);
     					});
                         me.cancelRejectCodeOp = result[4];
@@ -421,7 +422,6 @@
                 				 	defer = $q.defer();
                 				
         						if(confirm("취소거부 하시겠습니까?")){  
-        							alert("송장번호 체크로 인하여 처리시간이 다소 소요 될수 있습니다.");
         							var param = e.data.models[0],
                 						viewName = "",
                 						rejectCode = param.cancel_reject_code.CD_DEF,
@@ -441,11 +441,14 @@
         							};   
                 					 
                                     if(param.CD_PARS){
+            							alert("송장번호 체크로 인하여 처리시간이 다소 소요 될수 있습니다.");
+            							
                                     	saOrdCclSvc[viewName](param).then(function (res) {
                                     		if(res.data === "success"){
                     							alert("취소거부 처리 되었습니다.");
                                     			defer.resolve({result: "success"});
-                                    			Util03saSvc.storedQuerySearchPlay(ordCancelManagementDataVO, "ordCancelParam");
+                                    			//Util03saSvc.storedQuerySearchPlay(ordCancelManagementDataVO, "ordCancelParam");
+                                    			Util03saSvc.storedQuerySearchPlay(me, resData.storage);
                                     		}else if(res.data === "parsreject"){
                                     			ordCancelManagementDataVO.menualShwWrn = [res.data];
                                     			e.error([]);
@@ -519,8 +522,8 @@
                 			cdPars = e.model.CD_PARS,
                 			noInvo = e.model.NO_INVO,
                 			ddlRejectCodeSel = e.container.find("select[name=cancel_reject_code]"),
-                			ddlCancelReason = e.container.find("select[name=CD_CCLHRNKRSN]").data("kendoDropDownList"),
-                			ddlCancelLowReason = e.container.find("select[name=CD_CCLLRKRSN]").data("kendoDropDownList"),
+                			ddlCancelReason = e.container.find("select[name=NM_CCLHRNKRSN]").data("kendoDropDownList"),
+                			ddlCancelLowReason = e.container.find("select[name=NM_CCLLRKRSN]").data("kendoDropDownList"),
                 			inputDataSource = "",
                 			rejectCodeDS = "";
                 		                		
@@ -541,8 +544,8 @@
         					dclr.data(dataVo.cancelLowCodeOp.dataSource.filter(function(ele){
                     			return ele.DC_RMK1 === noMngmrk;
                     		}));
-        				}	        				   
-                		
+        				};
+        				
                 		inputDataSource = dataVo.shipList.filter(function(ele){
                 			return ele.DC_RMK1 === noMrk;
                 		});

@@ -7,8 +7,8 @@
      * 상품분류관리
      */
     angular.module("sa.TkbkReq.controller")
-        .controller("sa.TkbkReqCtrl", ["$scope", "$http", "$q", "$log", "sa.TkbkReqSvc", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "MenuSvc", "$window", "Util03saSvc", "APP_SA_MODEL",
-            function ($scope, $http, $q, $log, saTkbkReqSvc, APP_CODE, $timeout, resData, Page, UtilSvc, MenuSvc, $window, Util03saSvc, APP_SA_MODEL) {
+        .controller("sa.TkbkReqCtrl", ["$scope", "$state", "$http", "$q", "$log", "sa.TkbkReqSvc", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "MenuSvc", "$window", "Util03saSvc", "APP_SA_MODEL",
+            function ($scope, $state, $http, $q, $log, saTkbkReqSvc, APP_CODE, $timeout, resData, Page, UtilSvc, MenuSvc, $window, Util03saSvc, APP_SA_MODEL) {
 	            var page  = $scope.page = new Page({ auth: resData.access }),
 		            today = edt.getToday();
 
@@ -48,12 +48,17 @@
                     DTS_TKBKAPPRRJT 	: { type: APP_SA_MODEL.DTS_TKBKAPPRRJT.type		, editable: false, nullable: false },
                     NO_TKBKAPPRRJT 		: { type: APP_SA_MODEL.NO_TKBKAPPRRJT.type		, editable: false, nullable: false },
                     DTS_TKBKCPLT_VIEW 	: { type: APP_SA_MODEL.DTS_TKBKCPLT.type		, editable: false, nullable: false },
+                    NM_TKBKHRNKRSN 		: { type: "string"								, editable: false, nullable: false },
+                    NM_TKBKLRKRSN 		: { type: "string"								, editable: false, nullable: false },
+                    DC_TKBKRSNCTT 		: { type: "string"								, editable: false, nullable: false },
                     CODE			 	: { type: "string"								, editable: false, nullable: false },
                     NO_MNGMRK		 	: { type: "string"								, editable: false, nullable: false },
                     CD_PARS_TKBK	 	: { type: "string"								, editable: false, nullable: false },
                     NO_INVO_TKBK	 	: { type: "string"								, editable: false, nullable: false },
                     AM_TKBKSHP			: { type: "number"								, editable: false, nullable: false },
 				    NOW_YN		 		: { type: "boolean"								, editable: true,  nullable: false },
+				    DTS_RECE	 		: { type: "string"								, editable: false, nullable: false },
+				    NO_RECER	 		: { type: "string"								, editable: false, nullable: false },
 				    RECEIVE_SET  		: {
 							                   	 type: "string"
 							                   	,editable: true
@@ -128,9 +133,6 @@
 							                                	input.attr("data-cd_parsvalidation-msg", "택배사를 입력해 주세요.");
 							                                    return false;
 							                                }
-													    	/*if(input.is("[name='CD_PARS']") && input.val() != ""){					    		
-													    		manualDataBind(input, "CD_PARS");
-													    	};*/
 							                		   };
 							                		   return true;
 											    	}
@@ -166,9 +168,6 @@
 							                                	input.attr("data-cd_holdvalidation-msg", "보류사유를 입력해 주세요.");
 							                                    return false;
 							                                };
-													    	/*if(input.is("[name='CD_HOLD']") && input.val() != ""){										    		
-													    		manualDataBind(input, "CD_HOLD");
-													    	};*/
 									        		   };
 									        		   return true;
 											    	}
@@ -185,9 +184,6 @@
 							                                	input.attr("data-cd_hold_feevalidation-msg", "반품비를 입력해 주세요.");
 							                                    return false;
 							                               };
-													      /* if(input.is("[name='CD_HOLD_FEE']") && input.val() != 0 && input.val()){										    		
-													    		manualDataBind(input, "CD_HOLD_FEE");
-													       };*/
 								            		   };
 												    	return true;
 											    	}
@@ -270,7 +266,11 @@
 		        		gHoldCode : "",
 		        		receiveCheckCode : 'Y',
 		        		marketDivisionCode : "",
-		        		menualShwWrn: ""
+		        		menualShwWrn: "",
+		        		ddlDefaultOp : {
+		        			enable : false
+		        		},
+		        		inputPopupHeaderTitle : ""
 		        };   
 	            
 	            tkbkDataVO.initLoad = function () {
@@ -281,7 +281,8 @@
         				},
         				betParam = {
         					lnomngcdhd: "SYCH00064",
-        					lcdcls: "SA_000023"
+        					lcdcls: "SA_000023",
+	    					customnoc: "00000"   
         				},
         				cdTkbkrsnParm = {
         					lnomngcdhd: "SYCH00050",
@@ -293,10 +294,12 @@
 	    					customnoc: "00000"    
                 		},gHoldCodeParm = {
         					lnomngcdhd: "SYCH00074",
-        					lcdcls: "SA_000029"
+        					lcdcls: "SA_000029",
+	    					customnoc: "00000"
                 		},cdTkbkstat = {
         					lnomngcdhd: "SYCH00066",
-        					lcdcls: "SA_000025"
+        					lcdcls: "SA_000025",
+	    					customnoc: "00000"
                 		};                	
                     $q.all([
             			UtilSvc.csMrkList().then(function (res) {
@@ -341,10 +344,10 @@
                     });
                 };
 
-                APP_SA_MODEL.CD_TKBKRSN.fNm  = "tkbkDataVO.cdTkbkrsnOp.dataSource";
-                APP_SA_MODEL.CD_ORDSTAT.fNm  = "tkbkDataVO.ordStatusOp";
+                APP_SA_MODEL.CD_TKBKRSN.fNm = "tkbkDataVO.cdTkbkrsnOp.dataSource";
+                APP_SA_MODEL.CD_ORDSTAT.fNm = "tkbkDataVO.ordStatusOp";
                 APP_SA_MODEL.CD_TKBKSTAT.fNm = "tkbkDataVO.cdTkbkstat";
-                APP_SA_MODEL.CD_PARS_TKBK.fNm  = "tkbkDataVO.shipList";
+                APP_SA_MODEL.CD_PARS_TKBK.fNm = "tkbkDataVO.shipList";
                 
                 var grdCol = [[APP_SA_MODEL.ROW_CHK],
                               [APP_SA_MODEL.NO_ORD           ,[APP_SA_MODEL.NO_APVL, APP_SA_MODEL.NO_MRKORD]],
@@ -360,7 +363,7 @@
                               [APP_SA_MODEL.CD_ORDSTAT       , APP_SA_MODEL.DC_SHPWAY     ],
                               [APP_SA_MODEL.DTS_ORD          , APP_SA_MODEL.DTS_TKBKREQ   ],
                               [APP_SA_MODEL.DTS_TKBKAPPRRJT  , APP_SA_MODEL.NO_TKBKAPPRRJT],
-                              [APP_SA_MODEL.DTS_TKBKCPLT_VIEW, APP_SA_MODEL.NO_TKBKCPLT   ],
+                              [APP_SA_MODEL.DTS_RECE		 , APP_SA_MODEL.NO_RECER   	  ],
                               [APP_SA_MODEL.YN_CONN          , APP_SA_MODEL.CD_TKBKSTAT   ]
                              ],
                     grdDetOption      = {},
@@ -751,7 +754,8 @@
 	    	        	            			if(trueV.length > 0){
                         							alert("반품처리 하였습니다.");
 	    	        	            				defer.resolve();		         
-	                    							Util03saSvc.storedQuerySearchPlay(tkbkDataVO, "tkbkDataVO");
+	                    							//Util03saSvc.storedQuerySearchPlay(tkbkDataVO, "tkbkDataVO");
+	    	        	            				Util03saSvc.storedQuerySearchPlay(me, resData.storage);
 	    	        	            			}else if(falseV.length > 0){
 	    	        	            				tkbkDataVO.menualShwWrn = falseV;
 	    	        	            				e.error([]);
@@ -771,6 +775,11 @@
                     	            		angular.element($(".k-checkbox:eq(0)")).prop("checked",false);
                     	            	}
                 						break;
+                					}
+                					case "004" : {
+                						if(confirm("선택하신 주문을 교환으로 변경 처리하시겠습니까?")){
+                							
+                						}
                 					}
                 					default : {
                 						break;
@@ -851,6 +860,14 @@
                 			grdItem.DTS_TKBKCPLT = new Date();
 							break;
 						};
+						case "004" : {
+							if(tkbkDataVO.cCode.indexOf(grdItem.CODE) > -1){
+	            				alert("쿠팡은 교환으로 변경 기능을 사용할 수 없습니다.");
+	            				return false;
+	            			}; 
+	            			alert("배송 완료 후 90일 이상 된 주문은 처리 되지 않을수 있습니다.");
+	            			break;
+						}
 						default : {
 							return false;
 							break;
@@ -859,6 +876,7 @@
 
         			grd.options.editable.window.width = px;
             		tkbkDataVO.updateChange = code;
+            		tkbkDataVO.inputPopupHeaderTitle = saTkbkReqSvc.popupHeaderTitle(code);
             		grd.editRow(chked.closest("tr"));
                 };
 	            	            
@@ -876,13 +894,19 @@
 	                	widget.element.find(".k-grid-tkbk-reject").on("click", function(e){	    
 	                		clickEventValidNprocess(mainGrd, "002", "800px");
 	                		return true;
-	                	});	           
+	                	});	          
 	                	
 	                	//반품완료
 	                	widget.element.find(".k-grid-tkbk-accept").on("click", function(e){	                		
                 			clickEventValidNprocess(mainGrd, "001", "550px");
                 			return true;
 	                	}); 
+	                	
+	                	//교환으로 변경
+	                	widget.element.find(".k-grid-tkbk-change").on("click", function(e){	                		
+                			clickEventValidNprocess(mainGrd, "004", "800px");
+                			return true;
+	                	});
 	                }
                 });
 	            

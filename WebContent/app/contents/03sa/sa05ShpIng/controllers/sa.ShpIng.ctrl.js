@@ -125,7 +125,7 @@
                               [APP_SA_MODEL.CD_ORDSTAT   , APP_SA_MODEL.DC_SHPWAY     ],
                               [APP_SA_MODEL.DTS_ORD      , APP_SA_MODEL.DT_SND        ],
                               [APP_SA_MODEL.CD_PARS      , APP_SA_MODEL.NO_INVO       ],
-                              [APP_SA_MODEL.QT_ORD       , APP_SA_MODEL.CD_SHPSTAT    ]
+                              [APP_SA_MODEL.QT_ORD       ]
                              ],
                     grdDetOption      = {},
                     grdRowTemplate    = "<tr data-uid=\"#= uid #\">\n",
