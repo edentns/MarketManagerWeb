@@ -6,8 +6,8 @@
 	 * @description
 	 * 상품 유틸 서비스
 	 */
-	angular.module('edtApp.common.service').service('Util03saSvc', ['$rootScope', '$state', '$window', '$http', '$timeout', 'APP_CONFIG', 'MenuSvc', 'UtilSvc', "$log", "$q", 
-		function ($rootScope, $state, $window, $http, $timeout, APP_CONFIG, MenuSvc, UtilSvc, $log, $q) {
+	angular.module('edtApp.common.service').service('Util03saSvc', ['$rootScope', '$state', '$window', '$http', '$timeout', 'APP_CONFIG',
+		function ($rootScope, $state, $window, $http, $timeout, APP_CONFIG) {
 		
 			//popup insert & update Validation
             this.readValidation = function(idx){
@@ -71,7 +71,7 @@
                     return false;
                 };
         		if (input.is("[name='"+colunm+"']") && iValue && !regTest.test(iValue.trim())) {
- 					input.attr("data-"+valicolunm+"-msg", "송장번호는  숫자 또는 숫자와 '-'(특수문자) 조합으로만 가능합니다.");
+ 					input.attr("data-"+valicolunm+"-msg", "송장번호에 숫자와 '-'문자 이외에 다른 문자가 입력되었습니다.(특수문자,문자,공백)");
  				    return false;
  				};
 				return true;
