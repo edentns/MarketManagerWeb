@@ -49,7 +49,8 @@
 	        		resetAtGrd :"",
 	        		param : "",
 	        		menualShwWrn : "",
-	        		importCnt : 10
+	        		importCnt : 10,
+	        		chkOrdStatList : ""
 	            };
 	            
 	            shpbyordDataVO.initLoad = function () {
@@ -348,19 +349,27 @@
         						 	code = shpbyordDataVO.updateChange;
                 				
                 				if(code === "002"){                						
-                					if(confirm("배송정보를 등록 하시겠습니까?")){
+                					if(confirm("배송정보를 등록 하시겠습니까?\n송장번호 체크로 인하여 처리시간이 다소 소요 될수 있습니다.")){
                 						var param = e.data.models.filter(function(ele){
         	                		 	    	return ele.ROW_CHK === true;
-        	                		 	    });                        			
+        	                		 	    }),
+        	                		 	    itfRst = param.filter(function(ele){
+        	                		 	    	return ele.ITF_RST !== '1' && ele.ITF_RST !== 1;
+        	                		 	    }),
+        	                		 	    startTime = new Date();                        			
                         				
                         				if(!saShpStdbyOrdSvc.updateValidation(param, shpbyordDataVO.updateChange)){
                         					e.success();
                         					return false;
-                        				}
-                        					
-                    					alert("송장번호 체크로 인하여 처리시간이 다소 소요 될수 있습니다.");
-                    					var startTime = new Date();
-                    					
+                        				}       
+                        				
+                        				if(itfRst.length > 0){
+	                    					if(!confirm("주문확정에 대한 연동결과가 없는 주문이 있습니다.\n계속 진행하시겠습니까?\n연동결과가 없는 주문은 해당마켓과 주문상태가 차이 날 수도 있습니다.")){
+	                        					e.success();
+	                        					return false;
+	                        				}
+                        				}   
+                        				
                     					saShpStdbyOrdSvc.shpInReg(param).then(function (res) {                 						
                     						var rtnV = res.data,
                     						    falseV = rtnV.falseNoOrd,
@@ -369,15 +378,24 @@
                     						    endTime = new Date(),
                     						    crTime = (endTime - startTime)/1000;
                     						
-                    						$log.info("경과시간 = "+crTime+"초");
-                    					
-                    						alert("총 "+allV.length+"건 중 "+trueV.length+"건 배송정보등록 완료");  
+                							$log.info("경과시간 = "+crTime+"초");
+                        					
+                    						alert("총 "+allV.length+"건 중 "+trueV.length+"건 배송정보등록 완료");
                     						Util03saSvc.storedQuerySearchPlay(shpbyordDataVO, "shpStdbyOrdSerchParam");
-                    		                shpbyordDataVO.menualShwWrn = falseV;			
-    		                				defer.resolve(); 
+                    		                shpbyordDataVO.menualShwWrn = falseV;
+                						                    						
+                    		                defer.resolve();
     		                			}, function(err){
     		                				if(err.status !== 412){
-                                            	alert(err.data);
+    		                					var errMsg = err.data;
+    		                					if(errMsg === '1'){
+    		                						alert("배송정보등록 처리 실패");
+    		                					}else if(errMsg === '2'){
+    		                						alert("배송정보등록 전체 실패");
+    		                					}else{    		                						
+    		                						shpbyordDataVO.chkOrdStatList = errMsg;
+            		                				$scope.win2.open();
+    		                					}
                                            	} 
                                            	$log.error(err.data);
     	            						e.error([]);
@@ -472,7 +490,8 @@
                 				    DTS_ORD: 	   	   { type: "string", editable:false, nullable:false },
                 				    YN_CONN: 	   	   { type: "string", editable:false, nullable:false },	
                 				    DTS_ORDDTRM: 	   { type: "string", editable:false, nullable:false },      
-							    	NO_MRKITEMORD: 	   { type: "string", editable:false, nullable:false },     
+							    	NO_MRKITEMORD: 	   { type: "string", editable:false, nullable:false },   
+				                    ITF_RST:		   { type: APP_SA_MODEL.ITF_RST.type        , editable: false, nullable: false },	
                 				    CD_PARS: 	   	   {
 					                				    	type: "array",
 															editable: true,
@@ -768,11 +787,22 @@
 		                        {
 		                        	field: "YN_CONN",
 		                            title: "연동구분",
-		                            width: 100,
+		                            width: 70,
 		                            attributes: { "class" : "ta-c" }, 
 		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
+		                        },       
+		                        {
+		                        	field: "ITF_RST",
+		                            title: "주문확정연동결과",
+		                            width: 70,
+		                            attributes: { "class" : "ta-c" }, 
+		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
+		                            template : function(e){
+		                            	var input = e.ITF_RST;
+		                            	return input === '1' ? 'Y' : 'N';		                            	
+		                            }
 		                        }
-                    ]                	          	
+                    ]
 	        	};
 	           
 	            //kendo grid 체크박스 옵션

@@ -490,7 +490,7 @@
                 									return ((ele.NO_C === noC) && (ele.CD_REF1 === noQa) && (ele.CD_AT === cdAt));
                 								}
                 								if(gubun === 'mng') {
-                									return ((ele.CD_REF1 === noC) && (ele.CD_REF2 === noQa) && (ele.CD_AT === cdAt));
+                									return ((ele.NO_C === '00000') && (ele.CD_REF1 === noC) && (ele.CD_REF2 === noQa) && (ele.CD_AT === cdAt));
                 								}
 				                			});
                 							return returnDta;
@@ -505,7 +505,7 @@
             			fileMngDataVO.currentDataList = fileLst('mng', e.model.NO_C, e.model.NO_QA, fileMngDataVO.CD_AT);
                 			
             			angular.forEach(fileSlrDataVO.currentDataList, function (data, index) {
-		                    htmlcode += "<span>"+(index+1)+".</span> <a href='"+fileUrl+"?NO_AT="+data.NO_AT+"&CD_AT="+data.CD_AT+"' download="+data.NM_FILE+"> "+data.NM_FILE+" </a></br>";
+		                    htmlcode += "<span>"+(index+1)+".</span> <a href='"+fileUrl+"?NO_AT="+data.NO_AT+"&CD_AT="+data.CD_AT+"&U_NO_C="+data.NO_C+"' download="+data.NM_FILE+"> "+data.NM_FILE+" </a></br>";
 		                });
             			
             			angular.element(document.querySelector("#qa-slr-file-list")).append((!htmlcode) ? "<p>없음</p>" : htmlcode);

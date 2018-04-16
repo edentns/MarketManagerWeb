@@ -145,7 +145,7 @@
         	            	$timeout(function(){
         						var selectDDL = angular.element("#CD_PARS").data("kendoDropDownList");
         						
-        						if(res.data.CD_PARS && selectDDL){					
+        						if(res.data.CD_PARS && selectDDL){
         							selectDDL.value(res.data.CD_PARS);
         							selectDDL.trigger("change");
         						}
@@ -157,7 +157,7 @@
 	            };
 	            
 	            //송장 출력
-	            ordInfoDataVO.shpOutPrint = function(){
+	            /*ordInfoDataVO.shpOutPrint = function(){
 	            	if(!this.valid('002')) return;
 	            	
 	            	if(confirm("송장을 출력 하시겠습니까?")){
@@ -172,7 +172,7 @@
     					});	            		
             			return defer.promise;
 	            	}
-	            };
+	            };*/
 	            
 	            //배송정보 등록	
 	            ordInfoDataVO.shpInfoReg = function(){
@@ -248,7 +248,7 @@
 	            	
 	            	me.mBoxTitle = "주문·배송 / "+menu+" 상세";
 	            			           
-	            	if(me.noOrd && me.noMrkord && me.rootMenu){
+	            	if(me.noOrd && me.rootMenu){
 	            		me.getInitializeOrdInfoProc();
 	            	}else{
 	                    me.goBack(me.rootMenu);	                    
@@ -302,6 +302,7 @@
 	            
 	            //주문취소
 	            ordInfoDataVO.doOrdCancel = function(){
+	            	var me = this;
 	            	if(!this.inputs.CD_CCLRSN){
 	            		//alert("주문취소코드를 선택해주세요.");
 	            		return false;
@@ -318,16 +319,18 @@
 	            		var defer = $q.defer(),
         			 		param = $.extend(ordInfoDataVO.inputs, ordInfoDataVO.ds);
 	            		    				    
-        				saOrdSvc.orderCancel(param).then(function (res) {        					
-                			defer.resolve();            				
+        				saOrdSvc.orderCancel(param).then(function (res) {    
                 			ordInfoDataVO.ordCancelPopOptionsClose();
-                			location.reload();      						
+                			//location.reload();
+                			me.getInitializeOrdInfoProc();
+            				defer.resolve();		   
             			});
             			return defer.promise;
 	            	};
 	            };
 	            	            
 	            ordInfoDataVO.doOrdConfirm = function(){
+	            	var me = this;
 	            	if(confirm("현재 주문을 확정 하시겠습니까?")){
 	            		var defer = $q.defer(),
     			 			param = {
@@ -335,8 +338,9 @@
 	            			};
 	            		
 	    				saOrdSvc.orderConfirm(param).then(function (res) {
-	        				defer.resolve();            			
-	        				location.reload();
+	        				//location.reload();
+	    					$state.go("app.saOrd", { kind: null, menu: null, rootMenu : "saShpStdbyOrd", noOrd : param.data[0].NO_ORD, noMrkord: param.data[0].NO_MRKORD });	 
+            				defer.resolve();		   
 	        			});
 	        			return defer.promise;
 	            	};
