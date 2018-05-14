@@ -101,8 +101,8 @@
 														input.attr("data-dc_echgrjtcttvalidation-msg", "교한거부사유를 입력해 주세요.");
 													    return false;
 													};
-													if (input.is("[name='DC_ECHGRJTCTT']") && input.val() !== "" && input.val().length > 1000) {
-														input.attr("data-dc_echgrjtcttvalidation-msg", "교환거부사유를 1000자 이내로 입력해 주세요.");
+													if (input.is("[name='DC_ECHGRJTCTT']") && input.val() !== "" && input.val().length > 200) {
+														input.attr("data-dc_echgrjtcttvalidation-msg", "교환거부사유를 200자 이내로 입력해 주세요.");
 													    return false;
 													};
 												};
@@ -189,7 +189,7 @@
 	        			dataSource : [],
 	        			autoBind: false,
                 		dataTextField : "NM_PARS_TEXT",
-                		dataValueField : "CD_DEF",
+                		dataValueField : "DC_RMK2",
                 		optionLabel : "택배사를 선택해 주세요 ",
                 		select : function(e){
                 			var me = this;
@@ -201,7 +201,7 @@
                 		},
                         change : function(e){
                         	if(this.text() === "택배사 등록" && this.selectedIndex === 1){
-                        		$state.go("app.syPars", { menu: true, ids: null });
+                        		$state.go("app.syPars", { mrk: echgDataVO.nowMrkName, menu: true, ids: null });
                         		$scope.echgkg.cancelRow();
                         	}
                         }
@@ -242,6 +242,7 @@
 	        		completeShowMrkCode : ['170104','170102','170106','170103','170902'],
 	        		completeShowCode : ['003'],
 	        		receiveShowMrkCode : ['170902'],
+	        		nowMrkName : "",
 	        		receiveChk : false,
 	        		shpList : "",
 	        		curCode : "",
@@ -575,6 +576,7 @@
                     	};
                     	
                     	echgDataVO.curCode = e.model.CODE;
+                    	echgDataVO.nowMrkName = e.model.NO_MRK;
                     },
                     cancel: function(e){
                     	angular.element($(".k-checkbox:eq(0)")).prop("checked",false);
@@ -636,7 +638,7 @@
 		    	        	            				alert("교환승인 하였습니다.");
 		    	        	            				defer.resolve();		         
 		                    							//Util03saSvc.storedQuerySearchPlay(echgDataVO, "echgDataVO");
-		    	        	            				Util03saSvc.storedQuerySearchPlay(me, resData.storage);
+		    	        	            				Util03saSvc.storedQuerySearchPlay(echgDataVO, resData.storage);
 		    	        	            			}else if(falseV.length > 0){
 		    	        	            				echgDataVO.menualShwWrn = falseV;
 		    	        	            				e.error([]);
@@ -651,7 +653,7 @@
 	                    								alert("교환승인 하였습니다.");
 		    	        	            				defer.resolve();		         
 		                    							//Util03saSvc.storedQuerySearchPlay(echgDataVO, "echgDataVO");
-		    	        	            				Util03saSvc.storedQuerySearchPlay(me, resData.storage);
+		    	        	            				Util03saSvc.storedQuerySearchPlay(echgDataVO, resData.storage);
 	                    							}else{
 	                    								alert("교환승인을 실패하였습니다.");
 		                    							e.error([]);
@@ -738,7 +740,7 @@
                         							alert("교환완료 하였습니다.");
 	    	        	            				defer.resolve();		         
 	                    							//Util03saSvc.storedQuerySearchPlay(echgDataVO, "echgDataVO");
-	    	        	            				Util03saSvc.storedQuerySearchPlay(me, resData.storage);
+	    	        	            				Util03saSvc.storedQuerySearchPlay(echgDataVO, resData.storage);
 	    	        	            			}else if(falseV.length > 0){
 	    	        	            				echgDataVO.menualShwWrn = falseV;
 	    	        	            				e.error([]);

@@ -295,13 +295,14 @@
 		<td class="active border-right-line">
 			<code>*</code>재발송 송장번호
 		</td>
-		<td colspan="3" menual-shw-wrn="echgDataVO.menualShwWrn">			
+		<td colspan="3" menual-shw-wrn="echgDataVO.menualShwWrn">
 			<input class="k-textbox" name="NO_INVO" data-bind="value: NO_INVO_INPUT" 
-				data-ng-trim="true"
-				placeholder="송장번호는  숫자 또는 숫자와 '-'(특수문자) 조합으로만 가능합니다."
-				autocomplete="off"
-			    style="width:100%;"/>
-		</td> 
+			data-ng-trim="true"
+			placeholder="송장번호는  숫자 또는 숫자와 '-'(특수문자) 조합으로만 가능합니다."
+			autocomplete="off"
+		    style="width:100%;"/>
+		</td>
+		
 	</tr>
 	
 	<tr class="border-bottom-line" data-ng-if="echgDataVO.ngIfdata(echgDataVO.completeShowCode, echgDataVO.completeShowMrkCode, '#: CODE #')">
