@@ -10,7 +10,7 @@
     angular.module("te.OtherKendo.service")
         .factory("te.OtherKendoSvc", TeOtherKendoSvc)
             
-        TeOtherKendoSvc.$inject = [ 'ModalSvc', 'APP_CODE', '$http'];
+        TeOtherKendoSvc.$inject = [ 'ModalSvc', 'APP_CONFIG', '$http'];
         	function TeOtherKendoSvc(ModalSvc, APP_CONFIG, $http) {
 				
         	return {
@@ -86,6 +86,19 @@
                     return $http({
                         method : "POST",
                         url    : APP_CONFIG.domain +"/dept",
+                        data   : oParam
+                    });
+                },
+                
+                /**
+                 * 부서코드를 저장, 수정, 삭제한다.
+                 * @param oParam
+                 * @returns {*}
+                 */
+                chkKey : function (oParam) {
+                    return $http({
+                        method : "POST",
+                        url    : APP_CONFIG.domain +"/shpingapikeytest",
                         data   : oParam
                     });
                 }
