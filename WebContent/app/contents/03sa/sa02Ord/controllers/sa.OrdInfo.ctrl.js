@@ -7,8 +7,8 @@
      * 상품분류관리
      */
     angular.module("sa.Ord.controller")
-        .controller("sa.OrdInfoCtrl", ["$stateParams", "$window", "$scope", "$state", "$http", "$q", "$log", "sa.OrdSvc", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "MenuSvc", "sa.ShpStdbyOrdSvc", "Util03saSvc",  
-            function ($stateParams, $window, $scope, $state, $http, $q, $log, saOrdSvc, APP_CODE, $timeout, resData, Page, UtilSvc, MenuSvc, ShpStdbyOrdSvc, Util03saSvc) {
+        .controller("sa.OrdInfoCtrl", ["$stateParams", "$window", "$scope", "$state", "$http", "$q", "$log", "sa.OrdSvc", "APP_CODE", "APP_MSG", "$timeout", "resData", "Page", "UtilSvc", "MenuSvc", "sa.ShpStdbyOrdSvc", "Util03saSvc",  
+            function ($stateParams, $window, $scope, $state, $http, $q, $log, saOrdSvc, APP_CODE, APP_MSG, $timeout, resData, Page, UtilSvc, MenuSvc, ShpStdbyOrdSvc, Util03saSvc) {
 	            //var page  = $scope.page = new Page({ auth: resData.access }),
 		        //    today = edt.getToday();
         	        		
@@ -75,7 +75,8 @@
 		        	                			e.success(res.data);
 		        	                		}else{
 		        	                			if(confirm("택배사를 등록해 주세요.\n확인을 누르시면 택배사 관리페이지로 이동합니다.")){
-		        	                				$state.go("app.syPars", { menu: true, ids: null });
+		        	                				//$state.go("app.syPars", { menu: true, ids: null });
+		        	                				$state.go("app.syPars", { mrk: ordInfoDataVO.noMrk, menu: true, ids: null });
 		        	                			}else{
 		        	                				e.success([]);
 		        	                				e.success([{NM_PARS_TEXT : "택배사 등록", CD_PARS : ""}]);
@@ -97,7 +98,8 @@
                     	optionLabel : "-- 택배사를 선택해 주세요 --",
                         change : function(e){
                         	if(this.text() === "택배사 등록" && this.selectedIndex === 1){
-                        		$state.go("app.syPars", { menu: true, ids: null });
+                        		//$state.go("app.syPars", { menu: true, ids: null });
+                        		$state.go("app.syPars", { mrk: ordInfoDataVO.noMrk, menu: true, ids: null });
                         	}
                         }
 	        		},
@@ -115,27 +117,28 @@
 		        };
 	            	            	            
 	            ordInfoDataVO.getInitializeOrdInfoProc = function(){
-	            	var param = {
-    					NO_ORD: this.noOrd
-    				};
+	            	var	self = this, 
+	            		param = {
+	            			NO_ORD: this.noOrd
+    					};
 	            	saOrdSvc.orderInfo(param).then(function (res) {
         				if(res.data.NO_ORD){
-        					ordInfoDataVO.ds = res.data;
-        					
+        					self.ds = res.data;
+        					self.noMrk = self.ds.NO_MRK;
         	            	//취소 사유 코드 드랍 박스 실행	
         	            	var cancelReasonCode = (function(){
         	    				var param = {
         	    					lnomngcdhd: "SYCH00056",
         	    					lcdcls: "SA_000015",
         	    					customnoc: "00000",
-        	    					mid: ordInfoDataVO.ds.NO_MNGMRK
+        	    					mid: self.ds.NO_MNGMRK
         	    				};
         	        			UtilSvc.getCommonCodeList(param).then(function (res) {
         	        				if(res.data){
-        	        					ordInfoDataVO.cancelCodeOptions.dataSource = res.data.filter(function(ele){
+        	        					self.cancelCodeOptions.dataSource = res.data.filter(function(ele){
         	        						return (!ele.DC_RMK2);
         	        					});
-        	        					ordInfoDataVO.cancelCodeSubOptionsArray = res.data.filter(function(ele){
+        	        					self.cancelCodeSubOptionsArray = res.data.filter(function(ele){
         	        						return (ele.DC_RMK2);
         	        					});
         	        				}
@@ -156,24 +159,6 @@
         			});	
 	            };
 	            
-	            //송장 출력
-	            /*ordInfoDataVO.shpOutPrint = function(){
-	            	if(!this.valid('002')) return;
-	            	
-	            	if(confirm("송장을 출력 하시겠습니까?")){
-	            		var defer = $q.defer(),
-	            			param = [$.extend({ROW_CHK: true}, ordInfoDataVO.ds)];
-		            		    				        				
-	            		ShpStdbyOrdSvc.noout(param).then(function (res) {
-            				defer.resolve();            			
-            				location.reload();
-            			}, function(err){
-    						e.error([]);
-    					});	            		
-            			return defer.promise;
-	            	}
-	            };*/
-	            
 	            //배송정보 등록	
 	            ordInfoDataVO.shpInfoReg = function(){
 	            	var me = this;
@@ -184,7 +169,7 @@
 	            		var defer = $q.defer(),
 	            			param = [$.extend({ROW_CHK: true}, me.ds)];
 	            		
-	            		alert("송장번호 체크로 인하여 처리시간이 다소 소요 될수 있습니다.");
+	            		alert(APP_MSG.invcChkMsg);
 	            		ordInfoDataVO.resChk = true;
 	            		ShpStdbyOrdSvc.shpInReg(param).then(function (res) {
 	            			var rtnV = res.data,
@@ -241,7 +226,7 @@
 	            	me.kind = $stateParams.kind;
 	            	me.noOrd = $stateParams.noOrd;
 	            	me.noMrkord = $stateParams.noMrkord;
-	            	me.noMrk = $stateParams.noMrk;
+	            	//me.noMrk = $stateParams.noMrk;
 	            	me.rootMenu = $stateParams.rootMenu;
 	            	
 	            	menu = (me.rootMenu === "saOrd") ? "신규주문" : "베송준비";
