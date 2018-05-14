@@ -6,8 +6,8 @@
 	 * @description
 	 * 상품 유틸 서비스
 	 */
-	angular.module('edtApp.common.service').service('Util03saSvc', ['$rootScope', '$state', '$window', '$http', '$timeout', 'APP_CONFIG',
-		function ($rootScope, $state, $window, $http, $timeout, APP_CONFIG) {
+	angular.module('edtApp.common.service').service('Util03saSvc', ['$rootScope', '$state', '$window', '$http', '$timeout', 'APP_CONFIG', '$resource',
+		function ($rootScope, $state, $window, $http, $timeout, APP_CONFIG, $resource) {
 		
 			//popup insert & update Validation
             this.readValidation = function(idx){
@@ -204,7 +204,6 @@
             			//me.setting.allCheckYn = 'N';
         			}
         		}
-				
 				me.inQuiry();
 			};
 			
@@ -275,6 +274,15 @@
 						rtnData.storage = "";
 					}
 					return rtnData;
+				});
+			};
+			//파라미터는 객체에 넣어주면 됨 
+			this.shppingList = function (param) {
+				var url = APP_CONFIG.domain +"/code/common/shplist/:shippingType/:mrkType";				
+				return $resource(url, {shippingType:'@st', mrkType:'@mt'}, {
+					get: {
+			        	method: 'GET', isArray:true
+			        }
 				});
 			};
 		}
