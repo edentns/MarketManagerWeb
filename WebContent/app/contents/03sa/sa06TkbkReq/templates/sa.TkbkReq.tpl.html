@@ -114,97 +114,35 @@
 <!-- 주문 취소 팝업 -->
 <script id="tkbk_popup_template" type="text/x-kendo-template">
 <div class="not_pop_title">
-	<h4>{{tkbkDataVO.inputPopupHeaderTitle}}</h4>
+	<h4 ng-bind="tkbkDataVO.inputPopupHeaderTitle"></h4>
 </div>
 
-<table class="table signal" data-uid="#= uid #">
+<table class="signal" data-uid="#= uid #">
 	<colgroup>
-      <col style="width: 16%;">
-      <col style="width: 30%;">
+      <col style="width: 17%;">
+      <col style="width: 29%;">
       <col style="width: 14%;">
       <col style="width: 30%;">
     </colgroup>
     <tbody>	
-	<tr class="border-bottom-line border-top-line">	
-		<td class="active border-right-line">
-			마켓
-		</td>
-		<td class="border-right-line">
-			#if(NM_MRK){ #
-			#: NM_MRK #
-			#}#
-		</td>
-		<td class="active border-right-line">
-			상품주문번호
-		</td>
-		<td>
-			#if(NO_MRKITEMORD){ #
-			#: NO_MRKITEMORD #
-			#}#
+
+	<tr data-ng-repeat="x in tkbkDataVO.popupColumn" data-ng-class="{'border-bottom-line' : $index > 0, 'border-bottom-line border-top-line' : $index === 0}">
+		<td data-ng-repeat="value in x" data-ng-class="getTdClass($index, value.align)" ng-attr-colspan="{{x.length < 3 && $index === 1 ? 3 : undefined}}">
+			<span ng-bind="value.name"></span>
 		</td>
 	</tr>
-	<tr class="border-bottom-line">
-		<td class="active border-right-line">
-			상품코드
-		</td>
-		<td colspan="3">
-			#if(NO_MRKITEM){ #
-			#: NO_MRKITEM #
-			#}#	
-		</td>
-	</tr>
-	<tr class="border-bottom-line">
-		<td class="active border-right-line">
-			상품명
-		</td>
-		<td colspan="3">
-			#if(NM_MRKITEM){ #
-			#: NM_MRKITEM #
-			#}#
-		</td>
-	</tr>
-	<tr class="border-bottom-line">
-		<td class="active border-right-line">
-			구매자
-		</td>
-		<td class="border-right-line">
-			#if(NM_PCHR){ #
-			#: NM_PCHR #
-			#}#	
-		</td>
-		<td class="active border-right-line">
-			배송방법
-		</td>
-		<td>
-			#if(DC_SHPWAY){ #
-			#: DC_SHPWAY #
-			#}#			
-		</td>
-	</tr>
-	<tr class="border-bottom-line">
-		<td class="active border-right-line">
-			구매수량
-		</td>
-		<td class="ta-r">
-			#if(QT_ORD){ #
-			#: QT_ORD #
-			#}#
-		<td class="active border-right-line">
-		</td>
-		<td>
-		</td>
-	</tr>		
 		
 		<tr class="border-bottom-line" data-ng-if="tkbkDataVO.updateChange === '001'">
 			<td class="active border-right-line">
 				반품완료자
 			</td>
 			<td>
-				{{tkbkDataVO.userInfo}}
+				<span ng-bind="tkbkDataVO.userInfo" />
 			</td>
 			<td colspan="2">
 			</td> 
 		</tr>
+
 		<tr class="border-bottom-line" data-ng-if="tkbkDataVO.updateChange === '001'">
 			<td class="active border-right-line">
 				<code>*</code>반품완료일자
@@ -219,35 +157,41 @@
 			</td> 
 		</tr>
 	
-		<tr class="border-bottom-line" data-ng-if="['002','003'].indexOf(tkbkDataVO.updateChange) > -1">
+		<tr class="border-bottom-line" data-ng-if="['002','003','004'].indexOf(tkbkDataVO.updateChange) > -1">
 			<td class="active border-right-line">
 				반품사유코드
 			</td>
+			#if(NO_MNGMRK === 'SYMM170901_00001'){#
 			<td>
 				<select kendo-drop-down-list options="tkbkDataVO.ddlDefaultOp" name="NM_TKBKHRNKRSN" style="width: 100%">
 					<option>#: NM_TKBKHRNKRSN #</option>
 				</select>
 			</td>
-			#if(NO_MNGMRK === 'SYMM170901_00001'){#
 			<td class="active border-right-line">
 				반품사유 상세코드 
 			</td>
-				<td>
-					<select kendo-drop-down-list options="tkbkDataVO.ddlDefaultOp" name="NM_TKBKLRKRSN" style="width: 100%">
-						<option>#: NM_TKBKLRKRSN #</option>
-					</select>
-				</td>
-			#}else{#
-				<td colspan="2">
-				</td>	
+			<td>
+				<select kendo-drop-down-list options="tkbkDataVO.ddlDefaultOp" name="NM_TKBKLRKRSN" style="width: 100%">
+					<option>#: NM_TKBKLRKRSN #</option>
+				</select>
+			</td>
+			#}else{#	
+			<td colspan="2">
+				<select kendo-drop-down-list options="tkbkDataVO.ddlDefaultOp" name="NM_TKBKHRNKRSN" style="width: 100%">
+					<option>#: NM_TKBKHRNKRSN #</option>
+				</select>
+			</td>		
+			<td class="border-right-line">
+			</td>
 			#}#	
 		</tr>
-		<tr class="border-bottom-line" data-ng-if="['002','003'].indexOf(tkbkDataVO.updateChange) > -1">
+
+		<tr class="border-bottom-line" data-ng-if="['002','003','004'].indexOf(tkbkDataVO.updateChange) > -1">
 			<td class="active border-right-line">
 				반품사유
 			</td>
-			<td colspan="3">			
-				<textarea class="k-textbox k-state-disabled" name="DC_TKBKRSNCTT" data-bind="value: DC_TKBKRSNCTT" disabled="disabled" style="width:100%; height:150px; overflow-y: scroll;"></textarea>
+			<td class="border-right-line" colspan="3">			
+				<textarea class="k-textbox k-state-disabled" name="DC_TKBKRSNCTT" data-bind="value: DC_TKBKRSNCTT" disabled="disabled" style="width:100%; height:100px; overflow-y: scroll;"></textarea>
 			</td> 
 		</tr>
 
@@ -264,36 +208,40 @@
                 	style="width: 100%">
 				</select>
 			</td>
-			<td colspan="2">
+			<td class="border-right-line" colspan="2">
 			</td> 
 		</tr>
+
 		<tr class="border-bottom-line" data-ng-if="tkbkDataVO.updateChange === '002'">
 			<td class="active border-right-line">
 				<code>*</code>반품거부사유
 			</td>
-			<td colspan="3">			
+			<td class="border-bottom-line" colspan="3">			
 				<textarea class="k-textbox" name="DC_TKBKRJTCTT" data-bind="value: DC_TKBKRJTCTT" style="width:100%; height:150px; overflow-y: scroll;"></textarea>
 			</td> 
 		</tr>	
 
-		<tr class="border-bottom-line" data-ng-if="tkbkDataVO.updateChange === '003' && ngIfdata(tkbkDataVO.gCode, '#: CODE #')">
+		<tr class="border-bottom-line" data-ng-if="(ngIfdata(tkbkDataVO.gCode, '#: CODE #') && ['003','004'].indexOf(tkbkDataVO.updateChange) > -1) || (ngIfdata(tkbkDataVO.sCode, '#: CODE #') && ['004'].indexOf(tkbkDataVO.updateChange) > -1)">
 			<td class="active border-right-line">
-				<code>*</code>반품상품을<br/>받으셨습니까?
+				<code>*</code>
+				<span ng-if="ngIfdata(tkbkDataVO.gCode, '#: CODE #')">반품상품을<br/>받으셨습니까?</span>
+				<span ng-if="ngIfdata(tkbkDataVO.sCode, '#: CODE #')">교환완료<br/> 동시처리</span>
 			</td>
 			<td class="border-right-line ta-l" colspan="3">
 				<ul id="receive-group">
 					<li style="float:left; margin-right: 5px;">
-              			<input type="radio" name="RECEIVE_SET" id="receive-y" class="k-radio" checked="checked" required data-bind="checked: RECEIVE_SET" data-type="string" value="Y" data-ng-click="receiveCheckClickEvent($event)">
-              			<label class="k-radio-label" for="receive-y">접수 </label>
+              			<input type="radio" name="RECEIVE_SET" id="receive-y" class="k-radio" checked="checked" required data-bind="checked: RECEIVE_SET" data-type="string" value="Y" data-ng-click="receiveCheckClickEvent($event, '#: CODE #')">
+              			<label class="k-radio-label" for="receive-y">네 </label>
 					</li>
           			<li style="float:left">
-              			<input type="radio" name="RECEIVE_SET" id="receive-n" class="k-radio" required data-bind="checked: RECEIVE_SET" data-type="string" value="N" data-ng-click="receiveCheckClickEvent($event)">
-              			<label class="k-radio-label" for="receive-n">미접수</label>
+              			<input type="radio" name="RECEIVE_SET" id="receive-n" class="k-radio" required data-bind="checked: RECEIVE_SET" data-type="string" value="N" data-ng-click="receiveCheckClickEvent($event, '#: CODE #')">
+              			<label class="k-radio-label" for="receive-n">아니오</label>
 					</li>
 				</ul>
-			</td>					
+			</td>		
 		</tr>
-		<tr class="border-bottom-line" data-ng-show="tkbkDataVO.receiveCheckCode === 'N'">
+
+		<tr class="border-bottom-line" data-ng-show="tkbkDataVO.receiveCheckCode === 'N' && tkbkDataVO.updateChange !== '004'">
 			<td class="active border-right-line">
 				<code>*</code>보류사유 
 			</td>
@@ -316,7 +264,6 @@
 			</td>
 		</tr>		
 
-
 		<tr class="border-bottom-line" data-ng-if="tkbkDataVO.updateChange === '003' && ngIfdata(tkbkDataVO.cCode, '#: CODE #')">
 			<td class="active border-right-line">
 				<code>*</code>환불동시 진행여부
@@ -328,32 +275,118 @@
 			<td colspan="2">
 			</td>
 		</tr>
-
-
-		<tr class="border-bottom-line" data-ng-show="tkbkDataVO.updateChange === '003' && ngIfdata(tkbkDataVO.sCode, '#: CODE #')">
+		
+		<tr class="border-bottom-line" data-ng-if="tkbkDataVO.updateChange === '004'">
 			<td class="active border-right-line">
-				<code>*</code>회수 택배사<br/>
+				교환변경사유코드
+			</td>
+			<td colspan="2">			
+			    <select kendo-drop-down-list options="tkbkDataVO.ddlDefaultOp" style="width: 100%">
+					<option>#: NM_TKBKHRNKRSN #</option>
+				</select>
+			</td> 
+			<td class="border-right-line">
+			</td>
+		</tr>		
+		
+		<tr class="border-bottom-line" data-ng-if="tkbkDataVO.updateChange === '004'">
+			<td class="active border-right-line">
+				<code>*</code>교환변경 상세사유
+			</td>
+			<td class="border-right-line" colspan="3">			
+				<textarea class="k-textbox" name="DC_ECHGRSNCTT" data-bind="value: DC_ECHGRSNCTT" placeholder="상세 사유를 200자 이내로 입력하세요." style="width:100%; height:50px; overflow-y: scroll;"></textarea>
+			</td> 
+		</tr>	
+
+		<tr class="border-bottom-line" data-ng-show="tkbkDataVO.updateChange === '004' && (tkbkDataVO.receiveCheckCode !== 'N' || '#: DC_TKBKSHPCOSTAPVL #' === '선결제 완료 (환불완료시 반품배송비 정산이 진행됩니다.)') && ngIfdata(tkbkDataVO.sCode, '#: CODE #')">
+			<td class="active border-right-line">
+				<code>*</code>회수 택배사
 			</td>
 			<td>
-				<select
+				<select 
+					name="PICK_CD_PARS"
+					data-bind="value: PICK_CD_PARS"
+               		style="width: 100%">
+				</select>
+			</td>
+			<td class="active border-right-line">				
+				<code>*</code>회수 송장번호
+			</td>
+			<td class="border-right-line" menual-shw-wrn="tkbkDataVO.menualShwWrn" menual-shw-wrn-no-ord='P_#: NO_ORD #'>			
+				<input type="text" class="k-textbox" name="PICK_NO_INVO" data-bind="value: PICK_NO_INVO"
+					placeholder="송장번호는  숫자 또는 숫자와 '-'(특수문자) 조합으로만 가능합니다."
+					autocomplete="off"
+				 	style="width:100%;"/>
+			</td>
+		</tr>
+
+		<tr class="border-bottom-line" data-ng-show="tkbkDataVO.updateChange === '004' && tkbkDataVO.receiveCheckCode !== 'N' || (tkbkDataVO.updateChange === '003' && ngIfdata(tkbkDataVO.sCode, '#: CODE #'))">
+			<td class="active border-right-line">
+					<div ng-switch="tkbkDataVO.updateChange">
+						<code>*</code>
+  						<span ng-switch-when="003">회수 택배사</span>
+  						<span ng-switch-when="004">발송 택배사</span>
+					</div>
+			</td>
+			<td>
+				<select 
 					name="CD_PARS"
 					data-bind="value: CD_PARS"
                		style="width: 100%">
 				</select>
 			</td>
-			<td colspan="2">
+			<td class="active border-right-line">				
+				<div ng-switch="tkbkDataVO.updateChange">
+					<code>*</code>
+  					<span ng-switch-when="003">회수 송장번호</span>
+  					<span ng-switch-when="004">발송 송장번호</span>
+				</div>
 			</td>
-		</tr>
-		<tr class="border-bottom-line" data-ng-show="tkbkDataVO.updateChange === '003' && ngIfdata(tkbkDataVO.sCode, '#: CODE #')">
-			<td class="active border-right-line">
-				<code>*</code>회수 송장번호
-			</td>
-			<td colspan="3" menual-shw-wrn="tkbkDataVO.menualShwWrn">			
-				<input class="k-textbox" name="NO_INVO" data-bind="value: NO_INVO"
+			<td class="border-right-line" menual-shw-wrn="tkbkDataVO.menualShwWrn" menual-shw-wrn-no-ord='#: NO_ORD #'>			
+				<input type="text" class="k-textbox" name="NO_INVO" data-bind="value: NO_INVO"
 					placeholder="송장번호는  숫자 또는 숫자와 '-'(특수문자) 조합으로만 가능합니다."
 					autocomplete="off"
-				 	style="width:100%;"></textarea>
-			</td> 
+				 	style="width:100%;"/>
+			</td>
+		</tr>
+
+		<tr class="border-bottom-line" data-ng-if="tkbkDataVO.updateChange === '004' && ngIfdata(tkbkDataVO.eCode, '#: CODE #') && ('#: NM_TKBKLRKRSN #' === '구매자' || '#: NM_TKBKLRKRSN #' === '구매자 귀책')">
+			<td class="active border-right-line">
+				<code>*</code>교환배송비<br/>전달방법
+			</td>
+			<td class="border-right-line" colspan="3">
+				<select
+					name="transform_pay_reason"
+					data-bind="value: transform_pay_reason"
+               		style="width: 100%">
+				</select>
+			</td>
+		</tr>
+
+		<tr data-ng-if="tkbkDataVO.updateChange === '004' && ngIfdata(tkbkDataVO.gCode, '#: CODE #')">
+			<td class="ta-l" colspan="4">
+				<p style="display: inline-block; vertical-align:top;">
+					<code>*</code>
+				</p>
+				<p style="display: inline-block">
+				반품건을 교환으로 전환시 반품배송비는 구매고객에게 환불됩니다. </br>
+				교환배송비등 추가비용은 구매고객님과 합의하시기 바랍니다.
+				</p>			
+			</td>
+		</tr>
+
+		<tr data-ng-if="tkbkDataVO.updateChange === '004' && (ngIfdata(tkbkDataVO.gCode, '#: CODE #') || ngIfdata(tkbkDataVO.sCode, '#: CODE #')) && tkbkDataVO.receiveCheckCode !== 'Y'">
+			<td class="ta-l" colspan="4">
+				<span ng-if="ngIfdata(tkbkDataVO.gCode, '#: CODE #')">
+					<code>*</code><mark>반품상품이 수거 되지 않으면 교환으로 변경이 진행되지 않습니다.</mark>
+				</span>
+				<span ng-if="ngIfdata(tkbkDataVO.sCode, '#: CODE #')">
+					<code>*</code><mark>동시처리 하지 않을 경우 교환요청상태로만 변경됩니다. 이후 처리는 교환처리에서 진행해 주세요.</mark><br/>
+				</span>	
+				<span ng-if="ngIfdata(tkbkDataVO.sCode, '#: CODE #') && '#: DC_TKBKSHPCOSTAPVL #' === '선결제 완료 (환불완료시 반품배송비 정산이 진행됩니다.)'">
+					<code>*</code><mark>이미 반품배송비를 결제한 경우, 회수 택배사를 입력해야 합니다.</mark>
+				</span>		
+			</td>
 		</tr>
 
 	</tbody>
@@ -398,5 +431,15 @@
 }
 .k-dirty{
 	visibility: hidden; 
-} */
+}  */
+.signal>tbody>tr>td, .signal>tbody>tr>th, .signal>tfoot>tr>td, .signal>tfoot>tr>th, .signal>thead>tr>td, .signal>thead>tr>th {
+    padding: 8px;
+   /*  border-top: 1px solid #ddd; */
+}
+.signal>tbody>tr>td.active, .signal>tbody>tr>th.active, .signal>tfoot>tr>td.active, .signal>tfoot>tr>th.active, .signal>thead>tr>td.active, .signal>thead>tr>th.active { 
+	background-color: #f5f5f5;
+}
+.border-bottom-less {
+	border-bottom :rgba(255,255,0,0.3);
+}
 </style>

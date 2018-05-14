@@ -7,13 +7,13 @@
      * 상품분류관리
      */
     angular.module("sa.TkbkReq.service")
-        .factory("sa.TkbkReqSvc", ["APP_CONFIG", "$http", function (APP_CONFIG, $http) {
+        .factory("sa.TkbkReqSvc", ["$rootScope", "APP_CONFIG", "$http", "UtilSvc", "Util03saSvc", "$log", function ($rootScope, APP_CONFIG, $http, UtilSvc, Util03saSvc, $log) {
             return {
             	
             	/**
 				 * 주문 목록 
 				 */
-            	orderList : function (param) {					
+            	orderList : function (param) {
 					return $http({
 						method	: "GET",
 						url		: APP_CONFIG.domain +"/tkbk/ordlist?"+ $.param(param),
@@ -61,24 +61,154 @@
 					});
 				},
 				
-				popupHeaderTitle : function(code){
+				/**
+				 * 교환으로 변경
+				 */
+            	tkbkExchange : function (param) {					
+					return $http({
+						method	: "POST",
+						url		: APP_CONFIG.domain +"/tkbk/exchange",
+						data	: param 
+					});
+				},
+				
+				/**
+				 * 교환으로 변경(스토어팜 요청 전용)
+				 */
+            	tkbkExchangeStoreFarmRequest : function (param) {					
+					return $http({
+						method	: "POST",
+						url		: APP_CONFIG.domain +"/tkbk/exchange-s",
+						data	: param 
+					});
+				},
+				
+				popupHeaderTitle : function(code, mrk){
 					var name = {
 							complete : "반품완료 입력",
 							reject : "반품거부 입력",
 							process : "반품처리 입력",
 							change : "교환으로 처리"
-						};
+						},
+						title = "";
 					
 					if(code === "001"){
-						return name.complete;
+						title = name.complete;
 					}else if(code === "002"){
-						return name.reject;
+						title = name.reject;
 					}else if(code === "003"){
-						return name.process;
+						title = name.process;
 					}else if(code === "004"){
-						return name.change;
+						title = name.change;
 					}
-				}
+					return title+' ('+mrk+')';
+				},
+				
+				 manualTkbkDataBind : function(kg, input, target){
+	            	var getUid = input.parents("table").attr("data-uid"),
+	            	    grid = kg,
+	            	    viewToRow = $("[data-uid='" + getUid + "']", grid.table),
+	            	    dataItem = grid.dataItem(viewToRow);				                	    
+	            	
+	            	if(target === "CD_PARS" || target === "CD_HOLD"){
+	            		var i, chosenPureData = input.data().handler.dataSource.data();
+	            		
+	            		for(i=0; i<chosenPureData.length; i++){
+	            			if(chosenPureData[i]["CD_DEF"] === input.val()){
+	            				dataItem[target] = chosenPureData[i];
+	            			}
+	            		};
+	            	}else if(target === "NOW_YN"){
+	            		dataItem[target] = input.is(":checked");	            		
+	            	}else if(target === "RECEIVE_SET"){
+	            		dataItem[target] = $("#receive-group").find("[type=radio]:checked").val();
+	            		//$log.info("receive_set");
+	            	}else{
+	            		dataItem[target] = input.val();
+	            	};
+	            },	
+	            
+	            receiveCheckClickEvent : function(model, e, code){
+	            	var element = $(e.currentTarget),
+            			checked = element.val(), 
+            			type = model.updateChange,
+            			msg = "";
+            	
+	            	if(type === "003"){
+	            		if(checked === 'N'){
+		            		model.receiveCheckCode = checked;
+		            	}else{
+		            		model.ngIfinIt();
+		            		
+	                		var ddl = element.parents("table").find("select[name=CD_HOLD]").data("kendoDropDownList"),
+	                			nutxt = element.parents("table").find("input[name=CD_HOLD_FEE]").data("kendoNumericTextBox");
+	                		
+	                		ddl.select(0);
+	                		ddl.trigger("change");
+	                		ddl.select(0);
+	                		
+	        				nutxt.value(0);
+	        				nutxt.trigger("change");
+	        				nutxt.value(0);
+		            	};
+	            	}else if(type === "004"){
+	            		if(checked === 'N'){
+	            			model.receiveCheckCode = checked;	            			
+		            	}else{
+		            		model.ngIfinIt('Y');
+		            	};
+	            	}
+	            },
+	            
+	            chkCdparsAndNoInvo : function(mrkCode, curCode, input, grd){   	
+            		if(["003","004"].indexOf(curCode)>-1){
+            			var gridPop = angular.element(document.querySelector("div[kendo-grid]")).data("kendoGrid"),
+							dataItem = gridPop.dataItem($("[data-uid='" + input.closest("tr").parents("table").attr("data-uid") + "']", gridPop.table));
+					            			
+            			if((['170104','170102',"170103"].indexOf(mrkCode)>-1 && dataItem.RECEIVE_SET === 'Y' && curCode === "004") ||
+            		    (["170103"].indexOf(mrkCode)>-1 && curCode === "003") ||     
+            			(['170106'].indexOf(mrkCode)>-1 && curCode === "004")){            				
+                			if(input.is("[name='CD_PARS']") && input.val() === ""){
+                				input.attr("data-cd_parsvalidation-msg", "택배사를 입력해 주세요.");
+                                return false;
+                			}else if(input.is("[name='NO_INVO']")){
+                				var result =  Util03saSvc.NoINVOValidation(input, 'NO_INVO', 'no_invovalidation');
+		            			if(result){
+		            				this.manualTkbkDataBind(grd, input, "NO_INVO");
+		            			}
+		            			return result;
+                			}
+            			}
+            			if(input.is("[name='PICK_CD_PARS']") && input.val() === "" && (dataItem.RECEIVE_SET === 'Y' || dataItem.DC_TKBKSHPCOSTAPVL === '선결제 완료 (환불완료시 반품배송비 정산이 진행됩니다.)' ) && ['170103'].indexOf(mrkCode)>-1 && curCode === "004"){
+            				input.attr("data-pick_cd_parsvalidation-msg", "택배사를 입력해 주세요.");
+                            return false;
+            			}
+            			if(input.is("[name='PICK_NO_INVO']") && (dataItem.RECEIVE_SET === 'Y' || dataItem.DC_TKBKSHPCOSTAPVL === '선결제 완료 (환불완료시 반품배송비 정산이 진행됩니다.)' ) &&['170103'].indexOf(mrkCode)>-1 && curCode === "004"){
+            				var result = Util03saSvc.NoINVOValidation(input, 'PICK_NO_INVO', 'pick_no_invovalidation');
+	            			if(result){
+	            				this.manualTkbkDataBind(grd, input, "PICK_NO_INVO");
+	            			}
+	            			return result;
+            			}
+            		}
+            		return true;
+	            },
+	            	            
+            	getTdClass : function(index, align){
+            		var viewClassName = "border-right-line "+align;
+            			
+            		if(index%2 === 0){
+            			viewClassName = "active border-right-line "+align;
+            		}            		
+            		return viewClassName;
+            	},
+            	
+            	allChkCcl : function(grd){
+            		if(grd){
+                		grd.cancelRow();	
+            		}
+                	angular.element($(".k-checkbox:eq(0)")).prop("checked",false);            		
+            	}
             };
         }]);
 }());
