@@ -17,6 +17,7 @@
         "sy.Notice",
         "sy.Pars",
         "sy.Qa",
-        "sy.Itl"
+        "sy.Itl",
+        "sy.Board"
     ]);
 }());
