@@ -177,7 +177,7 @@
 	            };	
 	            	            
 	        	teMobileVO.kGird = {
-	        		boxTitle : "Mobile Grid",		
+	        		boxTitle : "주문 목록",		
 	        		autoBind: false,
                     messages: {                        	
                         requestFailed: "주문정보를 가져오는 중 오류가 발생하였습니다.",
@@ -187,7 +187,6 @@
                         }
                         ,noRecords: "검색된 데이터가 없습니다."
                     },
-                	boxTitle : "주문 목록",
                 	pageable: {
                     	messages: UtilSvc.gridPageableMessages
                     },                  

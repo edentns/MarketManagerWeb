@@ -52,7 +52,8 @@
     <div id="commentList" class="row">
     	<div class="content-area-container col-xs-12">
     		<div data-content-box-layer data-box-title="boardCommentDataVO.boxTitle" data-open="boardCommentDataVO.open">
-    			<div id="boardCommentListView" kendo-list-view k-options="boardCommentDataVO.listOptions"/>
+    			<div id="boardCommentListView" kendo-list-view k-options="boardCommentDataVO.listOptions">
+    			</div>
     		</div>
     	</div>
     </div>
@@ -70,7 +71,8 @@
 							<tr>
 								<th>댓글등록</th>
 								<td style="display:flex; justify-content: space-between;">
-									<textarea name="content" class="k-textbox" style="width: 100%; margin: 0 10px;" data-ng-model="boardCmtRegDataVO.params.DC_COMMENT" rows="4" validationMessage="required"/>
+									<textarea name="content" class="k-textbox" style="width: 100%; margin: 0 10px;" data-ng-model="boardCmtRegDataVO.params.DC_COMMENT" rows="4" validationMessage="required">
+									</textarea>
 									<kendo-button type="botton" title="댓글등록" data-ng-click="boardCmtRegDataVO.goCommentSave()" style="width:90px;">
 										<span class="k-icon k-i-save"></span>댓글등록
 									</kendo-button>
@@ -115,7 +117,8 @@
 			<dl>
 		</div>
 		<div style="width: 100%; border: 1px solid \#c7c3c3;">
-			<textarea style="height:72px;" name="content" data-bind="value:DC_COMMENT" validationMessage="required"/>
+			<textarea style="height:72px;" name="content" data-bind="value:DC_COMMENT" validationMessage="required">
+			</textarea>
 		</div>
 		<div style="width: 62px; margin-left:10px;">
 			<a class="k-button k-update-button" href="\\#"><span class="k-icon k-i-check"></span>저장</a>
