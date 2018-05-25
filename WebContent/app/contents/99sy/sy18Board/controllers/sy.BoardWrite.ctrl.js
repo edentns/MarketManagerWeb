@@ -24,7 +24,7 @@
 	        			currentDataList: resData.currentDataList
 	            	}
 		        };
-
+	            
 	            boardWriteDataVO.goSave = function() {
 	            	//저장하고 이동
 	            	if(!(boardWriteDataVO.params.DC_SBJ).trim()) {
@@ -81,6 +81,13 @@
 	            boardWriteDataVO.goList = function() {
 	            	//목록으로 이동
 	            	$state.go('app.syBoard', { kind: 'list', menu: true, ids: null });
-	            }
+	            };
+
+				// 처음 로드되었을 때 실행된다.
+				(function  () {
+					$timeout(function () {
+                        edt.id("DC_SBJ").focus();
+                    }, 500);
+				}());
             }]);
 }());

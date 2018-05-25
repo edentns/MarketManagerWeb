@@ -12,7 +12,7 @@
         <!-- 글쓰기 -->
         <div class="content-area-container col-xs-12">
         	<div data-content-box-layer data-box-title="boardWriteDataVO.boxTitle">
-        		<form class="search-type1">
+        		<form class="search-type1" id="myForm">
 	                <table>
 						<colgroup>
                            <col style="width: 12%;">
@@ -27,8 +27,16 @@
 								<th><span class="form-required">* </span>제목</th>
 								<td>
 									<span data-ng-if="page.isWriteable()">
-										<input type="text" class="form-control wid-x12" id="DC_SBJ" name="DC_SBJ" title="제목" maxlength="90"
-											data-ng-model="boardWriteDataVO.params.DC_SBJ">
+									
+		                            	<input data-ng-model="boardWriteDataVO.params.DC_SBJ"
+		                            		   focus="boardWriteDataVO.focus"
+		                            		   title="제목"
+		                            		   data-eden-type="kor" 
+		                            		   type="text" 
+										       maxlength="90" 
+										       id="DC_SBJ" 
+										       name="DC_SBJ" 
+		                            		   class="form-control" style="width:100%;"/>
 									</span>
 									<span data-ng-if="!page.isWriteable()">{{boardWriteDataVO.params.DC_SBJ}}</span>
 								</td>
@@ -59,7 +67,6 @@
 		</div>
 	</div>
 </div>
-
 <style>
 	.table {
 		width: 100%;
