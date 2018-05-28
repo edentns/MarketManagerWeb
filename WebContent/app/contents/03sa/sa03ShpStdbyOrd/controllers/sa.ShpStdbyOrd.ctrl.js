@@ -175,6 +175,34 @@
                     	shpbyordDataVO.flag = false;
                 	}
 	            };
+	            
+	            //kendo grid 체크박스 옵션
+                $scope.onOrdGrdCkboxClick = function(e){
+                	UtilSvc.grdCkboxClick(e, $scope.shpbyordkg);
+                };
+                
+                //kendo grid 체크박스 all click
+                $scope.onOrdGrdCkboxAllClick = function(e){
+                	UtilSvc.grdCkboxAllClick(e, $scope.shpbyordkg);
+                };
+                
+	            //그리드 셀 더블 클릭
+	            $("#divShpbyordGrd").delegate("tbody>tr", "dblclick", function(ev){
+	            	var grd = $scope.shpbyordkg;
+	            	var getCurrentCell = "",
+	         		     getCurrentRow = "",
+	         		           getData = "";
+	         		
+	         		getCurrentCell = $(ev.target).is("td") ? $(ev.target) : $(ev.target).parents("td");
+	         		getCurrentRow = $(ev.target).parents("tr");           
+	         		getData = grd.dataItem(getCurrentRow);           
+	         		
+	         		//택배사 수정 하다가 넘어가면 짜증 나니까 택배사및 송장번호 더블클릭은 막음
+	         		if(getCurrentCell.closest("td").hasClass("dnt-clk")){	         			
+	         			return false;
+	         		};
+	         		$state.go("app.saOrd", { kind: null, menu: null, rootMenu : "saShpStdbyOrd", noOrd : getData.NO_ORD, noMrkord: getData.NO_MRKORD });
+	            });
 	            	            	            
 		        //검색 그리드
 	            var grdShpbyordVO = $scope.grdShpbyordVO = {
@@ -809,34 +837,6 @@
 		                        }
                     ]
 	        	};
-	           
-	            //kendo grid 체크박스 옵션
-                $scope.onOrdGrdCkboxClick = function(e){
-                	UtilSvc.grdCkboxClick(e, $scope.shpbyordkg);
-                };
-                
-                //kendo grid 체크박스 all click
-                $scope.onOrdGrdCkboxAllClick = function(e){
-                	UtilSvc.grdCkboxAllClick(e, $scope.shpbyordkg);
-                };
-                
-	            //그리드 셀 더블 클릭
-	            $("#divShpbyordGrd").delegate("tbody>tr", "dblclick", function(ev){
-	            	var grd = $scope.shpbyordkg;
-	            	var getCurrentCell = "",
-	         		     getCurrentRow = "",
-	         		           getData = "";
-	         		
-	         		getCurrentCell = $(ev.target).is("td") ? $(ev.target) : $(ev.target).parents("td");
-	         		getCurrentRow = $(ev.target).parents("tr");           
-	         		getData = grd.dataItem(getCurrentRow);           
-	         		
-	         		//택배사 수정 하다가 넘어가면 짜증 나니까 택배사및 송장번호 더블클릭은 막음
-	         		if(getCurrentCell.closest("td").hasClass("dnt-clk")){	         			
-	         			return false;
-	         		};
-	         		$state.go("app.saOrd", { kind: null, menu: null, rootMenu : "saShpStdbyOrd", noOrd : getData.NO_ORD, noMrkord: getData.NO_MRKORD });
-	            });
 
 	            shpbyordDataVO.initLoad();
             }]);

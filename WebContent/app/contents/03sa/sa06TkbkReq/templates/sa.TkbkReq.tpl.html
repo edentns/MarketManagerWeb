@@ -230,7 +230,7 @@
 			<td class="border-right-line ta-l" colspan="3">
 				<ul id="receive-group">
 					<li style="float:left; margin-right: 5px;">
-              			<input type="radio" name="RECEIVE_SET" id="receive-y" class="k-radio" checked="checked" required data-bind="checked: RECEIVE_SET" data-type="string" value="Y" data-ng-click="receiveCheckClickEvent($event, '#: CODE #')">
+              			<input type="radio" name="RECEIVE_SET" id="receive-y" class="k-radio" required data-bind="checked: RECEIVE_SET" data-type="string" value="Y" data-ng-click="receiveCheckClickEvent($event, '#: CODE #')">
               			<label class="k-radio-label" for="receive-y">네 </label>
 					</li>
           			<li style="float:left">
@@ -298,7 +298,8 @@
 			</td> 
 		</tr>	
 
-		<tr class="border-bottom-line" data-ng-show="tkbkDataVO.updateChange === '004' && (tkbkDataVO.receiveCheckCode !== 'N' || '#: DC_TKBKSHPCOSTAPVL #' === '선결제 완료 (환불완료시 반품배송비 정산이 진행됩니다.)') && ngIfdata(tkbkDataVO.sCode, '#: CODE #')">
+		<tr class="border-bottom-line" data-ng-show="tkbkDataVO.updateChange === '004' && ngIfdata(tkbkDataVO.sCode, '#: CODE #') &&
+														(tkbkDataVO.receiveCheckCode === 'Y' || '#: DC_TKBKSHPCOSTAPVL #' === '선결제 완료 (환불완료시 반품배송비 정산이 진행됩니다.)')">
 			<td class="active border-right-line">
 				<code>*</code>회수 택배사
 			</td>
@@ -320,13 +321,15 @@
 			</td>
 		</tr>
 
-		<tr class="border-bottom-line" data-ng-show="tkbkDataVO.updateChange === '004' && tkbkDataVO.receiveCheckCode !== 'N' || (tkbkDataVO.updateChange === '003' && ngIfdata(tkbkDataVO.sCode, '#: CODE #'))">
+		<tr class="border-bottom-line" data-ng-show="(tkbkDataVO.updateChange === '004' && tkbkDataVO.receiveCheckCode === 'Y') || 
+													 (tkbkDataVO.updateChange === '004' && ngIfdata(tkbkDataVO.eCode, '#: CODE #')) || 		
+														(tkbkDataVO.updateChange === '003' && ngIfdata(tkbkDataVO.sCode, '#: CODE #'))">
 			<td class="active border-right-line">
-					<div ng-switch="tkbkDataVO.updateChange">
-						<code>*</code>
-  						<span ng-switch-when="003">회수 택배사</span>
-  						<span ng-switch-when="004">발송 택배사</span>
-					</div>
+				<div ng-switch="tkbkDataVO.updateChange">
+					<code>*</code>
+  					<span ng-switch-when="003">회수 택배사</span>
+  					<span ng-switch-when="004">재발송 택배사</span>
+				</div>
 			</td>
 			<td>
 				<select 
@@ -339,7 +342,7 @@
 				<div ng-switch="tkbkDataVO.updateChange">
 					<code>*</code>
   					<span ng-switch-when="003">회수 송장번호</span>
-  					<span ng-switch-when="004">발송 송장번호</span>
+  					<span ng-switch-when="004">재발송 송장번호</span>
 				</div>
 			</td>
 			<td class="border-right-line" menual-shw-wrn="tkbkDataVO.menualShwWrn" menual-shw-wrn-no-ord='#: NO_ORD #'>			
@@ -381,11 +384,11 @@
 					<code>*</code><mark>반품상품이 수거 되지 않으면 교환으로 변경이 진행되지 않습니다.</mark>
 				</span>
 				<span ng-if="ngIfdata(tkbkDataVO.sCode, '#: CODE #')">
-					<code>*</code><mark>동시처리 하지 않을 경우 교환요청상태로만 변경됩니다. 이후 처리는 교환처리에서 진행해 주세요.</mark><br/>
+					<code>*</code><mark>동시처리 하지 않을 경우 교환요청상태로만 변경됩니다. 이후 처리는 교환처리 메뉴에서 진행해 주세요.</mark><br/>
 				</span>	
 				<span ng-if="ngIfdata(tkbkDataVO.sCode, '#: CODE #') && '#: DC_TKBKSHPCOSTAPVL #' === '선결제 완료 (환불완료시 반품배송비 정산이 진행됩니다.)'">
-					<code>*</code><mark>이미 반품배송비를 결제한 경우, 회수 택배사를 입력해야 합니다.</mark>
-				</span>		
+					<code>*</code><mark>고객께서 이미 반품배송비를 결제한 경우, 회수 택배사를 입력해야 합니다.</mark>
+				</span>
 			</td>
 		</tr>
 

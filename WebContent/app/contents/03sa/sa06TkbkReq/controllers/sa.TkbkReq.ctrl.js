@@ -75,7 +75,7 @@
 															input.attr("data-dc_echgrsncttvalidation-msg", "교환변경 상세사유를 200자 이내로 입력해 주세요.");
 														    return false;
 														};
-														saTkbkReqSvc.manualTkbkDataBind($scope.tkbkkg, input, "DC_ECHGRSNCTT");	
+														Util03saSvc.manualTkbkDataBind($scope.tkbkkg, input, "DC_ECHGRSNCTT");	
 						                 			}	
 													return true;
 												}
@@ -88,11 +88,10 @@
 						                   ,validation: {
 						                	   transform_pay_reasonvalidation: function (input) {
 						                		   if(tkbkDataVO.eCode.indexOf(tkbkDataVO.marketDivisionCode) > -1 && ["004"].indexOf(tkbkDataVO.updateChange) > -1 && input.is("[name='transform_pay_reason']")){
-												    	if (input.val() === "") {
+												    	if (!Util03saSvc.manualTkbkDataBind($scope.tkbkkg, input, "transform_pay_reason")) {
 						                                	input.attr("data-transform_pay_reasonvalidation-msg", "(교환,반품)배송비 전달방법을 선택해 주세요.");
 						                                    return false;
-						                                }
-												    	saTkbkReqSvc.manualTkbkDataBind($scope.tkbkkg, input, "transform_pay_reason");
+						                                };
 						                		   };
 						                		   return true;
 										    	}
@@ -111,7 +110,7 @@
 							                   			){
 															if (input.is("[name=RECEIVE_SET]") && input.attr("required")) {
 																if($("#receive-group").find("[type=radio]").is(":checked")){
-																	saTkbkReqSvc.manualTkbkDataBind($scope.tkbkkg, input, "RECEIVE_SET");	
+																	Util03saSvc.manualTkbkDataBind($scope.tkbkkg, input, "RECEIVE_SET");	
 																	return true;
 																}else{
 																	input.attr("data-receive_setvalidation-msg", "버튼을 선택해 주세요.");																												
@@ -244,7 +243,7 @@
 								               ,validation: {
 								            	   cd_hold_feevalidation: function (input) {
 								            		   if(tkbkDataVO.gCode.indexOf(tkbkDataVO.marketDivisionCode) > -1 && tkbkDataVO.updateChange === '003'){
-								            			   if (input.is("[name='CD_HOLD_FEE']") && (!input.val() || input.val()) < 1 && tkbkDataVO.etcCostCode === 'Y') {
+								            			   if (input.is("[name='CD_HOLD_FEE']") && (!input.val() || input.val() < 1) && tkbkDataVO.etcCostCode === 'Y') {
 							                                	input.attr("data-cd_hold_feevalidation-msg", "반품비를 입력해 주세요.");
 							                                    return false;
 							                               };
@@ -316,25 +315,25 @@
 	        			step : 100
 	        		},
 	        		userInfo : JSON.parse($window.localStorage.getItem("USER")).NM_EMP,
-	        		updateChange : "",
+	        		updateChange : '',
 	        		dataTotal : 0,
-	        		resetAtGrd : "",
-	        		param : "",
-	        		shipList : "",
+	        		resetAtGrd : '',
+	        		param : '',
+	        		shipList : '',
 	        		gCode : ['170104','170102'],
 	        		eCode : ['170106'],
 	        		sCode : ['170103'],
 	        		cCode : ['170902'],
-	        		etcCostName : "",
-	        		etcCostCode : "",
-	        		gHoldCode : "",
-	        		receiveCheckCode : 'Y',
-	        		marketDivisionCode : "",
-	        		menualShwWrn: "",
+	        		etcCostName : '',
+	        		etcCostCode : '',
+	        		gHoldCode : '',
+	        		receiveCheckCode : '',
+	        		marketDivisionCode : '',
+	        		menualShwWrn: '',
 	        		ddlDefaultOp : {
 	        			enable : false
 	        		},
-	        		inputPopupHeaderTitle : ""
+	        		inputPopupHeaderTitle : ''
 		        };   
 	            
 	            tkbkDataVO.initLoad = function () {
@@ -522,7 +521,7 @@
                 	me.resetAtGrd = $scope.tkbkkg;
                 	me.resetAtGrd.dataSource.data([]);
                 	
-                	me.ngIfinIt('Y');
+                	me.ngIfinIt();
 	            };	
 	            
 	            //ng if 초기화버튼
@@ -530,8 +529,8 @@
             		var me  = this;
             		
                 	me.etcCostCode = "";                	
-                	me.etcCostName = "";
-                	me.receiveCheckCode = yn;            
+                	me.etcCostName = "";                	
+                	me.receiveCheckCode = (yn)? yn : '';            
                 	
                 	kendo.ui.progress(angular.element($(".k-widget")), false);
 	            };	
@@ -673,87 +672,85 @@
                     				break;
                     			}
                     		}
-                    	}else if(Type === "004"){ 
-                    		if(code !== dataVo.sCode[0] || dataVo.receiveCheckCode !== 'N'){
-                    			var shippingList = Util03saSvc.shppingList().query({shippingType:"003", mrkType:e.model.NO_MRK}),
-                    			    pickShippingList = Util03saSvc.shppingList().query({shippingType:"002", mrkType:e.model.NO_MRK}),
-                    			    mrks = e.model.NO_MRK;
-                    			
-                    			shippingList.$promise.then(function (data) {
-                    				var Data = data.length < 1 ? [{NM_PARS_TEXT : "택배사 등록", CD_PARS : ""}] : data;
-                    				selector.find("select[name=CD_PARS]").kendoDropDownList({
-    	    	            			dataSource : Data,
-    	    	                		dataTextField : "NM_PARS_TEXT",
-    	    	                		dataValueField : "CD_DEF",
-    	    	                		optionLabel : "택배사를 선택해 주세요 ",
-    	    	                		select : function(e){
-    	    	                			var me = this;
-    	    	                			$timeout(function(){
-    	    	                				if(me.selectedIndex > 0){
-        	    	                				me.element.parents("table").find(".k-invalid-msg").hide();
-        	    	                			}
-    	    	                			},0);
-    	    	                		},
-                                        change : function(e){
-                                        	if(this.text() === "택배사 등록" && this.selectedIndex === 1){
-                                        		$state.go("app.syPars", { mrk: mrks, menu: true, ids: null });
-                                        		$scope.tkbkkg.cancelRow();
-                                        	}
-                                        }
-    	    	            		});
-                    			},function(){
-                					$log.info("택배사 조회 실패!");
-                					alert("택배사 조회 실패! 관리자에게 문의하세요!");
-                				});
-                    			
-                    			pickShippingList.$promise.then(function (data) {
-                    				var Data = data.length < 1 ? [{NM_PARS_TEXT : "택배사 등록", CD_PARS : ""}] : data;
-                    				selector.find("select[name=PICK_CD_PARS]").kendoDropDownList({
-    	    	            			dataSource : Data,
-    	    	                		dataTextField : "NM_PARS_TEXT",
-    	    	                		dataValueField : "CD_DEF",
-    	    	                		optionLabel : "택배사를 선택해 주세요 ",
-    	    	                		select : function(e){
-    	    	                			var me = this;
-    	    	                			$timeout(function(){
-    	    	                				if(me.selectedIndex > 0){
-        	    	                				me.element.parents("table").find(".k-invalid-msg").hide();
-        	    	                			}
-    	    	                			},0);
-    	    	                		},
-                                        change : function(e){
-                                        	if(this.text() === "택배사 등록" && this.selectedIndex === 1){
-                                        		$state.go("app.syPars", { mrk: mrks, menu: true, ids: null });
-                                        		$scope.tkbkkg.cancelRow();
-                                        	}
-                                        }
-    	    	            		});
-                    			},function(){
-                					$log.info("택배사 조회 실패!");
-                					alert("택배사 조회 실패! 관리자에게 문의하세요!");
-                				});
-                    			                    			
-                    			if(code === dataVo.eCode[0] && (e.model.NM_TKBKLRKRSN === "구매자" || e.model.NM_TKBKLRKRSN === "구매자 귀책")){                    				
-                    				selector.find("select[name=transform_pay_reason]").kendoDropDownList({
-    	    	            			dataSource : dataVo.cd11stShippingFee,
-    	    	                		dataTextField : "NM_DEF",
-    	    	                		dataValueField : "CD_DEF",
-    	    	                		optionLabel : "교환배송비 전달방법을 선택해 주세요 ",
-    	    	                		select : function(e){
-    	    	                			var me = this;
-    	    	                			$timeout(function(){
-    	    	                				if(me.selectedIndex > 0){
-        	    	                				me.element.parents("table").find(".k-invalid-msg").hide();
-        	    	                			}
-    	    	                			},0);
-    	    	                		}
-    	    	            		});
-                    			}
-                    		}
-                    	}
+                    	}else if(Type === "004"){
+                			var shippingList = Util03saSvc.shppingList().query({shippingType:"003", mrkType:e.model.NO_MRK}),
+                			    pickShippingList = Util03saSvc.shppingList().query({shippingType:"002", mrkType:e.model.NO_MRK}),
+                			    mrks = e.model.NO_MRK;
+                			
+                			shippingList.$promise.then(function (data) {
+                				var Data = data.length < 1 ? [{NM_PARS_TEXT : "택배사 등록", CD_PARS : ""}] : data;
+                				selector.find("select[name=CD_PARS]").kendoDropDownList({
+	    	            			dataSource : Data,
+	    	                		dataTextField : "NM_PARS_TEXT",
+	    	                		dataValueField : "CD_DEF",
+	    	                		optionLabel : "택배사를 선택해 주세요 ",
+	    	                		select : function(e){
+	    	                			var me = this;
+	    	                			$timeout(function(){
+	    	                				if(me.selectedIndex > 0){
+    	    	                				me.element.parents("table").find(".k-invalid-msg").hide();
+    	    	                			}
+	    	                			},0);
+	    	                		},
+                                    change : function(e){
+                                    	if(this.text() === "택배사 등록" && this.selectedIndex === 1){
+                                    		$state.go("app.syPars", { mrk: mrks, menu: true, ids: null });
+                                    		$scope.tkbkkg.cancelRow();
+                                    	}
+                                    }
+	    	            		});
+                			},function(){
+            					$log.info("택배사 조회 실패!");
+            					alert("택배사 조회 실패! 관리자에게 문의하세요!");
+            				});
+                			
+                			pickShippingList.$promise.then(function (data) {
+                				var Data = data.length < 1 ? [{NM_PARS_TEXT : "택배사 등록", CD_PARS : ""}] : data;
+                				selector.find("select[name=PICK_CD_PARS]").kendoDropDownList({
+	    	            			dataSource : Data,
+	    	                		dataTextField : "NM_PARS_TEXT",
+	    	                		dataValueField : "CD_DEF",
+	    	                		optionLabel : "택배사를 선택해 주세요 ",
+	    	                		select : function(e){
+	    	                			var me = this;
+	    	                			$timeout(function(){
+	    	                				if(me.selectedIndex > 0){
+    	    	                				me.element.parents("table").find(".k-invalid-msg").hide();
+    	    	                			}
+	    	                			},0);
+	    	                		},
+                                    change : function(e){
+                                    	if(this.text() === "택배사 등록" && this.selectedIndex === 1){
+                                    		$state.go("app.syPars", { mrk: mrks, menu: true, ids: null });
+                                    		$scope.tkbkkg.cancelRow();
+                                    	}
+                                    }
+	    	            		});
+                			},function(){
+            					$log.info("택배사 조회 실패!");
+            					alert("택배사 조회 실패! 관리자에게 문의하세요!");
+            				});
+                			                    			
+                			if(code === dataVo.eCode[0] && (e.model.NM_TKBKLRKRSN === "구매자" || e.model.NM_TKBKLRKRSN === "구매자 귀책")){                    				
+                				selector.find("select[name=transform_pay_reason]").kendoDropDownList({
+	    	            			dataSource : dataVo.cd11stShippingFee,
+	    	                		dataTextField : "NM_DEF",
+	    	                		dataValueField : "CD_DEF",
+	    	                		optionLabel : "교환배송비 전달방법을 선택해 주세요 ",
+	    	                		select : function(e){
+	    	                			var me = this;
+	    	                			$timeout(function(){
+	    	                				if(me.selectedIndex > 0){
+    	    	                				me.element.parents("table").find(".k-invalid-msg").hide();
+    	    	                			}
+	    	                			},0);
+	    	                		}
+	    	            		});
+                			}
+                		}
                     },
                     cancel: function(e) {                    	 
-                    	tkbkDataVO.ngIfinIt('Y');
+                    	tkbkDataVO.ngIfinIt();
                     	saTkbkReqSvc.allChkCcl();
                     },
                 	scrollable: true,
@@ -768,7 +765,7 @@
                 			read: function(e) {
                 				var me = tkbkDataVO;
                 				
-	                			me.ngIfinIt('Y');
+	                			me.ngIfinIt();
 	                			
                 				saTkbkReqSvc.orderList(me.param).then(function (res) {
                 					me.shipList = res.data.queryShipList;
@@ -792,7 +789,7 @@
         	                			 	    });	                        						
                         					if(param.length !== 1){
                         						alert("반품승인 된 주문만 접수 처리 할 수 있습니다.");
-                        						tkbkDataVO.ngIfinIt('Y');
+                        						tkbkDataVO.ngIfinIt();
                         						return false;
                         					};
                         					
@@ -814,7 +811,7 @@
         		                			return defer.promise;
                     	            	}else{
                     	            		saTkbkReqSvc.allChkCcl(tkbkGrd);
-                    	            		tkbkDataVO.ngIfinIt('Y');
+                    	            		tkbkDataVO.ngIfinIt();
                     	            	}
                 						break;
                 					}
@@ -822,12 +819,13 @@
                 						if(confirm("선택하신 주문을 반품거부하시겠습니까?")){
                 							var defer = $q.defer(),	
                 								param = e.data.models.filter(function(ele){
-                									return (ele.ROW_CHK === true && ele.CD_TKBKSTAT === "001" && (ele.NO_ORD) && ele.NO_ORD !== "" && 
-                											((ele.NO_MNGMRK !== 'SYMM170101_00005' && whereIn.indexOf(ele.CD_ORDSTAT) > -1) || (ele.NO_MNGMRK === 'SYMM170101_00005' && where11stIn.indexOf(ele.CD_ORDSTAT) > -1)));
+                									return (ele.ROW_CHK && ele.NO_ORD && 
+                											((ele.NO_MNGMRK === 'SYMM170101_00005' && ['004','005','007','008','009'].indexOf(ele.CD_ORDSTAT) > -1 && ele.CD_TKBKSTAT === '001') ||
+                											(ele.NO_MNGMRK === 'SYMM170101_00002' && ['004','005'].indexOf(ele.CD_ORDSTAT) > -1 && ['001','002'].indexOf(ele.CD_TKBKSTAT) > -1)))
                 								});                             					
                         					if(param.length !== 1){
                         						alert("주문 상태를 확인해 주세요.");
-                        						tkbkDataVO.ngIfinIt('Y');
+                        						tkbkDataVO.ngIfinIt();
                         						return false;
                         					};  
                         					saTkbkReqSvc.tkbkReject(param[0]).then(function (res) {
@@ -846,7 +844,7 @@
         		                			return defer.promise;
                 						}else{
                 							saTkbkReqSvc.allChkCcl(tkbkGrd);
-                							tkbkDataVO.ngIfinIt('Y');
+                							tkbkDataVO.ngIfinIt();
                     	            	}
                 						break;
                 					}
@@ -859,7 +857,7 @@
                 								});                 							
                 							if(e.data.models.length !== param.length){
                 								alert("배송처리 된 반품요청 주문만 승인 처리 할 수 있습니다.");
-                								tkbkDataVO.ngIfinIt('Y');
+                								tkbkDataVO.ngIfinIt();
                         						return false;
                 							};
                 							if(param[0].NO_MNGMRK === "SYMM170101_00002"){
@@ -899,7 +897,7 @@
                 							return defer.promise;
                 						}else{
                 							saTkbkReqSvc.allChkCcl(tkbkGrd);
-                							tkbkDataVO.ngIfinIt('Y');
+                							tkbkDataVO.ngIfinIt();
                     	            	}
                 						break;
                 					}
@@ -907,8 +905,10 @@
                 						if(confirm("선택하신 주문을 교환으로 변경 처리하시겠습니까?")){
                 							var defer = $q.defer(),
             									param = e.data.models.filter(function(ele){
-            										return (ele.ROW_CHK === true && ele.CD_TKBKSTAT === "001" && (ele.NO_ORD) && ele.NO_ORD !== "" && 
-            												((ele.NO_MNGMRK !== 'SYMM170101_00005' && whereIn.indexOf(ele.CD_ORDSTAT) > -1) || (ele.NO_MNGMRK === 'SYMM170101_00005' && where11stIn.indexOf(ele.CD_ORDSTAT) > -1)));
+            										return ele.ROW_CHK && ele.NO_ORD && 
+            												((ele.NO_MNGMRK === 'SYMM170101_00005' && ['004','005','007','008','009'].indexOf(ele.CD_ORDSTAT) > -1 && ele.CD_TKBKSTAT === '001') ||
+            												 (['SYMM170101_00001','SYMM170101_00003'].indexOf(ele.NO_MNGMRK) > -1 && ['004','005'].indexOf(ele.CD_ORDSTAT) > -1 && ele.CD_TKBKSTAT === '001') ||		
+                        									 (ele.NO_MNGMRK === 'SYMM170101_00002' && ['004','005'].indexOf(ele.CD_ORDSTAT) > -1 && ['001','002'].indexOf(ele.CD_TKBKSTAT) > -1));
             									}),
                 								alertMsg = {
                 									qikShpYn : "빠른 환불 요청건은 교환으로 변경 처리가 진행 되지 없습니다.",
@@ -936,7 +936,7 @@
 	                							tkbkDataVO.ngIfinIt('N');
 	                    	            		return false;
 	            							};
-	            							if(param[0].CODE !== "170103" || tkbkDataVO.receiveCheckCode !== 'N'){
+	            							if(param[0].CODE !== "170103" || tkbkDataVO.receiveCheckCode === 'Y'){
 	            								
 	                							alert(APP_MSG.invcChkMsg);
 	                							
@@ -987,10 +987,10 @@
 	                        						e.error([]);
 	                        					}); 
 	                							return defer.promise;
-	            							};	            							
+	            							};
                 						}else{
                 							saTkbkReqSvc.allChkCcl(tkbkGrd);
-                							tkbkDataVO.ngIfinIt('Y');
+                							tkbkDataVO.ngIfinIt();
                 						}
                 					}
                 					default : {
@@ -1050,6 +1050,14 @@
         			};
     			
     				switch(code){
+						case '001' : {
+	            			if(tkbkcd.indexOf(grdItem.CD_TKBKSTAT) < 0){
+	            				alert("반품처리 된 주문만 완료 처리 할 수 있습니다.");
+	            				return false;
+	            			};
+	            			grdItem.DTS_TKBKCPLT = new Date();
+							break;
+						};
 	                	case '002' : {
 	            			if(tkbkDataVO.gCode.indexOf(grdItem.CODE) > -1){
 	            				alert("지마켓,옥션은 거부 기능을 사용할 수 없습니다.");
@@ -1058,7 +1066,16 @@
 	            			if(tkbkDataVO.cCode.indexOf(grdItem.CODE) > -1){
 	            				alert("쿠팡은 거부 기능을 사용할 수 없습니다.");
 	            				return false;
-	            			};   			
+	            			}; 
+	            			//11번가
+                			if(['170106'].indexOf(grdItem.CODE) > -1 && ['004','005','007','008','009'].indexOf(grdItem.CD_ORDSTAT) < 0 || grdItem.CD_TKBKSTAT !== '001'){			                				
+                				alert("주문상태를 확인해 주세요.");
+                				return false;
+                			}//스토어팜
+                			if(['170103'].indexOf(grdItem.CODE) > -1 && ['004','005'].indexOf(grdItem.CD_ORDSTAT) < 0 || ['001','002'].indexOf(grdItem.CD_TKBKSTAT) < 0){			                				
+                				alert("주문상태를 확인해 주세요.");
+                				return false;
+                			};
 						};
                 		case '003' : {
                 			if(grdItem.CD_TKBKSTAT !== "001" || ['004','005','007','008','009'].indexOf(grdItem.CD_ORDSTAT) < 0){
@@ -1067,23 +1084,25 @@
                 			}
                 			break;
                 		};
-						case '001' : {
-                			if(tkbkcd.indexOf(grdItem.CD_TKBKSTAT) < 0){
-                				alert("반품처리 된 주문만 완료 처리 할 수 있습니다.");
-                				return false;
-                			};
-                			grdItem.DTS_TKBKCPLT = new Date();
-							break;
-						};
 						case "004" : {
 							if(tkbkDataVO.cCode.indexOf(grdItem.CODE) > -1){
 	            				alert("쿠팡은 교환으로 변경 기능을 사용할 수 없습니다.");
 	            				return false;
-	            			}; 
-	            			if(grdItem.CD_TKBKSTAT !== "001"){
+	            			}
+	            			if(['170104','170102'].indexOf(grdItem.CODE) > -1 && ['004','005'].indexOf(grdItem.CD_ORDSTAT) < 0 || grdItem.CD_TKBKSTAT !== '001'){
+	            				alert("주문상태를 확인해 주세요.");
+                				return false;
+                			}
+	            			//11번가
+                			if(['170106'].indexOf(grdItem.CODE) > -1 && ['004','005','007','008','009'].indexOf(grdItem.CD_ORDSTAT) < 0 || grdItem.CD_TKBKSTAT !== '001'){			                				
                 				alert("주문상태를 확인해 주세요.");
                 				return false;
                 			}
+                			//스토어팜
+                			if(['170103'].indexOf(grdItem.CODE) > -1 && ['004','005'].indexOf(grdItem.CD_ORDSTAT) < 0 || ['001','002'].indexOf(grdItem.CD_TKBKSTAT) < 0){			                				
+                				alert("주문상태를 확인해 주세요.");
+                				return false;
+                			};
 	            			if(UtilSvc.diffDate(grdItem.DTS_TKBKREQ, new Date()) >= 90){
 		            			alert("배송 완료 후 90일 이상 된 주문은 정상적으로 처리 되지 않을수 있습니다.");
 	            			};
@@ -1094,7 +1113,10 @@
 							break;
 						}
     				};
-
+    				
+    				if(grdItem.YN_CONN === 'N'){			                				
+            			alert("연동결과가 없는 주문 입니다.\n연동결과가 없는 주문은 해당마켓과 주문상태가 차이 날 수도 있습니다.");
+            		};	
             		tkbkDataVO.popupColumn = [];
             		tkbkDataVO.popupColumn = [
 	    		                          	[{name: "마켓",   align : ""},
@@ -1114,7 +1136,7 @@
             		                    ];            		
         			grd.options.editable.window.width = px;
             		tkbkDataVO.updateChange = code;
-            		tkbkDataVO.inputPopupHeaderTitle = saTkbkReqSvc.popupHeaderTitle(code, grdItem.NM_MRK);
+            		tkbkDataVO.inputPopupHeaderTitle = Util03saSvc.popupHeaderTitle(code, grdItem.NM_MRK, "tkbk");
             		grd.editRow(chked.closest("tr"));
                 };
                          

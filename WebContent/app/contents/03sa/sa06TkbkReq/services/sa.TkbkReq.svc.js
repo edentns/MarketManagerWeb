@@ -82,52 +82,7 @@
 						data	: param 
 					});
 				},
-				
-				popupHeaderTitle : function(code, mrk){
-					var name = {
-							complete : "반품완료 입력",
-							reject : "반품거부 입력",
-							process : "반품처리 입력",
-							change : "교환으로 처리"
-						},
-						title = "";
-					
-					if(code === "001"){
-						title = name.complete;
-					}else if(code === "002"){
-						title = name.reject;
-					}else if(code === "003"){
-						title = name.process;
-					}else if(code === "004"){
-						title = name.change;
-					}
-					return title+' ('+mrk+')';
-				},
-				
-				 manualTkbkDataBind : function(kg, input, target){
-	            	var getUid = input.parents("table").attr("data-uid"),
-	            	    grid = kg,
-	            	    viewToRow = $("[data-uid='" + getUid + "']", grid.table),
-	            	    dataItem = grid.dataItem(viewToRow);				                	    
-	            	
-	            	if(target === "CD_PARS" || target === "CD_HOLD"){
-	            		var i, chosenPureData = input.data().handler.dataSource.data();
-	            		
-	            		for(i=0; i<chosenPureData.length; i++){
-	            			if(chosenPureData[i]["CD_DEF"] === input.val()){
-	            				dataItem[target] = chosenPureData[i];
-	            			}
-	            		};
-	            	}else if(target === "NOW_YN"){
-	            		dataItem[target] = input.is(":checked");	            		
-	            	}else if(target === "RECEIVE_SET"){
-	            		dataItem[target] = $("#receive-group").find("[type=radio]:checked").val();
-	            		//$log.info("receive_set");
-	            	}else{
-	            		dataItem[target] = input.val();
-	            	};
-	            },	
-	            
+					            
 	            receiveCheckClickEvent : function(model, e, code){
 	            	var element = $(e.currentTarget),
             			checked = element.val(), 
@@ -174,7 +129,7 @@
                 			}else if(input.is("[name='NO_INVO']")){
                 				var result =  Util03saSvc.NoINVOValidation(input, 'NO_INVO', 'no_invovalidation');
 		            			if(result){
-		            				this.manualTkbkDataBind(grd, input, "NO_INVO");
+		            				Util03saSvc.manualTkbkDataBind(grd, input, "NO_INVO");
 		            			}
 		            			return result;
                 			}
@@ -186,7 +141,7 @@
             			if(input.is("[name='PICK_NO_INVO']") && (dataItem.RECEIVE_SET === 'Y' || dataItem.DC_TKBKSHPCOSTAPVL === '선결제 완료 (환불완료시 반품배송비 정산이 진행됩니다.)' ) &&['170103'].indexOf(mrkCode)>-1 && curCode === "004"){
             				var result = Util03saSvc.NoINVOValidation(input, 'PICK_NO_INVO', 'pick_no_invovalidation');
 	            			if(result){
-	            				this.manualTkbkDataBind(grd, input, "PICK_NO_INVO");
+	            				Util03saSvc.manualTkbkDataBind(grd, input, "PICK_NO_INVO");
 	            			}
 	            			return result;
             			}

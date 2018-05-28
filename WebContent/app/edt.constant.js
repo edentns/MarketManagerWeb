@@ -148,7 +148,7 @@
         DC_TKBKRJTCTT 		: { field: "DC_TKBKRJTCTT"		 , type: "string" , width: "100px", textAlign: "center"		, title: ""},
         CD_TKBKRJT    		: { field: "CD_TKBKRJT"   		 , type: "string" , width: "100px", textAlign: "center"		, title: ""},
         DTS_TKBKCPLT  		: { field: "DTS_TKBKCPLT"		 , type: "string" , width: "100px", textAlign: "center"		, title: "반납상품 접수일자"},
-        NM_TKBKHRNKRSN		: { field: "NM_TKBKHRNKRSN"      , type: "string" , width: "100px", textAlign: "right" 		, title: "반품사유"},
+        NM_TKBKHRNKRSN		: { field: "NM_TKBKHRNKRSN"      , type: "string" , width: "100px", textAlign: "center" 		, title: "반품사유"},
         
         QT_ECHG       		: { field: "QT_ECHG"      		 , type: "string" , width: "100px", textAlign: "right" 		, title: "교환 요청 수량"},
         NO_CONSPHNE   		: { field: "NO_CONSPHNE"  		 , type: "string" , width: "100px", textAlign: "center"		, title: "수취인 전화번호"},

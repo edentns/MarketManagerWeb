@@ -58,16 +58,17 @@
             };
             
             //송장번호 유효성검사(정규식 체크)
-            this.NoINVOValidation = function(input, colunm, valicolunm){
+            this.NoINVOValidation = function(input, colunm, valicolunm, leng){
             	var regTest = /^(([\d]+)\-|([\d]+))+(\d)+$/;
-            	var iValue = input.val().trim(); 
+            	var iValue = !input.val() ? "" : input.val().trim();
+            	var lengthStrt = (leng === null || leng === undefined || leng === "") ? 3 : leng; 
  			                	
-			    if (input.is("[name='"+colunm+"']") && !iValue && valicolunm !== "no_invo_non_blank_validation") {
+			    if (input.is("[name='"+colunm+"']") && !iValue && lengthStrt>0 && valicolunm !== "no_invo_non_blank_validation") {
                  	input.attr("data-"+valicolunm+"-msg", "송장번호를 입력해 주세요.");
                     return false;
                 };
-                if (input.is("[name='"+colunm+"']") && iValue && (iValue.length<3 || iValue.length>30)) {
-                 	input.attr("data-"+valicolunm+"-msg", "송장번호를 3자 이상 30자 이하로 입력해 주세요.");
+                if (input.is("[name='"+colunm+"']") && iValue && (iValue.length<lengthStrt || iValue.length>30)) {
+                 	input.attr("data-"+valicolunm+"-msg", "송장번호를 "+lengthStrt+"자 이상 30자 이하로 입력해 주세요.");
                     return false;
                 };
         		if (input.is("[name='"+colunm+"']") && iValue && !regTest.test(iValue.trim())) {
@@ -233,11 +234,10 @@
 						}
 					}).error(function (data, status, headers, config) {
 						console.log("error",data,status,headers,config);
-					});
-					
+					});					
 					//$window.localStorage.setItem(key, JSON.stringify(data));
 				},				
-				getItem: function(name) {					
+				getItem: function(name) {
 					var user = $rootScope.webApp.user;
 					
 					// 저장
@@ -285,6 +285,78 @@
 			        }
 				});
 			};
+			
+			this.popupHeaderTitle = function(code, mrk, menu){
+				var tkbkName = {
+						complete : "반품완료 입력",
+						reject : "반품거부 입력",
+						process : "반품처리 입력",
+						change : "교환으로 변경"
+					},
+					echgName = {
+						complete : "교환완료 입력",
+						reject : "교환거부 입력",
+						process : "교환처리 입력",
+						change : "반품으로 변경"
+					},
+					title = "";
+				
+				if(code === "001"){
+					title = menu === "tkbk" ? tkbkName.complete : echgName.process; 
+				}else if(code === "002"){
+					title = menu === "tkbk" ? tkbkName.reject : echgName.reject;
+				}else if(code === "003"){
+					title = menu === "tkbk" ? tkbkName.process : echgName.complete;
+				}else if(code === "004"){
+					title = menu === "tkbk" ? tkbkName.change : echgName.change;
+				}
+				return title+' ('+mrk+')';
+			};			
+
+			this.manualTkbkDataBind = function(kg, input, target){
+	           	var getUid = input.parents("table").attr("data-uid"),
+	           	    grid = kg,
+	           	    viewToRow = $("[data-uid='" + getUid + "']", grid.table),
+	           	    dataItem = grid.dataItem(viewToRow);				                	    
+	           	
+	           	if(["CD_PARS","CD_HOLD"].indexOf(target) > -1){
+	           		var i, chosenPureData = input.data().handler.dataSource.data();
+	           		
+	           		for(i=0; i<chosenPureData.length; i++){
+	           			if(chosenPureData[i]["CD_DEF"] === input.val()){
+	           				dataItem[target] = chosenPureData[i];
+	           			}
+	           		};
+	           	}
+	        	else if(["CD_PARS_INPUT"].indexOf(target) > -1){
+	           		var i, chosenPureData = input.data().handler.dataSource.data();
+	           		
+	           		for(i=0; i<chosenPureData.length; i++){
+	           			if(chosenPureData[i]["DC_RMK2"] === input.val()){
+	           				dataItem[target] = chosenPureData[i];
+	           			}
+	           		};
+	           	}
+	           	else if(target === "NOW_YN"){
+	           		dataItem[target] = input.is(":checked");	            		
+	           	}
+	           	else if(target === "RECEIVE_SET"){
+	           		dataItem[target] = $("#receive-group").find("[type=radio]:checked").val();
+	           	}
+	           	else if(target === "transform_pay_reason"){
+	           		var i, rtnRst = false;
+	           		
+           			if((["구매자","구매자 귀책"].indexOf(dataItem["NM_TKBKLRKRSN"]) > -1 || ["구매자","구매자 귀책"].indexOf(dataItem["NM_ECHGLRKRSN"]) > -1) && input.val()){
+           				//dataItem[target] = input.NM_DEF;
+           				rtnRst = true;
+           			}
+	           		return rtnRst;
+	           	}
+	           	else{
+	           		dataItem[target] = input.val();
+	           	};
+	        };
+	        
 		}
 	]);
 }());
