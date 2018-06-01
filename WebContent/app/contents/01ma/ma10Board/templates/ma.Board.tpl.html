@@ -1,0 +1,118 @@
+<div id="app-content" class="col-xs-12 col-sm-10">
+    <div class="row">
+        <div id="app-content-header">
+            <ol class="breadcrumb">
+                <li><a href="#01ma/maDashboard"><i class="fa fa-home fa-2x"></i></a></li>
+                <li><a href="#01ma/maBoard">게시판</a></li>
+            </ol>
+        </div>
+    </div>
+    
+    <div class="row">
+        <!-- 검색 -->
+        <div class="content-area-container col-xs-12">
+        	<div data-content-box-layer data-box-title="boardDataVO.boxTitle" data-is-open="boardDataVO.isOpen(val)">
+                <form class="search-type1" id="myForm">
+                	<table>
+                        <colgroup>
+                            <col style="width: 6%;">
+                            <col style="width: 13%;">
+                            <col style="width: 6%;">
+                            <col style="width: 13%;">
+                            <col style="width: 10%;">
+                            <col style="width: 52%;">
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th>제목</th>
+                            <td>
+                            	<input data-ng-model="boardDataVO.subject"
+                            			focus="true"
+                            			title="제목"
+                            			type="text" 
+                            			class="form-control" style="width:100%;"/>
+                            </td>	
+                            <th>글쓴이</th>
+                            <td>     
+					            <input data-ng-model="boardDataVO.writer"
+                            			title="글쓴이" 
+                            			type="text" 
+                            			class="form-control" style="width:100%;"/>
+                            </td>      
+                            <th>금지어 등록된 게시물</th>
+                            <td>
+                            	<input type="checkbox" data-ng-model="boardDataVO.fbdCheck"></input>
+                            </td> 
+                        </tr>
+                        <tr>
+                            <th>등록기간 </th>
+                            <td colspan="5">     	
+                            	<div class="frm-group" data-date-search-group="boardDataVO.datesetting" style="display:inline-block;"></div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>            
+                    <div class="btn-group1 mt-10">
+                        <kendo-button type="submit" class="k-primary" title="검색" data-ng-click="boardDataVO.search()" style="width:70px;">검색</kendo-button>
+                        <kendo-button type="botton" title="초기화" data-ng-click="boardDataVO.reset()" style="width:70px;">초기화</kendo-button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- 게시판 리스트 -->          
+		<div class="content-area-container col-xs-12" style="padding:0px 0px 0px 0px;">				
+	        <div kendo-grid="kg" options="gridBoardVO">
+	        </div>	            
+        </div>
+    </div>
+</div>
+
+<script id="bss-toolbar-template" type="text/x-kendo-template">
+	<button id="undo" class="k-button k-button-icontext k-grid-edit" ng-click="moFbdWordMng.center().open()"><span class="k-icon k-i-edit"></span>금지단어관리</button>
+</script>
+
+<script id="dc_sbj_template" type="text/x-kendo-template">	
+<span class="ells">
+# if(SY_FILES > 0) { # 
+<img src='/assets/img/common/file.png'/> 
+# } #
+# if(DC_SBJ !== ''){ #
+#: DC_SBJ # 
+#} #
+</span>
+</script>
+
+<div kendo-window="moFbdWordMng" k-options="fbdWordVO">
+    <div class="row" style="padding:0; margin:0;">
+        <!-- 검색 -->
+        <div class="content-area-container col-xs-12">
+        	<div data-content-box-layer data-box-title="fbdWordVO.title" data-is-open="fbdWordVO.isOpen(val)">
+                <form class="search-type1" id="formFbdWord">
+                	<table>
+                        <tr>
+                            <th style="width:80px;">금지어</th>
+                            <td style="width:100%">
+                            	<input data-ng-model="fbdWordVO.fbdWord"
+                            			focus="true"
+                            			title="금지어"
+                            			type="text" 
+                            			class="form-control" style="width:100%;"/>
+                            </td>	 
+                        </tr>
+                        </tbody>
+                    </table>            
+                    <div class="btn-group1 mt-10">
+                        <kendo-button type="submit" class="k-primary" title="검색" data-ng-click="fbdWordVO.search()" style="width:70px;">검색</kendo-button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- 게시판 리스트 -->          
+		<div class="content-area-container col-xs-12" style="padding:0px 0px 0px 0px;">				
+	        <div kendo-grid="kgFbdWord" options="gridFbdWordVO">
+	        </div>	            
+        </div>
+    </div>
+</div>

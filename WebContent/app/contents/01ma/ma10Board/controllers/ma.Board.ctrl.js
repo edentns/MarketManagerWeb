@@ -3,39 +3,24 @@
 
     /**
      * @ngdoc function
-     * @name sy.Board.controller : sy.BoardCtrl
+     * @name ma.Qa.controller : ma.QaCtrl
      * QA 관리
      */
-    angular.module("sy.Board.controller")
-        .controller("sy.BoardCtrl", ["$window", "$scope", "$state", "$http", "$q", "$log", "sy.BoardSvc", "sy.MyInfoSvc", "APP_CONFIG", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "MenuSvc", "Util01maSvc", "APP_SA_MODEL", 
-            function ($window, $scope, $state, $http, $q, $log, SyBoardSvc, SyMyInfoSvc, APP_CONFIG, APP_CODE, $timeout, resData, Page, UtilSvc, MenuSvc, Util01maSvc, APP_SA_MODEL) {
+    angular.module("ma.Board.controller")
+        .controller("ma.BoardCtrl", ["$window", "$scope", "$state", "$http", "$q", "APP_CONFIG", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "ma.BoardSvc", 
+            function ($window, $scope, $state, $http, $q, APP_CONFIG, APP_CODE, $timeout, resData, Page, UtilSvc, maBoardSvc) {
 	            var page  = $scope.page = new Page({ auth: resData.access }),
 		            today = edt.getToday(),
 		            gridHeaderAttributes = {"class": "table-header-cell", style: "text-align: center; font-size: 12px"};
-
-	            $scope.moveBoardWrite = function() {
-	            	var defer = $q.defer();
-    				
-	            	SyMyInfoSvc.selectYnNkne().success(function(res) {
-	            		if(res) {
-	            			$state.go('app.syBoard', { kind: "", menu: null, write:true, ids: "new" });
-    						defer.resolve();
-	            		}
-	            		else {
-	            			$state.go('app.syMyInfo', { kind: "", menu: null });
-        					defer.reject();
-	            		}
-	            	}).error(function() {
-	            		$state.go('app.syMyInfo', { kind: "", menu: null });
-    					defer.reject();
-	            	});
-        			return defer.promise;
-				};
-
-	            $scope.moveMyInfo = function() {
-	            	$state.go('app.syMyInfo', { kind: "", menu: null });
-				};
-
+	            
+//	            $scope.fbdWordMng = function() {
+//	            	var fbdWordWin = $("#moFbdWordMng"),
+//	            	    undo = $("#undo");
+//	            	
+//	            	fbdWordWin.open();
+//	            	undo.fadeOut();
+//				};
+				
 	            var boardDataVO = $scope.boardDataVO = {
 	            	boxTitle : "게시판",
 	            	datesetting : {
@@ -48,9 +33,10 @@
 						}
 	        		},
              	    subject : resData.subject,  // 제목
-             	    writer  : resData.writer    // 글쓴이
+             	    writer  : resData.writer,   // 글쓴이
+             	    fbdCheck: resData.fbdCheck  // 금지어 등록된 게시물
 		        };
-	      	  
+
 	            boardDataVO.isOpen = function (val) {
 	            	if(val) {
 	            		$scope.syqakg.wrapper.height(657);
@@ -75,19 +61,19 @@
 	            	boardDataVO.search();
 	            };
 	            
-	            //toolTip
 	            UtilSvc.gridtooltipOptions.filter = "td";
 	            boardDataVO.tooltipOptions = UtilSvc.gridtooltipOptions;
-	            	
+	            
 	            //초기 실행
 	            boardDataVO.search = function(){
 	            	var self = this;
 	            	var param = {
-    						procedureParam: "USP_SY_18BOARD_SEARCH&L_DC_SBJ@s|L_NO_INSERT@s|L_START_DATE@s|L_END_DATE@s",
+    						procedureParam: "USP_MA_10BOARD_GET&L_DC_SBJ@s|L_NO_INSERT@s|L_START_DATE@s|L_END_DATE@s|L_CHECK@s",
     						L_DC_SBJ      : self.subject,
     						L_NO_INSERT   : self.writer,
     						L_START_DATE  : new Date(self.datesetting.period.start.y, self.datesetting.period.start.m-1, self.datesetting.period.start.d).dateFormat("Ymd"),
-    						L_END_DATE    : new Date(self.datesetting.period.end.y  , self.datesetting.period.end.m-1  , self.datesetting.period.end.d).dateFormat("Ymd")
+    						L_END_DATE    : new Date(self.datesetting.period.end.y  , self.datesetting.period.end.m-1  , self.datesetting.period.end.d).dateFormat("Ymd"),
+    						L_CHECK       : self.fbdCheck?'Y':'N'
     					};
 					UtilSvc.getList(param).then(function (res) {
 						$scope.gridBoardVO.dataSource.data(res.data.results[0]);
@@ -95,7 +81,8 @@
 						// 조회한 조건을 localstorage에 저장함.
 						var inquiryParam = {
 							subject : self.subject,       
-							writer  : self.writer,
+							writer  : self.writer,       
+							fbdCheck: self.fbdCheck,
 							selected: self.datesetting.selected,
     	                    start   : self.datesetting.period.start,
     	                    end     : self.datesetting.period.end
@@ -112,8 +99,7 @@
                         loading: "게시판정보를 가져오는 중...",
                         requestFailed: "게시판정보를 가져오는 중 오류가 발생하였습니다.",
                         commands: {
-                        	update: "글쓰기",
-                        	
+                        	update: "글쓰기"
                         }
                     },
                 	boxTitle : "게시판",                 	
@@ -140,7 +126,7 @@
                 					NO_BOARD  : { type: "string" },
                 					SY_FILES  : { type: "number" },
                 					DC_SBJ    : { type: "string" },
-                					NM_NKNE   : { type: "string" },
+                					NM_NKNENOC: { type: "string" },
                 					DTS_INSERT: { type: "string" },
                 					CNT_SEL   : { type: "string" }
                 				}
@@ -157,7 +143,7 @@
         		           {field: "DC_SBJ"   , title: "제목", attributes: {class:"ta-l"}, 
    							template: kendo.template($("#dc_sbj_template").html()),
    	   						headerAttributes: gridHeaderAttributes},
-        		           {field: "NM_NKNE", title: "글쓴이", width: 100,
+        		           {field: "NM_NKNENOC", title: "가입자번호/글쓴이", width: 100,
        	   					headerAttributes: gridHeaderAttributes},
         		           {field: "DTS_INSERT", title: "등록일시", width: 130, headerAttributes: gridHeaderAttributes},
         		           {field: "CNT_SEL"   , title: "조회", width: 80, attributes: {class:"ta-r"}, headerAttributes: gridHeaderAttributes}
@@ -170,7 +156,7 @@
                         var grid = this;
                         grid.tbody.find("tr").dblclick(function(e) {
                         	var dataItem = grid.dataItem(this);
-                        	$state.go('app.syBoard', { kind: "", menu: null, write: null, ids: dataItem.NO_BOARD });
+                        	$state.go('app.maBoard', { kind: "", menu: null, write: null, ids: dataItem.NO_BOARD });
                         });
                         
                         var rows = this.items();
@@ -182,7 +168,110 @@
                     },
                 	height: 699
                 };
-	            
+
+				var fbdWordVO = $scope.fbdWordVO = {
+	            	title : "금지어관리창",
+             	    fbdWord : '',  // 금지어,
+             	    width: "400",
+             	    height: "560",
+             	    visible: false,
+             	    scrollable: false,
+             	    modal: true
+		        };
+
+				fbdWordVO.search = function() {
+					gridFbdWordVO.dataSource.read();
+				};
+				
+				var gridFbdWordVO = $scope.gridFbdWordVO = {
+                    messages: {
+                        noRows: "금지어정보가 존재하지 않습니다.",
+                        loading: "금지어정보를 가져오는 중...",
+                        requestFailed: "금지어정보를 가져오는 중 오류가 발생하였습니다.",
+                        commands: {
+                        	create: "추가",
+                        	destroy: "삭제",
+                        	save: '저장',
+                        	cancel: '취소'
+                        }
+                    },
+                	boxTitle : "금지어",                 	
+                    pageable: {
+                    	messages: UtilSvc.gridPageableMessages
+                    },
+                	dataSource: new kendo.data.DataSource({
+                		transport: {
+                			read: function(e) {
+                				var param = {
+            						procedureParam: "USP_MA_10BOARD02_GET&L_NM_BOARDFILTER@s",
+            						L_NM_BOARDFILTER: fbdWordVO.fbdWord
+            					};
+            					UtilSvc.getList(param).then(function (res) {
+            						e.success(res.data.results[0]);
+            					});
+                			},
+                			create: function(e) {
+	                			var defer = $q.defer();
+                				maBoardSvc.boardFilterSave(e.data.models, "I").then(function () {
+                					e.success();
+            						defer.resolve();
+            						gridFbdWordVO.dataSource.read();                					
+                                });
+	                			return defer.promise;
+	            			},
+                			update: function(e) {
+	                			var defer = $q.defer();
+                				maBoardSvc.boardFilterSave(e.data.models, "U").success(function () {
+                					e.success();
+            						defer.resolve();
+            						gridFbdWordVO.dataSource.read();
+                				});
+	                			return defer.promise;
+                			},
+                			destroy: function(e) {
+	                			var defer = $q.defer();
+                				maBoardSvc.boardFilterSave(e.data.models, "D").success(function () {
+                					e.success();
+            						defer.resolve();
+            						gridFbdWordVO.dataSource.read();
+                				});
+	                			return defer.promise;
+                			},
+                			parameterMap: function(e, operation) {
+                				if(operation !== "read" && e.models) {
+                					return {models:kendo.stringify(e.models)};
+                				}
+                			}
+                		},
+                		batch: true,
+                		pageSize: 10,
+                		schema: {
+                			model: {
+                    			id: "NO_BOARDFILTER",
+                				fields: {
+                					ROW_NUM       : { type: "number", editable: false },
+                					NO_BOARDFILTER: { type: "string" },
+                					NM_BOARDFILTER: { type: "string", validation: {required: true}},
+                					DTS_INSERT    : { type: "string" }
+                				}
+                			}
+                		}
+                	}),
+                	toolbar: ["create","save","cancel"],
+                	columns: [
+           		           {field: "NO_BOARDFILTER"  , title: "번호",  width: 130,
+   							headerAttributes: gridHeaderAttributes},
+        		           {field: "NM_BOARDFILTER", title: "금지어", width: 150, attributes: {class:"ta-l"}, 
+       	   					headerAttributes: gridHeaderAttributes},
+       	   				   {command: ["destroy"],minwidth:10}
+                	],
+                    collapse: function(e) {
+                        this.cancelRow();
+                    },
+                    editable: true,
+                	height: 410
+                };
+				
 	            boardDataVO.init();
             }]);
 }());
