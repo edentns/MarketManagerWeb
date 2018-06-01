@@ -7,8 +7,8 @@
      * 상품분류관리
      */
     angular.module("sa.ShpIng.controller")
-        .controller("sa.ShpIngCtrl", ["$scope", "$state","$http", "$q", "$log", "sa.ShpIngSvc", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "MenuSvc", "sa.OrdCclSvc", "Util03saSvc", "APP_SA_MODEL", "sa.ShpStdbyOrdSvc", 
-            function ($scope, $state, $http, $q, $log, saShpIngSvc, APP_CODE, $timeout, resData, Page, UtilSvc, MenuSvc, saOrdCclSvc, Util03saSvc, APP_SA_MODEL, ShpStdbyOrdSvc) {
+        .controller("sa.ShpIngCtrl", ["$scope", "$state","$http", "$q", "$log", "sa.ShpIngSvc", "APP_CODE", "APP_MSG", "$timeout", "resData", "Page", "UtilSvc", "MenuSvc", "sa.OrdCclSvc", "Util03saSvc", "APP_SA_MODEL", "sa.ShpStdbyOrdSvc", 
+            function ($scope, $state, $http, $q, $log, saShpIngSvc, APP_CODE, APP_MSG, $timeout, resData, Page, UtilSvc, MenuSvc, saOrdCclSvc, Util03saSvc, APP_SA_MODEL, ShpStdbyOrdSvc) {
 	            var page  = $scope.page = new Page({ auth: resData.access }),
 		            today = edt.getToday(),
 		            menuId = MenuSvc.getNO_M($state.current.name);
@@ -258,7 +258,7 @@
     					DTS_STORAGE_TO: me.datesetting.period.end,
 					    NM_MRK_SELCT_INDEX : me.ordMrkNameOp.allSelectNames,
 					    NM_ORDSTAT_SELCT_INDEX : me.ordStatusOp.allSelectNames,
-					    CASH_PARAM : "shippingParam"
+					    CASH_PARAM : resData.storageKey
                     };   
     				if(Util03saSvc.readValidation(me.param)){
     					$scope.shippingkg.dataSource.data([]);  
@@ -369,7 +369,7 @@
                 						return;
                 					};
                 					
-                					alert("송장번호 체크로 인하여 처리시간이 다소 소요 될수 있습니다.");
+                					alert(APP_MSG.invcChkMsg);
                 					
                 					saShpIngSvc.edit(param[0]).then(function (res) {
                 						var rtnV = res.data,

@@ -1,0 +1,76 @@
+<div id="app-content" class="col-xs-12 col-sm-10">
+    <div class="row">
+        <div id="app-content-header">
+            <ol class="breadcrumb">
+                <li><a href="#99sy/syDashboard"><i class="fa fa-home fa-2x"></i></a></li>
+                <li><a href="#99sy/syBoard">게시판 글쓰기</a></li>
+            </ol>
+        </div>
+    </div>
+    
+    <div class="row">
+        <!-- 글쓰기 -->
+        <div class="content-area-container col-xs-12">
+        	<div data-content-box-layer data-box-title="boardWriteDataVO.boxTitle">
+        		<form class="search-type1" id="myForm">
+	                <table>
+						<colgroup>
+                           <col style="width: 12%;">
+                           <col style="width: 88%;">
+						</colgroup>
+						<tbody>
+							<tr>
+								<th>작성자</th>
+								<td></td>
+							</tr>
+							<tr>
+								<th><span class="form-required">* </span>제목</th>
+								<td>
+									<span data-ng-if="page.isWriteable()">
+									
+		                            	<input data-ng-model="boardWriteDataVO.params.DC_SBJ"
+		                            		   focus="boardWriteDataVO.focus"
+		                            		   title="제목"
+		                            		   data-eden-type="kor" 
+		                            		   type="text" 
+										       maxlength="90" 
+										       id="DC_SBJ" 
+										       name="DC_SBJ" 
+		                            		   class="form-control" style="width:100%;"/>
+									</span>
+									<span data-ng-if="!page.isWriteable()">{{boardWriteDataVO.params.DC_SBJ}}</span>
+								</td>
+							</tr>
+							<tr>
+								<th><span class="form-required">* </span>내용</th>
+								<td>
+									<p>저작권 등 다른 사람의 권리를 침해하거나 명예를 훼손하는 게시물은 이용약관 및 관련 법률에 의해 제재를 받을 수 있습니다. 건전한 토론문화와 양질의 댓글 문화를 위해, 타인에게 불쾌감을 주는 욕설 또는 특정 계층/민족, 종교 등을 비하하는 단어들은 표시가 제한됩니다.</p>
+									<textarea kendo-editor id="k-edi" name="DC_HTMLCONTENT" k-ng-model="boardWriteDataVO.params.DC_HTMLCONTENT" k-options="boardWriteDataVO.kEditor" style="text-align:left; height:444px;"/>
+								</td>
+							</tr>
+							<tr style="height:212px;">
+								<th>첨부파일</th>
+								<td style="position: absolute; height:212px;">
+									 <co02-filebox filevo="boardWriteDataVO.fileDataVO"/>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</form>
+				
+				<div class="btn-group1 mt-20">
+					<kendo-button data-ng-if="page.isWriteable() && boardWriteDataVO.params.NO_C === undefined" type="botton" title="저장" data-ng-click="boardWriteDataVO.goSave()" style="width:80px;"><span class="k-icon k-i-save"></span>저장</kendo-button>
+					<kendo-button data-ng-if="page.isWriteable() && boardWriteDataVO.params.NO_C === boardWriteDataVO.NO_C && boardWriteDataVO.params.NO_INSERT === boardWriteDataVO.NO_EMP" type="botton" title="수정" data-ng-click="boardWriteDataVO.goSave()" style="width:80px;"><span class="k-icon k-i-save"></span>수정</kendo-button>
+					<kendo-button type="botton" title="목록" data-ng-click="boardWriteDataVO.goList()" style="width:80px;"><span class="k-icon k-i-undo"></span>목록</kendo-button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<style>
+	.table {
+		width: 100%;
+		max-width: 100%;
+		margin-bottom: 0px;
+	}
+</style>

@@ -21,15 +21,15 @@
 	                        dataValueField: "CD_DEF",
 	    	    			dataSource: resData.csMrkDataSource,
 	    	    			valuePrimitive: true,
-	                	},
-	                	mngMrkMd: resData.csMrkDataSource.length != 0 ? resData.csMrkDataSource[0].CD_DEF : ""
+	                	},	                	
+	                	mngMrkMd: resData.resDataInitMrk
 	                };
 	            
 	            var sy15ParsVO = $scope.sy15ParsVO = {
 		            	initLoad: function(bLoading) {
 		            		var self = this;
 		            		//self.ctgrId                   = resData.cfctData[0].ID_CTGR;
-
+		            			
 		            		if(bLoading) {
 			                	angular.forEach($scope.sy15ParsGridVO, function (sy15ParsLocalGridVO, iIndex) {
 			                		sy15ParsLocalGridVO = $scope.sy15ParsGridVO.addCommonGridVO(sy15ParsLocalGridVO, iIndex);

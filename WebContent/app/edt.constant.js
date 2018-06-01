@@ -44,6 +44,7 @@
         delete  : {confirm: '삭제하시겠습니까?', success: '삭제되었습니다.', error: '삭제에 실패하였습니다.'},
         save    : {confirm: '저장하시겠습니까?', success: '저장되었습니다.', error: '저장에 실패하였습니다.'},
         cancel  : '취소하시겠습니까?',
+        invcChkMsg : "송장번호 체크로 인하여 처리시간이 다소 소요 될수 있습니다.",
         valid	: {
             name  : {space: '이름을 입력해주세요.',	 pattern: '한글과 영어, 공백 조합만 가능합니다.'},
             dept  : {space: '부서를 입력해주세요.',	 pattern: '한글과 영어, 숫자, 공백 조합만 가능합니다.'},
@@ -102,7 +103,7 @@
 	    DTS_ORDDTRM   		: { field: "DTS_ORDDTRM"  		 , type: "string" , width: "100px", textAlign: "center"		, title: "주문확정일시"},   
 	    AM_ITEMPRC    		: { field: "AM_ITEMPRC"   		 , type: "number" , width: "100px", textAlign: "right" 		, title: "주문상품단가"},
 	    AM_CUSTOM_SALES  	: { field: "AM_CUSTOM_SALES"     , type: "number" , width: "100px", textAlign: "right" 		, title: "판매가 ＋ 배송비 －수수료"},
-	    AM_CMS	         	: { field: "AM_CMS"         	 , type: "number" , width: "100px", textAlign: "right" 		, title: "수수료"},
+	    AM_CMS	         	: { field: "AM_CMS"         	 , type: "number" , width: "100px", textAlign: "right" 		, title: "수수료"},	   
 	    
 	    AM_SHPCOST    		: { field: "AM_SHPCOST"   		 , type: "number" , width: "100px", textAlign: "right" 		, title: "배송비"},                   
 	    CD_CCLHRNKRSN 		: { field: "CD_CCLHRNKRSN"		 , type: "string" , width: "100px", textAlign: "left"  		},
@@ -147,6 +148,7 @@
         DC_TKBKRJTCTT 		: { field: "DC_TKBKRJTCTT"		 , type: "string" , width: "100px", textAlign: "center"		, title: ""},
         CD_TKBKRJT    		: { field: "CD_TKBKRJT"   		 , type: "string" , width: "100px", textAlign: "center"		, title: ""},
         DTS_TKBKCPLT  		: { field: "DTS_TKBKCPLT"		 , type: "string" , width: "100px", textAlign: "center"		, title: "반납상품 접수일자"},
+        NM_TKBKHRNKRSN		: { field: "NM_TKBKHRNKRSN"      , type: "string" , width: "100px", textAlign: "center" 		, title: "반품사유"},
         
         QT_ECHG       		: { field: "QT_ECHG"      		 , type: "string" , width: "100px", textAlign: "right" 		, title: "교환 요청 수량"},
         NO_CONSPHNE   		: { field: "NO_CONSPHNE"  		 , type: "string" , width: "100px", textAlign: "center"		, title: "수취인 전화번호"},

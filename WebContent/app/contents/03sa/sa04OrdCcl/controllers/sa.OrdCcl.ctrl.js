@@ -582,7 +582,7 @@
                                         				e.sender.element.closest("tr").find("div.k-invalid-msg").hide();
                                         			}
                                         			if(this.text() === "택배사 등록" && this.selectedIndex === 1){
-                                        				$state.go("app.syPars", { menu: true, ids: null });
+                                        				$state.go("app.syPars", {mrk: noMrk,  menu: true, ids: null });
     		                                    		$scope.ordCancelManagementkg.cancelRow();
     		                                    	}
                                         		}

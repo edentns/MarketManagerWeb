@@ -13,9 +13,9 @@
 	            <div kendo-tab-strip k-content-urls="[]">
 	              <!-- tab list -->
 	              <ul>
-	                <li class="k-state-active" data-ng-click = "myInfoVO.tab(myInfoVO)">프로필 설정</li>
-	                <li data-ng-click = "myInfoVO.tab(myInfoVO)">비밀번호 설정</li>
-	                <li data-ng-click = "myInfoVO.tab(myInfoVO)">알림 설정</li>
+	                <li class="k-state-active" data-ng-click = "myInfoVO.tab(1, myInfoVO)">프로필 설정</li>
+	                <li data-ng-click = "myInfoVO.tab(2, myInfoVO)">비밀번호 설정</li>
+	                <li data-ng-click = "myInfoVO.tab(3, myInfoVO)">알림 설정</li>
 	              </ul>
 	          
 	              <div style="padding: 1em">
@@ -25,10 +25,10 @@
 			                <form class="form-type1">
 			                    <table>
 			                        <colgroup>
-			                            <col style="width: 12%">
-			                            <col style="width: 38%">
-			                            <col style="width: 12%">
-			                            <col style="width: 38%">
+			                            <col style="width: 8%">
+			                            <col style="width: 42%">
+			                            <col style="width: 8%">
+			                            <col style="width: 42%">
 			                        </colgroup>
 			                        <tbody>
 			                        <tr>
@@ -75,16 +75,25 @@
 			                        </tr>
 			                        <tr>
 			                            <th>프로필사진</th>
-			                            <td colspan="3">
-			                                <div class="file-ins-input" style="width:30%;">
+			                            <td>
+			                                <div class="file-ins-input">
 					                            <co02-filebox filevo="myInfoVO.fileProfileVO"></co02-filebox>
 					                        </div>
+			                            </td>
+			                            <th>닉네임</th>
+			                            <td>
+			                                <input type="text" class="form-control wid-x6" title="별명"
+			                                	   id="NM_NKNE" 
+	                                               maxlength="60"
+	                                               data-ng-change="myInfoVO.isChangeNmNkne()"
+	                                               data-ng-model="myInfoVO.param.NM_NKNE">
+											<button class="btn btn-primary" id="btnDupCheck" title="중복확인" data-ng-click="myInfoVO.dupCheck()" data-ng-disabled="myInfoVO.ynCheckDupNkne">중복확인</button>	                                               
 			                            </td>
 			                        </tr>
 			                        </tbody>
 			                    </table>
 			                    <div class="btn-group1 mt-20" data-ng-if="!page.isWriteable()">
-			                        <button type="button" class="btn btn-primary" title="프로필 변경" data-ng-click="myInfoVO.doFileChange()">변경</button>
+			                        <button type="button" class="btn btn-primary" title="프로필 변경" data-ng-click="myInfoVO.doUpdateProfile()">변경</button>
 			                    </div>
 			                </form>
 			            </div>

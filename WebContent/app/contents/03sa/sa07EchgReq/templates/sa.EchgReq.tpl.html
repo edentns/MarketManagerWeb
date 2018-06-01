@@ -113,14 +113,8 @@
 
 <!-- 교환 팝업 -->
 <script id="echg_popup_template" type="text/x-kendo-template">
-<div class="not_pop_title" ng-if="echgDataVO.updateChange === '001'">
-	<h4>교환처리</h4>
-</div>
-<div class="not_pop_title" ng-if="echgDataVO.updateChange === '002'">
-	<h4>교환거부 </h4>
-</div>
-<div class="not_pop_title" ng-if="echgDataVO.updateChange === '003'">
-	<h4>교환완료 </h4>
+<div class="not_pop_title">
+	<h4 ng-bind="echgDataVO.inputPopupHeaderTitle"></h4>
 </div>
 <table class="table signal" data-uid="#= uid #">
 	<colgroup>
@@ -220,22 +214,45 @@
 			교환요청내용
 		</td>
 		<td colspan="3">			
-			<textarea class="k-textbox k-state-disabled" name="DC_ECHGRSNCTT" data-bind="value: DC_ECHGRSNCTT" disabled="disabled" style="width:100%; height:150px; overflow-y: scroll;"></textarea>
+			<textarea class="k-textbox k-state-disabled" name="DC_ECHGRSNCTT" data-bind="value: DC_ECHGRSNCTT" disabled="disabled" style="width:100%; height:100px; overflow-y: scroll;"></textarea>
 		</td>
 	</tr>
-		
-	<tr class="border-bottom-line" data-ng-if="echgDataVO.updateChange === '003' && '#: CODE #' == '170902'">
+
+	<tr class="border-bottom-line" data-ng-if="echgDataVO.updateChange === '004'">
 		<td class="active border-right-line">
-			<code>*</code>교환상품<br/>회수 여부<br/>
+			반품변경사유코드
+		</td>
+		<td colspan="2">			
+		    <select kendo-drop-down-list options="echgDataVO.ddlDefaultOp" style="width: 100%">
+				<option>#: NM_ECHGHRNKRSN #</option>
+			</select>
+		</td> 
+		<td class="border-right-line">
+		</td>
+	</tr>		
+		
+	<tr class="border-bottom-line" data-ng-if="echgDataVO.updateChange === '004'">
+		<td class="active border-right-line">
+			<code>*</code>반품변경 상세사유 
+		</td>
+		<td class="border-right-line" colspan="3">			
+			<textarea class="k-textbox" name="DC_TKBKRSNCTT" data-bind="value: DC_TKBKRSNCTT" placeholder="상세 사유를 200자 이내로 입력하세요." style="width:100%; height:50px; overflow-y: scroll;"></textarea>
+		</td> 
+	</tr>
+		
+	<tr class="border-bottom-line" data-ng-if="(('003' === echgDataVO.updateChange && echgDataVO.cCode.indexOf('#: CODE #') > -1) || ('004' === echgDataVO.updateChange && ['170104','170102','170103'].indexOf('#: CODE #') > -1))">
+		<td class="active border-right-line">			
+			<span data-ng-if="['170104','170102','170902'].indexOf('#: CODE #') > -1"><code>*</code>교환상품을<br/>받으셨습니까?</span>
+			<span data-ng-if="['170103'].indexOf('#: CODE #') > -1"><code>*</code>교환완료<br/> 동시처리</span>
 		</td>
 		<td>
-			<ul id="receive-echg-group">
+			<ul id="receive-group">
 				<li style="float:left; margin-right: 5px;">
               		<input type="radio" name="RECEIVE_SET" id="receive-y" class="k-radio" required data-bind="checked: RECEIVE_SET" data-type="string" value="Y" data-ng-click="echgDataVO.receiveChkClkEvt($event)">
               		<label class="k-radio-label" for="receive-y">예 </label>
 				</li>
           		<li style="float:left">
-              		<input type="radio" name="RECEIVE_SET" id="receive-n" class="k-radio" checked="checked" required data-bind="checked: RECEIVE_SET" data-type="string" value="N" data-ng-click="echgDataVO.receiveChkClkEvt($event)">
+              		<input type="radio" name="RECEIVE_SET" id="receive-n" class="k-radio" required data-bind="checked: RECEIVE_SET" data-type="string" value="N" data-ng-click="echgDataVO.receiveChkClkEvt($event)">
              		<label class="k-radio-label" for="receive-n">아니오</label>
 				</li>
 			</ul>	
@@ -244,7 +261,45 @@
 		</td>
 	</tr>
 
-	<tr class="border-bottom-line" data-ng-if="echgDataVO.updateChange === '001' && echgDataVO.ngIfdata(echgDataVO.procShowCode, echgDataVO.procShowMrkCode, '#: CODE #')">
+	<tr class="border-bottom-line" data-ng-show="echgDataVO.receiveChk === false && echgDataVO.updateChange === '004' && echgDataVO.gCode.indexOf('#: CODE #') > -1">
+		<td class="active border-right-line">
+			<code>*</code>보류사유  
+		</td>
+		<td class="border-right-line ta-l">
+			<select
+				name="CD_HOLD"
+				data-bind="value: CD_HOLD"
+              		style="width: 100%">
+			</select>		
+		</td>
+		<td class="active border-right-line">
+			<span data-ng-show="echgDataVO.updateChange === '004' && echgDataVO.etcCostCode === 'Y' && echgDataVO.gCode.indexOf('#: CODE #') > -1">
+				<code>*</code>{{echgDataVO.etcCostName}}
+			</span> 
+		</td>
+		<td class="border-right-line">
+			<div data-ng-show="echgDataVO.updateChange === '004' && echgDataVO.etcCostCode === 'Y' && echgDataVO.gCode.indexOf('#: CODE #') > -1">
+				<input name="CD_HOLD_FEE" data-bind="value: CD_HOLD_FEE" kendo-numeric-text-box k-options="echgDataVO.cdHoldFee" style="width: 100%;" />
+			</div>
+		</td>
+	</tr>		
+	
+	<tr class="border-bottom-line" data-ng-if="echgDataVO.updateChange === '004' && echgDataVO.eCode.indexOf('#: CODE #') > -1 && ('#: NM_ECHGLRKRSN #' === '구매자' || '#: NM_ECHGLRKRSN #' === '구매자 귀책')">
+		<td class="active border-right-line">
+			<code>*</code>교환배송비<br/>전달방법
+		</td>
+		<td class="border-right-line" colspan="3">
+			<select
+				name="transform_pay_reason"
+				data-bind="value: transform_pay_reason"
+             	style="width: 100%">
+			</select>
+		</td>
+	</tr>
+
+	<tr class="border-bottom-line" data-ng-if="((echgDataVO.updateChange === '001' && echgDataVO.ngIfdata(echgDataVO.procShowCode, echgDataVO.procShowMrkCode, '#: CODE #')) || 
+				(echgDataVO.updateChange === '004' && echgDataVO.sCode.indexOf('#: CODE #') > -1 && '#: DC_ECHGSHPCOSTAPVL #' === '선결제 완료 (교환완료시 교환배송비 정산이 진행됩니다.)' && echgDataVO.receiveChk === false) ||
+				(echgDataVO.updateChange === '004' && echgDataVO.sCode.indexOf('#: CODE #') > -1 && echgDataVO.receiveChk === true))">
 		<td class="active border-right-line">
 			<code>*</code>회수 택배사<br/>
 		</td>
@@ -258,6 +313,47 @@
 			</select>
 		</td>
 		<td colspan="2">
+		</td>
+	</tr>
+
+	<tr class="border-bottom-line" data-ng-if="((echgDataVO.updateChange === '001' && echgDataVO.ngIfdata(echgDataVO.procShowCode, echgDataVO.procShowMrkCode, '#: CODE #')) || 
+				(echgDataVO.updateChange === '004' && echgDataVO.sCode.indexOf('#: CODE #') > -1 && '#: DC_ECHGSHPCOSTAPVL #' === '선결제 완료 (교환완료시 교환배송비 정산이 진행됩니다.)' && echgDataVO.receiveChk === false) ||
+				(echgDataVO.updateChange === '004' && echgDataVO.sCode.indexOf('#: CODE #') > -1 && echgDataVO.receiveChk === true)
+				)">
+		<td class="active border-right-line">
+			<code>*</code>회수 송장번호
+		</td>
+		<td colspan="3" menual-shw-wrn="echgDataVO.menualShwWrn" menual-shw-wrn-no-ord='#: NO_ORD #'>			
+			<input class="k-textbox" name="NO_INVO" data-bind="value: NO_INVO_INPUT" 
+				data-ng-trim="true"
+				placeholder="송장번호는  숫자 또는 숫자와 '-'(특수문자) 조합으로만 가능합니다."
+				autocomplete="off"
+			    style="width:100%;"/>
+		</td>
+	</tr>	
+	
+	<tr data-ng-if="echgDataVO.updateChange === '004' &&
+					((echgDataVO.gCode.indexOf('#: CODE #') > -1 && echgDataVO.receiveChk === true) ||
+					(echgDataVO.eCode.indexOf('#: CODE #') > -1 && ('#: NM_ECHGLRKRSN #' === '구매자' || '#: NM_ECHGLRKRSN #' === '구매자 귀책')) ||
+					(echgDataVO.sCode.indexOf('#: CODE #') > -1 && '#: DC_ECHGSHPCOSTAPVL #' === '선결제 완료 (교환완료시 교환배송비 정산이 진행됩니다.)'))">
+		<td class="ta-l" colspan="4">
+			<div>
+				<span style="display: inline-block; vertical-align:top; width:3%;">
+					<code>*</code>
+				</span>
+				<span data-ng-if="echgDataVO.gCode.indexOf('#: CODE #') > -1" class="span-alert-msg">
+					반품변경시 이미 결제되었던 교환배송비는 반품배송비로 전환되지않습니다. <br/>
+					구매자와 반품배송비에 대해 합의 후에 처리하시기 바랍니다
+				</span>	
+				<span data-ng-if="echgDataVO.eCode.indexOf('#: CODE #') > -1" class="span-alert-msg">
+					반품처리가 완료되면 구매자에게 자동으로 환불처리가 됩니다.
+					구매자가 교환배송비를 결제(카드/포인트)했을 경우 교환배송비가 자동환불 됩니다. 
+					(교환배송비 재계산에 따라서 발생하는 반품배송비는 구매자와 협의 후 박스에 동봉 또는 판매자에게 직접송금 의 방법을 사용하시기 바랍니다.)
+				</span>
+				<span data-ng-if="echgDataVO.sCode.indexOf('#: CODE #') > -1" class="span-alert-msg">
+					<code>*</code><mark>고객께서 이미 교환배송비를 결제한 경우, 회수 택배사를 입력해야 합니다.</mark>
+				</span>
+			</div>						
 		</td>
 	</tr>
 
@@ -278,30 +374,17 @@
 		</td>
 	</tr>
 
-	<tr class="border-bottom-line" data-ng-if="echgDataVO.updateChange === '001' && echgDataVO.ngIfdata(echgDataVO.procShowCode, echgDataVO.procShowMrkCode, '#: CODE #')">
-		<td class="active border-right-line">
-			<code>*</code>회수 송장번호
-		</td>
-		<td colspan="3" menual-shw-wrn="echgDataVO.menualShwWrn">			
-			<input class="k-textbox" name="NO_INVO" data-bind="value: NO_INVO_INPUT" 
-				data-ng-trim="true"
-				placeholder="송장번호는  숫자 또는 숫자와 '-'(특수문자) 조합으로만 가능합니다."
-				autocomplete="off"
-			    style="width:100%;"/>
-		</td>
-	</tr>
-
 	<tr class="border-bottom-line" data-ng-if="echgDataVO.updateChange === '003' && echgDataVO.ngIfdata(echgDataVO.completeShowCode, echgDataVO.completeShowMrkCode, '#: CODE #')">
 		<td class="active border-right-line">
 			<code>*</code>재발송 송장번호
 		</td>
-		<td colspan="3" menual-shw-wrn="echgDataVO.menualShwWrn">			
+		<td colspan="3" menual-shw-wrn="echgDataVO.menualShwWrn" menual-shw-wrn-no-ord='P_#: NO_ORD #'>
 			<input class="k-textbox" name="NO_INVO" data-bind="value: NO_INVO_INPUT" 
-				data-ng-trim="true"
-				placeholder="송장번호는  숫자 또는 숫자와 '-'(특수문자) 조합으로만 가능합니다."
-				autocomplete="off"
-			    style="width:100%;"/>
-		</td> 
+			data-ng-trim="true"
+			placeholder="송장번호는  숫자 또는 숫자와 '-'(특수문자) 조합으로만 가능합니다."
+			autocomplete="off"
+		    style="width:100%;"/>
+		</td>		
 	</tr>
 	
 	<tr class="border-bottom-line" data-ng-if="echgDataVO.ngIfdata(echgDataVO.completeShowCode, echgDataVO.completeShowMrkCode, '#: CODE #')">
@@ -484,10 +567,10 @@
  				# }	 	  				#
  			</div>
        	</td> 
- 		<td class="ta-l" style="padding:0">
+ 		<td class="ta-c" style="padding:0">
            	<div class="custom-style">
- 				# if(DC_ECHGRSNCTT){ 	#
- 				#: DC_ECHGRSNCTT		#
+ 				# if(NM_ECHGHRNKRSN){ 	#
+ 				#: NM_ECHGHRNKRSN		#
  				# }	 	 				#
  			</div>
  			<div class="custom-style">
@@ -609,5 +692,9 @@
 .signal{
     width: 99%;
     margin: 5px;
+}
+.span-alert-msg{
+	display: inline-block; 
+	width:95%;
 }
 </style>

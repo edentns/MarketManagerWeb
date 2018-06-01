@@ -7,11 +7,15 @@
 	          return {
 	              restrict: "A",
 	              scope: {
-	            	  menualShwWrn : '='
+	            	  menualShwWrn : '=',
+	            	  menualShwWrnNoOrd : '@',
+	            	  menualShwWrnListYn : '@'
 	              },
 	              link: function (scope, element, attrs) {
-	            	  var deliMsg = "운송장이 등록되지 않았거나 업체에서 상품 준비중입니다.",	 
-	            	  	  commonFnc = function(){
+	            	  var deliMsg = "운송장이 등록되지 않았거나 업체에서 상품 준비중입니다.",
+	            	  	  noOrd = attrs.menualShwWrnNoOrd,
+	            	  	  lstYn = attrs.menualShwWrnListYn;
+	            	  var commonFnc = function(){
                 		  	var msg = scope.menualShwWrn;
             	  		  	  
                 		  	if(msg){
@@ -29,18 +33,17 @@
 	                	  	              	  
 	                	  angular.forEach(msg, function(item, index){
 	                		  //복수건
-	                		  var trNoOrd = element.parent().find("td:eq(2)").text();
+	                		  //var trNoOrd = element.parent().find("td:eq(2)").text();
+	                		  var oldOrd = item.toString();
 	                		  
-	                		  if(trNoOrd === item.toString()){		                		
-	                			  element.text(deliMsg);		                		
-	                		  }
-	                		  //단일건
-	                		  if(!trNoOrd && item.toString()){	                	
+	                		  if(noOrd === oldOrd && lstYn === 'Y'){		                		
+	                			  element.text(deliMsg);	
+	                		  }else if((!lstYn && oldOrd && !noOrd) || (!lstYn && oldOrd === noOrd)){                	
 		                		  var html = "<div class='k-widget k-tooltip k-tooltip-validation k-invalid-msg' " +
 		                		  		"style='margin: 0.5em; display: block;' data-for='NO_INVO' role='alert'><span class='k-icon k-i-warning'> " +
 		                		  				"</span>"+deliMsg+"<div class='k-callout k-callout-n'></div></div>";
 		                		  element.append(html);
-		                	  }	                		  
+		                	  }
 	                	  });
 	                  });
 	                  

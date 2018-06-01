@@ -51,6 +51,30 @@
 						url		: APP_CONFIG.domain +"/echg/completed",
 						data	: param 
 					});
+				},
+				
+
+				
+				/**
+				 * 교환으로 변경
+				 */
+            	echgReturn : function (param) {					
+					return $http({
+						method	: "POST",
+						url		: APP_CONFIG.domain +"/echg/return",
+						data	: param 
+					});
+				},
+				
+				/**
+				 * 교환으로 변경(스토어팜 요청 전용)
+				 */
+				echgReturnStoreFarmRequest : function (param) {					
+					return $http({
+						method	: "POST",
+						url		: APP_CONFIG.domain +"/echg/return-s",
+						data	: param 
+					});
 				}
             };
         }]);

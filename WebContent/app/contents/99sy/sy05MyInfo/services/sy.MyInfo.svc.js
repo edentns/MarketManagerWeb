@@ -8,6 +8,19 @@
     angular.module("sy.MyInfo.service")
         .factory("sy.MyInfoSvc", ["APP_CONFIG", "$http", function (APP_CONFIG, $http) {
             return {
+            	/**
+                 * 프로파일을 변경한다.
+                 * @param   {Object} param - 수정될 데이터
+                 * @returns {Object} result
+                 */
+                updateProfile: function (param) {
+                    return $http({
+                        method	: "PUT",
+                        url		: APP_CONFIG.domain +"/sy05MyInfo/profile",
+                        data	: param
+                    });
+                },
+                
                 /**
                  * 비밀번호를 변경한다.
                  * @param   {Object} param - 수정될 데이터
@@ -73,7 +86,32 @@
                             }
                         }
                     }
-                }
+                },
+                
+                /**
+                 * 로그인한 사원의 닉네임이 있는지 조회 없으면 에러
+                 * @returns {Object} result
+                 */
+                selectYnNkne: function () {
+                    return $http({
+                        method	: "GET",
+                        url		: APP_CONFIG.domain +"/sy05MyInfo/ynNkne"
+                    });
+                },
+                
+                /**
+				 * 닉네임 중복 체크
+				 * @param {{nmNkne:string}} 닉네임
+				 * @returns {*}
+				 */
+                dupCheckNmNkne : function (nmNkne) {
+					return $http({
+						method	: "POST",
+						url		: APP_CONFIG.domain +"/sy05MyInfo/dupCheckNmNkne",
+						headers	: { "Content-Type": "application/x-www-form-urlencoded; text/plain; */*; charset=utf-8" },
+						data    : $.param({L_NM_NKNE:nmNkne})
+					});
+				},
             };
         }]);
 
