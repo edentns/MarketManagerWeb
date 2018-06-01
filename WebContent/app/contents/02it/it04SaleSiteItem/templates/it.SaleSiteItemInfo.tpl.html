@@ -1,0 +1,1956 @@
+<div id="app-content" class="col-xs-12 col-sm-10">
+    <div class="row">
+        <div id="app-content-header">
+            <ol class="breadcrumb">
+                <li><a href="#99sy/syDashboard"><i class="fa fa-home fa-2x"></i></a></li>
+                <li><a href="#02it/it04SaleSiteItem/list">판매Site별상품관리</a></li>
+            </ol>
+        </div>
+    </div>
+    
+    <div>
+    	<select class="form-control wid-x5" id="mngMrkList" title="오픈마켓"
+                data-ng-model="saleItemDataVO.NO_MNGMRK" style="width: 150px"
+                data-ng-options="item.NO_MNGMRK as item.NM_MRK for item in saleItemDataVO.mngMrkList"
+                ng-change="saleItemDataVO.mngCmrkChange()">
+            <option value="">오픈마켓선택</option>
+        </select>
+        <select class="form-control wid-x5" id="cmrkList" title="개인몰선택"
+                data-ng-model="saleItemDataVO.param.NO_MRK" style="width: 150px"
+                data-ng-options="item.NO_MRK as item.NM_MRK for item in saleItemDataVO.mallMrkList">
+                <option value="">개인몰선택</option>
+        </select>
+    </div>
+    
+    <div class="row" data-ng-if = "saleItemDataVO.NM_MRK == '옥션'">
+        <!-- 상품 정보 -->
+        <div class="content-area-container col-xs-12">
+        	<div data-content-box-layer data-box-title="saleItemDataVO.auct">
+        		<form class="form-type1">
+                   <table>
+                       <colgroup>
+                           <col style="width: 12%">
+                           <col style="width: 38%">
+                           <col style="width: 12%">
+                           <col style="width: 38%">
+                       </colgroup>
+                       <tbody>
+                       <tr>
+                           <th><span class="form-required">* </span>판매가</th>
+                           <td><input data-ng-if="page.isWriteable()" type="text" class="form-control wid-x4" id="AM_ITEMPRC" name="AM_ITEMPRC" title="가격 입력"
+                                      maxlength="7" data-ng-model="saleItemDataVO.param.AM_ITEMPRC">&nbsp;&nbsp;원&nbsp;&nbsp;
+                           </td>
+                           <th><span class="form-required">* </span>재고수량</th>
+                           <td><input data-ng-if="page.isWriteable()" type="text" class="form-control wid-x4" id="QT_SALE" name="QT_SALE" title="수량 입력"
+                                      maxlength="7" data-ng-model="saleItemDataVO.param.QT_SALE">&nbsp;&nbsp;※옵션이 존재할시 수량은 옵션재고수량을 따릅니다.
+                           </td>
+                       </tr>
+                       <tr>
+                          <th><span class="form-required">* </span>판매기간</th>
+	                      <td colspan="3">
+                       		   <span data-ng-if="page.isWriteable()">
+						       <div>
+						           <input kendo-date-picker data-ng-model="bssInfoDataVO.param.DT_SALESTART" style="width: 15%;" />
+						           &nbsp;&nbsp;-&nbsp;&nbsp;
+						           <input kendo-date-picker data-ng-model="bssInfoDataVO.param.DT_SALEEND" style="width: 15%;" />
+						       </div>
+						       </span>
+						       <span data-ng-if="!page.isWriteable()">
+                                   {{bssInfoDataVO.param.DT_SALESTART}} -  {{bssInfoDataVO.param.DT_SALEEND}}
+                               </span>
+                           </td>
+                       </tr>
+                       <tr>
+                           <th>예약판매</th>
+                           <td colspan="3">
+                      			<span data-ng-if="page.isWriteable()">
+                       			<input type="checkbox" ng-model = "saleItemDataVO.param.YN_RSVSALE" id="YN_RSVSALE"
+				          			   ng-true-value="Y" ng-false-value="N">&nbsp;&nbsp;&nbsp;사용
+				          		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				          		<span ng-if="saleItemDataVO.param.YN_RSVSALE=='Y'">배송시작일 : &nbsp;&nbsp;
+				          			<input kendo-date-picker data-ng-model="saleItemDataVO.param.DT_SHPSTART" style="width: 20%;" />
+				          		</span>
+                         	</span>
+                         	<span data-ng-if="!page.isWriteable() && saleItemDataVO.param.YN_RSVSALE =='Y'">
+                         		사용
+                         	</span>
+                         	<span data-ng-if="!page.isWriteable() && saleItemDataVO.param.YN_RSVSALE =='N'">
+                         		사용안함
+                         	</span>
+                        </td>
+                       </tr>
+                       <tr>
+                           <th>단위당 가격</th>
+                           <td colspan="3">
+                      		   <span style="width: 100%" data-ng-if="page.isWriteable()">
+                                  <input type="text" class="form-control wid-x1" id="VAL_UNI" name="VAL_UNI" title="단위 입력"
+                                         maxlength="7" data-ng-model="saleItemDataVO.param.VAL_UNI">&nbsp;&nbsp;당&nbsp;&nbsp;
+                                  <input type="text" class="form-control wid-x1" id="PRC_UNI" name="PRC_UNI" title="가격 입력"
+                                         maxlength="7" data-ng-model="saleItemDataVO.param.PRC_UNI">&nbsp;&nbsp;원&nbsp;&nbsp;
+                              </span>
+                              <span data-ng-if="!page.isWriteable()">{{saleItemDataVO.param.VAL_UNI}}&nbsp;&nbsp;당&nbsp;&nbsp;
+                               {{saleItemDataVO.param.PRC_UNI}}&nbsp;&nbsp;원</span>
+                      		</td>
+                       </tr>
+                       <tr>
+                           <th>최대구매수량</th>
+                           <td colspan="3">
+                      			<span data-ng-if="page.isWriteable()">
+                       			<input type="checkbox" ng-model = "saleItemDataVO.param.YN_MAXPCHSAMOU" id="YN_MAXPCHSAMOU"
+				          			   ng-true-value="Y" ng-false-value="N">&nbsp;&nbsp;&nbsp;사용
+                         	</span>
+                         	<span data-ng-if="!page.isWriteable() && saleItemDataVO.param.YN_MAXPCHSAMOU =='Y'">
+                         		사용
+                         	</span>
+                         	<span data-ng-if="!page.isWriteable() && saleItemDataVO.param.YN_MAXPCHSAMOU =='N'">
+                         		사용안함
+                         	</span>
+                               <table class="table-bordered" style="margin-left: 60px;width: 94%;margin-top: -15px"
+                               	   ng-if="saleItemDataVO.param.YN_MAXPCHSAMOU=='Y'">
+                               <colgroup>
+	                            <col style="width: 20%">
+	                            <col style="width: 80%">
+	                        </colgroup>
+                               	<tr>
+                               		<td><input type="radio" name="pchRaBtn"
+                            					   data-ng-model="saleItemDataVO.puhRaBtn" value="001">최대구매제한 
+                               		</td>
+                               		<td>구매자 1명이 최대 &nbsp;<input type="text" class="form-control wid-x1" id="AMOU_MAXPCHSLIM" name="AMOU_MAXPCHSLIM" title="최대구매갯수 입력"
+                                         maxlength="7" data-ng-model="saleItemDataVO.param.AMOU_MAXPCHSLIM">
+                               		&nbsp;&nbsp;개 까지 구매가능 (최대 999개)
+                               		</td>
+                               	</tr>
+                               	<tr>
+                               		<td><input type="radio" name="pchRaBtn"
+                            					   data-ng-model="saleItemDataVO.puhRaBtn" value="002">기간제한
+                               		</td>
+                               		<td>구매자 1명이 &nbsp;<input type="text" class="form-control wid-x1" id="DAYS_PRDLIM" name="DAYS_PRDLIM" title="일수 입력"
+                                         maxlength="7" data-ng-model="saleItemDataVO.param.DAYS_PRDLIM">
+                               		&nbsp;&nbsp;일 동안 최대 <input type="text" class="form-control wid-x1" id="AMOU_PRDLIM" name="AMOU_PRDLIM" title="갯수 입력"
+                                         maxlength="7" data-ng-model="saleItemDataVO.param.AMOU_PRDLIM">&nbsp;&nbsp;개 까지 구매가능
+                               		</td>
+                               	</tr>
+                               	<tr>
+                               		<td><input type="radio" name="pchRaBtn"
+                            					   data-ng-model="saleItemDataVO.puhRaBtn" value="003">1회제한
+                               		</td>
+                               		<td>1회구매시 최대 &nbsp;<input type="text" class="form-control wid-x1" id="AMOU_MAXPCHSLIM" name="AMOU_MAXPCHSLIM" title="갯수 입력"
+                                         maxlength="7" data-ng-model="saleItemDataVO.param.AMOU_MAXPCHSLIM">
+                               		&nbsp;&nbsp;개 까지 구매가능
+                               		</td>
+                               	</tr>
+                               </table>
+                           </td>
+                       </tr>
+                       <tr>
+                           <th>광고/홍보 입력 영역</th>
+                           <td colspan="3">
+                           	<div>
+			               		<textarea kendo-editor id="kEditAuct" name="kEditAuct" k-ng-model="saleItemDataVO.param.HTML_AVTMTRI" k-options="editorDetVO.kEditor" style="text-align:left; height:200px;"></textarea>
+			               </div>
+                           </td>
+                       </tr>
+                       <tr>
+                           <th>배송방법</th>
+                           <td colspan="3">
+                           	<span data-ng-if="page.isWriteable()">
+							    <select class="form-control wid-x5" id="CD_SHPWAY" title="배송방법"
+                                           data-ng-model="saleItemDataVO.param.CD_SHPWAY" style="width: 150px"
+                                           data-ng-options="item.CD_DEF as item.NM_DEF for item in saleItemDataVO.auctShpWayList">
+                                       <option value="">배송방법선택</option>
+                                   </select>
+                                   <select class="form-control wid-x5" id="auctParsList" title="택배사선택"
+                                           data-ng-model="saleItemDataVO.param.CD_SHPPARS" style="width: 150px"
+                                           data-ng-options="item.CD_DEF as item.NM_DEF for item in saleItemDataVO.auctParsList">
+                                           <option value="">택배사선택</option>
+                                   </select>
+                                </span>
+                                <span data-ng-if="!page.isWriteable()">
+                                	{{saleItemDataVO.param.CD_SHPWAY}}
+                                </span>
+                           </td>
+                       </tr>
+                       <tr>
+                           <th>추가배송방법</th>
+                           <td colspan="3">
+                           	<table class="table-bordered" style="margin-left: 60px;width: 94%">
+                               <colgroup>
+	                            <col style="width: 20%">
+	                            <col style="width: 80%">
+	                        </colgroup>
+                               	<tr>
+                               		<td>우편(소포/등기)
+                               		</td>
+                               		<td><span data-ng-if="page.isWriteable()">
+			                       			<div data-ng-repeat = "list in saleItemDataVO.postCodeList" style="float: left">
+				                         		<input type="radio" name="postRadio" data-ng-model="saleItemDataVO.param.CD_POST" value="{{list.CD_DEF}}">
+				                         		<label>
+				                         			{{list.NM_DEF}}
+				                         		</label>
+				                         	</div>
+				                         	<span data-ng-if="saleItemDataVO.param.CD_POST == '003'">
+				                         		<input type="text" class="form-control wid-x1" id="PRC_POST" name="PRC_POST" title="가격 입력"
+                                         				maxlength="7" data-ng-model="saleItemDataVO.param.PRC_POST">&nbsp;&nbsp;원&nbsp;&nbsp;
+                                         	</span>
+				                        </span>
+				                        <span data-ng-if="!page.isWriteable()">
+				                        	{{saleItemDataVO.param.CD_POST}}  {{saleItemDataVO.param.PRC_POST}} 원 
+				                        </span>
+                               		</td>
+                               	</tr>
+                               	<tr>
+                               		<td>퀵서비스
+                               		</td>
+                               		<td><input type="text" class="form-control wid-x8" id="AREA_QUISEV" name="AREA_QUISEV" 
+                               					data-ng-model="saleItemDataVO.param.AREA_QUISEV" readonly="readonly">
+                               			<kendo-button data-ng-if="page.isWriteable()" ng-click = "saleItemDataVO.quisevModal()">배송지역선택</kendo-button>
+                               			<kendo-button data-ng-if="page.isWriteable()" ng-click = "saleItemDataVO.quisevDelete()">삭제</kendo-button>
+                               		</td>
+                               	</tr>
+                               	<tr>
+                               		<td>퀵서비스회사명
+                               		</td>
+                               		<td><input type="text" class="form-control wid-x8" id="NM_QUISEVCMPN" name="NM_QUISEVCMPN" 
+                               					data-ng-model="saleItemDataVO.param.NM_QUISEVCMPN">
+                               		</td>
+                               	</tr>
+                               	<tr>
+                               		<td>퀵서비스전화번호
+                               		</td>
+                               		<td><input type="text" class="form-control wid-x8" id="NO_QUISEVPHNE" name="NO_QUISEVPHNE" 
+                               					data-ng-model="saleItemDataVO.param.NO_QUISEVPHNE">
+                               		</td>
+                               	</tr>
+                               </table>
+                           </td>
+                       </tr>
+                       <tr>
+                           <th>반품지정택배</th>
+                           <td>
+                           	<span data-ng-if="page.isWriteable()">
+                                   <select class="form-control wid-x5" id="auctParsList" title="오픈마켓선택"
+                                           data-ng-model="saleItemDataVO.param.CD_TKBKPARS" style="width: 150px"
+                                           data-ng-options="item.CD_DEF as item.NM_DEF for item in saleItemDataVO.auctTkbkParsList">
+                                           <option value="">택배사선택</option>
+                                   </select>
+                                </span>
+                                <span data-ng-if="!page.isWriteable()">
+                                	{{saleItemDataVO.param.CD_TKBKPARS}}
+                                </span>
+                           </td>
+                           <th>반품/교환 배송비(편도)</th>
+                           <td>
+                           	<input type="text" class="form-control wid-x4" id="PRC_ONESHP" name="PRC_ONESHP" title="가격 입력"
+                                         maxlength="7" data-ng-model="saleItemDataVO.param.PRC_ONESHP">&nbsp;&nbsp;원&nbsp;&nbsp;
+                           </td>
+                       </tr>
+                       <tr>
+                           <th>운송비부담구분</th>
+                           <td colspan="3">
+                           	<span data-ng-if="page.isWriteable()">
+                      				<div data-ng-repeat = "list in saleItemDataVO.prcShpList" style="float: left;">
+                         		<input type="radio" name="prcShpRadio" data-ng-model="saleItemDataVO.CD_PRCSHP" value="{{list.CD_DEF}}">
+                         		<label >
+                         			{{list.NM_DEF}}
+                         		</label>
+                         		</div>
+                         		<br>
+                         		<table class="form-type1" style="width: 40%;margin: 7px" data-ng-if="saleItemDataVO.CD_PRCSHP=='001'">
+                         		<colgroup>
+		                            <col style="width: 12%">
+		                            <col style="width: 38%">
+		                        </colgroup>
+		                        <tbody>
+                         			<tr>
+                         				<th>배송비템플릿</th>
+                         				<td>
+                         				<select class="form-control wid-x5" id="TplList" title="템플릿선택"
+	                                            data-ng-model="saleItemDataVO.param.CD_SHPPRCTPL" style="width: 150px"
+	                                            data-ng-options="item.CD_DEF as item.NM_DEF for item in saleItemDataVO.shpTplList">
+	                                            <option value="">템플릿선택</option>
+	                                    </select>
+										</td>
+                         			</tr>
+                         		</table>
+                         		<table class="form-type1" style="width: 100%;margin: 7px" data-ng-if="saleItemDataVO.CD_PRCSHP=='002'">
+                         		<colgroup>
+		                            <col style="width: 6%">
+		                            <col style="width: 44%">
+		                            <col style="width: 12%">
+		                        </colgroup>
+		                        <tbody>
+                         			<tr>
+                         				<th><input type="radio" name="shpRaBtn"
+                            					   data-ng-model="saleItemDataVO.shpRaBtn" value="001">무료</th>
+                         				<td colspan="2">
+                         				: 0원 (판매자 부담)
+										</td>
+                         			</tr>
+                         			<tr>
+                         				<th><input type="radio" name="shpRaBtn"
+                            					   data-ng-model="saleItemDataVO.puhRaBtn" value="002">유료</th>
+                         				<td>
+	                         				<input type="text" class="form-control wid-x2" id="PRC_SHP1" name="PRC_SHP1" title="배송비 입력"
+                                          			maxlength="7" data-ng-model="saleItemDataVO.param.PRC_SHP1">&nbsp;&nbsp;원&nbsp;&nbsp;
+										</td>
+										<td rowspan="3">
+                         				배송비 결제 여부<br>
+                         				<select class="form-control wid-x5" id="shpAWayList" title="부과방법선택"
+	                                            data-ng-model="saleItemDataVO.param.CD_SHPIMPWAY" style="width: 150px"
+	                                            data-ng-options="item.CD_DEF as item.NM_DEF for item in saleItemDataVO.shpAWayList">
+	                                            <option value="">부과방법선택</option>
+	                                    </select>
+										</td>
+                         			</tr>
+                         			<tr>
+                         				<th><input type="radio" name="shpRaBtn"
+                            					   data-ng-model="saleItemDataVO.puhRaBtn" value="003">조건부무료</th>
+                         				<td>
+                         					<input type="text" class="form-control wid-x2" id="PRC_SHP2" name="PRC_SHP2" title="배송비 입력"
+                                          			maxlength="7" data-ng-model="saleItemDataVO.param.PRC_SHP2">&nbsp;&nbsp;원&nbsp;&nbsp;/
+                                          	<input type="text" class="form-control wid-x2" id="PRC_STDSHP" name="PRC_STDSHP" title="기준배송비 입력"
+                                          			maxlength="7" data-ng-model="saleItemDataVO.param.PRC_STDSHP">&nbsp;&nbsp;원 이상 구매시 무료
+										</td>
+                         			</tr>
+                         			<tr>
+                         				<th><input type="radio" name="shpRaBtn"
+                            					   data-ng-model="saleItemDataVO.puhRaBtn" value="004">수량별차등</th>
+                         				<td>
+                         					<div data-ng-repeat = "list in saleItemDataVO.exchAClftList" style="float: left">
+				                         		<input type="radio" name="clftRadio" data-ng-model="saleItemDataVO.param.CD_EXCHGDISCCLFT" value="{{list.CD_DEF}}">
+				                         		<label>
+				                         			{{list.NM_DEF}}
+				                         		</label>
+				                         	</div>
+				                         	<table class="form-type1" style="width: 100%">
+			                                <colgroup>
+				                                <col style="width: 20%">
+					                            <col style="width: 30%">
+					                            <col style="width: 20%">
+					                            <col style="width: 25%">
+					                        </colgroup>
+			                                	<tr style="height: 60px;">
+			                                		<th colspan="2">수량 구간(최대5단계 구간까지 설정가능)</th>
+			                                		<th colspan="2">배송비</th>
+			                                	</tr>
+			                                	<tr>
+			                                		<td colspan="2">
+			                                			<input type="text" class="form-control wid-x2" id="COND_CNT0" name="COND_CNT0" title="조건 입력"
+                                          						maxlength="7" data-ng-model="saleItemDataVO.param.COND_CNT[0].VAL" ng-keyup="saleItemDataVO.condCnt()">&nbsp;&nbsp;개 미만
+			                                		</td>
+			                                		<td colspan="2">
+			                                			<input type="text" class="form-control wid-x2" id="COND_SHPPRC0" name="COND_SHPPRC0" title="조건 입력"
+                                          						maxlength="7" data-ng-model="saleItemDataVO.param.COND_SHPPRC[0].VAL">&nbsp;&nbsp;원&nbsp;&nbsp;
+			                                		</td>
+			                                	</tr>
+			                                	<tr data-ng-if="saleItemDataVO.param.COND_CNT[1].YN == 'Y'">
+			                                		<td colspan="2"><input type="text" class="form-control wid-x2" id="COND_CNT0" name="COND_CNT0" title="조건 입력"
+                                          						maxlength="7" data-ng-model="saleItemDataVO.param.COND_CNT[0].VAL" readonly="readonly">&nbsp;&nbsp;~&nbsp;&nbsp;
+                                          				<input type="text" class="form-control wid-x2" id="COND_CNT1" name="COND_CNT1" title="조건 입력"
+                                          						maxlength="7" data-ng-model="saleItemDataVO.param.COND_CNT[1].VAL" ng-keyup="saleItemDataVO.condCnt()">&nbsp;&nbsp;개 미만
+			                                		</td>
+			                                		<td colspan="2">
+			                                			<input type="text" class="form-control wid-x2" id="COND_SHPPRC1" name="COND_SHPPRC1" title="조건 입력"
+                                          						maxlength="7" data-ng-model="saleItemDataVO.param.COND_SHPPRC[1].VAL">&nbsp;&nbsp;원&nbsp;&nbsp;
+			                                			<kendo-button ng-click="saleItemDataVO.condAdd(2)" ng-if="saleItemDataVO.param.COND_CNT[2].YN == 'N'"><span class="k-icon k-i-plus"></span>추가</kendo-button>
+			                                			<kendo-button ng-click="saleItemDataVO.condDelete(1)" ng-if="saleItemDataVO.param.COND_CNT[2].YN == 'N'"><span class="k-icon k-i-cancel"></span>삭제</kendo-button>
+			                                		</td>
+			                                	</tr>
+			                                	<tr data-ng-if="saleItemDataVO.param.COND_CNT[2].YN == 'Y'">
+			                                		<td colspan="2"><input type="text" class="form-control wid-x2" id="COND_CNT1" name="COND_CNT1" title="조건 입력"
+                                          						maxlength="7" data-ng-model="saleItemDataVO.param.COND_CNT[1].VAL" readonly="readonly">&nbsp;&nbsp;~&nbsp;&nbsp;
+                                          				<input type="text" class="form-control wid-x2" id="COND_CNT2" name="COND_CNT2" title="조건 입력"
+                                          						maxlength="7" data-ng-model="saleItemDataVO.param.COND_CNT[2].VAL" ng-keyup="saleItemDataVO.condCnt()">&nbsp;&nbsp;개 미만
+			                                		</td>
+			                                		<td colspan="2">
+			                                			<input type="text" class="form-control wid-x2" id="COND_SHPPRC2" name="COND_SHPPRC2" title="조건 입력"
+                                          						maxlength="7" data-ng-model="saleItemDataVO.param.COND_SHPPRC[2].VAL">&nbsp;&nbsp;원&nbsp;&nbsp;
+			                                			<kendo-button ng-click="saleItemDataVO.condAdd(3)" ng-if="saleItemDataVO.param.COND_CNT[3].YN == 'N'"><span class="k-icon k-i-plus"></span>추가</kendo-button>
+			                                			<kendo-button ng-click="saleItemDataVO.condDelete(2)" ng-if="saleItemDataVO.param.COND_CNT[3].YN == 'N'"><span class="k-icon k-i-cancel"></span>삭제</kendo-button>
+			                                		</td>
+			                                	</tr>
+			                                	<tr data-ng-if="saleItemDataVO.param.COND_CNT[3].YN == 'Y'">
+			                                		<td colspan="2"><input type="text" class="form-control wid-x2" id="COND_CNT2" name="COND_CNT2" title="조건 입력"
+                                          						maxlength="7" data-ng-model="saleItemDataVO.param.COND_CNT[2].VAL" readonly="readonly">&nbsp;&nbsp;~&nbsp;&nbsp;
+                                          				<input type="text" class="form-control wid-x2" id="COND_CNT3" name="COND_CNT3" title="조건 입력"
+                                          						maxlength="7" data-ng-model="saleItemDataVO.param.COND_CNT[3].VAL" ng-keyup="saleItemDataVO.condCnt()">&nbsp;&nbsp;개 미만
+			                                		</td>
+			                                		<td colspan="2">
+			                                			<input type="text" class="form-control wid-x2" id="COND_SHPPRC3" name="COND_SHPPRC3" title="조건 입력"
+                                          						maxlength="7" data-ng-model="saleItemDataVO.param.COND_SHPPRC[3].VAL">&nbsp;&nbsp;원&nbsp;&nbsp;
+			                                			<kendo-button ng-click="saleItemDataVO.condDelete(3)"><span class="k-icon k-i-cancel"></span>삭제</kendo-button>
+			                                		</td>
+			                                	</tr>
+			                                	<tr>
+			                                		<td colspan="2">
+			                                			<input type="text" class="form-control wid-x2" id="COND_CNT4" name="COND_CNT4" title="조건 입력"
+                                          						maxlength="7" data-ng-model="saleItemDataVO.param.COND_CNT[4].VAL" readonly="readonly">&nbsp;&nbsp;개 이상
+			                                		</td>
+			                                		<td colspan="2">
+			                                			<input type="text" class="form-control wid-x2" id="COND_SHPPRC4" name="COND_SHPPRC4" title="조건 입력"
+                                          						maxlength="7" data-ng-model="saleItemDataVO.param.COND_SHPPRC[4].VAL">&nbsp;&nbsp;원&nbsp;&nbsp;
+			                                			<kendo-button ng-click="saleItemDataVO.condAdd(1)" ng-if="saleItemDataVO.param.COND_CNT[1].YN == 'N'"><span class="k-icon k-i-plus"></span>추가</kendo-button>
+			                                		</td>
+			                                	</tr>
+			                                </table>
+										</td>
+                         			</tr>
+                         		</table>
+                            </span>
+                            <div data-ng-if="!page.isWriteable()" >
+                            	{{saleItemDataVO.CD_PRCSHP}}
+                            </div>
+                           </td>
+                       </tr>
+                       <tr>
+                           <th>인증정보</th>
+                           <td colspan="3">
+                           	<table class="table-bordered" style="margin-left: 60px;width: 94%">
+                               <colgroup>
+	                            <col style="width: 30%">
+	                            <col style="width: 40%;text-align: center">
+	                            <col style="width: 40%;text-align: center">
+	                        </colgroup>
+                               	<tr style="height: 60px;">
+                               		<td style="text-align: center">인증정보
+                               		</td>
+                               		<td style="text-align: center">인증항목
+                               		</td>
+                               		<td style="text-align: center">인증번호
+                               		</td>
+                               	</tr>
+                               	<tr>
+                               		<td>어린이제품
+                               		</td>
+                               		<td style="text-align: center">
+                                		<select class="form-control wid-x6" id="ctfcInfo" title="인증정보"
+	                                            data-ng-model="saleItemDataVO.param.CTCFINFO[0].CD_CTFCINFO" style="width: 150px;"
+	                                            data-ng-options="item.CD_CTFCINFO as item.NM_CTFCINFO for item in saleItemDataVO.auctCtfcList[0]">
+	                                        <option value="">인증정보선택</option>
+	                                    </select>
+                               		</td>
+                               		<td style="text-align: center">
+                               			<input type="text" class="form-control wid-x6" id="ctfcInfoVal" name="ctfcInfoVal" title="인증번호 입력"
+                                          		data-ng-model="saleItemDataVO.param.CTCFINFO[0].VAL_CTFCINFO">
+                               		</td>
+                               	</tr>
+                               	<tr>
+                               		<td>생활용품
+                               		</td>
+                               		<td style="text-align: center">
+                                		<select class="form-control wid-x6" id="ctfcInfo" title="인증정보"
+	                                            data-ng-model="saleItemDataVO.param.CTCFINFO[1].CD_CTFCINFO" style="width: 150px;"
+	                                            data-ng-options="item.CD_CTFCINFO as item.NM_CTFCINFO for item in saleItemDataVO.auctCtfcList[1]">
+	                                        <option value="">인증정보선택</option>
+	                                    </select>
+                               		</td>
+                               		<td style="text-align: center">
+                               			<input type="text" class="form-control wid-x6" id="ctfcInfoVal" name="ctfcInfoVal" title="인증번호 입력"
+                                          		data-ng-model="saleItemDataVO.param.CTCFINFO[1].VAL_CTFCINFO">
+                               		</td>
+                               	</tr>
+                               	<tr>
+                               		<td>전기용품
+                               		</td>
+                               		<td style="text-align: center">
+                                		<select class="form-control wid-x6" id="ctfcInfo" title="인증정보"
+	                                            data-ng-model="saleItemDataVO.param.CTCFINFO[2].CD_CTFCINFO" style="width: 150px;"
+	                                            data-ng-options="item.CD_CTFCINFO as item.NM_CTFCINFO for item in saleItemDataVO.auctCtfcList[2]">
+	                                        <option value="">인증정보선택</option>
+	                                    </select>
+                               		</td>
+                               		<td style="text-align: center">
+                               			<input type="text" class="form-control wid-x6" id="ctfcInfoVal" name="ctfcInfoVal" title="인증번호 입력"
+                                          		data-ng-model="saleItemDataVO.param.CTCFINFO[2].VAL_CTFCINFO">
+                               		</td>
+                               	</tr>
+                               </table>
+                           </td>
+                       </tr>
+                       </tbody>
+                   </table>
+               </form>
+            </div>
+        </div>        
+    </div>
+    
+    <div class="row" data-ng-if = "saleItemDataVO.NM_MRK == '지마켓'">
+        <!-- 상품 정보 -->
+        <div class="content-area-container col-xs-12">
+        	<div data-content-box-layer data-box-title="saleItemDataVO.gmrk">
+        		<form class="form-type1">
+                   <table>
+                       <colgroup>
+                           <col style="width: 12%">
+                           <col style="width: 38%">
+                           <col style="width: 12%">
+                           <col style="width: 38%">
+                       </colgroup>
+                       <tbody>
+                       <tr>
+                           <th><span class="form-required">* </span>판매가</th>
+                           <td><input data-ng-if="page.isWriteable()" type="text" class="form-control wid-x4" id="AM_ITEMPRC" name="AM_ITEMPRC" title="가격 입력"
+                                      maxlength="7" data-ng-model="saleItemDataVO.param.AM_ITEMPRC">&nbsp;&nbsp;원&nbsp;&nbsp;
+                           </td>
+                           <th><span class="form-required">* </span>재고수량</th>
+                           <td><input data-ng-if="page.isWriteable()" type="text" class="form-control wid-x4" id="QT_SALE" name="QT_SALE" title="수량 입력"
+                                      maxlength="7" data-ng-model="saleItemDataVO.param.QT_SALE">&nbsp;&nbsp;※옵션이 존재할시 수량은 옵션재고수량을 따릅니다.
+                           </td>
+                       </tr>
+                       <tr>
+                          <th><span class="form-required">* </span>판매기간</th>
+	                      <td colspan="3">
+                       		   <span data-ng-if="page.isWriteable()">
+						       <div>
+						           <input kendo-date-picker data-ng-model="bssInfoDataVO.param.DT_SALESTART" style="width: 15%;" />
+						           &nbsp;&nbsp;-&nbsp;&nbsp;
+						           <input kendo-date-picker data-ng-model="bssInfoDataVO.param.DT_SALEEND" style="width: 15%;" />
+						       </div>
+						       </span>
+						       <span data-ng-if="!page.isWriteable()">
+                                   {{bssInfoDataVO.param.DT_SALESTART}} -  {{bssInfoDataVO.param.DT_SALEEND}}
+                               </span>
+                           </td>
+                       </tr>
+                       <tr>
+                           <th>해외판매여부</th>
+                           <td colspan="3">
+                               <span data-ng-if="page.isWriteable()">
+                       			<input type="checkbox" ng-model = "saleItemDataVO.param.YN_FECTSALE" id="YN_FECTSALE"
+				          			   ng-true-value="Y" ng-false-value="N">&nbsp;&nbsp;&nbsp;해외판매를 진행함.
+                         	</span>
+                         	<span data-ng-if="!page.isWriteable() && saleItemDataVO.param.YN_FECTSALE =='Y'">
+                         		사용
+                         	</span>
+                         	<span data-ng-if="!page.isWriteable() && saleItemDataVO.param.YN_FECTSALE =='N'">
+                         		사용안함
+                         	</span>
+                           </td>
+                       </tr>
+                       <tr>
+                           <th>단위당 가격</th>
+                           <td colspan="3">
+                      		   <span style="width: 100%" data-ng-if="page.isWriteable()">
+                                  <input type="text" class="form-control wid-x1" id="VAL_UNI" name="VAL_UNI" title="단위 입력"
+                                         maxlength="7" data-ng-model="saleItemDataVO.param.VAL_UNI">&nbsp;&nbsp;당&nbsp;&nbsp;
+                                  <input type="text" class="form-control wid-x1" id="PRC_UNI" name="PRC_UNI" title="가격 입력"
+                                         maxlength="7" data-ng-model="saleItemDataVO.param.PRC_UNI">&nbsp;&nbsp;원&nbsp;&nbsp;
+                              </span>
+                              <span data-ng-if="!page.isWriteable()">{{saleItemDataVO.param.VAL_UNI}}&nbsp;&nbsp;당&nbsp;&nbsp;
+                               {{saleItemDataVO.param.PRC_UNI}}&nbsp;&nbsp;원</span>
+                      		</td>
+                       </tr>
+                       <tr>
+                           <th>최대구매수량</th>
+                           <td colspan="3">
+                      			<span data-ng-if="page.isWriteable()">
+                       			<input type="checkbox" ng-model = "saleItemDataVO.param.YN_MAXPCHSAMOU" id="YN_MAXPCHSAMOU"
+				          			   ng-true-value="Y" ng-false-value="N">&nbsp;&nbsp;&nbsp;사용
+                         	</span>
+                         	<span data-ng-if="!page.isWriteable() && saleItemDataVO.param.YN_MAXPCHSAMOU =='Y'">
+                         		사용
+                         	</span>
+                         	<span data-ng-if="!page.isWriteable() && saleItemDataVO.param.YN_MAXPCHSAMOU =='N'">
+                         		사용안함
+                         	</span>
+                               <table class="table-bordered" style="margin-left: 60px;width: 94%;margin-top: -15px"
+                               	   ng-if="saleItemDataVO.param.YN_MAXPCHSAMOU=='Y'">
+                               <colgroup>
+	                            <col style="width: 20%">
+	                            <col style="width: 80%">
+	                        </colgroup>
+                               	<tr>
+                               		<td><input type="radio" name="pchRaBtn"
+                            					   data-ng-model="saleItemDataVO.puhRaBtn" value="001">최대구매제한 
+                               		</td>
+                               		<td>구매자 1명이 최대 &nbsp;<input type="text" class="form-control wid-x1" id="AMOU_MAXPCHSLIM" name="AMOU_MAXPCHSLIM" title="최대구매갯수 입력"
+                                         maxlength="7" data-ng-model="saleItemDataVO.param.AMOU_MAXPCHSLIM">
+                               		&nbsp;&nbsp;개 까지 구매가능 (최대 999개)
+                               		</td>
+                               	</tr>
+                               	<tr>
+                               		<td><input type="radio" name="pchRaBtn"
+                            					   data-ng-model="saleItemDataVO.puhRaBtn" value="002">기간제한
+                               		</td>
+                               		<td>구매자 1명이 &nbsp;<input type="text" class="form-control wid-x1" id="DAYS_PRDLIM" name="DAYS_PRDLIM" title="일수 입력"
+                                         maxlength="7" data-ng-model="saleItemDataVO.param.DAYS_PRDLIM">
+                               		&nbsp;&nbsp;일 동안 최대 <input type="text" class="form-control wid-x1" id="AMOU_PRDLIM" name="AMOU_PRDLIM" title="갯수 입력"
+                                         maxlength="7" data-ng-model="saleItemDataVO.param.AMOU_PRDLIM">&nbsp;&nbsp;개 까지 구매가능
+                               		</td>
+                               	</tr>
+                               	<tr>
+                               		<td><input type="radio" name="pchRaBtn"
+                            					   data-ng-model="saleItemDataVO.puhRaBtn" value="003">1회제한
+                               		</td>
+                               		<td>1회구매시 최대 &nbsp;<input type="text" class="form-control wid-x1" id="AMOU_MAXPCHSLIMCLS" name="AMOU_MAXPCHSLIMCLS" title="갯수 입력"
+                                         maxlength="7" data-ng-model="saleItemDataVO.param.AMOU_MAXPCHSLIMCLS">
+                               		&nbsp;&nbsp;개 까지 구매가능
+                               		</td>
+                               	</tr>
+                               </table>
+                           </td>
+                       </tr>
+                       <tr>
+                           <th>광고/홍보 입력 영역</th>
+                           <td colspan="3">
+                           	<div>
+			               		<textarea kendo-editor id="kEditGmrk" name="gmrkHTML_AVTMTRI" k-ng-model="saleItemDataVO.param.HTML_AVTMTRI" k-options="editorGmrkVO.kEditor" style="text-align:left; height:200px;"></textarea>
+			               </div>
+                           </td>
+                       </tr>
+                       <tr>
+                           <th>배송방법</th>
+                           <td colspan="3">
+                           	<span data-ng-if="page.isWriteable()">
+                                   <select class="form-control wid-x5" id="gmrkParsList" title="오픈마켓선택"
+                                           data-ng-model="saleItemDataVO.param.CD_SHPPARS" style="width: 150px"
+                                           data-ng-options="item.CD_DEF as item.NM_DEF for item in saleItemDataVO.gmrkParsList">
+                                           <option value="">택배사선택</option>
+                                   </select>
+                                </span>
+                                <span data-ng-if="!page.isWriteable()">
+                                	{{saleItemDataVO.param.CD_SHPWAY}}
+                                </span>
+                           </td>
+                       </tr>
+                       <tr>
+                           <th>추가배송방법</th>
+                           <td colspan="3">
+                           	<table class="table-bordered" style="margin-left: 60px;width: 94%">
+                               <colgroup>
+	                            <col style="width: 20%">
+	                            <col style="width: 80%">
+	                        </colgroup>
+                               	<tr>
+                               		<td>퀵서비스
+                               		</td>
+                               		<td><input type="text" class="form-control wid-x8" id="AREA_QUISEV" name="AREA_QUISEV" 
+                               					data-ng-model="saleItemDataVO.param.AREA_QUISEV" readonly="readonly">
+                               			<kendo-button data-ng-if="page.isWriteable()" ng-click = "saleItemDataVO.quisevModal()">배송지역선택</kendo-button>
+                               			<kendo-button data-ng-if="page.isWriteable()" ng-click = "saleItemDataVO.quisevDelete()">삭제</kendo-button>
+                               		</td>
+                               	</tr>
+                               	<tr>
+                               		<td>퀵서비스회사명
+                               		</td>
+                               		<td><input type="text" class="form-control wid-x8" id="NM_QUISEVCMPN" name="NM_QUISEVCMPN" 
+                               					data-ng-model="saleItemDataVO.param.NM_QUISEVCMPN">
+                               		</td>
+                               	</tr>
+                               	<tr>
+                               		<td>퀵서비스전화번호
+                               		</td>
+                               		<td><input type="text" class="form-control wid-x8" id="NO_QUISEVPHNE" name="NO_QUISEVPHNE" 
+                               					data-ng-model="saleItemDataVO.param.NO_QUISEVPHNE">
+                               		</td>
+                               	</tr>
+                               </table>
+                           </td>
+                       </tr>
+                       <tr>
+                           <th>반품지정택배</th>
+                           <td>
+                           	<span data-ng-if="page.isWriteable()">
+                                   <select class="form-control wid-x5" id="gmrkParsList" title="오픈마켓선택"
+                                           data-ng-model="saleItemDataVO.param.CD_TKBKPARS" style="width: 150px"
+                                           data-ng-options="item.CD_DEF as item.NM_DEF for item in saleItemDataVO.gmrkTkbkParsList">
+                                           <option value="">택배사선택</option>
+                                   </select>
+                                </span>
+                                <span data-ng-if="!page.isWriteable()">
+                                	{{saleItemDataVO.param.CD_TKBKPARS}}
+                                </span>
+                           </td>
+                           <th>반품/교환 배송비(편도)</th>
+                           <td>
+                           	<input type="text" class="form-control wid-x4" id="PRC_ONESHP" name="PRC_ONESHP" title="가격 입력"
+                                         maxlength="7" data-ng-model="saleItemDataVO.param.PRC_ONESHP">&nbsp;&nbsp;원&nbsp;&nbsp;
+                           </td>
+                       </tr>
+                       <tr>
+                           <th>운송비부담구분</th>
+                           <td colspan="3">
+                           	<span data-ng-if="page.isWriteable()">
+                      				<div data-ng-repeat = "list in saleItemDataVO.prcShpList" style="float: left;">
+                         		<input type="radio" name="prcShpRadio" data-ng-model="saleItemDataVO.CD_PRCSHP" value="{{list.CD_DEF}}">
+                         		<label >
+                         			{{list.NM_DEF}}
+                         		</label>
+                         		</div>
+                         		<br>
+                         		<table class="form-type1" style="width: 40%;margin: 7px" data-ng-if="saleItemDataVO.CD_PRCSHP=='001'">
+                         		<colgroup>
+		                            <col style="width: 12%">
+		                            <col style="width: 38%">
+		                        </colgroup>
+		                        <tbody>
+                         			<tr>
+                         				<th>배송비템플릿</th>
+                         				<td>
+                         				<select class="form-control wid-x5" id="TplList" title="템플릿선택"
+	                                            data-ng-model="saleItemDataVO.param.CD_SHPPRCTPL" style="width: 150px"
+	                                            data-ng-options="item.CD_DEF as item.NM_DEF for item in saleItemDataVO.shpTplList">
+	                                            <option value="">템플릿선택</option>
+	                                    </select>
+										</td>
+                         			</tr>
+                         		</table>
+                         		<table class="form-type1" style="width: 100%;margin: 7px" data-ng-if="saleItemDataVO.CD_PRCSHP=='002'">
+                         		<colgroup>
+		                            <col style="width: 6%">
+		                            <col style="width: 44%">
+		                            <col style="width: 12%">
+		                        </colgroup>
+		                        <tbody>
+                         			<tr>
+                         				<th><input type="radio" name="shpRaBtn"
+                            					   data-ng-model="saleItemDataVO.shpRaBtn" value="001">무료</th>
+                         				<td colspan="2">
+                         				: 0원 (판매자 부담)
+										</td>
+                         			</tr>
+                         			<tr>
+                         				<th><input type="radio" name="shpRaBtn"
+                            					   data-ng-model="saleItemDataVO.puhRaBtn" value="002">유료</th>
+                         				<td>
+	                         				<input type="text" class="form-control wid-x2" id="PRC_SHP1" name="PRC_SHP1" title="배송비 입력"
+                                          			maxlength="7" data-ng-model="saleItemDataVO.param.PRC_SHP1">&nbsp;&nbsp;원&nbsp;&nbsp;
+										</td>
+										<td rowspan="3">
+                         				배송비 결제 여부<br>
+                         				<select class="form-control wid-x5" id="shpAWayList" title="부과방법선택"
+	                                            data-ng-model="saleItemDataVO.param.CD_SHPIMPWAY" style="width: 150px"
+	                                            data-ng-options="item.CD_DEF as item.NM_DEF for item in saleItemDataVO.shpAWayList">
+	                                            <option value="">부과방법선택</option>
+	                                    </select>
+										</td>
+                         			</tr>
+                         			<tr>
+                         				<th><input type="radio" name="shpRaBtn"
+                            					   data-ng-model="saleItemDataVO.puhRaBtn" value="003">조건부무료</th>
+                         				<td>
+                         					<input type="text" class="form-control wid-x2" id="PRC_SHP2" name="PRC_SHP2" title="배송비 입력"
+                                          			maxlength="7" data-ng-model="saleItemDataVO.param.PRC_SHP2">&nbsp;&nbsp;원&nbsp;&nbsp;/
+                                          	<input type="text" class="form-control wid-x2" id="PRC_STDSHP" name="PRC_STDSHP" title="기준배송비 입력"
+                                          			maxlength="7" data-ng-model="saleItemDataVO.param.PRC_STDSHP">&nbsp;&nbsp;원 이상 구매시 무료
+										</td>
+                         			</tr>
+                         			<tr>
+                         				<th><input type="radio" name="shpRaBtn"
+                            					   data-ng-model="saleItemDataVO.puhRaBtn" value="004">수량별차등</th>
+                         				<td>
+                         					<div data-ng-repeat = "list in saleItemDataVO.exchGClftList" style="float: left">
+				                         		<input type="radio" name="clftGRadio" data-ng-model="saleItemDataVO.param.CD_AMOUSECTCLFT" value="{{list.CD_DEF}}" data-ng-change="saleItemDataVO.shpReset()">
+				                         		<label>
+				                         			{{list.NM_DEF}}
+				                         		</label>
+				                         	</div>
+				                         	<table class="form-type1" style="width: 100%" ng-if="saleItemDataVO.param.CD_AMOUSECTCLFT == '001'">
+			                                <colgroup>
+				                                <col style="width: 20%">
+					                            <col style="width: 30%">
+					                            <col style="width: 20%">
+					                            <col style="width: 25%">
+					                        </colgroup>
+					                        	<tr>
+			                                		<td colspan="4">
+			                                			구매 수량 <input type="text" class="form-control wid-x2" id="COND_CNT0" name="COND_CNT0"
+                                          						maxlength="7" data-ng-model="saleItemDataVO.param.COND_CNT[0].VAL" ng-keyup="saleItemDataVO.gmrkCondcnt()">&nbsp;개&nbsp;&nbsp;마다 배송비
+                                          					  <input type="text" class="form-control wid-x2" id="COND_SHPPRC0" name="COND_SHPPRC0"
+                                          						maxlength="7" data-ng-model="saleItemDataVO.param.COND_SHPPRC[0].VAL" ng-keyup="saleItemDataVO.gmrkCondshpprc()">&nbsp;원 반복 추가
+			                                		</td>
+			                                	</tr>
+			                                	<tr>
+			                                		<th colspan="2" style="text-align: center">구간</th>
+			                                		<th colspan="2">총배송비</th>
+			                                	</tr>
+			                                	<tr>
+			                                		<td colspan="2" style="text-align: center">
+			                                			<input type="text" class="form-control wid-x2" id="gmrkCnt1" name="gmrkCnt1" title="조건 입력"
+                                          						maxlength="7" readonly="readonly">&nbsp;&nbsp;개 ~
+                                          				<input type="text" class="form-control wid-x2" id="gmrkCnt2" name="gmrkCnt2" title="조건 입력"
+                                          						maxlength="7" readonly="readonly">&nbsp;&nbsp;개
+			                                		</td>
+			                                		<td colspan="2">
+			                                			<input type="text" class="form-control wid-x4" id="gmrkShp1" name="gmrkShp1" title="조건 입력"
+                                          						maxlength="7" readonly="readonly">&nbsp;&nbsp;원&nbsp;&nbsp;
+			                                		</td>
+			                                	</tr>
+			                                	<tr>
+			                                		<td colspan="2" style="text-align: center">
+			                                			<input type="text" class="form-control wid-x2" id="gmrkCnt3" name="gmrkCnt3" title="조건 입력"
+                                          						maxlength="7" readonly="readonly">&nbsp;&nbsp;개 ~
+                                          				<input type="text" class="form-control wid-x2" id="gmrkCnt4" name="gmrkCnt4" title="조건 입력"
+                                          						maxlength="7" readonly="readonly">&nbsp;&nbsp;개
+			                                		</td>
+			                                		<td colspan="2">
+			                                			<input type="text" class="form-control wid-x4" id="gmrkShp2" name="gmrkShp2" title="조건 입력"
+                                          						maxlength="7" readonly="readonly">&nbsp;&nbsp;원&nbsp;&nbsp;
+			                                		</td>
+			                                	</tr>
+			                                	<tr>
+			                                		<td colspan="2" style="text-align: center">
+			                                			<input type="text" class="form-control wid-x2" id="gmrkCnt5" name="gmrkCnt5" title="조건 입력"
+                                          						maxlength="7" readonly="readonly">&nbsp;&nbsp;개 ~
+                                          				<input type="text" class="form-control wid-x2" id="gmrkCnt6" name="gmrkCnt6" title="조건 입력"
+                                          						maxlength="7" readonly="readonly">&nbsp;&nbsp;개
+			                                		</td>
+			                                		<td colspan="2">
+			                                			<input type="text" class="form-control wid-x4" id="gmrkShp3" name="gmrkShp3" title="조건 입력"
+                                          						maxlength="7" readonly="readonly">&nbsp;&nbsp;원&nbsp;&nbsp;
+			                                		</td>
+			                                	</tr>
+			                                	<tr>
+			                                		<td colspan="4" style="text-align: center;">.&nbsp;&nbsp;.&nbsp;&nbsp;.
+			                                		</td>
+			                                	</tr>
+			                                </table>
+				                         	<table class="form-type1" style="width: 100%" ng-if="saleItemDataVO.param.CD_AMOUSECTCLFT == '002'">
+			                                <colgroup>
+				                                <col style="width: 20%">
+					                            <col style="width: 30%">
+					                            <col style="width: 20%">
+					                            <col style="width: 25%">
+					                        </colgroup>
+			                                	<tr style="height: 60px;">
+			                                		<th colspan="2">수량 구간(최대5단계 구간까지 설정가능)</th>
+			                                		<th colspan="2">배송비</th>
+			                                	</tr>
+			                                	<tr>
+			                                		<td colspan="2">
+			                                			<input type="text" class="form-control wid-x2" id="COND_CNT0" name="COND_CNT0" title="조건 입력"
+                                          						maxlength="7" data-ng-model="saleItemDataVO.param.COND_CNT[0].VAL" ng-keyup="saleItemDataVO.condCnt()">&nbsp;&nbsp;개 미만
+			                                		</td>
+			                                		<td colspan="2">
+			                                			<input type="text" class="form-control wid-x2" id="COND_SHPPRC0" name="COND_SHPPRC0" title="조건 입력"
+                                          						maxlength="7" data-ng-model="saleItemDataVO.param.COND_SHPPRC[0].VAL">&nbsp;&nbsp;원&nbsp;&nbsp;
+			                                		</td>
+			                                	</tr>
+			                                	<tr data-ng-if="saleItemDataVO.param.COND_CNT[1].YN == 'Y'">
+			                                		<td colspan="2"><input type="text" class="form-control wid-x2" id="COND_CNT0" name="COND_CNT0" title="조건 입력"
+                                          						maxlength="7" data-ng-model="saleItemDataVO.param.COND_CNT[0].VAL" readonly="readonly">&nbsp;&nbsp;~&nbsp;&nbsp;
+                                          				<input type="text" class="form-control wid-x2" id="COND_CNT1" name="COND_CNT1" title="조건 입력"
+                                          						maxlength="7" data-ng-model="saleItemDataVO.param.COND_CNT[1].VAL" ng-keyup="saleItemDataVO.condCnt()">&nbsp;&nbsp;개 미만
+			                                		</td>
+			                                		<td colspan="2">
+			                                			<input type="text" class="form-control wid-x2" id="COND_SHPPRC1" name="COND_SHPPRC1" title="조건 입력"
+                                          						maxlength="7" data-ng-model="saleItemDataVO.param.COND_SHPPRC[1].VAL">&nbsp;&nbsp;원&nbsp;&nbsp;
+			                                			<kendo-button ng-click="saleItemDataVO.condAdd(2)" ng-if="saleItemDataVO.param.COND_CNT[2].YN == 'N'"><span class="k-icon k-i-plus"></span>추가</kendo-button>
+			                                			<kendo-button ng-click="saleItemDataVO.condDelete(1)" ng-if="saleItemDataVO.param.COND_CNT[2].YN == 'N'"><span class="k-icon k-i-cancel"></span>삭제</kendo-button>
+			                                		</td>
+			                                	</tr>
+			                                	<tr data-ng-if="saleItemDataVO.param.COND_CNT[2].YN == 'Y'">
+			                                		<td colspan="2"><input type="text" class="form-control wid-x2" id="COND_CNT1" name="COND_CNT1" title="조건 입력"
+                                          						maxlength="7" data-ng-model="saleItemDataVO.param.COND_CNT[1].VAL" readonly="readonly">&nbsp;&nbsp;~&nbsp;&nbsp;
+                                          				<input type="text" class="form-control wid-x2" id="COND_CNT2" name="COND_CNT2" title="조건 입력"
+                                          						maxlength="7" data-ng-model="saleItemDataVO.param.COND_CNT[2].VAL" ng-keyup="saleItemDataVO.condCnt()">&nbsp;&nbsp;개 미만
+			                                		</td>
+			                                		<td colspan="2">
+			                                			<input type="text" class="form-control wid-x2" id="COND_SHPPRC2" name="COND_SHPPRC2" title="조건 입력"
+                                          						maxlength="7" data-ng-model="saleItemDataVO.param.COND_SHPPRC[2].VAL">&nbsp;&nbsp;원&nbsp;&nbsp;
+			                                			<kendo-button ng-click="saleItemDataVO.condAdd(3)" ng-if="saleItemDataVO.param.COND_CNT[3].YN == 'N'"><span class="k-icon k-i-plus"></span>추가</kendo-button>
+			                                			<kendo-button ng-click="saleItemDataVO.condDelete(2)" ng-if="saleItemDataVO.param.COND_CNT[3].YN == 'N'"><span class="k-icon k-i-cancel"></span>삭제</kendo-button>
+			                                		</td>
+			                                	</tr>
+			                                	<tr data-ng-if="saleItemDataVO.param.COND_CNT[3].YN == 'Y'">
+			                                		<td colspan="2"><input type="text" class="form-control wid-x2" id="COND_CNT2" name="COND_CNT2" title="조건 입력"
+                                          						maxlength="7" data-ng-model="saleItemDataVO.param.COND_CNT[2].VAL" readonly="readonly">&nbsp;&nbsp;~&nbsp;&nbsp;
+                                          				<input type="text" class="form-control wid-x2" id="COND_CNT3" name="COND_CNT3" title="조건 입력"
+                                          						maxlength="7" data-ng-model="saleItemDataVO.param.COND_CNT[3].VAL" ng-keyup="saleItemDataVO.condCnt()">&nbsp;&nbsp;개 미만
+			                                		</td>
+			                                		<td colspan="2">
+			                                			<input type="text" class="form-control wid-x2" id="COND_SHPPRC3" name="COND_SHPPRC3" title="조건 입력"
+                                          						maxlength="7" data-ng-model="saleItemDataVO.param.COND_SHPPRC[3].VAL">&nbsp;&nbsp;원&nbsp;&nbsp;
+			                                			<kendo-button ng-click="saleItemDataVO.condDelete(3)"><span class="k-icon k-i-cancel"></span>삭제</kendo-button>
+			                                		</td>
+			                                	</tr>
+			                                	<tr>
+			                                		<td colspan="2">
+			                                			<input type="text" class="form-control wid-x2" id="COND_CNT4" name="COND_CNT4" title="조건 입력"
+                                          						maxlength="7" data-ng-model="saleItemDataVO.param.COND_CNT[4].VAL" readonly="readonly">&nbsp;&nbsp;개 이상
+			                                		</td>
+			                                		<td colspan="2">
+			                                			<input type="text" class="form-control wid-x2" id="COND_SHPPRC4" name="COND_SHPPRC4" title="조건 입력"
+                                          						maxlength="7" data-ng-model="saleItemDataVO.param.COND_SHPPRC[4].VAL">&nbsp;&nbsp;원&nbsp;&nbsp;
+			                                			<kendo-button ng-click="saleItemDataVO.condAdd(1)" ng-if="saleItemDataVO.param.COND_CNT[1].YN == 'N'"><span class="k-icon k-i-plus"></span>추가</kendo-button>
+			                                		</td>
+			                                	</tr>
+			                                </table>
+										</td>
+                         			</tr>
+                         		</table>
+                            </span>
+                            <div data-ng-if="!page.isWriteable()" >
+                            	{{saleItemDataVO.CD_PRCSHP}}
+                            </div>
+                           </td>
+                       </tr>
+                       <tr>
+                           <th>인증정보</th>
+                           <td colspan="3">
+                           	<table class="table-bordered" style="margin-left: 60px;width: 94%">
+                               <colgroup>
+	                            <col style="width: 30%">
+	                            <col style="width: 40%;text-align: center">
+	                            <col style="width: 40%;text-align: center">
+	                        </colgroup>
+                               	<tr style="height: 60px;">
+                               		<td style="text-align: center">인증정보
+                               		</td>
+                               		<td style="text-align: center">인증항목
+                               		</td>
+                               		<td style="text-align: center">인증번호
+                               		</td>
+                               	</tr>
+                               	<tr>
+                               		<td>어린이제품
+                               		</td>
+                               		<td style="text-align: center">
+                                		<select class="form-control wid-x6" id="ctfcInfo" title="인증정보"
+	                                            data-ng-model="saleItemDataVO.param.CTCFINFO[0].CD_CTFCINFO" style="width: 150px;"
+	                                            data-ng-options="item.CD_CTFCINFO as item.NM_CTFCINFO for item in saleItemDataVO.gmrkCtfcList[0]">
+	                                        <option value="">인증정보선택</option>
+	                                    </select>
+                               		</td>
+                               		<td style="text-align: center">
+                               			<input type="text" class="form-control wid-x6" id="ctfcInfoVal" name="ctfcInfoVal" title="인증번호 입력"
+                                          		data-ng-model="saleItemDataVO.param.CTCFINFO[0].VAL_CTFCINFO">
+                               		</td>
+                               	</tr>
+                               	<tr>
+                               		<td>생활용품
+                               		</td>
+                               		<td style="text-align: center">
+                                		<select class="form-control wid-x6" id="ctfcInfo" title="인증정보"
+	                                            data-ng-model="saleItemDataVO.param.CTCFINFO[1].CD_CTFCINFO" style="width: 150px;"
+	                                            data-ng-options="item.CD_CTFCINFO as item.NM_CTFCINFO for item in saleItemDataVO.gmrkCtfcList[1]">
+	                                        <option value="">인증정보선택</option>
+	                                    </select>
+                               		</td>
+                               		<td style="text-align: center">
+                               			<input type="text" class="form-control wid-x6" id="ctfcInfoVal" name="ctfcInfoVal" title="인증번호 입력"
+                                          		data-ng-model="saleItemDataVO.param.CTCFINFO[1].VAL_CTFCINFO">
+                               		</td>
+                               	</tr>
+                               	<tr>
+                               		<td>전기용품
+                               		</td>
+                               		<td style="text-align: center">
+                                		<select class="form-control wid-x6" id="ctfcInfo" title="인증정보"
+	                                            data-ng-model="saleItemDataVO.param.CTCFINFO[2].CD_CTFCINFO" style="width: 150px;"
+	                                            data-ng-options="item.CD_CTFCINFO as item.NM_CTFCINFO for item in saleItemDataVO.gmrkCtfcList[2]">
+	                                        <option value="">인증정보선택</option>
+	                                    </select>
+                               		</td>
+                               		<td style="text-align: center">
+                               			<input type="text" class="form-control wid-x6" id="ctfcInfoVal" name="ctfcInfoVal" title="인증번호 입력"
+                                          		data-ng-model="saleItemDataVO.param.CTCFINFO[2].VAL_CTFCINFO">
+                               		</td>
+                               	</tr>
+                               </table>
+                           </td>
+                       </tr>
+                       </tbody>
+                   </table>
+               </form>
+            </div>
+        </div>        
+    </div>
+    
+    <div class="row" data-ng-if = "saleItemDataVO.NM_MRK == '스토어팜'">
+        <!-- 상품 정보 -->
+        <div class="content-area-container col-xs-12">
+        	<div data-content-box-layer data-box-title="saleItemDataVO.storf">
+        		<form class="form-type1">
+                    <table>
+                        <colgroup>
+                            <col style="width: 12%">
+                            <col style="width: 38%">
+                            <col style="width: 12%">
+                            <col style="width: 38%">
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                           <th><span class="form-required">* </span>판매가</th>
+                           <td><input data-ng-if="page.isWriteable()" type="text" class="form-control wid-x4" id="AM_ITEMPRC" name="AM_ITEMPRC" title="가격 입력"
+                                      maxlength="7" data-ng-model="saleItemDataVO.param.AM_ITEMPRC">&nbsp;&nbsp;원&nbsp;&nbsp;
+                           </td>
+                           <th><span class="form-required">* </span>재고수량</th>
+                           <td><input data-ng-if="page.isWriteable()" type="text" class="form-control wid-x4" id="QT_SALE" name="QT_SALE" title="수량 입력"
+                                      maxlength="7" data-ng-model="saleItemDataVO.param.QT_SALE">&nbsp;&nbsp;※옵션이 존재할시 수량은 옵션재고수량을 따릅니다.
+                           </td>
+                       </tr>
+                       <tr>
+                          <th><span class="form-required">* </span>판매기간</th>
+	                      <td colspan="3">
+                       		   <span data-ng-if="page.isWriteable()">
+						       <div>
+						           <input kendo-date-picker data-ng-model="bssInfoDataVO.param.DT_SALESTART" style="width: 15%;" />
+						           &nbsp;&nbsp;-&nbsp;&nbsp;
+						           <input kendo-date-picker data-ng-model="bssInfoDataVO.param.DT_SALEEND" style="width: 15%;" />
+						       </div>
+						       </span>
+						       <span data-ng-if="!page.isWriteable()">
+                                   {{bssInfoDataVO.param.DT_SALESTART}} -  {{bssInfoDataVO.param.DT_SALEEND}}
+                               </span>
+                           </td>
+                       </tr>
+                        <tr>
+                            <th>최소구매수량</th>
+                            <td colspan="3">
+                                <span data-ng-if="page.isWriteable()">
+                                    <input type="text" class="form-control wid-x1" id="AMOU_MINPCHS" name="AMOU_MINPCHS" title="가격 입력"
+                                          maxlength="7" data-ng-model="saleItemDataVO.param.AMOU_MINPCHS">&nbsp;&nbsp;개
+                                </span>
+                                <span data-ng-if="!page.isWriteable()">
+                                    {{saleItemDataVO.param.AMOU_MINPCHS}} 개
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>최대구매수량</th>
+                            <td colspan="3">
+                                <span data-ng-if="page.isWriteable()">
+	                       			<input type="checkbox" ng-model = "saleItemDataVO.YN_TIMSMAXPCHS" id="YN_TIMSMAXPCHS"
+					          			   ng-true-value="Y" ng-false-value="N">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1회 구매시 최대
+					          		<span ng-if="saleItemDataVO.YN_TIMSMAXPCHS=='Y'">&nbsp;&nbsp;
+					          			<input type="text" class="form-control wid-x1" id="AMOU_MAXPCHSLIMCLS" name="AMOU_MAXPCHSLIMCLS" title="수량 입력"
+                                          maxlength="7" data-ng-model="saleItemDataVO.param.AMOU_MAXPCHSLIMCLS">
+					          		</span>
+	                         	</span>
+	                         	<span data-ng-if="!page.isWriteable() && saleItemDataVO.YN_TIMSMAXPCHS =='Y'">
+	                         		사용
+	                         	</span>
+	                         	<span data-ng-if="!page.isWriteable() && saleItemDataVO.YN_TIMSMAXPCHS =='N'">
+	                         		사용안함
+	                         	</span></br>
+	                         	<span data-ng-if="page.isWriteable()">
+	                       			<input type="checkbox" ng-model = "saleItemDataVO.YN_PESMAXPCHS" id="YN_PESMAXPCHS"
+					          			   ng-true-value="Y" ng-false-value="N">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1인 구매시 최대
+					          		<span ng-if="saleItemDataVO.YN_PESMAXPCHS=='Y'">&nbsp;&nbsp;
+					          			<input type="text" class="form-control wid-x1" id="AMOU_MAXPCHSLIMPER" name="AMOU_MAXPCHSLIMPER" title="수량 입력"
+                                          maxlength="7" data-ng-model="saleItemDataVO.param.AMOU_MAXPCHSLIMPER">
+					          		</span>
+	                         	</span>
+	                         	<span data-ng-if="!page.isWriteable() && saleItemDataVO.YN_PESMAXPCHS =='Y'">
+	                         		사용
+	                         	</span>
+	                         	<span data-ng-if="!page.isWriteable() && saleItemDataVO.YN_PESMAXPCHS =='N'">
+	                         		사용안함
+	                         	</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>배송방법</th>
+                            <td colspan="3">
+                                <table class="table-bordered" style="margin-left: 60px;width: 94%">
+                                <colgroup>
+		                            <col style="width: 20%">
+		                            <col style="width: 80%">
+		                        </colgroup>
+                                	<tr>
+                                		<td colspan="2">
+	                                	<span data-ng-if="page.isWriteable()">
+										    <select class="form-control wid-x5" id="CD_SHPWAY" title="배송방법"
+		                                            data-ng-model="saleItemDataVO.param.CD_SHPWAY" style="width: 150px"
+		                                            data-ng-options="item.CD_DEF as item.NM_DEF for item in saleItemDataVO.shpSWayList">
+		                                        <option value="">배송방법선택</option>
+		                                    </select>&nbsp;&nbsp;&nbsp;
+		                                    <input type="checkbox" ng-model = "saleItemDataVO.YN_QICK" id="YN_QICK"
+							          			   ng-true-value="Y" ng-false-value="N">&nbsp;&nbsp;&nbsp;퀵서비스
+							          				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							          		<input type="checkbox" ng-model = "saleItemDataVO.param.YN_VISRECE" id="YN_VISRECE"
+							          			   ng-true-value="Y" ng-false-value="N">&nbsp;&nbsp;&nbsp;방문수령
+							          				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;※ 방문수령시 오픈마켓에 있는 기본 출고지로 주소가 설정됩니다.
+		                                 </span>
+		                                 <span data-ng-if="!page.isWriteable()">
+		                                 	{{saleItemDataVO.param.CD_SHPWAY}}
+		                                 </span>
+                                		</td>
+                                	</tr>
+                                	<tr data-ng-if = "saleItemDataVO.YN_QICK == 'Y'">
+                                		<td colspan="2">
+                                			<input type="text" class="form-control wid-x8" id="AREA_QUISEV" name="AREA_QUISEV" 
+                                					data-ng-model="saleItemDataVO.param.AREA_QUISEV" readonly="readonly">
+                                			<kendo-button data-ng-if="page.isWriteable()" ng-click = "saleItemDataVO.quisevModal()">배송지역선택</kendo-button>
+                                			<kendo-button data-ng-if="page.isWriteable()" ng-click = "saleItemDataVO.quisevDelete()">삭제</kendo-button>
+                                		</td>
+                                	</tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>묶음배송 여부</th>
+                            <td colspan="3">
+                            	<span data-ng-if="page.isWriteable()">
+	                       			<input type="checkbox" ng-model = "saleItemDataVO.param.YN_BDLSHP" id="YN_BDLSHP"
+					          			   ng-true-value="Y" ng-false-value="N">&nbsp;&nbsp;가능&nbsp;&nbsp;&nbsp;&nbsp;
+					          			   ※ 묶음 그룹에서 가장 작은 배송비로 부과 / 제주,도서산간 추가배송비: 설정안함 으로 설정됩니다.
+	                         	</span>
+	                         	<span data-ng-if="!page.isWriteable() && saleItemDataVO.param.YN_BDLSHP =='Y'">
+	                         		사용
+	                         	</span>
+	                         	<span data-ng-if="!page.isWriteable() && saleItemDataVO.param.YN_BDLSHP =='N'">
+	                         		사용안함
+	                         	</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>배송비 설정</th>
+                            <td colspan="3">
+                            	<table class="table-bordered" style="margin-left: 60px;width: 94%">
+                                <colgroup>
+		                            <col style="width: 13%">
+		                            <col style="width: 87%">
+		                        </colgroup>
+                                	<tr>
+                                		<td colspan="2">
+	                                	<span data-ng-if="page.isWriteable()">
+										    <div data-ng-repeat = "list in saleItemDataVO.shpprcList" style="float: left">
+				                         		<input type="radio" name="shpprcRadio" data-ng-model="saleItemDataVO.param.CD_SHPPRC" value="{{list.CD_DEF}}">
+				                         		<label>
+				                         			{{list.NM_DEF}}
+				                         		</label>
+				                         	</div>
+		                                 </span>
+		                                 <span data-ng-if="!page.isWriteable()">
+		                                 	{{saleItemDataVO.param.CD_SHPPRC}}
+		                                 </span>
+                                		</td>
+                                	</tr>
+                                	<tr data-ng-if = "page.isWriteable() && saleItemDataVO.param.CD_SHPPRC != '001'">
+                                		<th>기본배송비</th>
+                                		<td>
+                                			<span data-ng-if="page.isWriteable()">
+	                                			<input type="text" class="form-control wid-x4" id="PRC_SHP" name="PRC_SHP" title="가격 입력"
+		                                          maxlength="7" data-ng-model="saleItemDataVO.param.PRC_SHP1">&nbsp;&nbsp;원&nbsp;&nbsp;
+		                                    </span>
+		                                    <span data-ng-if="!page.isWriteable()">
+		                                 		{{saleItemDataVO.param.PRC_SHP1}}
+		                                 	</span>
+                                		</td>
+                                	</tr>
+                                	<tr data-ng-if = "page.isWriteable() && saleItemDataVO.param.CD_SHPPRC == '002'">
+                                		<th>배송비 조건</th>
+                                		<td>
+                                			<input type="text" class="form-control wid-x4" id="PRC_STDSHP" name="PRC_STDSHP" title="가격 입력"
+	                                          maxlength="7" data-ng-model="saleItemDataVO.param.PRC_STDSHP">&nbsp;&nbsp;원 이상 무료&nbsp;&nbsp;(상품 판매가 합계)
+                                		</td>
+                                	</tr>
+                                	<tr data-ng-if = "page.isWriteable() && saleItemDataVO.param.CD_SHPPRC == '004'">
+                                		<th>배송비 조건</th>
+                                		<td>
+                                			<input type="text" class="form-control wid-x4" id="PRC_STDSHP" name="PRC_STDSHP" title="가격 입력"
+	                                          maxlength="7" data-ng-model="saleItemDataVO.param.PRC_STDSHP">&nbsp;&nbsp;&nbsp;&nbsp;개 마다 기본 배송비 반복 부과
+                                		</td>
+                                	</tr>
+                                	<tr data-ng-if = "page.isWriteable() && saleItemDataVO.param.CD_SHPPRC == '005'">
+                                		<th>배송비 조건</th>
+                                		<td>
+                                			<div data-ng-repeat = "list in saleItemDataVO.sectCntYnList" style="float: left">
+				                         		<input type="radio" name="sectCntYnRadio" data-ng-model="saleItemDataVO.param.CD_SECTCNTYN" value="{{list.CD_DEF}}">
+				                         		<label>
+				                         			{{list.NM_DEF}}
+				                         		</label>
+				                         	</div></br></br>
+				                         	<input type="text" class="form-control wid-x2" id="COND_CNT" name="COND_CNT" title="가격 입력"
+	                                          maxlength="7" data-ng-model="saleItemDataVO.param.COND_CNT[0].VAL" placeholder="숫자만입력">&nbsp;&nbsp;개 까지 추가배송비 없음</br>
+	                                        <div ng-if="saleItemDataVO.param.CD_SECTCNTYN=='002'">
+	                                        <input type="text" class="form-control wid-x2" id="PRC_STDSHP" name="PRC_STDSHP" title="가격 입력"
+	                                          maxlength="7" data-ng-model="saleItemDataVO.param.COND_CNT[1].VAL" placeholder="숫자만입력">&nbsp;&nbsp;개 까지 추가배송비</br>
+	                                        <input type="text" class="form-control wid-x2" id="PRC_STDSHP" name="PRC_STDSHP" title="가격 입력"
+	                                          maxlength="7" data-ng-model="saleItemDataVO.param.PRC_STDSHP[1]" placeholder="숫자만입력">&nbsp;&nbsp;원</br>
+	                                        </div>
+	                                         	 &nbsp;초과 구매시 추가배송비</br>
+	                                        <input type="text" class="form-control wid-x2" id="PRC_STDSHP" name="PRC_STDSHP" title="가격 입력"
+	                                          maxlength="7" data-ng-model="saleItemDataVO.param.PRC_STDSHP[0]" placeholder="숫자만입력">&nbsp;&nbsp;원
+                                		</td>
+                                	</tr>
+                                	<tr data-ng-if = "page.isWriteable() && saleItemDataVO.param.CD_SHPPRC != '001'">
+                                		<th>배송비 결제 여부
+                                		</th>
+                                		<td><select class="form-control wid-x5" id="shpAWayList" title="부과방법선택"
+		                                            data-ng-model="saleItemDataVO.param.CD_SHPIMPWAY" style="width: 150px"
+		                                            data-ng-options="item.CD_DEF as item.NM_DEF for item in saleItemDataVO.shpAWayList">
+		                                            <option value="">부과방법선택</option>
+		                                    </select>
+		                                </td>
+                                	</tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>반품지정택배</th>
+                            <td>
+                            	<span data-ng-if="page.isWriteable()">
+                                    <select class="form-control wid-x5" id="storfParsList" title="오픈마켓선택"
+                                            data-ng-model="saleItemDataVO.param.CD_TKBKPARS" style="width: 150px"
+                                            data-ng-options="item.CD_DEF as item.NM_DEF for item in saleItemDataVO.storfTkbkParsList">
+                                            <option value="">택배사선택</option>
+                                    </select>
+                                 </span>
+                                 <span data-ng-if="!page.isWriteable()">
+                                 	{{saleItemDataVO.param.CD_TKBKPARS}}
+                                 </span>
+                            </td>
+                            <th>반품/교환 배송비(편도)</th>
+                            <td>
+                            	<span data-ng-if="page.isWriteable()">
+	                            	<input type="text" class="form-control wid-x4" id="PRC_TKBKSHP" name="PRC_TKBKSHP" title="가격 입력"
+	                                          maxlength="7" data-ng-model="saleItemDataVO.param.PRC_TKBKSHP">&nbsp;&nbsp;원&nbsp;&nbsp;
+                                </span>
+                                <span data-ng-if="!page.isWriteable()">
+                                    {{saleItemDataVO.param.PRC_TKBKSHP}} 원
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>지역별 차등 배송비</th>
+                            <td colspan="3">
+                            	<span data-ng-if="page.isWriteable()">
+				          			<input type="text" class="form-control wid-x1" id="PRC_AREACLSFSHP" name="PRC_AREACLSFSHP" title="가격 입력"
+                                         maxlength="7" data-ng-model="saleItemDataVO.param.PRC_AREACLSFSHP">&nbsp;원
+                                         &nbsp;&nbsp;※제주/도서산간을 제외한 지역별 차등 배송비가 있는 경우 입력 
+	                         	</span>
+	                         	<span data-ng-if="!page.isWriteable()">
+                                    {{saleItemDataVO.param.PRC_AREACLSFSHP}} 원
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>별도 설치비</th>
+                            <td colspan="3">
+                            	<span data-ng-if="page.isWriteable()">
+	                       			<input type="checkbox" ng-model = "saleItemDataVO.param.YN_SPRINSTPRC" id="YN_SPRINSTPRC"
+					          			   ng-true-value="Y" ng-false-value="N">&nbsp;&nbsp;있음
+	                         	</span>
+	                         	<span data-ng-if="!page.isWriteable() && saleItemDataVO.param.YN_SPRINSTPRC =='Y'">
+	                         		있음
+	                         	</span>
+	                         	<span data-ng-if="!page.isWriteable() && saleItemDataVO.param.YN_SPRINSTPRC =='N'">
+	                         		없음
+	                         	</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>인증정보</th>
+                            <td colspan="3">
+                            	<div><kendo-grid options="ctfcStorfVO" id="gridCtfcStorf" style="width:70%;margin-left:60px"></kendo-grid></div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+        </div>        
+    </div>
+    
+    <div class="row" data-ng-if = "saleItemDataVO.NM_MRK == '11번가'">
+        <!-- 상품 정보 -->
+        <div class="content-area-container col-xs-12">
+        	<div data-content-box-layer data-box-title="saleItemDataVO.st">
+        		<form class="form-type1">
+                    <table>
+                        <colgroup>
+                            <col style="width: 12%">
+                            <col style="width: 38%">
+                            <col style="width: 12%">
+                            <col style="width: 38%">
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                           <th><span class="form-required">* </span>판매가</th>
+                           <td><input data-ng-if="page.isWriteable()" type="text" class="form-control wid-x4" id="AM_ITEMPRC" name="AM_ITEMPRC" title="가격 입력"
+                                      maxlength="7" data-ng-model="saleItemDataVO.param.AM_ITEMPRC">&nbsp;&nbsp;원&nbsp;&nbsp;
+                           </td>
+                           <th><span class="form-required">* </span>재고수량</th>
+                           <td><input data-ng-if="page.isWriteable()" type="text" class="form-control wid-x4" id="QT_SALE" name="QT_SALE" title="수량 입력"
+                                      maxlength="7" data-ng-model="saleItemDataVO.param.QT_SALE">&nbsp;&nbsp;※옵션이 존재할시 수량은 옵션재고수량을 따릅니다.
+                           </td>
+                       </tr>
+                       <tr>
+                          <th><span class="form-required">* </span>판매기간</th>
+	                      <td colspan="3">
+                       		   <span data-ng-if="page.isWriteable()">
+						       <div>
+						           <input kendo-date-picker data-ng-model="bssInfoDataVO.param.DT_SALESTART" style="width: 15%;" />
+						           &nbsp;&nbsp;-&nbsp;&nbsp;
+						           <input kendo-date-picker data-ng-model="bssInfoDataVO.param.DT_SALEEND" style="width: 15%;" />
+						       </div>
+						       </span>
+						       <span data-ng-if="!page.isWriteable()">
+                                   {{bssInfoDataVO.param.DT_SALESTART}} -  {{bssInfoDataVO.param.DT_SALEEND}}
+                               </span>
+                           </td>
+                       </tr>
+                        <tr>
+                            <th>모델코드</th>
+                            <td>
+                               <span style="width: 100%" data-ng-if="page.isWriteable()">
+                                   <input type="text" class="form-control wid-x6" id="CD_MD" name="CD_MD" title="모델코드 입력"
+                                          maxlength="30" data-ng-model="saleItemDataVO.param.CD_MD">
+                               </span>
+                               <span data-ng-if="!page.isWriteable()">
+                                   {{saleItemDataVO.param.CD_MD}}
+                               </span>
+                            </td>
+                            <th>서비스상품</th>
+                            <td>
+                               <span style="width: 100%" data-ng-if="page.isWriteable()">
+                                   <select class="form-control wid-x6" id="ctfcInfo" title="서비스상품"
+		                                   data-ng-model="saleItemDataVO.param.CD_SERVITEM" style="width: 150px;"
+		                                   data-ng-options="item.CD_DEF as item.NM_DEF for item in saleItemDataVO.servItemList">
+		                           </select>
+                               </span>
+                               <span data-ng-if="!page.isWriteable()">
+                                   {{saleItemDataVO.param.CD_SERVITEM}}
+                               </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>최소구매수량</th>
+                            <td colspan="3">
+                                <span data-ng-if="page.isWriteable()">
+                                    <input type="text" class="form-control wid-x1" id="AMOU_MINPCHS" name="AMOU_MINPCHS" title="가격 입력"
+                                          maxlength="7" data-ng-model="saleItemDataVO.param.AMOU_MINPCHS">&nbsp;&nbsp;개
+                                </span>
+                                <span data-ng-if="!page.isWriteable()">
+                                    {{saleItemDataVO.param.AMOU_MINPCHS}} 개
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>최대구매수량</th>
+                            <td colspan="3">
+                                <span data-ng-if="page.isWriteable()">
+	                       			<input type="checkbox" ng-model = "saleItemDataVO.YN_TIMSMAXPCHS" id="YN_TIMSMAXPCHS"
+					          			   ng-true-value="Y" ng-false-value="N">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1회 구매시 최대
+					          		<span ng-if="saleItemDataVO.YN_TIMSMAXPCHS=='Y'">&nbsp;&nbsp;
+					          			<input type="text" class="form-control wid-x1" id="AMOU_MAXPCHSLIMCLS" name="AMOU_MAXPCHSLIMCLS" title="수량 입력"
+                                          maxlength="7" data-ng-model="saleItemDataVO.param.AMOU_MAXPCHSLIMCLS">
+					          		</span>
+	                         	</span>
+	                         	<span data-ng-if="!page.isWriteable() && saleItemDataVO.YN_TIMSMAXPCHS =='Y'">
+	                         		사용
+	                         	</span>
+	                         	<span data-ng-if="!page.isWriteable() && saleItemDataVO.YN_TIMSMAXPCHS =='N'">
+	                         		사용안함
+	                         	</span></br>
+	                         	<span data-ng-if="page.isWriteable()">
+	                       			<input type="checkbox" ng-model = "saleItemDataVO.YN_PESMAXPCHS" id="YN_PESMAXPCHS"
+					          			   ng-true-value="Y" ng-false-value="N">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1인 구매시 최대
+					          		<span ng-if="saleItemDataVO.YN_PESMAXPCHS=='Y'">&nbsp;&nbsp;
+					          			<input type="text" class="form-control wid-x1" id="AMOU_MAXPCHSLIMPER" name="AMOU_MAXPCHSLIMPER" title="수량 입력"
+                                          maxlength="7" data-ng-model="saleItemDataVO.param.AMOU_MAXPCHSLIMPER">
+					          		</span>
+	                         	</span>
+	                         	<span data-ng-if="!page.isWriteable() && saleItemDataVO.YN_PESMAXPCHS =='Y'">
+	                         		사용
+	                         	</span>
+	                         	<span data-ng-if="!page.isWriteable() && saleItemDataVO.YN_PESMAXPCHS =='N'">
+	                         		사용안함
+	                         	</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>홍보문구내용</th>
+                            <td colspan="3">
+                                <div>
+				               		<textarea id="textAreaSt" name="textAreaSt" k-ng-model="saleItemDataVO.param.DC_PUREWD" style="text-align:left; height:100px;border-width: 1px"></textarea>
+				               </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>배송방법</th>
+                            <td colspan="3">
+                            	<span data-ng-if="page.isWriteable()">
+								    <select class="form-control wid-x5" id="CD_SHPWAY" title="배송방법"
+                                            data-ng-model="saleItemDataVO.param.CD_SHPWAY" style="width: 150px"
+                                            data-ng-options="item.CD_DEF as item.NM_DEF for item in saleItemDataVO.shpSTWayList">
+                                        <option value="">배송방법선택</option>
+                                    </select>
+                                    <select class="form-control wid-x5" id="stParsList" title="오픈마켓선택"
+                                            data-ng-model="saleItemDataVO.param.CD_SHPPARS" style="width: 150px"
+                                            data-ng-options="item.CD_DEF as item.NM_DEF for item in saleItemDataVO.stParsList">
+                                            <option value="">택배사선택</option>
+                                    </select>
+                                 </span>
+                                 <span data-ng-if="!page.isWriteable()">
+                                 	{{saleItemDataVO.param.CD_SHPWAY}}
+                                 </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>배송비 설정</th>
+                            <td colspan="3">
+                            	<table class="table-bordered" style="margin-left: 60px;width: 94%">
+                                <colgroup>
+		                            <col style="width: 20%">
+		                            <col style="width: 80%">
+		                        </colgroup>
+                                	<tr>
+                                		<td colspan="2">
+										<span data-ng-if="page.isWriteable()">
+										    <div data-ng-repeat = "list in saleItemDataVO.shpprSTList" style="float: left">
+				                         		<input type="radio" name="shpprcSTRadio" data-ng-model="saleItemDataVO.param.CD_SHPPRC" data-ng-change="saleItemDataVO.shpReset()" value="{{list.CD_DEF}}">
+				                         		<label>
+				                         			{{list.NM_DEF}}
+				                         		</label>
+				                         	</div>
+		                                 </span>
+		                                 <span data-ng-if="!page.isWriteable()">
+		                                 	{{saleItemDataVO.param.CD_SHPPRC}}
+		                                 </span>
+                                		</td>
+                                	</tr>
+                                	<tr data-ng-if = "page.isWriteable() && saleItemDataVO.param.CD_SHPPRC != '001'">
+                                		<th>기본배송비</th>
+                                		<td>
+                                			<span data-ng-if="page.isWriteable()">
+	                                			<input type="text" class="form-control wid-x4" id="PRC_SHP" name="PRC_SHP" title="가격 입력"
+		                                          maxlength="7" data-ng-model="saleItemDataVO.param.PRC_SHP1">&nbsp;&nbsp;원&nbsp;&nbsp;
+		                                    </span>
+		                                    <span data-ng-if="!page.isWriteable()">
+		                                 		{{saleItemDataVO.param.PRC_SHP1}}
+		                                 	</span>
+                                		</td>
+                                	</tr>
+                                	<tr data-ng-if = "page.isWriteable() && saleItemDataVO.param.CD_SHPPRC == '002'">
+                                		<th>배송비 조건</th>
+                                		<td>
+                                			<input type="text" class="form-control wid-x2" id="PRC_SHP2" name="PRC_SHP2" title="배송비 입력"
+                                          			maxlength="7" data-ng-model="saleItemDataVO.param.PRC_SHP2">&nbsp;&nbsp;원&nbsp;&nbsp;/
+                                          	<input type="text" class="form-control wid-x2" id="PRC_STDSHP" name="PRC_STDSHP" title="기준배송비 입력"
+                                          			maxlength="7" data-ng-model="saleItemDataVO.param.PRC_STDSHP">&nbsp;&nbsp;원 이상 구매시 무료
+                                		</td>
+                                	</tr>
+                                	<tr data-ng-if = "page.isWriteable() && saleItemDataVO.param.CD_SHPPRC == '003'">
+                                		<th>배송비 조건</th>
+                                		<td>
+                                			<table class="form-type1" style="width: 100%">
+				                                <colgroup>
+					                                <col style="width: 20%">
+						                            <col style="width: 30%">
+						                            <col style="width: 20%">
+						                            <col style="width: 25%">
+						                        </colgroup>
+				                                	<tr style="height: 60px;">
+				                                		<th colspan="2">수량 구간(최대5단계 구간까지 설정가능)</th>
+				                                		<th colspan="2">배송비</th>
+				                                	</tr>
+				                                	<tr>
+				                                		<td colspan="2">
+				                                			<input type="text" class="form-control wid-x2" id="COND_CNT0" name="COND_CNT0" title="조건 입력"
+	                                          						maxlength="7" data-ng-model="saleItemDataVO.param.COND_CNT[0].VAL" ng-keyup="saleItemDataVO.stCondcnt002()">&nbsp;&nbsp;개 미만
+				                                		</td>
+				                                		<td colspan="2">
+				                                			<input type="text" class="form-control wid-x2" id="COND_SHPPRC0" name="COND_SHPPRC0" title="조건 입력"
+	                                          						maxlength="7" data-ng-model="saleItemDataVO.param.COND_SHPPRC[0].VAL">&nbsp;&nbsp;원&nbsp;&nbsp;
+				                                		</td>
+				                                	</tr>
+				                                	<tr data-ng-if="saleItemDataVO.param.COND_CNT[1].YN == 'Y'">
+				                                		<td colspan="2"><input type="text" class="form-control wid-x2" id="COND_CNT0" name="COND_CNT0" title="조건 입력"
+	                                          						maxlength="7" data-ng-model="saleItemDataVO.param.COND_CNT[0].VAL" readonly="readonly">&nbsp;&nbsp;~&nbsp;&nbsp;
+	                                          				<input type="text" class="form-control wid-x2" id="COND_CNT1" name="COND_CNT1" title="조건 입력"
+	                                          						maxlength="7" data-ng-model="saleItemDataVO.param.COND_CNT[1].VAL" ng-keyup="saleItemDataVO.stCondcnt002()">&nbsp;&nbsp;개 미만
+				                                		</td>
+				                                		<td td colspan="2">
+				                                			<input type="text" class="form-control wid-x2" id="COND_SHPPRC1" name="COND_SHPPRC1" title="조건 입력"
+	                                          						maxlength="7" data-ng-model="saleItemDataVO.param.COND_SHPPRC[1].VAL">&nbsp;&nbsp;원&nbsp;&nbsp;
+				                                			<kendo-button ng-click="saleItemDataVO.condAdd(2)" ng-if="saleItemDataVO.param.COND_CNT[2].YN == 'N'"><span class="k-icon k-i-plus"></span>추가</kendo-button>
+				                                			<kendo-button ng-click="saleItemDataVO.condDelete(1)" ng-if="saleItemDataVO.param.COND_CNT[2].YN == 'N'"><span class="k-icon k-i-cancel"></span>삭제</kendo-button>
+				                                		</td>
+				                                	</tr>
+				                                	<tr data-ng-if="saleItemDataVO.param.COND_CNT[2].YN == 'Y'">
+				                                		<td colspan="2"><input type="text" class="form-control wid-x2" id="COND_CNT1" name="COND_CNT1" title="조건 입력"
+	                                          						maxlength="7" data-ng-model="saleItemDataVO.param.COND_CNT[1].VAL" readonly="readonly">&nbsp;&nbsp;~&nbsp;&nbsp;
+	                                          				<input type="text" class="form-control wid-x2" id="COND_CNT2" name="COND_CNT2" title="조건 입력"
+	                                          						maxlength="7" data-ng-model="saleItemDataVO.param.COND_CNT[2].VAL" ng-keyup="saleItemDataVO.stCondcnt002()">&nbsp;&nbsp;개 미만
+				                                		</td>
+				                                		<td td colspan="2">
+				                                			<input type="text" class="form-control wid-x2" id="COND_SHPPRC2" name="COND_SHPPRC2" title="조건 입력"
+	                                          						maxlength="7" data-ng-model="saleItemDataVO.param.COND_SHPPRC[2].VAL">&nbsp;&nbsp;원&nbsp;&nbsp;
+				                                			<kendo-button ng-click="saleItemDataVO.condAdd(3)" ng-if="saleItemDataVO.param.COND_CNT[3].YN == 'N'"><span class="k-icon k-i-plus"></span>추가</kendo-button>
+				                                			<kendo-button ng-click="saleItemDataVO.condDelete(2)" ng-if="saleItemDataVO.param.COND_CNT[3].YN == 'N'"><span class="k-icon k-i-cancel"></span>삭제</kendo-button>
+				                                		</td>
+				                                	</tr>
+				                                	<tr data-ng-if="saleItemDataVO.param.COND_CNT[3].YN == 'Y'">
+				                                		<td colspan="2"><input type="text" class="form-control wid-x2" id="COND_CNT2" name="COND_CNT2" title="조건 입력"
+	                                          						maxlength="7" data-ng-model="saleItemDataVO.param.COND_CNT[2].VAL" readonly="readonly">&nbsp;&nbsp;~&nbsp;&nbsp;
+	                                          				<input type="text" class="form-control wid-x2" id="COND_CNT3" name="COND_CNT3" title="조건 입력"
+	                                          						maxlength="7" data-ng-model="saleItemDataVO.param.COND_CNT[3].VAL" ng-keyup="saleItemDataVO.stCondcnt002()">&nbsp;&nbsp;개 미만
+				                                		</td>
+				                                		<td td colspan="2">
+				                                			<input type="text" class="form-control wid-x2" id="COND_SHPPRC3" name="COND_SHPPRC3" title="조건 입력"
+	                                          						maxlength="7" data-ng-model="saleItemDataVO.param.COND_SHPPRC[3].VAL">&nbsp;&nbsp;원&nbsp;&nbsp;
+				                                			<kendo-button ng-click="saleItemDataVO.condDelete(3)"><span class="k-icon k-i-cancel"></span>삭제</kendo-button>
+				                                		</td>
+				                                	</tr>
+				                                	<tr>
+				                                		<td colspan="2">
+				                                			<input type="text" class="form-control wid-x2" id="COND_CNT4" name="COND_CNT4" title="조건 입력"
+	                                          						maxlength="7" data-ng-model="saleItemDataVO.param.COND_CNT[4].VAL" readonly="readonly">&nbsp;&nbsp;개 이상
+				                                		</td>
+				                                		<td colspan="2">
+				                                			<input type="text" class="form-control wid-x2" id="COND_SHPPRC4" name="COND_SHPPRC4" title="조건 입력"
+	                                          						maxlength="7" data-ng-model="saleItemDataVO.param.COND_SHPPRC[4].VAL">&nbsp;&nbsp;원&nbsp;&nbsp;
+				                                			<kendo-button ng-click="saleItemDataVO.condAdd(1)" ng-if="saleItemDataVO.param.COND_CNT[1].YN == 'N'"><span class="k-icon k-i-plus"></span>추가</kendo-button>
+				                                		</td>
+				                                	</tr>
+				                                </table>
+                                		</td>
+                                	</tr>
+                                	<tr data-ng-if = "page.isWriteable() && saleItemDataVO.param.CD_SHPPRC == '005'">
+                                		<th>배송비 추가 안내</th>
+                                		<td>
+                                			<select class="form-control wid-x5" id="CD_SHPPRCADDGUI"
+		                                            data-ng-model="saleItemDataVO.param.CD_SHPPRCADDGUI" style="width: 150px"
+		                                            data-ng-options="item.CD_DEF as item.NM_DEF for item in saleItemDataVO.shpGuiList">
+		                                            <option value="">해당사항없음</option>
+		                                    </select>
+		                                    &nbsp;(착불만 가능 선택시만 설정 가능)
+                                		</td>
+                                	</tr>
+                                	<tr data-ng-if = "page.isWriteable() && saleItemDataVO.param.CD_SHPPRC != '001'">
+                                		<th>배송비 결제 여부
+                                		</th>
+                                		<td><select class="form-control wid-x5" id="shpAWayList" title="부과방법선택"
+		                                            data-ng-model="saleItemDataVO.param.CD_SHPIMPWAY" style="width: 150px"
+		                                            data-ng-options="item.CD_DEF as item.NM_DEF for item in saleItemDataVO.shpAWayList">
+		                                            <option value="">부과방법선택</option>
+		                                    </select>
+		                                </td>
+                                	</tr>
+                                	<tr data-ng-if = "page.isWriteable() && (saleItemDataVO.param.CD_SHPPRC == '001' || saleItemDataVO.param.CD_SHPPRC == '003' || saleItemDataVO.param.CD_SHPPRC == '005')">
+                                		<th>묶음배송여부
+                                		</th>
+                                		<td>
+											<select class="form-control wid-x3" id="YN_BDLSHP"
+		                                            data-ng-model="saleItemDataVO.param.YN_BDLSHP" coopyle="width: 100px">
+		                                        <option value="N">불가</option>
+		                                        <option value="Y">가능</option>
+	                                    	</select>
+		                                </td>
+                                	</tr>
+                                </table>
+                                <div>
+                                	<span data-ng-if="page.isWriteable()">
+	                       			<input type="checkbox" ng-model = "saleItemDataVO.YN_JJMNT" id="YN_JJMNT"
+					          			   ng-true-value="Y" ng-false-value="N">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;제주/도서산간 추가배송비 설정
+						          		<span ng-if="saleItemDataVO.YN_JJMNT=='Y'">&nbsp;&nbsp;
+						          			<table class="form-type1" style="width: 100%">
+				                                <colgroup>
+					                                <col style="width: 20%">
+						                            <col style="width: 30%">
+						                            <col style="width: 20%">
+						                            <col style="width: 25%">
+						                        </colgroup>
+				                                	<tr>
+				                                		<th>제주</th>
+				                                		<td>
+				                                			<input type="text" class="form-control wid-x2" id="PRC_JJADDSHP" name="PRC_JJADDSHP"
+	                                          						maxlength="7" data-ng-model="saleItemDataVO.param.PRC_JJADDSHP">원
+				                                		</td>
+				                                		<th>도서산간</th>
+				                                		<td>
+				                                			<input type="text" class="form-control wid-x2" id="PRC_MNTADDSHP" name="PRC_MNTADDSHP" 
+	                                          						maxlength="7" data-ng-model="saleItemDataVO.param.PRC_MNTADDSHP">원
+				                                		</td>
+				                                	</tr>
+				                                </table>
+						          		</span>
+		                         	</span>
+		                         	<span data-ng-if="!page.isWriteable() && saleItemDataVO.YN_JJMNT =='Y'">
+		                         		사용 제주 : {{saleItemDataVO.param.PRC_JJADDSHP}} / 도서산간 : {{saleItemDataVO.param.PRC_MNTADDSHP}}
+		                         	</span>
+		                         	<span data-ng-if="!page.isWriteable() && saleItemDataVO.YN_JJMNT =='N'">
+		                         		사용안함
+		                         	</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>초기배송비 무료시 부과방법</th>
+                            <td>
+                            	<input type="radio" name="erlshpprcRaBtn"
+                             			data-ng-model="saleItemDataVO.param.CD_ERLSHPPRCFREIMPWAY" value="왕복">왕복 (x2) 
+                             	<input type="radio" name="erlshpprcRaBtn"
+                             			data-ng-model="saleItemDataVO.param.CD_ERLSHPPRCFREIMPWAY" value="편도">편도
+                            </td>
+                            <th>반품/교환 배송비</th>
+                            <td colspan="3">
+                       		   <span style="width: 100%" data-ng-if="page.isWriteable()">편도 :
+                                   <input type="text" class="form-control wid-x3" id="PRC_ONESHP" name="PRC_ONESHP"
+                                          maxlength="7" data-ng-model="saleItemDataVO.param.PRC_ONESHP">&nbsp;&nbsp;원 / 교환(왕복):&nbsp;&nbsp;
+                                   <input type="text" class="form-control wid-x3" id="PRC_RTIPSHP" name="PRC_RTIPSHP"
+                                          maxlength="7" data-ng-model="saleItemDataVO.param.PRC_RTIPSHP">&nbsp;&nbsp;원&nbsp;&nbsp;
+                               </span>
+                               <span data-ng-if="!page.isWriteable()">편도:{{saleItemDataVO.param.PRC_ONESHP}}&nbsp;&nbsp;원 / 교환(왕복)&nbsp;&nbsp;
+                                {{saleItemDataVO.param.PRC_RTIPSHP}}&nbsp;&nbsp;원</span>
+                       		</td>
+                        </tr>
+                        <tr>
+                            <th>반품/교환 안내</th>
+                            <td colspan="3">
+                            	<div>
+				               		<textarea id="guiTextArea" name="guiTextArea" maxlength="5000" placeholder="상품상세 페이지에 안내되는 내용으로, 반품/교환 문의를 줄이실 수 있습니다."
+				               				 k-ng-model="saleItemDataVO.param.GUI_TKBKECHG" style="text-align:left; height:100px;border-width: 1px"></textarea>
+				               </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>인증정보</th>
+                            <td colspan="3">
+                            	<div><kendo-grid options="ctfcStVO" id="gridCtfcSt" style="width:70%;margin-left:60px"></kendo-grid></div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+        </div>        
+    </div>
+    
+    <div class="row" data-ng-if = "saleItemDataVO.NM_MRK == '쿠팡'">
+        <!-- 상품 정보 -->
+        <div class="content-area-container col-xs-12">
+        	<div data-content-box-layer data-box-title="saleItemDataVO.coop">
+        		<form class="form-type1">
+                    <table>
+                        <colgroup>
+                            <col style="width: 12%">
+                            <col style="width: 38%">
+                            <col style="width: 12%">
+                            <col style="width: 38%">
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                           <th><span class="form-required">* </span>판매가</th>
+                           <td><input data-ng-if="page.isWriteable()" type="text" class="form-control wid-x4" id="AM_ITEMPRC" name="AM_ITEMPRC" title="가격 입력"
+                                      maxlength="7" data-ng-model="saleItemDataVO.param.AM_ITEMPRC">&nbsp;&nbsp;원&nbsp;&nbsp;
+                           </td>
+                           <th><span class="form-required">* </span>재고수량</th>
+                           <td><input data-ng-if="page.isWriteable()" type="text" class="form-control wid-x4" id="QT_SALE" name="QT_SALE" title="수량 입력"
+                                      maxlength="7" data-ng-model="saleItemDataVO.param.QT_SALE">&nbsp;&nbsp;※옵션이 존재할시 수량은 옵션재고수량을 따릅니다.
+                           </td>
+                       </tr>
+                       <tr>
+                          <th><span class="form-required">* </span>판매기간</th>
+	                      <td colspan="3">
+                       		   <span data-ng-if="page.isWriteable()">
+						       <div>
+						           <input kendo-date-picker data-ng-model="bssInfoDataVO.param.DT_SALESTART" style="width: 15%;" />
+						           &nbsp;&nbsp;-&nbsp;&nbsp;
+						           <input kendo-date-picker data-ng-model="bssInfoDataVO.param.DT_SALEEND" style="width: 15%;" />
+						       </div>
+						       </span>
+						       <span data-ng-if="!page.isWriteable()">
+                                   {{bssInfoDataVO.param.DT_SALESTART}} -  {{bssInfoDataVO.param.DT_SALEEND}}
+                               </span>
+                           </td>
+                        </tr>
+                        <tr>
+                            <th>제조사</th>
+                            <td colspan="3">
+                            	<span style="width: 100%" data-ng-if="page.isWriteable()">
+                                   <input type="text" class="form-control wid-x4" id="NM_MNFR" name="NM_MNFR" title="제조사 입력"
+                                          maxlength="20" data-ng-model="saleItemDataVO.param.NM_MNFR">
+                               </span>
+                               <span data-ng-if="!page.isWriteable()">
+                                   {{saleItemDataVO.param.NM_MNFR}}
+                               </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>바코드</th>
+                            <td colspan="3">
+                                <sapn data-ng-if="page.isWriteable()">
+                       			<select class="form-control wid-x5" id="YN_BCD" title="바코드유무"
+                                           data-ng-model="saleItemDataVO.param.YN_BCD" coopyle="width: 100px" ng-change="saleItemDataVO.bcdChange()">
+                                       <option value="N">없음</option>
+                                       <option value="Y">있음</option>
+                                   </select>
+                                   <input type="text" class="form-control wid-x4" id="DC_BCD" title="사유 입력"
+		                                maxlength="20" data-ng-model="saleItemDataVO.param.DC_BCD" placeholder="바코드 없는 사유">
+		                        </sapn>
+		                        <sapn data-ng-if="!page.isWriteable() && saleItemDataVO.param.YN_BCD == 'Y'">
+		                        	바코드 있음
+		                        </sapn>
+		                        <sapn data-ng-if="!page.isWriteable() && saleItemDataVO.param.YN_BCD == 'N'">
+		                        	바코드 없음 - 사유 : {{saleItemDataVO.param.DC_BCD}}
+		                        </sapn>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>최대구매수량</th>
+                            <td >
+                            	<span data-ng-if="page.isWriteable()">
+                            		&nbsp;&nbsp;1인당 최대 구매 수량<input type="text" class="form-control wid-x1" id="AMOU_PESMAXPCHS" name="AMOU_PESMAXPCHS" title="갯수 입력"
+                                          maxlength="5" data-ng-model="saleItemDataVO.param.COOP.AMOU_PESMAXPCHS">
+                                		&nbsp;&nbsp;개 /<input type="text" class="form-control wid-x1" id="DAYS_PRDLIM" name="DAYS_PRDLIM" title="일수 입력"
+                                          maxlength="5" data-ng-model="saleItemDataVO.param.DAYS_PRDLIM">&nbsp;&nbsp;일
+                            	</span>
+                                <span data-ng-if="!page.isWriteable()">
+                                    &nbsp;&nbsp;1인당 최대 구매 수량{{saleItemDataVO.param.AMOU_PESMAXPCHS}}&nbsp;&nbsp;개 /{{saleItemDataVO.param.DAYS_PRDLIM}}일
+                                </span>
+                            </td>
+                            <th>출고소요기간</th>
+                            <td >
+                                <span data-ng-if="page.isWriteable()">
+                            		<input type="text" class="form-control wid-x1" id="DAYS_DELITAK" name="DAYS_DELITAK"
+                                          maxlength="5" data-ng-model="saleItemDataVO.param.DAYS_DELITAK">일
+                            	</span>
+                                <span data-ng-if="!page.isWriteable()">
+                                    {{saleItemDataVO.param.DAYS_DELITAK}}일
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>병행수입여부</th>
+                            <td >
+                                <span data-ng-if="page.isWriteable()">
+	                       			<input type="checkbox" ng-model = "saleItemDataVO.param.YN_PRLICOM" id="YN_PRLICOM"
+					          			   ng-true-value="Y" ng-false-value="N">&nbsp;&nbsp;&nbsp;사용
+	                         	</span>
+	                         	<span data-ng-if="!page.isWriteable() && saleItemDataVO.param.YN_PRLICOM =='Y'">
+	                         		사용
+	                         	</span>
+	                         	<span data-ng-if="!page.isWriteable() && saleItemDataVO.param.YN_PRLICOM =='N'">
+	                         		사용안함
+	                         	</span>
+                            </td>
+                            <th>해외구매대행여부</th>
+                            <td >
+                                <span data-ng-if="page.isWriteable()">
+	                       			<input type="checkbox" ng-model = "saleItemDataVO.param.YN_FECTPCHSAGNCY" id=YN_FECTPCHSAGNCY
+					          			   ng-true-value="Y" ng-false-value="N">&nbsp;&nbsp;&nbsp;사용
+					          		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					          		<span ng-if="saleItemDataVO.param.YN_FECTPCHSAGNCY=='Y'">구매시 개인통관부호 필수 여부 : &nbsp;&nbsp;
+					          			<input type="checkbox" ng-model = "saleItemDataVO.param.YN_INDVCTCAMAKNECE" id="YN_INDVCTCAMAKNECE"
+					          			   ng-true-value="Y" ng-false-value="N">
+					          		</span>
+	                         	</span>
+	                         	<span data-ng-if="!page.isWriteable() && saleItemDataVO.param.YN_FECTPCHSAGNCY =='Y'">
+	                         		사용
+	                         	</span>
+	                         	<span data-ng-if="!page.isWriteable() && saleItemDataVO.param.YN_FECTPCHSAGNCY =='N'">
+	                         		사용안함
+	                         	</span>
+	                         	<span data-ng-if="!page.isWriteable() && saleItemDataVO.param.YN_INDVCTCAMAKNECE =='Y'">
+	                         		통관여부 사용
+	                         	</span>
+	                         	<span data-ng-if="!page.isWriteable() && saleItemDataVO.param.YN_INDVCTCAMAKNECE =='N'">
+	                         		통관여부 사용안함
+	                         	</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>배송방법</th>
+                            <td colspan="3">
+                                <span data-ng-if="page.isWriteable()">
+								    <select class="form-control wid-x5" id="CD_SHPWAY" title="배송방법"
+                                            data-ng-model="saleItemDataVO.param.CD_SHPWAY" style="width: 150px"
+                                            data-ng-options="item.CD_DEF as item.NM_DEF for item in saleItemDataVO.shpCWayList">
+                                        <option value="">배송방법선택</option>
+                                    </select>
+                                    <select class="form-control wid-x5" id="coopParsList" title="오픈마켓선택"
+                                            data-ng-model="saleItemDataVO.param.CD_SHPPARS" style="width: 150px"
+                                            data-ng-options="item.CD_DEF as item.NM_DEF for item in saleItemDataVO.coopParsList">
+                                            <option value="">택배사선택</option>
+                                    </select>
+                                 </span>
+                                 <span data-ng-if="!page.isWriteable()">
+                                 	{{saleItemDataVO.param.CD_SHPWAY}}
+                                 </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>묶음배송여부</th>
+                            <td >
+                                <span data-ng-if="page.isWriteable()">
+	                       			<input type="checkbox" ng-model = "saleItemDataVO.param.YN_BDLSHP" id="YN_BDLSHP"
+					          			   ng-true-value="Y" ng-false-value="N">&nbsp;&nbsp;&nbsp;사용
+	                         	</span>
+	                         	<span data-ng-if="!page.isWriteable() && saleItemDataVO.param.YN_BDLSHP =='Y'">
+	                         		사용
+	                         	</span>
+	                         	<span data-ng-if="!page.isWriteable() && saleItemDataVO.param.YN_BDLSHP =='N'">
+	                         		사용안함
+	                         	</span>
+                            </td>
+                            <th>도서산간배송여부</th>
+                            <td >
+                                <span data-ng-if="page.isWriteable()">
+	                       			<input type="checkbox" ng-model = "saleItemDataVO.param.YN_MNTSHP" id="YN_MNTSHP"
+					          			   ng-true-value="Y" ng-false-value="N">&nbsp;&nbsp;&nbsp;사용
+	                         	</span>
+	                         	<span data-ng-if="!page.isWriteable() && saleItemDataVO.param.YN_MNTSHP =='Y'">
+	                         		사용
+	                         	</span>
+	                         	<span data-ng-if="!page.isWriteable() && saleItemDataVO.param.YN_MNTSHP =='N'">
+	                         		사용안함
+	                         	</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>배송비종류</th>
+                            <td>
+                            	<span data-ng-if="page.isWriteable()">
+								    <select class="form-control wid-x5" id="CD_SHPIMPWAY" title="배송방법"
+                                            data-ng-model="saleItemDataVO.param.CD_SHPIMPWAY" style="width: 150px"
+                                            data-ng-options="item.CD_DEF as item.NM_DEF for item in saleItemDataVO.shpprcCList">
+                                        <option value="">배송비부과방법선택</option>
+                                    </select>
+                                 </span>
+                                 <span data-ng-if="!page.isWriteable()">
+                                 	{{saleItemDataVO.param.CD_SHPIMPWAY}}
+                                 </span>
+                            </td>
+                            <th>기본배송비</th>
+                            <td>
+                            	<span data-ng-if="page.isWriteable()">
+                              			<input type="text" class="form-control wid-x4" id="PRC_SHP" name="PRC_SHP" title="가격 입력"
+                                         maxlength="7" data-ng-model="saleItemDataVO.param.PRC_SHP1">&nbsp;&nbsp;원&nbsp;&nbsp;
+                                   </span>
+                                   <span data-ng-if="!page.isWriteable()">
+                                		{{saleItemDataVO.param.PRC_SHP1}}
+                                	</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>조건부무료 기준금액</th>
+                            <td>
+                            	<span data-ng-if="page.isWriteable()">
+                              			<input type="text" class="form-control wid-x4" id="PRC_STDSHP" name="PRC_STDSHP" title="가격 입력"
+                                         maxlength="7" data-ng-model="saleItemDataVO.param.PRC_STDSHP">&nbsp;&nbsp;원&nbsp;&nbsp;
+                                   </span>
+                                   <span data-ng-if="!page.isWriteable()">
+                                		{{saleItemDataVO.param.PRC_STDSHP}}
+                                	</span>
+                            </td>
+                            <th>초도 반품 배송비</th>
+                            <td>
+                            	<span data-ng-if="page.isWriteable()">
+                          			<input type="text" class="form-control wid-x4" id="PRC_ONESHP" name="PRC_ONESHP" title="가격 입력"
+                                     		maxlength="7" data-ng-model="saleItemDataVO.param.PRC_ONESHP">&nbsp;&nbsp;원&nbsp;&nbsp;
+                                </span>
+                                <span data-ng-if="!page.isWriteable()">
+                               		{{saleItemDataVO.param.PRC_ONESHP}}
+                               	</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>반품배송비(편도)</th>
+                            <td>
+                            	<span data-ng-if="page.isWriteable()">
+                              			<input type="text" class="form-control wid-x4" id="PRC_FIRTTIMSTKBKSHP" name="PRC_FIRTTIMSTKBKSHP" title="가격 입력"
+                                         maxlength="7" data-ng-model="saleItemDataVO.param.PRC_FIRTTIMSTKBKSHP">&nbsp;&nbsp;원&nbsp;&nbsp;
+                                   </span>
+                                   <span data-ng-if="!page.isWriteable()">
+                                		{{saleItemDataVO.param.PRC_FIRTTIMSTKBKSHP}}
+                                	</span>
+                            </td>
+                            <th>반품배송비 착불여부</th>
+                            <td>
+                            	<input type="radio" name="codYnRaBtn"
+                             			data-ng-model="saleItemDataVO.param.YN_TKBKSHPPRCCOD" value="Y">착불
+                             	<input type="radio" name="codYnRaBtn"
+                             			data-ng-model="saleItemDataVO.param.YN_TKBKSHPPRCCOD" value="N">후불		   
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>인증정보</th>
+                            <td colspan="3">
+                            	<div><kendo-grid options="ctfcCoopVO" id="gridCtfcCoop" style="width:70%;margin-left:60px"></kendo-grid></div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+        </div>        
+    </div>
+   	
+	<div class="btn-group1 mt-20"  data-ng-if = "saleItemDataVO.NM_MRK != ''">
+		<kendo-button data-ng-if="page.isWriteable()" type="botton" title="저장" data-ng-click="saleItemDataVO.goSave()" style="width:80px;"><span class="k-icon k-i-save"></span>저장</kendo-button>
+		<!-- <kendo-button type="botton" title="미리보기" data-ng-click="saleItemDataVO.goPreview()" style="width:80px;"><span class="k-icon k-i-window"></span>미리보기</kendo-button> -->
+		<kendo-button type="botton" title="목록" data-ng-click="saleItemDataVO.goBack()" style="width:80px;"><span class="k-icon k-i-undo"></span>취소</kendo-button>
+	</div>
+    </br></br>
+</div>
+
+<!-- 주문 취소 팝업 div-->
+<div kendo-window="win" k-options = "saleItemDataVO.ordCancelPopOptions"></div> 
+            
+<!-- 인증정보 사용x template -->
+<script id="ctfcTable_template" type="text/x-kendo-template">
+<form id="ctfcTable_form">
+<button style='margin:10px' data-ng-if='page.isWriteable()' class='ng-scope k-button addStorfCtfc' data-role='button' role='button' tabindex='0'>추가</button>
+<table class='table-bordered' style='margin-left: 60px;width: 94%'>
+	<colgroup>
+		<col style='width: 10%'>
+		<col style='width: 35%'>
+		<col style='width: 35%'>
+		<col style='width: 20%'>
+	</colgroup>
+    <tbody>	
+	<tr style='height: 60px;'><td style='text-align: center'>번호</td>
+                	<td style='text-align: center'>인증항목</td>
+                	<td style='text-align: center'>인증번호</td>
+                	<td style='text-align: center'>삭제</td>
+	</tr>
+    <tr>
+<td>1</td>
+<td style='width: 150px;text-align: center'>
+<select class='form-control wid-x6 ng-pristine ng-valid' id='ctfcInfo' title='인증정보'
+		data-ng-model='saleItemDataVO.param.STORF.CTCFINFO[0].CD_CTFCINFO' style='width: 150px;'>
+		<option value=''>인증정보선택</option>
+		</select></td>
+		<td style='width: 150px;text-align: center'><input type='text' class='form-control wid-x6' id='CTCFINFO' name='CTCFINFO' title='인증번호 입력'
+			       data-ng-model='saleItemDataVO.param.STORF.CTCFINFO[0].VAL'></td>
+		<td style='text-align: center'><a class="k-button k-button-icontext deleteStorfCtfc">삭제</a></td></tr>
+	</tr>
+	
+	</tbody>
+</table>	
+</div>
+</form>
+</script>     
+                       
+<style>
+.k-edit-form-container{
+    width: 920px;
+}
+.k-popup-edit-form .k-edit-label{
+    width: 20%;
+    text-align: left;
+}
+.k-popup-edit-form .k-edit-field{
+    width: 70%;
+}
+.k-popup-edit-form .k-edit-field > .k-textbox,
+.k-popup-edit-form .k-edit-field > .k-widget:not(.k-tooltip){
+    width: 98%;
+}
+.not_pop_title{
+	padding: 10px;
+}
+.signal{    
+    width: 99%;
+    margin: 5px;
+}
+.border-right-line{    
+	border-right: 1px solid #eee;    
+}
+.border-top-line{	
+	border-top: 1px solid #eee;
+}
+.border-bottom-line{	
+	border-bottom: 1px solid #eee;
+}
+span.k-widget.k-tooltip-validation{
+	position: absolute;
+	margin: 3px;
+	display: block;
+}
+</style>

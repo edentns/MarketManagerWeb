@@ -56,27 +56,13 @@
                             </td>         
                         </tr>
                         <tr>
-                            <th>제조사</th>
-                            <td>                            	              	
-                            	<input data-ng-model="bssItemDataVO.nmMnfr.value"
-                            			focus="bssItemDataVO.nmMnfr.focus"
-                            			title="구매자"
-                            			data-eden-type="kor" 
-                            			type="text" 
-                            			class="form-control" style="width:100%;"/>
-                            </td>
-                            <th>상품구분</th>
-                            <td>                            	              	
-                            	<co01-mcbox id="bssList_iClft" title="상품구분" model="bssItemDataVO.iClftIds" options="bssItemDataVO.iClftList" setting="bssItemDataVO.setting"  style="width:100%;">
-        						</co01-mcbox>
-                            </td>
                             <th>상품종류</th>
                             <td>                            	              	
                             	<co01-mcbox id="bssList_iKind" title="상품종류" model="bssItemDataVO.iKindIds" options="bssItemDataVO.iKindList" setting="bssItemDataVO.setting"  style="width:100%;">
         						</co01-mcbox>
                             </td>
                             <th>상품상태</th>
-                            <td>                            	              	
+                            <td colspan="2">                            	              	
                             	<co01-mcbox id="bssList_iStat" title="상품상태" model="bssItemDataVO.iStatIds" options="bssItemDataVO.iStatList" setting="bssItemDataVO.setting"  style="width:100%;">
         						</co01-mcbox>
                             </td>                            
@@ -160,15 +146,15 @@
       	</td>
 		<td class="ta-l" style="padding:0">
           	<div class="custom-style">
-							   # if(NM_MNFR !== "" && NM_MNFR !== null && NM_MNFR !== "undefined"){ #
-							   #: NM_MNFR #
+							   # if(NM_FGFT !== "" && NM_FGFT !== null && NM_FGFT !== "undefined"){ #
+							   #: NM_FGFT #
 							   # }else{  #
 							   #: "-" #
                                #}	# 	
 			</div>
 			<div class="custom-style"> 
-							   # if(CD_ITEMCLFT !== "" && CD_ITEMCLFT !== null && CD_ITEMCLFT !== "undefined"){ #	
-							   #: CD_ITEMCLFT #
+							   # if(DT_FGFTPRESSTART !== "" && DT_FGFTPRESSTART !== null && DT_FGFTPRESSTART !== "undefined"){ #	
+							   #: DT_FGFTPRESSTART #
 							   # }else{ }	# 
 			</div>
      	</td>
@@ -253,8 +239,8 @@
 							# }else{ }	 	 #
 			</div>
 			<div class="custom-style">
-							# if(DTS_VLD !== "" || DTS_VLD !== null || DTS_VLD !== "undefined"){ #  
-							#: DTS_VLD # 
+							# if(DT_VLD !== "" || DT_VLD !== null || DT_VLD !== "undefined"){ #  
+							#: DT_VLD # 
 							# }else{ #
 							#: "-"   #
 							# }	 	 #
@@ -312,15 +298,15 @@
       	</td>
 		<td class="ta-l" style="padding:0">
           	<div class="custom-style">
-							   # if(NM_MNFR !== "" && NM_MNFR !== null && NM_MNFR !== "undefined"){ #
-							   #: NM_MNFR #
+							   # if(NM_FGFT !== "" && NM_FGFT !== null && NM_FGFT !== "undefined"){ #
+							   #: NM_FGFT #
 							   # }else{  #
 							   #: "-" #
                                #}	# 	
 			</div>
 			<div class="custom-style"> 
-							   # if(CD_ITEMCLFT !== "" && CD_ITEMCLFT !== null && CD_ITEMCLFT !== "undefined"){ #	
-							   #: CD_ITEMCLFT #
+							   # if(DT_FGFTPRESSTART !== "" && DT_FGFTPRESSTART !== null && DT_FGFTPRESSTART !== "undefined"){ #	
+							   #: DT_FGFTPRESSTART #
 							   # }else{ }	# 
 			</div>
      	</td>
@@ -405,8 +391,8 @@
 							# }else{ }	 	 #
 			</div>
 			<div class="custom-style">
-							# if(DTS_VLD !== "" || DTS_VLD !== null || DTS_VLD !== "undefined"){ #  
-							#: DTS_VLD # 
+							# if(DT_VLD !== "" || DT_VLD !== null || DT_VLD !== "undefined"){ #  
+							#: DT_VLD # 
 							# }else{ #
 							#: "-"   #
 							# }	 	 #

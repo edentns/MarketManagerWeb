@@ -13,6 +13,8 @@
 	            today = edt.getToday();
 
 	        	var otherKendoVO1 = $scope.otherKendoVO1 = {
+	        			pars : "04",
+	        			invoice : "615327242550",
 	        		boxTitle : "검색",
 	        		mcb01Data : [],
 	        		mcb01Model : "",
@@ -162,6 +164,20 @@
 	        	otherKendoVO1.kEditor = UtilSvc.kendoEditor("010");
 	        	otherKendoVO1.kEditor_test = UtilSvc.kendoEditor("011");
 	        	otherKendoVO1.kEditor.tools = ["insertImage"];
+	        	
+	        	otherKendoVO1.chkKey = function() {
+	        		var self = this;
+	        		
+					var param = {
+						t_code : otherKendoVO1.pars,
+						t_invoice : otherKendoVO1.invoice
+					};
+					
+					TeOtherKendoSvc.chkKey(param).then(function (res) {
+						alert(res.data[0]);
+						alert(res.data[1]);
+					});
+	        	};
         	
 	        	otherKendoVO1.initLoad = function() {
 	        		var self = this;

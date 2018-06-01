@@ -9,10 +9,10 @@
     angular.module("it.SaleSiteItem.service")
         .factory("it.SaleSiteItemSvc", ["APP_CONFIG", "$http", "ModalSvc", function (APP_CONFIG, $http, ModalSvc) {
             return {
-            	saleSiteDetail : function(NO_MRKREGITEM) {
+            	/*saleSiteDetail : function(NO_MRKREGITEM) {
 					var modalInstance = ModalSvc.saleSiteDetail(NO_MRKREGITEM);
 					return modalInstance.result;
-				}
+				}*/
             };
         }]);
 }());

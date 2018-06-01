@@ -305,8 +305,9 @@
 
 <!-- 그리드 툴바 템플릿 -->
 <script id="sale-toolbar-template" type="text/x-kendo-template">
-	<button class="k-button k-button-icontext k-grid-edit" ng-click="saleItemInsert('sale')"><span class="k-icon k-i-edit"></span>등록된상품가져오기</button>
-	<button class="k-button k-button-icontext k-grid-edit" ng-click="saleItemInsert('new')"><span class="k-icon k-i-edit"></span>미리보기</button>
+	<button class="k-button k-button-icontext k-grid-edit" ng-click="saleItemDataVO.saleItemGet()"><span class="k-icon k-i-edit"></span>등록된상품가져오기</button>
+	<button class="k-button k-button-icontext" ng-click="saleItemDataVO.saleItemInsert()"><span class="k-icon k-i-add"></span>등록</button>
+	<button class="k-button k-button-icontext k-grid-delete" ng-click="saleItemDataVO.saleItemDelete()"><span class="k-icon k-i-delete"></span>삭제</button>
 </script>
 
 <!-- 검색시 유효성 검사 경고창 -->
