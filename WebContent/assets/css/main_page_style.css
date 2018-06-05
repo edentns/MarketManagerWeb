@@ -1,4 +1,4 @@
-.clearfix{clear:both}
+﻿.clearfix{clear:both}
 .wrap{ width:100%;}
 img{width:100%;}
 h3{font-size:28px;font-weight:bold;text-align:center;}
@@ -17,6 +17,10 @@ h3 span{color:#0066b3;font-weight:bold;}
 .title{background: url(/assets/img/main-page/title-1.jpg)   center no-repeat;height:350px;} 
 .title h1{color:#0066b3;font-size:35px;font-weight:bold;margin-top:10px;}
 .title-txt {width:1170px; margin:0 auto;padding-top:130px;}
+.title dl{width:50%;margin-top:30px;}
+.title dl img{width:100%;}
+.title dt{float:left;width:117px;}
+.title dd{float:left;padding:0 !important;margin:8px;margin-bottom:3px;margin-top:9px;}
 
 /*마켓 매니저 소개*/
 .info{width:1170px; margin:0 auto;text-align:center;margin-top:60px;}
@@ -48,9 +52,10 @@ h3 span{color:#0066b3;font-weight:bold;}
 .no-function ol li{background: url(/assets/img/main-page/list-2.jpg) left center no-repeat; padding-left: 10px;}
 
 /*하단*/
-.footer{width:100%;text-align:center;color:#fff;line-height:50px;background-color:#3a3a3a;margin-top:60px;}
+.footer{width:100%;text-align:center;color:#fff;line-height:50px;background-color:#3a3a3a;}
 .footer img{width:20px;margin-right:10px;}
 
+.logo{width:1170px;margin:0 auto;}
 
 
 /*모바일 메뉴*/
@@ -66,6 +71,11 @@ h3 span{color:#0066b3;font-weight:bold;}
 	.info ul li{width:49%;}	
 	.function dl{height:100px;}
 	.function dl:nth-child(2n){margin-left:1%;}
+	.logo{width:95%;}
+		.title{width:100%;}
+	.title dl{box-sizing:border-box;width:50% !important;}
+	.title dt{width:23% !important;}
+	.title dd{width:65%;}
 }
 
 
@@ -73,6 +83,9 @@ h3 span{color:#0066b3;font-weight:bold;}
 	
 	
 	.function dl{height:130px;width:44%;}
+		.title dl{box-sizing:border-box;width:70% !important;}
+	.title dt{width:23% !important;}
+	.title dd{width:71%;}
 }
 
 @media only screen and (max-width: 728px) {
@@ -97,6 +110,9 @@ h3 span{color:#0066b3;font-weight:bold;}
 	
 	.title h2{font-size:20px;}
 	.title h1{font-size:30px;}
+		.title dl{width:100% !important;}
+	.title dt{width:25% !important;}
+	.title dd{width:67%;}
 	
 }
 
