@@ -33,6 +33,7 @@
              	    fileGubunBind  : resData.fileGubunBind,  // 파일구분
              	    ynDelList      : [{CD_DEF: 'N', NM_DEF: '미삭제'},{CD_DEF: 'Y', NM_DEF: '삭제'}], 
              	    ynDelModel     : resData.ynDelModel,     // 삭제여부
+             	    selYnDelModel  : resData.ynDelModel,     // 삭제여부
              	    noC            : resData.noC             // 가입자번호
 		        };
 
@@ -61,32 +62,34 @@
 	            
 	            //초기 실행
 	            fileDataVO.search = function(){
-	            	var self = this;
-	            	var param = {
-    						procedureParam: "USP_MA_11FILE_GET&L_CD_AT@s|L_YN_DIRDEL@s|L_NO_C@s|L_START_DATE@s|L_END_DATE@s",
-    						L_CD_AT       : self.fileGubunModel,
-    						L_YN_DIRDEL   : self.ynDelModel,
-    						L_NO_C        : self.noC,
-    						L_START_DATE  : new Date(self.datesetting.period.start.y, self.datesetting.period.start.m-1, self.datesetting.period.start.d).dateFormat("Ymd"),
-    						L_END_DATE    : new Date(self.datesetting.period.end.y  , self.datesetting.period.end.m-1  , self.datesetting.period.end.d).dateFormat("Ymd"),
-    					};
-					UtilSvc.getList(param).then(function (res) {
-						$scope.gridFileVO.dataSource.data(res.data.results[0]);
-
-						// 조회한 조건을 localstorage에 저장함.
-						var inquiryParam = {
-							fileGubunBindSelectIndex: self.fileGubunBind.allSelectNames,	
-							fileGubunModel: self.fileGubunModel,       
-							ynDelModel : self.ynDelModel,       
-							noC        : self.noC,
-							selected   : self.datesetting.selected,
-    	                    start      : self.datesetting.period.start,
-    	                    end        : self.datesetting.period.end
-	                    };
-						
-	        			// 검색조건 세션스토리지에 임시 저장
-	        			UtilSvc.grid.setInquiryParam(inquiryParam);
-					});
+	            	$scope.gridFileVO.dataSource.read();
+//	            	var self = this;
+//	            	var param = {
+//    						procedureParam: "USP_MA_11FILE_GET&L_CD_AT@s|L_YN_DIRDEL@s|L_NO_C@s|L_START_DATE@s|L_END_DATE@s",
+//    						L_CD_AT       : self.fileGubunModel,
+//    						L_YN_DIRDEL   : self.ynDelModel,
+//    						L_NO_C        : self.noC,
+//    						L_START_DATE  : new Date(self.datesetting.period.start.y, self.datesetting.period.start.m-1, self.datesetting.period.start.d).dateFormat("Ymd"),
+//    						L_END_DATE    : new Date(self.datesetting.period.end.y  , self.datesetting.period.end.m-1  , self.datesetting.period.end.d).dateFormat("Ymd"),
+//    					};
+//					UtilSvc.getList(param).then(function (res) {
+//						$scope.gridFileVO.dataSource.data(res.data.results[0]);
+//						// 삭제, 삭제복원 버튼 보이기 안보이기때문에 설정
+//						self.selYnDelModel = self.ynDelModel;
+//						// 조회한 조건을 localstorage에 저장함.
+//						var inquiryParam = {
+//							fileGubunBindSelectIndex: self.fileGubunBind.allSelectNames,	
+//							fileGubunModel: self.fileGubunModel,       
+//							ynDelModel : self.ynDelModel,       
+//							noC        : self.noC,
+//							selected   : self.datesetting.selected,
+//    	                    start      : self.datesetting.period.start,
+//    	                    end        : self.datesetting.period.end
+//	                    };
+//						
+//	        			// 검색조건 세션스토리지에 임시 저장
+//	        			UtilSvc.grid.setInquiryParam(inquiryParam);
+//					});
 	            };	
 	            
 	            var gridFileVO = $scope.gridFileVO = {
@@ -102,7 +105,37 @@
                 	dataSource: new kendo.data.DataSource({
                 		transport: {
                 			read: function(e) {
-                				e.success();
+                				//var self = fileDataVO;
+            	            	var param = {
+                						procedureParam: "USP_MA_11FILE_GET&L_CD_AT@s|L_YN_DIRDEL@s|L_NO_C@s|L_START_DATE@s|L_END_DATE@s",
+                						L_CD_AT       : fileDataVO.fileGubunModel,
+                						L_YN_DIRDEL   : fileDataVO.ynDelModel,
+                						L_NO_C        : fileDataVO.noC,
+                						L_START_DATE  : new Date(fileDataVO.datesetting.period.start.y, fileDataVO.datesetting.period.start.m-1, fileDataVO.datesetting.period.start.d).dateFormat("Ymd"),
+                						L_END_DATE    : new Date(fileDataVO.datesetting.period.end.y  , fileDataVO.datesetting.period.end.m-1  , fileDataVO.datesetting.period.end.d).dateFormat("Ymd"),
+                					};
+            					UtilSvc.getList(param).then(function (res) {
+            						e.success(res.data.results[0]);
+            						var grid = $scope.kg;
+            						grid.clearSelection();
+            						// 삭제, 삭제복원 버튼 보이기 안보이기때문에 설정
+            						fileDataVO.selYnDelModel = fileDataVO.ynDelModel;
+            						// 조회한 조건을 localstorage에 저장함.
+            						var inquiryParam = {
+            							fileGubunBindSelectIndex: fileDataVO.fileGubunBind.allSelectNames,	
+            							fileGubunModel: fileDataVO.fileGubunModel,       
+            							ynDelModel : fileDataVO.ynDelModel,       
+            							noC        : fileDataVO.noC,
+            							selected   : fileDataVO.datesetting.selected,
+                	                    start      : fileDataVO.datesetting.period.start,
+                	                    end        : fileDataVO.datesetting.period.end
+            	                    };
+            						
+            	        			// 검색조건 세션스토리지에 임시 저장
+            	        			UtilSvc.grid.setInquiryParam(inquiryParam);
+            					}, function(err) {
+            						e.error([]);
+            					});
                 			},
                 			parameterMap: function(e, operation) {
                 				if(operation !== "read" && e.models) {
@@ -178,7 +211,7 @@
             		for(; iIndex < gridSelect.length; iIndex++) {
             			dataItem = grid.dataItem(gridSelect[iIndex]);
             			
-            			if(dataItem.YN_DEL === "삭제") {
+            			if(dataItem.YN_DIRDEL === "삭제") {
             				alert('미삭제로 조회 후 삭제이동을 해야 합니다.');
             				return;
             			}
@@ -214,7 +247,7 @@
             		for(; iIndex < gridSelect.length; iIndex++) {
             			dataItem = grid.dataItem(gridSelect[iIndex]);
             			
-            			if(dataItem.YN_DEL === "미삭제") {
+            			if(dataItem.YN_DIRDEL === "미삭제") {
             				alert('삭제로 조회 후 원복을 하셔야 합니다.');
             				return;
             			}
