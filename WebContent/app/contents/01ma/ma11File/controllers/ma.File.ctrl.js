@@ -102,6 +102,7 @@
                 	dataSource: new kendo.data.DataSource({
                 		transport: {
                 			read: function(e) {
+                				e.success();
                 			},
                 			parameterMap: function(e, operation) {
                 				if(operation !== "read" && e.models) {
@@ -169,14 +170,32 @@
 
 	            gridFileVO.fileDeleteMove = function() {
 	            	// 서버에 전달
-	            	if(!confirm("삭제폴더로 이동하시겠습니까?")) {
-	            		var grid = $scope.kg;
-	            		var selectedItem = grid.dataItem(grid.select());
-	            	
-	            		maFileSvc.fileDeleteMove(selectedItem, "D").then(function(res) {
+            		var grid = $scope.kg;
+            		var gridSelect = grid.select();
+            		var retData = [];
+            		var iIndex = 0;
+            		var dataItem = {};
+            		for(; iIndex < gridSelect.length; iIndex++) {
+            			dataItem = grid.dataItem(gridSelect[iIndex]);
+            			
+            			if(dataItem.YN_DEL === "삭제") {
+            				alert('미삭제로 조회 후 삭제이동을 해야 합니다.');
+            				return;
+            			}
+            			
+            			retData.push(dataItem);
+            		}
+
+            		if(iIndex === 0) {
+            			alert('선택된 데이터가 없습니다.');
+            			return;
+            		}
+            		
+		            if(confirm("삭제폴더로 이동하시겠습니까?")) {
+	            		maFileSvc.fileDeleteMove(retData, "D").then(function(res) {
 	        				if(res.data) {
 	        					alert('삭제폴더로 이동하였습니다.');
-	        					$state.go('app.maFile', { kind: 'list', menu: true, ids: null });
+	        					fileDataVO.search();
 	        				}
 	        				else {
 	        					alert('삭제폴더의 이동에 실패하였습니다.');
@@ -184,7 +203,43 @@
 	        			});
 	            	}
 	            };
-	            	
+	            
+	            gridFileVO.fileUndo = function() {
+	            	// 서버에 전달
+            		var grid = $scope.kg;
+            		var gridSelect = grid.select();
+            		var retData = [];
+            		var iIndex = 0;
+            		var dataItem = {};
+            		for(; iIndex < gridSelect.length; iIndex++) {
+            			dataItem = grid.dataItem(gridSelect[iIndex]);
+            			
+            			if(dataItem.YN_DEL === "미삭제") {
+            				alert('삭제로 조회 후 원복을 하셔야 합니다.');
+            				return;
+            			}
+
+            			retData.push(dataItem);
+            		}
+            		
+            		if(iIndex === 0) {
+            			alert('선택된 데이터가 없습니다.');
+            			return;
+            		}
+            		
+            		if(confirm("해당 건을 원복하시겠습니까?")) {
+	            		maFileSvc.fileDeleteMove(retData, "U").then(function(res) {
+	        				if(res.data) {
+	        					alert('원복하였습니다.');
+	        					fileDataVO.search();
+	        				}
+	        				else {
+	        					alert('원복에 실패하였습니다.');
+	        				}
+	        			});
+	            	}
+	            };
+	            
 	            fileDataVO.init();
             }]);
 }());
