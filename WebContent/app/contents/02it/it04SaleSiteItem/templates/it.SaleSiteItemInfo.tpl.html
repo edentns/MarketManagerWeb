@@ -50,13 +50,13 @@
 	                      <td colspan="3">
                        		   <span data-ng-if="page.isWriteable()">
 						       <div>
-						           <input kendo-date-picker data-ng-model="bssInfoDataVO.param.DT_SALESTART" style="width: 15%;" />
+						           <input kendo-date-picker data-ng-model="saleItemDataVO.param.DT_SALESTART" style="width: 15%;" />
 						           &nbsp;&nbsp;-&nbsp;&nbsp;
-						           <input kendo-date-picker data-ng-model="bssInfoDataVO.param.DT_SALEEND" style="width: 15%;" />
+						           <input kendo-date-picker data-ng-model="saleItemDataVO.param.DT_SALEEND" style="width: 15%;" />
 						       </div>
 						       </span>
 						       <span data-ng-if="!page.isWriteable()">
-                                   {{bssInfoDataVO.param.DT_SALESTART}} -  {{bssInfoDataVO.param.DT_SALEEND}}
+                                   {{saleItemDataVO.param.DT_SALESTART}} -  {{saleItemDataVO.param.DT_SALEEND}}
                                </span>
                            </td>
                        </tr>
@@ -402,7 +402,7 @@
                             </div>
                            </td>
                        </tr>
-                       <tr>
+                       <!-- <tr>
                            <th>인증정보</th>
                            <td colspan="3">
                            	<table class="table-bordered" style="margin-left: 60px;width: 94%">
@@ -424,29 +424,29 @@
                                		</td>
                                		<td style="text-align: center">
                                 		<select class="form-control wid-x6" id="ctfcInfo" title="인증정보"
-	                                            data-ng-model="saleItemDataVO.param.CTCFINFO[0].CD_CTFCINFO" style="width: 150px;"
+	                                            data-ng-model="saleItemDataVO.param.CTFCINFO[0].CD_CTFCINFO" style="width: 150px;"
 	                                            data-ng-options="item.CD_CTFCINFO as item.NM_CTFCINFO for item in saleItemDataVO.auctCtfcList[0]">
 	                                        <option value="">인증정보선택</option>
 	                                    </select>
                                		</td>
                                		<td style="text-align: center">
                                			<input type="text" class="form-control wid-x6" id="ctfcInfoVal" name="ctfcInfoVal" title="인증번호 입력"
-                                          		data-ng-model="saleItemDataVO.param.CTCFINFO[0].VAL_CTFCINFO">
+                                          		data-ng-model="saleItemDataVO.param.CTFCINFO[0].VAL_CTFCINFO">
                                		</td>
                                	</tr>
                                	<tr>
-                               		<td>생활용품
+                               		<td>생활용품{{saleItemDataVO.param.CTFCINFO[1].CD_CTFCINFO}}
                                		</td>
                                		<td style="text-align: center">
                                 		<select class="form-control wid-x6" id="ctfcInfo" title="인증정보"
-	                                            data-ng-model="saleItemDataVO.param.CTCFINFO[1].CD_CTFCINFO" style="width: 150px;"
+	                                            data-ng-model="saleItemDataVO.param.CTFCINFO[1].CD_CTFCINFO" style="width: 150px;"
 	                                            data-ng-options="item.CD_CTFCINFO as item.NM_CTFCINFO for item in saleItemDataVO.auctCtfcList[1]">
 	                                        <option value="">인증정보선택</option>
 	                                    </select>
                                		</td>
                                		<td style="text-align: center">
                                			<input type="text" class="form-control wid-x6" id="ctfcInfoVal" name="ctfcInfoVal" title="인증번호 입력"
-                                          		data-ng-model="saleItemDataVO.param.CTCFINFO[1].VAL_CTFCINFO">
+                                          		data-ng-model="saleItemDataVO.param.CTFCINFO[1].VAL_CTFCINFO">
                                		</td>
                                	</tr>
                                	<tr>
@@ -454,19 +454,19 @@
                                		</td>
                                		<td style="text-align: center">
                                 		<select class="form-control wid-x6" id="ctfcInfo" title="인증정보"
-	                                            data-ng-model="saleItemDataVO.param.CTCFINFO[2].CD_CTFCINFO" style="width: 150px;"
+	                                            data-ng-model="saleItemDataVO.param.CTFCINFO[2].CD_CTFCINFO" style="width: 150px;"
 	                                            data-ng-options="item.CD_CTFCINFO as item.NM_CTFCINFO for item in saleItemDataVO.auctCtfcList[2]">
 	                                        <option value="">인증정보선택</option>
 	                                    </select>
                                		</td>
                                		<td style="text-align: center">
                                			<input type="text" class="form-control wid-x6" id="ctfcInfoVal" name="ctfcInfoVal" title="인증번호 입력"
-                                          		data-ng-model="saleItemDataVO.param.CTCFINFO[2].VAL_CTFCINFO">
+                                          		data-ng-model="saleItemDataVO.param.CTFCINFO[2].VAL_CTFCINFO">
                                		</td>
                                	</tr>
                                </table>
                            </td>
-                       </tr>
+                       </tr> -->
                        </tbody>
                    </table>
                </form>
@@ -502,13 +502,13 @@
 	                      <td colspan="3">
                        		   <span data-ng-if="page.isWriteable()">
 						       <div>
-						           <input kendo-date-picker data-ng-model="bssInfoDataVO.param.DT_SALESTART" style="width: 15%;" />
+						           <input kendo-date-picker data-ng-model="saleItemDataVO.param.DT_SALESTART" style="width: 15%;" />
 						           &nbsp;&nbsp;-&nbsp;&nbsp;
-						           <input kendo-date-picker data-ng-model="bssInfoDataVO.param.DT_SALEEND" style="width: 15%;" />
+						           <input kendo-date-picker data-ng-model="saleItemDataVO.param.DT_SALEEND" style="width: 15%;" />
 						       </div>
 						       </span>
 						       <span data-ng-if="!page.isWriteable()">
-                                   {{bssInfoDataVO.param.DT_SALESTART}} -  {{bssInfoDataVO.param.DT_SALEEND}}
+                                   {{saleItemDataVO.param.DT_SALESTART}} -  {{saleItemDataVO.param.DT_SALEEND}}
                                </span>
                            </td>
                        </tr>
@@ -885,7 +885,7 @@
                             </div>
                            </td>
                        </tr>
-                       <tr>
+                       <!-- <tr>
                            <th>인증정보</th>
                            <td colspan="3">
                            	<table class="table-bordered" style="margin-left: 60px;width: 94%">
@@ -907,14 +907,14 @@
                                		</td>
                                		<td style="text-align: center">
                                 		<select class="form-control wid-x6" id="ctfcInfo" title="인증정보"
-	                                            data-ng-model="saleItemDataVO.param.CTCFINFO[0].CD_CTFCINFO" style="width: 150px;"
+	                                            data-ng-model="saleItemDataVO.param.CTFCINFO[0].CD_CTFCINFO" style="width: 150px;"
 	                                            data-ng-options="item.CD_CTFCINFO as item.NM_CTFCINFO for item in saleItemDataVO.gmrkCtfcList[0]">
 	                                        <option value="">인증정보선택</option>
 	                                    </select>
                                		</td>
                                		<td style="text-align: center">
                                			<input type="text" class="form-control wid-x6" id="ctfcInfoVal" name="ctfcInfoVal" title="인증번호 입력"
-                                          		data-ng-model="saleItemDataVO.param.CTCFINFO[0].VAL_CTFCINFO">
+                                          		data-ng-model="saleItemDataVO.param.CTFCINFO[0].VAL_CTFCINFO">
                                		</td>
                                	</tr>
                                	<tr>
@@ -922,14 +922,14 @@
                                		</td>
                                		<td style="text-align: center">
                                 		<select class="form-control wid-x6" id="ctfcInfo" title="인증정보"
-	                                            data-ng-model="saleItemDataVO.param.CTCFINFO[1].CD_CTFCINFO" style="width: 150px;"
+	                                            data-ng-model="saleItemDataVO.param.CTFCINFO[1].CD_CTFCINFO" style="width: 150px;"
 	                                            data-ng-options="item.CD_CTFCINFO as item.NM_CTFCINFO for item in saleItemDataVO.gmrkCtfcList[1]">
 	                                        <option value="">인증정보선택</option>
 	                                    </select>
                                		</td>
                                		<td style="text-align: center">
                                			<input type="text" class="form-control wid-x6" id="ctfcInfoVal" name="ctfcInfoVal" title="인증번호 입력"
-                                          		data-ng-model="saleItemDataVO.param.CTCFINFO[1].VAL_CTFCINFO">
+                                          		data-ng-model="saleItemDataVO.param.CTFCINFO[1].VAL_CTFCINFO">
                                		</td>
                                	</tr>
                                	<tr>
@@ -937,19 +937,19 @@
                                		</td>
                                		<td style="text-align: center">
                                 		<select class="form-control wid-x6" id="ctfcInfo" title="인증정보"
-	                                            data-ng-model="saleItemDataVO.param.CTCFINFO[2].CD_CTFCINFO" style="width: 150px;"
+	                                            data-ng-model="saleItemDataVO.param.CTFCINFO[2].CD_CTFCINFO" style="width: 150px;"
 	                                            data-ng-options="item.CD_CTFCINFO as item.NM_CTFCINFO for item in saleItemDataVO.gmrkCtfcList[2]">
 	                                        <option value="">인증정보선택</option>
 	                                    </select>
                                		</td>
                                		<td style="text-align: center">
                                			<input type="text" class="form-control wid-x6" id="ctfcInfoVal" name="ctfcInfoVal" title="인증번호 입력"
-                                          		data-ng-model="saleItemDataVO.param.CTCFINFO[2].VAL_CTFCINFO">
+                                          		data-ng-model="saleItemDataVO.param.CTFCINFO[2].VAL_CTFCINFO">
                                		</td>
                                	</tr>
                                </table>
                            </td>
-                       </tr>
+                       </tr> -->
                        </tbody>
                    </table>
                </form>
@@ -985,13 +985,13 @@
 	                      <td colspan="3">
                        		   <span data-ng-if="page.isWriteable()">
 						       <div>
-						           <input kendo-date-picker data-ng-model="bssInfoDataVO.param.DT_SALESTART" style="width: 15%;" />
+						           <input kendo-date-picker data-ng-model="saleItemDataVO.param.DT_SALESTART" style="width: 15%;" />
 						           &nbsp;&nbsp;-&nbsp;&nbsp;
-						           <input kendo-date-picker data-ng-model="bssInfoDataVO.param.DT_SALEEND" style="width: 15%;" />
+						           <input kendo-date-picker data-ng-model="saleItemDataVO.param.DT_SALEEND" style="width: 15%;" />
 						       </div>
 						       </span>
 						       <span data-ng-if="!page.isWriteable()">
-                                   {{bssInfoDataVO.param.DT_SALESTART}} -  {{bssInfoDataVO.param.DT_SALEEND}}
+                                   {{saleItemDataVO.param.DT_SALESTART}} -  {{saleItemDataVO.param.DT_SALEEND}}
                                </span>
                            </td>
                        </tr>
@@ -1232,12 +1232,12 @@
 	                         	</span>
                             </td>
                         </tr>
-                        <tr>
+                        <!-- <tr>
                             <th>인증정보</th>
                             <td colspan="3">
                             	<div><kendo-grid options="ctfcStorfVO" id="gridCtfcStorf" style="width:70%;margin-left:60px"></kendo-grid></div>
                             </td>
-                        </tr>
+                        </tr> -->
                         </tbody>
                     </table>
                 </form>
@@ -1273,13 +1273,13 @@
 	                      <td colspan="3">
                        		   <span data-ng-if="page.isWriteable()">
 						       <div>
-						           <input kendo-date-picker data-ng-model="bssInfoDataVO.param.DT_SALESTART" style="width: 15%;" />
+						           <input kendo-date-picker data-ng-model="saleItemDataVO.param.DT_SALESTART" style="width: 15%;" />
 						           &nbsp;&nbsp;-&nbsp;&nbsp;
-						           <input kendo-date-picker data-ng-model="bssInfoDataVO.param.DT_SALEEND" style="width: 15%;" />
+						           <input kendo-date-picker data-ng-model="saleItemDataVO.param.DT_SALEEND" style="width: 15%;" />
 						       </div>
 						       </span>
 						       <span data-ng-if="!page.isWriteable()">
-                                   {{bssInfoDataVO.param.DT_SALESTART}} -  {{bssInfoDataVO.param.DT_SALEEND}}
+                                   {{saleItemDataVO.param.DT_SALESTART}} -  {{saleItemDataVO.param.DT_SALEEND}}
                                </span>
                            </td>
                        </tr>
@@ -1598,12 +1598,12 @@
 				               </div>
                             </td>
                         </tr>
-                        <tr>
+                        <!-- <tr>
                             <th>인증정보</th>
                             <td colspan="3">
                             	<div><kendo-grid options="ctfcStVO" id="gridCtfcSt" style="width:70%;margin-left:60px"></kendo-grid></div>
                             </td>
-                        </tr>
+                        </tr> -->
                         </tbody>
                     </table>
                 </form>
@@ -1639,13 +1639,13 @@
 	                      <td colspan="3">
                        		   <span data-ng-if="page.isWriteable()">
 						       <div>
-						           <input kendo-date-picker data-ng-model="bssInfoDataVO.param.DT_SALESTART" style="width: 15%;" />
+						           <input kendo-date-picker data-ng-model="saleItemDataVO.param.DT_SALESTART" style="width: 15%;" />
 						           &nbsp;&nbsp;-&nbsp;&nbsp;
-						           <input kendo-date-picker data-ng-model="bssInfoDataVO.param.DT_SALEEND" style="width: 15%;" />
+						           <input kendo-date-picker data-ng-model="saleItemDataVO.param.DT_SALEEND" style="width: 15%;" />
 						       </div>
 						       </span>
 						       <span data-ng-if="!page.isWriteable()">
-                                   {{bssInfoDataVO.param.DT_SALESTART}} -  {{bssInfoDataVO.param.DT_SALEEND}}
+                                   {{saleItemDataVO.param.DT_SALESTART}} -  {{saleItemDataVO.param.DT_SALEEND}}
                                </span>
                            </td>
                         </tr>
@@ -1858,14 +1858,115 @@
                              			data-ng-model="saleItemDataVO.param.YN_TKBKSHPPRCCOD" value="N">후불		   
                             </td>
                         </tr>
-                        <tr>
+                        <!-- <tr>
                             <th>인증정보</th>
                             <td colspan="3">
                             	<div><kendo-grid options="ctfcCoopVO" id="gridCtfcCoop" style="width:70%;margin-left:60px"></kendo-grid></div>
                             </td>
-                        </tr>
+                        </tr> -->
                         </tbody>
                     </table>
+                </form>
+            </div>
+        </div>        
+    </div>
+    
+    <div class="row" data-ng-if = "saleItemDataVO.NM_MRK != ''">
+        <!-- 옵션 정보 -->
+        <div class="content-area-container col-xs-12">
+        	<div data-content-box-layer data-box-title="saleItemDataVO.opt">
+        		<form class="search-type1">
+                	<table class="table-bordered">
+	                	<colgroup>
+                           <col style="width: 13%;">
+                           <col style="width: 20%;">
+                           <col style="width: 13%;">
+                           <col style="width: 20%;">
+                           <col style="width: 13%;">
+                           <col style="width: 20%;">
+                       </colgroup>
+	                       <tbody>
+	                       	<tr>
+	                       		<th>옵션유형 선택</th>
+	                       		<td colspan="3">
+	                       		<span data-ng-if="page.isWriteable()">
+	                       			<div data-ng-repeat = "list in saleItemDataVO.optTypeList" style="float: left">
+		                         		<input type="radio" name="optRadio" data-ng-model="saleItemDataVO.param.CD_OPTTP" value="{{list.CD_DEF}}" data-ng-change="saleItemDataVO.optChange()">
+		                         		<label>
+		                         			{{list.NM_DEF}}
+		                         		</label>
+		                         	</div>
+		                        </span>
+		                        <span data-ng-if="!page.isWriteable()">
+		                        	{{saleItemDataVO.param.NM_OPTTP}}
+		                        </span>
+		                        </td>
+	                       		<th></th>
+	                       		<td></td>
+	                       	</tr>
+	                       	<tr>
+	                       		<th>상품옵션종류</th>
+	                       		<td colspan="5">
+									<kendo-button data-ng-if="saleItemDataVO.param.CD_OPTTP!='001' && page.isWriteable()" ng-click = "saleItemDataVO.basicOptGet(saleItemDataVO.param.CD_OPTTP)">기본옵션조회 및 설정</kendo-button>
+	                                <kendo-button data-ng-if="saleItemDataVO.param.CD_OPTTP!='001' && page.isWriteable()" ng-click = "saleItemDataVO.otherOptCopy(saleItemDataVO.param.CD_OPTTP)">다른상품옵션복사하기</kendo-button>
+								</td>
+	                       	</tr>
+	                       	<tr data-ng-if="saleItemDataVO.param.CD_OPTTP!='001' && page.isWriteable()">
+	                       		<th>옵션명1</th>
+	                       		<td>
+	                       		   <span style="width: 100%" data-ng-if="page.isWriteable()">
+	                                   <input type="text" class="form-control wid-x4" id="NM_OPT1" name="NM_OPT1" title="옵션명" data-eden-type="kor"
+	                                          maxlength="30" data-ng-model="saleItemDataVO.param.NM_OPT1" style="width: 95%;" placeholder="EX) 색상">
+	                               </span>
+								</td>
+								<th>옵션값1</th>
+	                       		<td colspan="3">
+	                       			<span style="width: 100%" data-ng-if="page.isWriteable()">
+	                                   <input type="text" class="form-control wid-x4" id="VAL_OPT1" name="VAL_OPT1" title="옵션값" data-eden-type="kor"
+	                                          maxlength="50" data-ng-model="saleItemDataVO.param.VAL_OPT1" style="width: 45%;" placeholder="EX) 빨강,노랑,초록">
+	                                </span>
+								</td>
+	                       	</tr>
+	                       	<tr data-ng-if="(saleItemDataVO.param.CD_OPTTP=='003' || saleItemDataVO.param.CD_OPTTP=='004') && page.isWriteable()">
+	                       		<th>옵션명2</th>
+	                       		<td>
+	                       		   <span style="width: 100%" data-ng-if="page.isWriteable()">
+	                                   <input type="text" class="form-control wid-x4" id="NM_OPT2" name="NM_OPT2" title="옵션명" data-eden-type="kor"
+	                                          maxlength="30" data-ng-model="saleItemDataVO.param.NM_OPT2" style="width: 95%;">
+	                               </span>
+								</td>
+								<th>옵션값2</th>
+	                       		<td colspan="3">
+	                       			<span style="width: 100%" data-ng-if="page.isWriteable()">
+	                                   <input type="text" class="form-control wid-x4" id="VAL_OPT2" name="VAL_OPT2" title="옵션값" data-eden-type="kor"
+	                                          maxlength="50" data-ng-model="saleItemDataVO.param.VAL_OPT2" style="width: 45%;">
+	                                </span>
+								</td>
+	                       	</tr>
+	                       	<tr data-ng-if="saleItemDataVO.param.CD_OPTTP=='004' && page.isWriteable()">
+	                       		<th>옵션명3</th>
+	                       		<td>
+	                       		   <span style="width: 100%" data-ng-if="page.isWriteable()">
+	                                   <input type="text" class="form-control wid-x4" id="NM_OPT3" name="NM_OPT3" title="옵션명" data-eden-type="kor"
+	                                          maxlength="30" data-ng-model="saleItemDataVO.param.NM_OPT3" style="width: 95%;">
+	                               </span>
+								</td>
+								<th>옵션값3</th>
+	                       		<td colspan="3">
+	                       			<span style="width: 100%" data-ng-if="page.isWriteable()">
+	                                   <input type="text" class="form-control wid-x4" id="VAL_OPT3" name="VAL_OPT3" title="옵션값" data-eden-type="kor"
+	                                          maxlength="50" data-ng-model="saleItemDataVO.param.VAL_OPT3" style="width: 45%;">
+	                                </span>
+								</td>
+	                       	</tr>
+	                       </tbody>
+	                </table>
+	                <div style="margin: 10px;margin-left: 190px">
+	                	<kendo-button data-ng-if="saleItemDataVO.param.CD_OPTTP!='001' && page.isWriteable()" type="botton" title="옵션목록으로 적용" data-ng-click="saleItemDataVO.optListing()" style="width:150px;">옵션목록으로 적용↓</kendo-button>
+	                </div>
+	                <div data-ng-if="saleItemDataVO.param.CD_OPTTP=='002'"> <kendo-grid options = "gridOpt002VO" id = "gridOpt002"></kendo-grid> </div>
+	                <div data-ng-if="saleItemDataVO.param.CD_OPTTP=='003'"> <kendo-grid options = "gridOpt003VO" id = "gridOpt003"></kendo-grid> </div>
+	                <div data-ng-if="saleItemDataVO.param.CD_OPTTP=='004'"> <kendo-grid options = "gridOpt004VO" id = "gridOpt004"></kendo-grid> </div>
                 </form>
             </div>
         </div>        
@@ -1903,11 +2004,11 @@
 <td>1</td>
 <td style='width: 150px;text-align: center'>
 <select class='form-control wid-x6 ng-pristine ng-valid' id='ctfcInfo' title='인증정보'
-		data-ng-model='saleItemDataVO.param.STORF.CTCFINFO[0].CD_CTFCINFO' style='width: 150px;'>
+		data-ng-model='saleItemDataVO.param.STORF.CTFCINFO[0].CD_CTFCINFO' style='width: 150px;'>
 		<option value=''>인증정보선택</option>
 		</select></td>
-		<td style='width: 150px;text-align: center'><input type='text' class='form-control wid-x6' id='CTCFINFO' name='CTCFINFO' title='인증번호 입력'
-			       data-ng-model='saleItemDataVO.param.STORF.CTCFINFO[0].VAL'></td>
+		<td style='width: 150px;text-align: center'><input type='text' class='form-control wid-x6' id='CTFCINFO' name='CTFCINFO' title='인증번호 입력'
+			       data-ng-model='saleItemDataVO.param.STORF.CTFCINFO[0].VAL'></td>
 		<td style='text-align: center'><a class="k-button k-button-icontext deleteStorfCtfc">삭제</a></td></tr>
 	</tr>
 	

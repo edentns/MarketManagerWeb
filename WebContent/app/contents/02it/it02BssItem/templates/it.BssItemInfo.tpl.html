@@ -28,7 +28,7 @@
 	                                   <input type="text" class="form-control wid-x4" id="CD_SIGNITEM" name="CD_SIGNITEM" title="상품코드 입력"
 	                                          maxlength="15" data-ng-model="bssInfoDataVO.param.CD_SIGNITEM" ng-change = "bssInfoDataVO.duplChange()">
 	                               <kendo-button ng-click ="bssInfoDataVO.duplCheck()" id="duple">중복확인</kendo-button>
-	                               <kendo-button ng-click ="bssInfoDataVO.itemCopyModal()">상품복사등록</kendo-button>
+	                               <!-- <kendo-button ng-click ="bssInfoDataVO.itemCopyModal()">상품복사등록</kendo-button> -->
 	                               </span>
 	                               <span data-ng-if="!page.isWriteable()">{{bssInfoDataVO.param.CD_SIGNITEM}}</span>
                                 </td>
@@ -403,13 +403,13 @@
 	                       		<th></th>
 	                       		<td></td>
 	                       	</tr>
-	                       	<tr>
+	                       	<!-- <tr>
 	                       		<th>상품옵션종류</th>
 	                       		<td colspan="5">
 									<kendo-button data-ng-if="bssInfoDataVO.param.CD_OPTTP!='001' && page.isWriteable()" ng-click = "bssInfoDataVO.basicOptGet(bssInfoDataVO.param.CD_OPTTP)">기본옵션조회 및 설정</kendo-button>
 	                                <kendo-button data-ng-if="bssInfoDataVO.param.CD_OPTTP!='001' && page.isWriteable()" ng-click = "bssInfoDataVO.otherOptCopy(bssInfoDataVO.param.CD_OPTTP)">다른상품옵션복사하기</kendo-button>
 								</td>
-	                       	</tr>
+	                       	</tr> -->
 	                       	<tr data-ng-if="bssInfoDataVO.param.CD_OPTTP!='001' && page.isWriteable()">
 	                       		<th>옵션명1</th>
 	                       		<td>
@@ -474,7 +474,7 @@
 	<div class="row">
         <!-- 추가상품 -->
         <div class="content-area-container col-xs-12">
-        	<div data-content-box-layer data-box-title="bssInfoDataVO.opInfo.boxTitle">
+        	<div data-content-box-layer data-box-title="bssInfoDataVO.addInfo.boxTitle">
         		<form class="search-type1">
                 	<table class="table-bordered">
 	                	<colgroup>
@@ -682,7 +682,7 @@
 	<div class="row">
         <!-- 고시 정보 -->
         <div class="content-area-container col-xs-12">
-        	<div data-content-box-layer data-box-title="bssInfoDataVO.transInfo.boxTitle">
+        	<div data-content-box-layer data-box-title="bssInfoDataVO.licenseInfo.boxTitle">
         		<form class="search-type1">
                 	<table class="table-bordered">
 	                	<colgroup>
@@ -731,14 +731,14 @@
     <div class="row">
         <!-- 오픈마켓별 추가 정보 -->
         <div class="content-area-container col-xs-12">
-        	<div data-content-box-layer data-box-title="bssInfoDataVO.licenseInfo.boxTitle">
+        	<div data-content-box-layer data-box-title="bssInfoDataVO.omInfo.boxTitle">
         		<div kendo-tab-strip id="omTab">
 	              <!-- tab list -->
 	              <ul>
-	                <li>옥션</li>
+	                <li class="k-state-active">옥션</li>
 	                <li>지마켓</li>
 	                <li>스마트스토어</li>
-	                <li class="k-state-active">11번가</li>
+	                <li>11번가</li>
 	                <li>쿠팡</li>
 	              </ul>
 	          

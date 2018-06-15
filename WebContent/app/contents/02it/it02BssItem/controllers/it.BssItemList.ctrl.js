@@ -68,8 +68,6 @@
 	        		adulYnIds     : resData.adulYnIds,
 	        		taxClftList   : resData.taxCodeList,
 	        		taxClftIds    : resData.taxClftIds,
-	        		iClftList     : resData.iClftCodeList,
-	        		iClftIds      : resData.iClftIds,
 	        		iKindList     : resData.iKindCodeList,
 	        		iKindIds      : resData.iKindIds,
 	        		iStatList     : resData.iStatCodeList,
@@ -255,7 +253,7 @@
                     											editable: false,
                         										nullable: false
                     									   },                    									   
-                    					SF_DE:	   	       {	
+                    					HTML_DETEXPL:	   	       {	
     			    									    	type: "string", 
     								    						editable: true,
     								    						nullable: false
@@ -341,8 +339,7 @@
   			                        field: "ROW_CHK",
   			                        title: "<input class='k-checkbox' type='checkbox' id='grd_chk_master' ng-click='onBssGrdCkboxAllClick($event)'><label class='k-checkbox-label k-no-text' for='grd_chk_master' style='margin-bottom:0;'>​</label>",
 			                        width: "40px",
-  			                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px; vertical-align:middle;"},
-  			                        selectable: true
+  			                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px; vertical-align:middle;"}
                   	            },                        
   		                        {	
                   	            	field: "CD_SIGNITEM",
@@ -429,7 +426,7 @@
   			                                ]
   		                        },                        
   		                        {
-  		                        	field: "SF_DE",
+  		                        	field: "HTML_DETEXPL",
   		                            title: "상세설명",
   		                            width: 100,
   		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},

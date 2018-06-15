@@ -28,7 +28,9 @@
 	        		prodInfo : { boxTitle : "제조 정보" },
 	        		transInfo : { boxTitle : "배송 정보" },
 	        		opInfo : { boxTitle : "옵션 / 재고" },
+	        		addInfo : { boxTitle : "추가구성상품" },
 	        		licenseInfo : { boxTitle : "인허가 / 고시정보" },
+	        		omInfo : { boxTitle : "오픈마켓별 추가정보" },
 	        		itemCtgrList1 : [],
 	        		selectedCtgr1 : {ID_CTGR : "", NM_CTGR: ""},
 	        		itemCtgrList2 : [],
@@ -100,7 +102,7 @@
                     shpprcCList   : [],
                     shpprSTList   : [],
                     shpGuiList    : [],
-                    CD_PRCSHP     : '002',
+                    CD_PRCSHP     : '001',
 	        		itemDetailYN  : 'N',
 	        		puhRaBtn      : '001',
 	        		shpRaBtn      : '001',
@@ -111,7 +113,7 @@
 	        		oriOPTTP      : "",
 	        		duplFlag      : false,
 	        		addItemList   : [{ID : 1, LABEL : "1개"},{ID : 2, LABEL : "2개"},{ID : 3, LABEL : "3개"},{ID : 4, LABEL : "4개"},{ID : 5, LABEL : "5개"}],
-	        		addItemNo     : 5,
+	        		addItemNo     : 1,
 	        		ynUseDataSource : [{
 						"NM_DEF": '사용',
 						"CD_DEF": 'Y'
@@ -256,7 +258,7 @@
 		        		YN_VISRECE    : "N",
 		        		YN_BDLSHP     : "N",
                         AREA_QUISEV   : "",
-		        		CD_SHPPRC     : "005",
+		        		CD_SHPPRC     : "001",
 		        		PRC_SHP       : "",
 		        		PRC_STDSHP    : "",
 		        		CD_SECTCNTYN  : "001",
@@ -409,7 +411,7 @@
 	                	dataSource: new kendo.data.DataSource({
 	                		transport: {
 	                			read: function(e) {
-	                				var param = {
+	                				/*var param = {
                 						procedureParam:"USP_IT_02BSSITEMOPT_GET&L_CD_ITEM@s|L_FLAG@s",
                 						L_CD_ITEM  :  bssInfoDataVO.ids,
                 						L_FLAG     :  "1"
@@ -423,7 +425,7 @@
 	            	    					grid.hideColumn(5);
 	            	    					$("#gridOpt"+bssInfoDataVO.param.CD_OPTTP+" .k-grid-toolbar").hide();
 	            	    				}
-	            					});
+	            					});*/
 	                			},
 	                			create: function(e) {
 	                				if(bssInfoDataVO.oriOPTTP != bssInfoDataVO.param.CD_OPTTP){
@@ -556,7 +558,7 @@
 	                	dataSource: new kendo.data.DataSource({
 	                		transport: {
 	                			read: function(e) {
-	                				var param = {
+	                				/*var param = {
                 						procedureParam:"USP_IT_02BSSITEMOPT_GET&L_CD_ITEM@s|L_FLAG@s",
                 						L_CD_ITEM  :  bssInfoDataVO.ids,
                 						L_FLAG     :  "2"
@@ -569,7 +571,7 @@
 	            	    					grid.hideColumn(7);
 	            	    					$("#gridOpt"+bssInfoDataVO.param.CD_OPTTP+" .k-grid-toolbar").hide();
 	            	    				}
-	            					});
+	            					});*/
 	                			},
 	                			create: function(e) {
 	                				if(bssInfoDataVO.oriOPTTP != bssInfoDataVO.param.CD_OPTTP){
@@ -734,7 +736,7 @@
 	                	dataSource: new kendo.data.DataSource({
 	                		transport: {
 	                			read: function(e) {
-	                				var param = {
+	                				/*var param = {
                 						procedureParam:"USP_IT_02BSSITEMOPT_GET&L_CD_ITEM@s|L_FLAG@s",
                 						L_CD_ITEM  :  bssInfoDataVO.ids,
                 						L_FLAG     :  "2"
@@ -747,7 +749,7 @@
 	            	    					grid.hideColumn(7);
 	            	    					$("#gridOpt"+bssInfoDataVO.param.CD_OPTTP+" .k-grid-toolbar").hide();
 	            	    				}
-	            					});
+	            					});*/
 	                			},
 	                			create: function(e) {
 	                				if(bssInfoDataVO.oriOPTTP != bssInfoDataVO.param.CD_OPTTP){
@@ -1780,6 +1782,12 @@
 	            	var SU = bssInfoDataVO.kind == "detail" ? "U" : "I";
 	            	if(SU == "I"){
 		            	if (confirm("저장하시겠습니까?")) {
+		            		//원산지 마지막값 하나 가져오기
+		            		if(bssInfoDataVO.selectedCoo3.CD_COO != "")bssInfoDataVO.param.CD_COO = bssInfoDataVO.selectedCoo3.CD_COO;
+		            		else{
+		            			if(bssInfoDataVO.selectedCoo2.CD_COO != "")bssInfoDataVO.param.CD_COO = bssInfoDataVO.selectedCoo2.CD_COO;
+		            			else bssInfoDataVO.param.CD_COO = bssInfoDataVO.selectedCoo1.CD_COO;
+		            		}
 		            		var optData = [];
 		            		if(bssInfoDataVO.param.CD_OPTTP != '001')optData = $("#gridOpt"+bssInfoDataVO.param.CD_OPTTP).data("kendoGrid").dataSource._data;
 		            		var addData = $("#gridAddVO").data("kendoGrid").dataSource._data;
@@ -2053,7 +2061,7 @@
 	            			S_NM_OPT = bssInfoDataVO.param.NM_OPT1;
 	            		
 	            		for( var i = 0 ; i < S_VAL_OPT1.length ; i++ ){
-	            			grid.dataSource.insert(i, { NM_OPT : S_NM_OPT, VAL_OPT : S_VAL_OPT1[i], NO_MD : "", S_ITEMPRC : 0, QT_SSPL: 0 });
+	            			grid.dataSource.insert(i, { NM_OPT1 : S_NM_OPT, VAL_OPT1 : S_VAL_OPT1[i], NO_MD : "", S_ITEMPRC : 0, QT_SSPL: 0 });
 	            		}
 	            	}
 	            	if(bssInfoDataVO.param.CD_OPTTP == "003"){
@@ -2388,7 +2396,7 @@
 	            	}
 	            };
 	            
-	            // 스토어팜, 11번가, 쿠팡 인증정보 데이터 정렬
+	            // 스토어팜, 11번가, 쿠팡 인증정보 데이터 정렬(저장할때)
 	            bssInfoDataVO.ctfcParamSort = function(dataList){
 	            	var resultList = [{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''}];
 	            	for(var i = 0 ; i < dataList.length ; i++){

@@ -24,10 +24,11 @@
                     	return "it.SaleSiteItem"+ edt.getMenuFileName($stateParams.kind) +"Ctrl";                                  
                     }],
                     resolve		: {
-                        resData: ["AuthSvc", "$q", "sy.CodeSvc", "UtilSvc", function (AuthSvc, $q, SyCodeSvc, UtilSvc) {
+                        resData: ["AuthSvc", "$q", "sy.CodeSvc", "UtilSvc", "$stateParams", function (AuthSvc, $q, SyCodeSvc, UtilSvc, $stateParams) {
                             var defer 	= $q.defer(),
                                 resData = {},
-                                today   = edt.getToday();
+                                today   = edt.getToday(),
+                                CD_ITEM = $stateParams.ids;
 
                             AuthSvc.isAccess().then(function (result) {
                                 resData.access = result[0];
@@ -35,7 +36,8 @@
                 					cmrkParam      = {procedureParam: "USP_IT_03SALEITEM_CMRK_GET"},
                                 	mngCmrkParam   = {procedureParam: "USP_SY_09MRK01_GET"},
                                     paramCmrk      = {procedureParam: "USP_SY_09MRK03_GET"},
-                                    paramCtfc      = {procedureParam: "USP_IT_02BSSITEMCTFCINFOM_GET&L_MNG_AUCT@s|L_MNG_GMRK@s|L_MNG_STORF@s|L_MNG_ST@s|L_MNG_COOP@s",L_MNG_AUCT:"SYMM170101_00003",L_MNG_GMRK:"SYMM170101_00001",L_MNG_STORF:"SYMM170101_00002",L_MNG_ST:"SYMM170101_00005",L_MNG_COOP:"SYMM170901_00001"};
+                                    paramCtfc      = {procedureParam: "USP_IT_02BSSITEMCTFCINFOM_GET&L_MNG_AUCT@s|L_MNG_GMRK@s|L_MNG_STORF@s|L_MNG_ST@s|L_MNG_COOP@s",L_MNG_AUCT:"SYMM170101_00003",L_MNG_GMRK:"SYMM170101_00001",L_MNG_STORF:"SYMM170101_00002",L_MNG_ST:"SYMM170101_00005",L_MNG_COOP:"SYMM170901_00001"},
+                                    paramInfo      = {procedureParam: "USP_IT_03SALEITEM_OM_GET&L_CD_ITEM@s",L_CD_ITEM: $stateParams.ids };
                                 $q.all([
                                         SyCodeSvc.getSubcodeList({cd: "SY_000007", search: "all"}).then(function (result) {
                                             return result.data;
@@ -105,11 +107,20 @@
                                         }),
                                         SyCodeSvc.getSubcodeList({cd: "IT_000034", search: "all"}).then(function (result) {
                                             return result.data;
+                                        }),
+                                        UtilSvc.getList(paramInfo).then(function (res) {
+                	    					return res.data.results;
+                                        }),
+                                        SyCodeSvc.getSubcodeList({cd: "IT_000007", search: "all"}).then(function (result) {
+                                            return result.data;
                                         })
                                     ]).then(function (result) {
-                                        resData.taxCodeList   = result[0];
-                                        resData.iStatCodeList = result[1];
-                                        resData.itCtgrList    = result[2];
+                                    	resData.CD_ITEM        = CD_ITEM;
+                                    	var list = new Array();
+                                    	
+                                        resData.taxCodeList    = result[0];
+                                        resData.iStatCodeList  = result[1];
+                                        resData.itCtgrList     = result[2];
                                         //resData.cmrkList      = result[3];
                                         
                                         resData.mngMrkList     = result[4];
@@ -135,6 +146,19 @@
                                         resData.shpprcCList    = result[20];
                                         resData.shpprSTList    = result[21];
                                         resData.shpGuiList     = result[22];
+                                        resData.auctData       = result[23][0];
+                                        resData.gmrkData       = result[23][1];
+                                        resData.storfData      = result[23][2];
+                                        resData.stData         = result[23][3];
+                                        resData.coopData       = result[23][4];
+                                        resData.optDataList    = result[23][5];
+                                        list.push(result[23][6]);
+                                        list.push(result[23][7]);
+                                        list.push(result[23][8]);
+                                        list.push(result[23][9]);
+                                        list.push(result[23][10]);
+                                        resData.ctfcData       = list;
+                                        resData.optTypeList    = result[24];
                                         
                                         defer.resolve( resData );
                                     });

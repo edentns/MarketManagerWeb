@@ -18,8 +18,10 @@
 	            	storf: "스토어팜추가정보",
 	            	st   : "11번가추가정보",
 	            	coop : "쿠팡추가정보",
-	        		NO_MNGMRK        : "SYMM170101_00003",
-	        		NM_MRK           : "옥션",
+	            	opt  : "옵션정보",
+	        		NO_MNGMRK        : "",
+	        		NO_MNGMRK_OLD    : "",
+	        		NM_MRK           : "",
 	        		mngMrkList       : [],
 	        		cmrkList         : [],
 	        		mallMrkList      : [],
@@ -54,18 +56,20 @@
 	                shpCWayList      : [],   
 	                shpprcCList      : [],   
 	                shpprSTList      : [],   
-	                shpGuiList       : [],  
+	                shpGuiList       : [], 
+	                optTypeList      : [],
 	                YN_TIMSMAXPCHS   : "N",
 	                YN_JJMNT         : "N",
+	                firstFlag        : 1,
 	        		param            : {
 	        			NO_MRK : "",
 	        			
+	        			CD_OPTTP             : "",
 	        			AM_ITEMPRC           : "",
 	        			QT_SALE              : "",
         				CD_ITEM              : "",
-        				NO_MRK               : "",
-        				DTS_SALEEND          : "",
-        				DTS_SALESTART        : "",
+        				DT_SALEEND           : "",
+        				DT_SALESTART         : "",
         				NO_MRKITEM           : "",
         				NM_MRKCLFT           : "",
         				CD_REGSTAT           : "",
@@ -105,7 +109,7 @@
         				CD_SERVITEM          : "",
         				YN_QUIK              : "",
         				YN_VISRECE           : "",
-        				YN_TKBKSHPPRCCOD     : "",
+        				YN_TKBKSHPPRCCOD     : "", 
         				DAYS_DELITAK         : "",
         				YN_BCD               : "",
         				DC_BCD               : "",
@@ -128,7 +132,7 @@
         				DC_PUREWD            : "",
         				COND_CNT      : [{VAL : '', YN: 'Y'},{VAL : '', YN: 'N'},{VAL : '', YN: 'N'},{VAL : '', YN: 'N'},{VAL : '', YN: 'Y'}],
 		        		COND_SHPPRC   : [{VAL : ''},{VAL : ''},{VAL : ''},{VAL : ''},{VAL : ''}],
-		        		CTCFINFO      : [{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''}]
+		        		CTFCINFO      : [{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''}]
 	        		}
 	            };	     
 	            
@@ -157,16 +161,12 @@
                     saleItemDataVO.shpprcCList    = resData.shpprcCList;
                     saleItemDataVO.shpprSTList    = resData.shpprSTList;
                     saleItemDataVO.shpGuiList     = resData.shpGuiList;
-	            	
-	            	/*바꿔서 넣어야 하는 컬럼명
-	            	AMOU_TIMSLIM       = AMOU_MAXPCHSLIMCLS
-	            	AMOU_TIMSMAXPCHS   = AMOU_MAXPCHSLIMCLS
-	            	AMOU_PESMAXPCHS    = AMOU_MAXPCHSLIMPER
-	            	PRC_TKBKECHGONESHP = PRC_ONESHP
-	            	PRC_TKBKSHP        = PRC_ONESHP
-	            	PRC_ECHGSHP        = PRC_RTIPSHP
-	            	DAYS_PESMAXPCHSAMOU = DAYS_PRDLIM
-*/
+                    saleItemDataVO.optTypeList    = resData.optTypeList;
+                    
+                    
+                    
+                    
+                    
 	            	
 	            	
 	            	/*$timeout(function() {
@@ -186,8 +186,325 @@
 	            	},1000);*/
 	            };
 	            
+	            // 저장
+	            saleItemDataVO.goSave = function(){
+	            	var SU = saleItemDataVO.kind == "detail" ? "U" : "I";
+                    saleItemDataVO.param.CD_ITEM  = resData.CD_ITEM;
+	            	if(SU == "I"){
+		            	if (confirm("저장하시겠습니까?")) {
+		            		var optData = [];
+		            		if(saleItemDataVO.param.CD_OPTTP != '001')optData = $("#gridOpt"+saleItemDataVO.param.CD_OPTTP).data("kendoGrid").dataSource._data;
+		            		var itemData = saleItemDataVO.param;
+		            		if(saleItemDataVO.NM_MRK == "스토어팜"){if($("#gridCtfcStorf").data("kendoGrid").dataSource._data.length!=0){itemData.CTCFINFO = saleItemDataVO.ctfcParamSort($("#gridCtfcStorf").data("kendoGrid")._data)}};
+		            		if(saleItemDataVO.NM_MRK == "11번가"){if($("#gridCtfcSt").data("kendoGrid").dataSource._data.length!=0){itemData.CTCFINFO = saleItemDataVO.ctfcParamSort($("#gridCtfcSt").data("kendoGrid")._data)}};
+		            		if(saleItemDataVO.NM_MRK == "쿠팡"){if($("#gridCtfcCoop").data("kendoGrid").dataSource._data.length!=0){itemData.CTCFINFO = saleItemDataVO.ctfcParamSort($("#gridCtfcCoop").data("kendoGrid")._data)}};
+		            		var param = {
+		            				SALESITEITEM : itemData,
+		            				OPT : optData };
+		            		itSaleSiteItemSvc.saveItem(param, SU).success(function () {
+	                        	alert("판매SITE별상품 등록이 완료되었습니다.");
+	                        	saleItemDataVO.goBack();
+	                        });
+		                }
+	            	}else{
+	            		if (confirm("수정하시겠습니까?")) {
+		                    if (saleItemDataVO.isValid(saleItemDataVO.param)) {
+		                		if(saleItemDataVO.selectedCtgr2.ID_CTGR != ""){
+		                			if(saleItemDataVO.selectedCtgr3.ID_CTGR != ""){
+		                    			saleItemDataVO.param.ID_CTGR = saleItemDataVO.selectedCtgr3.ID_CTGR;
+		                        	}else{
+		                        		saleItemDataVO.param.ID_CTGR = saleItemDataVO.selectedCtgr2.ID_CTGR;
+		                        	}
+		                    	}else{
+		                    		saleItemDataVO.param.ID_CTGR = saleItemDataVO.selectedCtgr1.ID_CTGR;
+		                    	}
+		                		saleItemDataVO.param.CD_ITEM = saleItemDataVO.ids;
+		                		saleItemDataVO.param.RT_TAX = Number(saleItemDataVO.param.RT_TAX);
+		                    	itBssItemSvc.saveItem(saleItemDataVO.param, SU).success(function () {
+		                    		if(saleItemDataVO.param.CD_OPTTP == "002" || saleItemDataVO.param.CD_OPTTP == "003" ){
+		                        		var grid = $("#gridOpt"+saleItemDataVO.param.CD_OPTTP).data("kendoGrid");
+		                            	grid.dataSource.sync();
+		                    		}
+		                        	saleItemDataVO.fileSave();
+		                        	alert("기본상품 수정이 완료되었습니다.");
+		                        	saleItemDataVO.goBack();
+		                        });
+		                    }
+		                }
+	            	}
+	            };
+	            
+	            // 초기 인증정보 5개몰에 각각 넣어줌
+	            saleItemDataVO.ctfcDataSplit = function(ctfcData){
+	            	//옥션
+	            	for(var i = 0 ; i < ctfcData[0].length; i++){
+	            		var tempList = [];
+                    	tempList = ctfcData[0][i].NM_CTFCINFO.split(" ");
+                    	if(tempList[0]=="어린이제품")saleItemDataVO.param.CTFCINFO[0].CD_CTFCINFO = ctfcData[0][i].CD_CTFCINFO;
+                    	if(tempList[0]=="생활용품")saleItemDataVO.param.CTFCINFO[1].CD_CTFCINFO = ctfcData[0][i].CD_CTFCINFO;
+                    	if(tempList[0]=="전기용품")saleItemDataVO.param.CTFCINFO[2].CD_CTFCINFO = ctfcData[0][i].CD_CTFCINFO;
+	            	}
+	            	//지마켓
+	            	for(var i = 0 ; i < ctfcData[1].length; i++){
+	            		var tempList = [];
+                    	tempList = ctfcData[1][i].NM_CTFCINFO.split(" ");
+                    	if(tempList[0]=="어린이제품")saleItemDataVO.param.CTFCINFO[0].CD_CTFCINFO = ctfcData[1][i].CD_CTFCINFO;
+                    	if(tempList[0]=="생활용품")saleItemDataVO.param.CTFCINFO[1].CD_CTFCINFO = ctfcData[1][i].CD_CTFCINFO;
+                    	if(tempList[0]=="전기용품")saleItemDataVO.param.CTFCINFO[2].CD_CTFCINFO = ctfcData[1][i].CD_CTFCINFO;
+	            	}
+	            };
+	            
+	            saleItemDataVO.mngCmrkChange = function(){
+	            	if(saleItemDataVO.firstFlag != 1){
+	            		if(!saleItemDataVO.setData()){
+	            			saleItemDataVO.NO_MNGMRK = saleItemDataVO.NO_MNGMRK_OLD;
+	            			return;
+	            		}else{
+	            			saleItemDataVO.NO_MNGMRK_OLD = saleItemDataVO.NO_MNGMRK;
+	            		}
+	            	}
+	            	else{
+	            		saleItemDataVO.firstFlag++;
+	            		saleItemDataVO.NO_MNGMRK_OLD = saleItemDataVO.NO_MNGMRK;
+	            		
+	            		saleItemDataVO.mallMrkList = [];
+		            	for(var i = 0; i < saleItemDataVO.cmrkList.length; i++){
+		            		if(saleItemDataVO.cmrkList[i].NO_MNGMRK == saleItemDataVO.NO_MNGMRK){
+		            			saleItemDataVO.NM_MRK = saleItemDataVO.cmrkList[i].NM_MNGMRK;
+		            			saleItemDataVO.mallMrkList.push(saleItemDataVO.cmrkList[i]);
+		            		}
+		            	}
+		            	if(saleItemDataVO.mallMrkList.length == 1)saleItemDataVO.param.NO_MRK = saleItemDataVO.mallMrkList[0].NO_MRK;
+		            	
+		            	if(saleItemDataVO.NM_MRK == "옥션") saleItemDataVO.dataSetting(resData.auctData[0]);
+            			if(saleItemDataVO.NM_MRK == "지마켓") saleItemDataVO.dataSetting(resData.gmrkData[0]);
+            			if(saleItemDataVO.NM_MRK == "스토어팜") saleItemDataVO.dataSetting(resData.storfData[0]);
+            			if(saleItemDataVO.NM_MRK == "11번가") saleItemDataVO.dataSetting(resData.stData[0]);
+            			if(saleItemDataVO.NM_MRK == "쿠팡") saleItemDataVO.dataSetting(resData.coopData[0]);
+                        
+	            		saleItemDataVO.cmrkParsChange();
+		            	saleItemDataVO.cmrkTkbkChange();
+	            	}
+	            };
+	            
+	            saleItemDataVO.setData = function(){
+	            	if(confirm('오픈마켓 변경시 데이터가 초기화 됩니다.\n진행 하시겠습니까?')){
+	            		saleItemDataVO.dataClear();
+	            		saleItemDataVO.mallMrkList = [];
+		            	for(var i = 0; i < saleItemDataVO.cmrkList.length; i++){
+		            		if(saleItemDataVO.cmrkList[i].NO_MNGMRK == saleItemDataVO.NO_MNGMRK){
+		            			saleItemDataVO.NM_MRK = saleItemDataVO.cmrkList[i].NM_MNGMRK;
+		            			saleItemDataVO.mallMrkList.push(saleItemDataVO.cmrkList[i]);
+		            		}
+		            	}
+		            	if(saleItemDataVO.mallMrkList.length == 1)saleItemDataVO.param.NO_MRK = saleItemDataVO.mallMrkList[0].NO_MRK;
+		            	
+		            	if(saleItemDataVO.NM_MRK == "옥션") saleItemDataVO.dataSetting(resData.auctData[0]);
+            			if(saleItemDataVO.NM_MRK == "지마켓") saleItemDataVO.dataSetting(resData.gmrkData[0]);
+            			if(saleItemDataVO.NM_MRK == "스토어팜") saleItemDataVO.dataSetting(resData.storfData[0]);
+            			if(saleItemDataVO.NM_MRK == "11번가") saleItemDataVO.dataSetting(resData.stData[0]);
+            			if(saleItemDataVO.NM_MRK == "쿠팡") saleItemDataVO.dataSetting(resData.coopData[0]);
+            			
+    	            	/*바꿔서 넣어야 하는 컬럼명
+    	            	AMOU_TIMSLIM       = AMOU_MAXPCHSLIMCLS
+    	            	AMOU_TIMSMAXPCHS   = AMOU_MAXPCHSLIMCLS
+    	            	AMOU_PESMAXPCHS    = AMOU_MAXPCHSLIMPER
+    	            	PRC_TKBKECHGONESHP = PRC_ONESHP
+    	            	PRC_TKBKSHP        = PRC_ONESHP
+    	            	PRC_ECHGSHP        = PRC_RTIPSHP
+    	            	DAYS_PESMAXPCHSAMOU = DAYS_PRDLIM
+    	            	*/
+                        
+	            		saleItemDataVO.cmrkParsChange();
+		            	saleItemDataVO.cmrkTkbkChange();
+        				return true;
+        			}else{
+        				return false;
+        			}
+	            };
+	            
+	            // 칼럼명을 데이터에 맞춰서 return
+	            saleItemDataVO.dataSetting = function(data){
+	            	var resultData = {
+	            			AM_ITEMPRC           : data.AM_ITEMPRC,
+		        			QT_SALE              : data.QT_SALE,
+	        				DTS_SALEEND          : data.DTS_SALEEND,
+	        				DTS_SALESTART        : data.DTS_SALESTART,
+	        				NO_MRKITEM           : data.NO_MRKITEM,
+	        				NM_MRKCLFT           : data.NM_MRKCLFT,
+	        				CD_REGSTAT           : data.CD_REGSTAT,
+	        				VAL_UNI              : data.VAL_UNI,
+	        				PRC_UNI              : data.PRC_UNI,
+	        				DT_SHPSTART          : data.DT_SHPSTART,
+	        				YN_MAXPCHSAMOU       : data.YN_MAXPCHSAMOU,
+	        				AMOU_MAXPCHSLIM      : data.AMOU_MAXPCHSLIM,
+	        				DAYS_PRDLIM          : data.DAYS_PRDLIM,
+	        				AMOU_PRDLIM          : data.AMOU_PRDLIM,
+	        				AMOU_MAXPCHSLIMCLS   : data.AMOU_MAXPCHSLIMCLS,
+	        				AMOU_MAXPCHSLIMPER   : data.AMOU_MAXPCHSLIMPER,
+	        				HTML_AVTMTRI         : data.HTML_AVTMTRI,
+	        				CD_SHPWAY            : data.CD_SHPWAY,
+	        				CD_SHPPARS           : data.CD_SHPPARS,
+	        				CD_TKBKPARS          : data.CD_TKBKPARS,
+	        				CD_POST              : data.CD_POST,
+	        				PRC_POST             : data.PRC_POST,
+	        				AREA_QUISEV          : data.AREA_QUISEV,
+	        				NM_QUISEVCMPN        : data.NM_QUISEVCMPN,
+	        				NO_QUISEVPHNE        : data.NO_QUISEVPHNE,
+	        				PRC_ONESHP           : data.PRC_ONESHP,
+	        				PRC_RTIPSHP          : data.PRC_RTIPSHP,
+	        				YN_BDLSHP            : data.YN_BDLSHP,
+	        				CD_SHPPRC            : data.CD_SHPPRC,
+	        				CD_ERLSHPPRCFREIMPWAY: data.CD_ERLSHPPRCFREIMPWAY,
+	        				PRC_SHP1             : data.PRC_SHP,
+	        				PRC_SHP2             : data.PRC_SHP,
+	        				PRC_STDSHP           : data.PRC_STDSHP,
+	        				CD_SHPIMPWAY         : data.CD_SHPIMPWAY,
+	        				PRC_AREACLSFSHP      : data.PRC_AREACLSFSHP,
+	        				PRC_ADDINST          : data.PRC_ADDINST,
+	        				GUI_TKBKECHG         : data.GUI_TKBKECHG,
+	        				YN_FECTSALE          : data.YN_FECTSALE,
+	        				AMOU_MINPCHS         : data.AMOU_MINPCHS,
+	        				CD_MD                : data.CD_MD,
+	        				CD_SERVITEM          : data.CD_SERVITEM,
+	        				YN_QUIK              : data.YN_QUIK,
+	        				YN_VISRECE           : data.YN_VISRECE,
+	        				YN_TKBKSHPPRCCOD     : data.YN_TKBKSHPPRCCOD,
+	        				DAYS_DELITAK         : data.DAYS_DELITAK,
+	        				YN_BCD               : data.YN_BCD,
+	        				DC_BCD               : data.DC_BCD,
+	        				RSN_BCDNO            : data.RSN_BCDNO,
+	        				YN_PRLICOM           : data.YN_PRLICOM,
+	        				YN_FECTPCHSAGNCY     : data.YN_FECTPCHSAGNCY,
+	        				YN_INDVCTCAMAKNECE   : data.YN_INDVCTCAMAKNECE,
+	        				YN_MNTSHP            : data.YN_MNTSHP,
+	        				NM_MNFR              : data.NM_MNFR,
+	        				YN_RSVSALE           : data.YN_RSVSALE,
+	        				CD_SHPPRCTPL         : data.CD_SHPPRCTPL,
+	        				CD_EXCHGDISCCLFT     : data.CD_EXCHGDISCCLFT,
+	        				CD_AMOUSECTCLFT      : data.CD_AMOUSECTCLFT,
+	        				CD_SECTCNTYN         : data.CD_SECTCNTYN,
+	        				YN_SPRINSTPRC        : data.YN_SPRINSTPRC,
+	        				CD_SHPPRCADDGUI      : data.CD_SHPPRCADDGUI,
+	        				PRC_MNTADDSHP        : data.PRC_MNTADDSHP,
+	        				PRC_JJADDSHP         : data.PRC_JJADDSHP,
+	        				PRC_FIRTTIMSTKBKSHP  : data.PRC_FIRTTIMSTKBKSHP,
+	        				DC_PUREWD            : data.DC_PUREWD,
+	        				CD_OPTTP             : data.CD_OPTTP,
+	        				COND_CNT      : [{VAL : '', YN: 'Y'},{VAL : '', YN: 'N'},{VAL : '', YN: 'N'},{VAL : '', YN: 'N'},{VAL : '', YN: 'Y'}],
+			        		COND_SHPPRC   : [{VAL : ''},{VAL : ''},{VAL : ''},{VAL : ''},{VAL : ''}],
+			        		CTFCINFO      : [{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''}]
+	            	}
+	            	saleItemDataVO.param = resultData;
+            		if(data.AMOU_TIMSLIM != "" && data.AMOU_TIMSLIM != "undefined") saleItemDataVO.param.AMOU_MAXPCHSLIMCLS = data.AMOU_TIMSLIM;
+            		if(data.AMOU_TIMSMAXPCHS != "" && data.AMOU_TIMSMAXPCHS != "undefined") saleItemDataVO.param.AMOU_MAXPCHSLIMCLS = data.AMOU_TIMSMAXPCHS;
+            		if(data.AMOU_PESMAXPCHS != "" && data.AMOU_PESMAXPCHS != "undefined") saleItemDataVO.param.AMOU_MAXPCHSLIMPER = data.AMOU_PESMAXPCHS;
+            		if(data.PRC_TKBKECHGONESHP != "" && data.PRC_TKBKECHGONESHP != "undefined") saleItemDataVO.param.PRC_ONESHP = data.PRC_TKBKECHGONESHP;
+            		if(data.PRC_TKBKSHP != "" && data.PRC_TKBKSHP != "undefined") saleItemDataVO.param.PRC_ONESHP = data.PRC_TKBKSHP;
+            		if(data.PRC_ECHGSHP != "" && data.PRC_ECHGSHP != "undefined") saleItemDataVO.param.PRC_RTIPSHP = data.PRC_ECHGSHP;
+            		if(data.DAYS_PESMAXPCHSAMOU != "" && data.DAYS_PESMAXPCHSAMOU != "undefined") saleItemDataVO.DAYS_PRDLIM = data.DAYS_PESMAXPCHSAMOU;
+            		//운송비부담구분 - 수량별 값이 존재할때 값 할당
+            		if(data.COND_CNT1 != "" && data.COND_CNT1 != "undefined"){
+            			saleItemDataVO.param.COND_CNT[0].VAL = data.COND_CNT1;
+            			saleItemDataVO.param.COND_SHPPRC[0].VAL = data.PRC_SHP;
+            			saleItemDataVO.param.COND_SHPPRC[1].VAL = data.COND_SHPPRC1;
+            			if(data.COND_CNT2 != "" && data.COND_CNT2 != "undefined"){
+                			saleItemDataVO.param.COND_CNT[1].VAL = data.COND_CNT2;
+                			saleItemDataVO.param.COND_CNT[1].YN  = "Y";
+                			saleItemDataVO.param.COND_SHPPRC[2].VAL = data.COND_SHPPRC2;
+                			if(data.COND_CNT3 != "" && data.COND_CNT3 != "undefined"){
+                    			saleItemDataVO.param.COND_CNT[2].VAL = data.COND_CNT3;
+                    			saleItemDataVO.param.COND_CNT[2].YN  = "Y";
+                    			saleItemDataVO.param.COND_SHPPRC[3].VAL = data.COND_SHPPRC3;
+                    			if(data.COND_CNT4 != "" && data.COND_CNT4 != "undefined"){
+                        			saleItemDataVO.param.COND_CNT[3].VAL = data.COND_CNT4;
+                        			saleItemDataVO.param.COND_CNT[3].YN  = "Y";
+                        			saleItemDataVO.param.COND_CNT[4].VAL = data.COND_CNT4;
+                        			saleItemDataVO.param.COND_SHPPRC[4].VAL = data.COND_SHPPRC4;
+                        		}
+                    		}
+                		}
+            		}
+            		saleItemDataVO.ctfcDataSplit(resData.ctfcData);
+	            };
+	            
+	            saleItemDataVO.dataClear = function(){
+	            	var clearData = {
+	            			AM_ITEMPRC           : "",
+		        			QT_SALE              : "",
+	        				CD_ITEM              : resData.CD_ITEM,
+	        				DTS_SALEEND          : "",
+	        				DTS_SALESTART        : "",
+	        				NO_MRKITEM           : "",
+	        				NM_MRKCLFT           : "",
+	        				CD_REGSTAT           : "",
+	        				VAL_UNI              : "",
+	        				PRC_UNI              : "",
+	        				DT_SHPSTART          : "",
+	        				YN_MAXPCHSAMOU       : "N",
+	        				AMOU_MAXPCHSLIM      : "",
+	        				DAYS_PRDLIM          : "",
+	        				AMOU_PRDLIM          : "",
+	        				AMOU_MAXPCHSLIMCLS   : "",
+	        				AMOU_MAXPCHSLIMPER   : "",
+	        				HTML_AVTMTRI         : "",
+	        				CD_SHPWAY            : "",
+	        				CD_SHPPARS           : "",
+	        				CD_TKBKPARS          : "",
+	        				CD_POST              : "001",
+	        				PRC_POST             : "",
+	        				AREA_QUISEV          : "",
+	        				NM_QUISEVCMPN        : "",
+	        				NO_QUISEVPHNE        : "",
+	        				PRC_ONESHP           : "",
+	        				PRC_RTIPSHP          : "",
+	        				YN_BDLSHP            : "N",
+	        				CD_SHPPRC            : "",
+	        				CD_ERLSHPPRCFREIMPWAY: "",
+	        				PRC_SHP1             : "",
+	        				PRC_SHP2             : "",
+	        				PRC_STDSHP           : "",
+	        				CD_SHPIMPWAY         : "001",
+	        				PRC_AREACLSFSHP      : "",
+	        				PRC_ADDINST          : "",
+	        				GUI_TKBKECHG         : "",
+	        				YN_FECTSALE          : "",
+	        				AMOU_MINPCHS         : "",
+	        				CD_MD                : "",
+	        				CD_SERVITEM          : "",
+	        				YN_QUIK              : "",
+	        				YN_VISRECE           : "",
+	        				YN_TKBKSHPPRCCOD     : "",
+	        				DAYS_DELITAK         : "",
+	        				YN_BCD               : "",
+	        				DC_BCD               : "",
+	        				RSN_BCDNO            : "",
+	        				YN_PRLICOM           : "",
+	        				YN_FECTPCHSAGNCY     : "",
+	        				YN_INDVCTCAMAKNECE   : "",
+	        				YN_MNTSHP            : "N",
+	        				NM_MNFR              : "",
+	        				YN_RSVSALE           : "N",
+	        				CD_SHPPRCTPL         : "",
+	        				CD_EXCHGDISCCLFT     : "",
+	        				CD_AMOUSECTCLFT      : "",
+	        				CD_SECTCNTYN         : "",
+	        				YN_SPRINSTPRC        : "",
+	        				CD_SHPPRCADDGUI      : "",
+	        				PRC_MNTADDSHP        : "",
+	        				PRC_JJADDSHP         : "",
+	        				PRC_FIRTTIMSTKBKSHP  : "",
+	        				DC_PUREWD            : "",
+	        				CD_OPTTP             : "",
+	        				COND_CNT      : [{VAL : '', YN: 'Y'},{VAL : '', YN: 'N'},{VAL : '', YN: 'N'},{VAL : '', YN: 'N'},{VAL : '', YN: 'Y'}],
+			        		COND_SHPPRC   : [{VAL : ''},{VAL : ''},{VAL : ''},{VAL : ''},{VAL : ''}],
+			        		CTFCINFO      : [{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''}]
+	            	}
+	            	saleItemDataVO.param = clearData;
+	            };
+	            
 	            // 사용자별 마켓눌렀을때 설정해놓은 택배사 가져오는 기능 (발송)
-	            saleItemDataVO.cmrkChange = function(){
+	            saleItemDataVO.cmrkParsChange = function(){
         			var	param = {
 	                    	procedureParam: "USP_SY_15PARS01_GET&NO_MRK@s|L_FLAG@s",
 	                    	NO_MRK : saleItemDataVO.param.NO_MRK,
@@ -324,21 +641,13 @@
 	                	dataSource: new kendo.data.DataSource({
 	                		transport: {
 	                			read: function(e) {
-	                				var param = {
-                						procedureParam:"USP_IT_02BSSITEMOPT_GET&L_CD_ITEM@s|L_FLAG@s",
-                						L_CD_ITEM  :  saleItemDataVO.ids,
-                						L_FLAG     :  "1"
-                					};
-	            					UtilSvc.getList(param).then(function (res) {
-	            						e.success(res.data.results[0]);
-	            						saleItemDataVO.NM_COM = res.data.results[1][0].NM_C;
-	            						if(!page.isWriteable()){
-	            	    					var grid = $("#gridOpt"+saleItemDataVO.param.CD_OPTTP).data("kendoGrid");
-	            	    					grid.setOptions({editable : false});   
-	            	    					grid.hideColumn(5);
-	            	    					$("#gridOpt"+saleItemDataVO.param.CD_OPTTP+" .k-grid-toolbar").hide();
-	            	    				}
-	            					});
+	                				e.success(resData.optDataList);
+	                				if(!page.isWriteable()){
+            							var grid = $("#gridOpt"+saleItemDataVO.param.CD_OPTTP).data("kendoGrid");
+            	    					grid.setOptions({editable : false});   
+            	    					grid.hideColumn(7);
+            	    					$("#gridOpt"+saleItemDataVO.param.CD_OPTTP+" .k-grid-toolbar").hide();
+            	    				}
 	                			},
 	                			create: function(e) {
 	                				if(saleItemDataVO.oriOPTTP != saleItemDataVO.param.CD_OPTTP){
@@ -471,20 +780,13 @@
 	                	dataSource: new kendo.data.DataSource({
 	                		transport: {
 	                			read: function(e) {
-	                				var param = {
-                						procedureParam:"USP_IT_02BSSITEMOPT_GET&L_CD_ITEM@s|L_FLAG@s",
-                						L_CD_ITEM  :  saleItemDataVO.ids,
-                						L_FLAG     :  "2"
-                					};
-	            					UtilSvc.getList(param).then(function (res) {
-	            						e.success(res.data.results[0]);
-	            						if(!page.isWriteable()){
-	            							var grid = $("#gridOpt"+saleItemDataVO.param.CD_OPTTP).data("kendoGrid");
-	            	    					grid.setOptions({editable : false});   
-	            	    					grid.hideColumn(7);
-	            	    					$("#gridOpt"+saleItemDataVO.param.CD_OPTTP+" .k-grid-toolbar").hide();
-	            	    				}
-	            					});
+	                				e.success(resData.optDataList);
+	                				if(!page.isWriteable()){
+            							var grid = $("#gridOpt"+saleItemDataVO.param.CD_OPTTP).data("kendoGrid");
+            	    					grid.setOptions({editable : false});   
+            	    					grid.hideColumn(7);
+            	    					$("#gridOpt"+saleItemDataVO.param.CD_OPTTP+" .k-grid-toolbar").hide();
+            	    				}
 	                			},
 	                			create: function(e) {
 	                				if(saleItemDataVO.oriOPTTP != saleItemDataVO.param.CD_OPTTP){
@@ -649,20 +951,13 @@
 	                	dataSource: new kendo.data.DataSource({
 	                		transport: {
 	                			read: function(e) {
-	                				var param = {
-                						procedureParam:"USP_IT_02BSSITEMOPT_GET&L_CD_ITEM@s|L_FLAG@s",
-                						L_CD_ITEM  :  saleItemDataVO.ids,
-                						L_FLAG     :  "2"
-                					};
-	            					UtilSvc.getList(param).then(function (res) {
-	            						e.success(res.data.results[0]);
-	            						if(!page.isWriteable()){
-	            							var grid = $("#gridOpt"+saleItemDataVO.param.CD_OPTTP).data("kendoGrid");
-	            	    					grid.setOptions({editable : false});   
-	            	    					grid.hideColumn(7);
-	            	    					$("#gridOpt"+saleItemDataVO.param.CD_OPTTP+" .k-grid-toolbar").hide();
-	            	    				}
-	            					});
+	                				e.success(resData.optDataList);
+	                				if(!page.isWriteable()){
+            							var grid = $("#gridOpt"+saleItemDataVO.param.CD_OPTTP).data("kendoGrid");
+            	    					grid.setOptions({editable : false});   
+            	    					grid.hideColumn(7);
+            	    					$("#gridOpt"+saleItemDataVO.param.CD_OPTTP+" .k-grid-toolbar").hide();
+            	    				}
 	                			},
 	                			create: function(e) {
 	                				if(saleItemDataVO.oriOPTTP != saleItemDataVO.param.CD_OPTTP){
@@ -1507,18 +1802,7 @@
                     	//id는 유니크한 모델값으로 해야함 안그러면 cancel 시에 row grid가 중복 되는 현상이 발생
         		};
 	            
-	            saleItemDataVO.mngCmrkChange = function(){
-	            	saleItemDataVO.mallMrkList = [];
-	            	for(var i = 0; i < saleItemDataVO.cmrkList.length; i++){
-	            		if(saleItemDataVO.cmrkList[i].NO_MNGMRK == saleItemDataVO.NO_MNGMRK){
-	            			saleItemDataVO.NM_MRK = saleItemDataVO.cmrkList[i].NM_MNGMRK;
-	            			saleItemDataVO.mallMrkList.push(saleItemDataVO.cmrkList[i]);
-	            		}
-	            	}
-	            	if(saleItemDataVO.mallMrkList.length == 1)saleItemDataVO.param.NO_MRK = saleItemDataVO.mallMrkList[0].NO_MRK;
-	            	saleItemDataVO.cmrkChange();
-	            	saleItemDataVO.cmrkTkbkChange();
-	            };
+	            
 	            
 	            saleItemDataVO.dropDownEditor = function(container, options, objDataSource, arrField) {
 		       		$('<input required name='+ options.field +' data-bind="value:' + options.field + '" />')

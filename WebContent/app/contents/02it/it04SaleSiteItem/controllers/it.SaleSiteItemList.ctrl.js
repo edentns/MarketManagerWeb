@@ -463,9 +463,9 @@
 	            	}
 	            };
 	            
-	            saleItemDataVO.saleItemInsert = function(){
+	            /*saleItemDataVO.saleItemInsert = function(){
 	            	$state.go('app.itSaleSiteItem', { kind: "insert", menu: null, ids: "new" });
-	            };
+	            };*/
                 
                 saleItemDataVO.doQuiry();
                 
