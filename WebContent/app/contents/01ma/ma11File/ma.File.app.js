@@ -22,16 +22,19 @@
 
                             AuthSvc.isAccess().then(function (result) {
                                 resData.access = result[0];
-
+                                
+                                // 파일구분 : 사진, 사업자등록증, 통신판매업신고증 ...
                                 var param = {
                 					lnomngcdhd: "SYCH00019",
                 					lcdcls: "SY_000019"
                 				};
                                 
                                 $q.all([
+                                    // 파일구분 코드 데이터
                             		UtilSvc.getCommonCodeList(param).then(function (res) {
                             	    	return res.data;
                             		}),
+                            		// 조회조건 데이터
                             		UtilSvc.grid.getInquiryParam().then(function (res) {
                             			return res.data;
                             		})
@@ -44,7 +47,7 @@
     				            		resData.fileGubunModel = history.fileGubunModel;
     				            		resData.ynDelModel     = history.ynDelModel;
     				            		resData.noC            = history.noC;
-    				            		resData.selectDate     = UtilSvc.grid.getSelectDate(history.selected, history.start, history.end);
+    				            		resData.selectDate     = UtilSvc.grid.getSelectDate(history.selected, history.start, (history.toDay === 1)?angular.copy(edt.getToday()):history.end);
     				            	}
     				            	else {
     				            		resData.fileGubunModel    = "*";

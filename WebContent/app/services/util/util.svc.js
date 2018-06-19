@@ -800,7 +800,7 @@
 						rtnSelectDate.end      = angular.copy(today);
             		}
             		else {
-            			rtnSelectDate.selected = 'range';
+            			rtnSelectDate.selected = selected;
             			rtnSelectDate.start    = start;
             			rtnSelectDate.end      = end;
             		}

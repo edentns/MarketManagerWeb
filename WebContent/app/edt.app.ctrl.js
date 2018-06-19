@@ -38,7 +38,7 @@ angular.module('edtApp')
         });
 		
 		UtilSvc.splitter.toggle(splitterElement.children(".k-pane")[1], false);
-		splitterElement.height($scope.menuConHeight);
+		//splitterElement.height($scope.menuConHeight);
 		
 		kendo.culture('ko-KR');
 	}]);

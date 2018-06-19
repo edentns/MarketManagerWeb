@@ -13,7 +13,8 @@
 					isRegisterId: false,
 					info		: { bsCd    : APP_CONFIG.bsCd, user	: "", password: "" },
 					version	: APP_CONFIG.version,
-					url : ""
+					url : "",
+					bAvtm : false
 				};
 
 				/**
@@ -36,24 +37,29 @@
 					}
 
 					LoginSvc.selectAvtm("SYAC180305_00003").then(function (res) {
-						if(res.data.length > 0) {
-							var scrolltemplate = kendo.template($("#scrolltemplate").html());
 						
-							$("#loginAvtmSlides").html(kendo.render(scrolltemplate, res.data));
-							
-							$('#loginAvtmSlides').slidesjs({
-						        height: res.data[0].VAL_HEIGHT,
-						        navigation: false,
-						        pagination: false,
-						        play: {
-						          effect: "fade",
-						          pauseOnHover: true,
-						          auto: true,
-						          interval: 4000,
-						          restartDelay: 1000
-						        }
-							});
+						if(res.data.length < 1) {
+							loginVO.bAvtm = false;
+							return;
 						}
+						
+						loginVO.bAvtm = true;
+						var scrolltemplate = kendo.template($("#scrolltemplate").html());
+					
+						$("#loginAvtmSlides").html(kendo.render(scrolltemplate, res.data));
+						
+						$('#loginAvtmSlides').slidesjs({
+					        height: res.data[0].VAL_HEIGHT,
+					        navigation: false,
+					        pagination: false,
+					        play: {
+					          effect: "fade",
+					          pauseOnHover: true,
+					          auto: true,
+					          interval: 4000,
+					          restartDelay: 1000
+					        }
+						});
 					});
 					
 					$timeout(function () {

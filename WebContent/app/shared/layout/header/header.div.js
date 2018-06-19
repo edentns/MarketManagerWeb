@@ -83,7 +83,7 @@
 						$(".show-sidebar").on("click", function (e) {
 							function MessagesMenuWidth(){
 								var W = window.innerWidth;
-								var Wmenu = $("#sidebar-left").outerWidth();
+								var Wmenu = $("#menuMain").outerWidth();
 								var wmessages = (W-Wmenu)*12/100;
 
 								$("#messages-menu").width(wmessages);

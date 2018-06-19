@@ -22,7 +22,7 @@
 	            	},
 	            	datesetting : {  // 등록일자
 	        			dateType   : 'market',
-						buttonList : ['current', '1Day', '1Week', '1Month', 'range'],
+						buttonList : ['current', '1Day', '1Week', '1Month'],
 						selected   : resData.selectDate.selected,
 						period : {
 							start : resData.selectDate.start,
@@ -63,33 +63,6 @@
 	            //초기 실행
 	            fileDataVO.search = function(){
 	            	$scope.gridFileVO.dataSource.read();
-//	            	var self = this;
-//	            	var param = {
-//    						procedureParam: "USP_MA_11FILE_GET&L_CD_AT@s|L_YN_DIRDEL@s|L_NO_C@s|L_START_DATE@s|L_END_DATE@s",
-//    						L_CD_AT       : self.fileGubunModel,
-//    						L_YN_DIRDEL   : self.ynDelModel,
-//    						L_NO_C        : self.noC,
-//    						L_START_DATE  : new Date(self.datesetting.period.start.y, self.datesetting.period.start.m-1, self.datesetting.period.start.d).dateFormat("Ymd"),
-//    						L_END_DATE    : new Date(self.datesetting.period.end.y  , self.datesetting.period.end.m-1  , self.datesetting.period.end.d).dateFormat("Ymd"),
-//    					};
-//					UtilSvc.getList(param).then(function (res) {
-//						$scope.gridFileVO.dataSource.data(res.data.results[0]);
-//						// 삭제, 삭제복원 버튼 보이기 안보이기때문에 설정
-//						self.selYnDelModel = self.ynDelModel;
-//						// 조회한 조건을 localstorage에 저장함.
-//						var inquiryParam = {
-//							fileGubunBindSelectIndex: self.fileGubunBind.allSelectNames,	
-//							fileGubunModel: self.fileGubunModel,       
-//							ynDelModel : self.ynDelModel,       
-//							noC        : self.noC,
-//							selected   : self.datesetting.selected,
-//    	                    start      : self.datesetting.period.start,
-//    	                    end        : self.datesetting.period.end
-//	                    };
-//						
-//	        			// 검색조건 세션스토리지에 임시 저장
-//	        			UtilSvc.grid.setInquiryParam(inquiryParam);
-//					});
 	            };	
 	            
 	            var gridFileVO = $scope.gridFileVO = {
@@ -128,7 +101,8 @@
             							noC        : fileDataVO.noC,
             							selected   : fileDataVO.datesetting.selected,
                 	                    start      : fileDataVO.datesetting.period.start,
-                	                    end        : fileDataVO.datesetting.period.end
+                	                    end        : fileDataVO.datesetting.period.end,
+                	                    toDay      : (fileDataVO.datesetting.period.end === edt.getToday())?1:0
             	                    };
             						
             	        			// 검색조건 세션스토리지에 임시 저장
