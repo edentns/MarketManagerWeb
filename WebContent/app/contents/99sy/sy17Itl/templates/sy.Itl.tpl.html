@@ -10,7 +10,7 @@
     
     <div class="row">
         <!-- 검색 -->
-        <div class="content-area-container col-xs-12">
+        <div class="content-area-container col-xs-12" id="searchId">
         	<div data-content-box-layer data-box-title="itlDataVO.boxTitle" data-is-open="itlDataVO.isOpen(val)">
                 <form class="search-type1" id="myForm">
                 	<table>
@@ -49,8 +49,9 @@
             </div>
         </div>
         
-        <div class="content-area-container col-xs-4" style="padding:0px 0px 0px 0px;">	
-        	<div data-content-box-layer data-box-title="gridMidVO[0].boxTitle">
+        <!-- 로그인 실패한 마켓리스트 그리드 -->
+        <div class="content-area-container col-xs-4" style="padding:0px 0px 0px 0px; margin-top:-5px;" id="dataView01">	
+        	<div data-content-box-layer data-box-title="gridMidVO[0].boxTitle" data-is-open="itlDataVO.isOpen(val)">
               	<div style="height:122px;">
 					<kendo-tooltip options="itlDataVO.tooltipOptions">		
 						<div id="divItlFailMrkGrd" kendo-grid="itlFailMrkkg" options="gridMidVO[0]">
@@ -59,8 +60,10 @@
 			    </div>
 		    </div>
 	    </div>
-	    <div class="content-area-container col-xs-8" style="padding:0px 0px 0px 0px;">
-    		<div data-content-box-layer data-box-title="gridMidVO[1].boxTitle">
+	    
+	    <!-- 연동 통계 건수 -->
+	    <div class="content-area-container col-xs-8" style="padding:0px 0px 0px 0px; margin-top:-5px;" id="dataView02">
+    		<div data-content-box-layer data-box-title="gridMidVO[1].boxTitle" data-is-open="itlDataVO.isOpen(val)">
               	<div style="height:122px;">
 	    			<div class="content-area-container col-xs-6" style="padding:0px 5px 0px 0px;">
 				        <kendo-tooltip options="itlDataVO.tooltipOptions">		
@@ -78,7 +81,7 @@
 			</div>
 		</div>
         
-        <div class="content-area-container col-xs-12" style="padding:0px 0px 0px 0px;">	
+        <div class="content-area-container col-xs-12" style="padding:0px 0px 0px 0px; margin-top:-5px;">	
 	        <div kendo-tab-strip k-content-urls="[]">
               <!-- tab list -->
               <ul>

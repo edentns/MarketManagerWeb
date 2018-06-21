@@ -790,9 +790,22 @@
 				 * @param {string=} psKind
 				 * @param {string=} psUrl
 				 */
-				getSelectDate: function (selected, start, end) {
+				getSelectDate: function (period) {
 					var rtnSelectDate = {},
-					    today = edt.getToday();
+					    today = edt.getToday(),
+					    selected = "",
+					    start = "",
+					    end = "";
+					
+					if(period === undefined ||
+					   period === "") {
+						selected = "current";
+					}
+					else {
+						selected = period.selected;
+						start = period.start;
+						end = (period.toDay === 1)?angular.copy(edt.getToday()):period.end;
+					}
 					
 					if(selected === "current") {
 						rtnSelectDate.selected = selected;
@@ -806,6 +819,23 @@
             		}
 					
 					return rtnSelectDate;
+				},
+				
+				/**
+				 * 검색조건 중 날짜 설정 저장 포멧 변경
+				 * @param {Object} datesetting
+				 */
+				getDateSetting: function (datesetting) {
+					var rtnDateSetting = {
+						selected : datesetting.selected,
+	                    start    : datesetting.period.start,
+	                    end      : datesetting.period.end,
+	                    toDay    : (datesetting.period.end.y === edt.getToday().y && 
+	                    		    datesetting.period.end.m === edt.getToday().m && 
+	                    		    datesetting.period.end.d === edt.getToday().d)? 1 : 0
+					};
+					
+					return rtnDateSetting;
 				},
 				
 				/**

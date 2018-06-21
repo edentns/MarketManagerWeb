@@ -44,7 +44,7 @@
 	    				            		resData.subject    = history.subject;
 	    				            		resData.writer     = history.writer;
 	    				            		resData.fbdCheck   = history.fbdCheck;
-	    				            		resData.selectDate = UtilSvc.grid.getSelectDate(history.selected, history.start, history.end);
+	    				            		resData.selectDate = UtilSvc.grid.getSelectDate(history.period);
 	    				            	}
 	    				            	else {
 	    				            		resData.subject         = "";

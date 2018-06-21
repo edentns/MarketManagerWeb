@@ -83,9 +83,7 @@
 							subject : self.subject,       
 							writer  : self.writer,       
 							fbdCheck: self.fbdCheck,
-							selected: self.datesetting.selected,
-    	                    start   : self.datesetting.period.start,
-    	                    end     : self.datesetting.period.end
+							period  : UtilSvc.grid.getDateSetting(self.datesetting)
 	                    };
 						
 	        			// 검색조건 세션스토리지에 임시 저장

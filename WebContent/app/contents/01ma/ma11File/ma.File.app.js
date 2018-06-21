@@ -47,7 +47,7 @@
     				            		resData.fileGubunModel = history.fileGubunModel;
     				            		resData.ynDelModel     = history.ynDelModel;
     				            		resData.noC            = history.noC;
-    				            		resData.selectDate     = UtilSvc.grid.getSelectDate(history.selected, history.start, (history.toDay === 1)?angular.copy(edt.getToday()):history.end);
+    				            		resData.selectDate     = UtilSvc.grid.getSelectDate(history.period);
     				            	}
     				            	else {
     				            		resData.fileGubunModel    = "*";

@@ -166,6 +166,7 @@
                 });
                 
                 $scope.treelistOptions = {
+                	height: $(window).height() - 90 - 60,
                     messages: {
                         noRows: "부서가 존재하지 않습니다.",
                         loading: "부서리스트를 가져오는 중...",

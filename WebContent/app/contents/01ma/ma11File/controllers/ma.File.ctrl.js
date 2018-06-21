@@ -100,9 +100,7 @@
             							ynDelModel : fileDataVO.ynDelModel,       
             							noC        : fileDataVO.noC,
             							selected   : fileDataVO.datesetting.selected,
-                	                    start      : fileDataVO.datesetting.period.start,
-                	                    end        : fileDataVO.datesetting.period.end,
-                	                    toDay      : (fileDataVO.datesetting.period.end === edt.getToday())?1:0
+            							period     : UtilSvc.grid.getDateSetting(fileDataVO.datesetting)
             	                    };
             						
             	        			// 검색조건 세션스토리지에 임시 저장
