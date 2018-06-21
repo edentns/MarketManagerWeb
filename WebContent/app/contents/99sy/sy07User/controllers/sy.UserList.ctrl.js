@@ -75,7 +75,9 @@
 						}
         			});
                     
-                    grdUserVO.dataSource.read();
+                    grdUserVO.dataSource.read().then(function(res) {
+                    	vo.isOpen(false);
+                    });
                 };
                 
                 vo.reset = function() {
@@ -86,18 +88,15 @@
                     vo.searchName = "";
 				};
 
-                /*vo.isOpen = function (val) {
-	            	if(val) {
-	            		$scope.userkg.wrapper.height(658);
-	            		$scope.userkg.resize();
-	            		grdUserVO.dataSource.pageSize(20);
-	            	}
-	            	else {
-	            		$scope.userkg.wrapper.height(798);
-	            		$scope.userkg.resize();
-	            		grdUserVO.dataSource.pageSize(24);
-	            	}
-	            };*/
+                vo.isOpen = function (val) {
+					var searchIdHeight = $("#searchId").height();
+	            	var settingHeight = $(window).height() - searchIdHeight - 90;
+	            	var pageSizeValue = val? 20 : 24;
+	            	
+            		$scope.gridUserVO.wrapper.height(settingHeight);
+            		$scope.gridUserVO.resize();
+            		grdUserVO.dataSource.pageSize(pageSizeValue);
+	            };
 				
                 vo.doInquiry = function () {// 검색조건에 해당하는 유저 정보를 가져온다.
             		grdUserVO.dataSource.page(1);

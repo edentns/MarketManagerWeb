@@ -28,7 +28,7 @@
 	        		},
 	            	datesetting : {
 	        			dateType   : 'market',
-						buttonList : ['current', '1Day', '1Week', '1Month', 'range'],
+						buttonList : ['current', '1Day', '1Week', '1Month'],
 						selected   : resData.selectDate.selected,
 						period : {
 							start : resData.selectDate.start,
