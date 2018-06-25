@@ -623,12 +623,13 @@
 			};
 			
 			/**
-			 * date관련 함수
+			 * arg = date 비교 날짜, 현재 날짜			 * 
 			 * 날짜 비교 후 차이 일수 리턴
 			 */
 			this.diffDate = function (_date1, _date2) {
 			    var fParseDate = function(_arg){
-			    					var rpcUnder = _arg.replace('-','');
+			    	  				var regex = /[^0-9]/g,
+			    	  					rpcUnder = _arg.replace(regex,'');
 			    					return rpcUnder.substring(0,4)+'-'+rpcUnder.substring(4,6)+'-'+rpcUnder.substring(6,8);
 			    				 };  
 			    var	diffDate_1 = _date1 instanceof Date ? _date1 : new Date(fParseDate(_date1)),
@@ -639,7 +640,7 @@
 			    diffDate_2 = new Date(diffDate_2.getFullYear(), diffDate_2.getMonth()+1, diffDate_2.getDate());
 			 
 			    diff = Math.abs(diffDate_2.getTime() - diffDate_1.getTime());
-			    diff = Math.ceil(diff / (1000 * 3600 * 24));		
+			    diff = Math.ceil(diff / (1000 * 3600 * 24));
 			    
 			    return diff;
 			};
