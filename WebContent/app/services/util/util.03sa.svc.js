@@ -1,13 +1,12 @@
 (function () {
 	'use strict';
-
 	/**
 	 * @ngdoc service
 	 * @description
 	 * 상품 유틸 서비스
 	 */
-	angular.module('edtApp.common.service').service('Util03saSvc', ['$rootScope', '$state', '$window', '$http', '$timeout', 'APP_CONFIG', '$resource',
-		function ($rootScope, $state, $window, $http, $timeout, APP_CONFIG, $resource) {
+	angular.module('edtApp.common.service').service('Util03saSvc', ['$rootScope', '$state', '$window', '$http', '$timeout', 'APP_CONFIG', '$resource', 
+		function ($rootScope, $state, $window, $http, $timeout, APP_CONFIG, $resource) { 
 		
 			//popup insert & update Validation
             this.readValidation = function(idx){
@@ -53,7 +52,6 @@
             		idx.CD_CCLSTAT_SELCT_INDEX = "";        		
             		//idx.DTS_SELECTED = "";        			
         		}        		
-        		
             	return result;
             };
             
@@ -61,7 +59,7 @@
             this.NoINVOValidation = function(input, colunm, valicolunm, leng){
             	var regTest = /^(([\d]+)\-|([\d]+))+(\d)+$/;
             	var iValue = !input.val() ? "" : input.val().trim();
-            	var lengthStrt = (leng === null || leng === undefined || leng === "") ? 3 : leng; 
+            	var lengthStrt = (leng === 'undefined' || leng === '' || leng === null) ? 3 : leng; //0이 들어갈거라서 !를 안썼음 
  			                	
 			    if (input.is("[name='"+colunm+"']") && !iValue && lengthStrt>0 && valicolunm !== "no_invo_non_blank_validation") {
                  	input.attr("data-"+valicolunm+"-msg", "송장번호를 입력해 주세요.");
@@ -102,8 +100,7 @@
             	},
             	mblur : function(e){
             		var element = $(e.currentTarget),
-        			msg = element.closest("tr").find(".k-invalid-msg") || element.closest("td").find(".k-invalid-msg");
-        			
+        				msg = element.closest("tr").find(".k-invalid-msg") || element.closest("td").find(".k-invalid-msg");        			
         			msg.hide();
             	}
             };
@@ -126,8 +123,7 @@
 				var getParam = storage,
 					me = vo;
 			
-				if(getParam){        			        			
-        			
+				if(getParam){        			        			        			
         			for(var w in me) {
         				if(w === "datesetting"){
         					if(getParam.DTS_SELECTED === "current") {
@@ -139,9 +135,7 @@
 	        					me[w].period.end   = getParam.DTS_STORAGE_TO;
         					}
         				}
-        				if(w === "betweenDateOptionMo" ){
-        					me[w] = getParam.DTS_CHK;
-        				}
+        				if(w === "betweenDateOptionMo" ){ me[w] = getParam.DTS_CHK; }
         				if(w === "ordMrkNameOp"){
         			   		me[w].setSelectNames = getParam.NM_MRK_SELCT_INDEX;
         			   		me[w].allSelectNames = getParam.NM_MRK_SELCT_INDEX;
@@ -150,12 +144,8 @@
                 			me[w].setSelectNames = getParam.NM_ORDSTAT_SELCT_INDEX;
         					me[w].allSelectNames = getParam.NM_ORDSTAT_SELCT_INDEX;
         				}
-        				if(w === "ordMrkNameMo"){
-        					me[w] = getParam.NM_MRK || getParam.NO_MRK; 
-        				}
-        				if(w === "ordStatusMo"){
-        					me[w] = getParam.CD_ORDSTAT; 
-        				}
+        				if(w === "ordMrkNameMo"){ me[w] = getParam.NM_MRK || getParam.NO_MRK; }
+        				if(w === "ordStatusMo"){ me[w] = getParam.CD_ORDSTAT; }
         				if(w === "procName"){
         					var v = getParam.NM_MRKITEM || getParam.I_NM_MRKITEM || "";
         					me[w].value = v.trim();
@@ -172,28 +162,16 @@
         					var v = (!getParam.NO_ORDDTRM) ? "" : getParam.NO_ORDDTRM;
         					me[w].value = v.trim();
         				}
-        				if(w === "cancelStatusMo"){
-        					me[w] = getParam.CD_CCLSTAT;
-        				}
+        				if(w === "cancelStatusMo"){ me[w] = getParam.CD_CCLSTAT; }
         				if(w === "cancelStatusOp"){
     				   		me[w].setSelectNames = getParam.CD_CCLSTAT_SELCT_INDEX;
     				   		me[w].allSelectNames = getParam.CD_CCLSTAT_SELCT_INDEX;
         				}
-        				if(w === "echgStatusMo"){
-        					me[w] = getParam.CD_ECHGSTAT;
-        				}
-        				if(w === "cdTkbkstatMo"){
-        					me[w] = getParam.CD_TKBKSTAT;
-        				}
-        				if(w === "csMrkNameMo"){
-        					me[w] = getParam.I_NO_MRK;
-        				}        				
-        				if(w === "csStatusMo"){
-        					me[w] = getParam.I_CD_INQSTAT;
-        				}      				
-        				if(w === "csQuestionCodeMo"){
-        					me[w].value = getParam.I_NM_INQCLFT;
-        				}
+        				if(w === "echgStatusMo"){ me[w] = getParam.CD_ECHGSTAT; }
+        				if(w === "cdTkbkstatMo"){ me[w] = getParam.CD_TKBKSTAT; }
+        				if(w === "csMrkNameMo"){ me[w] = getParam.I_NO_MRK; }        				
+        				if(w === "csStatusMo"){ me[w] = getParam.I_CD_INQSTAT; }      				
+        				if(w === "csQuestionCodeMo"){ me[w].value = getParam.I_NM_INQCLFT; }
         				if(w === "csMrkNameOp"){
         					me[w].setSelectNames = getParam.CS_NM_MRK_SELCT_INDEX;
         			   		me[w].allSelectNames = getParam.CS_NM_MRK_SELCT_INDEX;
@@ -201,7 +179,7 @@
         				if(w === "csStatusOp"){
         					me[w].setSelectNames = getParam.CS_NM_ORDSTAT_SELCT_INDEX;
         					me[w].allSelectNames = getParam.CS_NM_ORDSTAT_SELCT_INDEX;
-        				}        				
+        				}
             			//me.setting.allCheckYn = 'N';
         			}
         		}
@@ -276,6 +254,7 @@
 					return rtnData;
 				});
 			};
+			
 			//파라미터는 객체에 넣어주면 됨 
 			this.shppingList = function (param) {
 				var url = APP_CONFIG.domain +"/code/common/shplist/:shippingType/:mrkType";				
@@ -286,6 +265,7 @@
 				});
 			};
 			
+			//팝업창 이름 변경
 			this.popupHeaderTitle = function(code, mrk, menu){
 				var tkbkName = {
 						complete : "반품완료 입력",
@@ -299,17 +279,29 @@
 						process : "교환처리 입력",
 						change : "반품으로 변경"
 					},
+					shppingName = {
+						edit : '배송정보 수정',
+						shipping : '판매자 직접반품 신청'
+					},
 					title = "";
 				
 				if(code === "001"){
-					title = menu === "tkbk" ? tkbkName.complete : echgName.process; 
+					if(menu === "tkbk"){ title = tkbkName.complete; }
+					else if(menu === "echg"){ title = echgName.process; }
+					else if(menu === "shpping"){ title = shppingName.edit; }
 				}else if(code === "002"){
-					title = menu === "tkbk" ? tkbkName.reject : echgName.reject;
+					if(menu === "tkbk"){ title = tkbkName.reject; }
+					else if(menu === "echg"){ title = echgName.reject; }
+					else if(menu === "shpping"){ title = shppingName.shipping; }
 				}else if(code === "003"){
-					title = menu === "tkbk" ? tkbkName.process : echgName.complete;
+					if(menu === "tkbk"){ title = tkbkName.process; }
+					else if(menu === "echg"){ title = echgName.complete; }
+					else if(menu === "shpping"){ }
 				}else if(code === "004"){
-					title = menu === "tkbk" ? tkbkName.change : echgName.change;
-				}
+					if(menu === "tkbk"){ title = tkbkName.change; }
+					else if(menu === "echg"){ title = echgName.change; }
+					else if(menu === "shpping"){ }
+				}				
 				return title+' ('+mrk+')';
 			};			
 
@@ -338,25 +330,43 @@
 	           		};
 	           	}
 	           	else if(target === "NOW_YN"){
-	           		dataItem[target] = input.is(":checked");	            		
+	           		dataItem[target] = input.is(":checked");
 	           	}
 	           	else if(target === "RECEIVE_SET"){
 	           		dataItem[target] = $("#receive-group").find("[type=radio]:checked").val();
 	           	}
 	           	else if(target === "transform_pay_reason"){
-	           		var i, rtnRst = false;
-	           		
+	           		var i;
            			if((["구매자","구매자 귀책"].indexOf(dataItem["NM_TKBKLRKRSN"]) > -1 || ["구매자","구매자 귀책"].indexOf(dataItem["NM_ECHGLRKRSN"]) > -1) && input.val()){
            				//dataItem[target] = input.NM_DEF;
-           				rtnRst = true;
+           				return true;
            			}
-	           		return rtnRst;
+	           		return false;
 	           	}
 	           	else{
 	           		dataItem[target] = input.val();
 	           	};
+	        };	        
+	        //grid 동적 크기 변경
+	        this.isOpen = function(kg, vo, grdVo, val){	        	
+	        	if(val) {
+            		kg.wrapper.height(616);
+            		kg.resize();
+            		if(vo.param !== "") grdVo.dataSource.pageSize(9);
+            	}
+            	else {
+            		kg.wrapper.height(798);
+            		kg.resize();
+            		if(vo.param !== "") grdVo.dataSource.pageSize(12);
+            	}
 	        };
-	        
+	        //드롭다운 리스트 초기화시 선택
+	        this.ddlSelectedIndex = function(ele, name){
+            	var ddl = ele.find("select[name="+name+"]").data("kendoDropDownList");            
+            	ddl.select(0);
+            	ddl.trigger("change");       
+	        };
+	               
 		}
 	]);
 }());
