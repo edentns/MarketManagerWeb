@@ -114,6 +114,11 @@
 	        		duplFlag      : false,
 	        		addItemList   : [{ID : 1, LABEL : "1개"},{ID : 2, LABEL : "2개"},{ID : 3, LABEL : "3개"},{ID : 4, LABEL : "4개"},{ID : 5, LABEL : "5개"}],
 	        		addItemNo     : 1,
+	        		optDeleteList : new Array(),
+	        		addDeleteList : new Array(),
+	        		storfCtfcDeleteList : new Array(),
+	        		stCtfcDeleteList    : new Array(),
+	        		coopCtfcDeleteList  : new Array(),
 	        		ynUseDataSource : [{
 						"NM_DEF": '사용',
 						"CD_DEF": 'Y'
@@ -140,7 +145,8 @@
 		        		INFO_FGFT     : "",
 		        		HTML_DETEXPL  : "",
 		        		CD_CPYBSSITEM : "",
-		        		
+		        		NO_ASPHNE     : "",
+		        		GUI_AS        : "",
 		        		
 		        		//판매정보
 		        		S_ITEMPRC     : 0,
@@ -198,7 +204,6 @@
 		        		AMOU_MAXPCHSLIM: "",
 		        		DAYS_PRDLIM   : "",
 		        		AMOU_PRDLIM   : "",
-		        		AMOU_MAXPCHSLIMCLS : "",
 		        		AMOU_TIMSLIM  : "",
 		        		HTML_AVTMTRI  : "",
 		        		CD_SHPWAY     : "",
@@ -218,7 +223,8 @@
 		        		CD_EXCHGDISCCLFT : "001",
 		        		COND_CNT      : [{VAL : '', YN: 'Y'},{VAL : '', YN: 'N'},{VAL : '', YN: 'N'},{VAL : '', YN: 'N'},{VAL : '', YN: 'Y'}],
 		        		COND_SHPPRC   : [{VAL : ''},{VAL : ''},{VAL : ''},{VAL : ''},{VAL : ''}],
-		        		CTCFINFO      : [{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''}]
+		        		CTFCINFO      : [{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''}],
+		        		ORI_CTFCINFO  : [{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''}]
 		        		},
 		        		GMRK:{
 		        		YN_FECTSALE   : "N",
@@ -230,9 +236,7 @@
 		        		AMOU_PRDLIM   : "",
 		        		AMOU_TIMSLIM  : "",
 		        		HTML_AVTMTRI  : "",
-		        		CD_SHPWAY     : "",
 		        		CD_SHPPARS    : "",
-		        		PRC_POST      : "",
 		        		AREA_QUISEV   : "",
 		        		NM_QUISEVCMPN : "",
 		        		NO_QUISEVPHNE : "",
@@ -246,13 +250,14 @@
 		        		CD_AMOUSECTCLFT : "001",
 		        		COND_CNT      : [{VAL : '', YN: 'Y'},{VAL : '', YN: 'N'},{VAL : '', YN: 'N'},{VAL : '', YN: 'N'},{VAL : '', YN: 'Y'}],
 		        		COND_SHPPRC   : [{VAL : ''},{VAL : ''},{VAL : ''},{VAL : ''},{VAL : ''}],
-		        		CTCFINFO      : [{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''}]
+		        		CTFCINFO      : [{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''}],
+		        		ORI_CTFCINFO  : [{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''}]
 		        		},
 		        		STORF:{
 		        		AMOU_MINIPCHS  : "",
-		        		YN_TIMSMAXPCHS: "N",
+		        		YN_TIMSMAXPCHS: "N",            //DB에는 존재하지 않지만 밖으로 빼면 11번가와 값이 겹침
 		        		AMOU_TIMSMAXPCHS : "",
-		        		YN_PESMAXPCHS : "N",
+		        		YN_PESMAXPCHS : "N",			//DB에는 존재하지 않지만 밖으로 빼면 11번가와 값이 겹침
                         AMOU_PESMAXPCHS  : "",
                         CD_SHPWAY     : "",
 		        		YN_VISRECE    : "N",
@@ -270,16 +275,18 @@
 		        		PRC_ECHGSHP   : "",
 		        		PRC_AREACLSFSHP  : "",
 		        		YN_SPRINSTPRC : "N",
-		        		CTCFINFO      : [{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''}]
+		        		CTFCINFO      : [{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''}]
 		        		},
 		        		ST:{
 		        		CD_MD         : "",
 		        		CD_SERVITEM   : "001",
 		        		AMOU_MINPCHS  : "",
-		        		YN_TIMSMAXPCHS: "N",
+		        		YN_TIMSMAXPCHS: "N",             //DB에는 존재하지 않지만 밖으로 빼면 스토어팜과 값이 겹침
 		        		AMOU_TIMSMAXPCHS : "",
-		        		YN_PESMAXPCHS : "N",
+		        		YN_PESMAXPCHS : "N",			 //DB에는 존재하지 않지만 밖으로 빼면 스토어팜과 값이 겹침
                         AMOU_PESMAXPCHS  : "",
+                        CD_SHPWAY     : "",
+                        CD_SHPPARS    : "",
                         DC_PUREWD     : "",
                         CD_ERLSHPPRCFREIMPWAY : "왕복",
                         PRC_TKBKSHP   : "",
@@ -298,7 +305,7 @@
 		        		PRC_MNTADDSHP : "",
 		        		YN_JJMNT      : "N",
 		        		YN_BDLSHP     : "N",
-		        		CTCFINFO      : [{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''}]
+		        		CTFCINFO      : [{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''}]
 		        		},
 		        		COOP:{
 	        			NM_MNFR       : "",
@@ -321,7 +328,7 @@
 	        			PRC_TKBKSHP   : "",
 	        			PRC_FIRTTIMSTKBKSHP : "",
 	        			YN_TKBKSHPPRCCOD    : "",
-	        			CTCFINFO      : [{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''}]
+	        			CTFCINFO      : [{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''}]
 		        		},
 		        		
 		        		
@@ -411,21 +418,7 @@
 	                	dataSource: new kendo.data.DataSource({
 	                		transport: {
 	                			read: function(e) {
-	                				/*var param = {
-                						procedureParam:"USP_IT_02BSSITEMOPT_GET&L_CD_ITEM@s|L_FLAG@s",
-                						L_CD_ITEM  :  bssInfoDataVO.ids,
-                						L_FLAG     :  "1"
-                					};
-	            					UtilSvc.getList(param).then(function (res) {
-	            						e.success(res.data.results[0]);
-	            						bssInfoDataVO.NM_COM = res.data.results[1][0].NM_C;
-	            						if(!page.isWriteable()){
-	            	    					var grid = $("#gridOpt"+bssInfoDataVO.param.CD_OPTTP).data("kendoGrid");
-	            	    					grid.setOptions({editable : false});   
-	            	    					grid.hideColumn(5);
-	            	    					$("#gridOpt"+bssInfoDataVO.param.CD_OPTTP+" .k-grid-toolbar").hide();
-	            	    				}
-	            					});*/
+	                				e.success(resData.optDataList);
 	                			},
 	                			create: function(e) {
 	                				if(bssInfoDataVO.oriOPTTP != bssInfoDataVO.param.CD_OPTTP){
@@ -512,7 +505,7 @@
 	                	}),
 	                	navigatable: true,
 	                	toolbar: 
-	                		["create", "cancel"],
+	                		["create", { template: "<div ng-click='bssInfoDataVO.gridCancel("+JSON.stringify('opt')+")' class='k-button k-button-icontext'><span class='k-icon k-i-cancel'></span>취소</div>"}],
 	                	columns: [
 	        		           {field: "NM_OPT1",   title: "옵션명",  width: 100,
 	   	   						headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}},
@@ -526,7 +519,18 @@
 	        		           {field: "S_ITEMPRC", title: "판매가 (+,-)", width: 100,
 	       	   					headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"},
 	           	   				template:"<span style='float:right'>#: S_ITEMPRC #</span>"},
-	           	   				{command: [ "destroy" ]}
+		           	   			{command: [ {
+			                        name: "삭제", imageClass: "k-icon k-i-close", click: function (e) {  //삭제 버튼
+			                            e.preventDefault();
+			                            if (confirm("삭제하시겠습니까?")) {
+				                            var dataItem = this.dataItem($(e.target).closest("tr")),
+				                            dataSource = $("#"+e.delegateTarget.id).data("kendoGrid").dataSource;
+				                            dataItem.TEMP = "DELETE";
+				                            bssInfoDataVO.optDeleteList.push(dataItem);
+			                                dataSource.remove(dataItem);
+			                            }
+			                        }
+			                    } ],minwidth:10}
 	                	],
 	                    collapse: function(e) {
 	                        // console.log(e.sender);
@@ -558,20 +562,7 @@
 	                	dataSource: new kendo.data.DataSource({
 	                		transport: {
 	                			read: function(e) {
-	                				/*var param = {
-                						procedureParam:"USP_IT_02BSSITEMOPT_GET&L_CD_ITEM@s|L_FLAG@s",
-                						L_CD_ITEM  :  bssInfoDataVO.ids,
-                						L_FLAG     :  "2"
-                					};
-	            					UtilSvc.getList(param).then(function (res) {
-	            						e.success(res.data.results[0]);
-	            						if(!page.isWriteable()){
-	            							var grid = $("#gridOpt"+bssInfoDataVO.param.CD_OPTTP).data("kendoGrid");
-	            	    					grid.setOptions({editable : false});   
-	            	    					grid.hideColumn(7);
-	            	    					$("#gridOpt"+bssInfoDataVO.param.CD_OPTTP+" .k-grid-toolbar").hide();
-	            	    				}
-	            					});*/
+	                				e.success(resData.optDataList);
 	                			},
 	                			create: function(e) {
 	                				if(bssInfoDataVO.oriOPTTP != bssInfoDataVO.param.CD_OPTTP){
@@ -686,7 +677,7 @@
 	                	}),
 	                	navigatable: true,
 	                	toolbar: 
-	                		["create", "cancel"],
+	                		["create", { template: "<div ng-click='bssInfoDataVO.gridCancel("+JSON.stringify('opt')+")' class='k-button k-button-icontext'><span class='k-icon k-i-cancel'></span>취소</div>"}],
 	                	columns: [
 	           		           {field: "NM_OPT1",   title: "옵션명1",  width: 100,
 	   	   						headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}},
@@ -704,7 +695,18 @@
 	        		           {field: "S_ITEMPRC", title: "판매가 (+,-)", width: 100,
 	       	   					headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"},
 	           	   				template:"<span style='float:right'>#: S_ITEMPRC #</span>"},
-	           	   				{command: [ "destroy" ]}
+		           	   			{command: [ {
+			                        name: "삭제", imageClass: "k-icon k-i-close", click: function (e) {  //삭제 버튼
+			                            e.preventDefault();
+			                            if (confirm("삭제하시겠습니까?")) {
+				                            var dataItem = this.dataItem($(e.target).closest("tr")),
+				                            dataSource = $("#"+e.delegateTarget.id).data("kendoGrid").dataSource;
+				                            dataItem.TEMP = "DELETE";
+				                            bssInfoDataVO.optDeleteList.push(dataItem);
+			                                dataSource.remove(dataItem);
+			                            }
+			                        }
+			                    } ],minwidth:10}
 	                	],
 	                    collapse: function(e) {
 	                        // console.log(e.sender);
@@ -736,20 +738,7 @@
 	                	dataSource: new kendo.data.DataSource({
 	                		transport: {
 	                			read: function(e) {
-	                				/*var param = {
-                						procedureParam:"USP_IT_02BSSITEMOPT_GET&L_CD_ITEM@s|L_FLAG@s",
-                						L_CD_ITEM  :  bssInfoDataVO.ids,
-                						L_FLAG     :  "2"
-                					};
-	            					UtilSvc.getList(param).then(function (res) {
-	            						e.success(res.data.results[0]);
-	            						if(!page.isWriteable()){
-	            							var grid = $("#gridOpt"+bssInfoDataVO.param.CD_OPTTP).data("kendoGrid");
-	            	    					grid.setOptions({editable : false});   
-	            	    					grid.hideColumn(7);
-	            	    					$("#gridOpt"+bssInfoDataVO.param.CD_OPTTP+" .k-grid-toolbar").hide();
-	            	    				}
-	            					});*/
+	                				e.success(resData.optDataList);
 	                			},
 	                			create: function(e) {
 	                				if(bssInfoDataVO.oriOPTTP != bssInfoDataVO.param.CD_OPTTP){
@@ -892,7 +881,7 @@
 	                	}),
 	                	navigatable: true,
 	                	toolbar: 
-	                		["create", "cancel"],
+	                		["create", { template: "<div ng-click='bssInfoDataVO.gridCancel("+JSON.stringify('opt')+")' class='k-button k-button-icontext'><span class='k-icon k-i-cancel'></span>취소</div>"}],
 	                	columns: [
 	           		           {field: "NM_OPT1",   title: "옵션명1",  width: 100,
 	   	   						headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}},
@@ -914,7 +903,18 @@
 	        		           {field: "S_ITEMPRC", title: "판매가 (+,-)", width: 100,
 	       	   					headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"},
 	           	   				template:"<span style='float:right'>#: S_ITEMPRC #</span>"},
-	           	   				{command: [ "destroy" ]}
+		           	   			{command: [ {
+			                        name: "삭제", imageClass: "k-icon k-i-close", click: function (e) {  //삭제 버튼
+			                            e.preventDefault();
+			                            if (confirm("삭제하시겠습니까?")) {
+				                            var dataItem = this.dataItem($(e.target).closest("tr")),
+				                            dataSource = $("#"+e.delegateTarget.id).data("kendoGrid").dataSource;
+				                            dataItem.TEMP = "DELETE";
+				                            bssInfoDataVO.optDeleteList.push(dataItem);
+			                                dataSource.remove(dataItem);
+			                            }
+			                        }
+			                    } ],minwidth:10}
 	                	],
 	                    collapse: function(e) {
 	                        // console.log(e.sender);
@@ -946,14 +946,15 @@
                 						L_FLAG     :  "1"
                 					};
 	            					UtilSvc.getList(param).then(function (res) {
-	            						e.success(res.data.results[0]);
-	            						/*bssInfoDataVO.NM_COM = res.data.results[1][0].NM_C;*/
-	            						if(!page.isWriteable()){
+	            						if(resData.addDataList.length > 0){
+	            							e.success(resData.addDataList);
+	            						}
+	            						/*if(!page.isWriteable()){
 	            	    					var grid = $("#gridOpt"+bssInfoDataVO.param.CD_OPTTP).data("kendoGrid");
 	            	    					grid.setOptions({editable : false});   
 	            	    					grid.hideColumn(5);
 	            	    					$("#gridOpt"+bssInfoDataVO.param.CD_OPTTP+" .k-grid-toolbar").hide();
-	            	    				}
+	            	    				}*/
 	            					});
 	                			},
 	                			create: function(e) {
@@ -986,10 +987,11 @@
 	                		batch: true,
 	                		schema: {
 	                			model: {
-	                    			id: "CD_ITEM",
+	                    			id: "CD_ADDSSPL",
 	                				fields: {
 	                					CD_ITEM:    {  },
 	                					CD_ADDITEM: {  },
+	                					CD_ADDSSPL: {  },
 	                					NM_ADDITEM: {  },
 	                					VAL_ADDITEM:{  },
 	                					PRC_ADDITEM:{  },
@@ -1015,13 +1017,14 @@
 	                					CD_ADDITEMMNG:{  },
 	                					YN_USE:     { defaultValue: 'Y' },
 	                					VAL_WET:    {  },
+	                					TEMP   :    {  }
 	                				}
 	                			}
 	                		}
 	                	}),
 	                	navigatable: true,
 	                	toolbar: 
-	                		["create", "cancel"],
+	                		["create", { template: "<div ng-click='bssInfoDataVO.gridCancel("+JSON.stringify('add')+")' class='k-button k-button-icontext'><span class='k-icon k-i-cancel'></span>취소</div>"}],
 	                	columns: [
 	           		           {field: "NM_ADDITEM",   title: "추가상품명",  width: 100,
 	   	   						headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}},
@@ -1062,7 +1065,18 @@
 	          		       	  	}},
 	        		           {field: "VAL_WET",      title: "무게",    width: 100,
 	       	   					headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}},
-	           	   				{command: [ "destroy" ]}
+		       	   				{command: [ {
+			                        name: "삭제", imageClass: "k-icon k-i-close", click: function (e) {  //삭제 버튼
+			                            e.preventDefault();
+			                            if (confirm("삭제하시겠습니까?")) {
+				                            var dataItem = this.dataItem($(e.target).closest("tr")),
+				                            dataSource = $("#"+e.delegateTarget.id).data("kendoGrid").dataSource;
+				                            dataItem.TEMP = "DELETE";
+				                            bssInfoDataVO.addDeleteList.push(dataItem);
+			                                dataSource.remove(dataItem);
+			                            }
+			                        }
+			                    } ],minwidth:10}
 	                	],
 	                    collapse: function(e) {
 	                        // console.log(e.sender);
@@ -1113,6 +1127,7 @@
 	                							required: {message: "선택 주세요."}
 	                						}  },
 	                					VAL_CTFCINFO: {  },
+	                					TEMP  : {},
 	                				}
 	                			}
 	                		}
@@ -1138,7 +1153,18 @@
 	          		       	  	}},
 	          		       	  	{field: "VAL_CTFCINFO",   title: "인증번호",  width: 280,
 		   	   					 headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}},
-	           	   				{command: [ "destroy" ]}
+			   	   				{command: [ {
+			                        name: "삭제", imageClass: "k-icon k-i-close", click: function (e) {  //삭제 버튼
+			                            e.preventDefault();
+			                            if (confirm("삭제하시겠습니까?")) {
+				                            var dataItem = this.dataItem($(e.target).closest("tr")),
+				                            dataSource = $("#"+e.delegateTarget.id).data("kendoGrid").dataSource;
+				                            dataItem.TEMP = "DELETE";
+				                            bssInfoDataVO.storfCtfcDeleteList.push(dataItem);
+			                                dataSource.remove(dataItem);
+			                            }
+			                        }
+			                    } ],minwidth:10}
 	                	],
 	                    collapse: function(e) {
 	                        // console.log(e.sender);
@@ -1222,6 +1248,7 @@
 	                							required: {message: "선택 주세요."}
 	                						}  },
 	                					VAL_CTFCINFO: {  },
+	                					TEMP  : {},
 	                				}
 	                			}
 	                		}
@@ -1247,7 +1274,18 @@
 	          		       	  	}},
 	          		       	  	{field: "VAL_CTFCINFO",   title: "인증번호",  width: 280,
 		   	   					 headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}},
-	           	   				{command: [ "destroy" ]}
+			   	   				{command: [ {
+			                        name: "삭제", imageClass: "k-icon k-i-close", click: function (e) {  //삭제 버튼
+			                            e.preventDefault();
+			                            if (confirm("삭제하시겠습니까?")) {
+				                            var dataItem = this.dataItem($(e.target).closest("tr")),
+				                            dataSource = $("#"+e.delegateTarget.id).data("kendoGrid").dataSource;
+				                            dataItem.TEMP = "DELETE";
+				                            bssInfoDataVO.stCtfcDeleteList.push(dataItem);
+			                                dataSource.remove(dataItem);
+			                            }
+			                        }
+			                    } ],minwidth:10}
 	                	],
 	                    collapse: function(e) {
 	                        // console.log(e.sender);
@@ -1331,6 +1369,7 @@
 	                							required: {message: "선택 주세요."}
 	                						}  },
 	                					VAL_CTFCINFO: {  },
+	                					TEMP  : {},
 	                				}
 	                			}
 	                		}
@@ -1356,7 +1395,18 @@
 	          		       	  	}},
 	          		       	  	{field: "VAL_CTFCINFO",   title: "인증번호",  width: 280,
 		   	   					 headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}},
-	           	   				{command: [ "destroy" ]}
+			   	   				{command: [ {
+			                        name: "삭제", imageClass: "k-icon k-i-close", click: function (e) {  //삭제 버튼
+			                            e.preventDefault();
+			                            if (confirm("삭제하시겠습니까?")) {
+				                            var dataItem = this.dataItem($(e.target).closest("tr")),
+				                            dataSource = $("#"+e.delegateTarget.id).data("kendoGrid").dataSource;
+				                            dataItem.TEMP = "DELETE";
+				                            bssInfoDataVO.coopCtfcDeleteList.push(dataItem);
+			                                dataSource.remove(dataItem);
+			                            }
+			                        }
+			                    } ],minwidth:10}
 	                	],
 	                    collapse: function(e) {
 	                        // console.log(e.sender);
@@ -1490,47 +1540,423 @@
 		                "outdent",
 		                "viewHtml"
 		            ];
+	            	
+	            bssInfoDataVO.gridCancel = function(flag) {
+	            	var targetGrid = "";
+	            	if(confirm("데이터를 되돌리시겠습니까?")){
+						if(flag == "opt"){
+							targetGrid = "#gridOpt"+bssInfoDataVO.param.CD_OPTTP;
+							bssInfoDataVO.optDeleteList = new Array();
+						}else if(flag == "add"){
+							targetGrid = "#gridAddVO";
+							bssInfoDataVO.addDeleteList = new Array();
+						}
+						
+						var grid = $(targetGrid).data("kendoGrid");
+						grid.cancelChanges();
+	            	}
+				};
 	            	            	            
 	            bssInfoDataVO.initBssItem = function(){
 	            	bssInfoDataVO.duplFlag = true;
-	            	var self = this,
-	            		param = {
-    					procedureParam: "USP_IT_02BSSITEMINFO01_GET&L_CD_ITEM@s",
-    					L_CD_ITEM: self.ids
-    				};	            	
-        			UtilSvc.getList(param).then(function (res) {
-        				if(res.data.results[0].length >= 1){
-        					bssInfoDataVO.param = res.data.results[0][0];
-        					bssInfoDataVO.NM_COM = res.data.results[0][0].NM_C;
-        					bssInfoDataVO.tempOPTTP = res.data.results[0][0].CD_OPTTP;
-        					bssInfoDataVO.oriOPTTP = res.data.results[0][0].CD_OPTTP;
-        					if(res.data.results[1].length >= 1){
-        						self.ctgrChange(0);
-        						self.selectedCtgr1.ID_CTGR = res.data.results[1][0].ID_CTGR;
-        						self.selectedCtgr1.NM_CTGR = res.data.results[1][0].NM_CTGR;
-        						if(res.data.results[1].length >= 2){
-        							self.ctgrChange(1);
-            						self.selectedCtgr2.ID_CTGR = res.data.results[1][1].ID_CTGR;
-            						self.selectedCtgr2.NM_CTGR = res.data.results[1][1].NM_CTGR;
-        						}
-        						if(res.data.results[1].length >= 3){
-            						self.ctgrChange(2);
-            						self.selectedCtgr3.ID_CTGR = res.data.results[1][2].ID_CTGR;
-            						self.selectedCtgr3.NM_CTGR = res.data.results[1][2].NM_CTGR;
-        						}
-        					}
-        				}
-        				bssInfoDataVO.taxChange();
+	            	var paramDetail = {procedureParam: "USP_IT_02BSSITEMDETAIL_GET&L_CD_ITEM@s",L_CD_ITEM:$stateParams.ids};
+            		UtilSvc.getList(paramDetail).then(function (res) {
+    					resData.detailData     = res.data.results[0][0];
+    					resData.optDataList    = res.data.results[1];
+    					resData.addDataList    = res.data.results[2];
+    					resData.annoDataList   = res.data.results[3];
+    					resData.ctgrDataList   = res.data.results[4];
+    					resData.auctData       = res.data.results[5][0];
+    					resData.auctCtfcData   = res.data.results[6][0];
+    					resData.gmrkData       = res.data.results[7][0];
+    					resData.gmrkCtfcData   = res.data.results[8][0];
+    					resData.storfData      = res.data.results[9][0];
+    					resData.storfCtfcData  = res.data.results[10][0];
+    					resData.stData         = res.data.results[11][0];
+    					resData.stCtfcData     = res.data.results[12][0];
+    					resData.coopData       = res.data.results[13][0];
+    					resData.coopCtfcData   = res.data.results[14][0];
+    					
+    					bssInfoDataVO.tempOPTTP = resData.detailData.CD_OPTTP;
+    					bssInfoDataVO.oriOPTTP = resData.detailData.CD_OPTTP;
+    					var detailData = {
+    	        			// 상품정보
+    	        			CD_SIGNITEM   : resData.detailData.CD_SIGNITEM,
+    	        			NM_ITEM       : resData.detailData.NM_ITEM,
+    	        			DC_ITEMABBR   : resData.detailData.DC_ITEMABBR,
+    	        			NM_BRD        : resData.detailData.NM_BRD,
+    		        		CD_ITEMKIND   : resData.detailData.CD_ITEMKIND,
+    		        		NM_MD         : resData.detailData.NM_MD,
+    		        		CD_ITEMSTAT   : resData.detailData.CD_ITEMSTAT,
+    		        		ID_CTGR       : resData.detailData.ID_CTGR,
+    		        		CD_COOKIND    : resData.detailData.CD_COOKIND,
+    		        		CD_COO        : resData.detailData.CD_COO,
+    		        		NM_FGFT       : resData.detailData.NM_FGFT,
+    		        		DT_FGFTPRESSTART : resData.detailData.DT_FGFTPRESSTART,
+    		        		DT_FGFTPRESEND   : resData.detailData.DT_FGFTPRESEND,
+    		        		INFO_FGFT     : resData.detailData.INFO_FGFT,
+    		        		HTML_DETEXPL  : resData.detailData.HTML_DETEXPL,
+    		        		CD_CPYBSSITEM : resData.detailData.CD_CPYBSSITEM,
+    		        		NO_ASPHNE     : resData.detailData.NO_ASPHNE,
+    		        		GUI_AS        : resData.detailData.GUI_AS,
+    		        		
+    		        		//판매정보
+    		        		S_ITEMPRC     : resData.detailData.S_ITEMPRC,
+    		        		QT_SSPL       : resData.detailData.QT_SSPL,
+    		        		B_ITEMPRC     : resData.detailData.B_ITEMPRC,
+    		        		YN_PORTPRCCOMPSITERGTT : resData.detailData.YN_PORTPRCCOMPSITERGTT,
+    		        		YN_TEENPCHS   : resData.detailData.YN_TEENPCHS,
+    		        		CD_TAXCLFT    : resData.detailData.CD_TAXCLFT,
+    		        		DT_SALESTART  : resData.detailData.DT_SALESTART,
+    		        		DT_SALEEND    : resData.detailData.DT_SALEEND,
+    		        		DT_VLD        : resData.detailData.DT_VLD,
+    		        		DT_MNFT       : resData.detailData.DT_MNFT,
+    		        		
+    		        		//옵션/재고
+    		        		CD_OPTTP      : resData.detailData.CD_OPTTP,
+    		        		NM_OPT1       : "",
+    		        		VAL_OPT1      : "",
+    		        		NM_OPT2       : "",
+    		        		VAL_OPT2      : "",
+    		        		NM_OPT3       : "",
+    		        		VAL_OPT3      : "",
+    		        		
+    		        		//추가구성상품
+    		        		YN_USE        : resData.detailData.YN_USE,
+    		        		CD_SORTORD    : resData.detailData.CD_SORTORD,
+    		        		HTML_ADDDETEXPL  : resData.detailData.HTML_ADDDETEXPL,
+    		        		//넣을때 trim 필요할듯, 스페이스 안되게 막던가
+    		        		NM_ADDITEM1   : "",
+    		        		VAL_ADDITEM1  : "",
+    		        		PRC_ADDITEM1  : "",
+    		        		NM_ADDITEM2   : "",
+    		        		VAL_ADDITEM2  : "",
+    		        		PRC_ADDITEM2  : "",
+    		        		NM_ADDITEM3   : "",
+    		        		VAL_ADDITEM3  : "",
+    		        		PRC_ADDITEM3  : "",
+    		        		NM_ADDITEM4   : "",
+    		        		VAL_ADDITEM4  : "",
+    		        		PRC_ADDITEM4  : "",
+    		        		NM_ADDITEM5   : "",
+    		        		VAL_ADDITEM5  : "",
+    		        		PRC_ADDITEM5  : "",
+    		        		
+    		        		//고시정보
+    		        		CD_LIOG       : {CD_LIOG : resData.detailData.CD_LIOG,
+    		        						 NM_LIOG : resData.detailData.NM_LIOG},
+    		        		ANNOINFOARTILIST : resData.annoDataList,
+    		        		
+    		        		//옥션
+    		        		AUCT:{
+    		        		YN_RSVSALE    : resData.auctData.YN_RSVSALE,
+    		        		DT_SHPSTART   : resData.auctData.DT_SHPSTART,
+    		        		VAL_UNI       : resData.auctData.VAL_UNI,
+    		        		PRC_UNI       : resData.auctData.PRC_UNI,
+    		        		YN_MAXPCHSAMOU: resData.auctData.YN_MAXPCHSAMOU,
+    		        		AMOU_MAXPCHSLIM: resData.auctData.AMOU_MAXPCHSLIM,
+    		        		DAYS_PRDLIM   : resData.auctData.DAYS_PRDLIM,
+    		        		AMOU_PRDLIM   : resData.auctData.AMOU_PRDLIM,
+    		        		AMOU_TIMSLIM  : resData.auctData.AMOU_TIMSLIM,
+    		        		HTML_AVTMTRI  : resData.auctData.HTML_AVTMTRI,
+    		        		CD_SHPWAY     : resData.auctData.CD_SHPWAY,
+    		        		CD_SHPPARS    : resData.auctData.CD_SHPPARS,
+    		        		CD_POST       : resData.auctData.CD_POST,
+    		        		PRC_POST      : resData.auctData.PRC_POST,
+    		        		AREA_QUISEV   : resData.auctData.AREA_QUISEV,
+    		        		NM_QUISEVCMPN : resData.auctData.NM_QUISEVCMPN,
+    		        		NO_QUISEVPHNE : resData.auctData.NO_QUISEVPHNE,
+    		        		CD_TKBKPARS   : resData.auctData.CD_TKBKPARS,
+    		        		PRC_TKBKECHGONESHP : resData.auctData.PRC_TKBKECHGONESHP,
+    		        		CD_SHPPRCTPL  : resData.auctData.CD_SHPPRCTPL,
+    		        		PRC_SHP1      : resData.auctData.PRC_SHP,        //1,2 DB컬럼은 PRC_SHP로 저장
+    		        		PRC_SHP2      : resData.auctData.PRC_SHP,
+    		        		PRC_STDSHP    : resData.auctData.PRC_STDSHP,
+    		        		CD_SHPIMPWAY  : resData.auctData.CD_SHPIMPWAY,
+    		        		CD_EXCHGDISCCLFT : resData.auctData.CD_EXCHGDISCCLFT,
+    		        		COND_CNT      : [{VAL : '', YN: 'Y'},{VAL : '', YN: 'N'},{VAL : '', YN: 'N'},{VAL : '', YN: 'N'},{VAL : '', YN: 'Y'}],
+    		        		COND_SHPPRC   : [{VAL : ''},{VAL : ''},{VAL : ''},{VAL : ''},{VAL : ''}],
+    		        		CTFCINFO      : [{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''}],
+    		        		ORI_CTFCINFO  : [{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''}]
+    		        		},
+    		        		GMRK:{
+    		        		YN_FECTSALE   : resData.gmrkData.YN_FECTSALE,
+    		        		VAL_UNI       : resData.gmrkData.VAL_UNI,
+    		        		PRC_UNI       : resData.gmrkData.PRC_UNI,
+    		        		YN_MAXPCHSAMOU: resData.gmrkData.YN_MAXPCHSAMOU,
+    		        		AMOU_MAXPCHSLIM: resData.gmrkData.AMOU_MAXPCHSLIM,
+    		        		DAYS_PRDLIM   : resData.gmrkData.DAYS_PRDLIM,
+    		        		AMOU_PRDLIM   : resData.gmrkData.AMOU_PRDLIM,
+    		        		AMOU_TIMSLIM  : resData.gmrkData.AMOU_TIMSLIM,
+    		        		HTML_AVTMTRI  : resData.gmrkData.HTML_AVTMTRI,
+    		        		CD_SHPPARS    : resData.gmrkData.CD_SHPPARS,
+    		        		AREA_QUISEV   : resData.gmrkData.AREA_QUISEV,
+    		        		NM_QUISEVCMPN : resData.gmrkData.NM_QUISEVCMPN,
+    		        		NO_QUISEVPHNE : resData.gmrkData.NO_QUISEVPHNE,
+    		        		CD_TKBKPARS   : resData.gmrkData.CD_TKBKPARS,
+    		        		PRC_TKBKECHGONESHP : resData.gmrkData.PRC_TKBKECHGONESHP,
+    		        		CD_SHPPRCTPL  : resData.gmrkData.CD_SHPPRCTPL,
+    		        		PRC_SHP1      : resData.gmrkData.PRC_SHP,        //1,2 DB컬럼은 PRC_SHP로 저장
+    		        		PRC_SHP2      : resData.gmrkData.PRC_SHP,
+    		        		PRC_STDSHP    : resData.gmrkData.PRC_STDSHP,
+    		        		CD_SHPIMPWAY  : resData.gmrkData.CD_SHPIMPWAY,
+    		        		CD_AMOUSECTCLFT : resData.gmrkData.CD_AMOUSECTCLFT,
+    		        		COND_CNT      : [{VAL : '', YN: 'Y'},{VAL : '', YN: 'N'},{VAL : '', YN: 'N'},{VAL : '', YN: 'N'},{VAL : '', YN: 'Y'}],
+    		        		COND_SHPPRC   : [{VAL : ''},{VAL : ''},{VAL : ''},{VAL : ''},{VAL : ''}],
+    		        		CTFCINFO      : [{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''}],
+    		        		ORI_CTFCINFO  : [{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''}]
+    		        		},
+    		        		STORF:{
+    		        		AMOU_MINIPCHS  : resData.storfData.AMOU_MINIPCHS,
+    		        		YN_TIMSMAXPCHS : resData.storfData.YN_TIMSMAXPCHS,            //DB에는 존재하지 않지만 밖으로 빼면 11번가와 값이 겹침
+    		        		AMOU_TIMSMAXPCHS : resData.storfData.AMOU_TIMSMAXPCHS,
+    		        		YN_PESMAXPCHS : resData.storfData.YN_PESMAXPCHS,			//DB에는 존재하지 않지만 밖으로 빼면 11번가와 값이 겹침
+                            AMOU_PESMAXPCHS  : resData.storfData.AMOU_PESMAXPCHS,
+                            CD_SHPWAY     : resData.storfData.CD_SHPWAY,
+    		        		YN_VISRECE    : resData.storfData.YN_VISRECE,
+    		        		YN_BDLSHP     : resData.storfData.YN_BDLSHP,
+                            AREA_QUISEV   : resData.storfData.AREA_QUISEV,
+    		        		CD_SHPPRC     : resData.storfData.CD_SHPPRC,
+    		        		PRC_SHP       : resData.storfData.PRC_SHP,
+    		        		PRC_STDSHP    : resData.storfData.PRC_STDSHP,
+    		        		CD_SECTCNTYN  : resData.storfData.CD_SECTCNTYN,
+    		        		CD_SHPIMPWAY  : resData.storfData.CD_SHPIMPWAY,
+    		        		COND_CNT      : [{VAL : '', YN: 'Y'},{VAL : '', YN: 'Y'}],
+    		        		COND_SHPPRC   : [{VAL : ''},{VAL : ''},{VAL : ''},{VAL : ''},{VAL : ''}],
+    		        		CD_TKBKPARS   : resData.storfData.CD_TKBKPARS,
+    		        		PRC_TKBKSHP   : resData.storfData.PRC_TKBKSHP,
+    		        		PRC_ECHGSHP   : resData.storfData.PRC_ECHGSHP,
+    		        		PRC_AREACLSFSHP  : resData.storfData.PRC_AREACLSFSHP,
+    		        		YN_SPRINSTPRC : resData.storfData.YN_SPRINSTPRC,
+    		        		CTFCINFO      : [{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''}]
+    		        		},
+    		        		ST:{
+    		        		CD_MD         : resData.stData.CD_MD,
+    		        		CD_SERVITEM   : resData.stData.CD_SERVITEM,
+    		        		AMOU_MINPCHS  : resData.stData.AMOU_MINPCHS,
+    		        		YN_TIMSMAXPCHS: resData.stData.YN_TIMSMAXPCHS,             //DB에는 존재하지 않지만 밖으로 빼면 스토어팜과 값이 겹침
+    		        		AMOU_TIMSMAXPCHS : resData.stData.AMOU_TIMSMAXPCHS,
+    		        		YN_PESMAXPCHS : resData.stData.YN_PESMAXPCHS,			 //DB에는 존재하지 않지만 밖으로 빼면 스토어팜과 값이 겹침
+                            AMOU_PESMAXPCHS  : resData.stData.AMOU_PESMAXPCHS,
+                            CD_SHPWAY     : resData.stData.CD_SHPWAY,
+                            CD_SHPPARS    : resData.stData.CD_SHPPARS,
+                            DC_PUREWD     : resData.stData.DC_PUREWD,
+                            CD_ERLSHPPRCFREIMPWAY : resData.stData.CD_ERLSHPPRCFREIMPWAY,
+                            PRC_TKBKSHP   : resData.stData.PRC_TKBKSHP,
+                            PRC_ECHGSHP   : resData.stData.PRC_ECHGSHP,
+                            GUI_TKBKECHG  : resData.stData.GUI_TKBKECHG,
+                            CD_SHPPRC     : resData.stData.CD_SHPPRC,
+                            CD_SHPIMPWAY  : resData.stData.CD_SHPIMPWAY,
+                            COND_CNT      : [{VAL : '', YN: 'Y'},{VAL : '', YN: 'Y'},{VAL : '', YN: 'Y'},{VAL : '', YN: 'Y'},{VAL : '', YN: 'Y'}],
+    		        		COND_SHPPRC   : [{VAL : ''},{VAL : ''},{VAL : ''},{VAL : ''},{VAL : ''}],
+    		        		PRC_STDSHP    : resData.stData.PRC_STDSHP,
+    		        		PRC_SHP       : resData.stData.PRC_SHP,
+    		        		PRC_SHP2      : resData.stData.PRC_SHP,
+    		        		PRC_SHP3      : resData.stData.PRC_SHP,
+    		        		CD_SHPPRCADDGUI : resData.stData.CD_SHPPRCADDGUI,
+    		        		PRC_JJADDSHP  : resData.stData.PRC_JJADDSHP,
+    		        		PRC_MNTADDSHP : resData.stData.PRC_MNTADDSHP,
+    		        		YN_JJMNT      : resData.stData.YN_JJMNT,
+    		        		YN_BDLSHP     : resData.stData.YN_BDLSHP,
+    		        		CTFCINFO      : [{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''}]
+    		        		},
+    		        		COOP:{
+    	        			NM_MNFR       : resData.coopData.NM_MNFR,
+    	        			YN_BCD        : resData.coopData.YN_BCD,
+    	        			DC_BCD        : resData.coopData.DC_BCD,
+    	        			RSN_BCDNO     : resData.coopData.RSN_BCDNO,
+    	        			AMOU_PESMAXPCHS     : resData.coopData.AMOU_PESMAXPCHS,
+    	        			DAYS_PESMAXPCHSAMOU : resData.coopData.DAYS_PESMAXPCHSAMOU,
+    	        			DAYS_DELITAK  : resData.coopData.DAYS_DELITAK,
+    	        			YN_PRLICOM    : resData.coopData.YN_PRLICOM,
+    	        			YN_FECTPCHSAGNCY    : resData.coopData.YN_FECTPCHSAGNCY,
+    	        			YN_INDVCTCAMAKNECE  : resData.coopData.YN_INDVCTCAMAKNECE,
+    	        			CD_SHPWAY     : resData.coopData.CD_SHPWAY,
+    	        			CD_SHPPARS    : resData.coopData.CD_SHPPARS,
+    	        			YN_BDLSHP     : resData.coopData.YN_BDLSHP,
+    	        			YN_MNTSHP     : resData.coopData.YN_MNTSHP,
+    	        			CD_SHPPRC     : resData.coopData.CD_SHPPRC,
+    	        			PRC_SHP       : resData.coopData.PRC_SHP,
+    	        			PRC_STDSHP    : resData.coopData.PRC_STDSHP,
+    	        			PRC_TKBKSHP   : resData.coopData.PRC_TKBKSHP,
+    	        			PRC_FIRTTIMSTKBKSHP : resData.coopData.PRC_FIRTTIMSTKBKSHP,
+    	        			YN_TKBKSHPPRCCOD    : resData.coopData.YN_TKBKSHPPRCCOD,
+    	        			CTFCINFO      : [{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''},{CD_CTFCINFO : '', VAL_CTFCINFO: ''}]
+    		        		}}
+    					bssInfoDataVO.param = detailData;
+    					
+    					//운송비부담구분 - 수량별 값이 존재할때 값 할당 (옥션)
+                		if(resData.auctData.COND_CNT1 != "" && resData.auctData.COND_CNT1 != "undefined"){
+                			bssInfoDataVO.param.AUCT.COND_CNT[0].VAL = resData.auctData.COND_CNT1;
+                			bssInfoDataVO.param.AUCT.COND_SHPPRC[0].VAL = resData.auctData.PRC_SHP;
+                			bssInfoDataVO.param.AUCT.COND_SHPPRC[1].VAL = resData.auctData.COND_SHPPRC1;
+                			if(resData.auctData.COND_CNT2 != "" && resData.auctData.COND_CNT2 != "undefined"){
+                    			bssInfoDataVO.param.AUCT.COND_CNT[1].VAL = resData.auctData.COND_CNT2;
+                    			bssInfoDataVO.param.AUCT.COND_CNT[1].YN  = "Y";
+                    			bssInfoDataVO.param.AUCT.COND_SHPPRC[2].VAL = resData.auctData.COND_SHPPRC2;
+                    			if(resData.auctData.COND_CNT3 != "" && resData.auctData.COND_CNT3 != "undefined"){
+                        			bssInfoDataVO.param.AUCT.COND_CNT[2].VAL = resData.auctData.COND_CNT3;
+                        			bssInfoDataVO.param.AUCT.COND_CNT[2].YN  = "Y";
+                        			bssInfoDataVO.param.AUCT.COND_SHPPRC[3].VAL = resData.auctData.COND_SHPPRC3;
+                        			if(resData.auctData.COND_CNT4 != "" && resData.auctData.COND_CNT4 != "undefined"){
+                            			bssInfoDataVO.param.AUCT.COND_CNT[3].VAL = resData.auctData.COND_CNT4;
+                            			bssInfoDataVO.param.AUCT.COND_CNT[3].YN  = "Y";
+                            			bssInfoDataVO.param.AUCT.COND_CNT[4].VAL = resData.auctData.COND_CNT4;
+                            			bssInfoDataVO.param.AUCT.COND_SHPPRC[4].VAL = resData.auctData.COND_SHPPRC4;
+                            		}
+                        		}
+                    		}
+                		}
+                		
+                		//운송비부담구분 - 수량별 값이 존재할때 값 할당 (지마켓)
+                		if(resData.gmrkData.COND_CNT1 != "" && resData.gmrkData.COND_CNT1 != "undefined"){
+                			bssInfoDataVO.param.GMRK.COND_CNT[0].VAL = resData.gmrkData.COND_CNT1;
+                			bssInfoDataVO.param.GMRK.COND_SHPPRC[0].VAL = resData.gmrkData.PRC_SHP;
+                			bssInfoDataVO.param.GMRK.COND_SHPPRC[1].VAL = resData.gmrkData.COND_SHPPRC1;
+                			if(resData.gmrkData.COND_CNT2 != "" && resData.gmrkData.COND_CNT2 != "undefined"){
+                    			bssInfoDataVO.param.GMRK.COND_CNT[1].VAL = resData.gmrkData.COND_CNT2;
+                    			bssInfoDataVO.param.GMRK.COND_CNT[1].YN  = "Y";
+                    			bssInfoDataVO.param.GMRK.COND_SHPPRC[2].VAL = resData.gmrkData.COND_SHPPRC2;
+                    			if(resData.gmrkData.COND_CNT3 != "" && resData.gmrkData.COND_CNT3 != "undefined"){
+                        			bssInfoDataVO.param.GMRK.COND_CNT[2].VAL = resData.gmrkData.COND_CNT3;
+                        			bssInfoDataVO.param.GMRK.COND_CNT[2].YN  = "Y";
+                        			bssInfoDataVO.param.GMRK.COND_SHPPRC[3].VAL = resData.gmrkData.COND_SHPPRC3;
+                        			if(resData.gmrkData.COND_CNT4 != "" && resData.gmrkData.COND_CNT4 != "undefined"){
+                            			bssInfoDataVO.param.GMRK.COND_CNT[3].VAL = resData.gmrkData.COND_CNT4;
+                            			bssInfoDataVO.param.GMRK.COND_CNT[3].YN  = "Y";
+                            			bssInfoDataVO.param.GMRK.COND_CNT[4].VAL = resData.gmrkData.COND_CNT4;
+                            			bssInfoDataVO.param.GMRK.COND_SHPPRC[4].VAL = resData.gmrkData.COND_SHPPRC4;
+                            		}
+                        		}
+                    		}
+                		}
+                		
+                		//운송비부담구분 - 수량별 값이 존재할때 값 할당 (스토어팜)
+                		if(resData.storfData.COND_CNT1 != "" && resData.storfData.COND_CNT1 != "undefined"){
+                			bssInfoDataVO.param.STORF.COND_CNT[0].VAL = resData.storfData.COND_CNT1;
+                			bssInfoDataVO.param.STORF.COND_SHPPRC[0].VAL = resData.storfData.PRC_SHP;
+                			bssInfoDataVO.param.STORF.COND_SHPPRC[1].VAL = resData.storfData.COND_SHPPRC1;
+                			if(resData.storfData.COND_CNT2 != "" && resData.storfData.COND_CNT2 != "undefined"){
+                    			bssInfoDataVO.param.STORF.COND_CNT[1].VAL = resData.storfData.COND_CNT2;
+                    			bssInfoDataVO.param.STORF.COND_CNT[1].YN  = "Y";
+                    			bssInfoDataVO.param.STORF.COND_SHPPRC[2].VAL = resData.storfData.COND_SHPPRC2;
+                    			if(resData.storfData.COND_CNT3 != "" && resData.storfData.COND_CNT3 != "undefined"){
+                        			bssInfoDataVO.param.STORF.COND_CNT[2].VAL = resData.storfData.COND_CNT3;
+                        			bssInfoDataVO.param.STORF.COND_CNT[2].YN  = "Y";
+                        			bssInfoDataVO.param.STORF.COND_SHPPRC[3].VAL = resData.storfData.COND_SHPPRC3;
+                        			if(resData.storfData.COND_CNT4 != "" && resData.storfData.COND_CNT4 != "undefined"){
+                            			bssInfoDataVO.param.STORF.COND_CNT[3].VAL = resData.storfData.COND_CNT4;
+                            			bssInfoDataVO.param.STORF.COND_CNT[3].YN  = "Y";
+                            			bssInfoDataVO.param.STORF.COND_CNT[4].VAL = resData.storfData.COND_CNT4;
+                            			bssInfoDataVO.param.STORF.COND_SHPPRC[4].VAL = resData.storfData.COND_SHPPRC4;
+                            		}
+                        		}
+                    		}
+                		}
+                		
+                		//운송비부담구분 - 수량별 값이 존재할때 값 할당 (11번가)
+                		if(resData.stData.COND_CNT1 != "" && resData.stData.COND_CNT1 != "undefined"){
+                			bssInfoDataVO.param.ST.COND_CNT[0].VAL = resData.stData.COND_CNT1;
+                			bssInfoDataVO.param.ST.COND_SHPPRC[0].VAL = resData.stData.PRC_SHP;
+                			bssInfoDataVO.param.ST.COND_SHPPRC[1].VAL = resData.stData.COND_SHPPRC1;
+                			if(resData.stData.COND_CNT2 != "" && resData.stData.COND_CNT2 != "undefined"){
+                    			bssInfoDataVO.param.ST.COND_CNT[1].VAL = resData.stData.COND_CNT2;
+                    			bssInfoDataVO.param.ST.COND_CNT[1].YN  = "Y";
+                    			bssInfoDataVO.param.ST.COND_SHPPRC[2].VAL = resData.stData.COND_SHPPRC2;
+                    			if(resData.stData.COND_CNT3 != "" && resData.stData.COND_CNT3 != "undefined"){
+                        			bssInfoDataVO.param.ST.COND_CNT[2].VAL = resData.stData.COND_CNT3;
+                        			bssInfoDataVO.param.ST.COND_CNT[2].YN  = "Y";
+                        			bssInfoDataVO.param.ST.COND_SHPPRC[3].VAL = resData.stData.COND_SHPPRC3;
+                        			if(resData.stData.COND_CNT4 != "" && resData.stData.COND_CNT4 != "undefined"){
+                            			bssInfoDataVO.param.ST.COND_CNT[3].VAL = resData.stData.COND_CNT4;
+                            			bssInfoDataVO.param.ST.COND_CNT[3].YN  = "Y";
+                            			bssInfoDataVO.param.ST.COND_CNT[4].VAL = resData.stData.COND_CNT4;
+                            			bssInfoDataVO.param.ST.COND_SHPPRC[4].VAL = resData.stData.COND_SHPPRC4;
+                            		}
+                        		}
+                    		}
+                		}
+                		
+                		// 옥션, 지마켓 CTFC 셋팅
+                		if(resData.auctCtfcData && resData.gmrkCtfcData){
+	                		var list = new Array();
+	                		list.push(resData.auctCtfcData);
+	                		list.push(resData.gmrkCtfcData);
+	                		bssInfoDataVO.ctfcDataSplit(list);
+                		}
+    					
+    					if(resData.ctgrDataList.length >= 1){
+    						bssInfoDataVO.ctgrChange(0);
+    						bssInfoDataVO.selectedCtgr1.ID_CTGR = resData.ctgrDataList[0].ID_CTGR;
+    						bssInfoDataVO.selectedCtgr1.NM_CTGR = resData.ctgrDataList[0].NM_CTGR;
+    						if(resData.ctgrDataList.length >= 2){
+    							bssInfoDataVO.ctgrChange(1);
+    							bssInfoDataVO.selectedCtgr2.ID_CTGR = resData.ctgrDataList[1].ID_CTGR;
+    							bssInfoDataVO.selectedCtgr2.NM_CTGR = resData.ctgrDataList[1].NM_CTGR;
+    						}
+    						if(resData.ctgrDataList.length >= 3){
+    							bssInfoDataVO.ctgrChange(2);
+    							bssInfoDataVO.selectedCtgr3.ID_CTGR = resData.ctgrDataList[2].ID_CTGR;
+    							bssInfoDataVO.selectedCtgr3.NM_CTGR = resData.ctgrDataList[2].NM_CTGR;
+    						}
+    					}
+        				/*bssInfoDataVO.taxChange();
         				bssInfoDataVO.sprcCal('', Number(bssInfoDataVO.param.RT_TAX) ,'R');
         				bssInfoDataVO.splyChange();
         				bssInfoDataVO.mrfrChange();
         				bssInfoDataVO.bcdChange();
-        				bssInfoDataVO.shptpChange();
-        			});
-    				bssInfoDataVO.fileMainVO.currentData = resData.fileMainVOcurrentData;
-    				bssInfoDataVO.fileSmallVO.currentData = resData.fileSmallVOcurrentData;
-    				bssInfoDataVO.fileDExVO.currentDataList = resData.fileDExVOcurrentDataList;
-    				bssInfoDataVO.fileDImageVO.currentDataList = resData.fileDImageVOcurrentDataList;
+        				bssInfoDataVO.shptpChange();*/
+        				
+        				bssInfoDataVO.fileMainVO.currentData = resData.fileMainVOcurrentData;
+        				bssInfoDataVO.fileSmallVO.currentData = resData.fileSmallVOcurrentData;
+        				bssInfoDataVO.fileDExVO.currentDataList = resData.fileDExVOcurrentDataList;
+        				bssInfoDataVO.fileDImageVO.currentDataList = resData.fileDImageVOcurrentDataList;
+                    })
+					
+	            };
+	            
+	            // 수정시 인증정보 옥션,지마켓에 각각 넣어줌
+	            bssInfoDataVO.ctfcDataSplit = function(ctfcData){
+	            	//옥션
+	            	for(var i = 0 ; i < ctfcData[0].length; i++){
+	            		var tempList = [];
+                    	tempList = ctfcData[0][i].NM_CTFCINFO.split(" ");
+                    	if(tempList[0]=="어린이제품"){
+                    		bssInfoDataVO.param.AUCT.CTFCINFO[0].CD_CTFCINFO = ctfcData[0][i].CD_CTFCINFO; 
+                    		bssInfoDataVO.param.AUCT.ORI_CTFCINFO[0].CD_CTFCINFO = ctfcData[0][i].CD_CTFCINFO;
+                    		bssInfoDataVO.param.AUCT.CTFCINFO[0].VAL_CTFCINFO = ctfcData[0][i].VAL_CTFCINFO; 
+                    		bssInfoDataVO.param.AUCT.ORI_CTFCINFO[0].VAL_CTFCINFO = ctfcData[0][i].VAL_CTFCINFO;}
+                    	if(tempList[0]=="생활용품"){
+                    		bssInfoDataVO.param.AUCT.CTFCINFO[1].CD_CTFCINFO = ctfcData[0][i].CD_CTFCINFO; 
+                    		bssInfoDataVO.param.AUCT.ORI_CTFCINFO[1].CD_CTFCINFO = ctfcData[0][i].CD_CTFCINFO;
+                    		bssInfoDataVO.param.AUCT.CTFCINFO[1].VAL_CTFCINFO = ctfcData[0][i].VAL_CTFCINFO; 
+                    		bssInfoDataVO.param.AUCT.ORI_CTFCINFO[1].VAL_CTFCINFO = ctfcData[0][i].VAL_CTFCINFO;}
+                    	if(tempList[0]=="전기용품"){
+                    		bssInfoDataVO.param.AUCT.CTFCINFO[2].CD_CTFCINFO = ctfcData[0][i].CD_CTFCINFO; 
+	                		bssInfoDataVO.param.AUCT.ORI_CTFCINFO[2].CD_CTFCINFO = ctfcData[0][i].CD_CTFCINFO;
+	                		bssInfoDataVO.param.AUCT.CTFCINFO[2].VAL_CTFCINFO = ctfcData[0][i].VAL_CTFCINFO; 
+	                		bssInfoDataVO.param.AUCT.ORI_CTFCINFO[2].VAL_CTFCINFO = ctfcData[0][i].VAL_CTFCINFO;}
+	            	}
+	            	//지마켓
+	            	for(var i = 0 ; i < ctfcData[1].length; i++){
+	            		var tempList = [];
+                    	tempList = ctfcData[1][i].NM_CTFCINFO.split(" ");
+                    	if(tempList[0]=="어린이제품"){
+                    		bssInfoDataVO.param.GMRK.CTFCINFO[0].CD_CTFCINFO = ctfcData[1][i].CD_CTFCINFO; 
+                    		bssInfoDataVO.param.GMRK.ORI_CTFCINFO[0].CD_CTFCINFO = ctfcData[1][i].CD_CTFCINFO;
+                    		bssInfoDataVO.param.GMRK.CTFCINFO[0].VAL_CTFCINFO = ctfcData[1][i].VAL_CTFCINFO; 
+                    		bssInfoDataVO.param.GMRK.ORI_CTFCINFO[0].VAL_CTFCINFO = ctfcData[1][i].VAL_CTFCINFO;}
+                    	if(tempList[0]=="생활용품"){
+                    		bssInfoDataVO.param.GMRK.CTFCINFO[1].CD_CTFCINFO = ctfcData[1][i].CD_CTFCINFO; 
+                    		bssInfoDataVO.param.GMRK.ORI_CTFCINFO[1].CD_CTFCINFO = ctfcData[1][i].CD_CTFCINFO;
+                    		bssInfoDataVO.param.GMRK.CTFCINFO[1].VAL_CTFCINFO = ctfcData[1][i].VAL_CTFCINFO; 
+                    		bssInfoDataVO.param.GMRK.ORI_CTFCINFO[1].VAL_CTFCINFO = ctfcData[1][i].VAL_CTFCINFO;}
+                    	if(tempList[0]=="전기용품"){
+                    		bssInfoDataVO.param.GMRK.CTFCINFO[2].CD_CTFCINFO = ctfcData[1][i].CD_CTFCINFO; 
+                    		bssInfoDataVO.param.GMRK.ORI_CTFCINFO[2].CD_CTFCINFO = ctfcData[1][i].CD_CTFCINFO;
+                    		bssInfoDataVO.param.GMRK.CTFCINFO[2].VAL_CTFCINFO = ctfcData[1][i].VAL_CTFCINFO; 
+                    		bssInfoDataVO.param.GMRK.ORI_CTFCINFO[2].VAL_CTFCINFO = ctfcData[1][i].VAL_CTFCINFO;}
+	            	}
 	            };
 	            
 	            bssInfoDataVO.getInitializeItemInfo = function(){
@@ -1794,9 +2220,9 @@
 		            		var itemData = bssInfoDataVO.param;
 		            		itemData.CD_LIOG = itemData.CD_LIOG.CD_LIOG;
 		            		itemData.ID_CTGR = bssInfoDataVO.selectedCtgr3.ID_CTGR;
-		            		if($("#gridCtfcStorf").data("kendoGrid").dataSource._data.length!=0){itemData.STORF.CTCFINFO = bssInfoDataVO.ctfcParamSort($("#gridCtfcStorf").data("kendoGrid")._data)};
-		            		if($("#gridCtfcSt").data("kendoGrid").dataSource._data.length!=0){itemData.ST.CTCFINFO = bssInfoDataVO.ctfcParamSort($("#gridCtfcSt").data("kendoGrid")._data)};
-		            		if($("#gridCtfcCoop").data("kendoGrid").dataSource._data.length!=0){itemData.COOP.CTCFINFO = bssInfoDataVO.ctfcParamSort($("#gridCtfcCoop").data("kendoGrid")._data)};
+		            		if($("#gridCtfcStorf").data("kendoGrid").dataSource._data.length!=0){itemData.STORF.CTFCINFO = bssInfoDataVO.ctfcParamSort($("#gridCtfcStorf").data("kendoGrid")._data)};
+		            		if($("#gridCtfcSt").data("kendoGrid").dataSource._data.length!=0){itemData.ST.CTFCINFO = bssInfoDataVO.ctfcParamSort($("#gridCtfcSt").data("kendoGrid")._data)};
+		            		if($("#gridCtfcCoop").data("kendoGrid").dataSource._data.length!=0){itemData.COOP.CTFCINFO = bssInfoDataVO.ctfcParamSort($("#gridCtfcCoop").data("kendoGrid")._data)};
 		            		var param = {
 		            				BSSITEM : itemData,
 		            				OPT : optData,
@@ -1832,29 +2258,64 @@
 		                }
 	            	}else{
 	            		if (confirm("수정하시겠습니까?")) {
-		                    if (bssInfoDataVO.isValid(bssInfoDataVO.param)) {
-		                		if(bssInfoDataVO.selectedCtgr2.ID_CTGR != ""){
-		                			if(bssInfoDataVO.selectedCtgr3.ID_CTGR != ""){
-		                    			bssInfoDataVO.param.ID_CTGR = bssInfoDataVO.selectedCtgr3.ID_CTGR;
-		                        	}else{
-		                        		bssInfoDataVO.param.ID_CTGR = bssInfoDataVO.selectedCtgr2.ID_CTGR;
-		                        	}
-		                    	}else{
-		                    		bssInfoDataVO.param.ID_CTGR = bssInfoDataVO.selectedCtgr1.ID_CTGR;
-		                    	}
-		                		bssInfoDataVO.param.CD_ITEM = bssInfoDataVO.ids;
-		                		bssInfoDataVO.param.RT_TAX = Number(bssInfoDataVO.param.RT_TAX);
-		                    	itBssItemSvc.saveItem(bssInfoDataVO.param, SU).success(function () {
-		                    		if(bssInfoDataVO.param.CD_OPTTP == "002" || bssInfoDataVO.param.CD_OPTTP == "003" ){
-		                        		var grid = $("#gridOpt"+bssInfoDataVO.param.CD_OPTTP).data("kendoGrid");
-		                            	grid.dataSource.sync();
-		                    		}
-		                        	bssInfoDataVO.fileSave();
-		                        	alert("기본상품 수정이 완료되었습니다.");
-		                        	bssInfoDataVO.goBack();
-		                        });
-		                    }
+	            			if(bssInfoDataVO.selectedCoo3.CD_COO != "")bssInfoDataVO.param.CD_COO = bssInfoDataVO.selectedCoo3.CD_COO;
+		            		else{
+		            			if(bssInfoDataVO.selectedCoo2.CD_COO != "")bssInfoDataVO.param.CD_COO = bssInfoDataVO.selectedCoo2.CD_COO;
+		            			else bssInfoDataVO.param.CD_COO = bssInfoDataVO.selectedCoo1.CD_COO;
+		            		}
+	            			bssInfoDataVO.param.CD_ITEM = bssInfoDataVO.CD_ITEM;
+		            		var optData = new Array();
+		            		if(bssInfoDataVO.param.CD_OPTTP != '001')optData = $("#gridOpt"+bssInfoDataVO.param.CD_OPTTP).data("kendoGrid")._data;
+		            		if(bssInfoDataVO.optDeleteList.length != 0)optData = optData.concat(bssInfoDataVO.optDeleteList);
+		            		var addData = $("#gridAddVO").data("kendoGrid")._data;
+		            		if(bssInfoDataVO.addDeleteList.length != 0)addData = addData.concat(bssInfoDataVO.addDeleteList);
+		            		var itemData = bssInfoDataVO.param;
+		            		itemData.CD_LIOG = itemData.CD_LIOG.CD_LIOG;
+		            		itemData.ID_CTGR = bssInfoDataVO.selectedCtgr3.ID_CTGR;
+		            		//인증정보 (옥션,지마켓) 수정,삭제,생성 판별
+		            		bssInfoDataVO.ctfcSetting();
+		            		if($("#gridCtfcStorf").data("kendoGrid").dataSource._data.length!=0){itemData.STORF.CTFCINFO = bssInfoDataVO.ctfcParamSort($("#gridCtfcStorf").data("kendoGrid")._data)};
+		            		if($("#gridCtfcSt").data("kendoGrid").dataSource._data.length!=0){itemData.ST.CTFCINFO = bssInfoDataVO.ctfcParamSort($("#gridCtfcSt").data("kendoGrid")._data)};
+		            		if($("#gridCtfcCoop").data("kendoGrid").dataSource._data.length!=0){itemData.COOP.CTFCINFO = bssInfoDataVO.ctfcParamSort($("#gridCtfcCoop").data("kendoGrid")._data)};
+		            		if(bssInfoDataVO.storfCtfcDeleteList.length != 0)itemData.STORF.CTFCINFO = itemData.STORF.CTFCINFO.concat(bssInfoDataVO.storfCtfcDeleteList);
+		            		if(bssInfoDataVO.stCtfcDeleteList.length != 0)itemData.ST.CTFCINFO = itemData.ST.CTFCINFO.concat(bssInfoDataVO.stCtfcDeleteList);
+		            		if(bssInfoDataVO.coopCtfcDeleteList.length != 0)itemData.COOP.CTFCINFO = itemData.COOP.CTFCINFO.concat(bssInfoDataVO.coopCtfcDeleteList);
+		            		var param = {
+		            				BSSITEM : itemData,
+		            				OPT : optData,
+		            				ADDITEM : addData };
+		            		itBssItemSvc.saveItem(param, SU).success(function () {
+	                        	/*bssInfoDataVO.fileSave();*/
+	                        	alert("기본상품 수정이 완료되었습니다.");
+	                        	/*bssInfoDataVO.goBack();*/
+	                        });
 		                }
+	            	}
+	            };
+	            
+	            // 인증정보 (옥션,지마켓) 수정,삭제,생성 판별 - 수정하기 전에
+	            bssInfoDataVO.ctfcSetting = function(){
+	            	// 옥션
+	            	for(var i = 0 ; bssInfoDataVO.param.AUCT.CTFCINFO.length; i++){
+	            		if(bssInfoDataVO.param.AUCT.CTFCINFO[i].CD_CTFCINFO != ""){
+	            			bssInfoDataVO.param.AUCT.CTFCINFO[i].TEMP = "DELETE";
+	            			for(var j = 0 ; bssInfoDataVO.param.AUCT.ORI_CTFCINFO.length; j++){
+	            				if(bssInfoDataVO.param.AUCT.CTFCINFO[i].CD_CTFCINFO == bssInfoDataVO.param.AUCT.ORI_CTFCINFO[j].CD_CTFCINFO) {bssInfoDataVO.param.AUCT.CTFCINFO[i].TEMP = "UPDATE";return;}
+	            				if(j == bssInfoDataVO.param.AUCT.ORI_CTFCINFO.length - 1) bssInfoDataVO.param.AUCT.CTFCINFO[i].TEMP = "INSERT";
+	            			}
+	            		}
+	            	}
+	            	// 지마켓
+	            	for(var i = 0 ; bssInfoDataVO.param.GMRK.CTFCINFO.length; i++){
+	            		if(bssInfoDataVO.param.GMRK.CTFCINFO[i].CD_CTFCINFO != ""){
+	            			bssInfoDataVO.param.GMRK.CTFCINFO[i].TEMP = "DELETE";
+	            			for(var j = 0 ; bssInfoDataVO.param.GMRK.ORI_CTFCINFO.length; j++){
+	            				if(bssInfoDataVO.param.GMRK.ORI_CTFCINFO[i].CD_CTFCINFO != ""){
+	            					if(bssInfoDataVO.param.GMRK.CTFCINFO[i].CD_CTFCINFO == bssInfoDataVO.param.GMRK.ORI_CTFCINFO[j].CD_CTFCINFO) {bssInfoDataVO.param.GMRK.CTFCINFO[i].TEMP = "UPDATE";return;}
+	            					if(j == bssInfoDataVO.param.GMRK.ORI_CTFCINFO.length - 1) bssInfoDataVO.param.GMRK.CTFCINFO[i].TEMP = "INSERT";
+	            				}
+	            			}
+	            		}
 	            	}
 	            };
 	            
@@ -1992,6 +2453,7 @@
 	            	var grid = $("#gridOpt"+bssInfoDataVO.tempOPTTP).data("kendoGrid");
 		            	if(bssInfoDataVO.tempOPTTP != bssInfoDataVO.param.CD_OPTTP && grid.dataSource._data.length != 0){
 		            		if (confirm("원래의 옵션이 취소됩니다.\n계속 하시겠습니까?")) {
+		            			bssInfoDataVO.optDeleteList = new Array();
 	        					grid.cancelChanges();
 		            		}else{
 		            			$timeout(function() {
@@ -2150,6 +2612,7 @@
 	            	var self = this;
 	            	itBssItemSvc.getLiogList(bssInfoDataVO.param.CD_LIOG.CD_LIOG).then(function (res) {
 	            		bssInfoDataVO.param.ANNOINFOARTILIST = res.data;
+	            		bssInfoDataVO.param.ANNOTYPE = "INSERT";
         			});
 	            };
 	            
@@ -2268,6 +2731,7 @@
         					procedureParam: "USP_IT_02BSSITEMCOO01_GET&L_CD_COO@s",
         					L_CD_COO: ""
         					};
+	            	self.param.CD_COO = "";
 	            	if(flag == 0){
 	            		if(self.selectedCoo1){
 	            			param.L_CD_COO = "";
