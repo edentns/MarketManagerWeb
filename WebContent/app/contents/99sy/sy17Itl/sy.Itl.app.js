@@ -48,7 +48,7 @@
     				            		resData.mngMrkData.setSelectNames = history.mngMrkBindSelect;
     				            		resData.stJobModel                = history.stJobModel;
     				            		resData.stJobData.setSelectNames  = history.stJobBindSelect;
-    				            		resData.selectDate                = UtilSvc.grid.getSelectDate(history.selected, history.start, history.end);
+    				            		resData.selectDate                = UtilSvc.grid.getSelectDate(history.period);
     				            	}
     				            	else {
     				            		resData.mngMrkModel         = "*";

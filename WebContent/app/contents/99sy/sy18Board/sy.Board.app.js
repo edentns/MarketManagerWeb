@@ -1,7 +1,7 @@
 (function () {
     "use strict";
 
-    // [ma] Notice
+    // [SY] Board
     var qaApp = angular.module("sy.Board", ["sy.Board.controller", "sy.Board.service"]);
     angular.module("sy.Board.controller", [] );
     angular.module("sy.Board.service", [] );
@@ -45,15 +45,16 @@
 	                        			if(history){
 	    				            		resData.subject    = history.subject;
 	    				            		resData.writer     = history.writer;
-	    				            		resData.selectDate = UtilSvc.grid.getSelectDate(history.selected, history.start, history.end);
+	    				            		resData.selectDate = UtilSvc.grid.getSelectDate(history.period);
 	    				            	}
 	    				            	else {
 	    				            		resData.subject         = "";
 	    				            		resData.writer          = "";
-	    				            		resData.selectDate        = {};
-	    				            		resData.selectDate.start  = angular.copy(edt.getToday());
-	    				            		resData.selectDate.end    = angular.copy(edt.getToday());
-	    				            		resData.selectDate.selected = '1Week';
+	    				            		resData.selectDate      = {
+	    				            			start : angular.copy(edt.getToday()),
+	    				            			end   : angular.copy(edt.getToday()),
+	    				            			selected : '1Week'
+	    				            		};
 	    				            	}
 	    				            		
 	    		    					defer.resolve(resData);

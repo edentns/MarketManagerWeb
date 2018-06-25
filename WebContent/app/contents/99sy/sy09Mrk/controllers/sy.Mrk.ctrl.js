@@ -45,7 +45,7 @@
 	        		ItlStatCodeList: resData.ItlStatCodeList,
 	        		datesetting : {
 	        			dateType   : 'market',
-						buttonList : ['current', '1Day', '1Week', '1Month', 'range'],
+						buttonList : ['current', '1Day', '1Week', '1Month'],
 						selected   : resData.selectDate.selected,
 						period : {
 							start : resData.selectDate.start,
@@ -59,6 +59,8 @@
 	            		if(!page.isWriteable()){
 	    					$("#mrkKg .k-grid-toolbar").hide();
 	    				}
+	            		
+	            		dateVO.isOpen(false);
         			});
 					
 					$scope.gridMrkVO.dataSource.read();
@@ -80,31 +82,26 @@
                			}
                     });
 					
-	            	if(val) {
-	            		$scope.mrkKg.wrapper.height(657);
-	            		$scope.mrkKg.resize();
-	            		gridMrkVO.dataSource.pageSize(20);
-	            	}
-	            	else {
-	            		$scope.mrkKg.wrapper.height(798);
-	            		$scope.mrkKg.resize();
-	            		gridMrkVO.dataSource.pageSize(24);
-	            	}
+					var searchIdHeight = $("#searchId").height();
+	            	var settingHeight = $(window).height() - searchIdHeight - 90;
+	            	var pageSizeValue = val? 20 : 24;
+	            	
+            		$scope.mrkKg.wrapper.height(settingHeight);
+            		$scope.mrkKg.resize();
+            		gridMrkVO.dataSource.pageSize(pageSizeValue);
 	            };
 	             
                 dateVO.doInquiry = function () {// 검색조건에 해당하는 유저 정보를 가져온다.
                 	gridMrkVO.dataSource.read();
                 	var param = {
-                			MRK_LIST     : dateVO.selectedMrkIds,
-                			MRK_SELECT_INDEX : dateVO.MrkCodeList.allSelectNames,
-    						STAT_LIST    : dateVO.selectedItlStatIds,
-    						STAT_SELECT_INDEX : dateVO.ItlStatCodeList.allSelectNames,
-    						SELECTED_DATE: dateVO.datesetting.selected,
-    						START_DATE   : dateVO.datesetting.period.start,
-    						END_DATE     : dateVO.datesetting.period.end
-    	                };
-            			// 검색조건 세션스토리지에 임시 저장
-            			UtilSvc.grid.setInquiryParam(param);
+            			MRK_LIST     : dateVO.selectedMrkIds,
+            			MRK_SELECT_INDEX : dateVO.MrkCodeList.allSelectNames,
+						STAT_LIST    : dateVO.selectedItlStatIds,
+						STAT_SELECT_INDEX : dateVO.ItlStatCodeList.allSelectNames,
+						PERIOD : UtilSvc.grid.getDateSetting(dateVO.datesetting)
+	                };
+        			// 검색조건 세션스토리지에 임시 저장
+        			UtilSvc.grid.setInquiryParam(param);
                 };
 		        
                 //새로 저장시 유효성 검사 (수정 할 땐 비밀번호를 따로 입력할 필요할 없어서 required 하지 않아서 저장시 따로 함수를 만듦 kendo로는  editable true 일때만 됨)
@@ -385,7 +382,7 @@
        	   	   				//{field: "DTS_INSERT", title: "등록일자", width: 80, headerAttributes: gridHeaderAttributes},
        	   	   				//{field: "DTS_UPDATE", title: "수정일자", width: 80, headerAttributes: gridHeaderAttributes},
        	   	   				//{field: "NM_UPDATE",  title: "수정자" , width: 80, headerAttributes: gridHeaderAttributes},
-        		            {command: [{text:"연동체크", click: checkCon }, "destroy"], attributes:{class:"ta-l"}},
+        		            {command: [{text:"연동체크", click: checkCon }, "destroy"], width: 160, attributes:{class:"ta-l"}},
                 	],
                     collapse: function(e) {
                         // console.log(e.sender);

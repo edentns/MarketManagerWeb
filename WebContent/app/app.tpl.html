@@ -2,23 +2,20 @@
 	<header id="app-header" data-header-div></header>
 
 	<div id="app-main" class="container-fluid">
-		<div class="row">
-			<div id="menuMain" class="col-xs-2 col-sm-2" style="height:918px;">
-				<div id="menuView" style="padding:0 15px; width:100%;">
-					<menu-navigation menu-config="menu"></menu-navigation>
+		<div class="row" style="display:flex;">
+			<div id="menuMain" class="col-xs-2-fix" style="overflow:visible;">
+				<div id="menuView" style="padding:0 10px; width:100%; overflow:visible;">
+					<menu-navigation menu-config="menu" menu-height="100vh;"></menu-navigation>
 				</div>
-				<div id="leftAvtmSlides" style="border-width: 1px;border-style: double;margin: 0px;padding-left: 10px; background-color:white;">
+				<div id="leftAvtmSlides" style="border-width: 0px;border-style: double;margin: 0px;padding-left: 10px; background-color:white;">
 				</div>
 			</div>
-			<!-- <menu-navigation id="sidebar-left" class="col-xs-2 col-sm-2" menu-config="menu" menu-height="menuHeight"></menu-navigation> -->
-			<!-- <div data-ui-view="contentView"></div> -->
-			<div id="contentMain" class="col-xs-10 col-sm-10" style="width:91%; height:918px; margin:0; padding:0;">
+			<div id="contentMain" class="col-xs-12 col-sm-12" style="margin:0; padding:0;">
 				<div id="conView">
 					<div data-ui-view="contentView"></div>
 				</div>
-				<!-- <div id="helpView"><font style="font-size: 25px; color: #b7472a;">도움말</font></div> -->
 				<div id="helpView">
-					<textarea id="helpEditor" style="height:915px;"></textarea>
+					<textarea id="helpEditor"></textarea>
 				<div>
 			</div>
 		</div>

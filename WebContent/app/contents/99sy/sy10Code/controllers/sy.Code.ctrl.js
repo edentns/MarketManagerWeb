@@ -84,7 +84,7 @@
                         this.cancelRow();
                     },
                 	editable: false,
-                	height: 680,
+                	height: $(window).height() - 90 - 140,
                 	
                 	initLoad: function() {
                 		var self = this;

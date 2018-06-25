@@ -41,9 +41,9 @@
 #app-content.col-sm-10 {
   width: 100%;
 }
-#menuMain.col-sm-2 {
+#menuMain.col-sm-2-fix {
   opacity: 1;
-  width: 9%;
+  width: 174px;
 }
 
 .navbar {
@@ -82,6 +82,13 @@ a.show-sidebar:hover {
   -moz-transition: 0.2s;
   -o-transition: 0.2s;
   transition: 0.2s;
+  min-height: calc(100vh - 50px);
+}
+#contentMain {
+  min-height: calc(100vh - 50px);
+}
+#helpEditor {
+  min-height: calc(100vh - 50px);
 }
 #app-content {
   position: relative;
@@ -443,20 +450,18 @@ a.show-sidebar:hover {
 .expanded a.close-link {
   display:none;
 }
-#menuMain.col-xs-2 {
-  opacity: 0;
-  width: 0%;
+#menuMain.col-xs-2-fix {
+  opacity: 1;
+  width: 174px;
   padding: 0;
 }
-.sidebar-show #menuMain.col-xs-2 {
-  opacity: 1;
-  /*width: 16.666666666666664%;*/
-  width: 9%;
-  padding: 0 15px;
+.sidebar-show #menuMain.col-xs-2-fix {
+  opacity: 0;
+  width: 0%;
 }
 .sidebar-show #app-content.col-xs-12 {
   opacity: 1;
-  width: 83.33333333333334%;
+  width: 100%;
 }
 .expanded {
   overflow-y:scroll;

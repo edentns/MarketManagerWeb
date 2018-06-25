@@ -68,8 +68,6 @@
 	        		adulYnIds     : resData.adulYnIds,
 	        		taxClftList   : resData.taxCodeList,
 	        		taxClftIds    : resData.taxClftIds,
-	        		iClftList     : resData.iClftCodeList,
-	        		iClftIds      : resData.iClftIds,
 	        		iKindList     : resData.iKindCodeList,
 	        		iKindIds      : resData.iKindIds,
 	        		iStatList     : resData.iStatCodeList,
@@ -168,13 +166,11 @@
                     			read: function(e) {
                     				var me = this,
                     					param = {
-                    					procedureParam:"USP_IT_02BSSITEM01_GET&I_CD_CLFT@s|I_NM_ITEM@s|I_NM_MNFR@s|I_YN_ADULCTFC@s|I_CD_TAXCLFT@s|I_CD_ITEMCLFT@s|I_CD_ITEMKIND@s|I_CD_ITEMSTAT@s|I_DATEOPT@s|DATE_FROM@s|DATE_TO@s",
+                    					procedureParam:"USP_IT_02BSSITEM01_GET&I_CD_CLFT@s|I_NM_ITEM@s|I_YN_ADULCTFC@s|I_CD_TAXCLFT@s|I_CD_ITEMKIND@s|I_CD_ITEMSTAT@s|I_DATEOPT@s|DATE_FROM@s|DATE_TO@s",
                     					I_CD_CLFT :	bssItemDataVO.signItem.value,
                     					I_NM_ITEM : bssItemDataVO.nmItem.value,
-                    		        	I_NM_MNFR :	bssItemDataVO.nmMnfr.value,
                     					I_YN_ADULCTFC : bssItemDataVO.adulYnIds,
                     					I_CD_TAXCLFT  : bssItemDataVO.taxClftIds,
-                    					I_CD_ITEMCLFT : bssItemDataVO.iClftIds,
                     					I_CD_ITEMKIND : bssItemDataVO.iKindIds,
                     					I_CD_ITEMSTAT : bssItemDataVO.iStatIds,
                     					I_DATEOPT     : bssItemDataVO.selectedDateOption,
@@ -247,7 +243,7 @@
     															editable: false, 
     															nullable: false
     						    	    				   },						    	    				   
-    						    	    NM_MNFR: 	       {
+    						    	    NM_FGFT: 	       {
     			        										type: "string",
     			        										editable: false,
     			        										nullable: false //true 일때 defaultValue가 안 됨
@@ -257,7 +253,7 @@
                     											editable: false,
                         										nullable: false
                     									   },                    									   
-                    					SF_DE:	   	       {	
+                    					HTML_DETEXPL:	   	       {	
     			    									    	type: "string", 
     								    						editable: true,
     								    						nullable: false
@@ -282,21 +278,6 @@
                         										editable: true,
                         									    nullable: false
                     									   },
-                    					NO_CSMADVPHNE: 	   {
-                    											type: "string", 
-                    											editable: false, 
-                    											nullable: false
-                    									   },
-                    					CD_CTFOBJ: 	       {
-    				                    				    	type: "string", 
-    															editable: false, 
-    															nullable: false
-                    				    				   },	
-                    				    CD_CTFINFO: 	   {
-    				                    				    	type: "string", 
-    															editable: false, 
-    															nullable: false
-                    				    				   },
                     				    DTS_INSERT: 	   {
     				                    				    	type: "string", 
     															editable: false, 
@@ -312,7 +293,7 @@
     															editable: false, 
     															nullable: false
                     				    				   },	
-                    				    CD_ITEMCLFT:       { 	
+                    				    DT_FGFTPRESSTART:  { 	
     				                    				    	type: "string", 
     															editable: false, 
     															nullable: false
@@ -358,8 +339,7 @@
   			                        field: "ROW_CHK",
   			                        title: "<input class='k-checkbox' type='checkbox' id='grd_chk_master' ng-click='onBssGrdCkboxAllClick($event)'><label class='k-checkbox-label k-no-text' for='grd_chk_master' style='margin-bottom:0;'>​</label>",
 			                        width: "40px",
-  			                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px; vertical-align:middle;"},
-  			                        selectable: true
+  			                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px; vertical-align:middle;"}
                   	            },                        
   		                        {	
                   	            	field: "CD_SIGNITEM",
@@ -404,14 +384,14 @@
   			                                ]
   		                        },                       
   		                        {
-  		                        	field: "NM_MNFR",
-  		                            title: "제조사",
+  		                        	field: "NM_FGFT",
+  		                            title: "사은품명",
   		                            width: 100,
   		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
   		                            columns: [ 
   		                                       	{
-  				                                    field: "CD_ITEMKIND",
-  				                                    title: "상품구분",
+  				                                    field: "DT_FGFTPRESSTART",
+  				                                    title: "사은품 증정시작일",
   				  		                            width: 100,
   							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
   				                                }
@@ -446,7 +426,7 @@
   			                                ]
   		                        },                        
   		                        {
-  		                        	field: "SF_DE",
+  		                        	field: "HTML_DETEXPL",
   		                            title: "상세설명",
   		                            width: 100,
   		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
@@ -494,7 +474,7 @@
   		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
   		                            columns: [ 
   		                                       	{
-  				                                    field: "DTS_VLD",
+  				                                    field: "DT_VLD",
   				                                    title: "유효일시",
   				  		                            width: 100,
   							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
@@ -530,8 +510,10 @@
 	                
 	                if (checked) {
 	                	row.addClass("k-state-selected");
+	                	row.find(".k-checkbox").prop( "checked", true );
 	                } else {
 	                	row.removeClass("k-state-selected");
+	                	row.find(".k-checkbox").prop( "checked", false );
 	                };
                 };
                 
@@ -564,22 +546,6 @@
 	                	row.find(".k-checkbox").prop( "checked", false );
 	                };
                 };
-
-                $scope.onCsGridEditClick = function(){            	
-                	var grd = $scope.cskg,
-	            		chked = grd.element.find("input:checked"),
-	            		chkedLeng = grd.element.find("input:checked").length;
-                	
-                	if(chkedLeng === 1){
-                		grd.editRow(chked.closest('tr'));
-                	}else if(chkedLeng > 1){
-                		//alert("답변 하실 데이터를 1개만 선택해 주세요.");
-                		$scope.showPopup("답변 하실 데이터를 1개만 선택해 주세요.");
-                	}else if(chkedLeng < 1){
-                		//alert("답변 하실 데이터를 선택해 주세요.");
-                		$scope.showPopup("답변 하실 데이터를 선택해 주세요.");
-                	}
-                };	
                 
                 //alert 경고
                 $scope.notf1Options = {

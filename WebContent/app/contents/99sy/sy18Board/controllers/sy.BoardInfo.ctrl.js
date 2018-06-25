@@ -32,7 +32,7 @@
     					L_NO_BOARD: $stateParams.ids
     				};
                 	UtilSvc.getList(param).then(function (res) {
-						$scope.boardCommentDataVO.boxTitle = "댓글 "+res.data.results[0].length+"건";
+						$scope.boardCommentDataVO.boxTitle = "댓글 "+res.data.results[1][0].CNT_COMMENT+"건";
 						if(res.data.results[0].length >= 1) {
 							$scope.boardCommentDataVO.listOptions.dataSource.data(res.data.results[0]);
 							//e.success(res.data.results[0]);
@@ -65,18 +65,20 @@
 	            
 	            // 게시글 삭제
 	            boardInfoDataVO.goDelete = function() {
-	            	var params = {
-	            		NO_BOARD: $stateParams.ids
-	            	};
-	            	SyBoardSvc.boardSave(params, "D").then(function(res) {
-        				if(res.data) {
-        					alert('게시글 삭제하였습니다.');
-        					$state.go('app.syBoard', { kind: 'list', menu: true, ids: null });
-        				}
-        				else {
-        					alert('게시글 삭제에 실패하였습니다.');
-        				}
-        			});
+	            	if(!confirm("삭제하시겠습니까?")) {	
+		            	var params = {
+		            		NO_BOARD: $stateParams.ids
+		            	};
+		            	SyBoardSvc.boardSave(params, "D").then(function(res) {
+	        				if(res.data) {
+	        					alert('게시글 삭제하였습니다.');
+	        					$state.go('app.syBoard', { kind: 'list', menu: true, ids: null });
+	        				}
+	        				else {
+	        					alert('게시글 삭제에 실패하였습니다.');
+	        				}
+	        			});
+	            	}
 	            }
 	            
 	            // 목록으로 이동
@@ -225,7 +227,7 @@
 	                            	UtilSvc.getList(param).then(function (res) {
 	            						if(res.data.results[0].length >= 1) {
 	            							$scope.boardCommentDataVO.listOptions.dataSource.data(res.data.results[0]);
-	            							$scope.boardCommentDataVO.boxTitle = "댓글 "+res.data.results[0].length+"건";
+	            							$scope.boardCommentDataVO.boxTitle = "댓글 "+res.data.results[1][0].CNT_COMMENT+"건";
 	            							boardCmtRegDataVO.params.DC_COMMENT = "";
 	            						}
 	            					});

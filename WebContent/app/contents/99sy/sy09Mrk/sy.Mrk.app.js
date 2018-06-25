@@ -45,15 +45,15 @@
     				            		resData.MrkCodeList.setSelectNames     = history.MRK_SELECT_INDEX;
     				            		resData.selectedItlStatIds             = history.STAT_LIST;
     				            		resData.ItlStatCodeList.setSelectNames = history.STAT_SELECT_INDEX;
-    				            		resData.selectDate                     = UtilSvc.grid.getSelectDate(history.SELECTED_DATE, history.START_DATE, history.END_DATE);
+    				            		resData.selectDate                     = UtilSvc.grid.getSelectDate(history.PERIOD);
     				            	}
     				            	else {
     				            		resData.selectedMrkIds     = "*";
     				            		resData.selectedItlStatIds = "*";
     				            		resData.selectDate = {};
-    				            		resData.selectDate.start              = angular.copy(edt.getToday());
-    				            		resData.selectDate.end                = angular.copy(edt.getToday());
-    				            		resData.selectDate.selected           = '1Day';
+    				            		resData.selectDate.start    = angular.copy(edt.getToday());
+    				            		resData.selectDate.end      = angular.copy(edt.getToday());
+    				            		resData.selectDate.selected = '1Day';
     				            	}
     				            		
     		    					defer.resolve(resData);

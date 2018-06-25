@@ -22,7 +22,7 @@
 				},
 				
 				/**
-				 * 리스트 화면에서 상품삭제
+				 * 리스트 화면에서 상품삭제getLiogList
 				 */
 				deleteBssItem : function(param) {
 					return $http({
@@ -82,6 +82,20 @@
 				
 				itemPreviewModal : function(src) {
 					var modalInstance = ModalSvc.itemPreviewModal(src);
+					return modalInstance.result;
+				},
+				
+				// 상품군에 해당하는 항목명들 가져오기
+				getLiogList : function(param) {
+					return $http({
+						method  : "POST",
+                        url     : APP_CONFIG.domain +"/it02Bss/getLiogList",
+                        data    : param
+					});
+				},
+				
+				quisevModal : function() {
+					var modalInstance = ModalSvc.quisevModal();
 					return modalInstance.result;
 				}
 				

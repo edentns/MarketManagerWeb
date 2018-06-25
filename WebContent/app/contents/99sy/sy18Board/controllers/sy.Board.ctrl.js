@@ -13,6 +13,9 @@
 		            today = edt.getToday(),
 		            gridHeaderAttributes = {"class": "table-header-cell", style: "text-align: center; font-size: 12px"};
 
+	            /*
+	             * 글쓰기 버튼 클릭시 실행되는 함수
+	             */
 	            $scope.moveBoardWrite = function() {
 	            	var defer = $q.defer();
     				
@@ -32,6 +35,9 @@
         			return defer.promise;
 				};
 
+				/*
+				 * 닉네임 변경 버튼 클릭시 실행되는 함수
+				 */
 	            $scope.moveMyInfo = function() {
 	            	$state.go('app.syMyInfo', { kind: "", menu: null });
 				};
@@ -40,7 +46,7 @@
 	            	boxTitle : "게시판",
 	            	datesetting : {
 	        			dateType   : 'market',
-						buttonList : ['current', '1Day', '1Week', '1Month', 'range'],
+						buttonList : ['current', '1Day', '1Week', '1Month'],
 						selected   : resData.selectDate.selected,
 						period : {
 							start : resData.selectDate.start,
@@ -50,20 +56,25 @@
              	    subject : resData.subject,  // 제목
              	    writer  : resData.writer    // 글쓴이
 		        };
-
+	      	  
 	            boardDataVO.isOpen = function (val) {
+	            	var searchIdHeight = $("#searchId").height();
+	            	var settingHeight = $(window).height() - searchIdHeight - 90;
 	            	if(val) {
-	            		$scope.syqakg.wrapper.height(657);
-	            		$scope.syqakg.resize();
-	            		gridSyQaVO.dataSource.pageSize(20);
+	            		$scope.kg.wrapper.height(settingHeight);
+	            		$scope.kg.resize();
+	            		gridBoardVO.dataSource.pageSize(20);
 	            	}
 	            	else {
-	            		$scope.syqakg.wrapper.height(798);
-	            		$scope.syqakg.resize();
-	            		gridSyQaVO.dataSource.pageSize(24);
+	            		$scope.kg.wrapper.height(settingHeight);
+	            		$scope.kg.resize();
+	            		gridBoardVO.dataSource.pageSize(24);
 	            	}
 	            };
 	            
+	            /*
+	             * 초기화 버튼 클릭시 실행되는 함수
+	             */
 	            boardDataVO.reset = function() {
 	            	var self = this;
 	            	self.datesetting.period.start = angular.copy(edt.getToday());
@@ -71,14 +82,12 @@
 	            	self.datesetting.selected = '1Week';
 	            };
 	            
+	            /*
+	             * 처음 화면 로딩시 실행되는 함수
+	             */
 	            boardDataVO.init = function() {
 	            	boardDataVO.search();
 	            };
-	            
-                var iNumWidth = "50px",
-                    iDateTimeWidth = "140px",
-                    iNullWidth = "0px";
-                var sEllipsis = "text-overflow: ellipsis; white-space: nowrap; overflow:hidden;";
 	            
 	            //toolTip
 	            UtilSvc.gridtooltipOptions.filter = "td";
@@ -86,33 +95,9 @@
 	            	
 	            //초기 실행
 	            boardDataVO.search = function(){
-	            	var self = this;
-	            	var param = {
-    						procedureParam: "USP_SY_18BOARD_SEARCH&L_DC_SBJ@s|L_NO_INSERT@s|L_START_DATE@s|L_END_DATE@s",
-    						L_DC_SBJ      : self.subject,
-    						L_NO_INSERT   : self.writer,
-    						L_START_DATE  : new Date(self.datesetting.period.start.y, self.datesetting.period.start.m-1, self.datesetting.period.start.d).dateFormat("Ymd"),
-    						L_END_DATE    : new Date(self.datesetting.period.end.y  , self.datesetting.period.end.m-1  , self.datesetting.period.end.d).dateFormat("Ymd")
-    					};
-					UtilSvc.getList(param).then(function (res) {
-						$scope.gridBoardVO.dataSource.data(res.data.results[0]);
-
-						// 조회한 조건을 localstorage에 저장함.
-						var inquiryParam = {
-							subject : self.subject,       
-							writer  : self.writer,
-							selected: self.datesetting.selected,
-    	                    start   : self.datesetting.period.start,
-    	                    end     : self.datesetting.period.end
-	                    };
-						
-	        			// 검색조건 세션스토리지에 임시 저장
-	        			UtilSvc.grid.setInquiryParam(inquiryParam);
-					});
-	            };	
-	            	  
-	            //open
-	            boardDataVO.isOpen = function(val){
+	            	gridBoardVO.dataSource.read().then(function(res) {
+	            		boardDataVO.isOpen(false);
+	            	});
 	            };	
 	            
 	            var gridBoardVO = $scope.gridBoardVO = {
@@ -132,6 +117,29 @@
                 	dataSource: new kendo.data.DataSource({
                 		transport: {
                 			read: function(e) {
+                				var self = boardDataVO;
+            	            	var param = {
+                						procedureParam: "USP_SY_18BOARD_SEARCH&L_DC_SBJ@s|L_NO_INSERT@s|L_START_DATE@s|L_END_DATE@s",
+                						L_DC_SBJ      : self.subject,
+                						L_NO_INSERT   : self.writer,
+                						L_START_DATE  : new Date(self.datesetting.period.start.y, self.datesetting.period.start.m-1, self.datesetting.period.start.d).dateFormat("Ymd"),
+                						L_END_DATE    : new Date(self.datesetting.period.end.y  , self.datesetting.period.end.m-1  , self.datesetting.period.end.d).dateFormat("Ymd")
+                					};
+            					UtilSvc.getList(param).then(function (res) {
+            						e.success(res.data.results[0]);
+
+            						// 조회한 조건을 localstorage에 저장함.
+            						var inquiryParam = {
+            							subject : self.subject,       
+            							writer  : self.writer,
+            							period  : UtilSvc.grid.getDateSetting(self.datesetting)
+            	                    };
+            						
+            	        			// 검색조건 세션스토리지에 임시 저장
+            	        			UtilSvc.grid.setInquiryParam(inquiryParam);
+            					}, function(err){
+            						e.error([]);
+            					});
                 			},
                 			parameterMap: function(e, operation) {
                 				if(operation !== "read" && e.models) {
@@ -168,8 +176,8 @@
    	   						headerAttributes: gridHeaderAttributes},
         		           {field: "NM_NKNE", title: "글쓴이", width: 100,
        	   					headerAttributes: gridHeaderAttributes},
-        		           {field: "DTS_INSERT", title: "날짜", width: 130, headerAttributes: gridHeaderAttributes},
-        		           {field: "CNT_SEL"   , title: "조회수", width: 80, attributes: {class:"ta-r"}, headerAttributes: gridHeaderAttributes}
+        		           {field: "DTS_INSERT", title: "등록일시", width: 130, headerAttributes: gridHeaderAttributes},
+        		           {field: "CNT_SEL"   , title: "조회", width: 80, attributes: {class:"ta-r"}, headerAttributes: gridHeaderAttributes}
                 	],
                     collapse: function(e) {
                         // console.log(e.sender);

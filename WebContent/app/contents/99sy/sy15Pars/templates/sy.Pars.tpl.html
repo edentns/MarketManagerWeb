@@ -9,9 +9,9 @@
     </div>
     
     <div class="row">
-        <!-- 마켓분류 Layer -->
-        <div class="content-area-container col-xs-12" >
-            <div data-content-box-layer data-box-title="mrkName.boxTitle">
+        <!-- 검색 -->
+        <div class="content-area-container col-xs-12" id="searchId">
+            <div data-content-box-layer data-box-title="mrkName.boxTitle" data-is-open="sy15ParsVO.isOpen(val)">
                 <form class="box-content-search">
                 	관리마켓 &nbsp;&nbsp;
 					<select kendo-drop-down-list k-options="mrkName.mngMrkDs" k-ng-model="mrkName.mngMrkMd" style="width:20%;"></select>
@@ -23,7 +23,7 @@
             </div>
         </div>
         
-        <div class="content-area-container col-xs-12" style="padding:0px 0px 0px 0px;">
+        <div class="content-area-container col-xs-12" style="padding:0px 0px 0px 0px; margin-top:-5px;">
 			<div class="content-area-container col-xs-4">
 				<div data-content-box-layer data-box-title="sy15ParsGridVO[0].boxTitle">
 	                <kendo-grid options="sy15ParsGridVO[0]" id="grid0">
@@ -43,5 +43,5 @@
                 </div>
 			</div>
         </div>
- 
+ 	</div>
 </div>

@@ -7,8 +7,8 @@
      * 상품분류관리
      */
     angular.module("it.SaleSiteItem.controller")
-        .controller("it.SaleSiteItemCtrl", ["$scope", "$http", "$q", "$log", "it.SaleSiteItemSvc", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc",
-            function ($scope, $http, $q, $log, itSaleSiteItemSvc, APP_CODE, $timeout, resData, Page, UtilSvc) {
+        .controller("it.SaleSiteItemListCtrl", ["$scope", "$state", "$http", "$q", "$log", "it.SaleSiteItemSvc", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc",
+            function ($scope, $state, $http, $q, $log, itSaleSiteItemSvc, APP_CODE, $timeout, resData, Page, UtilSvc) {
 	            var page  = $scope.page = new Page({ auth: resData.access }),
 		            today = edt.getToday();
 
@@ -16,6 +16,65 @@
                 	itSaleSiteItemSvc.saleSiteDetail(NO_MRKREGITEM).then(function() {
 	            	}, function() {
 					});
+                };
+                
+              //kendo grid 체크박스 옵션
+                $scope.onSaleGrdCkboxClick = function(e){
+	                var element =$(e.currentTarget);
+	                
+	                var checked = element.is(':checked'),
+	                	row = element.closest("tr"),
+	                	grid = $scope.gridSaleVO,
+	                	dataItem = grid.dataItem(row);
+	                 	                
+	                dataItem.ROW_CHK = checked;
+	                
+	                if (checked) {
+	                	row.addClass("k-state-selected");
+	                } else {
+	                	row.removeClass("k-state-selected");
+	                };
+                };
+                
+                $scope.onCsGridEditClick = function(){            	
+                	var grd = $scope.cskg,
+	            		chked = grd.element.find("input:checked"),
+	            		chkedLeng = grd.element.find("input:checked").length;
+                	
+                	if(chkedLeng === 1){
+                		grd.editRow(chked.closest('tr'));
+                	}else if(chkedLeng > 1){
+                		//alert("답변 하실 데이터를 1개만 선택해 주세요.");
+                		$scope.showPopup("답변 하실 데이터를 1개만 선택해 주세요.");
+                	}else if(chkedLeng < 1){
+                		//alert("답변 하실 데이터를 선택해 주세요.");
+                		$scope.showPopup("답변 하실 데이터를 선택해 주세요.");
+                	}
+                };	
+                
+                //alert 경고
+                $scope.notf1Options = {
+            		position: {
+                        // notification popup will scroll together with the other content
+                        pinned: false,
+                        // the first notification popup will appear 30px from the viewport's top and right edge
+                        top: 30,
+                        left: 30,
+                        height: 300,
+                        width: 250
+                    },	
+                    templates: [{                    	
+                        type: "warning",
+                        template: $("#notificationTemplate").html()
+                    }]
+                };
+
+                $scope.ngValue = "[닫기]";
+
+                $scope.showPopup = function (msg) {
+                    $scope.notf1.show({
+                      kValue: msg
+                    }, "warning");
                 };
                 
 	            var saleItemDataVO = $scope.saleItemDataVO = {
@@ -403,65 +462,10 @@
 		            	}
 	            	}
 	            };
-                                
-                //kendo grid 체크박스 옵션
-                $scope.onSaleGrdCkboxClick = function(e){
-	                var element =$(e.currentTarget);
-	                
-	                var checked = element.is(':checked'),
-	                	row = element.closest("tr"),
-	                	grid = $scope.gridSaleVO,
-	                	dataItem = grid.dataItem(row);
-	                 	                
-	                dataItem.ROW_CHK = checked;
-	                
-	                if (checked) {
-	                	row.addClass("k-state-selected");
-	                } else {
-	                	row.removeClass("k-state-selected");
-	                };
-                };
-                
-                $scope.onCsGridEditClick = function(){            	
-                	var grd = $scope.cskg,
-	            		chked = grd.element.find("input:checked"),
-	            		chkedLeng = grd.element.find("input:checked").length;
-                	
-                	if(chkedLeng === 1){
-                		grd.editRow(chked.closest('tr'));
-                	}else if(chkedLeng > 1){
-                		//alert("답변 하실 데이터를 1개만 선택해 주세요.");
-                		$scope.showPopup("답변 하실 데이터를 1개만 선택해 주세요.");
-                	}else if(chkedLeng < 1){
-                		//alert("답변 하실 데이터를 선택해 주세요.");
-                		$scope.showPopup("답변 하실 데이터를 선택해 주세요.");
-                	}
-                };	
-                
-                //alert 경고
-                $scope.notf1Options = {
-            		position: {
-                        // notification popup will scroll together with the other content
-                        pinned: false,
-                        // the first notification popup will appear 30px from the viewport's top and right edge
-                        top: 30,
-                        left: 30,
-                        height: 300,
-                        width: 250
-                    },	
-                    templates: [{                    	
-                        type: "warning",
-                        template: $("#notificationTemplate").html()
-                    }]
-                };
-
-                $scope.ngValue = "[닫기]";
-
-                $scope.showPopup = function (msg) {
-                    $scope.notf1.show({
-                      kValue: msg
-                    }, "warning");
-                };
+	            
+	            /*saleItemDataVO.saleItemInsert = function(){
+	            	$state.go('app.itSaleSiteItem', { kind: "insert", menu: null, ids: "new" });
+	            };*/
                 
                 saleItemDataVO.doQuiry();
                 

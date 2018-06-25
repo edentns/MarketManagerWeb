@@ -12,7 +12,6 @@
         <div class="content-area-container col-xs-12">
             <div class="app-content-search ">
                 <div class="col-xs-6">
-
                 </div>
                 <div class="col-xs-6 ta-r">
                     <button data-ng-if="page.isWriteable()" type="button" class="ae-btn ae-save-btn" title="" data-ng-click="syAtrtVO.save()"><i class="fa fa-floppy-o"></i> 저장</button>
@@ -24,7 +23,7 @@
     <div class="row">
         <!-- 권한정보 Layer -->
         <div class="content-area-container col-xs-5">
-            <div data-content-box-layer data-box-title="syAtrtVO.boxTitle" data-content-height="height:756px; margin-bottom:-10px;">
+            <div data-content-box-layer data-box-title="syAtrtVO.boxTitle" data-content-height="margin-bottom:-10px;">
                 <div class="box-content-article"> 
                 	<div class="article-header">
 		                <div class="col-xs-6 article-header-box">
@@ -33,7 +32,7 @@
 		                </div>
 		            </div>
 	                <div class="article-view">
-	                    <div data-ui-grid="syAtrtVO.options" ui-grid-selection ui-grid-edit ui-grid-cellnav style="height:690px;"></div>
+	                    <div style="display:flex; height:{{syAtrtVO.height}};" data-ui-grid="syAtrtVO.options" ui-grid-auto-resize ui-grid-selection ui-grid-edit ui-grid-cellnav></div>
 	                </div>
             	</div>
             </div>
@@ -42,12 +41,10 @@
 
         <!-- 메뉴정보 Layer -->
         <div class="content-area-container col-xs-7" data-ng-controller="sy.AtrtMenuCtrl">
-            <div data-content-box-layer data-box-title="menuVO.boxTitle" data-content-height="height:756px; margin-bottom:-10px;">
+            <div data-content-box-layer data-box-title="menuVO.boxTitle" data-content-height="margin-bottom:-10px;">
                 <div class="box-content-article">
                     <div class="article-header">
- 
                         <div class="col-xs-6 article-header-box ta-r">
-
                         </div>
                     </div>
                     <div class="article-view">

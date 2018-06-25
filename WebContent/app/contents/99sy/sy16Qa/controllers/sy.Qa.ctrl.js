@@ -22,7 +22,7 @@
 	        		},
 	            	datesetting : {
 	        			dateType   : 'market',
-						buttonList : ['current', '1Day', '1Week', '1Month', 'range'],
+						buttonList : ['current', '1Day', '1Week', '1Month'],
 						selected   : resData.selectDate.selected,
 						period : {
 							start : resData.selectDate.start,
@@ -77,9 +77,7 @@
 	    						L_CONT: syQaDataVO.contentText.value,
 	    						L_CD_ANSSTAT : syQaDataVO.answerStatusModel,
 	    						L_CD_ANSSTAT_INDEX : syQaDataVO.answerStatusBind.allSelectNames,
-	    						L_SELECTED_DATE: syQaDataVO.datesetting.selected,
-	    						L_START_DATE  : syQaDataVO.datesetting.period.start,
-	    						L_END_DATE    : syQaDataVO.datesetting.period.end
+	    						L_PERIOD : UtilSvc.grid.getDateSetting(syQaDataVO.datesetting)
 	    	                };
 	            			// 검색조건 세션스토리지에 임시 저장
 	            			UtilSvc.grid.setInquiryParam(param);
@@ -121,13 +119,15 @@
 	            };
 
 	            syQaDataVO.isOpen = function (val) {
+	            	var searchIdHeight = $("#searchId").height();
+	            	var settingHeight = $(window).height() - searchIdHeight - 90;
 	            	if(val) {
-	            		$scope.syqakg.wrapper.height(657);
+	            		$scope.syqakg.wrapper.height(settingHeight);
 	            		$scope.syqakg.resize();
 	            		gridSyQaVO.dataSource.pageSize(20);
 	            	}
 	            	else {
-	            		$scope.syqakg.wrapper.height(798);
+	            		$scope.syqakg.wrapper.height(settingHeight);
 	            		$scope.syqakg.resize();
 	            		gridSyQaVO.dataSource.pageSize(24);
 	            	}
@@ -582,6 +582,8 @@
         		    };
 
 					$scope.gridSyQaVO.dataSource.read();
+
+            		syQaDataVO.isOpen(false);
                 },0);
                
                 //kendo grid 체크박스 옵션

@@ -24,13 +24,13 @@
                             SyLoginSvc.isLogin().then(function () {
                                 $rootScope.$emit("event:login");
                                 $q.all([
-                                        UtilSvc.getList(param).then(function (result) {  
+                                    UtilSvc.getList(param).then(function (result) {  
 		                            return result.data.results;
 		                        }),]).then(function (result) {
-		                        		resData.MyParam = result[0][0][0];
-		                        		resData.fileProfile = result[0][1][0];
-                                        defer.resolve( resData );
-                                    });
+	                        		resData.MyParam = result[0][0][0];
+	                        		resData.fileProfile = result[0][1][0];
+                                    defer.resolve( resData );
+                                });
                                 
                             });
                             return defer.promise;

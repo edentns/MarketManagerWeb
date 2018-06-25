@@ -43,7 +43,7 @@
     				            		resData.contentTextValue  = history.L_CONT;
     				            		resData.answerStatusModel = history.L_CD_ANSSTAT;
     				            		resData.answerStatusBind.setSelectNames = history.L_CD_ANSSTAT_INDEX;
-    				            		resData.selectDate        = UtilSvc.grid.getSelectDate(history.L_SELECTED_DATE, history.L_START_DATE, history.L_END_DATE);
+    				            		resData.selectDate        = UtilSvc.grid.getSelectDate(history.L_PERIOD);
     				            	}
     				            	else {
     				            		resData.contentTextValue    = "";

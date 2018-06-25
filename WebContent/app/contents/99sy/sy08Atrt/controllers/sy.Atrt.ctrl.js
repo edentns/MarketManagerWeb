@@ -46,7 +46,9 @@
                         NM_ATRT : ""
                     }
                 };
-
+                
+                syAtrtVO.height = $(window).height() - 90 - 131;
+                syAtrtVO.height = syAtrtVO.height + 'px'; 
                 /**
                  * 권한정보 grid option을 세팅한다.
                  */
@@ -56,12 +58,11 @@
                     enableCellEditOnFocus   : true,
 
                     data    : [],
-                    height  : 690,
                     rowTemplate : rowTemplate,
                     procedureParam: "USP_SY_08ATRT01_GET",
                     columnDefs  : [
                         { displayName : "권한코드", field : "NO_ATRT", width : 100, enableCellEdit: false },
-                        { displayName : "권한이름", field : "NM_ATRT", width : 150, enableCellEdit: true },
+                        { displayName : "권한이름", field : "NM_ATRT", width : 130, enableCellEdit: true },
                         { displayName : "사용여부", field : "YN_USE", width : 100, enableCellEdit: true, cellClass: "ta-c", cellFilter: "ynUse", editableCellTemplate: "ui-grid/dropdownEditor", editDropdownValueLabel: "YN_USE",
                             editDropdownOptionsArray : [  { id: "Y", YN_USE: "사용" }, { id: "N", YN_USE: "사용안함" }] },
                         { displayName : "수정일시", field : "DTS_UPDATE", width : 120, enableCellEdit: false }
