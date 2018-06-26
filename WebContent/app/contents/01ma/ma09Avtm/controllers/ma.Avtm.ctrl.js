@@ -347,6 +347,10 @@
                 	height: 802      
 	            };
 	            
-            	$scope.gridAvtmClftVO.dataSource.read();
+            	$scope.gridAvtmClftVO.dataSource.read().then(function(res) {
+//            		var settingHeight = $(window).height() - 120;
+//            		$scope.avtmClftkg.wrapper.height(settingHeight);
+//            		$scope.avtmkg.wrapper.height(settingHeight);            		
+            	});
             }]);
 }());

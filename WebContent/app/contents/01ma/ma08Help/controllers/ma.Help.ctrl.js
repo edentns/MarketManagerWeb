@@ -53,21 +53,19 @@
 	            };
 	            
 	            editorHelpVO.initEditor = function() {
-	            	var grid = $("#divMenuGrd").data("kendoGrid");
-                	var dataItem = grid.dataItem(grid.select());
-                	
-	            	//var dataItem = gridMenuVO.dataItem(gridMenuVO.select());
-	            	
-            		var param = {
-    					procedureParam: "USP_MA_08HELP02_GET&L_ID_CMP@s",
-    					L_ID_CMP : dataItem.ID_CMP
-    				};
-					UtilSvc.getList(param).then(function (res) {
-						if(res.data.results[0].length === 0) editorHelpVO.DC_HTMLCONTENT = '';
-						else editorHelpVO.DC_HTMLCONTENT = res.data.results[0][0].DC_HTMLCONTENT;
-						
-						editorHelpVO.ID_CMP = dataItem.ID_CMP;
-					});
+//	            	var grid = $("#divMenuGrd").data("kendoGrid");
+//                	var dataItem = grid.dataItem(grid.select());
+//                	
+//            		var param = {
+//    					procedureParam: "USP_MA_08HELP02_GET&L_ID_CMP@s",
+//    					L_ID_CMP : dataItem.ID_CMP
+//    				};
+//					UtilSvc.getList(param).then(function (res) {
+//						if(res.data.results[0].length === 0) editorHelpVO.DC_HTMLCONTENT = '';
+//						else editorHelpVO.DC_HTMLCONTENT = res.data.results[0][0].DC_HTMLCONTENT;
+//						
+//						editorHelpVO.ID_CMP = dataItem.ID_CMP;
+//					});
 	            };
 	            
 	            var gridMenuVO = $scope.gridMenuVO = {
@@ -147,6 +145,9 @@
                 	height: 802      
 	            };
 	            
-            	$scope.gridMenuVO.dataSource.read();
+            	$scope.gridMenuVO.dataSource.read().then(function(res) {
+//            		var settingHeight = $(window).height() - 120;
+//            		$scope.menukg.wrapper.height(settingHeight);
+            	});
             }]);
 }());

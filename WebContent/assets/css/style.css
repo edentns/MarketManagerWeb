@@ -207,7 +207,7 @@ a.show-sidebar:hover {
 }
 #app-main {
   /*margin-top: 50px;*/
-  min-height: 800px;
+  min-height: 400px;
   overflow: hidden;
 }
 #search {

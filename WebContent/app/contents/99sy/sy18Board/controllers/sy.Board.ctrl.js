@@ -60,16 +60,10 @@
 	            boardDataVO.isOpen = function (val) {
 	            	var searchIdHeight = $("#searchId").height();
 	            	var settingHeight = $(window).height() - searchIdHeight - 90;
-	            	if(val) {
-	            		$scope.kg.wrapper.height(settingHeight);
-	            		$scope.kg.resize();
-	            		gridBoardVO.dataSource.pageSize(20);
-	            	}
-	            	else {
-	            		$scope.kg.wrapper.height(settingHeight);
-	            		$scope.kg.resize();
-	            		gridBoardVO.dataSource.pageSize(24);
-	            	}
+	            	var pageSizeValue = val? 20 : 24;
+	            	$scope.kg.wrapper.height(settingHeight);
+            		$scope.kg.resize();
+            		gridBoardVO.dataSource.pageSize(pageSizeValue);
 	            };
 	            
 	            /*

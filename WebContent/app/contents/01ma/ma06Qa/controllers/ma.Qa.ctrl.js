@@ -23,15 +23,15 @@
 	            	datesetting : {
 	        			dateType   : 'market',
 						buttonList : ['current', '1Day', '1Week', '1Month'],
-						selected   : '1Week',
+						selected   : resData.selectDate.selected,
 						period : {
-							start : angular.copy(today),
-							end   : angular.copy(today)
+							start : resData.selectDate.start,
+							end   : resData.selectDate.end
 						}
 	        		},
-                    contentText: { value: "" , focus: false},			//제목,내용
-                    answerStatusModel : "*",                     	    //답변처리상태 모델
-                    answerStatusBind : [],                     	    	//답변처리상태 옵션                    
+                    contentText: { value: resData.contentText , focus: false}, //제목,내용
+                    answerStatusModel : resData.answerStatusModel,             //답변처리상태 모델
+                    answerStatusBind : resData.answerStatusBind,               //답변처리상태 옵션                    
                     allSelectTargetModel : [],							//전체 선택시 공지대상자들 아이디를 담아 놓는 모델 
                     qaNocModel : [],									//문의대상
                     qaNocOp : {											//조회시 필요한 문의대상 드랍다운
@@ -40,12 +40,10 @@
                         placeholder: "가입자를 선택해 주세요.",
                         dataTextField: "NM",
                         dataValueField: "NO_C",
-                        valuePrimitive: true /*,
-                        minLength: 1000000,				//아래로 목록이 안 뜨게 하기 위함;
-                        enforceMinLength: true	        //아래로 목록이 안 뜨게 하기 위함; */
+                        valuePrimitive: true
                     },
                     customOptions : {
-                    	dataSource: [],
+                    	dataSource: angular.copy(resData.answerStatusBind).splice(0,1),
                         dataTextField: "NM_DEF",
                         dataValueField: "CD_DEF",
                         optionLabel: "선택해 주세요.",
@@ -63,24 +61,6 @@
     				dataTotal : 0,
              	    resetAtGrd : ""
 		        };
-	            
-	            //답변 상태 바인딩
-	            qaDataVO.asrStsBind = (function(){
-	            	var self = this, param = {
-    					lnomngcdhd: "SYCH00091",
-    					lcdcls: "SY_000031"
-    				};
-        			UtilSvc.getCommonCodeList(param).then(function (res) {
-        					if(res.data.length >= 1){
-        						self.answerStatusBind = res.data;
-        						self.customOptions.dataSource = angular.copy(res.data);
-        						self.customOptions.dataSource.splice(0,1);
-        					}
-	        			},
-					    function(err) {
-	 				    	e.error([]);	 				       
-	 				    });
-	            });	            	
 	            
 	            //문의대상 바인딩
 	            qaDataVO.qaTgtBind = (function(proparam, e, seq, view){
@@ -141,16 +121,16 @@
          	    };
 	            	            
 	            //조회
-	            qaDataVO.inQuiry = function(qa, noc){
+	            qaDataVO.inQuiry = function(){
 	            	var me = this, dateSts = qaDataVO.datesetting.period.start, dateSte = qaDataVO.datesetting.period.end;
 	            	me.param = {
                     	CONT: qaDataVO.contentText.value,
                     	CD_ANSSTAT : qaDataVO.answerStatusModel,
                     	NO_C_S : qaDataVO.qaNocModel.toString(),                    	
-                    	DTS_FROM : (qa)? new Date(today.y, today.m, today.d-1, 23, 59, 58).dateFormat("YmdHis") : new Date(dateSts.y, dateSts.m-1, dateSts.d-1, 23, 59, 58).dateFormat("YmdHis"),
-                    	DTS_TO : (qa)? new Date(today.y, today.m, today.d, 23, 59, 58).dateFormat("YmdHis") : new Date(dateSte.y, dateSte.m-1, dateSte.d, 23, 59, 59).dateFormat("YmdHis"),
-                    	NO_QA : qa,
-                    	NO_SALE_C : noc
+                    	DTS_FROM : new Date(dateSts.y, dateSts.m-1, dateSts.d-1, 23, 59, 58).dateFormat("YmdHis"),
+                    	DTS_TO : new Date(dateSte.y, dateSte.m-1, dateSte.d, 23, 59, 59).dateFormat("YmdHis"),
+                    	CD_ANSSTAT_SELECT_INDEX : qaDataVO.answerStatusBind.allSelectNames,
+                    	PERIOD: UtilSvc.grid.getDateSetting(qaDataVO.datesetting)
                     }; 
 	            	
 	            	if(!me.answerStatusModel){ alert("답변처리상태를 입력해 주세요."); return false; };
@@ -159,7 +139,7 @@
 	            	
 	            	$scope.qakg.dataSource.data([]);
 	            	$scope.qakg.dataSource.page(1);
-	            	//$scope.nkg.dataSource.read();
+        			UtilSvc.grid.setInquiryParam(me.param);
 	            };	        
 	            	            
 	            //초기화버튼
@@ -194,15 +174,13 @@
 	            
 	            //open
 	            qaDataVO.isOpen = function(val){
-	            	if(val) {
-	            		$scope.qakg.wrapper.height(657);
-	            		$scope.qakg.resize();
-	            		gridQaVO.dataSource.pageSize(20);
-	            	}else {
-	            		$scope.qakg.wrapper.height(798);
-	            		$scope.qakg.resize();
-	            		gridQaVO.dataSource.pageSize(24);
-	            	}
+	            	var searchIdHeight = $("#searchId").height();
+	            	var settingHeight = $(window).height() - searchIdHeight - 90;
+	            	var pageSizeValue = val? 20 : 24;
+	            	
+	            	$scope.qakg.wrapper.height(settingHeight);
+            		$scope.qakg.resize();
+            		gridQaVO.dataSource.pageSize(pageSizeValue);
 	            };	
 	            
 	            qaDataVO.paramFunc =  function(param){
@@ -750,8 +728,9 @@
        				   $(".k-grid-delete").click(qaDataVO.stopEvent);
        			   };
 
-            	   qaDataVO.initCdTarget();   
-            	   qaDataVO.asrStsBind();
+            	   qaDataVO.initCdTarget();
+       			   qaDataVO.inQuiry();
+         	       qaDataVO.isOpen(false);
                });
                
             }]);

@@ -53,10 +53,11 @@
     				            		resData.fileGubunModel    = "*";
     				            		resData.ynDelModel        = "N";
     				            		resData.noC               = "";
-    				            		resData.selectDate        = {};
-    				            		resData.selectDate.start  = angular.copy(edt.getToday());
-    				            		resData.selectDate.end    = angular.copy(edt.getToday());
-    				            		resData.selectDate.selected = '1Week';
+    				            		resData.selectDate        = {
+    				            			start : angular.copy(edt.getToday()),
+    				            			end   : angular.copy(edt.getToday()),
+    				            			selected : '1Week'
+    				            		};
     				            	}
     				            		
     		    					defer.resolve(resData);
