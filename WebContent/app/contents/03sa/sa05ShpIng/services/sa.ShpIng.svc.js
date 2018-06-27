@@ -314,20 +314,24 @@
 						}
 						case 'SYMM170901_00001' : {//c
 							var qtyMrk = model.QT_ORD,
-								lowDdl = '', cdparsDdl = '', cdparsDdlDs = '';							
-							
-							cdparsDdlDs = Util03saSvc.shppingList().query({shippingType:"002", mrkType:noMrk});							
-							cdparsDdl = ele.find("select[name='CD_PARS_COU']").data("kendoDropDownList");	
-							cdparsDdlDs.$promise.then(function (data) { cdparsDdl.dataSource.data(data); });
+								lowDdl = '';					
 														
+							shippingList.shpList = Util03saSvc.shppingList().query({shippingType:"002", mrkType:model.NO_MRK});
+        					shippingList.mrks = model.NO_MRK;
+        					shippingList.selector = ele;
+        					shippingList.kg = kg;
+        					shippingList.label = "택배사를 선택해주세요.";
+        					shippingList.txtFld = "NM_PARS_TEXT";
+        					shippingList.valFld = "CD_PARS";
+        					shippingList.findEle = "CD_PARS_COU";
+
+        					this.shpList(shippingList);					
 							this.qtySelector(qtyMrk, ele, model);
 							
 							ele.find("select[name='CD_TKBKLRKRSN']").kendoDropDownList({
                 				dataSource : [],
     		        			dataTextField : "NM_DEF",
     		                    dataValueField : "CD_DEF"
-    	                		//optionLabel : "하위반품코드를 선택해 주세요 ",	                    
-    		                    //valuePrimitive : true
     	            		});
                 			
 							lowDdl = ele.find("select[name='CD_TKBKLRKRSN']").data("kendoDropDownList");
@@ -346,8 +350,7 @@
 			                    	if(lowDdl){
 			                    		lowDdl.dataSource.data(vo.tkbkhrnkrsnDsCouSub.filter(function(ele){
 			                    			return (ele.DC_RMK3 === cdDef) && (ele.DC_RMK1 === dcRmk1) && (ele.DC_RMK2 === nmDef);
-			                    		}));
-			                    		
+			                    		}));			                    		
 			                    		$timeout(function(){
 					                    	Util03saSvc.ddlSelectedIndex(ele, "CD_TKBKLRKRSN");
 				                    	});
