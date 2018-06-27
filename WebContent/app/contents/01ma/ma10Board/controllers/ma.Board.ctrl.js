@@ -25,7 +25,7 @@
 	            	boxTitle : "게시판",
 	            	datesetting : {
 	        			dateType   : 'market',
-						buttonList : ['current', '1Day', '1Week', '1Month', 'range'],
+						buttonList : ['current', '1Day', '1Week', '1Month'],
 						selected   : resData.selectDate.selected,
 						period : {
 							start : resData.selectDate.start,
@@ -38,16 +38,13 @@
 		        };
 
 	            boardDataVO.isOpen = function (val) {
-	            	if(val) {
-	            		$scope.syqakg.wrapper.height(657);
-	            		$scope.syqakg.resize();
-	            		gridSyQaVO.dataSource.pageSize(20);
-	            	}
-	            	else {
-	            		$scope.syqakg.wrapper.height(798);
-	            		$scope.syqakg.resize();
-	            		gridSyQaVO.dataSource.pageSize(24);
-	            	}
+	            	var searchIdHeight = $("#searchId").height();
+	            	var settingHeight = $(window).height() - searchIdHeight - 90;
+	            	var pageSizeValue = val? 20 : 24;
+	            	
+	            	$scope.kg.wrapper.height(settingHeight);
+            		$scope.kg.resize();
+            		gridBoardVO.dataSource.pageSize(pageSizeValue);
 	            };
 	            
 	            boardDataVO.reset = function() {
@@ -58,14 +55,16 @@
 	            };
 	            
 	            boardDataVO.init = function() {
-	            	boardDataVO.search();
+	            	boardDataVO.search(function(){
+	            		boardDataVO.isOpen(false);
+	            	});
 	            };
 	            
 	            UtilSvc.gridtooltipOptions.filter = "td";
 	            boardDataVO.tooltipOptions = UtilSvc.gridtooltipOptions;
 	            
 	            //초기 실행
-	            boardDataVO.search = function(){
+	            boardDataVO.search = function(func){
 	            	var self = this;
 	            	var param = {
     						procedureParam: "USP_MA_10BOARD_GET&L_DC_SBJ@s|L_NO_INSERT@s|L_START_DATE@s|L_END_DATE@s|L_CHECK@s",
@@ -88,6 +87,10 @@
 						
 	        			// 검색조건 세션스토리지에 임시 저장
 	        			UtilSvc.grid.setInquiryParam(inquiryParam);
+	        			
+	        			if(func !== undefined) {
+	        				func();
+	        			}
 					});
 	            };	
 	            

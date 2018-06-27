@@ -13,22 +13,7 @@
 		            today = edt.getToday();
 	            
 	            $scope.userInfo = JSON.parse($window.localStorage.getItem("USER"));
-	            		      
-	            //공지사항 구분 드랍 박스 실행	
-	            var connSetting = (function(){
-    				var param = {
-    					procedureParam: "USP_SY_10CODE02_GET&lnomngcdhd@s|lcdcls@s",
-    					lnomngcdhd: "SYCH00014",
-    					lcdcls: "SY_000014"
-    				};
-        			UtilSvc.getList(param).then(function (res) {
-        				if(res.data.results[0].length >= 1){
-        					noticeDataVO.noticeCdVO = res.data.results[0];
-        					noticeDataVO.popUpNoticeCdVO.dataSource = res.data.results[0];
-        				}
-        			});
-	            }());
-	            	            
+          
 	            //팝업 파일 리스트
 	            var fileList = (function(no){
 	            	var param = {
@@ -78,27 +63,25 @@
 	            	datesetting : {
 	        			dateType   : 'market',
 						buttonList : ['current', '1Day', '1Week', '1Month'],
-						selected   : '1Week',
+						selected   : resData.selectDate.selected,
 						period : {
-							start : angular.copy(today),
-							end   : angular.copy(today)
+							start : resData.selectDate.start,
+							end   : resData.selectDate.end
 						}
 	        		},
-	        		writeText: { value: "" , focus: false},				//작성자
-                    contentText: { value: "" , focus: false},			//제목/내용
-                    noticeCdModel : "*",								//공지구분	                    
+	        		writeText: { value: resData.writeText, focus: false},				//작성자
+                    contentText: { value: resData.contentText, focus: false},			//제목/내용
+                    noticeCdModel : resData.noticeCdModel,								//공지구분	                    
                     noticeTargetModel : ["*"],			   				//공지대상                    
-                    allSelectTargetModel : ["*"],							//전체 선택시 공지대상자들 아이디를 담아 놓는 모델 
-                    noticeCdVO : [],		 							//조회시 필요한 공지구분 드랍다운
+                    allSelectTargetModel : ["*"],						//전체 선택시 공지대상자들 아이디를 담아 놓는 모델 
+                    noticeCdVO : resData.noticeCdVO,                    //조회시 필요한 공지구분 드랍다운
                     noticeTargetVO : {									//조회시 필요한 공지대상 드랍다운
                     	tagTemplate: kendo.template($.trim($("#ma-notice-select-template").html())),
                     	tagMode: "single",
                         placeholder: "가입자를 선택해 주세요.",
                         dataTextField: "NM",
                         dataValueField: "NO_C",
-                        valuePrimitive: true /*,
-                        minLength: 1000000,				//아래로 목록이 안 뜨게 하기 위함;
-                        enforceMinLength: true	        //아래로 목록이 안 뜨게 하기 위함; */
+                        valuePrimitive: true
                     },
                     popUpNoticeTargetVO : {
                     	tagTemplate: kendo.template($.trim($("#ma-notice-select-template").html())),
@@ -109,10 +92,9 @@
                         valuePrimitive: true      
                     },
                     popUpNoticeCdVO : {
-    					dataSource: [],
+    					dataSource: resData.noticeCdVO,
     					dataTextField: "NM_DEF",
                         dataValueField: "CD_DEF",
-                      /*  optionLabel: {"NM_DEF": "공지구분을 선택해 주세요.", "CD_DEF": ""},*/
                     	valuePrimitive: true
     				},
     				fileDataVO : {
@@ -130,64 +112,24 @@
 
 	            UtilSvc.gridtooltipOptions.filter = "td";
 	            noticeDataVO.tooltipOptions = UtilSvc.gridtooltipOptions;
-	            
-	            noticeDataVO.kEditor = {
-	            	noNotice : "",
-                    path: "",
-         	    	tools: [
-         	    	   "bold",
-                       "italic",
-                       "underline",
-                       "strikethrough",
-                       "justifyLeft",
-                       "justifyCenter",
-                       "justifyRight",
-                       "justifyFull",
-                       "insertUnorderedList",
-                       "insertOrderedList",
-                       "indent",
-                       "outdent"/*,
-        	    	   "insertImage"*/
-                    ],
-                    imageBrowser: {
-                    	messages: {
-                    		dropFilesHere: "드래그 한 파일을 여기에 놓아 주세요.",
-                            empty: "비었음",
-                            uploadFile: "그림 파일 업로드"
-                        },
-                        change: function(е) {
-                            var selectedImage = e.sender._selectedItem();
-                            console.log('selectedImage', selectedImage);
-                        },
-                        transport: {
-                        	  read: function(e){
-                        		  var param = {
-                        			  procedureParam: "USP_MA_05NOTICE_FILELIST_GET&no@s",
-              	    				  no: noticeDataVO.kEditor.noNotice
-              	    			  };
-          	            		  UtilSvc.getList(param).then(function (res) {
-          	            			  if(res.data.results[0].length >= 1){
-          	            				  e.success(res.data.results[0]);		  
-          	            			  }else{
-          	            				  e.success([]);          	            				  
-          	            			  }
-          	            		  });
-              		          },
-                              destroy: {
-                            	  url: APP_CONFIG.domain + "/ut05FileUpload",
-                                  type: "DELETE"
-                              },
-                              uploadUrl : APP_CONFIG.domain + "/ut05FileUpload",
-                              thumbnailUrl: function(path, file){
-                            	  console.log(path, file);
-                              },
-                              imageUrl: function(e){
-                            	  /*console.log(e);
-                            	  return e;*/
-                              }
-                        }
-                    }
-         	    };
+	            UtilSvc.kendoEditor("010")
+	            noticeDataVO.kEditor = UtilSvc.kendoEditor("010"); 
+	            noticeDataVO.kEditor.tools = [
+	                "insertImage",
+	                "bold",
+					"italic",
+					"underline",
+					"strikethrough",
+					"justifyLeft",
+					"justifyCenter",
+					"justifyRight",
+					"justifyFull",
+					"insertUnorderedList",
+					"insertOrderedList",
+					"indent",
+					"outdent",
+	                "viewHtml"
+	            ];
 	            	            
 	            //조회
 	            noticeDataVO.inQuiry = function(){
@@ -199,7 +141,9 @@
                     	ARR_NO_C: noticeDataVO.noticeTargetModel.toString().replace(/,/g,'^'),
                     	SB_NM: noticeDataVO.contentText.value,
                     	NOTI_TO: new Date(noticeDataVO.datesetting.period.start.y, noticeDataVO.datesetting.period.start.m-1, noticeDataVO.datesetting.period.start.d, "00", "00", "00").dateFormat("YmdHis"),
-                    	NOTI_FROM: new Date(noticeDataVO.datesetting.period.end.y, noticeDataVO.datesetting.period.end.m-1, noticeDataVO.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis")
+                    	NOTI_FROM: new Date(noticeDataVO.datesetting.period.end.y, noticeDataVO.datesetting.period.end.m-1, noticeDataVO.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis"),
+                    	ARR_CD_NO_SELECT_INDEX: noticeDataVO.noticeCdVO.allSelectNames,
+                    	PERIOD: UtilSvc.grid.getDateSetting(noticeDataVO.datesetting)
                     }; 
 	            		          
 	            	if(!me.noticeTargetModel){ alert("공지대상을 입력해 주세요."); return; };
@@ -208,7 +152,8 @@
 	            	
 	            	$scope.nkg.dataSource.data([]);
 	            	$scope.nkg.dataSource.page(1);
-	            	//$scope.nkg.dataSource.read();
+	            	
+        			UtilSvc.grid.setInquiryParam(me.param);
 	            };	        
 	            
 	            //초기화버튼
@@ -246,16 +191,14 @@
 	            
 	            //open
 	            noticeDataVO.isOpen = function(val){
-	            	if(val) {
-	            		$scope.nkg.wrapper.height(657);
-	            		$scope.nkg.resize();
-	            		gridNoticeVO.dataSource.pageSize(20);
-	            	}else {
-	            		$scope.nkg.wrapper.height(798);
-	            		$scope.nkg.resize();
-	            		gridNoticeVO.dataSource.pageSize(24);
-	            	}
-	            };	            
+	            	var searchIdHeight = $("#searchId").height();
+	            	var settingHeight = $(window).height() - searchIdHeight - 90;
+	            	var pageSizeValue = val? 20 : 24;
+	            	
+	            	$scope.nkg.wrapper.height(settingHeight);
+            		$scope.nkg.resize();
+            		gridNoticeVO.dataSource.pageSize(pageSizeValue);
+	            };
 	            	            
 	            //저장 후 조회
 	            noticeDataVO.afterSaveQuery = function(param){
@@ -308,7 +251,12 @@
                         noRecords: true,
                     	dataSource: new kendo.data.DataSource({
                     		transport: {
-                    			read: function(e) {                   
+                    			read: function(e) {    
+                    				if(noticeDataVO.param === undefined) {
+                    					e.success([]);
+                    					return;
+                    				}
+                    				
                 					UtilSvc.getList(noticeDataVO.param).then(function (res) {
                 						if(res.data.results[0]){
                 							e.success(res.data.results[0]);
@@ -683,59 +631,10 @@
                     	},	
                     	edit: function (e) {
                     		$scope.memSearchPopGrd.repeaterItems = [];
-                    		/*var editor = $("#k-edi").data("kendoEditor");
-
-                            // attach a click handler on the tool button, which opens the ImageBrowser dialog
-                            editor.toolbar.element.find(".k-i-image").parent().click(function(){
-                                // a setTimeout is required, otherwise the ImageBrowser widget will still not be initialized
-                                $timeout(function(){
-            	            		  
-      	          	       		  var onUpload = function onUpload(e) {
-  		    	          	       	    e.formData = new FormData();
-  			    	          	       	e.formData.append("cd_at", "007");
-  			    	          	        e.formData.append("cd_ref1", "");
-  			    	          	        e.formData.append("cd_ref2", "");
-  			    	          	        e.formData.append("cd_ref3", "");
-  			    	          	        e.formData.append("cd_ref4", "");
-  			    	          	        e.formData.append("cd_ref5", "");
-  			    	          	        e.formData.append("bimage", true);
-      	          	       		  };
-            	            		  
-	  		    	          	    $("[data-role='upload']").kendoUpload({
-	      	          	       			  async: {
-	      	          	       				  saveUrl: APP_CONFIG.domain + "/ut05FileUpload"
-	  		    	          	          },
-	  		    	          	         upload: onUpload
-	  		    	          	    });       	       	
-	      	          	       		  
-                                    // retrieve the ImageBrowser widget object
-                                    var imageBrowser = $(".k-imagebrowser").data("kendoImageBrowser");
-                                    console.log(imageBrowser);
-                                    
-                                    // retrieve the ListView widget object
-                                    var listView = imageBrowsser.listView;
-                                    console.log(listView);
-
-                                    // retrieve the Upload widget object
-                                    var upload = imageBrowser.upload;
-                                    console.log(upload);
-
-                                    // retrieve the DropDownList widget object
-                                    var dropdownlist = imageBrowser.arrangeBy;
-                                    console.log(dropdownlist);                                   
-                                });
-                            });*/
-                            
                 		    //새 글 일때
                 		    if (e.model.isNew()) { 		    	
                 		        $(".k-grid-update").text("저장");
                 		        $(".k-window-title").text("공지 사항 등록");
-                		        
-                		       /* $scope.$apply(function(){
-                		        	e.model.NO_NOTICE = "123456798";
-                		        	console.log($scope.gridNoticeVO.dataSource.data()[0].NO_NOTICE);
-                		        }); */              		        
-                		        
                 		    //수정 할 글일때
                 		    }else{
                 		    	$(".k-grid-update").text("수정");
@@ -1128,10 +1027,11 @@
             		   $(".k-grid-delete").addClass("k-state-disabled");
        				   $(".k-grid-add").click(noticeDataVO.stopEvent);
        				   $(".k-grid-delete").click(noticeDataVO.stopEvent);
-       				}
+            	   }
 
-            	   initCdTarget();            	  
+            	   initCdTarget();            
+           		   noticeDataVO.inQuiry();
+            	   noticeDataVO.isOpen(false);	  
                });
-               
             }]);
 }());

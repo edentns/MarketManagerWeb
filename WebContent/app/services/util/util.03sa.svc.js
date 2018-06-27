@@ -126,14 +126,9 @@
 				if(getParam){        			        			        			
         			for(var w in me) {
         				if(w === "datesetting"){
-        					if(getParam.DTS_SELECTED === "current") {
-        						me[w].selected = getParam.DTS_SELECTED;
-        					}
-        					else {
-	        					me[w].selected     = "range";
-	        					me[w].period.start = getParam.DTS_STORAGE_FROM;
-	        					me[w].period.end   = getParam.DTS_STORAGE_TO;
-        					}
+        					me[w].selected     = getParam.DTS_SELECTED;
+        					me[w].period.start = getParam.DTS_STORAGE_FROM;
+        					me[w].period.end   = (getParam.TODAY === 1)?angular.copy(edt.getToday()):getParam.DTS_STORAGE_TO; 
         				}
         				if(w === "betweenDateOptionMo" ){ me[w] = getParam.DTS_CHK; }
         				if(w === "ordMrkNameOp"){

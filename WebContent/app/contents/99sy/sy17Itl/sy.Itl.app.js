@@ -51,12 +51,13 @@
     				            		resData.selectDate                = UtilSvc.grid.getSelectDate(history.period);
     				            	}
     				            	else {
-    				            		resData.mngMrkModel         = "*";
-    				            		resData.stJobModel          = "*";
-    				            		resData.selectDate          = {};
-    				            		resData.selectDate.start    = angular.copy(edt.getToday());
-    				            		resData.selectDate.end      = angular.copy(edt.getToday());
-    				            		resData.selectDate.selected = '1Week';
+    				            		resData.mngMrkModel = "*";
+    				            		resData.stJobModel  = "*";
+    				            		resData.selectDate  = {
+    				            			start : angular.copy(edt.getToday()),
+    				            			end   : angular.copy(edt.getToday()),
+    				            			selected : '1Week'
+    				            		};
     				            	}
     				            		
     		    					defer.resolve(resData);

@@ -46,12 +46,13 @@
     				            		resData.selectDate                = UtilSvc.grid.getSelectDate(history.PERIOD);
     				            	}
     				            	else {
-    				            		resData.contentTextValue    = "";
-    				            		resData.noticeCdModel       = "*";
-    				            		resData.selectDate          = {};
-    				            		resData.selectDate.start    = angular.copy(edt.getToday());
-    				            		resData.selectDate.end      = angular.copy(edt.getToday());
-    				            		resData.selectDate.selected = 'current';
+    				            		resData.contentTextValue = "";
+    				            		resData.noticeCdModel    = "*";
+    				            		resData.selectDate       = {
+    				            			start : angular.copy(edt.getToday()),
+    				            			end   : angular.copy(edt.getToday()),
+    				            			selected : 'current'
+    				            		};
     				            	}
     				            		
     		    					defer.resolve(resData);

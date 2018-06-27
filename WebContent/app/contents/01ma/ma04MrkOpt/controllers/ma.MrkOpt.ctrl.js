@@ -45,6 +45,10 @@
 		                	angular.forEach($scope.ma04MrkOptGridVO, function (ma04MrkOptLocalGridVO, iIndex) {
 		                		ma04MrkOptLocalGridVO = $scope.ma04MrkOptGridVO.addCommonGridVO(ma04MrkOptLocalGridVO, iIndex);
 		                    });
+		                	
+		                	$timeout(function() {
+		                		ma04MrkOptVO.isOpen(false);
+		                	});
 	            		}
 	    	            
 	            		self.doInquiry();
@@ -61,39 +65,22 @@
 	            };
 
 	            ma04MrkOptVO.isOpen = function (val) {
-	            	var iMinHeight = 349
-	            	  , iMaxHeight = 398
-	            	  , iMinPageS = 10
-	            	  , iMaxPageS = 12;
+	            	var searchIdHeight = $("#searchId").height();
+	            	var settingHeight = Math.trunc(($(window).height() - searchIdHeight - 95)/2);
+	            	var pageSizeValue = val? 10 : 12;
 	            	
-	            	if(val) {
-	            		$scope.kg0.wrapper.height(iMinHeight);
-	            		$scope.kg1.wrapper.height(iMinHeight);
-	            		$scope.kg2.wrapper.height(iMinHeight);
-	            		$scope.kg3.wrapper.height(iMinHeight);
-	            		$scope.kg0.resize();
-	            		$scope.kg1.resize();
-	            		$scope.kg2.resize();
-	            		$scope.kg3.resize();
-	            		ma04MrkOptGridVO[0].dataSource.pageSize(iMinPageS);
-	            		ma04MrkOptGridVO[1].dataSource.pageSize(iMinPageS);
-	            		ma04MrkOptGridVO[2].dataSource.pageSize(iMinPageS);
-	            		ma04MrkOptGridVO[3].dataSource.pageSize(iMinPageS);
-	            	}
-	            	else {
-	            		$scope.kg0.wrapper.height(iMaxHeight);
-	            		$scope.kg1.wrapper.height(iMaxHeight);
-	            		$scope.kg2.wrapper.height(iMaxHeight);
-	            		$scope.kg3.wrapper.height(iMaxHeight);
-	            		$scope.kg0.resize();
-	            		$scope.kg1.resize();
-	            		$scope.kg2.resize();
-	            		$scope.kg3.resize();
-	            		ma04MrkOptGridVO[0].dataSource.pageSize(iMaxPageS);
-	            		ma04MrkOptGridVO[1].dataSource.pageSize(iMaxPageS);
-	            		ma04MrkOptGridVO[2].dataSource.pageSize(iMaxPageS);
-	            		ma04MrkOptGridVO[3].dataSource.pageSize(iMaxPageS);
-	            	}
+	            	$scope.kg0.wrapper.height(settingHeight);
+            		$scope.kg1.wrapper.height(settingHeight);
+            		$scope.kg2.wrapper.height(settingHeight);
+            		$scope.kg3.wrapper.height(settingHeight);
+            		$scope.kg0.resize();
+            		$scope.kg1.resize();
+            		$scope.kg2.resize();
+            		$scope.kg3.resize();
+            		ma04MrkOptGridVO[0].dataSource.pageSize(pageSizeValue);
+            		ma04MrkOptGridVO[1].dataSource.pageSize(pageSizeValue);
+            		ma04MrkOptGridVO[2].dataSource.pageSize(pageSizeValue);
+            		ma04MrkOptGridVO[3].dataSource.pageSize(pageSizeValue);
 	            };
 	                  
 				var ma04MrkOptGridVO = $scope.ma04MrkOptGridVO = [{

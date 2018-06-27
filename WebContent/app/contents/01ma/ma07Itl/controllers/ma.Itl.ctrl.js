@@ -28,18 +28,18 @@
 	            	datesetting : {
 	        			dateType   : 'market',
 						buttonList : ['current', '1Day', '1Week', '1Month'],
-						selected   : '1Week',
+						selected   : resData.selectDate.selected,
 						period : {
-							start : angular.copy(today),
-							end   : angular.copy(today)
+							start : resData.selectDate.start,
+							end   : resData.selectDate.end
 						}
 	        		},
-                    mngMrkModel : "*",                                  //마켓명 모델
-                    mngMrkBind  : resData.mngMrkData,                                   //마켓명 옵션
-                    nmJobModel  : "*",                                  //작업명 모델
-                    nmJobBind   : resData.nmJobData,                                   //작업명 옵션                    
-                    stJobModel  : "*",                     	            //작업상태 모델
-                    stJobBind   : resData.stJobData,                     	    	    //작업상태 옵션
+                    mngMrkModel : resData.mngMrkModel, //마켓명 모델
+                    mngMrkBind  : resData.mngMrkBind,  //마켓명 옵션
+                    nmJobModel  : resData.nmJobModel,  //작업명 모델
+                    nmJobBind   : resData.nmJobBind,   //작업명 옵션                    
+                    stJobModel  : resData.stJobModel,   //작업상태 모델
+                    stJobBind   : resData.stJobBind,  //작업상태 옵션
 		        };
                 var iNumWidth = "50px",
                     iDateTimeWidth = "140px",
@@ -155,13 +155,41 @@
 	            	
 	            //초기 실행
 	            itlDataVO.search = function(){
+	            	var me = this; 
+	            	me.param = {
+						procedureParam: "USP_MA_07ITL_SEARCH&L_LIST01@s|L_LIST02@s|L_LIST03@s|L_START_DATE@s|L_END_DATE@s",
+						L_LIST01      : itlDataVO.mngMrkModel,
+						L_LIST02      : itlDataVO.nmJobModel,
+						L_LIST03      : itlDataVO.stJobModel,
+						L_START_DATE  : new Date(itlDataVO.datesetting.period.start.y, itlDataVO.datesetting.period.start.m-1, itlDataVO.datesetting.period.start.d).dateFormat("Ymd"),
+						L_END_DATE    : new Date(itlDataVO.datesetting.period.end.y  , itlDataVO.datesetting.period.end.m-1  , itlDataVO.datesetting.period.end.d).dateFormat("Ymd"),
+						L_LIST01_SELECT_INDEX : itlDataVO.mngMrkBind.allSelectNames,
+						L_LIST02_SELECT_INDEX : itlDataVO.nmJobBind.allSelectNames,
+						L_LIST03_SELECT_INDEX : itlDataVO.stJobBind.allSelectNames,
+						PERIOD: UtilSvc.grid.getDateSetting(itlDataVO.datesetting)
+					};
+	            	
 	            	$scope.itlkg.dataSource.data([]);
 	            	$scope.itlkg.dataSource.page(1);
-	            	$scope.itlkg.dataSource.read();
+        			UtilSvc.grid.setInquiryParam(me.param);
 	            };	
 	            	  
 	            //open
 	            itlDataVO.isOpen = function(val){
+	            	var searchIdHeight = $("#searchId").height();
+	            	var settingHeight = $(window).height() - searchIdHeight - 90 - 370;
+	            	var pageSizeValue = val? 8 : 12;
+	            	var gridObj = [$scope.ordkg, $scope.trankg, $scope.cankg, $scope.cskg, $scope.shikg];
+	            	var gridTabObj = [gridOrdVO, gridTranVO, $scope.gridCanVO, $scope.gridCsVO, $scope.gridShiVO];
+
+            		gridObj.forEach(function (currentObject, index) {
+	            		currentObject.wrapper.height(settingHeight);
+	            		currentObject.resize();
+	            	});
+            		
+            		gridTabObj.forEach(function (currentObject, index) {
+	            		currentObject.dataSource.pageSize(pageSizeValue);
+	            	});
 	            };	
 	            
 				//각 컬럼에 header 정보 넣어줌, 공통 모듈이 2줄 위주로 작성 되어 있기 떄문에  일부러 일케 했음 
@@ -192,15 +220,14 @@
                     dataSource: new kendo.data.DataSource({
                     	transport: {
                     		read: function(e) {
-                				var param = {
-                						procedureParam: "USP_MA_07ITL_SEARCH&L_LIST01@s|L_LIST02@s|L_LIST03@s|L_START_DATE@s|L_END_DATE@s",
-                						L_LIST01      : itlDataVO.mngMrkModel,
-                						L_LIST02      : itlDataVO.nmJobModel,
-                						L_LIST03      : itlDataVO.stJobModel,
-                						L_START_DATE  : new Date(itlDataVO.datesetting.period.start.y, itlDataVO.datesetting.period.start.m-1, itlDataVO.datesetting.period.start.d).dateFormat("Ymd"),
-                						L_END_DATE    : new Date(itlDataVO.datesetting.period.end.y  , itlDataVO.datesetting.period.end.m-1  , itlDataVO.datesetting.period.end.d).dateFormat("Ymd")
-                					};
-            					UtilSvc.getList(param).then(function (res) {
+            					UtilSvc.getList(itlDataVO.param).then(function (res) {
+            						if(res.data.results[0].length === 0) {
+            							$scope.ordkg.dataSource.data(res.data.results[0]);
+            							$scope.trankg.dataSource.data(res.data.results[0]);
+            							$scope.cankg.dataSource.data(res.data.results[0]);
+            							$scope.cskg.dataSource.data(res.data.results[0]);
+            							$scope.shikg.dataSource.data(res.data.results[0]);
+            						}
             						e.success(res.data.results[0]);
             					});
                 			},  		
@@ -514,5 +541,10 @@
                 	resizable: true,
                 	height: 285                 	
         		};
+                
+                $timeout(function () {
+                	itlDataVO.search();
+                	itlDataVO.isOpen(false);
+                });
             }]);
 }());

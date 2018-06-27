@@ -22,19 +22,19 @@
 	            	datesetting : {
 	        			dateType   : 'market',
 						buttonList : ['current', '1Day', '1Week', '1Month'],
-						selected   : '1Week',
+						selected   : resData.selectDate.selected,
 						period : {
-							start : edt.getWeekPeriod(edt.getPrevDate(todayString, "week", null)).st,
-							end   : angular.copy(today)
+							start : resData.selectDate.start,
+							end   : resData.selectDate.end
 						}
 	        		},
                     searchText: { value: "" , focus: false},	//검색어
-                    joinerStatusDt : "*",						//가입자 상태
-                    joinerProcNameDt : "*",			   			//상품명
-                    joinerBetweenDate: "",						//가입기간 
-                    StatusDtOptionVO : [],
-                    ProcNameDtOptionVO : [],
-                    BetweenDateOptionVO : [],
+                    joinerStatusDt : resData.YL,						//가입자 상태
+                    joinerProcNameDt : resData.IL,			   			//상품명
+                    joinerBetweenDate: resData.RMK,						//가입기간 
+                    StatusDtOptionVO : resData.StatusDtOptionVO,
+                    ProcNameDtOptionVO : resData.ProcNameDtOptionVO,
+                    BetweenDateOptionVO : resData.BetweenDateOptionVO,
              	    dataTotal : 0,
              	    resetAtGrd : "",
              	    param: ""
@@ -50,18 +50,22 @@
                     	IL:joinerDataVO.joinerProcNameDt,
                     	RMK:joinerDataVO.joinerBetweenDate,
                     	RMKTO:new Date(joinerDataVO.datesetting.period.start.y, joinerDataVO.datesetting.period.start.m-1, joinerDataVO.datesetting.period.start.d, "00", "00", "00").dateFormat("YmdHis"),
-                    	RMKFROM:new Date(joinerDataVO.datesetting.period.end.y, joinerDataVO.datesetting.period.end.m-1, joinerDataVO.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis")
+                    	RMKFROM:new Date(joinerDataVO.datesetting.period.end.y, joinerDataVO.datesetting.period.end.m-1, joinerDataVO.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis"),
+                    	YL_SELECT_INDEX : joinerDataVO.StatusDtOptionVO.allSelectNames,
+                    	IL_SELECT_INDEX :joinerDataVO.ProcNameDtOptionVO.allSelectNames,
+                    	PERIOD : UtilSvc.grid.getDateSetting(joinerDataVO.datesetting)
                     };
                 	
-	            	if(me.joinerStatusDt === ""){alert("가입자 상태 값을 입력해 주세요."); return false;};
-                	if(me.joinerProcNameDt === ""){alert("상품명을 입력해 주세요."); return false;};
-                	if(me.joinerBetweenDate === ""){alert("기간을 입력해 주세요."); return false;};
+	            	if(me.joinerStatusDt    === ""){alert("가입자 상태 값을 입력해 주세요."); return false;};
+                	if(me.joinerProcNameDt  === ""){alert("상품명을 입력해 주세요.");     return false;};
+                	if(me.joinerBetweenDate === ""){alert("기간을 입력해 주세요.");      return false;};
                 	if(me.param.RMKTO > me.param.RMKFROM){alert("기간을 올바르게 입력해 주세요."); return false;};
 	            	  
                 	$scope.checkedIds = [];
                 	$scope.kg.dataSource.data([]);
-                	$scope.kg.dataSource.page(1);
-	            	//$scope.kg.dataSource.read();	            	
+                	$scope.kg.dataSource.page(1)
+            	
+        			UtilSvc.grid.setInquiryParam(me.param);        	
 	            };
 	            //초기화버튼
 	            joinerDataVO.inIt = function(){
@@ -85,54 +89,14 @@
 	            };
 
 	            joinerDataVO.isOpen = function (val) {
-	            	if(val) {
-	            		$scope.kg.wrapper.height(656);
-	            		$scope.kg.resize();
-	            		if(joinerDataVO.param !== "") gridJoinerMemVO.dataSource.pageSize(20);
-	            	}
-	            	else {
-	            		$scope.kg.wrapper.height(798);
-	            		$scope.kg.resize();
-	            		if(joinerDataVO.param !== "") gridJoinerMemVO.dataSource.pageSize(24);
-	            	}
+	            	var searchIdHeight = $("#searchId").height();
+	            	var settingHeight = $(window).height() - searchIdHeight - 90;
+	            	var pageSizeValue = val? 20 : 24;
+	            	
+            		$scope.kg.wrapper.height(settingHeight);
+            		$scope.kg.resize();
+            		gridJoinerMemVO.dataSource.pageSize(pageSizeValue);
 	            };
-	            
-	            var connSetting = $scope.connSetting = {
-			        //가입자 상태
-		        	joinerStatusDt : function(){
-					        			var param = {
-					    					procedureParam: "USP_SY_10CODE02_GET&lnomngcdhd@s|lcdcls@s",
-					    					lnomngcdhd: "SYCH00002",
-					    					lcdcls: "SY_000002"
-					    				};            			
-					        			UtilSvc.getList(param).then(function (res) {
-					        				joinerDataVO.StatusDtOptionVO = res.data.results[0];
-					        			}); 
-		        					  },
-		            //상품명
-		            joinerProcNameDt : function(){
-						            	var param = {
-					    					procedureParam: "USP_SY_10CODE02_GET&lnomngcdhd@s|lcdcls@s",
-					    					lnomngcdhd: "SYCH00001",
-					    					lcdcls: "SY_000001"
-					    				};            			
-					        			UtilSvc.getList(param).then(function (res) {
-					        				joinerDataVO.ProcNameDtOptionVO = res.data.results[0];
-					        			}); 
-		            				  },
-		            //가입 기간
-		            joinerBetweenDate : function(){
-						            	var param = {
-					    					procedureParam: "USP_SY_10CODE02_GET&lnomngcdhd@s|lcdcls@s",
-					    					lnomngcdhd: "SYCH00015",
-					    					lcdcls: "SY_000015"
-					    				};            			
-					        			UtilSvc.getList(param).then(function (res) {
-					        				joinerDataVO.BetweenDateOptionVO = res.data.results[0];
-					        				joinerDataVO.joinerBetweenDate = res.data.results[0][0].CD_DEF;
-					        			}); 
-        							  }
-		        };
 	                   
 	            //마켓 검색 그리드
                 var gridJoinerMemVO = $scope.gridJoinerMemVO = {
@@ -156,8 +120,7 @@
                     	dataSource: new kendo.data.DataSource({
                     		transport: {
                     			read: function(e) {         				                    				
-                					UtilSvc.getList(joinerDataVO.param).then(function (res) {
-                						//joinerDataVO.dataTotal = res.data.results[0].length;                						
+                					UtilSvc.getList(joinerDataVO.param).then(function (res) {             						
                 						e.success(res.data.results[0]);   
                 					});                					
                     			},
@@ -383,9 +346,11 @@
                 	};
                 	return result;
                 };
-                                
-	            connSetting.joinerStatusDt();
-	            connSetting.joinerProcNameDt();
-	            connSetting.joinerBetweenDate();
+                
+                // 처음 로딩해서 조회함.
+                $timeout(function() {
+                	joinerDataVO.inQuiry();
+                	joinerDataVO.isOpen(false);
+                });
             }]);
 }());

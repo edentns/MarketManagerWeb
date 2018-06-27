@@ -38,10 +38,13 @@
 		        };
 
 	            fileDataVO.isOpen = function (val) {
-	            	if(val) {
-	            	}
-	            	else {
-	            	}
+	            	var searchIdHeight = $("#searchId").height();
+	            	var settingHeight = $(window).height() - searchIdHeight - 90;
+	            	var pageSizeValue = val? 20 : 24;
+	            	
+	            	$scope.kg.wrapper.height(settingHeight);
+            		$scope.kg.resize();
+            		gridFileVO.dataSource.pageSize(pageSizeValue);
 	            };
 	            
 	            fileDataVO.reset = function() {
@@ -54,15 +57,19 @@
 	            };
 	            
 	            fileDataVO.init = function() {
-	            	fileDataVO.search();
+	            	fileDataVO.search(function(){
+	            		fileDataVO.isOpen(false);
+	            	});
 	            };
 	            
 	            UtilSvc.gridtooltipOptions.filter = "td";
 	            fileDataVO.tooltipOptions = UtilSvc.gridtooltipOptions;
 	            
 	            //초기 실행
-	            fileDataVO.search = function(){
-	            	$scope.gridFileVO.dataSource.read();
+	            fileDataVO.search = function(func){
+	            	$scope.gridFileVO.dataSource.read().then(function(res){
+	            		if(func !== undefined) func();
+	            	});
 	            };	
 	            
 	            var gridFileVO = $scope.gridFileVO = {
