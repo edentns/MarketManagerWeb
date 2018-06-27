@@ -160,6 +160,49 @@
                                         resData.ctfcData       = list;
                                         resData.optTypeList    = result[24];
                                         
+                                        
+                                        UtilSvc.grid.getInquiryParam().then(function (res) {
+                                			var history = res.data;
+                                			
+                                			if(history){
+                    		            		resData.signItemValue = history.CD_SIGNITEM;	
+                    		            		resData.nmItemValue   = history.NM_ITEM;
+                    		            		resData.nmMnfrValue   = history.NM_MNFR;
+                    		            		resData.adulYnIds     = history.YN_ADULCTFC;
+                    		            		resData.taxClftIds    = history.CD_TAXCLFT;
+                    		            		resData.iClftIds      = history.CD_ITEMCLFT;
+                    		            		resData.iKindIds      = history.CD_ITEMKIND;
+                    		            		resData.adulYnList.setSelectNames    = history.YN_ADULCTFC_SELECT_INDEX;
+                    		            		resData.taxCodeList.setSelectNames   = history.CD_TAXCLFT_SELECT_INDEX;
+                    		            		resData.iClftCodeList.setSelectNames = history.CD_ITEMCLFT_SELECT_INDEX;
+                    		            		resData.iKindCodeList.setSelectNames = history.CD_ITEMKIND_SELECT_INDEX;
+                    		            		resData.selectedDateOption = history.DATEOPT;
+                    		            		if(history.DATE_SELECTED === "current") {
+                    		            			resData.selected = history.DATE_SELECTED
+                    		            			resData.start    = angular.copy(today);
+                        		            		resData.end      = angular.copy(today);
+                    		            		}
+                    		            		else {
+                    		            			resData.selected = 'range';
+                        		            		resData.start    = history.DATE_FROM;
+                        		            		resData.end      = history.DATE_TO;
+                    		            		}
+                    		            	}
+                                			else {
+                    		            		resData.signItemValue = "";	
+                    		            		resData.nmItemValue   = "";
+                    		            		resData.nmMnfrValue   = "";
+                    		            		resData.adulYnIds     = "*";
+                    		            		resData.taxClftIds    = "*";
+                    		            		resData.iClftIds      = "*";
+                    		            		resData.iKindIds      = "*";
+                    		            		resData.selectedDateOption = "001";
+                    		            		resData.start = angular.copy(edt.getToday());
+                    		            		resData.end   = angular.copy(edt.getToday());    
+            				            		resData.selected = 'current';                              				
+                                			}
+                                		})
+                                        
                                         defer.resolve( resData );
                                     });
                             });

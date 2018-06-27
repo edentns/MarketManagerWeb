@@ -73,11 +73,19 @@
                             <td>                            	              	
                             	<co01-mcbox id="SaleList_iStat" title="상품상태" model="saleItemDataVO.iStatIds" options="saleItemDataVO.iStatList" setting="saleItemDataVO.setting"  style="width:100%;">
         						</co01-mcbox>
+                            </td>                   
+                        </tr>
+                        <tr>
+                            <th>일시</th>                            
+                            <td>
+                            	<select ng-model="saleItemDataVO.selectedDateOption"
+        								ng-options="option.CD_DEF as option.NM_DEF for option in saleItemDataVO.dateOption"
+        								class="form-control" style="width: 100%">
+        						</select>	
                             </td>
-                            <th>판매일자</th>
-                            <td colspan="3">                            	              	
+                            <td colspan="6">                            	              	
                             	<div class="frm-group" data-date-search-group="saleItemDataVO.datesetting" style="display:inline-block;"></div>
-                            </td>                          
+                            </td>
                         </tr>
                         </tbody>
                     </table>         		     

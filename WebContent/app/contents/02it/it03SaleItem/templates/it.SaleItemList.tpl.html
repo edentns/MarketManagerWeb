@@ -60,15 +60,24 @@
                             <td>                            	              	
                             	<co01-mcbox id="SaleList_iKind" title="상품종류" model="saleItemDataVO.iKindIds" options="saleItemDataVO.iKindList" setting="saleItemDataVO.setting"  style="width:100%;">
         						</co01-mcbox>
-                            </td>   
-                            <th>일시</th>
-                            <td colspan="5">    
+                            </td>
+                            <th>상품상태</th>
+                            <td>                            	              	
+                            	<co01-mcbox id="SaleList_iStat" title="상품상태" model="saleItemDataVO.iStatIds" options="saleItemDataVO.iStatList" setting="saleItemDataVO.setting"  style="width:100%;">
+        						</co01-mcbox>
+                            </td>                            
+                        </tr>
+                        <tr>
+                            <th>일시</th>                            
+                            <td>
                             	<select ng-model="saleItemDataVO.selectedDateOption"
         								ng-options="option.CD_DEF as option.NM_DEF for option in saleItemDataVO.dateOption"
-        								class="form-control" style="width: 30%">
-        						</select>	                        	              	
+        								class="form-control" style="width: 100%">
+        						</select>	
+                            </td>
+                            <td colspan="6">                            	              	
                             	<div class="frm-group" data-date-search-group="saleItemDataVO.datesetting" style="display:inline-block;"></div>
-                            </td>                     
+                            </td>
                         </tr>
                         </tbody>
                     </table>         		     

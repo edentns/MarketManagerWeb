@@ -98,6 +98,10 @@
 							end   : resData.end
 						}
 	        		},
+	        		dateOption    : [{CD_DEF : "001" , NM_DEF : "등록일시"},
+	        		                 {CD_DEF : "002" , NM_DEF : "유효일시"}
+	        						],
+	        		selectedDateOption : resData.selectedDateOption,
 	        		itemCtgrList1 : [],
 	        		selectedCtgr1 : {ID_CTGR : "", NM_CTGR: ""},
 	        		itemCtgrList2 : [],
@@ -109,7 +113,7 @@
 	        		nmMnfr   : { value: "" , focus: false },
 	        		taxClftList   : [],
 	        		taxClftIds    : "*",
-	        		iStatList     : resData.iStatList,
+	        		iStatList     : resData.iStatCodeList,
 	        		iStatIds      : resData.iStatIds,
 	        		cmrkList      : resData.cmrkList,
 	        		cmrkIds       : resData.cmrkIds,
@@ -120,6 +124,9 @@
 	            //처음 화면들어왓을때
 	            saleItemDataVO.doQuiry = function(){
 	            	$timeout(function() {
+	            		$scope.gridSaleVO.dataSource.read();
+	            	});
+	            	/*$timeout(function() {
 		            	// 이전에 검색조건을 세션에 저장된 것을 가져옴
 	            		if(resData.CD_ITEMCTGR1 !== "") {
 	    					saleItemDataVO.selectedCtgr1.ID_CTGR = resData.CD_ITEMCTGR1;
@@ -132,8 +139,8 @@
 	    					saleItemDataVO.selectedCtgr3.NM_CTGR = resData.NM_ITEMCTGR3;
 	    					saleItemDataVO.ctgrChange(2);
 	            		}
-	            		$scope.gridSaleVO.dataSource.read();
-	            	},1000);
+	            		
+	            	},1000);*/
 	            };
 	            
 	            //조회
@@ -152,6 +159,7 @@
         					NM_ITEMCTGR2 : saleItemDataVO.selectedCtgr2.NM_CTGR,
         					CD_ITEMCTGR3 : saleItemDataVO.selectedCtgr3.ID_CTGR,
         					NM_ITEMCTGR3 : saleItemDataVO.selectedCtgr3.NM_CTGR,
+        					DATEOPT      : saleItemDataVO.selectedDateOption,
 							DATE_SELECTED: saleItemDataVO.datesetting.selected,
 							DATE_FROM    : saleItemDataVO.datesetting.period.start,
 		                	DATE_TO      : saleItemDataVO.datesetting.period.end
@@ -230,7 +238,10 @@
                     					L_NM_ITEM     : saleItemDataVO.nmItem.value,
                     					L_NO_MRK      : saleItemDataVO.cmrkIds,
                     					L_CD_ITEMSTAT : saleItemDataVO.iStatIds,
-                    					L_CD_ITEMCTGR : saleItemDataVO.iCtgrId
+                    					L_CD_ITEMCTGR : saleItemDataVO.iCtgrId,
+                    					I_DATEOPT     : saleItemDataVO.selectedDateOption,
+                    					DATE_FROM     : new Date(saleItemDataVO.datesetting.period.start.y, saleItemDataVO.datesetting.period.start.m-1, saleItemDataVO.datesetting.period.start.d, "00", "00", "00").dateFormat("YmdHis"),
+                                    	DATE_TO       : new Date(saleItemDataVO.datesetting.period.end.y, saleItemDataVO.datesetting.period.end.m-1, saleItemDataVO.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis"),
                                     };
                     				UtilSvc.getList(param).then(function (res) {
                 						e.success(res.data.results[0]);       
