@@ -147,6 +147,7 @@
 		        		CD_CPYBSSITEM : "",
 		        		NO_ASPHNE     : "",
 		        		GUI_AS        : "",
+		        		CD_BSSSALE       : "001",
 		        		
 		        		//판매정보
 		        		S_ITEMPRC     : 0,
@@ -368,26 +369,9 @@
 	        			imgWidth: '0px',
 	        			imgHeight: '0px'
 	        		},
-	        		fileSmallVO: {
-	        			CD_AT:"007",
-	        			limitCnt: 1,
-	        			bImage: true,
-	        			bDisabled: !page.isWriteable(),
-	        			imgWidth: '0px',
-	        			imgHeight: '0px'
-	        		},
-	        		fileDExVO: {
-	        			CD_AT:"005",
-	        			limitCnt: 10,
-	        			bImage: true,
-	        			bDisabled: !page.isWriteable(),
-	        			imgWidth: '0px',
-	        			imgHeight: '0px',
-	        			currentDataList:[]
-	        		},
 	        		fileDImageVO: {
 	        			CD_AT:"006",
-	        			limitCnt: 10,
+	        			limitCnt: 3,
 	        			bImage: true,
 	        			bDisabled: !page.isWriteable(),
 	        			imgWidth: '0px',
@@ -940,22 +924,17 @@
 	                	dataSource: new kendo.data.DataSource({
 	                		transport: {
 	                			read: function(e) {
-	                				var param = {
-                						procedureParam:"USP_IT_02BSSITEMOPT_GET&L_CD_ITEM@s|L_FLAG@s",
-                						L_CD_ITEM  :  bssInfoDataVO.ids,
-                						L_FLAG     :  "1"
-                					};
-	            					UtilSvc.getList(param).then(function (res) {
-	            						if(resData.addDataList.length > 0){
+	                				if(bssInfoDataVO.kind == "detail"){
+	                					if(resData.addDataList.length > 0){
 	            							e.success(resData.addDataList);
 	            						}
-	            						/*if(!page.isWriteable()){
-	            	    					var grid = $("#gridOpt"+bssInfoDataVO.param.CD_OPTTP).data("kendoGrid");
-	            	    					grid.setOptions({editable : false});   
-	            	    					grid.hideColumn(5);
-	            	    					$("#gridOpt"+bssInfoDataVO.param.CD_OPTTP+" .k-grid-toolbar").hide();
-	            	    				}*/
-	            					});
+	                				}
+	                				if(!page.isWriteable()){
+	                					var grid = $("#gridAddVO").data("kendoGrid");
+            	    					grid.setOptions({editable : false});   
+            	    					grid.hideColumn(5);
+            	    					$("#gridAddVO .k-grid-toolbar").hide();
+	                				}
 	                			},
 	                			create: function(e) {
 	                				if(bssInfoDataVO.oriOPTTP != bssInfoDataVO.param.CD_OPTTP){
@@ -1599,6 +1578,7 @@
     		        		CD_CPYBSSITEM : resData.detailData.CD_CPYBSSITEM,
     		        		NO_ASPHNE     : resData.detailData.NO_ASPHNE,
     		        		GUI_AS        : resData.detailData.GUI_AS,
+    		        		CD_BSSSALE    : "001",
     		        		
     		        		//판매정보
     		        		S_ITEMPRC     : resData.detailData.S_ITEMPRC,
@@ -1908,8 +1888,6 @@
         				bssInfoDataVO.shptpChange();*/
         				
         				bssInfoDataVO.fileMainVO.currentData = resData.fileMainVOcurrentData;
-        				bssInfoDataVO.fileSmallVO.currentData = resData.fileSmallVOcurrentData;
-        				bssInfoDataVO.fileDExVO.currentDataList = resData.fileDExVOcurrentDataList;
         				bssInfoDataVO.fileDImageVO.currentDataList = resData.fileDImageVOcurrentDataList;
                     })
 					
@@ -2228,7 +2206,7 @@
 		            				OPT : optData,
 		            				ADDITEM : addData };
 		            		itBssItemSvc.saveItem(param, SU).success(function () {
-	                        	/*bssInfoDataVO.fileSave();*/
+	                        	bssInfoDataVO.fileSave();
 	                        	alert("기본상품 등록이 완료되었습니다.");
 	                        	bssInfoDataVO.goBack();
 	                        });
@@ -2285,9 +2263,9 @@
 		            				OPT : optData,
 		            				ADDITEM : addData };
 		            		itBssItemSvc.saveItem(param, SU).success(function () {
-	                        	/*bssInfoDataVO.fileSave();*/
+	                        	bssInfoDataVO.fileSave();
 	                        	alert("기본상품 수정이 완료되었습니다.");
-	                        	/*bssInfoDataVO.goBack();*/
+	                        	bssInfoDataVO.goBack();
 	                        });
 		                }
 	            	}
@@ -2323,10 +2301,6 @@
 	            	var imgList = [];
 	            	bssInfoDataVO.fileMainVO.CD_REF1 = bssInfoDataVO.CD_ITEM;
 	            	imgList.push(bssInfoDataVO.fileMainVO);
-	            	bssInfoDataVO.fileSmallVO.CD_REF1 = bssInfoDataVO.CD_ITEM;
-	            	imgList.push(bssInfoDataVO.fileSmallVO);
-	            	bssInfoDataVO.fileDExVO.CD_REF1 = bssInfoDataVO.CD_ITEM;
-	            	imgList.push(bssInfoDataVO.fileDExVO);
 	            	bssInfoDataVO.fileDImageVO.CD_REF1 = bssInfoDataVO.CD_ITEM;
 	            	imgList.push(bssInfoDataVO.fileDImageVO);
 	            	UtilSvc.fileSaveExe(imgList);

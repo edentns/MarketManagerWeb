@@ -36,12 +36,10 @@
 	                					IT_ID_CTGR: ""
                 					},
                 					fileParam = {
-                                		procedureParam: "USP_IT_02BSSITEMFILE_GET&L_CD_ITEM@s|L_CD_AT_1@s|L_CD_AT_2@s|L_CD_AT_3@s|L_CD_AT_4@s",
+                                		procedureParam: "USP_IT_02BSSITEMFILE_GET&L_CD_ITEM@s|L_CD_AT_1@s|L_CD_AT_2@s",
                     					L_CD_ITEM: $stateParams.ids,
                     					L_CD_AT_1: "004",
-                    					L_CD_AT_2: "007",
-                    					L_CD_AT_3: "005",
-                    					L_CD_AT_4: "006"
+                    					L_CD_AT_2: "006"
                                     },
                                     liogParam = {
                                 		procedureParam: "USP_IT_02BSSITEMLIOG_GET"
@@ -215,9 +213,7 @@
                                     
                                 	if($stateParams.kind == "detail"){
             	    					resData.fileMainVOcurrentData = result[17][0][0];
-            	        				resData.fileSmallVOcurrentData = result[17][1][0];
-            	        				resData.fileDExVOcurrentDataList = result[17][2];
-            	        				resData.fileDImageVOcurrentDataList = result[17][3];
+            	        				resData.fileDImageVOcurrentDataList = result[17][1];
             	        				defer.resolve( resData );
                                     }
                                 	else {
@@ -225,19 +221,17 @@
                                 			var history = res.data;
                                 			
                                 			if(history){
-                    		            		resData.signItemValue = history.CD_CLFT;	
+                    		            		resData.signItemValue = history.CD_SIGNITEM;	
                     		            		resData.nmItemValue   = history.NM_ITEM;
                     		            		resData.nmMnfrValue   = history.NM_MNFR;
                     		            		resData.adulYnIds     = history.YN_ADULCTFC;
                     		            		resData.taxClftIds    = history.CD_TAXCLFT;
                     		            		resData.iClftIds      = history.CD_ITEMCLFT;
                     		            		resData.iKindIds      = history.CD_ITEMKIND;
-                    		            		resData.iStatIds      = history.CD_ITEMSTAT;
                     		            		resData.adulYnList.setSelectNames    = history.YN_ADULCTFC_SELECT_INDEX;
                     		            		resData.taxCodeList.setSelectNames   = history.CD_TAXCLFT_SELECT_INDEX;
                     		            		resData.iClftCodeList.setSelectNames = history.CD_ITEMCLFT_SELECT_INDEX;
                     		            		resData.iKindCodeList.setSelectNames = history.CD_ITEMKIND_SELECT_INDEX;
-                    		            		resData.iStatCodeList.setSelectNames = history.CD_ITEMSTAT_SELECT_INDEX;
                     		            		resData.selectedDateOption = history.DATEOPT;
                     		            		if(history.DATE_SELECTED === "current") {
                     		            			resData.selected = history.DATE_SELECTED
@@ -258,7 +252,6 @@
                     		            		resData.taxClftIds    = "*";
                     		            		resData.iClftIds      = "*";
                     		            		resData.iKindIds      = "*";
-                    		            		resData.iStatIds      = "*";
                     		            		resData.selectedDateOption = "001";
                     		            		resData.start = angular.copy(edt.getToday());
                     		            		resData.end   = angular.copy(edt.getToday());    

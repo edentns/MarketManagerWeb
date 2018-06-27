@@ -90,17 +90,15 @@
 	            bssItemDataVO.inQuiry = function(){
 	            	$scope.gridBssVO.dataSource.read();
 		            var param = {
-						CD_CLFT :	bssItemDataVO.signItem.value,
+		            	CD_SIGNITEM : bssItemDataVO.signItem.value,
 						NM_ITEM : bssItemDataVO.nmItem.value,
 			        	NM_MNFR :	bssItemDataVO.nmMnfr.value,
 			        	YN_ADULCTFC : bssItemDataVO.adulYnIds,
 						CD_TAXCLFT  : bssItemDataVO.taxClftIds,
 						CD_ITEMCLFT : bssItemDataVO.iClftIds,
 						CD_ITEMKIND : bssItemDataVO.iKindIds,
-						CD_ITEMSTAT : bssItemDataVO.iStatIds,
 						YN_ADULCTFC_SELECT_INDEX : bssItemDataVO.adulYnList.allSelectNames,
 						CD_TAXCLFT_SELECT_INDEX  : bssItemDataVO.taxClftList.allSelectNames,
-						CD_ITEMCLFT_SELECT_INDEX : bssItemDataVO.iClftList.allSelectNames,
 						CD_ITEMKIND_SELECT_INDEX : bssItemDataVO.iKindList.allSelectNames,
 						CD_ITEMSTAT_SELECT_INDEX : bssItemDataVO.iStatList.allSelectNames,
 						DATEOPT     : bssItemDataVO.selectedDateOption,

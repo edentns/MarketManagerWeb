@@ -86,6 +86,8 @@
 	        		taxClftIds    : resData.taxClftIds,
 	        		iKindList     : resData.iKindCodeList,
 	        		iKindIds      : resData.iKindIds,
+	        		iStatList     : resData.iStatCodeList,
+	        		iStatIds      : resData.iStatIds,
 	        		dataTotal     : 0
 	            };	            
 	            
@@ -103,18 +105,16 @@
 	            //조회
 	            saleItemDataVO.inQuiry = function(){
 	            	$scope.gridSaleVO.dataSource.read();
-	            	/*var param = {
+	            	var param = {
 	            			CD_SIGNITEM :	saleItemDataVO.signItem.value,
 							NM_ITEM : saleItemDataVO.nmItem.value,
 				        	NM_MNFR :	saleItemDataVO.nmMnfr.value,
 				        	YN_ADULCTFC : saleItemDataVO.adulYnIds,
 							CD_TAXCLFT  : saleItemDataVO.taxClftIds,
-							CD_ITEMCLFT : saleItemDataVO.iClftIds,
 							CD_ITEMKIND : saleItemDataVO.iKindIds,
 							CD_ITEMSTAT : saleItemDataVO.iStatIds,
 							YN_ADULCTFC_SELECT_INDEX : saleItemDataVO.adulYnList.allSelectNames,
 							CD_TAXCLFT_SELECT_INDEX  : saleItemDataVO.taxClftList.allSelectNames,
-							CD_ITEMCLFT_SELECT_INDEX : saleItemDataVO.iClftList.allSelectNames,
 							CD_ITEMKIND_SELECT_INDEX : saleItemDataVO.iKindList.allSelectNames,
 							CD_ITEMSTAT_SELECT_INDEX : saleItemDataVO.iStatList.allSelectNames,
 							DATEOPT     : saleItemDataVO.selectedDateOption,
@@ -123,7 +123,7 @@
 		                	DATE_TO     : saleItemDataVO.datesetting.period.end
 		                };
 	        			// 검색조건 세션스토리지에 임시 저장
-	        			UtilSvc.grid.setInquiryParam(param);*/
+	        			UtilSvc.grid.setInquiryParam(param);
 	            };	 
 	            
 	            //초기화버튼
@@ -173,12 +173,13 @@
                     		transport: {
                     			read: function(e) {
                     				var param = {
-                    					procedureParam:"USP_IT_03SALEITEM_LIST_GET&I_CD_SIGNITEM@s|I_NM_ITEM@s|I_YN_ADULCTFC@s|I_CD_TAXCLFT@s|I_CD_ITEMKIND@s|I_DATEOPT@s|DATE_FROM@s|DATE_TO@s",
+                    					procedureParam:"USP_IT_03SALEITEM_LIST_GET&I_CD_SIGNITEM@s|I_NM_ITEM@s|I_YN_ADULCTFC@s|I_CD_TAXCLFT@s|I_CD_ITEMKIND@s|I_CD_ITEMSTAT@s|I_DATEOPT@s|DATE_FROM@s|DATE_TO@s",
                     					I_CD_SIGNITEM :	saleItemDataVO.signItem.value,
                     					I_NM_ITEM : saleItemDataVO.nmItem.value,
                     					I_YN_ADULCTFC : saleItemDataVO.adulYnIds,
                     					I_CD_TAXCLFT  : saleItemDataVO.taxClftIds,
                     					I_CD_ITEMKIND : saleItemDataVO.iKindIds,
+                    					I_CD_ITEMSTAT : saleItemDataVO.iStatIds,
                     					I_DATEOPT     : saleItemDataVO.selectedDateOption,
                     					DATE_FROM     : new Date(saleItemDataVO.datesetting.period.start.y, saleItemDataVO.datesetting.period.start.m-1, saleItemDataVO.datesetting.period.start.d, "00", "00", "00").dateFormat("YmdHis"),
                                     	DATE_TO       : new Date(saleItemDataVO.datesetting.period.end.y, saleItemDataVO.datesetting.period.end.m-1, saleItemDataVO.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis"),
