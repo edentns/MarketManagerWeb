@@ -233,16 +233,7 @@
                     		            		resData.iClftCodeList.setSelectNames = history.CD_ITEMCLFT_SELECT_INDEX;
                     		            		resData.iKindCodeList.setSelectNames = history.CD_ITEMKIND_SELECT_INDEX;
                     		            		resData.selectedDateOption = history.DATEOPT;
-                    		            		if(history.DATE_SELECTED === "current") {
-                    		            			resData.selected = history.DATE_SELECTED
-                    		            			resData.start    = angular.copy(today);
-                        		            		resData.end      = angular.copy(today);
-                    		            		}
-                    		            		else {
-                    		            			resData.selected = 'range';
-                        		            		resData.start    = history.DATE_FROM;
-                        		            		resData.end      = history.DATE_TO;
-                    		            		}
+                    		            		resData.selectDate    = UtilSvc.grid.getSelectDate(history.PERIOD);
                     		            	}
                                 			else {
                     		            		resData.signItemValue = "";	
@@ -253,9 +244,11 @@
                     		            		resData.iClftIds      = "*";
                     		            		resData.iKindIds      = "*";
                     		            		resData.selectedDateOption = "001";
-                    		            		resData.start = angular.copy(edt.getToday());
-                    		            		resData.end   = angular.copy(edt.getToday());    
-            				            		resData.selected = 'current';                              				
+    	    				            		resData.selectDate      = {
+    	    				            			start : angular.copy(edt.getToday()),
+    	    				            			end   : angular.copy(edt.getToday()),
+    	    				            			selected : 'current'
+    	    				            		};                          				
                                 			}
                                 			
                 	        				defer.resolve( resData );

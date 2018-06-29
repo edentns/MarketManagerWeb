@@ -177,7 +177,9 @@
 	                    selectable: "multipleSmall"
 		            }
 		        ];
-
+				
+				var settingHeight = $(window).height() - 130;
+            	
 	            it01ItemCfctGridVO.addCommonGridVO = function(it01ItemCfctLocalGridVO, iIndex) {
 	            	var localSelf = it01ItemCfctLocalGridVO;
 	            	localSelf.iIndex = iIndex;
@@ -203,7 +205,7 @@
 	            	//localSelf.multiSelect              = false;
 	            	//localSelf.editable                 = false;
 	            	//localSelf.selected                 = null;
-	            	localSelf.height                   = 792;
+	            	localSelf.height                   = settingHeight;
 	            	localSelf.dataSource = new kendo.data.DataSource({
 	            		autoBind: false,
 	            		batch : true,
@@ -285,11 +287,11 @@
 	            			{
 	              			field: "NM_CTGR",
 	              			title: localSelf.boxTitle, 
-	              			width: 350,
+	              			width: 250,
 	              			maxwidth: 400, 
 							cellClass: "ta-c",
 							headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"},
-							template: "<div class='cell' id='"+localSelf.iIndex+"'>#=NM_CTGR#</div>"
+							template: "<div class='cell' style='text-align: left;' id='"+localSelf.iIndex+"'>#=NM_CTGR#</div>"
 	              		},{command: [ {
 	                        name: "삭제", imageClass: "k-icon k-i-close", click: function (e) {  //삭제 버튼
 	                            e.preventDefault();
