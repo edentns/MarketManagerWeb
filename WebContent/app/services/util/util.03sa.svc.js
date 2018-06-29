@@ -45,6 +45,11 @@
         			}
         		};
         		if(result){
+        			if(w === "DTS_STORAGE_TO") {
+        				idx.TODAY = (idx.DTS_STORAGE_TO.y === edt.getToday().y && 
+        						     idx.DTS_STORAGE_TO.m === edt.getToday().m && 
+        						     idx.DTS_STORAGE_TO.d === edt.getToday().d)? 1 : 0
+        			}
         			this.localStorage.setItem(idx.CASH_PARAM, cashParam);
             		//값이 너무 길어서 안넘어 가는듯.. 조회전에 다 짤라줌
             		idx.NM_MRK_SELCT_INDEX = "";
@@ -343,17 +348,16 @@
 	           	};
 	        };	        
 	        //grid 동적 크기 변경
-	        this.isOpen = function(kg, vo, grdVo, val){	        	
-	        	if(val) {
-            		kg.wrapper.height(616);
-            		kg.resize();
-            		if(vo.param !== "") grdVo.dataSource.pageSize(9);
-            	}
-            	else {
-            		kg.wrapper.height(798);
-            		kg.resize();
-            		if(vo.param !== "") grdVo.dataSource.pageSize(12);
-            	}
+	        this.isOpen = function(kg, vo, grdVo, val){	
+	        	var searchIdHeight = $("#searchId").height();
+            	var settingHeight = $(window).height() - searchIdHeight - 90;
+            	var pageSizeValue = val? 9 : 12;
+            	
+            	kg.wrapper.height(settingHeight);
+            	kg.resize();
+        		if(vo.param !== "") {
+        			grdVo.dataSource.pageSize(pageSizeValue);
+        		}
 	        };
 	        //드롭다운 리스트 초기화시 선택
 	        this.ddlSelectedIndex = function(ele, name){

@@ -307,7 +307,7 @@
         		},
             	datesetting : {
         			dateType   : 'market',
-					buttonList : ['current', '1Day', '1Week', '1Month', 'range'],
+					buttonList : ['current', '1Day', '1Week', '1Month'],
 					selected   : resData.selected,
 					period : {
 						start : angular.copy(today),
@@ -435,6 +435,7 @@
                     saShpIngSvc.tkbkhrnkrsnBind(me);
                     
                     $timeout(function(){
+                    	shippingDataVO.isOpen(false);
         				Util03saSvc.storedQuerySearchPlay(me, resData.storage);
                     },0);
                 });

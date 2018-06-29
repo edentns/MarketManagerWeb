@@ -267,7 +267,7 @@
 	        		},
 	            	datesetting : {
 	        			dateType   : 'market',
-						buttonList : ['current', '1Day', '1Week', '1Month', 'range'],
+						buttonList : ['current', '1Day', '1Week', '1Month'],
 						selected   : resData.selected,
 						period : {
 							start : angular.copy(today),
@@ -452,6 +452,7 @@
                         me.cd11stShippingFee = result[6];
                                                 
                         $timeout(function(){
+                        	echgDataVO.isOpen(false);
             				Util03saSvc.storedQuerySearchPlay(me, resData.storage);
                         },0);    
                     });
@@ -523,28 +524,22 @@
 	            };	
 	            
 	            echgDataVO.isOpen = function (val) {
-	            	if(val){
-	            		$scope.echgkg.wrapper.height(616);
-	            		$scope.echgkg.resize();
-	            		if(echgDataVO.param !== "") {
-	            			grdEchgVO.dataSource.pageSize(9);
-	            		}
-	            	}
-	            	else{
-	            		$scope.echgkg.wrapper.height(798);
-	            		$scope.echgkg.resize();
-	            		if(echgDataVO.param !== "") {
-	            			grdEchgVO.dataSource.pageSize(12);
-	            		}
-	            	}
+	            	var searchIdHeight = $("#searchId").height();
+	            	var settingHeight = $(window).height() - searchIdHeight - 90;
+	            	var pageSizeValue = val? 9 : 12;
+	            	
+	            	$scope.echgkg.wrapper.height(settingHeight);
+            		$scope.echgkg.resize();
+            		if(echgDataVO.param !== "") {
+            			grdEchgVO.dataSource.pageSize(pageSizeValue);
+            		}
 	            };	            
 	            
 	            echgDataVO.receiveChkClkEvt = function(e){
 	            	var element = $(e.currentTarget),
             			checked = element.val(),
             			self = this;
-	            	    
-	            	
+	            	   
 	            	if(checked === 'N'){
 		            	self.ngIfinIt(false);
 	            	}

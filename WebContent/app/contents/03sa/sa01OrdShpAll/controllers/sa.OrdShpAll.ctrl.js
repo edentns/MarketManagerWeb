@@ -82,7 +82,7 @@
 	        		},
 	            	datesetting : {
 	        			dateType   : 'market',
-						buttonList : ['current', '1Day', '1Week', '1Month', 'range'],
+						buttonList : ['current', '1Day', '1Week', '1Month'],
 						selected   : resData.selected,
 						period : {
 							start : angular.copy(today),
@@ -132,8 +132,9 @@
                         me.betweenDateOptionMo = result[2][0].CD_DEF; //처음 로딩 때 초기 인덱스를 위하여
                         
                         $timeout(function(){
+                        	ordAllDataVO.isOpen(false);
             				Util03saSvc.storedQuerySearchPlay(me, resData.storage, $scope.ordallkg);
-                        });    
+                        });
                     });
                 };
 
@@ -186,20 +187,16 @@
 	            };		
 
 	            ordAllDataVO.isOpen = function (val) {
-	            	if(val) {
-	            		$scope.ordallkg.wrapper.height(616);
-	            		$scope.ordallkg.resize();
-	            		if(ordAllDataVO.param !== "") {
-	            			grdOrdAllVO.dataSource.pageSize(9);
-	            		}
-	            	}
-	            	else {
-	            		$scope.ordallkg.wrapper.height(798);
-	            		$scope.ordallkg.resize();
-	            		if(ordAllDataVO.param !== "") {
-	            			grdOrdAllVO.dataSource.pageSize(12);
-	            		}
-	            	}
+	            	var searchIdHeight = $("#searchId").height();
+	            	var settingHeight = $(window).height() - searchIdHeight - 90;
+	            	var pageSizeValue = val? 9 : 12;
+	            	
+	            	$scope.ordallkg.wrapper.height(settingHeight);
+            		$scope.ordallkg.resize();
+            		
+            		if(ordAllDataVO.param !== "") {
+            			grdOrdAllVO.dataSource.pageSize(pageSizeValue);
+            		}
 	            };
 	            	            
 	            //detail Grid
