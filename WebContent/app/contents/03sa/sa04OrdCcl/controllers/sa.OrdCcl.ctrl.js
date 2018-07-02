@@ -183,7 +183,7 @@
             		boxTitle : "주문취소관리",
 	            	datesetting : {
 	        			dateType   : 'market',
-						buttonList : ['current', '1Day', '1Week', '1Month', 'range'],
+						buttonList : ['current', '1Day', '1Week', '1Month'],
 						selected   : resData.selected,
 						period : {
 							start : angular.copy(today),
@@ -318,6 +318,7 @@
                         me.cancelStatusOp = result[5];
                         
                         $timeout(function(){
+                        	ordCancelManagementDataVO.isOpen(false);
             				Util03saSvc.storedQuerySearchPlay(me, resData.storage);
                         },0);    
                     });
@@ -379,16 +380,15 @@
 	            };	
 
 	            ordCancelManagementDataVO.isOpen = function (val) {
-	            	if(val) {
-	            		$scope.ordCancelManagementkg.wrapper.height(616);
-	            		$scope.ordCancelManagementkg.resize();
-	            		if(ordCancelManagementDataVO.param !== "") grdOrdCancelManagementVO.dataSource.pageSize(9);
-	            	}
-	            	else {
-	            		$scope.ordCancelManagementkg.wrapper.height(798);
-	            		$scope.ordCancelManagementkg.resize();
-	            		if(ordCancelManagementDataVO.param !== "") grdOrdCancelManagementVO.dataSource.pageSize(12);
-	            	}
+	            	var searchIdHeight = $("#searchId").height();
+	            	var settingHeight = $(window).height() - searchIdHeight - 90;
+	            	var pageSizeValue = val? 9 : 12;
+	            	
+	            	$scope.ordCancelManagementkg.wrapper.height(settingHeight);
+            		$scope.ordCancelManagementkg.resize();
+            		if(ordCancelManagementDataVO.param !== "") {
+            			grdOrdCancelManagementVO.dataSource.pageSize(pageSizeValue);
+            		}
 	            };
 	            	            	            
 	            //주문 검색 그리드

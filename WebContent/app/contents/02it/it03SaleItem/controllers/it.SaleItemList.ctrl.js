@@ -66,11 +66,11 @@
 	        		},
 	        		datesetting : {
 	        			dateType   : 'market',
-						buttonList : ['current', '1Day', '1Week', '1Month', 'range'],
-						selected   : resData.selected,
+						buttonList : ['current', '1Day', '1Week', '1Month'],
+						selected   : resData.selectDate.selected,
 						period : {
-							start : resData.start,
-							end   : resData.end
+							start : resData.selectDate.start,
+							end   : resData.selectDate.end
 						}
 	        		},
 	        		dateOption    : [{CD_DEF : "001" , NM_DEF : "등록일시"},
@@ -106,24 +106,22 @@
 	            saleItemDataVO.inQuiry = function(){
 	            	$scope.gridSaleVO.dataSource.read();
 	            	var param = {
-	            			CD_SIGNITEM :	saleItemDataVO.signItem.value,
-							NM_ITEM : saleItemDataVO.nmItem.value,
-				        	NM_MNFR :	saleItemDataVO.nmMnfr.value,
-				        	YN_ADULCTFC : saleItemDataVO.adulYnIds,
-							CD_TAXCLFT  : saleItemDataVO.taxClftIds,
-							CD_ITEMKIND : saleItemDataVO.iKindIds,
-							CD_ITEMSTAT : saleItemDataVO.iStatIds,
-							YN_ADULCTFC_SELECT_INDEX : saleItemDataVO.adulYnList.allSelectNames,
-							CD_TAXCLFT_SELECT_INDEX  : saleItemDataVO.taxClftList.allSelectNames,
-							CD_ITEMKIND_SELECT_INDEX : saleItemDataVO.iKindList.allSelectNames,
-							CD_ITEMSTAT_SELECT_INDEX : saleItemDataVO.iStatList.allSelectNames,
-							DATEOPT     : saleItemDataVO.selectedDateOption,
-							DATE_SELECTED: saleItemDataVO.datesetting.selected,
-							DATE_FROM   : saleItemDataVO.datesetting.period.start,
-		                	DATE_TO     : saleItemDataVO.datesetting.period.end
-		                };
-	        			// 검색조건 세션스토리지에 임시 저장
-	        			UtilSvc.grid.setInquiryParam(param);
+            			CD_SIGNITEM :	saleItemDataVO.signItem.value,
+						NM_ITEM : saleItemDataVO.nmItem.value,
+			        	NM_MNFR :	saleItemDataVO.nmMnfr.value,
+			        	YN_ADULCTFC : saleItemDataVO.adulYnIds,
+						CD_TAXCLFT  : saleItemDataVO.taxClftIds,
+						CD_ITEMKIND : saleItemDataVO.iKindIds,
+						CD_ITEMSTAT : saleItemDataVO.iStatIds,
+						YN_ADULCTFC_SELECT_INDEX : saleItemDataVO.adulYnList.allSelectNames,
+						CD_TAXCLFT_SELECT_INDEX  : saleItemDataVO.taxClftList.allSelectNames,
+						CD_ITEMKIND_SELECT_INDEX : saleItemDataVO.iKindList.allSelectNames,
+						CD_ITEMSTAT_SELECT_INDEX : saleItemDataVO.iStatList.allSelectNames,
+						DATEOPT     : saleItemDataVO.selectedDateOption,
+						PERIOD      : UtilSvc.grid.getDateSetting(saleItemDataVO.datesetting)
+	                };
+        			// 검색조건 세션스토리지에 임시 저장
+        			UtilSvc.grid.setInquiryParam(param);
 	            };	 
 	            
 	            //초기화버튼
@@ -140,16 +138,12 @@
 	            };	
 
 	            saleItemDataVO.isOpen = function (val) {
-	            	if(val) {
-	            		$scope.gridSaleVO.wrapper.height(658);
-	            		$scope.gridSaleVO.resize();
-	            		gridSaleVO.dataSource.pageSize(9);
-	            	}
-	            	else {
-	            		$scope.gridSaleVO.wrapper.height(798);
-	            		$scope.gridSaleVO.resize();
-	            		gridSaleVO.dataSource.pageSize(12);
-	            	}
+	            	var searchIdHeight = $("#searchId").height();
+	            	var settingHeight = $(window).height() - searchIdHeight - 90;
+	            	var pageSizeValue = val? 9 : 12;
+	            	$scope.gridSaleVO.wrapper.height(settingHeight);
+            		$scope.gridSaleVO.resize();
+            		gridSaleVO.dataSource.pageSize(pageSizeValue);
 	            };
 	            
 	            //판매상품 검색 그리드
@@ -594,6 +588,9 @@
                     }, "warning");
                 };
                 
-                saleItemDataVO.doQuiry();
+                $timeout(function(){
+	                saleItemDataVO.doQuiry();
+	                saleItemDataVO.isOpen(false);
+                }, 0);
             }]);
 }());

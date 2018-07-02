@@ -22,7 +22,7 @@
 	        		},
 	            	datesetting : {
 	        			dateType   : 'market',
-						buttonList : ['current', '1Day', '1Week', '1Month', 'range'],
+						buttonList : ['current', '1Day', '1Week', '1Month'],
 						selected   : resData.selected,
 						period : {
 							start : angular.copy(today),
@@ -154,14 +154,11 @@
 	            };	               
 	            
 	            shpbyordDataVO.isOpen = function (val) {
-	            	if(val) {
-	            		$scope.shpbyordkg.wrapper.height(616);
-	            		$scope.shpbyordkg.resize();
-	            	}
-	            	else {
-	            		$scope.shpbyordkg.wrapper.height(798);
-	            		$scope.shpbyordkg.resize();
-	            	}
+	            	var searchIdHeight = $("#searchId").height();
+	            	var settingHeight = $(window).height() - searchIdHeight - 90;
+	            	
+	            	$scope.shpbyordkg.wrapper.height(settingHeight);
+            		$scope.shpbyordkg.resize();
 	            };
 	            
 	            shpbyordDataVO.flagFnc = function(){

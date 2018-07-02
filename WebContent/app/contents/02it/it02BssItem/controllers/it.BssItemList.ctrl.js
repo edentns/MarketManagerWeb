@@ -50,11 +50,11 @@
 	        		},
 	        		datesetting : {
 	        			dateType   : 'market',
-						buttonList : ['current', '1Day', '1Week', '1Month', 'range'],
-						selected   : resData.selected,
+						buttonList : ['current', '1Day', '1Week', '1Month'],
+						selected   : resData.selectDate.selected,
 						period : {
-							start : resData.start,
-							end   : resData.end
+							start : resData.selectDate.start,
+							end   : resData.selectDate.end
 						}
 	        		},
 	        		dateOption    : [{CD_DEF : "001" , NM_DEF : "등록일시"},
@@ -102,9 +102,7 @@
 						CD_ITEMKIND_SELECT_INDEX : bssItemDataVO.iKindList.allSelectNames,
 						CD_ITEMSTAT_SELECT_INDEX : bssItemDataVO.iStatList.allSelectNames,
 						DATEOPT     : bssItemDataVO.selectedDateOption,
-						DATE_SELECTED: bssItemDataVO.datesetting.selected,
-						DATE_FROM   : bssItemDataVO.datesetting.period.start,
-	                	DATE_TO     : bssItemDataVO.datesetting.period.end
+	                	PERIOD      : UtilSvc.grid.getDateSetting(bssItemDataVO.datesetting)
 	                };
         			// 검색조건 세션스토리지에 임시 저장
         			UtilSvc.grid.setInquiryParam(param);
@@ -120,16 +118,12 @@
 	            };
 	            
 	            bssItemDataVO.isOpen = function (val) {
-	            	if(val) {
-	            		$scope.gridBssVO.wrapper.height(615);
-	            		$scope.gridBssVO.resize();
-	            		gridBssVO.dataSource.pageSize(9);
-	            	}
-	            	else {
-	            		$scope.gridBssVO.wrapper.height(798);
-	            		$scope.gridBssVO.resize();
-	            		gridBssVO.dataSource.pageSize(12);
-	            	}
+	            	var searchIdHeight = $("#searchId").height();
+	            	var settingHeight = $(window).height() - searchIdHeight - 90;
+	            	var pageSizeValue = val? 9 : 12;
+	            	$scope.gridBssVO.wrapper.height(settingHeight);
+            		$scope.gridBssVO.resize();
+            		gridBssVO.dataSource.pageSize(pageSizeValue);
 	            };
 	            
 	            //popup insert & update Validation - 현재 사용안함
@@ -570,7 +564,9 @@
                     }, "warning");
                 };
                 
-                bssItemDataVO.doQuiry();
-                
+                $timeout(function(){
+	                bssItemDataVO.doQuiry();
+	                bssItemDataVO.isOpen(false);
+                }, 0);
             }]);
 }());

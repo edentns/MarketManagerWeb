@@ -132,7 +132,7 @@
 	        		},
 	            	datesetting : {
 	        			dateType   : 'market',
-						buttonList : ['current', '1Day', '1Week', '1Month', 'range'],
+						buttonList : ['current', '1Day', '1Week', '1Month'],
 						selected   : resData.selected,
 						period : {
 							start : angular.copy(today),
@@ -206,6 +206,7 @@
     					});
                         
                         $timeout(function(){
+                        	ordDataVO.isOpen(false);
             				Util03saSvc.storedQuerySearchPlay(me, resData.storage);
                         },0);    
                     });
@@ -261,15 +262,13 @@
 	            };
 	            
 	            ordDataVO.isOpen = function (val) {
-	            	if(val) {
-	            		$scope.ordkg.wrapper.height(616);
-	            		$scope.ordkg.resize();
-	            		grdOrdVO.dataSource.pageSize(9);
-	            	}else {
-	            		$scope.ordkg.wrapper.height(798);
-	            		$scope.ordkg.resize();
-	            		grdOrdVO.dataSource.pageSize(12);
-	            	};
+	            	var searchIdHeight = $("#searchId").height();
+	            	var settingHeight = $(window).height() - searchIdHeight - 90;
+	            	var pageSizeValue = val? 9 : 12;
+	            	
+	            	$scope.ordkg.wrapper.height(settingHeight);
+            		$scope.ordkg.resize();
+            		grdOrdVO.dataSource.pageSize(pageSizeValue);
 	            };
                 
 		        //주문 검색 그리드
