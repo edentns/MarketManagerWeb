@@ -64,41 +64,20 @@
 				
 				//위젯 유효성 검사
 		        widgetValidation : function(arg, grdItem){
-		        	switch(arg){
-						//배송정보 수정
-						case 1 : {
-							if(['004','005'].indexOf(grdItem.CD_ORDSTAT) < 0){
-	                    		alert(APP_MSG.caseChkOrdAlert);
-	                    		return false;
-	                    	}
-							if(grdItem.YN_CONFIRM === 'Y'){
-	                    		alert(APP_MSG.caseChkOrdAlert);
-	                    		return false;
-	                    	}
-	            			return true;
-	            			break;
-						};
-						//판매자 직접반품신청
-						case 2 : {
-							if(['004','005'].indexOf(grdItem.CD_ORDSTAT) < 0){
-	                    		alert(APP_MSG.caseChkOrdAlert);
-	                    		return false;
-	                    	}
-							if(grdItem.YN_CONFIRM === 'Y'){
-	                    		alert(APP_MSG.caseChkOrdAlert);
-	                    		return false;
-	                    	}
-							/*if(UtilSvc.diffDate(grdItem.DTS_ORD, new Date()) >= 8){
-		            			alert(APP_MSG.caseSevenDaysAlert);
-		            			return false;
-	            			};*/
-	            			return true;
-	            			break;
-						};
-						default : {
-							break; 
-						}
-					}
+		        	if(['004','005'].indexOf(grdItem.CD_ORDSTAT) < 0){
+                		alert(APP_MSG.caseChkOrdAlert);
+                		return false;
+                	}
+					if(grdItem.YN_CONFIRM === 'Y'){
+                		alert(APP_MSG.caseChkOrdAlert);
+                		return false;
+                	}
+					if(UtilSvc.diffDate(grdItem.DTS_ORD, new Date()) > 30){
+            			//alert(APP_MSG.caseSevenDaysAlert);
+						alert(APP_MSG.caseThirtyDaysAlert);								
+            			return false;
+        			};
+        			return true;
 		        },
 				
 				// 택배사 불러오기
@@ -282,7 +261,7 @@
 	        	   switch(mrk){
 	        	   		case 'SYMM170101_00001' :					// gmarket
 						case 'SYMM170101_00003' : {					// auction
-							Util03saSvc.ddlSelectedIndex(ele, "CD_TKBKHRNKRSN");
+							//Util03saSvc.ddlSelectedIndex(ele, "CD_TKBKHRNKRSN");
 							Util03saSvc.ddlSelectedIndex(ele, "CD_TKBKGOODSSTATUS");	
 
         					shippingList.shpList = Util03saSvc.shppingList().query({shippingType:"002", mrkType:model.NO_MRK});
@@ -298,7 +277,7 @@
 							break;                    				
 						}
 						case 'SYMM170101_00002' : {//s
-							Util03saSvc.ddlSelectedIndex(ele, "CD_TKBKHRNKRSN");
+							//Util03saSvc.ddlSelectedIndex(ele, "CD_TKBKHRNKRSN");
 							
 							shippingList.shpList = Util03saSvc.shppingList().query({shippingType:"002", mrkType:model.NO_MRK});
         					shippingList.mrks = model.NO_MRK;
@@ -313,8 +292,8 @@
 							break;
 						}
 						case 'SYMM170901_00001' : {//c
-							var qtyMrk = model.QT_ORD,
-								lowDdl = '';					
+							var qtyMrk = (model.QT_ORD - model.QT_TKBK_OUT),
+								lowDdl = '';
 														
 							shippingList.shpList = Util03saSvc.shppingList().query({shippingType:"002", mrkType:model.NO_MRK});
         					shippingList.mrks = model.NO_MRK;
@@ -325,13 +304,14 @@
         					shippingList.valFld = "CD_PARS";
         					shippingList.findEle = "CD_PARS_COU";
 
-        					this.shpList(shippingList);					
+        					this.shpList(shippingList);
 							this.qtySelector(qtyMrk, ele, model);
 							
 							ele.find("select[name='CD_TKBKLRKRSN']").kendoDropDownList({
                 				dataSource : [],
     		        			dataTextField : "NM_DEF",
-    		                    dataValueField : "CD_DEF"
+    		                    dataValueField : "CD_DEF",
+    		                	optionLabel : "하위 반품사유코드를 선택해 주세요 "	    
     	            		});
                 			
 							lowDdl = ele.find("select[name='CD_TKBKLRKRSN']").data("kendoDropDownList");
@@ -340,7 +320,7 @@
 	            				dataSource :  vo.tkbkhrnkrsnDsCou,
 			        			dataTextField : "NM_DEF",
 			                    dataValueField : "CD_DEF",
-		                		//optionLabel : "상위 반품사유코드를 선택해 주세요 ",	                    
+		                		optionLabel : "상위 반품사유코드를 선택해 주세요 ",	                    
 			                    //valuePrimitive : true,
 			                    change : function(e){
 			                    	var cdDef = this.dataItem().CD_DEF,
@@ -358,11 +338,11 @@
 			                    }
 		            		}); 
 							
-							Util03saSvc.ddlSelectedIndex(ele, "CD_TKBKHRNKRSN");							
+							//Util03saSvc.ddlSelectedIndex(ele, "CD_TKBKHRNKRSN");							
 							break;
 						}
 						case 'SYMM170101_00005' : {//e
-							var qtyMrk = model.QT_ORD,
+							var qtyMrk = (model.QT_ORD - model.QT_TKBK_OUT),
 								me = this;
 							
 							me.qtySelector(qtyMrk, ele, model);
@@ -370,7 +350,8 @@
 							ele.find("select[name='CD_TKBKHRNKRSN']").kendoDropDownList({
 								dataSource : vo.tkbkhrnkrsnDsEl,	
 			        			dataTextField : "NM_DEF",
-			                    dataValueField : "CD_DEF", 
+			                    dataValueField : "CD_DEF",  
+		                		optionLabel : "반품사유코드를 선택해 주세요 ",	   
 			                    change : function(e){
 			                    	var cdDef = this.dataItem().CD_DEF,
 			                    		nmDef = this.dataItem().NM_DEF,
@@ -381,7 +362,7 @@
 			                    		var qtyDdl = ele.find("select[name='QT_TKBK']").data("kendoDropDownList");
 			                    		qtyDdl.trigger("change");
 					    	    		
-			                    		model.tkbk_responsibility = "구매자";			                    		
+			                    		model.tkbk_responsibility = "구매자";
 			                    	}
 			                    	else if(nmDef && (nmDef !== reasonList)){
 			                    		model.tkbk_responsibility = "판매자"; 
@@ -398,7 +379,7 @@
 			                    }
 		            		});
 														
-							Util03saSvc.ddlSelectedIndex(ele, "CD_TKBKHRNKRSN");
+							//Util03saSvc.ddlSelectedIndex(ele, "CD_TKBKHRNKRSN");
 							
 							shippingList.shpList = Util03saSvc.shppingList().query({shippingType:"002", mrkType:model.NO_MRK});
         					shippingList.mrks = model.NO_MRK;

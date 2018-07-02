@@ -58,7 +58,7 @@
         invcChkMsg : "송장번호 체크로 인하여 처리시간이 다소 소요 될수 있습니다.",
         caseOneMoreThanOrdChk : "한 건의 주문을 선택해 주세요",
         caseNinetyDaysAlert : "배송 완료 후 90일 이상 된 주문은 정상적으로 처리 되지 않을수 있습니다.",
-        caseSevenDaysAlert : "반품접수는 7일까지 가능합니다.",
+        caseThirtyDaysAlert : "30일 이전까지 신청해주세요.",
         //caseYnConfirm : "구매 확정된 주문은 요청할 수 없습니다.",
         caseChkOrdAlert : "주문 상태를 확인해 주세요."
     });
