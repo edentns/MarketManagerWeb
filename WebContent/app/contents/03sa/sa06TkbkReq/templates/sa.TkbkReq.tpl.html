@@ -130,8 +130,7 @@
 		<td data-ng-repeat="value in x" data-ng-class="getTdClass($index, value.align)" ng-attr-colspan="{{x.length < 3 && $index === 1 ? 3 : undefined}}">
 			<span ng-bind="value.name"></span>
 		</td>
-	</tr>
-		
+	</tr>		
 		<tr class="border-bottom-line" data-ng-if="tkbkDataVO.updateChange === '001'">
 			<td class="active border-right-line">
 				반품완료자

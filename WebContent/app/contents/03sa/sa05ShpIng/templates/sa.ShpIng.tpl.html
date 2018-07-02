@@ -196,12 +196,14 @@
 			#}#
 		</td>
 		<td class="active border-right-line ta-l">
-			&emsp;단가
+			&emsp;반품완료 건수
 		</td>
-		<td class="ta-r">
-			#if(AM_ITEMPRC){ 	#
-			#= kendo.toString(AM_ITEMPRC,'C0', 'ko-KR') #
-			#}					#					
+		<td class="ta-r">	
+			#if(QT_TKBK_OUT){ #
+			#: QT_TKBK_OUT #
+			#}else{#
+			0
+			#}#				
 		</td>
 	</tr>
 
@@ -267,7 +269,7 @@
 			<code>*</code>반품사유코드
 		</td>
 		<td colspan="2">			
-		    <select 
+		    <select kendo-drop-down-list
 					k-data-source="shippingDataVO.tkbkhrnkrsnDsGau"
 					k-options="shippingDataVO.tkbkhrnkrsnOp"
 					name="CD_TKBKHRNKRSN"					
@@ -284,7 +286,7 @@
 			<code>*</code>상품상태
 		</td>
 		<td colspan="2">			
-		    <select 					
+		    <select kendo-drop-down-list 					
 					k-options="shippingDataVO.tkbkGoodsStatusOp"
 					name="CD_TKBKGOODSSTATUS"					
 					data-bind="value: CD_TKBKGOODSSTATUS"
@@ -365,7 +367,7 @@
 			<code>*</code>반품사유코드
 		</td>
 		<td colspan="2">			
-		    <select 
+		    <select kendo-drop-down-list
 					k-data-source="shippingDataVO.tkbkhrnkrsnDsStr"
 					k-options="shippingDataVO.tkbkhrnkrsnOp"
 					name="CD_TKBKHRNKRSN"					
@@ -440,7 +442,7 @@
 			<code>*</code>반품사유코드
 		</td>
 		<td colspan="3">				
-		    <select 
+		    <select
 					name="CD_TKBKHRNKRSN"					
 					data-bind="value: CD_TKBKHRNKRSN"
 					style="width: 100%">
@@ -474,7 +476,7 @@
 		</td>
 		<td>
 			<select
-					name="QT_TKBK"			
+					name="QT_TKBK"	
 					data-bind="value: QT_TKBK"		
 					style="width: 100%">
 			</select>

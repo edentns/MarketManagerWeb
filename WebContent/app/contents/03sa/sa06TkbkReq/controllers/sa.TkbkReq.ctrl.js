@@ -1132,7 +1132,9 @@
 	    		                          	 {name: "배송방법",   align : ""}, 
 	    		                          	 {name: grdItem.DC_SHPWAY,  align : ""}],
 	    		                          	[{name: "구매수량", align : ""}, 
-	    		                          	 {name: grdItem.QT_ORD,     align : "ta-r"}]
+	    		                          	 {name: grdItem.QT_ORD,     align : "ta-r"},
+	    		                          	 {name: "반품수량", align : ""}, 
+	    		                          	 {name: grdItem.QT_TKBK,  align : "ta-r"}]
             		                    ];            		
         			grd.options.editable.window.width = px;
             		tkbkDataVO.updateChange = code;

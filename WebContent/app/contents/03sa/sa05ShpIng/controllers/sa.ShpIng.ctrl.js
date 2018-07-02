@@ -47,6 +47,7 @@
 				AM_SHPCOST 				: {	type : "number",							editable : false,		nullable : false	},
 				AM_TKBKSHP 				: {	type : "number",							editable : false,		nullable : false	},
 				SEQ_TKBK				: {	type : "number",							editable : false,		nullable : false	},
+				QT_TKBK_OUT				: {	type : "number",							editable : false,		nullable : false	},
 				DC_SHPCOSTSTAT 			: {	type : "string",							editable : false,		nullable : false	},				
 				YN_CONFIRM 				: {	type : "string",							editable : false,		nullable : false	},	
 				DC_SHPCOSTSTAT_TRANS 	: {	type : "string",							editable : false,		nullable : false	},
@@ -71,7 +72,7 @@
 						}
 					}
 				},
-				CD_TKBKGOODSSTATUS : {
+				CD_TKBKGOODSSTATUS 		: {
 					type : "array",
 					editable : true,
 					nullable : false,
@@ -85,7 +86,7 @@
 						}
 					}
 				},
-				CD_TKBKHRNKRSN : {
+				CD_TKBKHRNKRSN 			: {
 					type : "array",
 					editable : true,
 					nullable : false,
@@ -99,7 +100,7 @@
 						}
 					}
 				},
-				CD_TKBKLRKRSN : {
+				CD_TKBKLRKRSN 			: {
 					type : "array",
 					editable : true,
 					nullable : false,
@@ -113,7 +114,7 @@
 						}
 					}
 				},
-				DC_TKBKRSNCTT : {
+				DC_TKBKRSNCTT 			: {
 					type : "string",
 					editable : true,
 					nullable : false,
@@ -131,7 +132,7 @@
 						}
 					}
 				},
-				RECEIVE_SET : {
+				RECEIVE_SET 			: {
 					type : "string",
 					editable : true,
 					nullable : false,
@@ -149,7 +150,7 @@
 						}
 					}
 				},
-				SFEE_RADIO_SELECTED : {
+				SFEE_RADIO_SELECTED 	: {
 					type : "string",
 					editable : true,
 					nullable : false,
@@ -175,7 +176,7 @@
 						}
 					}
 				},
-				CD_PARS_INPUT : {
+				CD_PARS_INPUT 			: {
 					type : "array",
 					editable : true,
 					nullable : false,
@@ -203,7 +204,7 @@
 						}
 					}
 				},
-				NO_INVO_INPUT : {
+				NO_INVO_INPUT 			: {
 					type : "string",
 					editable : true,
 					nullable : false,
@@ -233,7 +234,7 @@
 						}
 					}
 				},
-				NO_INVO : {
+				NO_INVO 				: {
 					type : "string",
 					editable : true,
 					nullable : false,
@@ -247,7 +248,7 @@
 						}
 					}
 				},
-			    transform_pay_reason: {
+			    transform_pay_reason	: {
 			    	type: "array",
      			   	editable: true,
      			   	nullable: false,
@@ -344,6 +345,7 @@
         		tkbkhrnkrsnOp : {
         			 dataTextField:"NM_DEF"
                     ,dataValueField:"CD_DEF"
+                    ,optionLabel : "반품사유코드를 선택해 주세요. "
                     /*,enable: false
                     ,valuePrimitive: true*/
         		},
