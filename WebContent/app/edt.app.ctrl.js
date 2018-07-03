@@ -17,6 +17,7 @@ angular.module('edtApp')
 		
 		// make readonly
 		$(editor.data("kendoEditor").body).removeAttr("contenteditable").find("a").on("click.readonly", false);
+		$("textarea.small-editor").closest("table.k-editor").addClass("small-editor");
 
 		var splitterElement = $("#contentMain");
 		var menuSplitterEle = $("#menuMain");

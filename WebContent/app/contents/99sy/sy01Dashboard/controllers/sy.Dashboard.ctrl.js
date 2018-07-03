@@ -7,8 +7,8 @@
      * 코드관리
      */
     angular.module("sy.Dashboard.controller")
-        .controller("sy.DashboardCtrl", ["$scope", "$http", "$q", "$log", "sy.DashboardSvc", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "ModalSvc", "$state",   
-            function ($scope, $http, $q, $log, MaDashboardSvc, APP_CODE, $timeout, resData, Page, UtilSvc, ModalSvc, $state) {
+        .controller("sy.DashboardCtrl", ["AuthSvc", "$scope", "$http", "$q", "$log", "sy.DashboardSvc", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "ModalSvc", "$state",   
+                                         function (AuthSvc, $scope, $http, $q, $log, MaDashboardSvc, APP_CODE, $timeout, resData, Page, UtilSvc, ModalSvc, $state) {
         		var vm = this;
 	            var page  = $scope.page = new Page({ auth: resData.access }),
 		            today = edt.getToday(),
@@ -187,6 +187,8 @@
 	            	if(vm.allOpen) {
 	            		$timeout(function() {
 			                vm.broadcast();
+			                AuthSvc.isAccess().then(function (result) {
+			        		});
 		                }, 500);
 	            	}
 	            });

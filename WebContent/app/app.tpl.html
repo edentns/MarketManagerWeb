@@ -15,7 +15,7 @@
 					<div data-ui-view="contentView"></div>
 				</div>
 				<div id="helpView">
-					<textarea id="helpEditor"></textarea>
+					<textarea id="helpEditor" class="small-editor" ></textarea>
 				<div>
 			</div>
 		</div>
@@ -26,5 +26,8 @@
 .k-widget, .k-widget * {
     -webkit-box-sizing:border-box;
     box-sizing:border-box;
+}
+table.small-editor {
+	height: calc(100vh - 50px);
 }
 </style>

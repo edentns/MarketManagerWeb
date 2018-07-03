@@ -14,24 +14,27 @@
                     templateUrl : "app/contents/99sy/sy05MyInfo/templates/sy.MyInfo.tpl.html",
                     controller  : "sy.MyInfoCtrl",
                     resolve		: {
-                        resData : ["sy.LoginSvc", "$q", "$rootScope", "UtilSvc", function (SyLoginSvc, $q, $rootScope, UtilSvc) {
+                        resData : ["AuthSvc", "sy.LoginSvc", "$q", "$rootScope", "UtilSvc", function (AuthSvc, SyLoginSvc, $q, $rootScope, UtilSvc) {
                             var defer = $q.defer(),
                                 resData = {},
                                 param = {
                                 		procedureParam:"USP_SY_05MyInfo_GET"
                                 	};
 
-                            SyLoginSvc.isLogin().then(function () {
-                                $rootScope.$emit("event:login");
-                                $q.all([
-                                    UtilSvc.getList(param).then(function (result) {  
-		                            return result.data.results;
-		                        }),]).then(function (result) {
-	                        		resData.MyParam = result[0][0][0];
-	                        		resData.fileProfile = result[0][1][0];
-                                    defer.resolve( resData );
-                                });
-                                
+                            AuthSvc.isAccess().then(function (result) {
+                                resData.access = result[0];
+	                            SyLoginSvc.isLogin().then(function () {
+	                                $rootScope.$emit("event:login");
+	                                $q.all([
+	                                    UtilSvc.getList(param).then(function (result) {  
+			                            return result.data.results;
+			                        }),]).then(function (result) {
+		                        		resData.MyParam = result[0][0][0];
+		                        		resData.fileProfile = result[0][1][0];
+	                                    defer.resolve( resData );
+	                                });
+	                                
+	                            });
                             });
                             return defer.promise;
                         }]
