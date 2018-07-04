@@ -236,7 +236,7 @@
                  * 유저정보를 가져온다.
                  */
                 vo.getUserInfo = function () {
-            		vo.param = Object.assign({}, resData.MyParam);
+            		vo.param = angular.copy(resData.MyParam);
             		vo.fileProfileVO.currentData = resData.fileProfile;
             		vo.param.newPw = "";
                 };
