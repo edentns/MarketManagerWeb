@@ -48,6 +48,8 @@
                     DTS_TKBKAPPRRJT 	: { type: APP_SA_MODEL.DTS_TKBKAPPRRJT.type		, editable: false, nullable: false },
                     NO_TKBKAPPRRJT 		: { type: APP_SA_MODEL.NO_TKBKAPPRRJT.type		, editable: false, nullable: false },
                     DTS_TKBKCPLT_VIEW 	: { type: APP_SA_MODEL.DTS_TKBKCPLT.type		, editable: false, nullable: false },
+                    NM_TKBKSTAT   		: { type: APP_SA_MODEL.NM_TKBKSTAT.type    		, editable: false, nullable: false },
+                    NM_ORDSTAT   		: { type: APP_SA_MODEL.NM_ORDSTAT.type    		, editable: false, nullable: false },
                     NM_TKBKHRNKRSN 		: { type: "string"								, editable: false, nullable: false },
                     NM_TKBKLRKRSN 		: { type: "string"								, editable: false, nullable: false },
                     DC_TKBKRSNCTT 		: { type: "string"								, editable: false, nullable: false },
@@ -420,9 +422,9 @@
                     });
                 };
 
-                //APP_SA_MODEL.CD_TKBKRSN.fNm = "tkbkDataVO.cdTkbkrsnOp.dataSource";
-                APP_SA_MODEL.CD_ORDSTAT.fNm = "tkbkDataVO.ordStatusOp";
-                APP_SA_MODEL.CD_TKBKSTAT.fNm = "tkbkDataVO.cdTkbkstat";
+                APP_SA_MODEL.CD_TKBKRSN.fNm = "tkbkDataVO.cdTkbkrsnOp.dataSource";
+                //APP_SA_MODEL.CD_ORDSTAT.fNm = "tkbkDataVO.ordStatusOp";
+                //APP_SA_MODEL.CD_TKBKSTAT.fNm = "tkbkDataVO.cdTkbkstat";
                 APP_SA_MODEL.CD_PARS_TKBK.fNm = "tkbkDataVO.shipList";
                 
                 var grdCol = [[APP_SA_MODEL.ROW_CHK],
@@ -436,11 +438,11 @@
                               [APP_SA_MODEL.CD_PARS_TKBK     , APP_SA_MODEL.NO_INVO_TKBK  ],                              
                               [APP_SA_MODEL.DC_PCHREMI       , APP_SA_MODEL.NM_CONS       ],
                               [APP_SA_MODEL.NM_TKBKHRNKRSN   , APP_SA_MODEL.DC_CONSNEWADDR],
-                              [APP_SA_MODEL.CD_ORDSTAT       , APP_SA_MODEL.DC_SHPWAY     ],
+                              [APP_SA_MODEL.NM_ORDSTAT       , APP_SA_MODEL.DC_SHPWAY     ],
                               [APP_SA_MODEL.DTS_ORD          , APP_SA_MODEL.DTS_TKBKREQ   ],
                               [APP_SA_MODEL.DTS_TKBKAPPRRJT  , APP_SA_MODEL.NO_TKBKAPPRRJT],
                               [APP_SA_MODEL.DTS_RECE		 , APP_SA_MODEL.NO_RECER   	  ],
-                              [APP_SA_MODEL.YN_CONN          , APP_SA_MODEL.CD_TKBKSTAT   ]
+                              [APP_SA_MODEL.YN_CONN          , APP_SA_MODEL.NM_TKBKSTAT   ]
                              ],
                     grdDetOption      = {},
                     grdRowTemplate    = "<tr data-uid=\"#= uid #\">\n",

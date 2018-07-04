@@ -53,7 +53,7 @@
 	        		chkOrdStatList : ""
 	            };
 	            
-	            shpbyordDataVO.initLoad = function () {
+	            shpbyordDataVO.initLoad = function(){
 	            	var me = this;
                 	var ordParam = {
                 			lnomngcdhd: "SYCH00048",
@@ -482,7 +482,6 @@
                 			
                 			angular.element($("#grd_chk_master")).prop("checked",false);
                 		},
-                		/*pageSize: 6,*/
                 		batch: true,
                 		schema: {
                 			model: {
@@ -541,7 +540,7 @@
 															validation: {
 																no_invo_non_blank_validation: function (input) {
 																	if (input.is("[name='NO_INVO']")) {
-																		return Util03saSvc.NoINVOValidation(input, 'NO_INVO', 'no_invo_non_blank_validation');
+																		return Util03saSvc.NoINVOValidation(input, 'NO_INVO', 'no_invo_non_blank_validation',3);
 																	};
 																	return true;
 				  									    	  	}

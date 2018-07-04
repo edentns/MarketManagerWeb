@@ -156,8 +156,9 @@
 	        		cancelCodeMo : "",
 	        		dataTotal : 0,
 	        		resetAtGrd :"",
-	        		param : "" 
-		        };	           
+	        		param : "",
+	        		pageSizeValue : 9
+		        };
 	            
 	            ordDataVO.initLoad = function () {
 	            	var me = this;
@@ -205,8 +206,8 @@
     						return (ele.DC_RMK2);
     					});
                         
-                        $timeout(function(){
-                        	ordDataVO.isOpen(false);
+                        $timeout(function(){          
+        					ordDataVO.isOpen(false);
             				Util03saSvc.storedQuerySearchPlay(me, resData.storage);
                         },0);    
                     });
@@ -233,7 +234,8 @@
 					    CASH_PARAM : resData.storageKey
                     };
     				if(Util03saSvc.readValidation(me.param)){
-    					$scope.ordkg.dataSource.read();
+    					//$scope.ordkg.dataSource.read();
+                		grdOrdVO.dataSource.pageSize(ordDataVO.pageSizeValue);
     				};     					    				
 	            };
 	            
@@ -261,22 +263,21 @@
                 	me.resetAtGrd.dataSource.data([]);	            		            	
 	            };
 	            
-	            ordDataVO.isOpen = function (val) {
+	            ordDataVO.isOpen = function(val){
 	            	var searchIdHeight = $("#searchId").height();
 	            	var settingHeight = $(window).height() - searchIdHeight - 90;
-	            	var pageSizeValue = val? 9 : 12;
+	            	this.pageSizeValue = val? 9 : 12;
 	            	
 	            	$scope.ordkg.wrapper.height(settingHeight);
             		$scope.ordkg.resize();
-            		grdOrdVO.dataSource.pageSize(pageSizeValue);
 	            };
-                
+	                            
 		        //주문 검색 그리드
 	            var grdOrdVO = $scope.gridOrdVO = {
             		autoBind: false,
                     messages: {                        	
-                        requestFailed: "주문정보를 가져오는 중 오류가 발생하였습니다.",
-                        commands: { update: "저장", canceledit: "닫기" }
+                         requestFailed: "주문정보를 가져오는 중 오류가 발생하였습니다."
+                        ,commands: { update: "저장", canceledit: "닫기" }
                         ,noRecords: "검색된 데이터가 없습니다."
                     },
                 	boxTitle : "주문 목록",
@@ -286,7 +287,7 @@
             		},*/                	
                     pageable: {
                     	messages: UtilSvc.gridPageableMessages
-                    },
+                    },                    
                     noRecords: true,
                 	dataSource: new kendo.data.DataSource({
                 		transport: {
@@ -306,7 +307,7 @@
                 			update: function(e){
                 				if(confirm("주문 취소 하시겠습니까?")){
                 					var defer = $q.defer(),
-	                			 	param = e.data.models[0];
+	                			 		param = e.data.models[0];
                 				
                 					if(param.CD_ORDSTAT === '006'){
                 						alert('이미 취소된 주문입니다.');

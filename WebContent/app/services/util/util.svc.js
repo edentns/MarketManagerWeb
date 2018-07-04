@@ -190,9 +190,11 @@
 							gridContentTemplate += "<co04-cd-to-nm cd=\"#:"+gridColVal[iIndex].field+"#\" nm-box=\""+gridColVal[iIndex].fNm+"\">\n";
 						}else if(gridColVal[iIndex].field.indexOf("CD_PARS_TKBK") === 0 && gridColVal[iIndex].fNm !== "" && (gridColVal[iIndex].fNm)) {
 							gridContentTemplate += "<co05-pars-to-nm no-mrk=\"#: NO_MRK #\" cd=\"#:"+gridColVal[iIndex].field+"#\" nm-box=\""+gridColVal[iIndex].fNm+"\">\n";
-						}else if(gridColVal[iIndex].field.indexOf("DTS") === 0) {
+						}
+						/*else if(gridColVal[iIndex].field.indexOf("DTS") === 0) {
 							gridContentTemplate += "<co06-date-format origin-date=\"\'#:"+ gridColVal[iIndex].field+"#\'\"> \n";
-						}else if(gridColVal[iIndex].field.indexOf("YN_CONN") === 0) {
+						}*/
+						else if(gridColVal[iIndex].field.indexOf("YN_CONN") === 0) {
 							gridContentTemplate += "# if("+gridColVal[iIndex].field+" !== 'N'){#\n Y\n #}else{#\n N\n#}#";						
 						}else {
 							gridContentTemplate += "#: "+gridColVal[iIndex].field+" #\n";
@@ -219,9 +221,11 @@
 						}else{
 							gridContentTemplate += "# if("+gridColVal.field+"){ #\n #= kendo.toString("+gridColVal.field+",'C0', 'ko-KR') #\n #}#";
 						}						
-					}else if(gridColVal.field.indexOf("DTS") === 0) {
+					}
+					/*else if(gridColVal.field.indexOf("DTS") === 0) {
 						gridContentTemplate += "<co06-date-format origin-date=\"\'#:"+ gridColVal.field+"#\'\"> \n";	
-					}else if(gridColVal.field.indexOf("CD") === 0 && gridColVal.field.indexOf("CD_PARS_TKBK") !== 0 && gridColVal.fNm !== "" && gridColVal.fNm !== undefined) {
+					}*/
+					else if(gridColVal.field.indexOf("CD") === 0 && gridColVal.field.indexOf("CD_PARS_TKBK") !== 0 && gridColVal.fNm !== "" && gridColVal.fNm !== undefined) {
 						gridContentTemplate += "# if("+gridColVal.field+"){ #\n <co04-cd-to-nm cd=\"#:"+gridColVal.field+"#\" nm-box=\""+gridColVal.fNm+"\">\n #}#";
 					}else if(gridColVal.field.indexOf("CD_PARS_TKBK") === 0 && gridColVal.fNm !== "" && (gridColVal.fNm)) {
 						gridContentTemplate += "<co05-pars-to-nm no-mrk=\"#: NO_MRK #\" cd=\"#:"+gridColVal.field+"#\" nm-box=\""+gridColVal.fNm+"\">\n";

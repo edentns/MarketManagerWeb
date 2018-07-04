@@ -581,8 +581,8 @@
        	</td>
  		<td class="ta-c" style="padding:0">
  			<div class="custom-style">
- 				# if(CD_ORDSTAT){ 		#
- 				<co04-cd-to-nm cd="#:CD_ORDSTAT#" nm-box="echgDataVO.ordStatusOp">
+ 				# if(NM_ORDSTAT){ 		#
+ 				#:	NM_ORDSTAT			#
  				# }	   					#
  			</div>
  			<div class="custom-style">
@@ -599,7 +599,7 @@
  			</div>
  			<div class="custom-style">
  				# if(DTS_ECHGREQ){ 		#
-				<co06-date-format origin-date="'#:DTS_ECHGREQ#'">   
+				#:DTS_ECHGREQ# 
  				# }	 					#
  			</div>
        	</td>
@@ -611,7 +611,7 @@
  			</div>
  			<div class="ta-c custom-style">				 
  				# if(DTS_ECHGAPPRRJT){	#
-				<co06-date-format origin-date="'#:DTS_ECHGAPPRRJT#'">   
+				#:DTS_ECHGAPPRRJT		#
  				# }	 					#
  			</div>
        	</td>
@@ -634,8 +634,8 @@
  				# } 					# 
  			</div>
  			<div class="ta-c custom-style">
-				# if(DTS_ECHGCPLT){	#
-				<co06-date-format origin-date="'#: DTS_ECHGCPLT #'">   
+				# if(DTS_ECHGCPLT){		#
+				#: DTS_ECHGCPLT 		#   
  				# }	 					#
  			</div>
        	</td>
@@ -648,8 +648,8 @@
 			 	# }						#
  			</div>
  			<div class="ta-c custom-style">
-				# if(CD_ECHGSTAT){  	# 
- 				<co04-cd-to-nm cd="#:CD_ECHGSTAT#" nm-box="echgDataVO.echgStatusOp">
+				# if(NM_ECHGSTAT){  	# 
+ 				#:		NM_ECHGSTAT		#
  				# }						# 
  			</div>
        	</td>

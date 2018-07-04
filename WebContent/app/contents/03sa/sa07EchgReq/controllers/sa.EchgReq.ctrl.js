@@ -57,6 +57,8 @@
         			CD_PARS_ECHG		: { type: "string"	  , editable: false, nullable: false },
         			NO_INVO_ECHG		: { type: "string"	  , editable: false, nullable: false },      
         			DC_ECHGSHPCOSTAPVL  : { type: "string"	  , editable: false, nullable: false },
+        			NM_ORDSTAT    		: { type: "string"    , editable: false, nullable: false },
+        			NM_ECHGSTAT    		: { type: "string"    , editable: false, nullable: false },
                     CD_ECHGRJTRSN 		: {
 	                    					 type: "string"    
 	                    					,editable: true
@@ -1297,7 +1299,7 @@
                                       ]
 	                        },
 	                        {
-	                        	field: "CD_ORDSTAT",
+	                        	field: "NM_ORDSTAT",
 	                            title: "주문상태",
 	                            width: 100,
 	                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
@@ -1373,7 +1375,7 @@
 	                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
 		                        columns : [
 											{
-												field: "CD_ECHGSTAT",
+												field: "NM_ECHGSTAT",
 												title: "교환상태",
 												width: 100,
 												headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}

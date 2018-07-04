@@ -55,6 +55,9 @@
                     CD_CCLHRNKRSN : { type: "array"  					 	 , editable: false, nullable: false },
                     NM_CCLHRNKRSN : { type: APP_SA_MODEL.NM_CCLHRNKRSN.type  , editable: false, nullable: false },
                     NM_CCLLRKRSN  : { type: APP_SA_MODEL.NM_CCLHRNKRSN.type  , editable: false, nullable: false }, 
+
+                    NM_ORDSTAT 	  : { type: APP_SA_MODEL.NM_ORDSTAT.type  	 , editable: false, nullable: false },
+                    NM_CCLSTAT    : { type: APP_SA_MODEL.NM_CCLSTAT.type  	 , editable: false, nullable: false },
                     cancel_reject_code : {	
 				                    	type: "array"  
 				     				   ,editable: true
@@ -164,10 +167,10 @@
                               [APP_SA_MODEL.NO_PCHRPHNE    , APP_SA_MODEL.DC_APVLWAY    ],
                               [APP_SA_MODEL.DC_PCHREMI     , APP_SA_MODEL.NM_CONS       ],
                               [APP_SA_MODEL.NM_CCLHRNKRSN  , APP_SA_MODEL.DC_CONSNEWADDR],
-                              [APP_SA_MODEL.CD_ORDSTAT     , APP_SA_MODEL.DC_SHPWAY     ],
+                              [APP_SA_MODEL.NM_ORDSTAT     , APP_SA_MODEL.DC_SHPWAY     ],
                               [APP_SA_MODEL.DTS_ORD        , APP_SA_MODEL.DTS_CCLREQ    ],
                               [APP_SA_MODEL.DTS_CCLAPPRRJT , APP_SA_MODEL.CCL_NO_UPDATE ],                              
-                              [APP_SA_MODEL.YN_CONN 	   , APP_SA_MODEL.CD_CCLSTAT]
+                              [APP_SA_MODEL.YN_CONN 	   , APP_SA_MODEL.NM_CCLSTAT]
                              ],
                     grdDetOption      = {},
                     grdRowTemplate    = "<tr data-uid=\"#= uid #\">\n",
@@ -687,8 +690,7 @@
             					});
 	                			return defer.promise;
 	                		}
-                			return false;
-	                			
+                			return false;	                			
 	                	});	                
 	                }
                 });                
