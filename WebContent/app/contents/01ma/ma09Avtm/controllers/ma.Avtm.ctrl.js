@@ -3,8 +3,8 @@
 
     /**
      * @ngdoc function
-     * @name ma.Qa.controller : ma.QaCtrl
-     * QA 관리
+     * @name ma.Avtm.controller : ma.AvtmCtrl
+     * 광고창관리
      */
     angular.module("ma.Avtm.controller")
         .controller("ma.AvtmCtrl", ["$window", "$scope", "$http", "$q", "APP_CONFIG", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "ma.AvtmSvc", 
@@ -28,6 +28,7 @@
 	            avtmClftVO.tooltipOptions = UtilSvc.gridtooltipOptions;
 	            avtmVO.tooltipOptions     = UtilSvc.gridtooltipOptions;
 
+	            // 광고내용의 editor
 	            var editorAvtmVO = $scope.editorAvtmVO = {
 	            	kEditor: UtilSvc.kendoEditor("010")
 	            };
@@ -48,6 +49,7 @@
 	                "viewHtml"
 	            ];
 	            
+	            // [광고] 그리드 선택 버튼 클릭시 처리 함수
 	            editorAvtmVO.onAvtmGrdClick = function(e) {
 	            	var element =$(e.currentTarget);
 	                
@@ -67,6 +69,7 @@
 	                }
 	            };
 	            
+	            // 광고 내용의 시작일시, 종료일시 포멧 설정 객체
 	            editorAvtmVO.dateOptions = {
 	            	parseFormats: ["yyyyMMddHHmmss"], 
 	            	format: "yyyy-MM-dd HH:mm",
@@ -83,6 +86,7 @@
 	            	value : new Date()
 	            };
 	            
+	            // 삭제 버튼 함수
                 $scope.onDeleteGrd = function(){
                 	var grid = $("#divAvtmGrd").data("kendoGrid"),
                 		chked = grid.element.find("input:checked"),
@@ -106,6 +110,7 @@
                 	};
                 };
                 
+                // 광고 구분 그리드 설정 객체
 	            var gridAvtmClftVO = $scope.gridAvtmClftVO = {
 	            	autoBind: false,
 	            	messages: {                        	
@@ -173,6 +178,7 @@
                 	height: 802      
 	            };
 	            
+	            // 광고 그리드 객체
 	            var gridAvtmVO = $scope.gridAvtmVO = {
 	            	autoBind: false,
 	            	messages: {                        	
@@ -243,9 +249,15 @@
                     			else {
 			                    	var param = e.data.models[0];
 
-	            					param.DTS_AVTMSTRT = kendo.toString(new Date(param.DTS_AVTMSTRT), "yyyyMMddHHmmss");        
-	            					param.DTS_AVTMEND  = kendo.toString(new Date(param.DTS_AVTMEND) , "yyyyMMddHHmmss");
-	            					
+			                    	if(param.DTS_AVTMSTRT.length > 16) {
+			                    		param.DTS_AVTMSTRT = kendo.toString(new Date(param.DTS_AVTMSTRT), "yyyyMMddHHmmss");        
+			                    		param.DTS_AVTMEND  = kendo.toString(new Date(param.DTS_AVTMEND) , "yyyyMMddHHmmss");
+			                    	}
+			                    	else {
+			                    		param.DTS_AVTMSTRT = param.DTS_AVTMSTRT.toString().replace(/[-\s\:]/gi,'')+"00";
+			                    		param.DTS_AVTMEND  = param.DTS_AVTMEND.toString().replace(/[-\s\:]/gi,'')+"00";
+			                    	}
+				
 			                    	MaAvtmSvc.avtmUpt(param, 'U').then(function(res) {
 	                    				if(!res.data) {
 	                    					e.error([]);
@@ -282,7 +294,9 @@
 							        AM_AVTM       : {type: "string" , editable: true , nullable: false},
 							        DC_HTMLCONTENT: {type: "string" , editable: true , nullable: false},
 							        VAL_HEIGHT    : {type: "string" , editable: true, nullable: false},
-							        VAL_WIDTH     : {type: "string" , editable: true, nullable: false}
+							        VAL_WIDTH     : {type: "string" , editable: true, nullable: false},
+							        DT_TEST1      : {type: "string" , editable: true , nullable: false},
+							        DT_TEST2      : {type: "string" , editable: true , nullable: false}
 	                			}
 	                		}
 	                	}
@@ -311,10 +325,12 @@
                 	edit: function (e) {
         		        $(".k-window-titlebar").css("height","30px");
         		        $(".k-popup-edit-form").css("margin-top","16px");
+
+        		    	var grid = $("#divAvtmClftGrd").data("kendoGrid"),
+        			        dataItem = grid.dataItem(grid.select());
+        		    	
             		    //새 글 일때
             		    if (e.model.isNew()) { 	
-            		    	var grid = $("#divAvtmClftGrd").data("kendoGrid"),
-            			        dataItem = grid.dataItem(grid.select());
             		    	
             		        $(".k-grid-update").text("저장");
             		        $(".k-window-title").text("광고 등록");
@@ -325,17 +341,15 @@
             		    //수정 할 글일때
             		    }else{
             		    	$(".k-grid-update").text("수정");
-            		    	$(".k-window-title").text("광고 수정");
-
-                    		//e.model.set("DTS_AVTMSTRT", today);
-                    		//e.model.set("DTS_AVTMEND" , today);        
+            		    	$(".k-window-title").text("광고 수정");    
+            		    	
+            		    	e.model.set("DT_TEST1", e.model.DTS_AVTMSTRT);
+                    		e.model.set("DT_TEST2", e.model.DTS_AVTMEND);
             		    }
         		        $(".k-grid-cancel").text("취소");    
         		        
             		    $timeout(function () {
                         	if(!page.isWriteable()) {
-                        		//$(".k-grid-update").addClass("k-state-disabled");
-                        		//$(".k-grid-update").click(noticeDataVO.stopEvent);
                         	}
                         });
                 	},
@@ -347,10 +361,7 @@
                 	height: 802      
 	            };
 	            
-            	$scope.gridAvtmClftVO.dataSource.read().then(function(res) {
-//            		var settingHeight = $(window).height() - 120;
-//            		$scope.avtmClftkg.wrapper.height(settingHeight);
-//            		$scope.avtmkg.wrapper.height(settingHeight);            		
+            	$scope.gridAvtmClftVO.dataSource.read().then(function(res) {           		
             	});
             }]);
 }());
