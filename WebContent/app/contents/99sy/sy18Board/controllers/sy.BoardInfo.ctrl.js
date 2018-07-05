@@ -65,7 +65,7 @@
 	            
 	            // 게시글 삭제
 	            boardInfoDataVO.goDelete = function() {
-	            	if(!confirm("삭제하시겠습니까?")) {	
+	            	if(confirm("삭제하시겠습니까?")) {	
 		            	var params = {
 		            		NO_BOARD: $stateParams.ids
 		            	};
