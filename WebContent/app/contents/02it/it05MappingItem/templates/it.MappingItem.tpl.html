@@ -1,0 +1,149 @@
+<div id="app-content" class="col-xs-12 col-sm-10">
+    <div class="row">
+        <div id="app-content-header">
+            <ol class="breadcrumb">
+                <li><a href="#99sy/syDashboard"><i class="fa fa-home fa-2x"></i></a></li>
+                <li><a href="">상품/판매상품/판매상품맵핑</a></li>
+            </ol>
+        </div>
+    </div>
+    
+    <div class="row">
+    	
+               
+        <!-- 조회 리스트 -->          
+		<div class="content-area-container col-xs-12" style="padding:0px 0px 0px 0px;">
+			<div class="content-area-container col-xs-5" style="width: 46%">
+				마켓에 등록된 상품
+                <kendo-grid options="linkDataVO" id="linkDataVO">
+                </kendo-grid>
+			</div>
+			<div class="content-area-container col-xs-1" style="width: 8%;text-align: center;margin-top: 110px">
+				<kendo-button>
+				신규등록
+				</kendo-button>
+				</br>
+				<kendo-button style="margin-top: 70px">
+				상품맵핑
+				</kendo-button>
+			</div>
+			<div class="content-area-container col-xs-5" style="width: 46%">
+				마켓매니져에 등록된 판매상품
+                <div id="divMmVO" kendo-grid="mmDataVO" options="mmDataVO">
+	        	</div>	
+			</div>
+        </div>
+    </div>
+    
+    <div class="row">
+               
+        <!-- 조회 리스트 -->          
+		<div class="content-area-container col-xs-12" style="padding:0px 0px 0px 0px;margin-top: 10px">
+			<div class="content-area-container col-xs-5" style="width: 46%">
+				미리보기
+                <kendo-grid options="linkDataPreVO" id="linkDataPreVO">
+                </kendo-grid>
+			</div>
+			<div class="content-area-container col-xs-1" style="width: 8%;text-align: center;margin-top: 110px">
+				메세지창
+			</div>
+			<div class="content-area-container col-xs-5" style="width: 46%">
+                <div>
+                	<table>
+                		<tr>
+                			<th>상품번호
+                			</th>
+                			<th>상품명
+                			</th>
+                			<th>판매가
+                			</th>
+                		</tr>
+                	</table>
+	        	</div>	
+			</div>
+        </div>
+    </div>
+</div>
+
+<script id="linkGrid_template" type="text/x-kendo-template">
+	<tr data-uid="#= uid #">
+		<td class="ta-c">
+			<div class="custom-style-checkbox">
+				<input class='k-checkbox' data-role='checkbox' type='checkbox' ng-click="onGrdCkboxClick($event)" id="#= uid #_row">
+				<label class='k-checkbox-label k-no-text' style="vertical-align:middle;" for="#= uid #_row"></label>
+			<div>		
+      	</td>
+		<td class="ta-l" style="padding:0">
+          	<div class="custom-style">
+							  # if(NM_MRK !== "" && NM_MRK !== null && NM_MRK !== "undefined"){ # 
+							  #: NM_MRK # 
+							  # }else{  #
+							  #: "-" #
+                              #}	# 
+			</div>
+      	</td>
+		<td class="ta-l" style="padding:0">
+          	<div class="custom-style">
+							  # if(NO_MRKITEM !== "" && NO_MRKITEM !== null && NO_MRKITEM !== "undefined"){ #
+                  	    	  #: NO_MRKITEM  # 
+                      	      # }else{  #
+							  #: "-" #
+                              #}	# 
+			</div>
+      	</td>
+		<td class="ta-l" style="padding:0">
+          	<div class="custom-style">
+							   # if(NM_ITEM !== "" && NM_ITEM !== null && NM_ITEM !== "undefined"){ #
+							   #: NM_ITEM #
+							   # }else{  #
+							   #: "-" #
+                               #}	# 	
+			</div>
+     	</td>
+		<td class="ta-r" style="padding:0">
+         	<div class="custom-style"># if(S_ITEMPRC !== "" && S_ITEMPRC !== null && S_ITEMPRC !== "undefined"){ #
+							  #= kendo.toString(S_ITEMPRC,'C0', 'ko-KR') #
+							  # }else{ #
+								0
+							  #}#
+			</div>
+      	</td>
+	</tr>			
+</script>
+
+<script id="mmGrid_template" type="text/x-kendo-template">
+	<tr data-uid="#= uid #">
+		<td class="ta-c">
+			<div class="custom-style-checkbox">
+				<input class='k-checkbox' data-role='checkbox' type='checkbox' ng-click="onMmGrdCkboxClick($event)" id="#= uid #_row">
+				<label class='k-checkbox-label k-no-text' style="vertical-align:middle;" for="#= uid #_row"></label>
+			<div>		
+      	</td>
+		<td class="ta-l" style="padding:0">
+          	<div class="custom-style">
+							  # if(CD_ITEM !== "" && CD_ITEM !== null && CD_ITEM !== "undefined"){ #
+                  	    	  #: CD_ITEM  # 
+                      	      # }else{  #
+							  #: "-" #
+                              #}	# 
+			</div>
+      	</td>
+		<td class="ta-l" style="padding:0">
+          	<div class="custom-style">
+							   # if(NM_ITEM !== "" && NM_ITEM !== null && NM_ITEM !== "undefined"){ #
+							   #: NM_ITEM #
+							   # }else{  #
+							   #: "-" #
+                               #}	# 	
+			</div>
+     	</td>
+		<td class="ta-r" style="padding:0">
+         	<div class="custom-style"># if(S_ITEMPRC !== "" && S_ITEMPRC !== null && S_ITEMPRC !== "undefined"){ #
+							  #= kendo.toString(S_ITEMPRC,'C0', 'ko-KR') + " 원"#
+							  # }else{ #
+								0
+							  #}#
+			</div>
+      	</td>
+	</tr>			
+</script>

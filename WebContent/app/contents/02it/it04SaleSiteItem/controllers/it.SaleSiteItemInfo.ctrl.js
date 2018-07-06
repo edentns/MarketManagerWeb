@@ -274,14 +274,13 @@
 		            			saleItemDataVO.mallMrkList.push(saleItemDataVO.cmrkList[i]);
 		            		}
 		            	}
-		            	if(saleItemDataVO.mallMrkList.length == 1)saleItemDataVO.param.NO_MRK = saleItemDataVO.mallMrkList[0].NO_MRK;
-		            	
 		            	if(saleItemDataVO.NM_MRK == "옥션") saleItemDataVO.dataSetting(resData.auctData[0]);
             			if(saleItemDataVO.NM_MRK == "지마켓") saleItemDataVO.dataSetting(resData.gmrkData[0]);
             			if(saleItemDataVO.NM_MRK == "스토어팜") saleItemDataVO.dataSetting(resData.storfData[0]);
             			if(saleItemDataVO.NM_MRK == "11번가") saleItemDataVO.dataSetting(resData.stData[0]);
             			if(saleItemDataVO.NM_MRK == "쿠팡") saleItemDataVO.dataSetting(resData.coopData[0]);
-                        
+            			
+            			if(saleItemDataVO.mallMrkList.length == 1)saleItemDataVO.param.NO_MRK = saleItemDataVO.mallMrkList[0].NO_MRK;
 	            		saleItemDataVO.cmrkParsChange();
 		            	saleItemDataVO.cmrkTkbkChange();
 	            	}
@@ -1815,6 +1814,10 @@
 		    			valuePrimitive: true
 		    		});
                 };
+                
+                saleItemDataVO.goBack = function() {
+		        	$state.go('app.itSaleItem', { kind: 'list', menu: null, ids: null });
+		        };
                 
                 saleItemDataVO.doQuiry();
                 

@@ -328,7 +328,7 @@
                     	columns: [
                     	            {
     			                        field: "ROW_CHK",
-    			                        title: "<input class='k-checkbox' type='checkbox' id='grd_chk_master' ng-click='onBssGrdCkboxAllClick($event)'><label class='k-checkbox-label k-no-text' for='grd_chk_master' style='margin-bottom:0;'>​</label>",
+    			                        title: "<input class='k-checkbox' type='checkbox' id='grd_chk_master' ng-click='onSaleGrdCkboxAllClick($event)'><label class='k-checkbox-label k-no-text' for='grd_chk_master' style='margin-bottom:0;'>​</label>",
   			                        width: "40px",
     			                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px; vertical-align:middle;"}
                     	            },                        

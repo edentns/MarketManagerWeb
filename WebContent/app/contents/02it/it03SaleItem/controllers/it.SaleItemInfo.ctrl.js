@@ -148,6 +148,7 @@
 		        		NO_ASPHNE     : "",
 		        		GUI_AS        : "",
 		        		CD_BSSSALE       : "002",
+		        		CD_ADDITEM    : "",
 		        		
 		        		//판매정보
 		        		S_ITEMPRC     : 0,
@@ -925,7 +926,7 @@
 	                		transport: {
 	                			read: function(e) {
 	                				if(saleInfoDataVO.kind == "detail"){
-	                					if(resData.addDataList.length > 0){
+	                					if(resData.addDataList){
 	            							e.success(resData.addDataList);
 	            						}
 	                				}
@@ -1579,6 +1580,7 @@
     		        		NO_ASPHNE     : resData.detailData.NO_ASPHNE,
     		        		GUI_AS        : resData.detailData.GUI_AS,
     		        		CD_BSSSALE       : "002",
+    		        		CD_ADDITEM    : resData.detailData.CD_ADDITEM,
     		        		
     		        		//판매정보
     		        		S_ITEMPRC     : resData.detailData.S_ITEMPRC,
@@ -2274,7 +2276,7 @@
 	            // 인증정보 (옥션,지마켓) 수정,삭제,생성 판별 - 수정하기 전에
 	            saleInfoDataVO.ctfcSetting = function(){
 	            	// 옥션
-	            	for(var i = 0 ; saleInfoDataVO.param.AUCT.CTFCINFO.length; i++){
+	            	for(var i = 0 ; i < saleInfoDataVO.param.AUCT.CTFCINFO.length; i++){
 	            		if(saleInfoDataVO.param.AUCT.CTFCINFO[i].CD_CTFCINFO != ""){
 	            			saleInfoDataVO.param.AUCT.CTFCINFO[i].TEMP = "DELETE";
 	            			for(var j = 0 ; saleInfoDataVO.param.AUCT.ORI_CTFCINFO.length; j++){
@@ -2284,7 +2286,7 @@
 	            		}
 	            	}
 	            	// 지마켓
-	            	for(var i = 0 ; saleInfoDataVO.param.GMRK.CTFCINFO.length; i++){
+	            	for(var i = 0 ; i < saleInfoDataVO.param.GMRK.CTFCINFO.length; i++){
 	            		if(saleInfoDataVO.param.GMRK.CTFCINFO[i].CD_CTFCINFO != ""){
 	            			saleInfoDataVO.param.GMRK.CTFCINFO[i].TEMP = "DELETE";
 	            			for(var j = 0 ; saleInfoDataVO.param.GMRK.ORI_CTFCINFO.length; j++){

@@ -124,6 +124,7 @@
 	            //처음 화면들어왓을때
 	            saleItemDataVO.doQuiry = function(){
 	            	$timeout(function() {
+	            		saleItemDataVO.itemCtgrList1   = resData.itCtgrList;
 	            		$scope.gridSaleVO.dataSource.read();
 	            	});
 	            	/*$timeout(function() {
@@ -233,7 +234,7 @@
                     					saleItemDataVO.iCtgrId = saleItemDataVO.selectedCtgr3.ID_CTGR;
                     				}
                     				var param = {
-                    					procedureParam: "USP_IT_04SITEITEM_LIST_GET&L_CD_SIGNITEM@s|L_NM_ITEM@s|L_NO_MRK@s|L_CD_ITEMSTAT@s|L_CD_ITEMCTGR@s",
+                    					procedureParam: "USP_IT_04SITEITEM_LIST_GET&L_CD_SIGNITEM@s|L_NM_ITEM@s|L_NO_MRK@s|L_CD_ITEMSTAT@s|L_CD_ITEMCTGR@s|I_DATEOPT@s|DATE_FROM@s|DATE_TO@s",
                     					L_CD_SIGNITEM :	saleItemDataVO.signItem.value,
                     					L_NM_ITEM     : saleItemDataVO.nmItem.value,
                     					L_NO_MRK      : saleItemDataVO.cmrkIds,
@@ -244,7 +245,13 @@
                                     	DATE_TO       : new Date(saleItemDataVO.datesetting.period.end.y, saleItemDataVO.datesetting.period.end.m-1, saleItemDataVO.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis"),
                                     };
                     				UtilSvc.getList(param).then(function (res) {
-                						e.success(res.data.results[0]);       
+                						e.success(res.data.results[0]);  //1에 옵션정보 들어옴     
+                						res.data.results[1];
+                						// 옵션이 있을시 옵션갯수들 행으로 가져옴
+                						angular.forEach(res.data.results[1], function (data) {
+            		                		
+            		                    });
+                						
                 					});
                     			},   		
                     			parameterMap: function(e, operation) {
@@ -361,16 +368,10 @@
   		                        },                        
   		                        {
   		                        	field: "NM_ITEM",	
-  		                            title: "상품명/옵션",
+  		                            title: "상품명",
   		                            width: 200,
   		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
-  		                        },                         
-  		                        {
-  		                        	field: "CD_ITEM",	
-  		                            title: "자체 상품번호",
-  		                            width: 90,
-  		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
-  		                        },                 
+  		                        },             
   		                        {
   		                        	field: "NM_CTGR",	
   		                            title: "상품분류",
@@ -382,15 +383,9 @@
   		                            title: "판매가",
   		                            width: 70,
   		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
-  		                        },                          
+  		                        }, 
   		                        {
-  		                        	field: "",	
-  		                            title: "수수료",
-  		                            width: 60,
-  		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
-  		                        },    
-  		                        {
-  		                        	field: "QT_SALE",	
+  		                        	field: "QT_SSPL",	
   		                            title: "재고수량",
   		                            width: 70,
   		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
@@ -402,15 +397,15 @@
   		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
   		                        },    
   		                        {
-  		                        	field: "DTS_SALESTART",	
+  		                        	field: "DT_SALESTART",	
   		                            title: "판매시작일시",
-  		                            width: 100,
+  		                            width: 80,
   		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
   		                        },
   		                        {
-  		                        	field: "DTS_SALEEND",	
+  		                        	field: "DT_SALEEND",	
   		                            title: "판매종료일시",
-  		                            width: 100,
+  		                            width: 80,
   		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
   		                        }
                       ],
@@ -460,6 +455,9 @@
 	            				self.itemCtgrList2 = res.data.results[0];
                             });
 		            	}else{
+		            		saleItemDataVO.selectedCtgr1 = {ID_CTGR : "", NM_CTGR: ""};
+		            		saleItemDataVO.selectedCtgr2 = {ID_CTGR : "", NM_CTGR: ""};
+		            		saleItemDataVO.selectedCtgr3 = {ID_CTGR : "", NM_CTGR: ""};
 		            		self.itemCtgrList2 = "";self.itemCtgrList3 = "";
 		            	}
 	            	}else if(flag == 2){
@@ -469,6 +467,8 @@
 	            				self.itemCtgrList3 = res.data.results[0];
                             });
 		            	}else{
+		            		saleItemDataVO.selectedCtgr2 = {ID_CTGR : "", NM_CTGR: ""};
+		            		saleItemDataVO.selectedCtgr3 = {ID_CTGR : "", NM_CTGR: ""};
 		            		self.itemCtgrList3 = "";
 		            	}
 	            	}
