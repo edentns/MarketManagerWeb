@@ -59,6 +59,7 @@
         			DC_ECHGSHPCOSTAPVL  : { type: "string"	  , editable: false, nullable: false },
         			NM_ORDSTAT    		: { type: "string"    , editable: false, nullable: false },
         			NM_ECHGSTAT    		: { type: "string"    , editable: false, nullable: false },
+        			YN_ECHGTRANS   		: { type: "string"    , editable: false, nullable: false },
                     CD_ECHGRJTRSN 		: {
 	                    					 type: "string"    
 	                    					,editable: true
@@ -593,9 +594,8 @@
 						caseGARjtDisabled: "지마켓, 옥션은 교환거부 기능을 사용할 수 없습니다.",
 						caseCTransformDisabled: "쿠팡은 반품으로 변경 기능을 사용할 수 없습니다.",
 						caseStatusChkAlert: "주문 상태를 확인해 주세요.",
-						caseNinetyDaysAlert : "배송 완료 후 90일 이상 된 주문은 정상적으로 처리 되지 않을수 있습니다.",
 						caseOneMoreThanOrdChk : "한 건의 주문을 선택해 주세요",
-						caseYnConnChkAlert : "연동결과가 없는 주문 입니다.\n연동결과가 없는 주문은 해당마켓과 주문상태가 차이 날 수도 있습니다."
+						notPossibleExchangeToReturn : "이미 반품에서 교환으로 변경된 주문입니다.\n반품으로 변경 처리를 할수 없습니다."
     				};
                 	
 	                if (widget === grd){
@@ -673,8 +673,14 @@
 			    		                				alert(msg.caseStatusChkAlert);
 			    		                				return false;
 			    		                			};
+			    		                			//이미 교환에서 넘어온 주문
+			    		                			if(grdItem.YN_ECHGTRANS === 'Y'){
+			    			                    		alert(msg.notPossibleExchangeToReturn);
+			    			                    		return false;
+			    			                    	};
+			    			                    	//90일 이상 주문건
 			    		                			if(UtilSvc.diffDate(grdItem.DTS_ECHGREQ, new Date()) >= 90){
-			    				            			alert(msg.caseNinetyDaysAlert);
+			    				            			alert(APP_MSG.caseNinetyDaysAlert);
 			    			            			};
 			    		                			return true;
 			    		                			break;
@@ -686,7 +692,7 @@
 	                				}, 
 	                			proc = function (px, curCode){
 	                				if(grdItem.YN_CONN === 'N'){			                				
-			                			alert(msg.caseYnConnChkAlert);
+			                			alert(APP_MSG.caseNotReceiveResultOrd);
 			                		};
 				    	            echgDataVO.inputPopupHeaderTitle = Util03saSvc.popupHeaderTitle(curCode, grdItem.NM_MRK, "echg");
 	                				grd.options.editable.window.width = px;

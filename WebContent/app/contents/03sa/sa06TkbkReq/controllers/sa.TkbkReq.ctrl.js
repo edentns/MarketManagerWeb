@@ -62,42 +62,43 @@
 				    DTS_RECE	 		: { type: "string"								, editable: false, nullable: false },
 				    NO_RECER	 		: { type: "string"								, editable: false, nullable: false },
 				    DC_TKBKSHPCOSTAPVL  : { type: "string"								, editable: false, nullable: false },
+				    YN_TKBKTRNAS  		: { type: "string"								, editable: false, nullable: false },
 				    DC_ECHGRSNCTT		: { 
-						                   	 type: "string" 
-						                 	,editable: true 
-						                 	,nullable: false
-						                 	,validation: {
-						                 		dc_echgrsncttvalidation: function (input) {
-						                 			if(["004"].indexOf(tkbkDataVO.updateChange) > -1 && input.is("[name='DC_ECHGRSNCTT']")){
-														if (!input.val()) {
-															input.attr("data-dc_echgrsncttvalidation-msg", "교환변경 상세사유를 입력해 주세요.");
-														    return false;
-														};
-														if (input.val() && input.val().length > 200) {
-															input.attr("data-dc_echgrsncttvalidation-msg", "교환변경 상세사유를 200자 이내로 입력해 주세요.");
-														    return false;
-														};
-														Util03saSvc.manualTkbkDataBind($scope.tkbkkg, input, "DC_ECHGRSNCTT");	
-						                 			}	
-													return true;
-												}
-											} 
+						                   	 	type: "string" 
+						                   	   ,editable: true 
+						                   	   ,nullable: false
+						                   	   ,validation: {
+						                   		   dc_echgrsncttvalidation: function (input) {
+						                   			   if(["004"].indexOf(tkbkDataVO.updateChange) > -1 && input.is("[name='DC_ECHGRSNCTT']")){
+						                   				   if (!input.val()) {
+						                   					   input.attr("data-dc_echgrsncttvalidation-msg", "교환변경 상세사유를 입력해 주세요.");
+						                   					   return false;
+						                   				   };
+						                   				   if (input.val() && input.val().length > 200) {
+						                   					   input.attr("data-dc_echgrsncttvalidation-msg", "교환변경 상세사유를 200자 이내로 입력해 주세요.");
+						                   					   return false;
+						                   				   };
+						                   				   Util03saSvc.manualTkbkDataBind($scope.tkbkkg, input, "DC_ECHGRSNCTT");	
+						                   			   }	
+						                   			   return true;
+						                   		   }
+						                   	   } 
 							              },	
 				    transform_pay_reason: {
-					                    	type: "array"  
-						     			   ,editable: true
-						     			   ,nullable: false
-						                   ,validation: {
-						                	   transform_pay_reasonvalidation: function (input) {
-						                		   if(tkbkDataVO.eCode.indexOf(tkbkDataVO.marketDivisionCode) > -1 && ["004"].indexOf(tkbkDataVO.updateChange) > -1 && input.is("[name='transform_pay_reason']")){
-												    	if (!Util03saSvc.manualTkbkDataBind($scope.tkbkkg, input, "transform_pay_reason")) {
-						                                	input.attr("data-transform_pay_reasonvalidation-msg", "(교환,반품)배송비 전달방법을 선택해 주세요.");
-						                                    return false;
-						                                };
-						                		   };
-						                		   return true;
-										    	}
-											}
+					                    		type: "array"  
+					                    	   ,editable: true
+					                    	   ,nullable: false
+					                    	   ,validation: {
+					                    		   transform_pay_reasonvalidation: function (input) {
+					                    			   if(tkbkDataVO.eCode.indexOf(tkbkDataVO.marketDivisionCode) > -1 && ["004"].indexOf(tkbkDataVO.updateChange) > -1 && input.is("[name='transform_pay_reason']")){
+					                    				   if (!Util03saSvc.manualTkbkDataBind($scope.tkbkkg, input, "transform_pay_reason")) {
+					                    					   input.attr("data-transform_pay_reasonvalidation-msg", "(교환,반품)배송비 전달방법을 선택해 주세요.");
+					                    					   return false;
+					                    				   };
+					                    			   };
+					                    			   return true;
+					                    		   }
+					                    	   }
 					     				  },
 				    RECEIVE_SET  		: {
 							                   	 type: "string"
@@ -337,6 +338,16 @@
 	        		},
 	        		inputPopupHeaderTitle : ''
 		        };   
+	            
+	            tkbkDataVO.alertMsg = {
+            		qikShpYn : "빠른 환불 요청건은 교환으로 변경 처리가 진행 되지 없습니다.",
+					cltImpo : "반품상품이 수거되지 않으면 교환으로 변경 처리가 진행 되지 없습니다.",
+					procYn : "주문상태를 확인해 주세요.",
+					returnToExchangeFail : "교환으로 변경처리 실패 하였습니다.\n관리자에게 문의해 주세요.",
+					returnToExchangeOky : "교환으로 변경처리 하였습니다.\n처리된 주문은 교환관리에서 확인해주세요.",
+					notPossibleReturnToExchange : "이미 교환에서 반품으로 변경된 주문입니다.\n교환으로 변경 처리를 할수 없습니다.",
+					plzChkOneOrd : "한 건의 주문을 선택해 주세요"
+	            };
 	            
 	            tkbkDataVO.initLoad = function () {
 	            	var me = this;
@@ -911,29 +922,28 @@
             												((ele.NO_MNGMRK === 'SYMM170101_00005' && ['004','005','007','008','009'].indexOf(ele.CD_ORDSTAT) > -1 && ele.CD_TKBKSTAT === '001') ||
             												 (['SYMM170101_00001','SYMM170101_00003'].indexOf(ele.NO_MNGMRK) > -1 && ['004','005'].indexOf(ele.CD_ORDSTAT) > -1 && ele.CD_TKBKSTAT === '001') ||		
                         									 (ele.NO_MNGMRK === 'SYMM170101_00002' && ['004','005'].indexOf(ele.CD_ORDSTAT) > -1 && ['001','002'].indexOf(ele.CD_TKBKSTAT) > -1));
-            									}),
-                								alertMsg = {
-                									qikShpYn : "빠른 환불 요청건은 교환으로 변경 처리가 진행 되지 없습니다.",
-                									cltImpo : "반품상품이 수거되지 않으면 교환으로 변경 처리가 진행 되지 없습니다.",
-                									procYn : "주문상태를 확인해 주세요.",
-                									returnToExchangeFail : "교환으로 변경처리 실패 하였습니다.\n관리자에게 문의해 주세요.",
-                									returnToExchangeOky : "교환으로 변경처리 하였습니다.\n처리된 주문은 교환관리에서 확인해주세요."
-                								};
+            									});
                 							
 	            							if(e.data.models.length !== param.length){
-	            								alert(alertMsg.procYn);
+	            								alert(tkbkDataVO.alertMsg.procYn);
+	                    	            		//saTkbkReqSvc.allChkCcl(tkbkGrd);
+	                    	            		tkbkDataVO.ngIfinIt('N');
+	                    						return false;
+	            							};
+	            							if(param[0].YN_TKBKTRANS === 'Y'){
+	            								alert(tkbkDataVO.alertMsg.notPossibleReturnToExchange);
 	                    	            		//saTkbkReqSvc.allChkCcl(tkbkGrd);
 	                    	            		tkbkDataVO.ngIfinIt('N');
 	                    						return false;
 	            							};
 	            							if(tkbkDataVO.gCode.indexOf(param[0].CODE) > -1 && tkbkDataVO.receiveCheckCode === 'N'){
-	                							alert(alertMsg.cltImpo);   	                							
+	                							alert(tkbkDataVO.alertMsg.cltImpo);   	                							
 	                							//saTkbkReqSvc.allChkCcl(tkbkGrd);
 	                							tkbkDataVO.ngIfinIt('N');
 	                    	            		return false;
 	            							};
 	            							if(tkbkDataVO.gCode.indexOf(param[0].CODE) > -1 && param[0].NM_TKBKLRKRSN === "빠른환불"){
-	                							alert(alertMsg.qikShpYn);   	                							
+	                							alert(tkbkDataVO.alertMsg.qikShpYn);   	                							
 	                							//saTkbkReqSvc.allChkCcl(tkbkGrd);
 	                							tkbkDataVO.ngIfinIt('N');
 	                    	            		return false;
@@ -956,7 +966,7 @@
 	                        						};
 		    	        	            			
 		    	        	            			if(trueV.length > 0 && falseV.length === 0){
-	                        							alert(alertMsg.returnToExchangeOky);
+	                        							alert(tkbkDataVO.alertMsg.returnToExchangeOky);
 		    	        	            				defer.resolve();		         
 		    	        	            				Util03saSvc.storedQuerySearchPlay(tkbkDataVO, resData.storage);
 		    	        	            			}else if(falseV.length > 0){
@@ -964,7 +974,7 @@
 		    	        	            				e.error([]);
 		    	        	            				defer.resolve();            		
 		    	        	            			}else if(allV.length < 1){
-		    	        	            				alert(alertMsg.returnToExchangeFail);
+		    	        	            				alert(tkbkDataVO.alertMsg.returnToExchangeFail);
 		                    							e.error();
 		    	        	            				defer.resolve();            		
 		    	        	            			};	
@@ -976,11 +986,11 @@
 	            							}else{
 	            								saTkbkReqSvc.tkbkExchangeStoreFarmRequest(param[0]).then(function (res) {	
 	                        						if(res.data === "success"){
-	                        							alert(alertMsg.returnToExchangeOky);
+	                        							alert(tkbkDataVO.alertMsg.returnToExchangeOky);
 		    	        	            				defer.resolve();		         
 		    	        	            				Util03saSvc.storedQuerySearchPlay(tkbkDataVO, resData.storage);
 		    	        	            			}else{
-	                        							alert(alertMsg.returnToExchangeFail);
+	                        							alert(tkbkDataVO.alertMsg.returnToExchangeFail);
 		                    							e.error();
 		    	        	            				defer.resolve();            		
 		    	        	            			};	
@@ -1047,7 +1057,7 @@
     			    	tkbkcd = ['002','005'];
                 	
                 	if(chkedLeng != 1){
-        				alert("한 건의 주문을 선택해 주세요");	
+        				alert(tkbkDataVO.alertMsg.plzChkOneOrd);	
         				return false;
         			};
     			
@@ -1071,17 +1081,17 @@
 	            			}; 
 	            			//11번가
                 			if(['170106'].indexOf(grdItem.CODE) > -1 && ['004','005','007','008','009'].indexOf(grdItem.CD_ORDSTAT) < 0 || grdItem.CD_TKBKSTAT !== '001'){			                				
-                				alert("주문상태를 확인해 주세요.");
+                				alert(tkbkDataVO.alertMsg.procYn);
                 				return false;
                 			}//스토어팜
                 			if(['170103'].indexOf(grdItem.CODE) > -1 && ['004','005'].indexOf(grdItem.CD_ORDSTAT) < 0 || ['001','002'].indexOf(grdItem.CD_TKBKSTAT) < 0){			                				
-                				alert("주문상태를 확인해 주세요.");
+                				alert(tkbkDataVO.alertMsg.procYn);
                 				return false;
                 			};
 						};
                 		case '003' : {
                 			if(grdItem.CD_TKBKSTAT !== "001" || ['004','005','007','008','009'].indexOf(grdItem.CD_ORDSTAT) < 0){
-                				alert("주문상태를 확인해 주세요.");
+                				alert(tkbkDataVO.alertMsg.procYn);
                 				return false;
                 			}
                 			break;
@@ -1092,21 +1102,27 @@
 	            				return false;
 	            			}
 	            			if(['170104','170102'].indexOf(grdItem.CODE) > -1 && ['004','005'].indexOf(grdItem.CD_ORDSTAT) < 0 || grdItem.CD_TKBKSTAT !== '001'){
-	            				alert("주문상태를 확인해 주세요.");
+	            				alert(tkbkDataVO.alertMsg.procYn);
                 				return false;
                 			}
 	            			//11번가
                 			if(['170106'].indexOf(grdItem.CODE) > -1 && ['004','005','007','008','009'].indexOf(grdItem.CD_ORDSTAT) < 0 || grdItem.CD_TKBKSTAT !== '001'){			                				
-                				alert("주문상태를 확인해 주세요.");
+                				alert(tkbkDataVO.alertMsg.procYn);
                 				return false;
                 			}
                 			//스토어팜
                 			if(['170103'].indexOf(grdItem.CODE) > -1 && ['004','005'].indexOf(grdItem.CD_ORDSTAT) < 0 || ['001','002'].indexOf(grdItem.CD_TKBKSTAT) < 0){			                				
-                				alert("주문상태를 확인해 주세요.");
+                				alert(tkbkDataVO.alertMsg.procYn);
                 				return false;
                 			};
+                			//이미 교환에서 넘어온 주문
+                			if(grdItem.YN_TKBKTRANS === 'Y'){
+		            			alert(tkbkDataVO.alertMsg.notPossibleReturnToExchange);
+		            			return false;
+	            			};
+	            			//90일 이상 주문건
 	            			if(UtilSvc.diffDate(grdItem.DTS_TKBKREQ, new Date()) >= 90){
-		            			alert("배송 완료 후 90일 이상 된 주문은 정상적으로 처리 되지 않을수 있습니다.");
+		            			alert(APP_MSG.caseNinetyDaysAlert);
 	            			};
 	            			break;
 						}
@@ -1117,8 +1133,9 @@
     				};
     				
     				if(grdItem.YN_CONN === 'N'){			                				
-            			alert("연동결과가 없는 주문 입니다.\n연동결과가 없는 주문은 해당마켓과 주문상태가 차이 날 수도 있습니다.");
+            			alert(APP_MSG.caseNotReceiveResultOrd);
             		};	
+            		
             		tkbkDataVO.popupColumn = [];
             		tkbkDataVO.popupColumn = [
 	    		                          	[{name: "마켓",   align : ""},
@@ -1174,6 +1191,6 @@
 	                }
                 });
 	            
-	            tkbkDataVO.initLoad(); 
+	            tkbkDataVO.initLoad();
             }]);
 }());

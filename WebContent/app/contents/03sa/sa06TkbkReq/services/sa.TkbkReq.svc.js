@@ -126,8 +126,9 @@
                 			if(input.is("[name='CD_PARS']") && input.val() === ""){
                 				input.attr("data-cd_parsvalidation-msg", "택배사를 입력해 주세요.");
                                 return false;
-                			}else if(input.is("[name='NO_INVO']")){
-                				var result =  Util03saSvc.NoINVOValidation(input, 'NO_INVO', 'no_invovalidation');
+                			}
+                			else if(input.is("[name='NO_INVO']")){
+                				var result = Util03saSvc.NoINVOValidation(input, 'NO_INVO', 'no_invovalidation', 3);
 		            			if(result){
 		            				Util03saSvc.manualTkbkDataBind(grd, input, "NO_INVO");
 		            			}

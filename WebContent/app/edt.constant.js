@@ -60,7 +60,8 @@
         caseNinetyDaysAlert : "배송 완료 후 90일 이상 된 주문은 정상적으로 처리 되지 않을수 있습니다.",
         caseThirtyDaysAlert : "30일 이전까지 신청해주세요.",
         //caseYnConfirm : "구매 확정된 주문은 요청할 수 없습니다.",
-        caseChkOrdAlert : "주문 상태를 확인해 주세요."
+        caseChkOrdAlert : "주문 상태를 확인해 주세요.",
+        caseNotReceiveResultOrd : "연동결과가 없는 주문 입니다.\n연동결과가 없는 주문은 해당마켓과 주문상태가 차이 날 수도 있습니다."
     });
 
 	edtApp.constant('APP_AUTH', {

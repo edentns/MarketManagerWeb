@@ -187,24 +187,13 @@
 		</td>
 	</tr>
 	<tr class="border-bottom-line">
-		<td class="active border-right-line ta-l">
-			&emsp;구매수량
-		</td>
-		<td class="ta-r border-right-line">
-			#if(QT_ORD){ #
-			#: QT_ORD #
-			#}#
-		</td>
-		<td class="active border-right-line ta-l">
-			&emsp;반품완료 건수
-		</td>
-		<td class="ta-r">	
-			#if(QT_TKBK_OUT){ #
-			#: QT_TKBK_OUT #
-			#}else{#
-			0
-			#}#				
-		</td>
+		#if(Type === '001' || (Type === '002' && NO_MNGMRK !== 'SYMM170901_00001' && NO_MNGMRK !== 'SYMM170101_00005')) {#
+			#var createCommonTemp = kendo.template($("\#shipping_none_tkbk_qty_template").html());#
+        	#=createCommonTemp(data)#
+		#}else if (Type === '002'){#
+			#var createCommonTemp = kendo.template($("\#shipping_tkbk_qty_template").html());#
+        	#=createCommonTemp(data)#
+		#} #
 	</tr>
 
 	#if(Type === '001') {#
@@ -225,6 +214,40 @@
 
 	</tbody>
 </table>
+</script>
+
+<!-- 판매자 반품 반품 수량 없이 -->
+<script id="shipping_none_tkbk_qty_template" type="text/x-kendo-template">
+	<td class="active border-right-line ta-l">
+		&emsp;구매수량
+	</td>
+	<td class="ta-r" colspan="3">
+		#if(QT_ORD){ #
+		#: QT_ORD #
+		#}#
+	</td>
+</script>
+
+<!-- 판매자 반품 반품 수량  -->
+<script id="shipping_tkbk_qty_template" type="text/x-kendo-template">
+	<td class="active border-right-line ta-l">
+		&emsp;구매수량
+	</td>
+	<td class="ta-r border-right-line">
+		#if(QT_ORD){ #
+		#: QT_ORD #
+		#}#
+	</td>
+	<td class="active border-right-line ta-l">
+		&emsp;반품완료 건수
+	</td>
+	<td class="ta-r">	
+		#if(QT_TKBK_OUT){ #
+		#: QT_TKBK_OUT #
+		#}else{#
+			0
+		#}#
+	</td>
 </script>
 
 <!-- 배송정보 수정  팝업 -->
@@ -428,11 +451,6 @@
 			    style="width:100%;"/>
 		</td>
 	</tr>
-	<tr>
-		<td class="ta-l" colspan="4">
-			<mark>스토어팜은 판매자 직접반품 신청 후 즉시 반품 승인상태가 됩니다.</mark>
-		</td>
-	</tr>	
 </script>
 
 <!-- 11번가 판매자 직접반품 신청 팝업 -->
