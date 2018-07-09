@@ -166,7 +166,7 @@
                                         if($stateParams.kind == "list"){
 	                            			var history = result[25];
 	                            			
-	                            			if(history){
+	                            			if(history.DATEOPT){
 	                		            		resData.signItemValue = history.CD_SIGNITEM;	
 	                		            		resData.nmItemValue   = history.NM_ITEM;
 	                		            		resData.cmrkIds       = history.NO_MRK;
@@ -206,11 +206,10 @@
 	                		            		resData.end   = angular.copy(edt.getToday());    
 	        				            		resData.selected = 'current';                              				
 	                            			}
+	                            			defer.resolve( resData );
                                         }
-                                        defer.resolve( resData );
                                     });
                             });
-
                             return defer.promise;
                         }]
                     }
