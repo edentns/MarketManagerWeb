@@ -26,7 +26,7 @@ angular.module('edtApp')
             orientation: "horizontal",
             panes: [
                 { collapsible: false },
-                { collapsible: true, resizable: true, size: "20%" }
+                { collapsible: true, resizable: true, size: "470px" }
             ]
         }).data("kendoSplitter");
 
