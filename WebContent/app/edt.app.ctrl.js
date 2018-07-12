@@ -34,11 +34,12 @@ angular.module('edtApp')
             orientation: "vertical",
             panes: [
                 { collapsible: false },
-                { collapsible: true, resizable: true, size: "30%" }
+                { collapsible: true, resizable: true, size: "0%" }
             ]
         });
 		
-		UtilSvc.splitter.toggle(splitterElement.children(".k-pane")[1], false);
+		//UtilSvc.splitter.toggle(splitterElement.children(".k-pane")[1], false);
+		//UtilSvc.menuSplitter.toggle(menuSplitterEle.children(".k-pane")[1], false);
 		//splitterElement.height($scope.menuConHeight);
 		
 		kendo.culture('ko-KR');
