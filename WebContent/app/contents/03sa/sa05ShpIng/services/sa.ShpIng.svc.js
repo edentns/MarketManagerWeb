@@ -69,7 +69,7 @@
                 		return false;
                 	}
 					if(grdItem.YN_CONFIRM === 'Y'){
-                		alert(APP_MSG.caseChkOrdAlert);
+                		alert(APP_MSG.caseYnConfirm);
                 		return false;
                 	}
 					if(UtilSvc.diffDate(grdItem.DTS_ORD, new Date()) > 30){
