@@ -18,6 +18,7 @@
 	            	kEditor    : UtilSvc.kendoEditor("010"),
                 	NO_C      : $rootScope.webApp.user.NO_C,
                 	NO_EMP    : $rootScope.webApp.user.NO_EMP,
+                	NM_NKNE   : $rootScope.webApp.user.NM_NKNE,
 	            	fileDataVO : {
 	            		CD_AT:'011',
 	        			limitCnt: 5,

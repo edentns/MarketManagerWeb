@@ -175,12 +175,17 @@
     	        				vo.ynEditNkne     = false;
     	        				vo.ynCheckDupNkne = false;
     	        				resData.MyParam.NM_NKNE = vo.param.NM_NKNE;
+    	        				$rootScope.webApp.user.NM_NKNE = vo.param.NM_NKNE;    	        				
     	        				alert('성공하였습니다.');
     		        		}, function() {
     		        			alert('파일업로드 실패하였습니다.');
     		        		});
     	        		}
     	        		else {
+    	        			vo.ynEditNkne     = false;
+	        				vo.ynCheckDupNkne = false;
+	        				resData.MyParam.NM_NKNE = vo.param.NM_NKNE;
+	        				$rootScope.webApp.user.NM_NKNE = vo.param.NM_NKNE;
     	        			alert('성공하였습니다.');
     	        		}
                     });
