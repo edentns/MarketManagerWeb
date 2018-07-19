@@ -85,7 +85,7 @@
 						                   	   } 
 							              },	
 				    transform_pay_reason: {
-					                    		type: "array"  
+					                    		type: "string"  
 					                    	   ,editable: true
 					                    	   ,nullable: false
 					                    	   ,validation: {
@@ -211,7 +211,7 @@
 												}
                     				      },	
                     PICK_NO_INVO		: {
-						                    	type: "string" 
+                    							type: "string" 
 								     		   ,editable: true
 								     		   ,nullable: false
 								               ,validation: {
@@ -471,8 +471,8 @@
 	            	return input.indexOf(eqInput) > -1;
 	            },	    
 	            
-	            receiveCheckClickEvent = $scope.receiveCheckClickEvent = function(e, code){
-	            	saTkbkReqSvc.receiveCheckClickEvent(tkbkDataVO, e, code);
+	            receiveCheckClickEvent = $scope.receiveCheckClickEvent = function(e, code, cdParsTkbk){
+	            	saTkbkReqSvc.receiveCheckClickEvent(tkbkDataVO, e, code, cdParsTkbk);
 	            },	   
 	            
 	            nowYnCheckClickEvent = $scope.nowYnCheckClickEvent = function(e){
@@ -650,6 +650,7 @@
                     			}
                     			case '170103' : {
                     				var localNoMrk = e.model.NO_MRK,
+                    					cdPars = e.model.CD_PARS,
                     				    deliverDS = dataVo.shipList.filter(function(ele){
     	    	            			return ele.DC_RMK1 === localNoMrk;
     	    	            		});	            	
@@ -659,7 +660,7 @@
                     				e.container.find("select[name=CD_PARS]").kendoDropDownList({
     	    	            			dataSource : deliverDS,
     	    	                		dataTextField : "NM_PARS_TEXT",
-    	    	                		dataValueField : "CD_DEF",
+    	    	                		dataValueField : "CD_PARS",
     	    	                		optionLabel : "택배사를 선택해 주세요 ",
     	    	                		select : function(e){
     	    	                			var me = this;
@@ -679,6 +680,13 @@
 	                                    	}
 	                                    }
     	    	            		});
+                    				
+                    				if(cdPars){
+                    					var cdParsDdl = e.container.find("select[name=CD_PARS]").data("kendoDropDownList");
+                    					  
+                    					cdParsTkbkDdl.value(cdPars);
+                    					cdParsTkbkDdl.trigger("change"); 
+                    				};
                     				break;
                     			}
                     			default : {
@@ -719,6 +727,7 @@
                 			
                 			pickShippingList.$promise.then(function (data) {
                 				var Data = data.length < 1 ? [{NM_PARS_TEXT : "택배사 등록", CD_PARS : ""}] : data;
+                				
                 				selector.find("select[name=PICK_CD_PARS]").kendoDropDownList({
 	    	            			dataSource : Data,
 	    	                		dataTextField : "NM_PARS_TEXT",
@@ -750,6 +759,7 @@
 	    	                		dataTextField : "NM_DEF",
 	    	                		dataValueField : "CD_DEF",
 	    	                		optionLabel : "교환배송비 전달방법을 선택해 주세요 ",
+	    	                		valuePrimitive: true,
 	    	                		select : function(e){
 	    	                			var me = this;
 	    	                			$timeout(function(){

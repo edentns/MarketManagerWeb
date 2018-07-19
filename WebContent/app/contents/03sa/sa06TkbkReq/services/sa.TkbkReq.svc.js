@@ -7,7 +7,7 @@
      * 상품분류관리
      */
     angular.module("sa.TkbkReq.service")
-        .factory("sa.TkbkReqSvc", ["$rootScope", "APP_CONFIG", "$http", "UtilSvc", "Util03saSvc", "$log", function ($rootScope, APP_CONFIG, $http, UtilSvc, Util03saSvc, $log) {
+        .factory("sa.TkbkReqSvc", ["$rootScope", "APP_CONFIG", "$http", "UtilSvc", "Util03saSvc", "$log", "$timeout", function ($rootScope, APP_CONFIG, $http, UtilSvc, Util03saSvc, $log, $timeout) {
             return {
             	
             	/**
@@ -83,7 +83,7 @@
 					});
 				},
 					            
-	            receiveCheckClickEvent : function(model, e, code){
+	            receiveCheckClickEvent : function(model, e, code, cdParsTkbk){
 	            	var element = $(e.currentTarget),
             			checked = element.val(), 
             			type = model.updateChange,
@@ -110,7 +110,14 @@
 	            		if(checked === 'N'){
 	            			model.receiveCheckCode = checked;	            			
 		            	}else{
-		            		model.ngIfinIt('Y');
+		            		model.ngIfinIt('Y');		            		
+
+            				if(cdParsTkbk){
+            					var cdParsTkbkDdl = element.parents("table").find("select[name=PICK_CD_PARS]").data("kendoDropDownList");
+            					  
+            					cdParsTkbkDdl.value(cdParsTkbk);
+            					cdParsTkbkDdl.trigger("change"); 
+            				};
 		            	};
 	            	}
 	            },

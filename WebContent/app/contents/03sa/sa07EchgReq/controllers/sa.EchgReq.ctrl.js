@@ -135,7 +135,7 @@
 						                                    return false;
 						                                }
 												    	if (input.is("[name='CD_PARS']") && input.val()) {
-												    		Util03saSvc.manualTkbkDataBind($scope.echgkg, input, "CD_PARS_INPUT");
+												    		Util03saSvc.manualTkbkDataBind($scope.echgkg, input, "CD_PARS");
 														    return true;
 						                                }
 						                		   };
@@ -161,7 +161,7 @@
 						            					   (me.sCode[0] === me.curCode && "004" === me.updateChange && me.receiveChk)){
 						            				   var result = Util03saSvc.NoINVOValidation(input, 'NO_INVO', 'no_invo_inputvalidation');		
 						            				   if(result){
-						            					   Util03saSvc.manualTkbkDataBind($scope.echgkg, input, "NO_INVO_INPUT");
+						            					   Util03saSvc.manualTkbkDataBind($scope.echgkg, input, "NO_INVO");
 						            				   };
 						            				   return result;
 					                               };	
