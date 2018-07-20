@@ -155,10 +155,10 @@
 									                   dataItem = grid.dataItem(viewToRow),
 									                   me = echgDataVO;	
 								                	
-						            			   if (input.is("[name='NO_INVO']") && (['170104','170102','170106','170902'].indexOf(me.curCode) > -1 && ["003"].indexOf(me.updateChange) > -1) || 
+						            			   if (input.is("[name='NO_INVO']") && ((['170104','170102','170106','170902'].indexOf(me.curCode) > -1 && ["003"].indexOf(me.updateChange) > -1) || 
 						            					   (me.sCode[0] === me.curCode && ["001","003"].indexOf(me.updateChange) > -1) ||
 						            					   (me.sCode[0] === me.curCode && "004" === me.updateChange && dataItem.DC_ECHGSHPCOSTAPVL === '선결제 완료 (교환완료시 교환배송비 정산이 진행됩니다.)' && !me.receiveChk) ||
-						            					   (me.sCode[0] === me.curCode && "004" === me.updateChange && me.receiveChk)){
+						            					   (me.sCode[0] === me.curCode && "004" === me.updateChange && me.receiveChk))){
 						            				   var result = Util03saSvc.NoINVOValidation(input, 'NO_INVO', 'no_invo_inputvalidation');		
 						            				   if(result){
 						            					   Util03saSvc.manualTkbkDataBind($scope.echgkg, input, "NO_INVO_INPUT");

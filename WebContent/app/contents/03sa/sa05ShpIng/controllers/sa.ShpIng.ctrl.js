@@ -182,13 +182,13 @@
 					editable : true,
 					nullable : false,
 					validation : {
-						cd_pars_inputvalidation : function(input) {							
+						cd_pars_inputvalidation : function(input) {
 							//배송정보 수정 & 스토어팜반품 신청  & 지옥
 							if ((input.is("[name='CD_PARS_INPUT']") || input.is("[name='CD_PARS_STORE']") || input.is("[name='CD_PARS_GA']")) && !input.val()) {
 								input.attr("data-cd_pars_inputvalidation-msg","택배사를 선택해 주세요.");
 								return false;
 							}
-							else if (input.is("[name='CD_PARS_COU']") && !input.val()) {
+							/*else if (input.is("[name='CD_PARS_COU']") && !input.val()) {
 								var getUid = input.parents("table").attr("data-uid"),
 		            		   	   	grid = $scope.shippingkg,
 		            		   	   	viewToRow = $("[data-uid='" + getUid + "']", grid.table),
@@ -200,7 +200,7 @@
 								}else{
 									return true;
 								}
-							};
+							};*/
 							return true;
 						}
 					}
@@ -211,7 +211,7 @@
 					nullable : false,
 					validation : {
 						no_invo_inputvalidation : function(input) {
-							if (input.is("[name='NO_INVO_STORE']")) {
+							/*if (input.is("[name='NO_INVO_STORE']")) {
 								return Util03saSvc.NoINVOValidation(input,'NO_INVO_STORE','no_invo_inputvalidation',0);								
 							}
 							else if (input.is("[name='NO_INVO_E']")) {
@@ -221,7 +221,7 @@
 								return Util03saSvc.NoINVOValidation(input,'NO_INVO_GA','no_invo_inputvalidation',0);								
 							}
 							else if (input.is("[name='NO_INVO_COU']")) {
-								var getUid = input.parents("table").attr("data-uid"),
+								*var getUid = input.parents("table").attr("data-uid"),
 		            		   	   	grid = $scope.shippingkg,
 		            		   	   	viewToRow = $("[data-uid='" + getUid + "']", grid.table),
 		            		   	   	dataItem = grid.dataItem(viewToRow);
@@ -229,7 +229,21 @@
 									return Util03saSvc.NoINVOValidation(input,'NO_INVO_COU','no_invo_inputvalidation');
 								}else{
 									return true;
-								}								
+								}
+								return Util03saSvc.NoINVOValidation(input,'NO_INVO_COU','no_invo_inputvalidation',0);
+							}*/
+							if(input.is("[name='NO_INVO_STORE']") || input.is("[name='NO_INVO_E']") || input.is("[name='NO_INVO_GA']") || input.is("[name='NO_INVO_COU']")){
+								var getUid = input.parents("table").attr("data-uid"),
+		            		   	   	grid = $scope.shippingkg,
+		            		   	   	viewToRow = $("[data-uid='" + getUid + "']", grid.table),
+		            		   	   	dataItem = grid.dataItem(viewToRow)
+	            		   	   	
+		            		   	if(!dataItem.CD_PARS_INPUT && input.val()){
+		            		   		input.attr("data-no_invo_inputvalidation-msg","택배사를 선택해 주세요.");
+									return false;
+								}else{
+									return Util03saSvc.NoINVOValidation(input,'NO_INVO_GA','no_invo_inputvalidation',0);
+								}
 							}
 							return true;
 						}

@@ -128,19 +128,19 @@
 							dataItem = gridPop.dataItem($("[data-uid='" + input.closest("tr").parents("table").attr("data-uid") + "']", gridPop.table));
 					            			
             			if((['170104','170102',"170103"].indexOf(mrkCode)>-1 && dataItem.RECEIVE_SET === 'Y' && curCode === "004") ||
-            		    (["170103"].indexOf(mrkCode)>-1 && curCode === "003") ||     
-            			(['170106'].indexOf(mrkCode)>-1 && curCode === "004")){            				
-                			if(input.is("[name='CD_PARS']") && input.val() === ""){
-                				input.attr("data-cd_parsvalidation-msg", "택배사를 입력해 주세요.");
-                                return false;
-                			}
-                			else if(input.is("[name='NO_INVO']")){
-                				var result = Util03saSvc.NoINVOValidation(input, 'NO_INVO', 'no_invovalidation', 3);
-		            			if(result){
-		            				Util03saSvc.manualTkbkDataBind(grd, input, "NO_INVO");
-		            			}
-		            			return result;
-                			}
+	            		    (["170103"].indexOf(mrkCode)>-1 && curCode === "003") ||     
+	            		    (['170106'].indexOf(mrkCode)>-1 && curCode === "004")){            				
+	                			if(input.is("[name='CD_PARS']") && !input.val()){
+	                				input.attr("data-cd_parsvalidation-msg", "택배사를 입력해 주세요.");
+	                                return false;
+	                			}
+	                			else if(input.is("[name='NO_INVO']")){
+	                				var result = Util03saSvc.NoINVOValidation(input, 'NO_INVO', 'no_invovalidation', 3);
+			            			if(result){
+			            				Util03saSvc.manualTkbkDataBind(grd, input, "NO_INVO");
+			            			}
+			            			return result;
+	                			}
             			}
             			if(input.is("[name='PICK_CD_PARS']") && input.val() === "" && (dataItem.RECEIVE_SET === 'Y' || dataItem.DC_TKBKSHPCOSTAPVL === '선결제 완료 (환불완료시 반품배송비 정산이 진행됩니다.)' ) && ['170103'].indexOf(mrkCode)>-1 && curCode === "004"){
             				input.attr("data-pick_cd_parsvalidation-msg", "택배사를 입력해 주세요.");
