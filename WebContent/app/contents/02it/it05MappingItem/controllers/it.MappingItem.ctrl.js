@@ -32,35 +32,34 @@
 	                	row.find(".k-checkbox").prop( "checked", false );
 	                };
                 };
-
-                //kendo grid 체크박스 all click
-                $scope.onMmGrdCkboxAllClick = function(e){
-	                var i = 0,
-	                	element = $(e.currentTarget),
-	                	checked = element.is(':checked'),
-	                	row = element.parents("div").find(".k-grid-content table tr"),
-	                	grid = $scope.mmDataVO,
-	                	dataItem = grid.dataItems(row),
-	                	dbLength = dataItem.length;
+                
+                $scope.onLinkGrdCkboxClick = function(e){
+	                var element =$(e.currentTarget);
 	                
-	                if(dbLength < 1){	                	
-	                	alert("전체 선택 할 데이터가 없습니다.");
-	                	angular.element($("#grd_chk_master")).prop("checked",false);
-	                	return;
-	                };   
+	                var checked = element.is(':checked'),
+	                	row = element.closest("tr"),
+	                	grid = $scope.linkDataVO,
+	                	dataItem = grid.dataItem(row);
+	                 	                
+	                dataItem.ROW_CHK = checked;
+	                dataItem.dirty = checked;
 	                
-	                for(i; i<dbLength; i += 1){
-	                	dataItem[i].ROW_CHK = checked;
-	                	dataItem[i].dirty = checked;
-	                };
-	                
-	                if(checked){
+	                if (checked) {
 	                	row.addClass("k-state-selected");
 	                	row.find(".k-checkbox").prop( "checked", true );
-	                }else{
+	                } else {
 	                	row.removeClass("k-state-selected");
 	                	row.find(".k-checkbox").prop( "checked", false );
 	                };
+                };
+                
+                // 
+                $scope.newItemMapping = function(e){
+	                alert();
+                };
+                
+                $scope.otherItemMapping = function(e){
+	                alert();
                 };
 	            
 	            var it05MappingItemVO = $scope.it05MappingItemVO = {
@@ -106,7 +105,10 @@
 	                	dataSource: new kendo.data.DataSource({
 	                		transport: {
 	                			read: function(e) {
-	                				/*e.success(resData.optDataList);*/
+	                				var param = { procedureParam:"USP_IT_05MAPPINGITEM_LIST_LINK" };
+                    				UtilSvc.getList(param).then(function (res) {
+                						e.success(res.data.results[0]);       
+                					});
 	                			},
 	                			create: function(e) {
 	                	        },
@@ -125,7 +127,7 @@
 	                		batch: true,
 	                		schema: {
 	                			model: {
-	                    			id: "CD_TEMPITEM",
+	                    			id: "NO_MRKITEM",
 	                				fields: {
 	                					ROW_CHK: {	type: "boolean", 
 													editable: true,  
@@ -143,7 +145,7 @@
 	                	toolbar: [],
 	                	columns: [
 							   {field: "ROW_CHK",
-								title: "<input class='k-checkbox' type='checkbox' id='grd_chk_master' ng-click='onMmGrdCkboxAllClick($event)'><label class='k-checkbox-label k-no-text' for='grd_chk_master' style='margin-bottom:0;'>​</label>",
+								title: " ",
 								width: "40px",headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px; vertical-align:middle;"}},
 	        		           {field: "NM_MRK",   title: "마켓명",  width: 100,
 	   	   						headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}},
@@ -212,7 +214,7 @@
 	                	toolbar: [],
 	                	columns: [
 							   {field: "ROW_CHK",
-								title: "<input class='k-checkbox' type='checkbox' id='grd_chk_master' ng-click='onMmGrdCkboxAllClick($event)'><label class='k-checkbox-label k-no-text' for='grd_chk_master' style='margin-bottom:0;'>​</label>",
+								title: "<input class='k-checkbox' type='checkbox' id='grd_chk_mm' ng-click='onMmGrdCkboxAllClick($event)'><label class='k-checkbox-label k-no-text' for='grd_chk_mm' style='margin-bottom:0;'>​</label>",
 								width: "40px",headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px; vertical-align:middle;"}},
 	   	   					   {field: "CD_ITEM",   title: "상품번호",  width: 100,
 		   	   					headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}},
