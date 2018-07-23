@@ -7,8 +7,8 @@
      * 상품분류관리
      */
     angular.module("sa.ShpIng.service")
-        .factory("sa.ShpIngSvc", ["APP_CONFIG", "$http", "APP_MSG", "UtilSvc", "Util03saSvc", "$timeout", "$log", "$state", "$q", "$resource",
-           function (APP_CONFIG, $http, APP_MSG, UtilSvc, Util03saSvc, $timeout, $log, $state, $q, $resource) {
+        .factory("sa.ShpIngSvc", ["$rootScope", "APP_CONFIG", "$http", "APP_MSG", "UtilSvc", "Util03saSvc", "$timeout", "$log", "$state", "$q", "$resource",
+           function ($rootScope, APP_CONFIG, $http, APP_MSG, UtilSvc, Util03saSvc, $timeout, $log, $state, $q, $resource) {
             return {
             	/**
 				 * 주문 목록 
@@ -361,14 +361,18 @@
 			                    	if(nmDef === reasonList){
 			                    		var qtyDdl = ele.find("select[name='QT_TKBK']").data("kendoDropDownList");
 			                    		qtyDdl.trigger("change");
-					    	    		
-			                    		model.tkbk_responsibility = "구매자";
+			                    		
+			                    		$rootScope.$apply(function() {
+			                    			model.tkbk_responsibility = "구매자";
+			                    		});			                    		
 			                    	}
 			                    	else if(nmDef && (nmDef !== reasonList)){
-			                    		model.tkbk_responsibility = "판매자"; 
-			         	        		model.DC_SHPCOSTSTAT_TRANS = "";
-			         	        		model.DC_SHPCOSTSTAT_TRANS_ETC = "";
-			         	        		model.AM_TKBKSHP = 0;
+			                    		$rootScope.$apply(function() {
+				                    		model.tkbk_responsibility = "판매자"; 
+				         	        		model.DC_SHPCOSTSTAT_TRANS = "";
+				         	        		model.DC_SHPCOSTSTAT_TRANS_ETC = "";
+				         	        		model.AM_TKBKSHP = 0;
+			                    		});	
 			                    	}
 			                    	else{
 			                    		model.tkbk_responsibility = "";
