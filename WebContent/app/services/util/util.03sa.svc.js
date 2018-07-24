@@ -333,7 +333,7 @@
 	           		dataItem[target] = input.is(":checked");
 	           	}
 	           	else if(target === "RECEIVE_SET"){
-	           		dataItem[target] = $("#receive-group").find("[type=radio]:checked").val();
+	           		dataItem[target] = $("#receive-group").find("[type=radio]:checked").val().trim();
 	           	}
 	           	else if(target === "transform_pay_reason"){
 	           		var i;
@@ -344,7 +344,7 @@
 	           		return false;
 	           	}
 	           	else{
-	           		dataItem[target] = input.val();
+	           		dataItem[target] = input.val().trim();
 	           	};
 	        };	        
 	        //grid 동적 크기 변경

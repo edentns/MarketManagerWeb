@@ -613,7 +613,7 @@
 		                    	ddlRjt.select(0);
 		                    	ddlRjt.trigger("change");                			
 		                	},50);		            		
-		            	// 반품 승인	
+		            	// 반품 처리
                     	}else if(Type === "003"){
                     		var	ddlHoldReasonCodeSel = e.container.find("select[name=CD_HOLD]");
                     		
@@ -650,10 +650,10 @@
                     			}
                     			case '170103' : {
                     				var localNoMrk = e.model.NO_MRK,
-                    					cdPars = e.model.CD_PARS,
+                    					cdParsTkbk = e.model.CD_PARS_TKBK,
                     				    deliverDS = dataVo.shipList.filter(function(ele){
-    	    	            			return ele.DC_RMK1 === localNoMrk;
-    	    	            		});	            	
+                    				    	return ele.DC_RMK1 === localNoMrk;
+                    				    });	            	
                     				if(!deliverDS.length){
                     					deliverDS = [{NM_PARS_TEXT : "택배사 등록", CD_PARS : ""}];
                                 	}
@@ -681,12 +681,15 @@
 	                                    }
     	    	            		});
                     				
-                    				if(cdPars){
+                    				if(cdParsTkbk){
                     					var cdParsDdl = e.container.find("select[name=CD_PARS]").data("kendoDropDownList");
                     					  
-                    					cdParsTkbkDdl.value(cdPars);
-                    					cdParsTkbkDdl.trigger("change"); 
-                    				};
+                    					cdParsDdl.value(cdParsTkbk);
+                    					cdParsDdl.trigger("change"); 
+                    				};  
+                    				
+                    				e.container.find("[name=NO_INVO]").val(e.model.NO_INVO_TKBK);
+                    				
                     				break;
                     			}
                     			default : {
