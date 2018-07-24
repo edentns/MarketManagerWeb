@@ -170,7 +170,7 @@
                               [APP_SA_MODEL.NM_ORDSTAT     , APP_SA_MODEL.DC_SHPWAY     ],
                               [APP_SA_MODEL.DTS_ORD        , APP_SA_MODEL.DTS_CCLREQ    ],
                               [APP_SA_MODEL.DTS_CCLAPPRRJT , APP_SA_MODEL.CCL_NO_UPDATE ],                              
-                              [APP_SA_MODEL.YN_CONN 	   , APP_SA_MODEL.NM_CCLSTAT]
+                              [APP_SA_MODEL.YN_CONN 	   , APP_SA_MODEL.NM_CCLSTAT	]
                              ],
                     grdDetOption      = {},
                     grdRowTemplate    = "<tr data-uid=\"#= uid #\">\n",
@@ -397,7 +397,7 @@
 	            //주문 검색 그리드
 	            var grdOrdCancelManagementVO = $scope.grdOrdCancelManagementVO = {
             		autoBind: false,
-                    messages: {                        	
+                    messages: { 
                         requestFailed: "주문정보를 가져오는 중 오류가 발생하였습니다.",
                         commands: {
                             update: "저장",
@@ -451,7 +451,7 @@
                     							alert("취소거부 처리 되었습니다.");
                                     			defer.resolve({result: "success"});
                                     			//Util03saSvc.storedQuerySearchPlay(ordCancelManagementDataVO, "ordCancelParam");
-                                    			Util03saSvc.storedQuerySearchPlay(me, resData.storage);
+                                    			Util03saSvc.storedQuerySearchPlay(ordCancelManagementDataVO, resData.storage);
                                     		}else if(res.data === "parsreject"){
                                     			ordCancelManagementDataVO.menualShwWrn = [res.data];
                                     			e.error([]);
