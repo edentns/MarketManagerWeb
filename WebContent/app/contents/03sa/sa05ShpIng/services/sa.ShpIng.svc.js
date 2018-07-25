@@ -68,10 +68,10 @@
                 		alert(APP_MSG.caseChkOrdAlert);
                 		return false;
                 	}
-					if(grdItem.YN_CONFIRM === 'Y'){
+					/*if(grdItem.YN_CONFIRM === 'Y'){
                 		alert(APP_MSG.caseYnConfirm);
                 		return false;
-                	}
+                	}*/
 					if(UtilSvc.diffDate(grdItem.DTS_ORD, new Date()) > 30){
             			//alert(APP_MSG.caseSevenDaysAlert);
 						alert(APP_MSG.caseThirtyDaysAlert);								
