@@ -416,7 +416,7 @@
 	        	 		var defer = $q.defer();	
 	        	 		if(confirm("배송정보를 수정 하시겠습니까?")){
 	     					var param = models.filter(function(ele){
-	     						return (ele.ROW_CHK === true && (["004","005"].indexOf(ele.CD_ORDSTAT) > -1) && ele.YN_CONFIRM !== 'Y');
+	     						return (ele.ROW_CHK === true && (["004","005"].indexOf(ele.CD_ORDSTAT) > -1));
 	     					}); 
 	     					
 	     					if(param.length !== 1){
@@ -464,7 +464,7 @@
 	        	 		var defer = $q.defer();	
 	        	 		if(confirm("판매자 직접 반품을 신청 하시겠습니까?")){
 	     					var param = models.filter(function(ele){
-	     						return (ele.ROW_CHK === true && (["004","005"].indexOf(ele.CD_ORDSTAT)> -1) && ele.YN_CONFIRM !== 'Y');
+	     						return (ele.ROW_CHK === true && (["004","005"].indexOf(ele.CD_ORDSTAT)> -1));
 	     					});
 	     					
 	     					if(param.length !== 1){
