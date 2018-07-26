@@ -336,9 +336,8 @@
 	           		dataItem[target] = $("#receive-group").find("[type=radio]:checked").val().trim();
 	           	}
 	           	else if(target === "transform_pay_reason"){
-	           		var i;
            			if((["구매자","구매자 귀책"].indexOf(dataItem["NM_TKBKLRKRSN"]) > -1 || ["구매자","구매자 귀책"].indexOf(dataItem["NM_ECHGLRKRSN"]) > -1) && input.val()){
-           				//dataItem[target] = input.NM_DEF;
+           				dataItem[target] = input.val().trim();
            				return true;
            			}
 	           		return false;

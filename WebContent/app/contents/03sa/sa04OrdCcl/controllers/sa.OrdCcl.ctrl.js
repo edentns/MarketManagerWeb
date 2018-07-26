@@ -451,7 +451,8 @@
                     							alert("취소거부 처리 되었습니다.");
                                     			defer.resolve({result: "success"});
                                     			//Util03saSvc.storedQuerySearchPlay(ordCancelManagementDataVO, "ordCancelParam");
-                                    			Util03saSvc.storedQuerySearchPlay(ordCancelManagementDataVO, resData.storage);
+                                    			//Util03saSvc.storedQuerySearchPlay(ordCancelManagementDataVO, resData.storage);
+                                    			ordCancelManagementDataVO.inQuiry();
                                     		}else if(res.data === "parsreject"){
                                     			ordCancelManagementDataVO.menualShwWrn = [res.data];
                                     			e.error([]);

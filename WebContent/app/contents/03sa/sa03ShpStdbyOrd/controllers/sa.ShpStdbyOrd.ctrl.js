@@ -408,7 +408,8 @@
                 							$log.info("경과시간 = "+crTime+"초");
                         					
                     						alert("총 "+allV.length+"건 중 "+trueV.length+"건 배송정보등록 완료");
-                    						Util03saSvc.storedQuerySearchPlay(shpbyordDataVO, resData.storage);
+                    						//Util03saSvc.storedQuerySearchPlay(shpbyordDataVO, resData.storage);
+                    						shpbyordDataVO.inQuiry();
                     		                shpbyordDataVO.menualShwWrn = falseV;
                 						                    						
                     		                defer.resolve();
@@ -446,7 +447,8 @@
 			                				defer.resolve(); 
 			                				e.success();
 			                				shpbyordDataVO.flagFnc();  
-			                				Util03saSvc.storedQuerySearchPlay(shpbyordDataVO, resData.storage);
+			                				//Util03saSvc.storedQuerySearchPlay(shpbyordDataVO, resData.storage);
+			                				shpbyordDataVO.inQuiry();
 			                			}, function(err){
 			                				if(err.status !== 412){
                                             	alert(err.data);

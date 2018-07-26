@@ -585,7 +585,8 @@
             				var vo = shippingDataVO;
             				saShpIngSvc.grdUpdate(e.data.models).then(function(res){
      							alert(res.msg);
-            					Util03saSvc.storedQuerySearchPlay(vo, resData.storage);
+            					//Util03saSvc.storedQuerySearchPlay(vo, resData.storage);
+     							shippingDataVO.inQuiry();
             				}, function(err){
             					if(err.msg === "not equal"){
          	            			vo.menualShwWrn = err.val; //송장번호 틀렷을 경우 에러 메세지

@@ -826,7 +826,8 @@
                         						if(res.data === "success"){
                         							alert("반품완료 되었습니다.");
                         							//$scope.tkbkkg.dataSource.read();
-                        							Util03saSvc.storedQuerySearchPlay(tkbkDataVO, resData.storage);
+                        							//Util03saSvc.storedQuerySearchPlay(tkbkDataVO, resData.storage);
+                        							tkbkDataVO.inQuiry();
                         						}else{
                         							alert("반품완료가 실패하였습니다.");
                         							e.error();
@@ -859,7 +860,8 @@
                         						if(res.data === "success"){
                         							alert("반품거부 하였습니다.");
             	            						//$scope.tkbkkg.dataSource.read();
-                        							Util03saSvc.storedQuerySearchPlay(tkbkDataVO, resData.storage);
+                        							//Util03saSvc.storedQuerySearchPlay(tkbkDataVO, resData.storage);
+                        							tkbkDataVO.inQuiry();
                         						}else{
                         							alert("반품거부를 실패하였습니다.");
                         							e.error();
@@ -906,7 +908,8 @@
                         							alert("반품처리 하였습니다.");
 	    	        	            				defer.resolve();		         
 	                    							//Util03saSvc.storedQuerySearchPlay(tkbkDataVO, "tkbkDataVO");
-	    	        	            				Util03saSvc.storedQuerySearchPlay(tkbkDataVO, resData.storage);
+	    	        	            				//Util03saSvc.storedQuerySearchPlay(tkbkDataVO, resData.storage);
+	    	        	            				tkbkDataVO.inQuiry();
 	    	        	            			}else if(falseV.length > 0){
 	    	        	            				tkbkDataVO.menualShwWrn = falseV;
 	    	        	            				e.error([]);
@@ -981,7 +984,8 @@
 		    	        	            			if(trueV.length > 0 && falseV.length === 0){
 	                        							alert(tkbkDataVO.alertMsg.returnToExchangeOky);
 		    	        	            				defer.resolve();		         
-		    	        	            				Util03saSvc.storedQuerySearchPlay(tkbkDataVO, resData.storage);
+		    	        	            				//Util03saSvc.storedQuerySearchPlay(tkbkDataVO, resData.storage);
+		    	        	            				tkbkDataVO.inQuiry();
 		    	        	            			}else if(falseV.length > 0){
 		    	        	            				tkbkDataVO.menualShwWrn = falseV;
 		    	        	            				e.error([]);
@@ -1001,7 +1005,8 @@
 	                        						if(res.data === "success"){
 	                        							alert(tkbkDataVO.alertMsg.returnToExchangeOky);
 		    	        	            				defer.resolve();		         
-		    	        	            				Util03saSvc.storedQuerySearchPlay(tkbkDataVO, resData.storage);
+		    	        	            				//Util03saSvc.storedQuerySearchPlay(tkbkDataVO, resData.storage);
+		    	        	            				tkbkDataVO.inQuiry();
 		    	        	            			}else{
 	                        							alert(tkbkDataVO.alertMsg.returnToExchangeFail);
 		                    							e.error();

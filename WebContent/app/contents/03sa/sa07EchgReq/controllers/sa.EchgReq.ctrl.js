@@ -905,7 +905,8 @@
 		    	        	            				alert("교환승인 하였습니다.");
 		    	        	            				defer.resolve();		         
 		                    							//Util03saSvc.storedQuerySearchPlay(echgDataVO, "echgDataVO");
-		    	        	            				Util03saSvc.storedQuerySearchPlay(echgDataVO, resData.storage);
+		    	        	            				//Util03saSvc.storedQuerySearchPlay(echgDataVO, resData.storage);
+		    	        	            				echgDataVO.inQuiry();
 		    	        	            			}else if(falseV.length > 0){
 		    	        	            				echgDataVO.menualShwWrn = falseV;
 		    	        	            				e.error([]);
@@ -920,7 +921,8 @@
 	                    								alert("교환승인 하였습니다.");
 		    	        	            				defer.resolve();		         
 		                    							//Util03saSvc.storedQuerySearchPlay(echgDataVO, "echgDataVO");
-		    	        	            				Util03saSvc.storedQuerySearchPlay(echgDataVO, resData.storage);
+		    	        	            				//Util03saSvc.storedQuerySearchPlay(echgDataVO, resData.storage);
+		    	        	            				echgDataVO.inQuiry();
 	                    							}else{
 	                    								alert("교환승인을 실패하였습니다.");
 		                    							e.error([]);
@@ -1015,7 +1017,8 @@
                         							alert("교환완료 하였습니다.");
 	    	        	            				defer.resolve();		         
 	                    							//Util03saSvc.storedQuerySearchPlay(echgDataVO, "echgDataVO");
-	    	        	            				Util03saSvc.storedQuerySearchPlay(echgDataVO, resData.storage);
+	    	        	            				//Util03saSvc.storedQuerySearchPlay(echgDataVO, resData.storage);
+	    	        	            				echgDataVO.inQuiry();
 	    	        	            			}else if(falseV.length > 0){
 	    	        	            				echgDataVO.menualShwWrn = falseV;
 	    	        	            				e.error([]);
@@ -1087,7 +1090,8 @@
 		    	        	            			if(trueV.length > 0 && falseV.length === 0){
 	                        							alert(alertMsg.returnToExchangeOky);
 		    	        	            				defer.resolve();		         
-		    	        	            				Util03saSvc.storedQuerySearchPlay(echgDataVO, resData.storage);
+		    	        	            				//Util03saSvc.storedQuerySearchPlay(echgDataVO, resData.storage);
+		    	        	            				echgDataVO.inQuiry();
 		    	        	            			}else if(falseV.length > 0){
 		    	        	            				echgDataVO.menualShwWrn = falseV;
 		    	        	            				e.error([]);
@@ -1107,7 +1111,8 @@
 	                        						if(res.data === "success"){
 	                        							alert(alertMsg.returnToExchangeOky);
 		    	        	            				defer.resolve();		         
-		    	        	            				Util03saSvc.storedQuerySearchPlay(echgDataVO, resData.storage);		    	            							
+		    	        	            				//Util03saSvc.storedQuerySearchPlay(echgDataVO, resData.storage);
+		    	        	            				echgDataVO.inQuiry();
 		    	        	            			}else{
 	                        							alert(alertMsg.returnToExchangeFail);
 		                    							e.error();
