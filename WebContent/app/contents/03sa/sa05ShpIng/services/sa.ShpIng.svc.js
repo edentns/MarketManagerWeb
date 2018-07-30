@@ -169,7 +169,8 @@
 	           qtySelector : function(qty, ele, model){
 	        	   var qtyList  = [],
 	        	   	   qtyObj = {},
-	        	   	   individual;
+	        	   	   individual,
+	        	   	   couQtyList = [{CD_DEF: qty, NM_DEF: qty}];
 				
         		   for(var i=1; i<=qty; i++){
 					   individual = i
@@ -177,9 +178,10 @@
 					   qtyObj.NM_DEF = individual;
 				       qtyList.push(angular.copy(qtyObj));
 				   }
-	        		
+        		   
+        		   // 원래는 11번가 쿠팡둘다 부분반품이 되지만, 로직상 구현하기 힘들어서 11번가만 부분반품 할수 있게 변경
 				   ele.find("select[name='QT_TKBK']").kendoDropDownList({
-					   dataSource : qtyList,
+					   dataSource : model.NO_MNGMRK === "SYMM170901_00001" ? couQtyList : qtyList,
 					   optionLabel : "수량을 선택해 주세요 ",	        
 		        	   dataTextField : "NM_DEF",
 		               dataValueField : "CD_DEF",
@@ -305,8 +307,8 @@
         					shippingList.findEle = "CD_PARS_COU";
 
         					this.shpList(shippingList);
-							this.qtySelector(qtyMrk, ele, model);
-							
+							this.qtySelector(qtyMrk, ele, model);					
+														
 							ele.find("select[name='CD_TKBKLRKRSN']").kendoDropDownList({
                 				dataSource : [],
     		        			dataTextField : "NM_DEF",
@@ -336,8 +338,8 @@
 				                    	});
 			                    	}
 			                    }
-		            		}); 
-							
+		            		}); 							
+							Util03saSvc.ddlSelectedIndex(ele, "QT_TKBK", 1);			            	
 							//Util03saSvc.ddlSelectedIndex(ele, "CD_TKBKHRNKRSN");							
 							break;
 						}

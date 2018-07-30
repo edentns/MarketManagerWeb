@@ -359,9 +359,10 @@
         		}
 	        };
 	        //드롭다운 리스트 초기화시 선택
-	        this.ddlSelectedIndex = function(ele, name){
+	        this.ddlSelectedIndex = function(ele, name, idx){
+	        	var choIdx = !idx ? 0 : idx;
             	var ddl = ele.find("select[name="+name+"]").data("kendoDropDownList");            
-            	ddl.select(0);
+            	ddl.select(choIdx);
             	ddl.trigger("change");       
 	        };
 	               

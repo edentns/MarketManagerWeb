@@ -49,6 +49,7 @@
 				AM_TKBKSHP 				: {	type : "number",							editable : false,		nullable : false	},
 				SEQ_TKBK				: {	type : "number",							editable : false,		nullable : false	},
 				QT_TKBK_OUT				: {	type : "number",							editable : false,		nullable : false	},
+				NO_MNGMRK				: {	type : "string",							editable : false,		nullable : false	},
 				DC_SHPCOSTSTAT 			: {	type : "string",							editable : false,		nullable : false	},				
 				YN_CONFIRM 				: {	type : "string",							editable : false,		nullable : false	},	
 				DC_SHPCOSTSTAT_TRANS 	: {	type : "string",							editable : false,		nullable : false	},
