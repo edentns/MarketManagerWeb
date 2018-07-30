@@ -25,31 +25,31 @@
                 			return false;
         				}
         			}
-        			if(w === "CD_ORDSTAT"){
+        			else if(w === "CD_ORDSTAT"){
         				if(!idx[w]){ alert("주문상태를 입력해 주세요."); result = false; return false;};
         			}
-        			if(w === "DTS_CHK"){
+        			else if(w === "DTS_CHK"){
         				if(!idx[w]){ alert("기간을 선택해 주세요."); result = false; return false;};
         			}
-        			if(w === "CD_CCLSTAT"){
+        			else if(w === "CD_CCLSTAT"){
         				if(!idx[w]){ alert("취소상태를 선택해 주세요."); result = false; return false;};
         			}
-        			if(w === "I_CD_INQSTAT"){
+        			else if(w === "I_CD_INQSTAT"){
         				if(!idx[w]){ alert("상태값을 입력해 주세요."); result = false; return false;};
         			}
-        			if(w === "I_DTS_INQREG_F"){
+        			else if(w === "I_DTS_INQREG_F"){
         				if(idx.I_DTS_INQREG_F > idx.I_DTS_INQREG_T){ alert("문의일자를 올바르게 입력해 주세요."); result = false; return;};    
         			}
-        			if(w === "DTS_FROM"){
+        			else if(w === "DTS_FROM"){
         				if(idx.DTS_TO < idx.DTS_FROM){ alert("조회기간을 올바르게 선택해 주세요."); result = false; return false;};	
         			}
-        		};
-        		if(result){
-        			if(w === "DTS_STORAGE_TO") {
-        				idx.TODAY = (idx.DTS_STORAGE_TO.y === edt.getToday().y && 
+        			else if(w === "DTS_STORAGE_TO") {
+        				cashParam.TODAY = (idx.DTS_STORAGE_TO.y === edt.getToday().y && 
         						     idx.DTS_STORAGE_TO.m === edt.getToday().m && 
         						     idx.DTS_STORAGE_TO.d === edt.getToday().d)? 1 : 0
         			}
+        		};
+        		if(result){
         			this.localStorage.setItem(idx.CASH_PARAM, cashParam);
             		//값이 너무 길어서 안넘어 가는듯.. 조회전에 다 짤라줌
             		idx.NM_MRK_SELCT_INDEX = "";
@@ -133,7 +133,7 @@
         				if(w === "datesetting"){
         					me[w].selected     = getParam.DTS_SELECTED;
         					me[w].period.start = getParam.DTS_STORAGE_FROM;
-        					me[w].period.end   = (getParam.TODAY === 1)?angular.copy(edt.getToday()):getParam.DTS_STORAGE_TO; 
+        					me[w].period.end   = (getParam.TODAY === 1)?vo.datesetting.period.end:getParam.DTS_STORAGE_TO; 
         				}
         				if(w === "betweenDateOptionMo" ){ me[w] = getParam.DTS_CHK; }
         				if(w === "ordMrkNameOp"){
