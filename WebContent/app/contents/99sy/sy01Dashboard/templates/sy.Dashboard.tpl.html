@@ -61,7 +61,7 @@
             <div data-ng-repeat="component in vm.components | filter:{visible:true} | orderBy:'order'">
                 <div class="row mt-10">
                     <div class="col-xs-12">
-                        <div data-content-box-layer data-box-title="component.displayName" data-open="vm.allOpen">
+                        <div data-content-box-layer data-box-title="component.displayName" data-open="vm.cmrkOpen">
                             <div data-ng-include="component.templateURL"></div>
                         </div>
                     </div>

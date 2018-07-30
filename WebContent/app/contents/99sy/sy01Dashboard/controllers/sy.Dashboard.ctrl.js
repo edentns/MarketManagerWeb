@@ -36,7 +36,8 @@
 		                	templateURL : 'app/contents/99sy/sy01Dashboard/templates/sy.SaCnt.tpl.html'
 		                }
 		            ];
-
+	            vm.cmrkOpen = resData.cmrkOpen;// && resData.parsOpen;
+	            vm.parsOpen = resData.parsOpen;// && resData.parsOpen;
 	            vm.allOpen = resData.cmrkOpen && resData.parsOpen;
 	            	            
 	            vm.sacsCnt = (function(){
@@ -54,7 +55,7 @@
                 	name        : 'sy.DashNoticeCtrl',
                 	displayName : '공지사항',
                 	templateURL : 'app/contents/99sy/sy01Dashboard/templates/sy.Notice.tpl.html',
-                	open        : resData.mainOpen && vm.allOpen
+                	open        : resData.mainOpen && vm.cmrkOpen
 	            };
 	            
 	            vm.subComponents = {
@@ -63,7 +64,7 @@
                 	name        : 'sy.DashQaCtrl',
                 	displayName : '묻고답하기',
                 	templateURL : 'app/contents/99sy/sy01Dashboard/templates/sy.Qa.tpl.html',
-                	open        : resData.subOpen && vm.allOpen
+                	open        : resData.subOpen && vm.cmrkOpen
 	            };
             
 	            vm.broadcast = function() {
@@ -110,8 +111,8 @@
 	            
 	            vm.markImg = (resData.cmrkOpen)? "/assets/img/markIn.png":"/assets/img/markOut.png";
 	            vm.parsImg = (resData.parsOpen)? "/assets/img/parsIn.png":"/assets/img/parsOut.png";
-	            vm.saImg = (vm.allOpen)? "/assets/img/saIn.png":"/assets/img/saOut.png";
-	            vm.arrowImg = (vm.allOpen)? "/assets/img/arrowIn.png":"/assets/img/arrowOut.png";
+	            vm.saImg = (vm.parsOpen)? "/assets/img/saIn.png":"/assets/img/saOut.png";
+	            vm.arrowImg = (vm.parsOpen)? "/assets/img/arrowIn.png":"/assets/img/arrowOut.png";
 	            
 	            
 	            vm.markmanagerClick = function() {
@@ -184,7 +185,7 @@
 	            };
 
 	            page.bootstrap(function() {
-	            	if(vm.allOpen) {
+	            	if(vm.cmrkOpen) {
 	            		$timeout(function() {
 			                vm.broadcast();
 			                AuthSvc.isAccess().then(function (result) {
