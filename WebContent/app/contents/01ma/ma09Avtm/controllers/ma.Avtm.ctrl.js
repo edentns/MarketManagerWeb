@@ -227,7 +227,7 @@
                     		},
                     		update: function(e) {
                     			var defer = $q.defer();
-                			    
+                    			
                     			if(editorAvtmVO.deleteOrdUpdate === "d") {
                     				MaAvtmSvc.avtmDelete(e.data.models).then(function(res) {
                     					if(res.data) {
@@ -249,7 +249,7 @@
                     			else {
 			                    	var param = e.data.models[0];
 
-			                    	if(param.DTS_AVTMSTRT.length > 16) {
+			                    	if(param.DTS_AVTMSTRT.length > 16 || param.DTS_AVTMEND.length > 16) {
 			                    		param.DTS_AVTMSTRT = kendo.toString(new Date(param.DTS_AVTMSTRT), "yyyyMMddHHmmss");        
 			                    		param.DTS_AVTMEND  = kendo.toString(new Date(param.DTS_AVTMEND) , "yyyyMMddHHmmss");
 			                    	}
