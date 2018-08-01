@@ -1,0 +1,64 @@
+<div class="modal-header">
+	<h3 class="modal-title">퀵서비스 배송지역 설정</h3>
+</div>
+<div class="modal-body">
+    <table class="table-bordered search-type1"  style="width: 94%;">
+	   <colgroup>
+		 <col style="width: 20%">
+		 <col style="width: 26%">
+		 <col style="width: 26%">
+		 <col style="width: 26%">
+		</colgroup>
+	      	<tr>
+	      		<th>서울</th>
+	      		<td colspan="3" ng-repeat = "area in quisevVO.areaList[0]" style="text-align: left;">
+					<input type="checkbox" ng-model = "area.YN_USE" id="YN_USE" ng-true-value="Y" ng-false-value="N">{{area.NM_QUISEVAREA}}
+	      		</td>
+	      	</tr>
+	      	<tr>
+	      		<th>경기</th>
+	      		<td colspan="3" id="areaTable">
+	      		</td>
+	      	</tr>
+	      	<tr>
+	      		<th>광주</th>
+	      		<td colspan="3" ng-repeat = "area in quisevVO.areaList[2]" style="text-align: left;">
+					<input type="checkbox" ng-model = "area.YN_USE" id="YN_USE" ng-true-value="Y" ng-false-value="N">{{area.NM_QUISEVAREA}}
+	      		</td>
+	      	</tr>
+	      	<tr>
+	      		<th>대구</th>
+	      		<td colspan="3" ng-repeat = "area in quisevVO.areaList[3]" style="text-align: left;">
+					<input type="checkbox" ng-model = "area.YN_USE" id="YN_USE" ng-true-value="Y" ng-false-value="N">{{area.NM_QUISEVAREA}}
+	      		</td>
+	      	</tr>
+	      	<tr>
+	      		<th>대전</th>
+	      		<td colspan="3" ng-repeat = "area in quisevVO.areaList[4]" style="text-align: left;">
+					<input type="checkbox" ng-model = "area.YN_USE" id="YN_USE" ng-true-value="Y" ng-false-value="N">{{area.NM_QUISEVAREA}}
+	      		</td>
+	      	</tr>
+	      	<tr>
+	      		<th>부산</th>
+	      		<td colspan="3" ng-repeat = "area in quisevVO.areaList[5]" style="text-align: left;">
+					<input type="checkbox" ng-model = "area.YN_USE" id="YN_USE" ng-true-value="Y" ng-false-value="N">{{area.NM_QUISEVAREA}}
+	      		</td>
+	      	</tr>
+	      	<tr>
+	      		<th>울산</th>
+	      		<td colspan="3" ng-repeat = "area in quisevVO.areaList[6]" style="text-align: left;">
+					<input type="checkbox" ng-model = "area.YN_USE" id="YN_USE" ng-true-value="Y" ng-false-value="N">{{area.NM_QUISEVAREA}}{{area.YN_USE}}
+	      		</td>
+	      	</tr>
+	      	<tr>
+	      		<th>인천</th>
+	      		<td colspan="3" ng-repeat = "area in quisevVO.areaList[7]" style="text-align: left;">
+					<input type="checkbox" ng-model = "area.YN_USE" id="YN_USE" ng-true-value="Y" ng-false-value="N">{{area.NM_QUISEVAREA}}
+	      		</td>
+	      	</tr>
+	  </table>
+</div>
+<div class="modal-footer">
+	<kendo-button type="button" title="취소" data-ng-click="quisevVO.doConfirm()">확인</kendo-button>
+	<kendo-button type="button" title="취소" data-ng-click="quisevVO.doCancle()">취소</kendo-button>
+</div>

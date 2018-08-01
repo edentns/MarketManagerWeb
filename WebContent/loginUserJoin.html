@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang=ko class=no-js data-ng-app=edtApp>
+<head>
+	<meta charset=utf-8>
+	<title>MarketManager</title>
+	<meta http-equiv=X-UA-compatible content="IE=edge">
+	<link rel=stylesheet href=assets/css/vendor.css>
+	<link rel=stylesheet href=assets/css/modify.vendor.css>
+	<link rel=stylesheet href=assets/css/kendoui.css>
+	<link rel=stylesheet href=assets/css/main.css>
+</head>
+<body data-ng-cloak>
+	<div data-ng-if=webApp.loader.isLoader class=loader-board>
+		<div class=loader>
+			<img src=assets/img/common/loading/loading-large.gif alt=로딩애니메이션>
+			<div class=message>
+				<span>Loading..</span>
+			</div>
+		</div>
+	</div>
+	<ui-view></ui-view>
+	<script src=assets/lib/vendor0.js></script>
+	<script src=assets/lib/vendor1.js></script>
+	<script src=assets/lib/vendor2.js></script>
+	<script src=assets/lib/kendoui.js></script>
+	<script src=assets/lib/modify.vendor0.js></script>
+	<script src=assets/lib/modify.vendor1.js></script>
+	<script src=assets/lib/modify.vendor2.js></script>
+	<script src=assets/js/main.min.UserJoin.js></script>
+	<script src=assets/js/main.min.sy.UserJoin.js></script>
+	<script src=assets/js/main.min.com.UserJoin.js></script>
+</body>
+</html>

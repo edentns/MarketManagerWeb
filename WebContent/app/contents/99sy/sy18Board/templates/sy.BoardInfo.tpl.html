@@ -1,0 +1,130 @@
+<div id="app-content" class="col-xs-12 col-sm-10">
+    <div class="row">
+        <div id="app-content-header">
+            <ol class="breadcrumb">
+                <li><a href="#99sy/syDashboard"><i class="fa fa-home fa-2x"></i></a></li>
+                <li><a href="#99sy/syBoard">게시판 내용</a></li>
+            </ol>
+        </div>
+    </div>
+    <!-- 게시글 상세 내용 -->
+    <div class="row">
+    	<div class="content-area-container col-xs-12">
+    		<div data-content-box-layer data-box-title="boardInfoDataVO.boxTitle">
+    			<form class="search-type1">
+	                <table>
+						<colgroup>
+                           <col style="width: 100%;">
+						</colgroup>
+						<tbody>
+							<tr>
+								<td style="display: flex; justify-content: space-between;">
+									<span style="font-size:larger; font-weight: bold;">{{boardInfoDataVO.params.DC_SBJ}}</span>
+									<span>조회수 ({{boardInfoDataVO.params.CNT_SEL}})&nbsp;&nbsp;&nbsp;{{boardInfoDataVO.params.DTS_INSERT}}</span>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<span>{{boardInfoDataVO.params.NM_NKNE}}&nbsp;&nbsp;{{boardInfoDataVO.params.DC_IPADDR}}</span>
+									<div style="height: 418px; display:flex; border: 1px solid #c7c3c3; margin: 5px 0px; padding: 5px; overflow: scroll;"
+									      ng-style="boardInfoDataVO.fileDataVO.currentDataList.length === 0 && {'height':'523px'}"> 
+										<p ng-bind-html="boardInfoDataVO.params.DC_HTMLCONTENT"></p>
+									</div>
+									<div data-ng-if="boardInfoDataVO.fileDataVO.currentDataList.length !== 0" style="height: 105px;">
+										<p style="padding: 0; margin: 0;"> 첨부파일 </p>
+										<div ng-repeat="currentData in boardInfoDataVO.fileDataVO.currentDataList">
+											<a href='{{boardInfoDataVO.fileUrl}}?NO_AT={{currentData.NO_AT}}&CD_AT={{currentData.CD_AT}}' download='{{currentData.NM_FILE}}'>- {{currentData.NM_FILE}}</a>
+										</div>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</form>
+				
+				<div class="btn-group1 mt-10">
+					<kendo-button data-ng-if="page.isWriteable() && boardInfoDataVO.NO_C === boardInfoDataVO.params.NO_C && boardInfoDataVO.NO_EMP === boardInfoDataVO.params.NO_INSERT" type="botton" title="수정" data-ng-click="boardInfoDataVO.goUpdate()" style="width:80px;"><span class="k-icon k-i-save"></span>수정</kendo-button>
+					<kendo-button data-ng-if="page.isWriteable() && boardInfoDataVO.NO_C === boardInfoDataVO.params.NO_C && boardInfoDataVO.NO_EMP === boardInfoDataVO.params.NO_INSERT" type="botton" title="삭제" data-ng-click="boardInfoDataVO.goDelete()" style="width:80px;"><span class="k-icon k-i-delete"></span>삭제</kendo-button>
+					<kendo-button type="botton" title="목록" data-ng-click="boardInfoDataVO.goList()" style="width:80px;"><span class="k-icon k-i-undo"></span>목록</kendo-button>
+				</div>
+    		</div>
+    	</div>
+    </div>
+    <!-- 댓글 리스트 -->
+    <div id="commentList" class="row">
+    	<div class="content-area-container col-xs-12">
+    		<div data-content-box-layer data-box-title="boardCommentDataVO.boxTitle" data-open="boardCommentDataVO.open">
+    			<div id="boardCommentListView" kendo-list-view k-options="boardCommentDataVO.listOptions">
+    			</div>
+    		</div>
+    	</div>
+    </div>
+    <!-- 댓글 등록 -->
+    <div class="row">
+    	<div class="content-area-container col-xs-12">
+    		<div data-content-box-layer data-box-title="boardCmtRegDataVO.boxTitle">
+    			<form class="search-type1">
+	                <table>
+						<colgroup>
+                           <col style="width: 12%;">
+                           <col style="width: 88%;">
+						</colgroup>
+						<tbody>
+							<tr>
+								<th>댓글등록</th>
+								<td style="display:flex; justify-content: space-between;">
+									<textarea name="content" class="k-textbox" placeholder="저작권 등 다른 사람의 권리를 침해하거나 명예를 훼손하는 게시물은 이용약관 및 관련 법률에 의해 제재를 받을 수 있습니다. 건전한 토론문화와 양질의 댓글 문화를 위해, 타인에게 불쾌감을 주는 욕설 또는 특정 계층/민족, 종교 등을 비하하는 단어들은 표시가 제한됩니다." style="width: 100%; margin: 0 10px;" data-ng-model="boardCmtRegDataVO.params.DC_COMMENT" rows="4" validationMessage="required">
+									</textarea>
+									<kendo-button type="botton" title="댓글등록" data-ng-click="boardCmtRegDataVO.goCommentSave()" style="width:90px;">
+										<span class="k-icon k-i-save"></span>댓글등록
+									</kendo-button>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</form>
+    		</div>
+    	</div>
+    </div>
+</div>
+
+<script id="boardCommentTemplate" type="text/x-kendo-tmpl">
+	<div style="display: flex; justify-content: space-between; margin: 10px; height: 72px;">
+		<div style="width: 93px; text-align:center;" ng-style="page.isWriteable() && '#:YN_DEL#' === 'N' && boardInfoDataVO.NO_C === '#:NO_C#' && boardInfoDataVO.NO_EMP === '#:NO_INSERT#' && {'width':'97px'}">
+			<dl>
+				<dd style="font-weight:bold;">#:NM_NKNE#</dd>
+				<dd>#:DATE_INSERT#</dd>
+				<dd>#:TIME_INSERT#</dd>
+				<dd>#:DC_IPADDR#</dd>
+			<dl>
+		</div>
+		<div style="width: 100%; border: 1px solid \#c7c3c3;" ng-style="'#:YN_DEL#' === 'Y' && {'color':'blue'}">
+			<textarea style="height:70px;" readonly>#:DC_COMMENT#</textarea>
+		</div>
+		<div data-ng-if="page.isWriteable() && '#:YN_DEL#' === 'N' && boardInfoDataVO.NO_C === '#:NO_C#' && boardInfoDataVO.NO_EMP === '#:NO_INSERT#'" style="width: 62px; margin-left:10px;">
+			<a class="k-button k-edit-button" href="\\#"><span class="k-icon k-i-edit"></span>수정</a>
+            <a class="k-button k-delete-button" href="\\#"><span class="k-icon k-i-close"></span>삭제</a>
+		</div>
+	</div>
+</script>
+
+<script id="boardCommentEditTemplate" type="text/x-kendo-tmpl">
+	<div style="display: flex; justify-content: space-between; margin: 10px; height: 72px;">
+		<div style="width: 97px; text-align:center;">
+			<dl>
+				<dd style="font-weight:bold;">#:NM_NKNE#</dd>
+				<dd>#:DATE_INSERT#</dd>
+				<dd>#:TIME_INSERT#</dd>
+				<dd>#:DC_IPADDR#</dd>
+			<dl>
+		</div>
+		<div style="width: 100%; border: 1px solid \#c7c3c3;">
+			<textarea style="height:72px;" name="content" data-bind="value:DC_COMMENT" validationMessage="required">
+			</textarea>
+		</div>
+		<div style="width: 62px; margin-left:10px;">
+			<a class="k-button k-update-button" href="\\#"><span class="k-icon k-i-check"></span>저장</a>
+            <a class="k-button k-cancel-button" href="\\#"><span class="k-icon k-i-cancel"></span>취소</a>
+		</div>
+	</div>
+</script>

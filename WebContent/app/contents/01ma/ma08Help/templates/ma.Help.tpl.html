@@ -1,0 +1,56 @@
+<div id="app-content" class="col-xs-12 col-sm-10">
+    <div class="row">
+        <div id="app-content-header">
+            <ol class="breadcrumb">
+                <li><a href="#01ma/maDashboard"><i class="fa fa-home fa-2x"></i></a></li>
+                <li><a href="#01ma/maHelp">화면도움창</a></li>
+            </ol>
+        </div>
+    </div>
+    
+    <div class="row">
+        <!-- 검색 -->
+        <div class="content-area-container col-xs-4">
+        	<div data-content-box-layer data-box-title="helpMenuVO.boxTitle">
+                <kendo-tooltip options="helpMenuVO.tooltipOptions">		
+			        <div id="divMenuGrd" kendo-grid="menukg" options="gridMenuVO">
+			        </div>	            
+			    </kendo-tooltip>
+            </div>
+        </div>
+                
+        <!-- qa 리스트 -->          
+		<div class="content-area-container col-xs-8">		
+			<div data-content-box-layer>
+        		<form class="search-type1">
+	                <table>
+	                	<colgroup>
+	                		<col style="width: 16%;">
+	                		<col style="width: 34%;">
+	                		<col style="width: 16%;">
+	                		<col style="width: 34%;">
+	                	</colgroup>
+	                	<tbody>
+	                		<tr>
+	                			<th>작성자</th>
+	                			<td>관리자</td>
+	                			<th>작성일시</th>
+	                			<td>2018-02-27 00:00</td>
+	                		</tr>
+	                		<tr>
+	                			<th>도움내용</th>
+	                			<td colspan='3'>
+	                				<textarea kendo-editor id="kEditHelp" name="DC_HTMLCONTENT" k-ng-model="editorHelpVO.DC_HTMLCONTENT" k-options="editorHelpVO.kEditor" style="text-align:left; height:700px;"></textarea>
+	                			</td>
+	                	</tbody>
+	        		</table>
+	        	</form>
+	        	
+				<div class="btn-group1 mt-10">
+					<kendo-button data-ng-if="page.isWriteable()" type="botton" data-ng-click="editorHelpVO.saveEditor()" title="저장" style="width:80px;"><span class="k-icon k-i-save"></span>저장</kendo-button>
+					<kendo-button type="botton" data-ng-click="editorHelpVO.initEditor()" title="초기화" style="width:80px;"><span class="k-icon k-i-undo"></span>초기화</kendo-button>
+				</div>
+	        </div>
+        </div>
+    </div>
+</div>

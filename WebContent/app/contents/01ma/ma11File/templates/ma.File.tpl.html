@@ -1,0 +1,76 @@
+<div id="app-content" class="col-xs-12 col-sm-10">
+    <div class="row">
+        <div id="app-content-header">
+            <ol class="breadcrumb">
+                <li><a href="#01ma/maDashboard"><i class="fa fa-home fa-2x"></i></a></li>
+                <li><a href="#01ma/maFile">파일관리</a></li>
+            </ol>
+        </div>
+    </div>
+    
+    <div class="row">
+        <!-- 검색 -->
+        <div class="content-area-container col-xs-12" id="searchId">
+        	<div data-content-box-layer data-box-title="fileDataVO.boxTitle" data-is-open="fileDataVO.isOpen(val)">
+                <form class="search-type1" id="myForm">
+                	<table>
+                        <colgroup>
+                            <col style="width: 6%;">
+                            <col style="width: 13%;">
+                            <col style="width: 6%;">
+                            <col style="width: 13%;">
+                            <col style="width: 10%;">
+                            <col style="width: 52%;">
+                        </colgroup>
+                        <tbody>
+                        <tr>
+                            <th>파일구분</th>
+                            <td>
+                            	<co01-mcbox id="ma-file-gubun" title="파일구분" model="fileDataVO.fileGubunModel" options="fileDataVO.fileGubunBind" setting="fileDataVO.setting"  style="width:100%;">
+        						</co01-mcbox>
+                            </td>	
+                            <th>DIR삭제여부</th>
+                            <td>  
+                            	<div data-ng-repeat = "list in fileDataVO.ynDelList" style="float: left; margin-right: 7px;">
+	                         		<input type="radio" name="ynDelRadio" data-ng-model="fileDataVO.ynDelModel" value="{{list.CD_DEF}}">
+	                         		<label >
+	                         			{{list.NM_DEF}}
+	                         		</label>
+	                         	</div>
+                            </td>      
+                            <th>가입자번호</th>
+                            <td>
+                            	<input data-ng-model="fileDataVO.noC"
+                            			title="가입자번호" 
+                            			type="text" 
+                            			class="form-control" style="width:100%;"/>
+                            </td> 
+                        </tr>
+                        <tr>
+                            <th>수정기간 </th>
+                            <td colspan="5">     	
+                            	<div class="frm-group" data-date-search-group="fileDataVO.datesetting" style="display:inline-block;"></div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>            
+                    <div class="btn-group1 mt-10">
+                        <kendo-button type="submit" class="k-primary" title="검색" data-ng-click="fileDataVO.search()" style="width:70px;">검색</kendo-button>
+                        <kendo-button type="botton" title="초기화" data-ng-click="fileDataVO.reset()" style="width:70px;">초기화</kendo-button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- 게시판 리스트 -->          
+		<div class="content-area-container col-xs-12" style="padding:0px 0px 0px 0px; margin-top:-5px;">				
+	        <div kendo-grid="kg" options="gridFileVO">
+	        </div>	            
+        </div>
+    </div>
+</div>
+
+<script id="bss-toolbar-template" type="text/x-kendo-template">
+	<button data-ng-if="fileDataVO.selYnDelModel === 'N'" id="undo" class="k-button k-button-icontext k-grid-edit" ng-click="gridFileVO.fileDeleteMove()"><span class="k-icon k-i-edit"></span>삭제이동</button>
+	<button data-ng-if="fileDataVO.selYnDelModel === 'Y'" id="undo" class="k-button k-button-icontext k-grid-edit" ng-click="gridFileVO.fileUndo()"><span class="k-icon k-i-edit"></span>삭제복원</button>
+</script>
