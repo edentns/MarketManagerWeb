@@ -15,19 +15,24 @@
 	                	var nmd = scope.cd,
 	                		noMrk = scope.noMrk,
                             grd = scope.nmBox,
-                            result = '';
+                            result = '',	                	
+                            regNumber = /^[0-9]*$/;
 	                	
-	                	var deliverDS = grd.filter(function(ele){
-	            			return ele.DC_RMK1 === noMrk;
-	            		});	      	
-	                	
-	                	for(var i=0, leng=deliverDS.length; i<leng; i++){
-	                		if(deliverDS[i].CD_PARS === nmd){
-		            			result = deliverDS[i].NM_DEF;
-		                    };
-		                }
-	                	
-	                	result = (!result) ? '' : result;
+	                	if(regNumber.test(nmd)){
+	                		var deliverDS = grd.filter(function(ele){
+		            			return ele.DC_RMK1 === noMrk;
+		            		});	      	
+		                	
+		                	for(var i=0, leng=deliverDS.length; i<leng; i++){
+		                		if(deliverDS[i].CD_PARS === nmd){
+			            			result = deliverDS[i].NM_DEF;
+			                    };
+			                }
+		                	
+		                	result = !result ? '' : result;
+	                	}else{
+	                		result = (!nmd || nmd === "undefined") ? '' : nmd;
+	                	}	                	
 	                	
 	                	element.text(result);
                 	},0);

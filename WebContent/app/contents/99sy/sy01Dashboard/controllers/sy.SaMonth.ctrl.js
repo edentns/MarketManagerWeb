@@ -103,12 +103,13 @@
           			{field: "T3_CNT", width: 100, attributes: grid_con_right , title: "반품완료" , headerAttributes: grid_header},
           			{field: "T4_CNT", width: 100, attributes: grid_con_right , title: "교환완료" , headerAttributes: grid_header},
           			{field: "detail", title: " "}
-          		],
-          		sortable: {
-          			mode: "single",
-          			allowUnsort: false,
-          			showIndexes: true
-          		}
+          		]
+//    			,
+//          		sortable: {
+//          			mode: "single",
+//          			allowUnsort: false,
+//          			showIndexes: true
+//          		}
 	        };
 	
 	        saMonth.chart = {

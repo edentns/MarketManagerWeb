@@ -2,8 +2,8 @@
 	"use strict";
 
 	angular.module("sy.Login.controller")
-		.controller("sy.LoginCtrl", ["$rootScope", "$scope", "$modal", "$state", "sy.LoginSvc", "APP_CONFIG", "$window", "$http", "MenuSvc", "$timeout",  
-			function ($rootScope, $scope, $modal, $state, LoginSvc, APP_CONFIG, $window, $http, MenuSvc, $timeout) {
+		.controller("sy.LoginCtrl", ["$rootScope", "$scope", "$modal", "$state", "sy.LoginSvc", "APP_CONFIG", "$window", "$http", "MenuSvc", "$timeout", "UtilSvc",  
+			function ($rootScope, $scope, $modal, $state, LoginSvc, APP_CONFIG, $window, $http, MenuSvc, $timeout, UtilSvc) {
 				var loginVO;
 				
 				/** test
@@ -13,7 +13,8 @@
 					isRegisterId: false,
 					info		: { bsCd    : APP_CONFIG.bsCd, user	: "", password: "" },
 					version	: APP_CONFIG.version,
-					url : ""
+					url : "",
+					bAvtm : false
 				};
 
 				/**
@@ -35,6 +36,32 @@
 						self.isRegisterId  = true;
 					}
 
+					LoginSvc.selectAvtm("SYAC180305_00003").then(function (res) {
+						
+						if(res.data.length < 1) {
+							loginVO.bAvtm = false;
+							return;
+						}
+						
+						loginVO.bAvtm = true;
+						var scrolltemplate = kendo.template($("#scrolltemplate").html());
+					
+						$("#loginAvtmSlides").html(kendo.render(scrolltemplate, res.data));
+						
+						$('#loginAvtmSlides').slidesjs({
+					        height: res.data[0].VAL_HEIGHT,
+					        navigation: false,
+					        pagination: false,
+					        play: {
+					          effect: "fade",
+					          pauseOnHover: true,
+					          auto: true,
+					          interval: 4000,
+					          restartDelay: 1000
+					        }
+						});
+					});
+					
 					$timeout(function () {
 						if(recentLoginInfo) edt.id("passWord").focus();
 						else                edt.id("bsCdId").focus();

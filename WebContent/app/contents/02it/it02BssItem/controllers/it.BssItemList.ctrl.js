@@ -51,70 +51,38 @@
 	        		datesetting : {
 	        			dateType   : 'market',
 						buttonList : ['current', '1Day', '1Week', '1Month'],
-						selected   : 'current',
+						selected   : resData.selectDate.selected,
 						period : {
-							start : angular.copy(today),
-							end   : angular.copy(today)
+							start : resData.selectDate.start,
+							end   : resData.selectDate.end
 						}
 	        		},
 	        		dateOption    : [{CD_DEF : "001" , NM_DEF : "등록일시"},
 	        		                 {CD_DEF : "002" , NM_DEF : "유효일시"}
 	        						],
-	        		selectedDateOption : "001",
-	        		signItem      : { value: "" , focus: false },
-	        		nmItem        : { value: "" , focus: false },
-	        		nmMnfr        : { value: "" , focus: false },
-	        		adulYnList    : [],
-	        		adulYnIds     : "*",
-	        		taxClftList   : [],
-	        		taxClftIds    : "*",
-	        		iClftList     : [],
-	        		iClftIds      : "*",
-	        		iKindList     : [],
-	        		iKindIds      : "*",
-	        		iStatList     : [],
-	        		iStatIds      : "*",
+	        		selectedDateOption : resData.selectedDateOption,
+	        		signItem      : { value: resData.signItemValue, focus: false },
+	        		nmItem        : { value: resData.nmItemValue  , focus: false },
+	        		nmMnfr        : { value: resData.nmMnfrValue  , focus: false },
+	        		adulYnList    : resData.adulYnList,
+	        		adulYnIds     : resData.adulYnIds,
+	        		taxClftList   : resData.taxCodeList,
+	        		taxClftIds    : resData.taxClftIds,
+	        		iKindList     : resData.iKindCodeList,
+	        		iKindIds      : resData.iKindIds,
+	        		iStatList     : resData.iStatCodeList,
+	        		iStatIds      : resData.iStatIds,
 	        		dataTotal     : 0
 	            };	            
-	            
+        		
 	            //처음 화면들어왓을때
 	            bssItemDataVO.doQuiry = function(){
-	            	bssItemDataVO.adulYnList  = resData.adulYnList;
-	            	bssItemDataVO.taxClftList = resData.taxCodeList;
-	            	bssItemDataVO.iClftList   = resData.iClftCodeList;
-	            	bssItemDataVO.iKindList   = resData.iKindCodeList;
-	            	bssItemDataVO.iStatList   = resData.iStatCodeList;
-	            	
-	            	bssItemDataVO.signItem.value = "";
-	            	bssItemDataVO.nmItem.value   = "";
-	            	bssItemDataVO.nmMnfr.value   = "";
-	            	
 	            	$timeout(function() {
 	            		if(!page.isWriteable()){
 	    					$("#divBssVO .k-grid-toolbar").hide();
 	    				}
-	            		// 이전에 검색조건을 세션에 저장된 것을 가져옴
-	            		var history = UtilSvc.grid.getInquiryParam();
-		            	if(history){
-		            		bssItemDataVO.signItem.value = history.CD_CLFT;	
-		            		bssItemDataVO.nmItem.value = history.NM_ITEM;
-		            		bssItemDataVO.nmMnfr.value = history.NM_MNFR;
-		            		bssItemDataVO.adulYnIds = history.YN_ADULCTFC;
-		            		bssItemDataVO.taxClftIds = history.CD_TAXCLFT;
-		            		bssItemDataVO.iClftIds = history.CD_ITEMCLFT;
-		            		bssItemDataVO.iKindIds = history.CD_ITEMKIND;
-		            		bssItemDataVO.iStatIds = history.CD_ITEMSTAT;
-		            		bssItemDataVO.adulYnList.setSelectNames = history.YN_ADULCTFC_SELECT_INDEX;
-		            		bssItemDataVO.taxClftList.setSelectNames = history.CD_TAXCLFT_SELECT_INDEX;
-		            		bssItemDataVO.iClftList.setSelectNames = history.CD_ITEMCLFT_SELECT_INDEX;
-		            		bssItemDataVO.iKindList.setSelectNames = history.CD_ITEMKIND_SELECT_INDEX;
-		            		bssItemDataVO.iStatList.setSelectNames = history.CD_ITEMSTAT_SELECT_INDEX;
-		            		bssItemDataVO.selectedDateOption = history.DATEOPT;
-		            		bssItemDataVO.datesetting.period.start = history.DATE_FROM;
-		            		bssItemDataVO.datesetting.period.end = history.DATE_TO;
-		            		
-		            		$scope.gridBssVO.dataSource.read();
-		            	}
+	            		
+	            		$scope.gridBssVO.dataSource.read();
         			});
 	            };
 	            
@@ -122,22 +90,19 @@
 	            bssItemDataVO.inQuiry = function(){
 	            	$scope.gridBssVO.dataSource.read();
 		            var param = {
-						CD_CLFT :	bssItemDataVO.signItem.value,
+		            	CD_SIGNITEM : bssItemDataVO.signItem.value,
 						NM_ITEM : bssItemDataVO.nmItem.value,
 			        	NM_MNFR :	bssItemDataVO.nmMnfr.value,
 			        	YN_ADULCTFC : bssItemDataVO.adulYnIds,
 						CD_TAXCLFT  : bssItemDataVO.taxClftIds,
 						CD_ITEMCLFT : bssItemDataVO.iClftIds,
 						CD_ITEMKIND : bssItemDataVO.iKindIds,
-						CD_ITEMSTAT : bssItemDataVO.iStatIds,
 						YN_ADULCTFC_SELECT_INDEX : bssItemDataVO.adulYnList.allSelectNames,
 						CD_TAXCLFT_SELECT_INDEX  : bssItemDataVO.taxClftList.allSelectNames,
-						CD_ITEMCLFT_SELECT_INDEX : bssItemDataVO.iClftList.allSelectNames,
 						CD_ITEMKIND_SELECT_INDEX : bssItemDataVO.iKindList.allSelectNames,
 						CD_ITEMSTAT_SELECT_INDEX : bssItemDataVO.iStatList.allSelectNames,
 						DATEOPT     : bssItemDataVO.selectedDateOption,
-						DATE_FROM   : bssItemDataVO.datesetting.period.start,
-	                	DATE_TO     : bssItemDataVO.datesetting.period.end
+	                	PERIOD      : UtilSvc.grid.getDateSetting(bssItemDataVO.datesetting)
 	                };
         			// 검색조건 세션스토리지에 임시 저장
         			UtilSvc.grid.setInquiryParam(param);
@@ -153,16 +118,12 @@
 	            };
 	            
 	            bssItemDataVO.isOpen = function (val) {
-	            	if(val) {
-	            		$scope.gridBssVO.wrapper.height(615);
-	            		$scope.gridBssVO.resize();
-	            		gridBssVO.dataSource.pageSize(9);
-	            	}
-	            	else {
-	            		$scope.gridBssVO.wrapper.height(798);
-	            		$scope.gridBssVO.resize();
-	            		gridBssVO.dataSource.pageSize(12);
-	            	}
+	            	var searchIdHeight = $("#searchId").height();
+	            	var settingHeight = $(window).height() - searchIdHeight - 90;
+	            	var pageSizeValue = val? 9 : 12;
+	            	$scope.gridBssVO.wrapper.height(settingHeight);
+            		$scope.gridBssVO.resize();
+            		gridBssVO.dataSource.pageSize(pageSizeValue);
 	            };
 	            
 	            //popup insert & update Validation - 현재 사용안함
@@ -197,13 +158,11 @@
                     			read: function(e) {
                     				var me = this,
                     					param = {
-                    					procedureParam:"USP_IT_02BSSITEM01_GET&I_CD_CLFT@s|I_NM_ITEM@s|I_NM_MNFR@s|I_YN_ADULCTFC@s|I_CD_TAXCLFT@s|I_CD_ITEMCLFT@s|I_CD_ITEMKIND@s|I_CD_ITEMSTAT@s|I_DATEOPT@s|DATE_FROM@s|DATE_TO@s",
+                    					procedureParam:"USP_IT_02BSSITEM01_GET&I_CD_CLFT@s|I_NM_ITEM@s|I_YN_ADULCTFC@s|I_CD_TAXCLFT@s|I_CD_ITEMKIND@s|I_CD_ITEMSTAT@s|I_DATEOPT@s|DATE_FROM@s|DATE_TO@s",
                     					I_CD_CLFT :	bssItemDataVO.signItem.value,
                     					I_NM_ITEM : bssItemDataVO.nmItem.value,
-                    		        	I_NM_MNFR :	bssItemDataVO.nmMnfr.value,
                     					I_YN_ADULCTFC : bssItemDataVO.adulYnIds,
                     					I_CD_TAXCLFT  : bssItemDataVO.taxClftIds,
-                    					I_CD_ITEMCLFT : bssItemDataVO.iClftIds,
                     					I_CD_ITEMKIND : bssItemDataVO.iKindIds,
                     					I_CD_ITEMSTAT : bssItemDataVO.iStatIds,
                     					I_DATEOPT     : bssItemDataVO.selectedDateOption,
@@ -276,7 +235,7 @@
     															editable: false, 
     															nullable: false
     						    	    				   },						    	    				   
-    						    	    NM_MNFR: 	       {
+    						    	    NM_FGFT: 	       {
     			        										type: "string",
     			        										editable: false,
     			        										nullable: false //true 일때 defaultValue가 안 됨
@@ -286,7 +245,7 @@
                     											editable: false,
                         										nullable: false
                     									   },                    									   
-                    					SF_DE:	   	       {	
+                    					HTML_DETEXPL:	   	       {	
     			    									    	type: "string", 
     								    						editable: true,
     								    						nullable: false
@@ -311,21 +270,6 @@
                         										editable: true,
                         									    nullable: false
                     									   },
-                    					NO_CSMADVPHNE: 	   {
-                    											type: "string", 
-                    											editable: false, 
-                    											nullable: false
-                    									   },
-                    					CD_CTFOBJ: 	       {
-    				                    				    	type: "string", 
-    															editable: false, 
-    															nullable: false
-                    				    				   },	
-                    				    CD_CTFINFO: 	   {
-    				                    				    	type: "string", 
-    															editable: false, 
-    															nullable: false
-                    				    				   },
                     				    DTS_INSERT: 	   {
     				                    				    	type: "string", 
     															editable: false, 
@@ -341,7 +285,7 @@
     															editable: false, 
     															nullable: false
                     				    				   },	
-                    				    CD_ITEMCLFT:       { 	
+                    				    DT_FGFTPRESSTART:  { 	
     				                    				    	type: "string", 
     															editable: false, 
     															nullable: false
@@ -387,8 +331,7 @@
   			                        field: "ROW_CHK",
   			                        title: "<input class='k-checkbox' type='checkbox' id='grd_chk_master' ng-click='onBssGrdCkboxAllClick($event)'><label class='k-checkbox-label k-no-text' for='grd_chk_master' style='margin-bottom:0;'>​</label>",
 			                        width: "40px",
-  			                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px; vertical-align:middle;"},
-  			                        selectable: true
+  			                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px; vertical-align:middle;"}
                   	            },                        
   		                        {	
                   	            	field: "CD_SIGNITEM",
@@ -433,14 +376,14 @@
   			                                ]
   		                        },                       
   		                        {
-  		                        	field: "NM_MNFR",
-  		                            title: "제조사",
+  		                        	field: "NM_FGFT",
+  		                            title: "사은품명",
   		                            width: 100,
   		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
   		                            columns: [ 
   		                                       	{
-  				                                    field: "CD_ITEMKIND",
-  				                                    title: "상품구분",
+  				                                    field: "DT_FGFTPRESSTART",
+  				                                    title: "사은품 증정시작일",
   				  		                            width: 100,
   							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
   				                                }
@@ -475,7 +418,7 @@
   			                                ]
   		                        },                        
   		                        {
-  		                        	field: "SF_DE",
+  		                        	field: "HTML_DETEXPL",
   		                            title: "상세설명",
   		                            width: 100,
   		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
@@ -523,7 +466,7 @@
   		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
   		                            columns: [ 
   		                                       	{
-  				                                    field: "DTS_VLD",
+  				                                    field: "DT_VLD",
   				                                    title: "유효일시",
   				  		                            width: 100,
   							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
@@ -559,8 +502,10 @@
 	                
 	                if (checked) {
 	                	row.addClass("k-state-selected");
+	                	row.find(".k-checkbox").prop( "checked", true );
 	                } else {
 	                	row.removeClass("k-state-selected");
+	                	row.find(".k-checkbox").prop( "checked", false );
 	                };
                 };
                 
@@ -593,22 +538,6 @@
 	                	row.find(".k-checkbox").prop( "checked", false );
 	                };
                 };
-
-                $scope.onCsGridEditClick = function(){            	
-                	var grd = $scope.cskg,
-	            		chked = grd.element.find("input:checked"),
-	            		chkedLeng = grd.element.find("input:checked").length;
-                	
-                	if(chkedLeng === 1){
-                		grd.editRow(chked.closest('tr'));
-                	}else if(chkedLeng > 1){
-                		//alert("답변 하실 데이터를 1개만 선택해 주세요.");
-                		$scope.showPopup("답변 하실 데이터를 1개만 선택해 주세요.");
-                	}else if(chkedLeng < 1){
-                		//alert("답변 하실 데이터를 선택해 주세요.");
-                		$scope.showPopup("답변 하실 데이터를 선택해 주세요.");
-                	}
-                };	
                 
                 //alert 경고
                 $scope.notf1Options = {
@@ -635,7 +564,9 @@
                     }, "warning");
                 };
                 
-                bssItemDataVO.doQuiry();
-                
+                $timeout(function(){
+	                bssItemDataVO.doQuiry();
+	                bssItemDataVO.isOpen(false);
+                }, 0);
             }]);
 }());

@@ -20,16 +20,49 @@
 
                             AuthSvc.isAccess().then(function (result) {
                                 resData.access = result[0];
-                                
                                 var param = {
-        		    					procedureParam: "MarketManager.USP_MA_07ITL_CODE_GET",
+        		    					procedureParam: "USP_MA_07ITL_CODE_GET",
         		    				};
-        		    				UtilSvc.getList(param).then(function (res) {
-        		    					resData.mngMrkData = res.data.results[0];
-        		    					resData.nmJobData  = res.data.results[1];
-        		    					resData.stJobData  = res.data.results[2];
-        		    					defer.resolve(resData);
-        							});
+
+                                $q.all([
+									UtilSvc.getList(param).then(function (res) {
+										return res.data;
+									}),
+                            		UtilSvc.grid.getInquiryParam().then(function (res) {
+                            			return res.data;
+                            		})
+                                ]).then(function (result) {
+                                	resData.mngMrkBind = result[0].results[0];
+    		    					resData.nmJobBind  = result[0].results[1];
+    		    					resData.stJobBind  = result[0].results[2];
+    		    					
+                                	resData.answerStatusBind = result[0];
+                                	
+                                	var history = result[1];
+                        			
+                        			if(history){
+    				            		resData.mngMrkModel               = history.L_LIST01;
+    				            		resData.mngMrkBind.setSelectNames = history.L_LIST01_SELECT_INDEX;
+    				            		resData.nmJobModel                = history.L_LIST02;
+    				            		resData.nmJobBind.setSelectNames  = history.L_LIST02_SELECT_INDEX;
+    				            		resData.stJobModel                = history.L_LIST03;
+    				            		resData.stJobBind.setSelectNames  = history.L_LIST03_SELECT_INDEX;
+    				            		
+    				            		resData.selectDate       = UtilSvc.grid.getSelectDate(history.PERIOD);
+    				            	}
+    				            	else {
+    				            		resData.mngMrkModel = "*";
+    				            		resData.nmJobModel  = "*";
+    				            		resData.stJobModel  = "*";
+    				            		resData.selectDate        = {
+    				            			start : angular.copy(edt.getToday()),
+    				            			end   : angular.copy(edt.getToday()),
+    				            			selected : '1Week'
+    				            		};
+    				            	}
+
+    		    					defer.resolve(resData);
+                                });
                             });
 
                             return defer.promise;

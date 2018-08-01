@@ -28,13 +28,21 @@
                     	return "sa.Ord"+ $stateParams.kind +"Ctrl";                                  
                     }],
                     resolve		: {
-                        resData: ["AuthSvc", "$q", function (AuthSvc, $q) {
+                        resData: ["AuthSvc", "$q", "Util03saSvc", function (AuthSvc, $q, Util03saSvc) {
                             var defer 	= $q.defer(),
-                                resData = {};
+                                resData = {},
+                                storageKey = "ordSerchParam";
 
                             AuthSvc.isAccess().then(function (result) {
                                 resData.access = result[0];
-                                defer.resolve(resData);
+
+                                Util03saSvc.storedDatesettingLoad(storageKey).then(function(res) {
+                                	resData.selected   = res.selected;
+                            		resData.storage    = res.storage;
+                            		resData.storageKey = storageKey;
+                            		
+                            		defer.resolve(resData);
+                                });
                             });
 
                             return defer.promise;

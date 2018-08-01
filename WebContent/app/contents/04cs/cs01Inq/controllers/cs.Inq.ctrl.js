@@ -22,7 +22,7 @@
 	            	datesetting : {
 	        			dateType   : 'market',
 						buttonList : ['current', '1Day', '1Week', '1Month'],
-						selected   : '1Week',
+						selected   : resData.selected,
 						period : {
 							start : angular.copy(today),
 							end   : angular.copy(today)
@@ -45,7 +45,7 @@
 	            csDataVO.initLoad = function(){
 	            	var me = this;
 	            	var ordArg = {
-	            			procedureParam: "MarketManager.USP_SY_10CODE02_GET&lnomngcdhd@s|lcdcls@s",
+	            			procedureParam: "USP_SY_10CODE02_GET&lnomngcdhd@s|lcdcls@s",
 	    					lnomngcdhd: "SYCH00069",
 	    					lcdcls: "CS_000001"
 	            		};
@@ -66,7 +66,8 @@
 	            		me.csMrkNameOp = result[1];
 	            		
 	            		$timeout(function(){
-            				Util03saSvc.storedQuerySearchPlay(me, "csDataVO");
+            				Util03saSvc.storedQuerySearchPlay(me, resData.storage);
+            				csDataVO.isOpen(false);
                         },0);  
 	            	});
 	            };
@@ -86,7 +87,12 @@
     					CS_NM_MRK_SELCT_INDEX : me.csMrkNameOp.allSelectNames,
     					CS_NM_ORDSTAT_SELCT_INDEX : me.csStatusOp.allSelectNames,
     					DTS_SELECTED : me.datesetting.selected,
-    					CASH_PARAM : "csDataVO"
+    					DTS_STORAGE_FROM: me.datesetting.period.start,
+    					DTS_STORAGE_TO: me.datesetting.period.end,
+    					CASH_PARAM : resData.storageKey,
+    					TODAY : (me.datesetting.period.end.y === edt.getToday().y && 
+    							me.datesetting.period.end.m === edt.getToday().m && 
+    							me.datesetting.period.end.d === edt.getToday().d)? 1 : 0
                     };   
     				if(Util03saSvc.readValidation(csDataVO.param)){
     					$scope.cskg.dataSource.data([]);
@@ -118,16 +124,12 @@
 	            };	
 	            
 	            csDataVO.isOpen = function (val) {
-	            	if(val) {
-	            		$scope.cskg.wrapper.height(616);
-	            		$scope.cskg.resize();
-	            		if(csDataVO.param !== "") gridCsVO.dataSource.pageSize(16);
-	            	}
-	            	else {
-	            		$scope.cskg.wrapper.height(798);
-	            		$scope.cskg.resize();
-	            		if(csDataVO.param !== "") gridCsVO.dataSource.pageSize(25);
-	            	}
+	            	var searchIdHeight = $("#searchId").height();
+	            	var settingHeight = $(window).height() - searchIdHeight - 90;
+	            	var pageSizeValue = val? 16 : 24;
+	            	$scope.cskg.wrapper.height(settingHeight);
+            		$scope.cskg.resize();
+            		if(csDataVO.param !== "") gridCsVO.dataSource.pageSize(pageSizeValue);
 	            };	    
 	            
 	            //cs 검색 그리드

@@ -2,5 +2,5 @@
     "use strict";
 
     // [te]
-    angular.module("edtApp.te", ["te.OtherKendo"]);
+    angular.module("edtApp.te", ["te.OtherKendo", "te.Mobile"]);
 }());

@@ -39,14 +39,14 @@
                 menuVO.options = {
                     data    : [],
                     colDefs : [
-                        { field : "POS", displayName : "메뉴코드", width : 180 },
-                        { field : "NM_M", displayName : "메뉴이름", width : 300, type: "tree" },
+                        { field : "POS", displayName : "메뉴코드", width : 130 },
+                        { field : "NM_M", displayName : "메뉴이름", width : 250, type: "tree" },
                         { field : "CD_ACC", displayName : "접근권한", width : 140, className : "ta-c", colTemplate: readColTemplate },
                         { field : "CD_WRITE", displayName : "등록/수정권한", width: 140, className : "ta-c", colTemplate: writeColTemplate }
                     ],
                     primaryName : "POS",
                     parentName  : "PARENT",
-                    height : 680,
+                    height : $(window).height() - 90 - 136,
 
                     onRegisterApi : function (treeApi) {
                         menuVO.treeApi = treeApi;

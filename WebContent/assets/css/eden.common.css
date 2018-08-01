@@ -563,7 +563,27 @@ form[name="businessForm"]:after {content: ''; display: block; clear: both;}
     width: 99%;
     margin: 5px;
 }
-
+.not_pop_title{
+	padding: 10px;
+}
+/* 캔두 팝업 */
+.k-edit-form-container{
+    width: 600px;
+}
+.k-popup-edit-form .k-edit-label{
+    width: 20%;
+    text-align: left;
+}
+.k-popup-edit-form .k-edit-field{
+    width: 70%;
+}
+.k-popup-edit-form .k-edit-field > .k-textbox,
+.k-popup-edit-form .k-edit-field > .k-widget:not(.k-tooltip){
+    width: 98%;
+}
+.div-rows{
+	border-bottom: solid 1px #bbdceb;	
+}
 .k-grid-header, .k-grouping-header, .k-header {
 	background-color: #398dcc;
 }

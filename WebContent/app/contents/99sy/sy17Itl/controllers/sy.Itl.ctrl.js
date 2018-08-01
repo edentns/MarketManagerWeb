@@ -28,11 +28,11 @@
 	        		},
 	            	datesetting : {
 	        			dateType   : 'market',
-						buttonList : ['current', '1Day', '1Week', '1Month', 'range'],
-						selected   : resData.selected,
+						buttonList : ['current', '1Day', '1Week', '1Month'],
+						selected   : resData.selectDate.selected,
 						period : {
-							start : resData.start,
-							end   : resData.end
+							start : resData.selectDate.start,
+							end   : resData.selectDate.end
 						}
 	        		},
                     mngMrkModel : resData.mngMrkModel,                  //마켓명 모델
@@ -60,7 +60,9 @@
 		            	gridTabLocalVO = $scope.gridTabVO.addCommonGridVO(gridTabLocalVO, iIndex);
 	                });
 		            
-		            itlDataVO.search();
+		            itlDataVO.search(function(res) {
+		            	itlDataVO.isOpen(false);
+		            });
 	            };
 	            
                 var iNumWidth = "50px",
@@ -90,10 +92,10 @@
 						{field: "process_result"   , width: "70px"  , attributes: {class:"ta-c", style:sEllipsis}, title: "처리상태"},
 						{field: "req_datetime"     , width: iDateTimeWidth, attributes: {class:"ta-c", style:sEllipsis}, title: "처리일시"},       		     		            
 						{field: "info_type"        , width: "70px"  , attributes: {class:"ta-l", style:sEllipsis}, title: "정보유형"},   
-						{field: "orderNo"          , width: "130px" , attributes: {class:"ta-c", style:sEllipsis}, title: "주문번호"},           		            
-						{field: "productOrderNo"   , width: "130px" , attributes: {class:"ta-l", style:sEllipsis}, title: "상품주문번호"},   
-						{field: "mallOrderNo"      , width: "130px" , attributes: {class:"ta-l", style:sEllipsis}, title: "마켓주문번호"},
-						{field: "paymentNo"        , width: "120px" , attributes: {class:"ta-l", style:sEllipsis}, title: "결재번호"},
+						{field: "orderNo"          , width: "130px" , attributes: {class:"ta-c", style:sEllipsis}, title: "주문번호"},  
+						{field: "paymentNo"        , width: "120px" , attributes: {class:"ta-l", style:sEllipsis}, title: "결재번호"},     
+						{field: "mallOrderNo"      , width: "130px" , attributes: {class:"ta-l", style:sEllipsis}, title: "마켓주문번호"},       		            
+						{field: "productOrderNo"   , width: "130px" , attributes: {class:"ta-l", style:sEllipsis}, title: "상품주문번호"},
 						{field: "definiteOrderDate", width: iDateTimeWidth, attributes: {class:"ta-c", style:sEllipsis}, title: "주문확정일시"},
 						{field: "DC_TEMP"          , width: iNullWidth, attributes: {class:"ta-c", style:sEllipsis}, title: " "}
 					],
@@ -105,10 +107,10 @@
 						{field: "process_result"     , width: "70px"  , attributes: {class:"ta-c", style:sEllipsis}, title: "처리상태"},
 						{field: "req_datetime"       , width: iDateTimeWidth, attributes: {class:"ta-c", style:sEllipsis}, title: "처리일시"},         		     		            
 						{field: "info_type"          , width: "70px"  , attributes: {class:"ta-c", style:sEllipsis}, title: "정보유형"},   
-						{field: "orderNo"            , width: "130px" , attributes: {class:"ta-c", style:sEllipsis}, title: "주문번호"},           		            
-						{field: "productOrderNo"     , width: "130px" , attributes: {class:"ta-l", style:sEllipsis}, title: "상품주문번호"},   
-						{field: "mallOrderNo"        , width: "130px" , attributes: {class:"ta-l", style:sEllipsis}, title: "마켓주문번호"},
-						{field: "paymentNo"          , width: "120px" , attributes: {class:"ta-l", style:sEllipsis}, title: "결재번호"},
+						{field: "orderNo"            , width: "130px" , attributes: {class:"ta-c", style:sEllipsis}, title: "주문번호"},  
+						{field: "paymentNo"          , width: "120px" , attributes: {class:"ta-l", style:sEllipsis}, title: "결재번호"},     
+						{field: "mallOrderNo"        , width: "130px" , attributes: {class:"ta-l", style:sEllipsis}, title: "마켓주문번호"},       		            
+						{field: "productOrderNo"     , width: "130px" , attributes: {class:"ta-l", style:sEllipsis}, title: "상품주문번호"},
 						{field: "deliveryDivision"   , width: "120px" , attributes: {class:"ta-l", style:sEllipsis}, title: "배송구분"},
 						{field: "delivery_type"      , width: "120px" , attributes: {class:"ta-l", style:sEllipsis}, title: "택배사"},
 						{field: "invoiceNo"          , width: "120px" , attributes: {class:"ta-l", style:sEllipsis}, title: "송장번호"},
@@ -126,9 +128,9 @@
 						{field: "requesteNo"       , width: "130px" , attributes: {class:"ta-c", style:sEllipsis}, title: "요청번호"},           		            
 						{field: "claimType"        , width: "70px"  , attributes: {class:"ta-c", style:sEllipsis}, title: "요청유형"},   
 						{field: "requestDate"      , width: iDateTimeWidth, attributes: {class:"ta-c", style:sEllipsis}, title: "요청일시"},
-						{field: "product_order_no" , width: "130px" , attributes: {class:"ta-l", style:sEllipsis}, title: "상품주문번호"},
-						{field: "mallOrderNo"      , width: "130px" , attributes: {class:"ta-l", style:sEllipsis}, title: "마켓주문번호"},
 						{field: "payment_no"       , width: "120px" , attributes: {class:"ta-l", style:sEllipsis}, title: "결재번호"},
+						{field: "mallOrderNo"      , width: "130px" , attributes: {class:"ta-l", style:sEllipsis}, title: "마켓주문번호"},
+						{field: "product_order_no" , width: "130px" , attributes: {class:"ta-l", style:sEllipsis}, title: "상품주문번호"},
 						{field: "permission_date"  , width: iDateTimeWidth, attributes: {class:"ta-c", style:sEllipsis}, title: "승인/거부일시"},
 						{field: "permission_person", width: "100px" , attributes: {class:"ta-c", style:sEllipsis}, title: "승인/거부 입력자"},
 						{field: "rejection_type"   , width: "120px" , attributes: {class:"ta-c", style:sEllipsis}, title: "거부구분"},
@@ -168,9 +170,9 @@
   						{field: "mall_no"          , width: "80px"  , attributes: {class:"ta-l", style:sEllipsis}, title: "쇼핑몰구분"},
 						{field: "info_type"        , width: "65px"  , attributes: {class:"ta-l", style:sEllipsis}, title: "정보유형"},   
 						{field: "orderNo"          , width: "128px" , attributes: {class:"ta-c", style:sEllipsis}, title: "주문번호"},
+						{field: "paymentNo"        , width: "80px"  , attributes: {class:"ta-l", style:sEllipsis}, title: "결재번호"},
 						{field: "mallOrderNo"      , width: "88px"  , attributes: {class:"ta-l", style:sEllipsis}, title: "마켓주문번호"},
 						{field: "mallItemNo"       , width: "128px" , attributes: {class:"ta-l", style:sEllipsis}, title: "마켓상품번호"},
-						{field: "paymentNo"        , width: "80px"  , attributes: {class:"ta-l", style:sEllipsis}, title: "결재번호"},
 						{field: "deliveryDivision" , width: "85px"  , attributes: {class:"ta-c", style:sEllipsis}, title: "배송구분"},
 						{field: "delivery_type"    , width: "70px"  , attributes: {class:"ta-c", style:sEllipsis}, title: "택배사명"},
 						{field: "invoiceNo"        , width: "80px"  , attributes: {class:"ta-l", style:sEllipsis}, title: "송장번호"},
@@ -185,7 +187,7 @@
 	            itlDataVO.tooltipOptions = UtilSvc.gridtooltipOptions;
 	            	
 	            //초기 실행
-	            itlDataVO.search = function(){
+	            itlDataVO.search = function(retFunc){
 	            	var self = this;
 	            	var param = {
     						procedureParam: "USP_SY_17ITL_SEARCH&L_LIST01@s|L_LIST02@s|L_START_DATE@s|L_END_DATE@s",
@@ -211,17 +213,34 @@
     	                    mngMrkBindSelect : self.mngMrkBind.allSelectNames,                    
     	                    stJobModel  : self.stJobModel,
     	                    stJobBindSelect : self.stJobBind.allSelectNames,
-    	                    start       : self.datesetting.period.start,
-    	                    end         : self.datesetting.period.end
+    	                    period : UtilSvc.grid.getDateSetting(self.datesetting)
 	                    };
 						
 	        			// 검색조건 세션스토리지에 임시 저장
 	        			UtilSvc.grid.setInquiryParam(inquiryParam);
+	        			
+	        			retFunc();
 					});
 	            };	
 	            	  
 	            //open
 	            itlDataVO.isOpen = function(val){
+	            	var searchIdHeight = $("#searchId").height();
+	            	var dataView01Height = $("#dataView01").height();
+	            	var dataView02Height = $("#dataView02").height();
+	            	var dataView = (dataView01Height > dataView02Height)? dataView01Height : dataView02Height;
+	            	var settingHeight = $(window).height() - searchIdHeight - 90 - dataView - 60;
+	            	var pageSizeValue = val? 20 : 24;
+	            	var gridObj = [$scope.ordkg, $scope.trankg, $scope.cankg, $scope.cskg, $scope.shikg];
+
+            		gridObj.forEach(function (currentObject, index) {
+	            		currentObject.wrapper.height(settingHeight);
+	            		currentObject.resize();
+	            	});
+            		
+	            	$scope.gridTabVO.forEach(function (currentObject, index) {
+	            		currentObject.dataSource.pageSize(pageSizeValue);
+	            	});
 	            };	
 	            
 				//각 컬럼에 header 정보 넣어줌, 공통 모듈이 2줄 위주로 작성 되어 있기 떄문에  일부러 일케 했음 

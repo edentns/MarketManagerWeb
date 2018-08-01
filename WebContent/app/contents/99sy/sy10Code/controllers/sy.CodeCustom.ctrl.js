@@ -10,7 +10,7 @@
         .controller("sy.CodeCustomCtrl", ["$scope", "$http", "$log", "$timeout", "$q", "sy.CodeSvc", "APP_CODE","UtilSvc",
             function ($scope, $http, $log, $timeout, $q, SyCodeSvc, APP_CODE, UtilSvc) {
         	var gridHeaderAttributes = {"class": "table-header-cell", style: "text-align: center; font-size: 12px"};
-        	
+        	var gridHeight = Math.round(($(window).height()-90-114)/2);
         	var gridCusCodeVO = $scope.gridCusCodeVO = {
     			NO_MNGCDHD   : "",
                 CD_CLS   : "",
@@ -125,7 +125,7 @@
                     this.cancelRow();
                 },
             	editable: true,
-            	height: 346,
+            	height: gridHeight,
             	
             	initLoad: function() {
             		var self = this;

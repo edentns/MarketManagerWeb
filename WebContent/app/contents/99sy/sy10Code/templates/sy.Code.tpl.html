@@ -15,7 +15,6 @@
 
     <!-- 코드 CONTENT Layer -->
     <div class="row">
-
         <!-- 코드분류 Layer -->
         <div class="content-area-container col-xs-6">
             <div data-content-box-layer data-box-title="syCodeVO.boxTitle">
@@ -49,24 +48,9 @@
         <div class="content-area-container col-xs-6">
             <div class="content-box-row" data-ng-controller="sy.CodeCustomCtrl">
             	<div data-content-box-layer data-box-title="gridCusCodeVO.boxTitle">
-                <kendo-grid options="gridCusCodeVO" id="gridCusCodeVO">
-                </kendo-grid>
-            </div>
-                <!-- <div data-content-box-layer data-box-title="customerVO.boxTitle">
-                    <div class="box-content-article">
-                        <div class="article-header">
-                            <div class="col-xs-6 article-header-box">
-                                <button type="button" class="ae-btn" data-ng-click="customerVO.init()"><i class="fa fa-refresh"></i></button>
-                                <button type="button" data-ng-if="page.isWriteable() && syCodeVO.isCustomWrite()" class="ae-btn ae-add-btn" title="사용자코드 추가" data-ng-click="customerVO.add()"><i class="fa fa-plus"></i> 추가</button>
-                                <button type="button" data-ng-if="page.isWriteable() && syCodeVO.isCustomWrite()" class="ae-btn ae-delete-btn" title="사용자코드 삭제" data-ng-click="customerVO.delete()"><i class="fa fa-times"></i> 삭제</button>
-                            </div>
-                            <div class="col-xs-6 article-header-box ta-r">
-                                <button type="button" data-ng-if="page.isWriteable() && syCodeVO.isCustomWrite()" class="ae-btn" title="저장" style="vertical-align: middle;" data-ng-click="customerVO.save()">저장</button>
-                            </div>
-                        </div>
-                        <div id="codeCustomerTbl" class="article-view" data-ui-grid="customerVO.gridOptions" ui-grid-selection ui-grid-edit ui-grid-cellnav class="grid"></div>
-                    </div>
-                </div> -->
+	                <kendo-grid options="gridCusCodeVO" id="gridCusCodeVO">
+	                </kendo-grid>
+            	</div>
             </div>
 
             <div class="content-box-row" data-ng-controller="sy.CodeSystemCtrl">

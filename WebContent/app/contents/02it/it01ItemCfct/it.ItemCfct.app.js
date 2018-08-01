@@ -21,7 +21,7 @@
                             AuthSvc.isAccess().then(function (result) {
                                 resData.access = result[0];
                                 var param = {
-        		    					procedureParam: "MarketManager.USP_IT_01ITEMCFCT01_GET",
+        		    					procedureParam: "USP_IT_01ITEMCFCT01_GET",
         		    				};
         		    				UtilSvc.getList(param).then(function (res) {
         		    					resData.cfctData = res.data.results[0];

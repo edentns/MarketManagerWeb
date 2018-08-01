@@ -20,7 +20,7 @@
 		    				transport: {
 		    					read: function(e){ 
 		    						var param = {
-	    		    					procedureParam: "MarketManager.USP_MA_04MNGMRK01_GET",
+	    		    					procedureParam: "USP_MA_04MNGMRK01_GET",
 	    		    				};
 	    		    				UtilSvc.getList(param).then(function (res) {
 	    								e.success(res.data.results[0]);
@@ -38,7 +38,7 @@
 	            		var self = this;
 	            		self.mngMrkMd                 = sendData;
 	            		/*var param = {
-		    					procedureParam: "MarketManager.USP_MA_04MNGMRK01_GET",
+		    					procedureParam: "USP_MA_04MNGMRK01_GET",
 		    				};
 		    				UtilSvc.getList(param).then(function (res) {
 		    					self.mngMrkDs.dataSource.data = res.data.results[0];
@@ -64,7 +64,7 @@
             			, 0      // 처음부터
             			, function(res){
             				var param = {
-    		    					procedureParam: "MarketManager.USP_MA_04MNGMRK01_GET",
+    		    					procedureParam: "USP_MA_04MNGMRK01_GET",
     		    				};
     		    				UtilSvc.getList(param).then(function (res) {
     		    					ma04MrkOptVO.mngMrkDs = res.data.results[0];
@@ -159,7 +159,7 @@
 	            ma04MrkOptGridVO.doGetList = function(strIdCtgr, iIndex, fnThen) {
 	            	var self = this
 	            	  , param = {
-    					procedureParam: "MarketManager.USP_MA_04MNGMRK02_GET&NO_MNGMRK@s|ID_CTGR@s",
+    					procedureParam: "USP_MA_04MNGMRK02_GET&NO_MNGMRK@s|ID_CTGR@s",
     					NO_MNGMRK: $scope.ma04MrkOptVO.mngMrkMd,
     					ID_CTGR: strIdCtgr,
     					}

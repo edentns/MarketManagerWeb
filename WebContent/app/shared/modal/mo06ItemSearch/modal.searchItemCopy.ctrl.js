@@ -93,7 +93,7 @@
 					};*/
 					
 					var param = {
-        					procedureParam:"MarketManager.USP_IT_02BSSITEM_SEARCH&L_SEARCH_TYPE@s|L_SEARCH_WORD@s",
+        					procedureParam:"USP_IT_02BSSITEM_SEARCH&L_SEARCH_TYPE@s|L_SEARCH_WORD@s",
         					L_SEARCH_TYPE :	searchCompanyVO.selectedCode,
         					L_SEARCH_WORD : searchCompanyVO.searchWord
                         };

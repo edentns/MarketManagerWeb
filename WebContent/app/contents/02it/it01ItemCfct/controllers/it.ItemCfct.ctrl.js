@@ -88,7 +88,7 @@
 	            	modal: function() {   // 팝업 버튼
 	            		 var NO_MNGMRK,
 	            		     param = {
-		    					procedureParam: "MarketManager.USP_MA_04MNGMRK01_GET"
+		    					procedureParam: "USP_MA_04MNGMRK01_GET"
 		    				 };
 	            		 UtilSvc.getList(param).then(function (res) {
 	    					 NO_MNGMRK = res.data.results[0][0].NO_MNGMRK;
@@ -177,7 +177,9 @@
 	                    selectable: "multipleSmall"
 		            }
 		        ];
-
+				
+				var settingHeight = $(window).height() - 130;
+            	
 	            it01ItemCfctGridVO.addCommonGridVO = function(it01ItemCfctLocalGridVO, iIndex) {
 	            	var localSelf = it01ItemCfctLocalGridVO;
 	            	localSelf.iIndex = iIndex;
@@ -203,7 +205,7 @@
 	            	//localSelf.multiSelect              = false;
 	            	//localSelf.editable                 = false;
 	            	//localSelf.selected                 = null;
-	            	localSelf.height                   = 792;
+	            	localSelf.height                   = settingHeight;
 	            	localSelf.dataSource = new kendo.data.DataSource({
 	            		autoBind: false,
 	            		batch : true,
@@ -285,11 +287,11 @@
 	            			{
 	              			field: "NM_CTGR",
 	              			title: localSelf.boxTitle, 
-	              			width: 350,
+	              			width: 250,
 	              			maxwidth: 400, 
 							cellClass: "ta-c",
 							headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"},
-							template: "<div class='cell' id='"+localSelf.iIndex+"'>#=NM_CTGR#</div>"
+							template: "<div class='cell' style='text-align: left;' id='"+localSelf.iIndex+"'>#=NM_CTGR#</div>"
 	              		},{command: [ {
 	                        name: "삭제", imageClass: "k-icon k-i-close", click: function (e) {  //삭제 버튼
 	                            e.preventDefault();
@@ -387,7 +389,7 @@
 	            	var self = this,
 	            		nextIndex = iIndex+1;
 	            	var param = {
-    					procedureParam: "MarketManager.USP_IT_01ITEMCFCT02_GET&IT_ID_CTGR@s",
+    					procedureParam: "USP_IT_01ITEMCFCT02_GET&IT_ID_CTGR@s",
     					IT_ID_CTGR: strIdCtgr
     					};
 		            	

@@ -23,7 +23,7 @@
 	            	datesetting : {
 	        			dateType   : 'market',
 						buttonList : ['current', '1Day', '1Week', '1Month'],
-						selected   : Util03saSvc.storedDatesettingLoad("shpStdbyOrdSerchParam"),
+						selected   : resData.selected,
 						period : {
 							start : angular.copy(today),
 							end   : angular.copy(today)
@@ -53,7 +53,7 @@
 	        		chkOrdStatList : ""
 	            };
 	            
-	            shpbyordDataVO.initLoad = function () {
+	            shpbyordDataVO.initLoad = function(){
 	            	var me = this;
                 	var ordParam = {
                 			lnomngcdhd: "SYCH00048",
@@ -100,7 +100,7 @@
     					});
                         
                         $timeout(function(){
-            				Util03saSvc.storedQuerySearchPlay(me, "shpStdbyOrdSerchParam");
+            				Util03saSvc.storedQuerySearchPlay(me, resData.storage);
                         },0);    
                     });
                 };
@@ -120,7 +120,9 @@
 					    DTS_FROM : new Date(me.datesetting.period.start.y, me.datesetting.period.start.m-1, me.datesetting.period.start.d, "00", "00", "00").dateFormat("YmdHis"),           
 					    DTS_TO : new Date(me.datesetting.period.end.y, me.datesetting.period.end.m-1, me.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis"),
 					    DTS_SELECTED : me.datesetting.selected,
-					    CASH_PARAM : "shpStdbyOrdSerchParam"
+    					DTS_STORAGE_FROM: me.datesetting.period.start,
+    					DTS_STORAGE_TO: me.datesetting.period.end,
+					    CASH_PARAM : resData.storageKey
                     };   
     				if(Util03saSvc.readValidation(me.param)){
     					$scope.shpbyordkg.dataSource.data([]);
@@ -152,14 +154,11 @@
 	            };	               
 	            
 	            shpbyordDataVO.isOpen = function (val) {
-	            	if(val) {
-	            		$scope.shpbyordkg.wrapper.height(616);
-	            		$scope.shpbyordkg.resize();
-	            	}
-	            	else {
-	            		$scope.shpbyordkg.wrapper.height(798);
-	            		$scope.shpbyordkg.resize();
-	            	}
+	            	var searchIdHeight = $("#searchId").height();
+	            	var settingHeight = $(window).height() - searchIdHeight - 90;
+	            	
+	            	$scope.shpbyordkg.wrapper.height(settingHeight);
+            		$scope.shpbyordkg.resize();
 	            };
 	            
 	            shpbyordDataVO.flagFnc = function(){
@@ -173,6 +172,34 @@
                     	shpbyordDataVO.flag = false;
                 	}
 	            };
+	            
+	            //kendo grid 체크박스 옵션
+                $scope.onOrdGrdCkboxClick = function(e){
+                	UtilSvc.grdCkboxClick(e, $scope.shpbyordkg);
+                };
+                
+                //kendo grid 체크박스 all click
+                $scope.onOrdGrdCkboxAllClick = function(e){
+                	UtilSvc.grdCkboxAllClick(e, $scope.shpbyordkg);
+                };
+                
+	            //그리드 셀 더블 클릭
+	            $("#divShpbyordGrd").delegate("tbody>tr", "dblclick", function(ev){
+	            	var grd = $scope.shpbyordkg;
+	            	var getCurrentCell = "",
+	         		     getCurrentRow = "",
+	         		           getData = "";
+	         		
+	         		getCurrentCell = $(ev.target).is("td") ? $(ev.target) : $(ev.target).parents("td");
+	         		getCurrentRow = $(ev.target).parents("tr");           
+	         		getData = grd.dataItem(getCurrentRow);           
+	         		
+	         		//택배사 수정 하다가 넘어가면 짜증 나니까 택배사및 송장번호 더블클릭은 막음
+	         		if(getCurrentCell.closest("td").hasClass("dnt-clk")){	         			
+	         			return false;
+	         		};
+	         		$state.go("app.saOrd", { kind: null, menu: null, rootMenu : "saShpStdbyOrd", noOrd : getData.NO_ORD, noMrkord: getData.NO_MRKORD });
+	            });
 	            	            	            
 		        //검색 그리드
 	            var grdShpbyordVO = $scope.grdShpbyordVO = {
@@ -287,8 +314,7 @@
     		                    		}));
     		                    	}
     		                    }
-    	            		});  
-                			
+    	            		}); 
                     		cdcclrsnData = cdcclrsn.data("kendoDropDownList");
                     		cdcclrsnData.value(0);
                 		}; 
@@ -311,15 +337,18 @@
             			if( !grid.dataSource._total || grid.dataSource._total == 0){
             				alert("그리드에 데이터가 없습니다.");
             			}else{
-            				var getParam = Util03saSvc.localStorage.getItem("shpStdbyOrdSerchParam");
-            				var colVo = angular.copy($scope.grdShpbyordVO.columns);
-            				colVo.splice(0,1);
-            				getParam.gridInfo       = [colVo,[{field:"NM_MRK",title:"마켓명"},{field:"CD_DEF",title:"택배사코드"},{field:"NM_DEF",title:"택배사명"},{field:"NM_SHPCLFT",title:"택배사구분"}]];
-            				getParam.procedureParam = $scope.grdShpbyordVO.excelVO.procedureParam;
-            				getParam.gridTitle      = $scope.grdShpbyordVO.excelVO.gridTitle;   
-            				getParam.downfilename   = $scope.grdShpbyordVO.excel.fileName;
-            				UtilSvc.getExcelDownload(getParam).then(function(result) {
-    						});
+            				Util03saSvc.localStorage.getItem(resData.storageKey).then(function (res) {
+            					var getParam = res.data,
+            					    colVo = angular.copy($scope.grdShpbyordVO.columns);
+                				colVo.splice(0,1);
+                				getParam.gridInfo       = [colVo,[{field:"NM_MRK",title:"마켓명"},{field:"CD_DEF",title:"택배사코드"},{field:"NM_DEF",title:"택배사명"},{field:"NM_SHPCLFT",title:"택배사구분"}]];
+                				getParam.procedureParam = $scope.grdShpbyordVO.excelVO.procedureParam;
+                				getParam.gridTitle      = $scope.grdShpbyordVO.excelVO.gridTitle;   
+                				getParam.downfilename   = $scope.grdShpbyordVO.excel.fileName;
+                				UtilSvc.getExcelDownload(getParam);
+                			}, function(err){
+        						e.error([]);
+        					});            				
             			}
             		},
                     editable : true,
@@ -379,7 +408,8 @@
                 							$log.info("경과시간 = "+crTime+"초");
                         					
                     						alert("총 "+allV.length+"건 중 "+trueV.length+"건 배송정보등록 완료");
-                    						Util03saSvc.storedQuerySearchPlay(shpbyordDataVO, "shpStdbyOrdSerchParam");
+                    						//Util03saSvc.storedQuerySearchPlay(shpbyordDataVO, resData.storage);
+                    						shpbyordDataVO.inQuiry();
                     		                shpbyordDataVO.menualShwWrn = falseV;
                 						                    						
                     		                defer.resolve();
@@ -417,7 +447,8 @@
 			                				defer.resolve(); 
 			                				e.success();
 			                				shpbyordDataVO.flagFnc();  
-			                				Util03saSvc.storedQuerySearchPlay(shpbyordDataVO, "shpStdbyOrdSerchParam");
+			                				//Util03saSvc.storedQuerySearchPlay(shpbyordDataVO, resData.storage);
+			                				shpbyordDataVO.inQuiry();
 			                			}, function(err){
 			                				if(err.status !== 412){
                                             	alert(err.data);
@@ -453,7 +484,6 @@
                 			
                 			angular.element($("#grd_chk_master")).prop("checked",false);
                 		},
-                		/*pageSize: 6,*/
                 		batch: true,
                 		schema: {
                 			model: {
@@ -481,7 +511,8 @@
                 				    DC_CONSNEWADDR:    { type: "string", editable:false, nullable:false },	
                 				    DC_PCHRREQCTT: 	   { type: "string", editable:false, nullable:false },	
                 				    DC_CONSOLDADDR:    { type: "string", editable:false, nullable:false },	
-                				    CD_ORDSTAT: 	   { type: "string", editable:false, nullable:false },	
+                				    CD_ORDSTAT: 	   { type: "string", editable:false, nullable:false },
+                				    NM_ORDSTAT: 	   { type: "string", editable:false, nullable:false },	
                 				    DC_SHPWAY: 	   	   { type: "string", editable:false, nullable:false },	
                 				    QT_ORD:			   { type: "number", editable:false, nullable:false },
                 				    DTS_APVL: 	   	   { type: "string", editable:false, nullable:false },	
@@ -511,7 +542,7 @@
 															validation: {
 																no_invo_non_blank_validation: function (input) {
 																	if (input.is("[name='NO_INVO']")) {
-																		return Util03saSvc.NoINVOValidation(input, 'NO_INVO', 'no_invo_non_blank_validation');
+																		return Util03saSvc.NoINVOValidation(input, 'NO_INVO', 'no_invo_non_blank_validation',3);
 																	};
 																	return true;
 				  									    	  	}
@@ -633,11 +664,12 @@
 		                        	field: "CD_PARS",
 		                            title: "<span class='form-required'>* </span>택배사",
 		                            width: 100,
-		                            attributes: { "class": "dnt-clk" }, 
+		                            attributes: { "class" : "dnt-clk" }, 
 		                            editor: function shipCategoryDropDownEditor(container, options) {
-		                            	var db = "";
+		                            	var db = "",
+		                            		noMrk = options.model.NO_MRK;
 		                            	
-		                            	db = saShpStdbyOrdSvc.filteringShpbox(options.model.NO_MRK, shpbyordDataVO);
+		                            	db = saShpStdbyOrdSvc.filteringShpbox(noMrk, shpbyordDataVO);
 		                            	
 		                            	if(!db.length){
 		                            		db = [{NM_PARS_TEXT : "택배사 등록", CD_PARS : ""}];
@@ -650,7 +682,7 @@
 		                                    dataSource: db,
 		                                    change : function(e){
 		                                    	if(this.text() === "택배사 등록" && this.selectedIndex === 1){
-		                                    		$state.go("app.syPars", { menu: true, ids: null });
+		                                    		$state.go("app.syPars", { mrk: noMrk, menu: true, ids: null });
 		                                    	}
 		                                    }
 		                                });		                            	
@@ -683,14 +715,16 @@
                                     field: "NO_INVO",
                                     title: "<span class='form-required'>* </span>송장번호",
                                     width: 150,
-                                    attributes: {
-                                    	"class" : "dnt-clk",
-                                    	"menual-shw-wrn" : "shpbyordDataVO.menualShwWrn" 
-                                    }, 
+                                    attributes:  {
+                    					"class" : "dnt-clk",
+                    					"menual-shw-wrn" : "shpbyordDataVO.menualShwWrn",
+                    					"menual-shw-wrn-no-ord" : "{{dataItem.NO_ORD}}",
+                    					"menual-shw-wrn-list-yn" : "Y"
+                                    },
                                 	editor: function(container, options){
                                     	$('<input class="k-textbox" name="' + options.field + '" data-bind="value: '+options.field+'" autocomplete=off />').appendTo(container);                                    	
                                     },
-			                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}                  
+			                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
 		                        },
 		                        {
 		                        	field: "NM_PCHR",
@@ -702,10 +736,9 @@
 		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
 		                        }, 
 		                        {
-		                        	field: "CD_ORDSTAT",
+		                        	field: "NM_ORDSTAT",
 		                            title: "주문상태",
 		                            width: 100,
-		                            template: "<co04-cd-to-nm cd='#:CD_ORDSTAT#' nm-box='shpbyordDataVO.ordStatusOp'>",
 		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
 		                        },
                                	{
@@ -802,34 +835,6 @@
 		                        }
                     ]
 	        	};
-	           
-	            //kendo grid 체크박스 옵션
-                $scope.onOrdGrdCkboxClick = function(e){
-                	UtilSvc.grdCkboxClick(e, $scope.shpbyordkg);
-                };
-                
-                //kendo grid 체크박스 all click
-                $scope.onOrdGrdCkboxAllClick = function(e){
-                	UtilSvc.grdCkboxAllClick(e, $scope.shpbyordkg);
-                };
-                
-	            //그리드 셀 더블 클릭
-	            $("#divShpbyordGrd").delegate("tbody>tr", "dblclick", function(ev){
-	            	var grd = $scope.shpbyordkg;
-	            	var getCurrentCell = "",
-	         		     getCurrentRow = "",
-	         		           getData = "";
-	         		
-	         		getCurrentCell = $(ev.target).is("td") ? $(ev.target) : $(ev.target).parents("td");
-	         		getCurrentRow = $(ev.target).parents("tr");           
-	         		getData = grd.dataItem(getCurrentRow);           
-	         		
-	         		//택배사 수정 하다가 넘어가면 짜증 나니까 택배사및 송장번호 더블클릭은 막음
-	         		if(getCurrentCell.closest("td").hasClass("dnt-clk")){	         			
-	         			return false;
-	         		};
-	         		$state.go("app.saOrd", { kind: null, menu: null, rootMenu : "saShpStdbyOrd", noOrd : getData.NO_ORD, noMrkord: getData.NO_MRKORD });
-	            });
 
 	            shpbyordDataVO.initLoad();
             }]);

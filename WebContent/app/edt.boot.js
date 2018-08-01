@@ -16,7 +16,7 @@
 
             webApp.user = null;
             webApp.loader = { auto: true, isLoader : false };
-
+            webApp.helpContent = '';
 
             // select 기본 연도 생성을 위한 Year 리스트
             $rootScope.basicYearList = edt.makeYearList();

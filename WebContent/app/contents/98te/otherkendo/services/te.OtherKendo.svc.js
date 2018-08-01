@@ -91,14 +91,15 @@
                 },
                 
                 /**
-                 * 택배사 조회
-                 * */
-                
-                parcelUpdate: function(param){
-                	return $http({
+                 * 부서코드를 저장, 수정, 삭제한다.
+                 * @param oParam
+                 * @returns {*}
+                 */
+                chkKey : function (oParam) {
+                    return $http({
                         method : "POST",
-                        url    : APP_CONFIG.domain +"/parcel/chk",
-                        data   : param
+                        url    : APP_CONFIG.domain +"/shpingapikeytest",
+                        data   : oParam
                     });
                 }
             };

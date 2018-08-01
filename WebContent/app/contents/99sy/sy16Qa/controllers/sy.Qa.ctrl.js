@@ -23,17 +23,17 @@
 	            	datesetting : {
 	        			dateType   : 'market',
 						buttonList : ['current', '1Day', '1Week', '1Month'],
-						selected   : 'current',
+						selected   : resData.selectDate.selected,
 						period : {
-							start : angular.copy(today),
-							end   : angular.copy(today)
+							start : resData.selectDate.start,
+							end   : resData.selectDate.end
 						}
 	        		},
-                    contentText: { value: "" , focus: false},			//제목,내용
-                    answerStatusModel : "*",                     	    //답변처리상태 모델
-                    answerStatusBind : [], 
+                    contentText: { value: resData.contentTextValue, focus: false},			//제목,내용
+                    answerStatusModel : resData.answerStatusModel,                     	    //답변처리상태 모델
+                    answerStatusBind  : resData.answerStatusBind, 
                     customOptions : {
-                    	dataSource: [],
+                    	dataSource: resData.answerStatusBind,
                         dataTextField: "NM_DEF",
                         dataValueField: "CD_DEF",
                         valuePrimitive: true
@@ -77,8 +77,7 @@
 	    						L_CONT: syQaDataVO.contentText.value,
 	    						L_CD_ANSSTAT : syQaDataVO.answerStatusModel,
 	    						L_CD_ANSSTAT_INDEX : syQaDataVO.answerStatusBind.allSelectNames,
-	    						L_START_DATE  : syQaDataVO.datesetting.period.start,
-	    						L_END_DATE    : syQaDataVO.datesetting.period.end
+	    						L_PERIOD : UtilSvc.grid.getDateSetting(syQaDataVO.datesetting)
 	    	                };
 	            			// 검색조건 세션스토리지에 임시 저장
 	            			UtilSvc.grid.setInquiryParam(param);
@@ -120,13 +119,15 @@
 	            };
 
 	            syQaDataVO.isOpen = function (val) {
+	            	var searchIdHeight = $("#searchId").height();
+	            	var settingHeight = $(window).height() - searchIdHeight - 90;
 	            	if(val) {
-	            		$scope.syqakg.wrapper.height(657);
+	            		$scope.syqakg.wrapper.height(settingHeight);
 	            		$scope.syqakg.resize();
 	            		gridSyQaVO.dataSource.pageSize(20);
 	            	}
 	            	else {
-	            		$scope.syqakg.wrapper.height(798);
+	            		$scope.syqakg.wrapper.height(settingHeight);
 	            		$scope.syqakg.resize();
 	            		gridSyQaVO.dataSource.pageSize(24);
 	            	}
@@ -186,7 +187,7 @@
 	                        transport: {
 	                        	  read: function(e){
 	                        		  var param = {
-	                        			  procedureParam: "MarketManager.USP_MA_05NOTICE_FILELIST_GET&no@s",
+	                        			  procedureParam: "USP_MA_05NOTICE_FILELIST_GET&no@s",
 	              	    				  no: noticeDataVO.kEditor.noNotice
 	              	    			  };
 	          	            		  UtilSvc.getList(param).then(function (res) {
@@ -575,24 +576,15 @@
                     	height: 657
         		};
                 
-                syQaDataVO.asrStsBind();
-                
-                var history = UtilSvc.grid.getInquiryParam();
-                
                 $timeout(function () {
              	    if(!page.isWriteable()) {            		   
     					$("#divSyQaGrd .k-grid-toolbar").hide();
         		    };
-        		    if(history){
-                    	syQaDataVO.contentText.value = history.L_CONT;
-						syQaDataVO.answerStatusModel = history.L_CD_ANSSTAT;
-						syQaDataVO.answerStatusBind.setSelectNames = history.L_CD_ANSSTAT_INDEX;
-						syQaDataVO.datesetting.period.start = history.L_START_DATE;
-						syQaDataVO.datesetting.period.end = history.L_END_DATE;
-	            		
-						$scope.gridSyQaVO.dataSource.read();
-	            	}
-                },1000);
+
+					$scope.gridSyQaVO.dataSource.read();
+
+            		syQaDataVO.isOpen(false);
+                },0);
                
                 //kendo grid 체크박스 옵션
                 $scope.onOrdGrdCkboxClick = function(e){

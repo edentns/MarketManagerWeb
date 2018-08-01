@@ -1,18 +1,22 @@
 <header class="navbar">
 	<div class="container-fluid expanded-panel">
-		<div class="row">
-			<div id="logo" class="col-xs-2" style="background:#c6daec;">
+		<div class="row" style="display:flex;">
+			<!-- div id="logo" class="col-xs-2" style="background:#c6daec;"-->
+			<div id="logo" style="background:#c6daec; width:174px;">
 				<a href=""><img alt="" src="/assets/img/common/leftLogo.png"/></a>
 			</div>
-			<div id="top-panel" class="col-xs-10">
+			<div id="top-panel" class="col-xs-12">
+			<!-- div id="top-panel" style="width:100%;" -->
 				<div class="row">
-					<div class="col-xs-4">
+					<div class="col-xs-1">
 						<a href="#" class="show-sidebar">
 							<i class="glyphicon glyphicon-transfer fa-lg" style="margin-right: 10px;"></i>
 						</a>
 					</div>
-					<div class="col-xs-8 top-panel-right">
-						<a href="/assets/download/UserSimpleMenual(V1.0).pdf" target="_blank" style="float:right!important;"><img title="사용자간편메뉴얼" src="/assets/img/common/UserSimpleMenual.png" width="32px" height="32px"/></a>
+					<div id="headAvtmSlides" class="col-xs-9">
+					</div>
+					<div class="col-xs-2 top-panel-right">
+						<a target="_blank" style="float:right!important;" data-ng-click="headerIconVO.helpToggle()"><img title="도움말" src="/assets/img/common/UserSimpleMenual.png" width="32px" height="32px"/></a>
 						<ul class="nav navbar-nav pull-right panel-menu" dropdown>
 							<li class="dropdown">
 								<a href class="dropdown-toggle account" style="line-height: 48px;" dropdown-toggle data-ng-click="headerIconVO.toggleDropdown($event)">

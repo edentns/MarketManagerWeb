@@ -1,13 +1,12 @@
 (function () {
 	'use strict';
-
 	/**
 	 * @ngdoc service
 	 * @description
 	 * 상품 유틸 서비스
 	 */
-	angular.module('edtApp.common.service').service('Util03saSvc', ['$rootScope', '$state', '$window', '$http', '$timeout', 'APP_CONFIG', 'MenuSvc', 'UtilSvc', "$log",
-		function ($rootScope, $state, $window, $http, $timeout, APP_CONFIG, MenuSvc, UtilSvc, $log) {
+	angular.module('edtApp.common.service').service('Util03saSvc', ['$rootScope', '$state', '$window', '$http', '$timeout', 'APP_CONFIG', '$resource', 
+		function ($rootScope, $state, $window, $http, $timeout, APP_CONFIG, $resource) { 
 		
 			//popup insert & update Validation
             this.readValidation = function(idx){
@@ -26,23 +25,28 @@
                 			return false;
         				}
         			}
-        			if(w === "CD_ORDSTAT"){
+        			else if(w === "CD_ORDSTAT"){
         				if(!idx[w]){ alert("주문상태를 입력해 주세요."); result = false; return false;};
         			}
-        			if(w === "DTS_CHK"){
+        			else if(w === "DTS_CHK"){
         				if(!idx[w]){ alert("기간을 선택해 주세요."); result = false; return false;};
         			}
-        			if(w === "CD_CCLSTAT"){
+        			else if(w === "CD_CCLSTAT"){
         				if(!idx[w]){ alert("취소상태를 선택해 주세요."); result = false; return false;};
         			}
-        			if(w === "I_CD_INQSTAT"){
+        			else if(w === "I_CD_INQSTAT"){
         				if(!idx[w]){ alert("상태값을 입력해 주세요."); result = false; return false;};
         			}
-        			if(w === "I_DTS_INQREG_F"){
+        			else if(w === "I_DTS_INQREG_F"){
         				if(idx.I_DTS_INQREG_F > idx.I_DTS_INQREG_T){ alert("문의일자를 올바르게 입력해 주세요."); result = false; return;};    
         			}
-        			if(w === "DTS_FROM"){
+        			else if(w === "DTS_FROM"){
         				if(idx.DTS_TO < idx.DTS_FROM){ alert("조회기간을 올바르게 선택해 주세요."); result = false; return false;};	
+        			}
+        			else if(w === "DTS_STORAGE_TO") {
+        				cashParam.TODAY = (idx.DTS_STORAGE_TO.y === edt.getToday().y && 
+        						     idx.DTS_STORAGE_TO.m === edt.getToday().m && 
+        						     idx.DTS_STORAGE_TO.d === edt.getToday().d)? 1 : 0
         			}
         		};
         		if(result){
@@ -53,21 +57,21 @@
             		idx.CD_CCLSTAT_SELCT_INDEX = "";        		
             		//idx.DTS_SELECTED = "";        			
         		}        		
-        		
             	return result;
             };
             
             //송장번호 유효성검사(정규식 체크)
-            this.NoINVOValidation = function(input, colunm, valicolunm){
+            this.NoINVOValidation = function(input, colunm, valicolunm, leng){
             	var regTest = /^(([\d]+)\-|([\d]+))+(\d)+$/;
-            	var iValue = input.val().trim(); 
+            	var iValue = !input.val() ? "" : input.val().trim();
+            	var lengthStrt = (leng === 'undefined' || leng === '' || leng === null) ? 3 : leng; //0이 들어갈거라서 !를 안썼음 
  			                	
-			    if (input.is("[name='"+colunm+"']") && !iValue && valicolunm !== "no_invo_non_blank_validation") {
+			    if (input.is("[name='"+colunm+"']") && !iValue && lengthStrt>0 && valicolunm !== "no_invo_non_blank_validation") {
                  	input.attr("data-"+valicolunm+"-msg", "송장번호를 입력해 주세요.");
                     return false;
                 };
-                if (input.is("[name='"+colunm+"']") && iValue && (iValue.length<3 || iValue.length>30)) {
-                 	input.attr("data-"+valicolunm+"-msg", "송장번호를 3자 이상 30자 이하로 입력해 주세요.");
+                if (input.is("[name='"+colunm+"']") && iValue && (iValue.length<lengthStrt || iValue.length>30)) {
+                 	input.attr("data-"+valicolunm+"-msg", "송장번호를 "+lengthStrt+"자 이상 30자 이하로 입력해 주세요.");
                     return false;
                 };
         		if (input.is("[name='"+colunm+"']") && iValue && !regTest.test(iValue.trim())) {
@@ -101,8 +105,7 @@
             	},
             	mblur : function(e){
             		var element = $(e.currentTarget),
-        			msg = element.closest("tr").find(".k-invalid-msg") || element.closest("td").find(".k-invalid-msg");
-        			
+        				msg = element.closest("tr").find(".k-invalid-msg") || element.closest("td").find(".k-invalid-msg");        			
         			msg.hide();
             	}
             };
@@ -121,21 +124,18 @@
 			};
             
 			//검색어 저장 후 조회기능
-			this.storedQuerySearchPlay = function(vo, param, grd){
-				var getParam = this.localStorage.getItem(param);
-            	
-        		if(getParam){        			        			
-        			var me = vo,
-				    	df = getParam.DTS_FROM,
-				    	dt = getParam.DTS_TO;
-        			
-        			for(var w in me){
+			this.storedQuerySearchPlay = function(vo, storage, grd){
+				var getParam = storage,
+					me = vo;
+			
+				if(getParam){        			        			        			
+        			for(var w in me) {
         				if(w === "datesetting"){
-        					me[w].selected = getParam.DTS_SELECTED;
+        					me[w].selected     = getParam.DTS_SELECTED;
+        					me[w].period.start = getParam.DTS_STORAGE_FROM;
+        					me[w].period.end   = (getParam.TODAY === 1)?vo.datesetting.period.end:getParam.DTS_STORAGE_TO; 
         				}
-        				if(w === "betweenDateOptionMo" ){
-        					me[w] = getParam.DTS_CHK;
-        				}
+        				if(w === "betweenDateOptionMo" ){ me[w] = getParam.DTS_CHK; }
         				if(w === "ordMrkNameOp"){
         			   		me[w].setSelectNames = getParam.NM_MRK_SELCT_INDEX;
         			   		me[w].allSelectNames = getParam.NM_MRK_SELCT_INDEX;
@@ -144,12 +144,8 @@
                 			me[w].setSelectNames = getParam.NM_ORDSTAT_SELCT_INDEX;
         					me[w].allSelectNames = getParam.NM_ORDSTAT_SELCT_INDEX;
         				}
-        				if(w === "ordMrkNameMo"){
-        					me[w] = getParam.NM_MRK || getParam.NO_MRK; 
-        				}
-        				if(w === "ordStatusMo"){
-        					me[w] = getParam.CD_ORDSTAT; 
-        				}
+        				if(w === "ordMrkNameMo"){ me[w] = getParam.NM_MRK || getParam.NO_MRK; }
+        				if(w === "ordStatusMo"){ me[w] = getParam.CD_ORDSTAT; }
         				if(w === "procName"){
         					var v = getParam.NM_MRKITEM || getParam.I_NM_MRKITEM || "";
         					me[w].value = v.trim();
@@ -166,28 +162,16 @@
         					var v = (!getParam.NO_ORDDTRM) ? "" : getParam.NO_ORDDTRM;
         					me[w].value = v.trim();
         				}
-        				if(w === "cancelStatusMo"){
-        					me[w] = getParam.CD_CCLSTAT;
-        				}
+        				if(w === "cancelStatusMo"){ me[w] = getParam.CD_CCLSTAT; }
         				if(w === "cancelStatusOp"){
     				   		me[w].setSelectNames = getParam.CD_CCLSTAT_SELCT_INDEX;
     				   		me[w].allSelectNames = getParam.CD_CCLSTAT_SELCT_INDEX;
         				}
-        				if(w === "echgStatusMo"){
-        					me[w] = getParam.CD_ECHGSTAT;
-        				}
-        				if(w === "cdTkbkstatMo"){
-        					me[w] = getParam.CD_TKBKSTAT;
-        				}
-        				if(w === "csMrkNameMo"){
-        					me[w] = getParam.I_NO_MRK;
-        				}        				
-        				if(w === "csStatusMo"){
-        					me[w] = getParam.I_CD_INQSTAT;
-        				}      				
-        				if(w === "csQuestionCodeMo"){
-        					me[w].value = getParam.I_NM_INQCLFT;
-        				}
+        				if(w === "echgStatusMo"){ me[w] = getParam.CD_ECHGSTAT; }
+        				if(w === "cdTkbkstatMo"){ me[w] = getParam.CD_TKBKSTAT; }
+        				if(w === "csMrkNameMo"){ me[w] = getParam.I_NO_MRK; }        				
+        				if(w === "csStatusMo"){ me[w] = getParam.I_CD_INQSTAT; }      				
+        				if(w === "csQuestionCodeMo"){ me[w].value = getParam.I_NM_INQCLFT; }
         				if(w === "csMrkNameOp"){
         					me[w].setSelectNames = getParam.CS_NM_MRK_SELCT_INDEX;
         			   		me[w].allSelectNames = getParam.CS_NM_MRK_SELCT_INDEX;
@@ -195,11 +179,11 @@
         				if(w === "csStatusOp"){
         					me[w].setSelectNames = getParam.CS_NM_ORDSTAT_SELCT_INDEX;
         					me[w].allSelectNames = getParam.CS_NM_ORDSTAT_SELCT_INDEX;
-        				}        				
+        				}
             			//me.setting.allCheckYn = 'N';
         			}
-    				me.inQuiry();
-        		};
+        		}
+				me.inQuiry();
 			};
 			
 			//로컬 스토리지			
@@ -209,21 +193,42 @@
 						noC = user.NO_C,
 						noEmp = user.NO_EMP,
 						key = noC+noEmp+name;
-					$window.localStorage.setItem(key, JSON.stringify(data));
+					
+					// 저장
+					var param = {
+						ID_KEY: name,
+						DC_VAL: JSON.stringify(data)
+    				};
+					
+					return $http({
+						method	: "POST",
+						url		: APP_CONFIG.domain +"/ut08Storage/",
+						headers	: { "Content-Type": "application/x-www-form-urlencoded; text/plain; */*; charset=utf-8" },
+						data	: $.param(param)
+					}).success(function (data, status, headers, config) {
+						if(data !== "저장 성공") {
+							alert("저장에 실패하였습니다.!! 연구소에 문의 부탁드립니다.\n("+data.errors[0].LMSG+")");
+							return;
+						}
+					}).error(function (data, status, headers, config) {
+						console.log("error",data,status,headers,config);
+					});					
+					//$window.localStorage.setItem(key, JSON.stringify(data));
 				},				
-				getItem: function(name) {					
-					var user = $rootScope.webApp.user,
-						noC = user.NO_C,
-					    noEmp = user.NO_EMP,
-					    key = noC+noEmp+name,
-						result = $window.localStorage.getItem(key);
-					if (!user){
-						return '';
+				getItem: function(name) {
+					var user = $rootScope.webApp.user;
+					
+					// 저장
+					var param = {
+						ID_KEY: name,
 					};
-					if (result) {
-						result = JSON.parse(result);
-					}					
-					return result;
+					
+					return $http({
+						method	: "GET",
+						url		: APP_CONFIG.domain +"/ut08Storage?"+ $.param(param)
+					}).success(function (data, status, headers, config) {
+					}).error(function (data, status, headers, config) {
+					});
 				},                
                 removeItem: function(name) {  
                 	var user = $rootScope.webApp.user,
@@ -235,14 +240,132 @@
 			};
 			
 			this.storedDatesettingLoad = function(name, vo){
-				var storedData = this.localStorage.getItem(name);
-								
-				if(storedData){					
-					return storedData.DTS_SELECTED; 
-				}else{
-					return "1Week";
-				}
+				return this.localStorage.getItem(name).then(function(res) {
+					var rtnData = [];
+					
+					if(res.data) {
+						rtnData.selected = res.data.DTS_SELECTED;
+						rtnData.storage = res.data;
+					}
+					else {
+						rtnData.selected = "1Week";
+						rtnData.storage = "";
+					}
+					return rtnData;
+				});
 			};
+			
+			//파라미터는 객체에 넣어주면 됨 
+			this.shppingList = function (param) {
+				var url = APP_CONFIG.domain +"/code/common/shplist/:shippingType/:mrkType";				
+				return $resource(url, {shippingType:'@st', mrkType:'@mt'}, {
+					get: {
+			        	method: 'GET', isArray:true
+			        }
+				});
+			};
+			
+			//팝업창 이름 변경
+			this.popupHeaderTitle = function(code, mrk, menu){
+				var tkbkName = {
+						complete : "반품완료 입력",
+						reject : "반품거부 입력",
+						process : "반품처리 입력",
+						change : "교환으로 변경"
+					},
+					echgName = {
+						complete : "교환완료 입력",
+						reject : "교환거부 입력",
+						process : "교환처리 입력",
+						change : "반품으로 변경"
+					},
+					shppingName = {
+						edit : '배송정보 수정',
+						shipping : '판매자 직접반품 신청'
+					},
+					title = "";
+				
+				if(code === "001"){
+					if(menu === "tkbk"){ title = tkbkName.complete; }
+					else if(menu === "echg"){ title = echgName.process; }
+					else if(menu === "shpping"){ title = shppingName.edit; }
+				}else if(code === "002"){
+					if(menu === "tkbk"){ title = tkbkName.reject; }
+					else if(menu === "echg"){ title = echgName.reject; }
+					else if(menu === "shpping"){ title = shppingName.shipping; }
+				}else if(code === "003"){
+					if(menu === "tkbk"){ title = tkbkName.process; }
+					else if(menu === "echg"){ title = echgName.complete; }
+					else if(menu === "shpping"){ }
+				}else if(code === "004"){
+					if(menu === "tkbk"){ title = tkbkName.change; }
+					else if(menu === "echg"){ title = echgName.change; }
+					else if(menu === "shpping"){ }
+				}				
+				return title+' ('+mrk+')';
+			};			
+
+			this.manualTkbkDataBind = function(kg, input, target){
+	           	var getUid = input.parents("table").attr("data-uid"),
+	           	    grid = kg,
+	           	    viewToRow = $("[data-uid='" + getUid + "']", grid.table),
+	           	    dataItem = grid.dataItem(viewToRow);				                	    
+	           	
+	           	if(["CD_PARS","CD_HOLD"].indexOf(target) > -1){
+	           		var i, chosenPureData = input.data().handler.dataSource.data();
+	           		
+	           		for(i=0; i<chosenPureData.length; i++){
+	           			if(chosenPureData[i]["CD_DEF"] === input.val()){
+	           				dataItem[target] = chosenPureData[i];
+	           			}
+	           		};
+	           	}
+	        	else if(["CD_PARS_INPUT"].indexOf(target) > -1){
+	           		var i, chosenPureData = input.data().handler.dataSource.data();
+	           		
+	           		for(i=0; i<chosenPureData.length; i++){
+	           			if(chosenPureData[i]["DC_RMK2"] === input.val()){
+	           				dataItem[target] = chosenPureData[i];
+	           			}
+	           		};
+	           	}
+	           	else if(target === "NOW_YN"){
+	           		dataItem[target] = input.is(":checked");
+	           	}
+	           	else if(target === "RECEIVE_SET"){
+	           		dataItem[target] = $("#receive-group").find("[type=radio]:checked").val().trim();
+	           	}
+	           	else if(target === "transform_pay_reason"){
+           			if((["구매자","구매자 귀책"].indexOf(dataItem["NM_TKBKLRKRSN"]) > -1 || ["구매자","구매자 귀책"].indexOf(dataItem["NM_ECHGLRKRSN"]) > -1) && input.val()){
+           				dataItem[target] = input.val().trim();
+           				return true;
+           			}
+	           		return false;
+	           	}
+	           	else{
+	           		dataItem[target] = input.val().trim();
+	           	};
+	        };	        
+	        //grid 동적 크기 변경
+	        this.isOpen = function(kg, vo, grdVo, val){	
+	        	var searchIdHeight = $("#searchId").height();
+            	var settingHeight = $(window).height() - searchIdHeight - 90;
+            	var pageSizeValue = val? 9 : 12;
+            	
+            	kg.wrapper.height(settingHeight);
+            	kg.resize();
+        		if(vo.param !== "") {
+        			grdVo.dataSource.pageSize(pageSizeValue);
+        		}
+	        };
+	        //드롭다운 리스트 초기화시 선택
+	        this.ddlSelectedIndex = function(ele, name, idx){
+	        	var choIdx = !idx ? 0 : idx;
+            	var ddl = ele.find("select[name="+name+"]").data("kendoDropDownList");            
+            	ddl.select(choIdx);
+            	ddl.trigger("change");       
+	        };
+	               
 		}
 	]);
 }());

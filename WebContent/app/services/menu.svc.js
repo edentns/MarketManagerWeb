@@ -80,7 +80,16 @@
 				});
 				return rtnNO_M;
 			},
-
+			
+			// MENU ID를 가져온다.
+			getUrl: function(NO_M) {
+				var rtnUrl = '';
+				angular.forEach(_data, function (menu) {
+					if (menu.NO_M === NO_M) { rtnUrl = menu.ID_CMP; }
+				});
+				return rtnUrl;
+			},
+			
 			// 로그인시 이동시킬 URL을 가져온다.
 			getDefaultUrl: function () {
 				var self = this,

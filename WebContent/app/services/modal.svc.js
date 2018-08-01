@@ -294,6 +294,19 @@
 
 				return $modal.open(defaults);
 				};
+				
+				self.quisevModal = function (options) {
+					var self = this,
+						defaults = {
+							templateUrl: "app/shared/modal/mo12Quisev/modal.quiServ.tpl.html",
+							controller : "modal.quiSevCtrl",
+							size       : "lg"
+						};
+
+					if (options) { defaults = angular.extend(defaults, options); }
+
+					return $modal.open(defaults);
+				};
 			}
 		]);
 }());

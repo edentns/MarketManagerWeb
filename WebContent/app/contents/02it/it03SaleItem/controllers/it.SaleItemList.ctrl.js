@@ -16,7 +16,19 @@
 	            	if(flag == "new"){
 	            		$state.go('app.itSaleItem', { kind: "insert", menu: null, ids: flag });
 	            	}else if(flag == "sale"){
-	            		alert("판매등록");
+	            		var grid = $scope.gridSaleVO,
+                	    	dataItem = grid._data,
+                	    	checkItem = [];
+	            		
+	            		angular.forEach(dataItem, function (data) {
+	                        if(data.ROW_CHK){
+	                        	checkItem.push(data.CD_ITEM);
+	                        }
+	                    });
+	            		
+	            		if(checkItem.length > 1){alert("한 개의 판매상품을 선택해주세요.");return;}
+	            		
+	            		$state.go('app.itSaleSiteItem', { kind: "insert", menu: null, ids: checkItem[0] });
 	            	}
 				};
 
@@ -44,8 +56,7 @@
                     	}
                 	}
 				};
-                
-	            	            
+                	            
 	            var saleItemDataVO = $scope.saleItemDataVO = {
 	            	boxTitle : "검색",
 	            	setting : {
@@ -53,61 +64,41 @@
 	        			name: "NM_DEF",
 	        			maxNames: 2
 	        		},
-	        		cmrkSetting : {
-	        			id: "NO_MRK",
-	        			name: "NM_MRK",
-	        			maxNames: 2
+	        		datesetting : {
+	        			dateType   : 'market',
+						buttonList : ['current', '1Day', '1Week', '1Month'],
+						selected   : resData.selectDate.selected,
+						period : {
+							start : resData.selectDate.start,
+							end   : resData.selectDate.end
+						}
 	        		},
-	        		signItem : { value: "" , focus: false },
-	        		nmItem   : { value: "" , focus: false },
-	        		nmMnfr   : { value: "" , focus: false },
-	        		adulYnList    : [],
-	        		adulYnIds     : "*",
-	        		taxClftList   : [],
-	        		taxClftIds    : "*",
-	        		iClftList     : [],
-	        		iClftIds      : "*",
-	        		iKindList     : [],
-	        		iKindIds      : "*",
-	        		iStatList     : [],
-	        		iStatIds      : "*",
-	        		cmrkList      : [],
-	        		cmrkIds       : "*",
+	        		dateOption    : [{CD_DEF : "001" , NM_DEF : "등록일시"},
+	        		                 {CD_DEF : "002" , NM_DEF : "유효일시"}
+	        						],
+	        		selectedDateOption : resData.selectedDateOption,
+	        		signItem : { value: resData.signItemValue, focus: false },
+	        		nmItem   : { value: resData.nmItemValue  , focus: false },
+	        		nmMnfr   : { value: resData.nmMnfrValue  , focus: false },
+	        		adulYnList    : resData.adulYnList,
+	        		adulYnIds     : resData.adulYnIds,
+	        		taxClftList   : resData.taxCodeList,
+	        		taxClftIds    : resData.taxClftIds,
+	        		iKindList     : resData.iKindCodeList,
+	        		iKindIds      : resData.iKindIds,
+	        		iStatList     : resData.iStatCodeList,
+	        		iStatIds      : resData.iStatIds,
 	        		dataTotal     : 0
 	            };	            
 	            
 	            //처음 화면들어왓을때
 	            saleItemDataVO.doQuiry = function(){
-	            	saleItemDataVO.adulYnList  = resData.adulYnList;
-	            	saleItemDataVO.taxClftList = resData.taxCodeList;
-	            	saleItemDataVO.iClftList   = resData.iClftCodeList;
-	            	saleItemDataVO.iKindList   = resData.iKindCodeList;
-	            	saleItemDataVO.iStatList   = resData.iStatCodeList;
-	            	saleItemDataVO.cmrkList    = resData.cmrkList;
-	            	
 	            	$timeout(function() {
 	            		if(!page.isWriteable()){
 	    					$("#divSaleVO .k-grid-toolbar").hide();
 	    				}
-	            		// 이전에 검색조건을 세션에 저장된 것을 가져옴
-	            		var history = UtilSvc.grid.getInquiryParam();
-		            	if(history){
-		            		saleItemDataVO.signItem.value = history.CD_SIGNITEM;	
-		            		saleItemDataVO.nmItem.value = history.NM_ITEM;
-		            		saleItemDataVO.nmMnfr.value = history.NM_MNFR;
-		            		saleItemDataVO.adulYnIds = history.YN_ADULCTFC;
-		            		saleItemDataVO.taxClftIds = history.CD_TAXCLFT;
-		            		saleItemDataVO.iClftIds = history.CD_ITEMCLFT;
-		            		saleItemDataVO.iKindIds = history.CD_ITEMKIND;
-		            		saleItemDataVO.cmrkIds = history.NO_MRK;
-		            		saleItemDataVO.adulYnList.setSelectNames = history.YN_ADULCTFC_SELECT_INDEX;
-		            		saleItemDataVO.taxClftList.setSelectNames = history.CD_TAXCLFT_SELECT_INDEX;
-		            		saleItemDataVO.iClftList.setSelectNames = history.CD_ITEMCLFT_SELECT_INDEX;
-		            		saleItemDataVO.iKindList.setSelectNames = history.CD_ITEMKIND_SELECT_INDEX;
-		            		saleItemDataVO.cmrkList.setSelectNames = history.NO_MRK_SELECT_INDEX;
-		            		
-		            		$scope.gridSaleVO.dataSource.read();
-		            	}
+
+	            		$scope.gridSaleVO.dataSource.read();
         			});
 	            };
 	            
@@ -115,22 +106,22 @@
 	            saleItemDataVO.inQuiry = function(){
 	            	$scope.gridSaleVO.dataSource.read();
 	            	var param = {
-	            			CD_SIGNITEM :	saleItemDataVO.signItem.value,
-        					NM_ITEM : saleItemDataVO.nmItem.value,
-        		        	NM_MNFR :	saleItemDataVO.nmMnfr.value,
-				        	YN_ADULCTFC : saleItemDataVO.adulYnIds,
-							CD_TAXCLFT  : saleItemDataVO.taxClftIds,
-							CD_ITEMCLFT : saleItemDataVO.iClftIds,
-							CD_ITEMKIND : saleItemDataVO.iKindIds,
-							NO_MRK : saleItemDataVO.cmrkIds,
-							YN_ADULCTFC_SELECT_INDEX : saleItemDataVO.adulYnList.allSelectNames,
-							CD_TAXCLFT_SELECT_INDEX  : saleItemDataVO.taxClftList.allSelectNames,
-							CD_ITEMCLFT_SELECT_INDEX : saleItemDataVO.iClftList.allSelectNames,
-							CD_ITEMKIND_SELECT_INDEX : saleItemDataVO.iKindList.allSelectNames,
-							NO_MRK_SELECT_INDEX : saleItemDataVO.cmrkList.allSelectNames
-		                };
-	        			// 검색조건 세션스토리지에 임시 저장
-	        			UtilSvc.grid.setInquiryParam(param);
+            			CD_SIGNITEM :	saleItemDataVO.signItem.value,
+						NM_ITEM : saleItemDataVO.nmItem.value,
+			        	NM_MNFR :	saleItemDataVO.nmMnfr.value,
+			        	YN_ADULCTFC : saleItemDataVO.adulYnIds,
+						CD_TAXCLFT  : saleItemDataVO.taxClftIds,
+						CD_ITEMKIND : saleItemDataVO.iKindIds,
+						CD_ITEMSTAT : saleItemDataVO.iStatIds,
+						YN_ADULCTFC_SELECT_INDEX : saleItemDataVO.adulYnList.allSelectNames,
+						CD_TAXCLFT_SELECT_INDEX  : saleItemDataVO.taxClftList.allSelectNames,
+						CD_ITEMKIND_SELECT_INDEX : saleItemDataVO.iKindList.allSelectNames,
+						CD_ITEMSTAT_SELECT_INDEX : saleItemDataVO.iStatList.allSelectNames,
+						DATEOPT     : saleItemDataVO.selectedDateOption,
+						PERIOD      : UtilSvc.grid.getDateSetting(saleItemDataVO.datesetting)
+	                };
+        			// 검색조건 세션스토리지에 임시 저장
+        			UtilSvc.grid.setInquiryParam(param);
 	            };	 
 	            
 	            //초기화버튼
@@ -147,16 +138,12 @@
 	            };	
 
 	            saleItemDataVO.isOpen = function (val) {
-	            	if(val) {
-	            		$scope.gridSaleVO.wrapper.height(658);
-	            		$scope.gridSaleVO.resize();
-	            		gridSaleVO.dataSource.pageSize(9);
-	            	}
-	            	else {
-	            		$scope.gridSaleVO.wrapper.height(798);
-	            		$scope.gridSaleVO.resize();
-	            		gridSaleVO.dataSource.pageSize(12);
-	            	}
+	            	var searchIdHeight = $("#searchId").height();
+	            	var settingHeight = $(window).height() - searchIdHeight - 90;
+	            	var pageSizeValue = val? 9 : 12;
+	            	$scope.gridSaleVO.wrapper.height(settingHeight);
+            		$scope.gridSaleVO.resize();
+            		gridSaleVO.dataSource.pageSize(pageSizeValue);
 	            };
 	            
 	            //판매상품 검색 그리드
@@ -180,15 +167,16 @@
                     		transport: {
                     			read: function(e) {
                     				var param = {
-                    					procedureParam:"USP_IT_03SALEITEM_LIST_GET&I_CD_SIGNITEM@s|I_NM_ITEM@s|I_NM_MNFR@s|I_YN_ADULCTFC@s|I_CD_TAXCLFT@s|I_CD_ITEMCLFT@s|I_CD_ITEMKIND@s|I_NO_MRK@s",
+                    					procedureParam:"USP_IT_03SALEITEM_LIST_GET&I_CD_SIGNITEM@s|I_NM_ITEM@s|I_YN_ADULCTFC@s|I_CD_TAXCLFT@s|I_CD_ITEMKIND@s|I_CD_ITEMSTAT@s|I_DATEOPT@s|DATE_FROM@s|DATE_TO@s",
                     					I_CD_SIGNITEM :	saleItemDataVO.signItem.value,
                     					I_NM_ITEM : saleItemDataVO.nmItem.value,
-                    		        	I_NM_MNFR :	saleItemDataVO.nmMnfr.value,
                     					I_YN_ADULCTFC : saleItemDataVO.adulYnIds,
                     					I_CD_TAXCLFT  : saleItemDataVO.taxClftIds,
-                    					I_CD_ITEMCLFT : saleItemDataVO.iClftIds,
                     					I_CD_ITEMKIND : saleItemDataVO.iKindIds,
-                    					I_NO_MRK      : saleItemDataVO.cmrkIds
+                    					I_CD_ITEMSTAT : saleItemDataVO.iStatIds,
+                    					I_DATEOPT     : saleItemDataVO.selectedDateOption,
+                    					DATE_FROM     : new Date(saleItemDataVO.datesetting.period.start.y, saleItemDataVO.datesetting.period.start.m-1, saleItemDataVO.datesetting.period.start.d, "00", "00", "00").dateFormat("YmdHis"),
+                                    	DATE_TO       : new Date(saleItemDataVO.datesetting.period.end.y, saleItemDataVO.datesetting.period.end.m-1, saleItemDataVO.datesetting.period.end.d, 23, 59, 59).dateFormat("YmdHis"),
                                     };
                     				UtilSvc.getList(param).then(function (res) {
                 						e.success(res.data.results[0]);       
@@ -246,7 +234,7 @@
     															editable: false, 
     															nullable: false
     						    	    				   },						    	    				   
-    						    	    NM_MNFR: 	       {
+    						    	    NM_FGFT: 	       {
     			        										type: "string",
     			        										editable: false,
     			        										nullable: false //true 일때 defaultValue가 안 됨
@@ -281,21 +269,6 @@
                         										editable: true,
                         									    nullable: false
                     									   },
-                    					NO_CSMADVPHNE: 	   {
-                    											type: "string", 
-                    											editable: false, 
-                    											nullable: false
-                    									   },
-                    					CD_CTFOBJ: 	       {
-    				                    				    	type: "string", 
-    															editable: false, 
-    															nullable: false
-                    				    				   },	
-                    				    CD_CTFINFO: 	   {
-    				                    				    	type: "string", 
-    															editable: false, 
-    															nullable: false
-                    				    				   },
                     				    DTS_INSERT: 	   {
     				                    				    	type: "string", 
     															editable: false, 
@@ -311,7 +284,7 @@
     															editable: false, 
     															nullable: false
                     				    				   },	
-                    				    CD_ITEMCLFT:       { 	
+                    				    DT_FGFTPRESSTART:  { 	
     				                    				    	type: "string", 
     															editable: false, 
     															nullable: false
@@ -342,20 +315,10 @@
     															nullable: false
                     				    				   },
                     				    CD_TAXCLFT: 	   {
-	   				                    				    	type: "string", 
-	   															editable: false, 
-	   															nullable: false
-                   				    				   	   },
-                   				    	S_CD_ITEM: 	  	   {
-					                    				    	type: "string", 
-																editable: false, 
-																nullable: false
-   				    				   					   },
-   				    				    CD_BDLITEMCPST:    {
-					                    				    	type: "string", 
-																editable: false, 
-																nullable: false
-	               				    				   	   }
+   				                    				    	type: "string", 
+   															editable: false, 
+   															nullable: false
+                   				    				   		}
                     				}
                     			}
                     		},
@@ -363,168 +326,153 @@
                     	navigatable: true, //키보드로 그리드 셀 이동 가능
                     	toolbar: [{template: kendo.template($.trim($("#Sale-toolbar-template").html()))}],
                     	columns: [
-                  	            {
-  			                        field: "ROW_CHK",
-  			                        title: "<input class='k-checkbox' type='checkbox' id='grd_chk_master' ng-click='onSaleGrdCkboxAllClick($event)'><label class='k-checkbox-label k-no-text' for='grd_chk_master' style='margin-bottom:0;'>​</label>",
-			                        width: "40px",
-  			                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px; vertical-align:middle;"},
-  			                        selectable: true
-                  	            },                        
-  		                        {	
-                  	            	field: "CD_SIGNITEM",
-  		                            title: "상품코드",
-  		                            width: "100px",
-  		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
-  		                            columns: [ 
-  		                                       	{
-  				                                    field: "CD_ITEMCLFT",
-  				                                    title: "상품분류",
-  				                                    width: 100,
-  							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
-  				                                }
-  			                                 ]
-  		                        },
-  		                        {
-  		                        	field: "NM_ITEM",	
-  		                            title: "상품명",
-  		                            width: 100,
-  		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
-  		                            columns: [ 
-  		                                       	{
-  				                                    field: "DC_ITEMABBR",
-  				                                    title: "상품약어",
-  				                                    width: 100,
-  							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
-  				                                }
-  			                                ]
-  		                        },                        
-  		                        {
-  		                        	field: "AM_PRCCLFT_S",	
-  		                            title: "판매가",
-  		                            width: 100,		                            
-  		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
-  		                            columns: [ 
-  		                                       	{
-  				                                    field: "AM_PRCCLFT_B",
-  				                                    title: "구입가",
-  				                                    width: 100,
-  							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
-  				                                }
-  			                                ]
-  		                        },                       
-  		                        {
-  		                        	field: "NM_MNFR",
-  		                            title: "제조사",
-  		                            width: 100,
-  		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
-  		                            columns: [ 
-  		                                       	{
-  				                                    field: "CD_ITEMKIND",
-  				                                    title: "상품구분",
-  				                                    width: 100,
-  							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
-  				                                }
-  			                                ]
-  		                        },               
-  		                        {
-  		                        	field: "CD_TAXCLFT", 
-  		                            title: "과세구분",
-  		                            width: 100,
-  		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
-  		                            columns: [ 
-  		                                       	{
-  				                                    field: "YN_ADULCTFC",
-  				                                    title: "성인인증",
-  				                                    width: 100,
-  							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
-  				                                }
-  			                                ]
-  		                        },                        
-  		                        {
-  		                        	field: "SF_M",
-  		                            title: "대표이미지",
-  		                            width: 100,
-  		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
-  		                            columns: [ 
-  		                                       	{
-  				                                    field: "SF_DI",
-  				                                    title: "상세이미지",
-  				                                    width: 100,
-  							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
-  				                                }
-  			                                ]
-  		                        },                        
-  		                        {
-  		                        	field: "SF_DE",
-  		                            title: "상세설명",
-  		                            width: 100,
-  		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
-  		                            columns: [ 
-  		                                       	{
-  				                                    field: "CD_OPTTP",
-  				                                    title: "옵션",
-  				                                    width: 100,
-  							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
-  				                                }
-  			                                ]
-  		                        } ,                        
-  		                        {
-  		                        	field: "NO_CSMADVPHNE",
-  		                            title: "인증",
-  		                            width: 100,
-  		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
-  		                            columns: [ 
-  		                                       	{
-  				                                    field: "CD_ITEMKIND",
-  				                                    title: "상품종류",
-  				                                    width: 100,
-  							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
-  				                                }
-  			                                ]
-  		                        } ,  
-  		                        {
-  		                        	field: "NM_BRD",
-  		                            title: "브랜드",
-  		                            width: 100,
-  		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
-  		                            columns: [ 
-  		                                       	{
-  				                                    field: "CD_ITEMSTAT",
-  				                                    title: "상품상태",
-  				                                    width: 100,
-  							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
-  				                                }
-  			                                ]
-  		                        } ,  
-  		                        {
-  		                        	field: "S_CD_ITEM",
-  		                            title: "판매Site",
-  		                            width: 100,
-  		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
-  		                            columns: [ 
-  		                                       	{
-  				                                    field: "CD_BDLITEMCPST",
-  				                                    title: "묶음상품구성",
-  				                                    width: 100,
-  							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
-  				                                }
-  			                                ]
-  		                        } , 
-  		                        {
-  		                        	field: "DTS_INSERT",
-  		                            title: "등록일시",
-  		                            width: 100,
-  		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
-  		                            columns: [ 
-  		                                       	{
-  				                                    field: "DTS_VLD",
-  				                                    title: "유효일시",
-  				                                    width: 100,
-  							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
-  				                                }
-  			                                ]
-  		                        }
-                      ],
+                    	            {
+    			                        field: "ROW_CHK",
+    			                        title: "<input class='k-checkbox' type='checkbox' id='grd_chk_master' ng-click='onSaleGrdCkboxAllClick($event)'><label class='k-checkbox-label k-no-text' for='grd_chk_master' style='margin-bottom:0;'>​</label>",
+  			                        width: "40px",
+    			                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px; vertical-align:middle;"}
+                    	            },                        
+    		                        {	
+                    	            	field: "CD_SIGNITEM",
+    		                            title: "상품코드",
+    		                            width: 100,
+    		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
+    		                            columns: [ 
+    		                                       	{
+    				                                    field: "CD_ITEMCLFT",
+    				                                    title: "상품분류",
+    				  		                            width: 100,
+    							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
+    				                                }
+    			                                 ]
+    		                        },
+    		                        {
+    		                        	field: "NM_ITEM",	
+    		                            title: "상품명",
+    		                            width: 100,
+    		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
+    		                            columns: [ 
+    		                                       	{
+    				                                    field: "DC_ITEMABBR",
+    				                                    title: "상품약어",
+    				  		                            width: 100,
+    							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
+    				                                }
+    			                                ]
+    		                        },                        
+    		                        {
+    		                        	field: "AM_PRCCLFT_S",	
+    		                            title: "판매가",
+    		                            width: 100,                          
+    		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
+    		                            columns: [ 
+    		                                       	{
+    				                                    field: "AM_PRCCLFT_B",
+    				                                    title: "구입가",
+    				  		                            width: 100,
+    							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
+    				                                }
+    			                                ]
+    		                        },                       
+    		                        {
+    		                        	field: "NM_FGFT",
+    		                            title: "사은품명",
+    		                            width: 100,
+    		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
+    		                            columns: [ 
+    		                                       	{
+    				                                    field: "DT_FGFTPRESSTART",
+    				                                    title: "사은품 증정시작일",
+    				  		                            width: 100,
+    							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
+    				                                }
+    			                                ]
+    		                        },               
+    		                        {
+    		                        	field: "CD_TAXCLFT", 
+    		                            title: "과세구분",
+    		                            width: 100,
+    		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
+    		                            columns: [ 
+    		                                       	{
+    				                                    field: "YN_ADULCTFC",
+    				                                    title: "성인인증",
+    				  		                            width: 100,
+    							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
+    				                                }
+    			                                ]
+    		                        },                        
+    		                        {
+    		                        	field: "SF_M",
+    		                            title: "대표이미지",
+    		                            width: 100,
+    		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
+    		                            columns: [ 
+    		                                       	{
+    				                                    field: "SF_DI",
+    				                                    title: "상세이미지",
+    				  		                            width: 100,
+    							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
+    				                                }
+    			                                ]
+    		                        },                        
+    		                        {
+    		                        	field: "SF_DE",
+    		                            title: "상세설명",
+    		                            width: 100,
+    		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
+    		                            columns: [ 
+    		                                       	{
+    				                                    field: "CD_OPTTP",
+    				                                    title: "옵션",
+    				  		                            width: 100,
+    							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
+    				                                }
+    			                                ]
+    		                        } ,                        
+    		                        {
+    		                        	field: "NO_CSMADVPHNE",
+    		                            title: "인증",
+    		                            width: 100,
+    		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
+    		                            columns: [ 
+    		                                       	{
+    				                                    field: "CD_ITEMKIND",
+    				                                    title: "상품종류",
+    				  		                            width: 100,
+    							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
+    				                                }
+    			                                ]
+    		                        } ,  
+    		                        {
+    		                        	field: "NM_BRD",
+    		                            title: "브랜드",
+    		                            width: 100,
+    		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
+    		                            columns: [ 
+    		                                       	{
+    				                                    field: "CD_ITEMSTAT",
+    				                                    title: "상품상태",
+    				  		                            width: 100,
+    							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
+    				                                }
+    			                                ]
+    		                        } ,  
+    		                        {
+    		                        	field: "DTS_INSERT",
+    		                            title: "등록일시",
+    		                            width: 100,
+    		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"},
+    		                            columns: [ 
+    		                                       	{
+    				                                    field: "DT_VLD",
+    				                                    title: "유효일시",
+    				  		                            width: 100,
+    							                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
+    				                                }
+    			                                ]
+    		                        }
+                          ],
                     	dataBound: function(e) {
                             this.expandRow(this.tbody.find("tr.k-master-row").first());// 마스터 테이블을 확장하므로 세부행을 볼 수 있음                                                  
                         },
@@ -558,11 +506,14 @@
 	                	dataItem = grid.dataItem(row);
 	                 	                
 	                dataItem.ROW_CHK = checked;
+	                dataItem.dirty = checked;
 	                
 	                if (checked) {
 	                	row.addClass("k-state-selected");
+	                	row.find(".k-checkbox").prop( "checked", true );
 	                } else {
 	                	row.removeClass("k-state-selected");
+	                	row.find(".k-checkbox").prop( "checked", false );
 	                };
                 };
 
@@ -637,6 +588,9 @@
                     }, "warning");
                 };
                 
-                saleItemDataVO.doQuiry();
+                $timeout(function(){
+	                saleItemDataVO.doQuiry();
+	                saleItemDataVO.isOpen(false);
+                }, 0);
             }]);
 }());

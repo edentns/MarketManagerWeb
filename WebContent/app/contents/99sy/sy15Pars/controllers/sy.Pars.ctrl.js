@@ -14,41 +14,44 @@
 		            menuId = MenuSvc.getNO_M($state.current.name);
 	           
 	            var mrkName = $scope.mrkName = {
-	                    boxTitle: "택배사관리",
-	                	mngMrkDs: {
-	                		autoBind: true,         
-	    	    			dataTextField: "NM_DEF",
-	                        dataValueField: "CD_DEF",
-	    	    			dataSource: resData.csMrkDataSource,
-	    	    			valuePrimitive: true,
-	                	},
-	                	mngMrkMd: resData.csMrkDataSource.length != 0 ? resData.csMrkDataSource[0].CD_DEF : ""
-	                };
+                    boxTitle: "택배사관리",
+                	mngMrkDs: {
+                		autoBind: true,         
+    	    			dataTextField: "NM_DEF",
+                        dataValueField: "CD_DEF",
+    	    			dataSource: resData.csMrkDataSource,
+    	    			valuePrimitive: true,
+                	},	                	
+                	mngMrkMd: resData.resDataInitMrk
+                };
 	            
 	            var sy15ParsVO = $scope.sy15ParsVO = {
-		            	initLoad: function(bLoading) {
-		            		var self = this;
-		            		//self.ctgrId                   = resData.cfctData[0].ID_CTGR;
-
-		            		if(bLoading) {
-			                	angular.forEach($scope.sy15ParsGridVO, function (sy15ParsLocalGridVO, iIndex) {
-			                		sy15ParsLocalGridVO = $scope.sy15ParsGridVO.addCommonGridVO(sy15ParsLocalGridVO, iIndex);
-			                		$timeout(function() {
-				                		if(!page.isWriteable()){
-				                			for(var i = 0 ; i < 3 ; i++){
-					                			var grid = $("#grid"+i).data("kendoGrid");
-					                			var op = {editable : false};
-						    					grid.setOptions(op);
-		            	    					grid.hideColumn(1);
-						    					$("#grid"+i+" .k-grid-toolbar").hide();
-				                			}
-					    				}
-			                		});
-			                    });
-			                	
-		            		}
-		            	}
-		            };
+	            	initLoad: function(bLoading) {
+	            		var self = this;
+	            		//self.ctgrId                   = resData.cfctData[0].ID_CTGR;
+	            			
+	            		if(bLoading) {
+		                	angular.forEach($scope.sy15ParsGridVO, function (sy15ParsLocalGridVO, iIndex) {
+		                		sy15ParsLocalGridVO = $scope.sy15ParsGridVO.addCommonGridVO(sy15ParsLocalGridVO, iIndex);
+		                		$timeout(function() {
+			                		if(!page.isWriteable()){
+			                			for(var i = 0 ; i < 3 ; i++){
+				                			var grid = $("#grid"+i).data("kendoGrid");
+				                			var op = {editable : false};
+					    					grid.setOptions(op);
+	            	    					grid.hideColumn(1);
+					    					$("#grid"+i+" .k-grid-toolbar").hide();
+			                			}
+				    				}
+		                		});
+		                    });
+		                	
+		                	$timeout(function() {
+		                		sy15ParsVO.isOpen(false);
+		        			}, 500);
+	            		}
+	            	}
+	            };
 	            
 	            //검색
 	            sy15ParsVO.search = function(e){
@@ -102,6 +105,28 @@
 	            		mrkName.mngMrkMd = resData.csMrkDataSource[0].CD_DEF;
 	            	}
 	            	self.search();
+	            };
+
+	            sy15ParsVO.isOpen = function (val) {
+	            	var searchIdHeight = $("#searchId").height();
+	            	var settingHeight = $(window).height() - searchIdHeight - 90 - 55;
+	            	var gridObj = [$("#grid0").data("kendoGrid"), $("#grid1").data("kendoGrid"), $("#grid2").data("kendoGrid")];
+
+            		gridObj.forEach(function (currentObject, index) {
+	            		currentObject.wrapper.height(settingHeight);
+	            		currentObject.resize();
+	            	});
+	            };
+	            
+	            sy15ParsVO.getGridHeight = function () {
+	            	var searchIdHeight = $("#searchId").height();
+	            	var settingHeight = $(window).height() - searchIdHeight - 90 - 55;
+	            	var gridObj = [$("#grid0").data("kendoGrid"), $("#grid1").data("kendoGrid"), $("#grid2").data("kendoGrid")];
+
+            		gridObj.forEach(function (currentObject, index) {
+	            		currentObject.wrapper.height(settingHeight);
+	            		currentObject.resize();
+	            	});
 	            };
 	            
 	            sy15ParsVO.dropDownEditor = function(container, options, objDataSource, arrField) {
@@ -173,14 +198,14 @@
 	        					read: function(e) {
 	        						var ls = localSelf;
         							var	param = {
-        			                    	procedureParam: "MarketManager.USP_SY_15PARS01_GET&NO_MRK@s|L_FLAG@s",
-        			                    	NO_MRK:$scope.mrkName.mngMrkMd,
-        			                    	L_FLAG : String(ls.iIndex)
-        			                    };
-        			            		UtilSvc.getList(param).then(function (res) {
-        			            			ls.ParsCodeList = res.data.results[1];
-        			            			ls.dataSource.data(res.data.results[0]);
-        							});
+    			                    	procedureParam: "USP_SY_15PARS01_GET&NO_MRK@s|L_FLAG@s",
+    			                    	NO_MRK:$scope.mrkName.mngMrkMd,
+    			                    	L_FLAG : String(ls.iIndex)
+    			                    };
+    			            		UtilSvc.getList(param).then(function (res) {
+    			            			ls.ParsCodeList = res.data.results[1];
+    			            			ls.dataSource.data(res.data.results[0]);
+    			            		});
 	        					},
 	        					create: function(e) {
 	        						var self = this;

@@ -10,7 +10,7 @@
     
     <div class="row">
         <!-- 검색 -->
-        <div class="content-area-container col-xs-12" style="margin:0px 0px -5px 0px;">
+        <div class="content-area-container col-xs-12" style="margin:0px 0px -5px 0px;" id="searchId">
         	<div data-content-box-layer data-box-title="saleItemDataVO.boxTitle" data-is-open="saleItemDataVO.isOpen(val)">
                 <form class="search-type1" id="myForm">
                 	<table>
@@ -56,30 +56,28 @@
                             </td>         
                         </tr>
                         <tr>
-                            <th>제조사</th>
-                            <td>                            	              	
-                            	<input data-ng-model="saleItemDataVO.nmMnfr.value"
-                            			focus="saleItemDataVO.nmMnfr.focus"
-                            			title="구매자"
-                            			data-eden-type="kor" 
-                            			type="text" 
-                            			class="form-control" style="width:100%;"/>
-                            </td>
-                            <th>상품구분</th>
-                            <td>                            	              	
-                            	<co01-mcbox id="SaleList_iClft" title="상품구분" model="saleItemDataVO.iClftIds" options="saleItemDataVO.iClftList" setting="saleItemDataVO.setting"  style="width:100%;">
-        						</co01-mcbox>
-                            </td>
                             <th>상품종류</th>
                             <td>                            	              	
                             	<co01-mcbox id="SaleList_iKind" title="상품종류" model="saleItemDataVO.iKindIds" options="saleItemDataVO.iKindList" setting="saleItemDataVO.setting"  style="width:100%;">
         						</co01-mcbox>
                             </td>
-                            <th>마켓종류</th>
+                            <th>상품상태</th>
                             <td>                            	              	
-                            	<co01-mcbox id="SaleList_cmrk" title="마켓종류" model="saleItemDataVO.cmrkIds" options="saleItemDataVO.cmrkList" setting="saleItemDataVO.cmrkSetting"  style="width:100%;">
+                            	<co01-mcbox id="SaleList_iStat" title="상품상태" model="saleItemDataVO.iStatIds" options="saleItemDataVO.iStatList" setting="saleItemDataVO.setting"  style="width:100%;">
         						</co01-mcbox>
                             </td>                            
+                        </tr>
+                        <tr>
+                            <th>일시</th>                            
+                            <td>
+                            	<select ng-model="saleItemDataVO.selectedDateOption"
+        								ng-options="option.CD_DEF as option.NM_DEF for option in saleItemDataVO.dateOption"
+        								class="form-control" style="width: 100%">
+        						</select>	
+                            </td>
+                            <td colspan="6">                            	              	
+                            	<div class="frm-group" data-date-search-group="saleItemDataVO.datesetting" style="display:inline-block;"></div>
+                            </td>
                         </tr>
                         </tbody>
                     </table>         		     
@@ -114,8 +112,7 @@
 							  #: CD_SIGNITEM # 
 							  # }else{ } #
 			</div>
-			<div class="custom-style">
-							  # if(ID_CTGR !== "" && ID_CTGR !== null && ID_CTGR !== "undefined"){ # 
+			<div class="custom-style"># if(ID_CTGR !== "" && ID_CTGR !== null && ID_CTGR !== "undefined"){ # 
 							  #: ID_CTGR # 
 							  # }else{ } #
 			</div>
@@ -149,19 +146,19 @@
       	</td>
 		<td class="ta-l" style="padding:0">
           	<div class="custom-style">
-							   # if(NM_MNFR !== "" && NM_MNFR !== null && NM_MNFR !== "undefined"){ #
-							   #: NM_MNFR #
+							   # if(NM_FGFT !== "" && NM_FGFT !== null && NM_FGFT !== "undefined"){ #
+							   #: NM_FGFT #
 							   # }else{  #
 							   #: "-" #
                                #}	# 	
 			</div>
 			<div class="custom-style"> 
-							   # if(CD_ITEMCLFT !== "" && CD_ITEMCLFT !== null && CD_ITEMCLFT !== "undefined"){ #	
-							   #: CD_ITEMCLFT #
+							   # if(DT_FGFTPRESSTART !== "" && DT_FGFTPRESSTART !== null && DT_FGFTPRESSTART !== "undefined"){ #	
+							   #: DT_FGFTPRESSTART #
 							   # }else{ }	# 
 			</div>
      	</td>
-		<td class="ta-l" style="padding:0">
+		<td class="ta-c" style="padding:0">
           	<div class="custom-style"> 
 							   # if(CD_TAXCLFT !== "" && CD_TAXCLFT !== null && CD_TAXCLFT !== "undefined"){ #	
 							   #: CD_TAXCLFT #
@@ -237,29 +234,13 @@
       	</td>
 		<td class="ta-c" style="padding:0">
           	<div class="custom-style">
-							# if(S_CD_ITEM !== "" && S_CD_ITEM !== null && S_CD_ITEM !== "undefined"){ #	
-							#: S_CD_ITEM # 
-							# }else{ #
-							#: "-"   #
-							# }	 	 #
-			</div>
-			<div class="custom-style">
-							# if(CD_BDLITEMCPST !== "" && CD_BDLITEMCPST !== null && CD_BDLITEMCPST !== "undefined" ){ #  
-							#: CD_BDLITEMCPST # 
-							# }else{ #
-							#: "-"   #
-							# }	 	 #
-			</div>
-      	</td>
-		<td class="ta-c" style="padding:0">
-          	<div class="custom-style">
 							# if(DTS_INSERT !== "" && DTS_INSERT !== null && DTS_INSERT !== "undefined"){ #	
 							#: DTS_INSERT # 
 							# }else{ }	 	 #
 			</div>
 			<div class="custom-style">
-							# if(DTS_VLD !== "" && DTS_VLD !== null && DTS_VLD !== "undefined" ){ #  
-							#: DTS_VLD # 
+							# if(DT_VLD !== "" || DT_VLD !== null || DT_VLD !== "undefined"){ #  
+							#: DT_VLD # 
 							# }else{ #
 							#: "-"   #
 							# }	 	 #
@@ -317,19 +298,19 @@
       	</td>
 		<td class="ta-l" style="padding:0">
           	<div class="custom-style">
-							   # if(NM_MNFR !== "" && NM_MNFR !== null && NM_MNFR !== "undefined"){ #
-							   #: NM_MNFR #
+							   # if(NM_FGFT !== "" && NM_FGFT !== null && NM_FGFT !== "undefined"){ #
+							   #: NM_FGFT #
 							   # }else{  #
 							   #: "-" #
                                #}	# 	
 			</div>
 			<div class="custom-style"> 
-							   # if(CD_ITEMCLFT !== "" && CD_ITEMCLFT !== null && CD_ITEMCLFT !== "undefined"){ #	
-							   #: CD_ITEMCLFT #
+							   # if(DT_FGFTPRESSTART !== "" && DT_FGFTPRESSTART !== null && DT_FGFTPRESSTART !== "undefined"){ #	
+							   #: DT_FGFTPRESSTART #
 							   # }else{ }	# 
 			</div>
      	</td>
-		<td class="ta-l" style="padding:0">
+		<td class="ta-c" style="padding:0">
           	<div class="custom-style"> 
 							   # if(CD_TAXCLFT !== "" && CD_TAXCLFT !== null && CD_TAXCLFT !== "undefined"){ #	
 							   #: CD_TAXCLFT #
@@ -346,7 +327,7 @@
 		<td class="ta-c" style="padding:0">
           	<div class="custom-style">
 							  # if(SF_M !== "" && SF_M !== null && SF_M !== "undefined"){ #
-				    		  <span class='k-icon k-i-check'></sapn>
+				    		  <span class='k-icon k-i-checkmark'></sapn>
 							  # }else{  #
 							  <span class='k-icon k-i-close k-i-x'></sapn>
                               #}	# 
@@ -405,29 +386,13 @@
       	</td>
 		<td class="ta-c" style="padding:0">
           	<div class="custom-style">
-							# if(S_CD_ITEM !== "" && S_CD_ITEM !== null && S_CD_ITEM !== "undefined"){ #	
-							#: S_CD_ITEM # 
-							# }else{ #
-							#: "-"   #
-							# }	 	 #
-			</div>
-			<div class="custom-style">
-							# if(CD_BDLITEMCPST !== "" && CD_BDLITEMCPST !== null && CD_BDLITEMCPST !== "undefined" ){ #  
-							#: CD_BDLITEMCPST # 
-							# }else{ #
-							#: "-"   #
-							# }	 	 #
-			</div>
-      	</td>
-		<td class="ta-c" style="padding:0">
-          	<div class="custom-style">
 							# if(DTS_INSERT !== "" && DTS_INSERT !== null && DTS_INSERT !== "undefined"){ #	
 							#: DTS_INSERT # 
 							# }else{ }	 	 #
 			</div>
 			<div class="custom-style">
-							# if(DTS_VLD !== "" && DTS_VLD !== null && DTS_VLD !== "undefined" ){ #  
-							#: DTS_VLD # 
+							# if(DT_VLD !== "" || DT_VLD !== null || DT_VLD !== "undefined"){ #  
+							#: DT_VLD # 
 							# }else{ #
 							#: "-"   #
 							# }	 	 #
@@ -436,8 +401,8 @@
 	</tr>			
 </script>
 <!-- 그리드 툴바 템플릿 -->
-<!-- <button class="k-button k-button-icontext k-grid-edit" ng-click="saleItemInsert('sale')"><span class="k-icon k-i-edit"></span>판매등록</button> 나중에 추가할것 -->
 <script id="Sale-toolbar-template" type="text/x-kendo-template">
+	<button class="k-button k-button-icontext k-grid-edit" ng-click="saleItemInsert('sale')"><span class="k-icon k-i-edit"></span>오픈마켓에등록</button>
 	<button class="k-button k-button-icontext k-grid-edit" ng-click="saleItemInsert('new')"><span class="k-icon k-i-edit"></span>신규등록</button>    
     <button class="k-button k-button-icontext k-grid-delete" ng-click="saleItemDelete(this)"><span class="k-icon k-i-delete"></span>삭제</button>
 </script>

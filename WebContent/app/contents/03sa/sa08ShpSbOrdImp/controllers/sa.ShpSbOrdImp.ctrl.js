@@ -49,14 +49,11 @@
 	            };
 	            
 	            shpbyordDataVO.isOpen = function (val) {
-	            	if(val) {
-	            		$scope.shpbyordekg.wrapper.height(616);
-	            		$scope.shpbyordekg.resize();
-	            	}
-	            	else {
-	            		$scope.shpbyordekg.wrapper.height(798);
-	            		$scope.shpbyordekg.resize();
-	            	}
+	            	var searchIdHeight = $("#searchId").height();
+	            	var settingHeight = $(window).height() - searchIdHeight - 90;
+	            	
+	            	$scope.shpbyordekg.wrapper.height(settingHeight);
+            		$scope.shpbyordekg.resize();
 	            };   
 	            
 	            shpbyordDataVO.excelExecute = function () {		

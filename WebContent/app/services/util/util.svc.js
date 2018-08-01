@@ -8,9 +8,114 @@
 	 */
 	angular.module('edtApp.common.service').service('UtilSvc', ['$rootScope', '$state', '$window', '$http', 'APP_CONFIG', 'MenuSvc', '$q',
 		function ($rootScope, $state, $window, $http, APP_CONFIG, MenuSvc, $q) {
-			var user = $rootScope.webApp.user,
-				menu = $rootScope.webApp.menu,
+			var menu = $rootScope.webApp.menu,
 				gridHeaderAttributes = {"class": "table-header-cell", style: "text-align: center; font-size: 12px"};
+			
+			this.kendoEditor = function(cd_at) {
+				var self = this,
+				    retVal = {};
+				
+				if(cd_at === undefined || cd_at === "") {
+					cd_at = "010";
+				}
+				
+				var retVal = {
+	            	noNotice : "",
+	                path: "",
+	                tools: [
+	         	    	"insertImage",
+	      	    	    "bold",
+	                    "italic",
+	                    "underline",
+	                    "strikethrough",
+	                    "justifyLeft",
+	                    "justifyCenter",
+	                    "justifyRight",
+	                    "justifyFull",
+	                    "insertUnorderedList",
+	                    "insertOrderedList",
+	                    "indent",
+	                    "outdent"
+	                ],
+	                imageBrowser: {
+	                	messages: {
+	                		dropFilesHere: "드래그 한 파일을 여기에 놓아 주세요.",
+	                        empty: "비었음",
+	                        uploadFile: "업로드",
+	                        search: "검색",
+	                        deleteFile: "[{0}] 삭제 하시겠습니까?",
+	                        overwriteFile: "[{0}] 이름의 이미지는 이미 존재합니다. 저장하시겠습니까?",
+	                        invalidFileType: "선택된 파일 [{0}]은 이미지 파일이 아닙니다. 확인 바랍니다.",
+	                        orderBy: "정렬방식",
+	                        orderByName: "이름",
+	                        orderBySize: "파일크기",
+	                        insertImage: "이미지 추가"
+	                    },
+	                    transport: {
+	                    	read: function(e){
+	                    		var path  = (e.data.path.length > 0)?e.data.path.substring(0, e.data.path.length-1):"";
+	                    		var param = {
+		                    		procedureParam: "USP_SY_THNFD_GET&NM_THNFD@s|CD_AT@s",
+		                    		NM_THNFD      : path,
+		                    		CD_AT         : cd_at
+		                    	};
+		                    	self.getList(param).then(function (res) {
+		                    		if(res.data.results[0].length >= 1){
+		                    			e.success(res.data.results[0]);		  
+		                    		}else{
+		                    			e.success([]);          	            				  
+		                    		}
+		                    	});
+		                    },
+                    		create: {
+	                    		url : APP_CONFIG.domain + "/ut05FileUploadThnFd",
+	                    		type: "POST",
+	                    		data: function(iData) {
+		                    		var param = {
+			                    		NM_THNFD    : iData.name,
+			                    		NM_HRNKTHNFD: iData.path,
+			                    		CD_AT       : cd_at
+		                    		};
+		                    		
+		                    		return param;
+		                    	}
+	                    	},
+	                    	destroy: {
+	                    		url : function(options) {
+		                    		return APP_CONFIG.domain + "/ut05FileUploadThn?" + $.param({NO_AT:options.NO_AT}) + 
+		                    		"&" + $.param({path:options.path + options.name}) + 
+		                    		"&" + $.param({type:options.type}) +
+		                    		"&" + $.param({CD_AT:cd_at});
+	                    		},
+	                    		type: "DELETE"
+	                    	},
+                    		uploadUrl : APP_CONFIG.domain + "/ut05FileUploadThn",
+                    		thumbnailUrl: function(e, file){
+                    			return decodeURIComponent(e.get("src"));
+                    		},
+                    		imageUrl: function(e){
+                    			return decodeURIComponent(e.get("src"));
+                    		}
+	                    },
+	                    _fileUpload : function(self) {
+	                    	var path = self.upload.options.upload.arguments[0].data.path;
+	                    	self.upload.options.upload.arguments[0].data = {
+	                			"cd_at"   : cd_at,
+	                        	"cd_ref1" : "",
+	                        	"cd_ref2" : "",
+	                        	"cd_ref3" : "",
+	                        	"cd_ref4" : "",
+	                        	"cd_ref5" : "",
+	                        	"bimage"  : true,
+	                        	"path"    : path
+	                    	};
+	                    	return self;
+	                    }
+	                }
+				};
+				
+				return retVal;
+			};
 			
 			this.gridPageableMessages = {
 				display: "총 {2}건 중 {0}-{1}건",
@@ -19,6 +124,31 @@
 				previous: "이전 페이지",
 				next: "다음 페이지",
 				last: "마지막 페이지"
+			};
+			
+			// 모듈이든 서비스든 저장을 해주세요
+			this.CachedPromise = function(promiseInvoker) {
+			  var cached;
+
+			  // cached 값이 
+			  return function invokeCachedPromise() {
+			    return typeof cached !== 'undefined' ? 
+			      // { then: } 이런 형식 대신, 직접 프로미스 오브젝트를 사용하는 이유는
+			      // callback에서 exception이 날라다녀도, promise가 catch해서 
+			      // .catch 메소드로 볼 수 있기 때문입니다.
+			      $q(function (resolve, reject) {
+			        resolve(cached);
+			      }) : 
+			      promiseInvoker.apply(null, arguments)
+			      .then(function (res) {
+			        // cached assignment 
+			        cached = res.data;
+			        
+			        // Promise 라이브러리 마다 좀 다르지만, 보통은 값을 리턴 해주셔야, 
+			        // 다음 then 메소드로 받아서 처리 하실 수 있습니다.
+			        return cached;
+			      });
+			  }
 			};
 			
 	        this.gridtooltipOptions = {
@@ -60,9 +190,11 @@
 							gridContentTemplate += "<co04-cd-to-nm cd=\"#:"+gridColVal[iIndex].field+"#\" nm-box=\""+gridColVal[iIndex].fNm+"\">\n";
 						}else if(gridColVal[iIndex].field.indexOf("CD_PARS_TKBK") === 0 && gridColVal[iIndex].fNm !== "" && (gridColVal[iIndex].fNm)) {
 							gridContentTemplate += "<co05-pars-to-nm no-mrk=\"#: NO_MRK #\" cd=\"#:"+gridColVal[iIndex].field+"#\" nm-box=\""+gridColVal[iIndex].fNm+"\">\n";
-						}else if(gridColVal[iIndex].field.indexOf("DTS") === 0) {
+						}
+						/*else if(gridColVal[iIndex].field.indexOf("DTS") === 0) {
 							gridContentTemplate += "<co06-date-format origin-date=\"\'#:"+ gridColVal[iIndex].field+"#\'\"> \n";
-						}else if(gridColVal[iIndex].field.indexOf("YN_CONN") === 0) {
+						}*/
+						else if(gridColVal[iIndex].field.indexOf("YN_CONN") === 0) {
 							gridContentTemplate += "# if("+gridColVal[iIndex].field+" !== 'N'){#\n Y\n #}else{#\n N\n#}#";						
 						}else {
 							gridContentTemplate += "#: "+gridColVal[iIndex].field+" #\n";
@@ -89,9 +221,11 @@
 						}else{
 							gridContentTemplate += "# if("+gridColVal.field+"){ #\n #= kendo.toString("+gridColVal.field+",'C0', 'ko-KR') #\n #}#";
 						}						
-					}else if(gridColVal.field.indexOf("DTS") === 0) {
+					}
+					/*else if(gridColVal.field.indexOf("DTS") === 0) {
 						gridContentTemplate += "<co06-date-format origin-date=\"\'#:"+ gridColVal.field+"#\'\"> \n";	
-					}else if(gridColVal.field.indexOf("CD") === 0 && gridColVal.field.indexOf("CD_PARS_TKBK") !== 0 && gridColVal.fNm !== "" && gridColVal.fNm !== undefined) {
+					}*/
+					else if(gridColVal.field.indexOf("CD") === 0 && gridColVal.field.indexOf("CD_PARS_TKBK") !== 0 && gridColVal.fNm !== "" && gridColVal.fNm !== undefined) {
 						gridContentTemplate += "# if("+gridColVal.field+"){ #\n <co04-cd-to-nm cd=\"#:"+gridColVal.field+"#\" nm-box=\""+gridColVal.fNm+"\">\n #}#";
 					}else if(gridColVal.field.indexOf("CD_PARS_TKBK") === 0 && gridColVal.fNm !== "" && (gridColVal.fNm)) {
 						gridContentTemplate += "<co05-pars-to-nm no-mrk=\"#: NO_MRK #\" cd=\"#:"+gridColVal.field+"#\" nm-box=\""+gridColVal.fNm+"\">\n";
@@ -491,6 +625,29 @@
 				
 				return ret;
 			};
+			
+			/**
+			 * arg = date 비교 날짜, 현재 날짜			 * 
+			 * 날짜 비교 후 차이 일수 리턴
+			 */
+			this.diffDate = function (_date1, _date2) {
+			    var fParseDate = function(_arg){
+			    	  				var regex = /[^0-9]/g,
+			    	  					rpcUnder = _arg.replace(regex,'');
+			    					return rpcUnder.substring(0,4)+'-'+rpcUnder.substring(4,6)+'-'+rpcUnder.substring(6,8);
+			    				 };  
+			    var	diffDate_1 = _date1 instanceof Date ? _date1 : new Date(fParseDate(_date1)),
+			    	diffDate_2 = _date2 instanceof Date ? _date2 : new Date(fParseDate(_date2)),
+			    	diff = "";
+			 
+			    diffDate_1 = new Date(diffDate_1.getFullYear(), diffDate_1.getMonth()+1, diffDate_1.getDate());
+			    diffDate_2 = new Date(diffDate_2.getFullYear(), diffDate_2.getMonth()+1, diffDate_2.getDate());
+			 
+			    diff = Math.abs(diffDate_2.getTime() - diffDate_1.getTime());
+			    diff = Math.ceil(diff / (1000 * 3600 * 24));
+			    
+			    return diff;
+			};
 
 			/**
 			 * 다운로드 관련 함수
@@ -555,6 +712,8 @@
 				 * @param {string=} psKind
 				 */
 				setColumns: function (poJson, psKind) {
+					var user = $rootScope.webApp.user;
+					
 					var fixKey = user.NO_C +''+ user.CD,
 						key = fixKey +''+ MenuSvc.getNO_M($state.current.name) +'Columns';
 
@@ -571,6 +730,7 @@
 				 * @returns {Object}
 				 */
 				getColumns: function (psKind) {
+					var user = $rootScope.webApp.user;
 					var fixKey = user.NO_C +''+ user.CD,
 						key = fixKey +''+ MenuSvc.getNO_M($state.current.name) +'Columns',
 						rtnData;
@@ -592,7 +752,8 @@
 						fk = config.parentKey,
 						dataList = self.sortAsc(config.deptData, pk),
 						root = [],
-						keys = {};
+						keys = {},
+						user = $rootScope.webApp.user;
 
 					angular.forEach(dataList, function (data) {
 						var pko =  keys[data[pk]] = {
@@ -628,7 +789,60 @@
 					return root;
 				},
 
-
+				/**
+				 * 검색조건 중 날짜 체크하여 변환
+				 * @param {Object} poJson
+				 * @param {string=} psKind
+				 * @param {string=} psUrl
+				 */
+				getSelectDate: function (period) {
+					var rtnSelectDate = {},
+					    today = edt.getToday(),
+					    selected = "",
+					    start = "",
+					    end = "";
+					
+					if(period === undefined ||
+					   period === "") {
+						selected = "current";
+					}
+					else {
+						selected = period.selected;
+						start = period.start;
+						end = (period.toDay === 1)?angular.copy(edt.getToday()):period.end;
+					}
+					
+					if(selected === "current") {
+						rtnSelectDate.selected = selected;
+						rtnSelectDate.start    = angular.copy(today);
+						rtnSelectDate.end      = angular.copy(today);
+            		}
+            		else {
+            			rtnSelectDate.selected = selected;
+            			rtnSelectDate.start    = start;
+            			rtnSelectDate.end      = end;
+            		}
+					
+					return rtnSelectDate;
+				},
+				
+				/**
+				 * 검색조건 중 날짜 설정 저장 포멧 변경
+				 * @param {Object} datesetting
+				 */
+				getDateSetting: function (datesetting) {
+					var rtnDateSetting = {
+						selected : datesetting.selected,
+	                    start    : datesetting.period.start,
+	                    end      : datesetting.period.end,
+	                    toDay    : (datesetting.period.end.y === edt.getToday().y && 
+	                    		    datesetting.period.end.m === edt.getToday().m && 
+	                    		    datesetting.period.end.d === edt.getToday().d)? 1 : 0
+					};
+					
+					return rtnDateSetting;
+				},
+				
 				/**
 				 * 검색조건을 세션에 저장한다.
 				 * @param {Object} poJson
@@ -636,20 +850,31 @@
 				 * @param {string=} psUrl
 				 */
 				setInquiryParam: function (poJson, psKind, psUrl) {
-					var fixKey = user.NO_C +''+ user.DC_ID,
-						key;
-
-					if (psUrl) {
-						key = fixKey +''+ MenuSvc.getNO_M(psUrl) +'Inquiry';
-					} else {
-						key = fixKey +''+ MenuSvc.getNO_M($state.current.name) +'Inquiry';
-					}
+					var strkey = 'menu';
 
 					if (angular.isString(psKind)) {
-						key += psKind;
+						strkey += psKind;
 					}
-					//console.log(poJson);
-					$window.localStorage.setItem(key, JSON.stringify(poJson));
+					
+					// 저장
+					var param = {
+						ID_KEY: strkey,
+						DC_VAL: JSON.stringify(poJson)
+    				};
+					
+					return $http({
+						method	: "POST",
+						url		: APP_CONFIG.domain +"/ut08Storage/",
+						headers	: { "Content-Type": "application/x-www-form-urlencoded; text/plain; */*; charset=utf-8" },
+						data	: $.param(param)
+					}).success(function (data, status, headers, config) {
+						if(data !== "저장 성공") {
+							alert("저장에 실패하였습니다.!! 연구소에 문의 부탁드립니다.\n("+data.errors[0].LMSG+")");
+							return;
+						}
+					}).error(function (data, status, headers, config) {
+						console.log("error",data,status,headers,config);
+					});
 				},
 
 				/**
@@ -658,22 +883,28 @@
 				 * @returns {Object}
 				 */
 				getInquiryParam: function (psKind) {
+					var user = $rootScope.webApp.user;
 					if(user === null || user === undefined) return '';
 					
-					var fixKey = user.NO_C +''+ user.DC_ID,
-						key = fixKey +''+ MenuSvc.getNO_M($state.current.name) +'Inquiry',
-						rtnData;
+					var strkey = 'menu';
 
 					if (angular.isString(psKind)) {
-						//key += psKind;
-						key = fixKey +''+ MenuSvc.getNO_M(psKind) +'Inquiry'
+						strkey += psKind;
 					}
-					rtnData = $window.localStorage.getItem(key);
-
-					if (rtnData) {
-						rtnData = JSON.parse(rtnData);
-					}
-					return rtnData;
+					
+					// 저장
+					var param = {
+						ID_KEY: strkey,
+    				};
+					
+					return $http({
+						method	: "GET",
+						url		: APP_CONFIG.domain +"/ut08Storage?"+ $.param(param)
+					}).success(function (data, status, headers, config) {
+						//console.log("success",data,status,headers,config);
+					}).error(function (data, status, headers, config) {
+						console.log("error",data,status,headers,config);
+					});
 				},
 
 				/**
@@ -734,6 +965,7 @@
 
 			this.localStorage = {
 				setItem: function(name, data) {
+					var user = $rootScope.webApp.user;
 					var fixKey 	= user.NO_C +''+ user.NO_EMP,
 						key 	= fixKey +''+ MenuSvc.getNO_M($state.current.name) +'-'+ name;
 
@@ -741,6 +973,7 @@
 				},
 				
 				getItem: function(name) {
+					var user = $rootScope.webApp.user;
 					if(user === null || user === undefined) return '';
 					
 					var fixKey 	= user.NO_C +''+ user.NO_EMP,
@@ -757,6 +990,7 @@
 				},
                 
                 removeItem: function(name) {
+                	var user = $rootScope.webApp.user;
                     var fixKey 	= user.NO_C +''+ user.NO_EMP,
                         key 	= fixKey +''+ MenuSvc.getNO_M($state.current.name) +'-'+ name;
                     
@@ -824,7 +1058,7 @@
                     	transport: {
                 			read: function(e) {
                 				var param = {
-                					procedureParam: "MarketManager.USP_SY_10CODE99_GET&L_CD_CLS@s",
+                					procedureParam: "USP_SY_10CODE99_GET&L_CD_CLS@s",
                 					L_CD_CLS: strCdCls
                 	            }, pAll = {'CD_DEF':'','NM_DEF':'전체'};
                 				

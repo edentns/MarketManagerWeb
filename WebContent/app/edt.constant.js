@@ -5,8 +5,8 @@
 
     edtApp.constant('APP_CONFIG', {
         bsCd    : '00000',
-		domain  : '/MarketManagerServer', // 운영
-        version : 'V 0.1.0',
+ 		domain  : '/MarketManagerServer_Mi', // 운영
+        version : 'V 0.2.0',
         encrypt : true 
     });
 
@@ -54,7 +54,14 @@
             addr2 : {space: '상세주소를 입력해주세요.',	 pattern: '한글+영어+숫자+\'@\'+\'-\'+공백 조합만 가능합니다.'},
             company		 : {space: '고객사명을 입력해주세요.',	 pattern: ''},
             salesCompany : {space: '매출처명을 입력해주세요.',	 pattern: ''}
-        }
+        },
+        invcChkMsg : "송장번호 체크로 인하여 처리시간이 다소 소요 될수 있습니다.",
+        caseOneMoreThanOrdChk : "한 건의 주문을 선택해 주세요",
+        caseNinetyDaysAlert : "배송 완료 후 90일 이상 된 주문은 정상적으로 처리 되지 않을수 있습니다.",
+        caseThirtyDaysAlert : "30일 이전까지 신청해주세요.",
+        caseYnConfirm : "구매 확정된 주문은 처리할 수 없습니다.",
+        caseChkOrdAlert : "주문 상태를 확인해 주세요.",
+        caseNotReceiveResultOrd : "연동결과가 없는 주문 입니다.\n연동결과가 없는 주문은 해당마켓과 주문상태가 차이 날 수도 있습니다."
     });
 
 	edtApp.constant('APP_AUTH', {
@@ -92,7 +99,8 @@
 	    DC_CONSNEWADDR		: { field: "DC_CONSNEWADDR" 	 , type: "string" , width: "100px", textAlign: "left"  		, title: "수취인주소"},    
 	    DC_PCHRREQCTT 		: { field: "DC_PCHRREQCTT"		 , type: "string" , width: "100px", textAlign: "left"  		, title: "요청내용"},
 	    
-	    CD_ORDSTAT    		: { field: "CD_ORDSTAT"   		 , type: "string" , width: "100px", textAlign: "center"		, title: "주문상태"},    
+	    CD_ORDSTAT    		: { field: "CD_ORDSTAT"   		 , type: "string" , width: "100px", textAlign: "center"		, title: "주문상태"},
+	    NM_ORDSTAT    		: { field: "NM_ORDSTAT"   		 , type: "string" , width: "100px", textAlign: "center"		, title: "주문상태"},
 	    DC_SHPWAY     		: { field: "DC_SHPWAY"    		 , type: "string" , width: "100px", textAlign: "center"		, title: "배송방법"},    
 	    QT_ORD        		: { field: "QT_ORD"       		 , type: "number" , width: "100px", textAlign: "right" 		, title: "주문수량"},
 	    DTS_APVL      		: { field: "DTS_APVL"     		 , type: "string" , width: "100px", textAlign: "center"		, title: "결제일시"},
@@ -102,7 +110,7 @@
 	    DTS_ORDDTRM   		: { field: "DTS_ORDDTRM"  		 , type: "string" , width: "100px", textAlign: "center"		, title: "주문확정일시"},   
 	    AM_ITEMPRC    		: { field: "AM_ITEMPRC"   		 , type: "number" , width: "100px", textAlign: "right" 		, title: "주문상품단가"},
 	    AM_CUSTOM_SALES  	: { field: "AM_CUSTOM_SALES"     , type: "number" , width: "100px", textAlign: "right" 		, title: "판매가 ＋ 배송비 －수수료"},
-	    AM_CMS	         	: { field: "AM_CMS"         	 , type: "number" , width: "100px", textAlign: "right" 		, title: "수수료"},
+	    AM_CMS	         	: { field: "AM_CMS"         	 , type: "number" , width: "100px", textAlign: "right" 		, title: "수수료"},	   
 	    
 	    AM_SHPCOST    		: { field: "AM_SHPCOST"   		 , type: "number" , width: "100px", textAlign: "right" 		, title: "배송비"},                   
 	    CD_CCLHRNKRSN 		: { field: "CD_CCLHRNKRSN"		 , type: "string" , width: "100px", textAlign: "left"  		},
@@ -117,6 +125,7 @@
         NO_CCLREQ     		: { field: "NO_CCLREQ"    		 , type: "string" , width: "100px", textAlign: "center"		, title: ""},
         DTS_CCLAPPRRJT		: { field: "DTS_CCLAPPRRJT"	 	 , type: "string" , width: "100px", textAlign: "center"		, title: "취소요청 처리일시"},
         CD_CCLSTAT    		: { field: "CD_CCLSTAT"   		 , type: "string" , width: "100px", textAlign: "center"		, title: "취소상태"},
+        NM_CCLSTAT    		: { field: "NM_CCLSTAT"   		 , type: "string" , width: "100px", textAlign: "center"		, title: "취소상태"},
         
         CD_CCLRJT     		: { field: "CD_CCLRJT"    		 , type: "string" , width: "100px", textAlign: "center"		},
         DC_CCLRJTCTT  		: { field: "DC_CCLRJTCTT" 		 , type: "string" , width: "100px", textAlign: "left"    	},
@@ -140,6 +149,7 @@
         
         NO_INSERT     		: { field: "NO_INSERT"    		 , type: "string" , width: "100px", textAlign: "center"		, title: ""},
         CD_TKBKSTAT   		: { field: "CD_TKBKSTAT" 	     , type: "string" , width: "100px", textAlign: "center"		, title: "반품상태"},
+        NM_TKBKSTAT   		: { field: "NM_TKBKSTAT" 	     , type: "string" , width: "100px", textAlign: "center"		, title: "반품상태"},
         NO_TKBKREQ    		: { field: "NO_TKBKREQ"   		 , type: "string" , width: "100px", textAlign: "center"		, title: ""},
         requesteNo    		: { field: "requesteNo"   		 , type: "string" , width: "100px", textAlign: "center"		, title: ""},
         mall_no       		: { field: "mall_no"      		 , type: "string" , width: "100px", textAlign: "center"		, title: "결과 전송 유무"},
@@ -147,6 +157,7 @@
         DC_TKBKRJTCTT 		: { field: "DC_TKBKRJTCTT"		 , type: "string" , width: "100px", textAlign: "center"		, title: ""},
         CD_TKBKRJT    		: { field: "CD_TKBKRJT"   		 , type: "string" , width: "100px", textAlign: "center"		, title: ""},
         DTS_TKBKCPLT  		: { field: "DTS_TKBKCPLT"		 , type: "string" , width: "100px", textAlign: "center"		, title: "반납상품 접수일자"},
+        NM_TKBKHRNKRSN		: { field: "NM_TKBKHRNKRSN"      , type: "string" , width: "100px", textAlign: "center" 		, title: "반품사유"},
         
         QT_ECHG       		: { field: "QT_ECHG"      		 , type: "string" , width: "100px", textAlign: "right" 		, title: "교환 요청 수량"},
         NO_CONSPHNE   		: { field: "NO_CONSPHNE"  		 , type: "string" , width: "100px", textAlign: "center"		, title: "수취인 전화번호"},

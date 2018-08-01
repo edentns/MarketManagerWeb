@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="ko" class="no-js" data-ng-app="edtApp">
-<head> 
+<head>
 	<meta charset="utf-8">
 	<title>MarketManager</title>
 	<meta http-equiv="X-UA-compatible" content="IE=edge">
@@ -52,6 +52,7 @@
 	<!-- build:js(.) assets/lib/vendor0.js -->
 	<script src="/bower_components/jquery/dist/jquery.js"></script>
 	<script src="/bower_components/jquery-ui/jquery-ui.js"></script>
+	<script src="/bower_components/SlidesJS3/source/jquery.slides.min.js"></script>
 	<!-- endbuild -->
 	
 	<!-- build:js(.) assets/lib/vendor1.js -->
@@ -169,6 +170,23 @@
 	<script src="app/contents/01ma/ma07Itl/ma.Itl.app.js"></script>
 	<script src="app/contents/01ma/ma07Itl/controllers/ma.Itl.ctrl.js"></script>
 	<script src="app/contents/01ma/ma07Itl/services/ma.Itl.svc.js"></script>
+	
+	<script src="app/contents/01ma/ma08Help/ma.Help.app.js"></script>
+	<script src="app/contents/01ma/ma08Help/controllers/ma.Help.ctrl.js"></script>
+	<script src="app/contents/01ma/ma08Help/services/ma.Help.svc.js"></script>
+	
+	<script src="app/contents/01ma/ma09Avtm/ma.Avtm.app.js"></script>
+	<script src="app/contents/01ma/ma09Avtm/controllers/ma.Avtm.ctrl.js"></script>
+	<script src="app/contents/01ma/ma09Avtm/services/ma.Avtm.svc.js"></script>
+	
+	<script src="app/contents/01ma/ma10Board/ma.Board.app.js"></script>
+	<script src="app/contents/01ma/ma10Board/controllers/ma.Board.ctrl.js"></script>
+	<script src="app/contents/01ma/ma10Board/controllers/ma.BoardInfo.ctrl.js"></script>
+	<script src="app/contents/01ma/ma10Board/services/ma.Board.svc.js"></script>
+	
+	<script src="app/contents/01ma/ma11File/ma.File.app.js"></script>
+	<script src="app/contents/01ma/ma11File/controllers/ma.File.ctrl.js"></script>
+	<script src="app/contents/01ma/ma11File/services/ma.File.svc.js"></script>
 	<!-- endbuild-->
 
 	<!-- build:mainITJS assets/js/main.min.it.js -->
@@ -189,8 +207,13 @@
 	<script src="app/contents/02it/it03SaleItem/services/it.SaleItem.svc.js"></script>
 	
 	<script src="app/contents/02it/it04SaleSiteItem/it.SaleSiteItem.app.js"></script>
-	<script src="app/contents/02it/it04SaleSiteItem/controllers/it.SaleSiteItem.ctrl.js"></script>
+	<script src="app/contents/02it/it04SaleSiteItem/controllers/it.SaleSiteItemList.ctrl.js"></script>
+	<script src="app/contents/02it/it04SaleSiteItem/controllers/it.SaleSiteItemInfo.ctrl.js"></script>
 	<script src="app/contents/02it/it04SaleSiteItem/services/it.SaleSiteItem.svc.js"></script>
+	
+	<script src="app/contents/02it/it05MappingItem/it.MappingItem.app.js"></script>
+	<script src="app/contents/02it/it05MappingItem/controllers/it.MappingItem.ctrl.js"></script>
+	<script src="app/contents/02it/it05MappingItem/services/it.MappingItem.svc.js"></script>
 	<!-- endbuild-->
 	
 	<!-- build:mainSAJS assets/js/main.min.sa.js -->
@@ -245,6 +268,10 @@
 	<script src="app/contents/98te/otherkendo/te.OtherKendo.app.js"></script>
 	<script src="app/contents/98te/otherkendo/controllers/te.OtherKendo.ctrl.js"></script>
 	<script src="app/contents/98te/otherkendo/services/te.OtherKendo.svc.js"></script>
+	
+	<script src="app/contents/98te/otherkendomobile/te.OtherKendoMobile.app.js"></script>
+	<script src="app/contents/98te/otherkendomobile/controllers/te.OtherKendoMobile.ctrl.js"></script>
+	<script src="app/contents/98te/otherkendomobile/services/te.OtherKendoMobile.svc.js"></script>
 	<!-- endbuild-->
 
 	<!-- build:mainSYJS assets/js/main.min.sy.js -->
@@ -325,6 +352,12 @@
 	<script src="app/contents/99sy/sy17Itl/sy.Itl.app.js"></script>
 	<script src="app/contents/99sy/sy17Itl/controllers/sy.Itl.ctrl.js"></script>
 	<script src="app/contents/99sy/sy17Itl/services/sy.Itl.svc.js"></script>	
+	
+	<script src="app/contents/99sy/sy18Board/sy.Board.app.js"></script>
+	<script src="app/contents/99sy/sy18Board/controllers/sy.Board.ctrl.js"></script>
+	<script src="app/contents/99sy/sy18Board/controllers/sy.BoardInfo.ctrl.js"></script>
+	<script src="app/contents/99sy/sy18Board/controllers/sy.BoardWrite.ctrl.js"></script>
+	<script src="app/contents/99sy/sy18Board/services/sy.Board.svc.js"></script>	
 	<!-- endbuild-->
 	
 	<!-- build:mainCOMJS assets/js/main.min.com.js -->
@@ -392,8 +425,13 @@
 	<script src="app/shared/modal/mo10ItemPreview/modal.itemPreview.ctrl.js"></script>
 	<script src="app/shared/modal/it01ItemCfct/modal.ItemCfct.ctrl.js"></script>
 	<script src="app/shared/modal/mo11SaleSiteDetail/modal.saleSiteDetail.ctrl.js"></script>
+	<script src="app/shared/modal/mo12Quisev/modal.quiServ.ctrl.js"></script>
 	<script src="app/shared/modal/address/search.js"></script>
 	<!-- endbuild -->
+	
+	<script id="scrolltemplate" type="text/x-kendo-template">
+		<div style="width:#= VAL_WIDTH #px;height:#= VAL_HEIGHT #px;">#= DC_HTMLCONTENT #</div>
+	</script>
 </body>
 
 </html>

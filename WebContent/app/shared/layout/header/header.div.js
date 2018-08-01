@@ -16,16 +16,65 @@
 				restrict: "AE",
 				transclude: true,
 				scope: true,
-				controller: ["$rootScope", "$scope", "$state", "sy.LoginSvc", function ($rootScope, $scope, $state, SyLoginSvc) {
+				controller: ["$rootScope", "$scope", "$state", "sy.LoginSvc", "UtilSvc", function ($rootScope, $scope, $state, SyLoginSvc, UtilSvc) {
 					var headerIconVO = $scope.headerIconVO = {
 						isShowDropdown : false
 					};
 
+					SyLoginSvc.selectAvtm("SYAC180305_00001").then(function (res) {
+						if(res.data.length > 0) {
+							var scrolltemplate = kendo.template($("#scrolltemplate").html());
+						
+							$("#headAvtmSlides").html(kendo.render(scrolltemplate, res.data));
+							
+							$('#headAvtmSlides').slidesjs({
+								width: res.data[0].VAL_WIDTH,
+						        height: res.data[0].VAL_HEIGHT,
+						        navigation: false,
+						        pagination: false,
+						        play: {
+						          effect: "fade",
+						          pauseOnHover: true,
+						          auto: true,
+						          interval: 4000,
+						          restartDelay: 1000
+						        }
+							});
+						}
+					});
+					
+					SyLoginSvc.selectAvtm("SYAC180305_00002").then(function (res) {
+						if(res.data.length > 0) {
+							var scrolltemplate = kendo.template($("#scrolltemplate").html());
+						
+							$("#leftAvtmSlides").html(kendo.render(scrolltemplate, res.data));
+							
+							$('#leftAvtmSlides').slidesjs({
+								width: res.data[0].VAL_WIDTH,
+						        height: res.data[0].VAL_HEIGHT,
+						        navigation: false,
+						        pagination: false,
+						        play: {
+						          effect: "fade",
+						          interval: 2000,
+						          pauseOnHover: true,
+						          auto: true,
+						        }
+							});
+						}
+					});
+					
 					headerIconVO.toggleDropdown = function ( $event ) {
 						$event.stopPropagation();
 						this.isShowDropdown = !this.isShowDropdown;
 					};
 
+					headerIconVO.helpToggle = function () {
+						var splitterElement = $("#contentMain");
+						
+						UtilSvc.splitter.toggle(splitterElement.children(".k-pane")[1], $(splitterElement.children(".k-pane")[1]).width() <= 0);
+					};
+					
 					headerIconVO.initLoad = function () {
 						headerIconVO.toggleSidebar();
 					};
@@ -34,7 +83,7 @@
 						$(".show-sidebar").on("click", function (e) {
 							function MessagesMenuWidth(){
 								var W = window.innerWidth;
-								var Wmenu = $("#sidebar-left").outerWidth();
+								var Wmenu = $("#menuMain").outerWidth();
 								var wmessages = (W-Wmenu)*12/100;
 
 								$("#messages-menu").width(wmessages);

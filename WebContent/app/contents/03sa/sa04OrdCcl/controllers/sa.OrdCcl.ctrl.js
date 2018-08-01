@@ -55,6 +55,9 @@
                     CD_CCLHRNKRSN : { type: "array"  					 	 , editable: false, nullable: false },
                     NM_CCLHRNKRSN : { type: APP_SA_MODEL.NM_CCLHRNKRSN.type  , editable: false, nullable: false },
                     NM_CCLLRKRSN  : { type: APP_SA_MODEL.NM_CCLHRNKRSN.type  , editable: false, nullable: false }, 
+
+                    NM_ORDSTAT 	  : { type: APP_SA_MODEL.NM_ORDSTAT.type  	 , editable: false, nullable: false },
+                    NM_CCLSTAT    : { type: APP_SA_MODEL.NM_CCLSTAT.type  	 , editable: false, nullable: false },
                     cancel_reject_code : {	
 				                    	type: "array"  
 				     				   ,editable: true
@@ -164,10 +167,10 @@
                               [APP_SA_MODEL.NO_PCHRPHNE    , APP_SA_MODEL.DC_APVLWAY    ],
                               [APP_SA_MODEL.DC_PCHREMI     , APP_SA_MODEL.NM_CONS       ],
                               [APP_SA_MODEL.NM_CCLHRNKRSN  , APP_SA_MODEL.DC_CONSNEWADDR],
-                              [APP_SA_MODEL.CD_ORDSTAT     , APP_SA_MODEL.DC_SHPWAY     ],
+                              [APP_SA_MODEL.NM_ORDSTAT     , APP_SA_MODEL.DC_SHPWAY     ],
                               [APP_SA_MODEL.DTS_ORD        , APP_SA_MODEL.DTS_CCLREQ    ],
                               [APP_SA_MODEL.DTS_CCLAPPRRJT , APP_SA_MODEL.CCL_NO_UPDATE ],                              
-                              [APP_SA_MODEL.YN_CONN 	   , APP_SA_MODEL.CD_CCLSTAT]
+                              [APP_SA_MODEL.YN_CONN 	   , APP_SA_MODEL.NM_CCLSTAT	]
                              ],
                     grdDetOption      = {},
                     grdRowTemplate    = "<tr data-uid=\"#= uid #\">\n",
@@ -184,7 +187,7 @@
 	            	datesetting : {
 	        			dateType   : 'market',
 						buttonList : ['current', '1Day', '1Week', '1Month'],
-						selected   : Util03saSvc.storedDatesettingLoad("ordCancelParam"),
+						selected   : resData.selected,
 						period : {
 							start : angular.copy(today),
 							end   : angular.copy(today)
@@ -318,7 +321,8 @@
                         me.cancelStatusOp = result[5];
                         
                         $timeout(function(){
-            				Util03saSvc.storedQuerySearchPlay(me, "ordCancelParam");
+                        	ordCancelManagementDataVO.isOpen(false);
+            				Util03saSvc.storedQuerySearchPlay(me, resData.storage);
                         },0);    
                     });
                 };
@@ -340,8 +344,10 @@
 					    NM_MRK_SELCT_INDEX : me.ordMrkNameOp.allSelectNames,
 					    NM_ORDSTAT_SELCT_INDEX : me.ordStatusOp.allSelectNames,
 					    CD_CCLSTAT_SELCT_INDEX : me.cancelStatusOp.allSelectNames,
-					    DTS_SELECTED : me.datesetting.selected,			
-					    CASH_PARAM : "ordCancelParam"
+					    DTS_SELECTED : me.datesetting.selected,	
+    					DTS_STORAGE_FROM: me.datesetting.period.start,
+    					DTS_STORAGE_TO: me.datesetting.period.end,		
+					    CASH_PARAM : resData.storageKey
                     }; 
     				if(Util03saSvc.readValidation(me.param)){
     					$scope.ordCancelManagementkg.dataSource.data([]);
@@ -377,22 +383,21 @@
 	            };	
 
 	            ordCancelManagementDataVO.isOpen = function (val) {
-	            	if(val) {
-	            		$scope.ordCancelManagementkg.wrapper.height(616);
-	            		$scope.ordCancelManagementkg.resize();
-	            		if(ordCancelManagementDataVO.param !== "") grdOrdCancelManagementVO.dataSource.pageSize(9);
-	            	}
-	            	else {
-	            		$scope.ordCancelManagementkg.wrapper.height(798);
-	            		$scope.ordCancelManagementkg.resize();
-	            		if(ordCancelManagementDataVO.param !== "") grdOrdCancelManagementVO.dataSource.pageSize(12);
-	            	}
+	            	var searchIdHeight = $("#searchId").height();
+	            	var settingHeight = $(window).height() - searchIdHeight - 90;
+	            	var pageSizeValue = val? 9 : 12;
+	            	
+	            	$scope.ordCancelManagementkg.wrapper.height(settingHeight);
+            		$scope.ordCancelManagementkg.resize();
+            		if(ordCancelManagementDataVO.param !== "") {
+            			grdOrdCancelManagementVO.dataSource.pageSize(pageSizeValue);
+            		}
 	            };
 	            	            	            
 	            //주문 검색 그리드
 	            var grdOrdCancelManagementVO = $scope.grdOrdCancelManagementVO = {
             		autoBind: false,
-                    messages: {                        	
+                    messages: { 
                         requestFailed: "주문정보를 가져오는 중 오류가 발생하였습니다.",
                         commands: {
                             update: "저장",
@@ -445,7 +450,9 @@
                                     		if(res.data === "success"){
                     							alert("취소거부 처리 되었습니다.");
                                     			defer.resolve({result: "success"});
-                                    			Util03saSvc.storedQuerySearchPlay(ordCancelManagementDataVO, "ordCancelParam");
+                                    			//Util03saSvc.storedQuerySearchPlay(ordCancelManagementDataVO, "ordCancelParam");
+                                    			//Util03saSvc.storedQuerySearchPlay(ordCancelManagementDataVO, resData.storage);
+                                    			ordCancelManagementDataVO.inQuiry();
                                     		}else if(res.data === "parsreject"){
                                     			ordCancelManagementDataVO.menualShwWrn = [res.data];
                                     			e.error([]);
@@ -579,7 +586,7 @@
                                         				e.sender.element.closest("tr").find("div.k-invalid-msg").hide();
                                         			}
                                         			if(this.text() === "택배사 등록" && this.selectedIndex === 1){
-                                        				$state.go("app.syPars", { menu: true, ids: null });
+                                        				$state.go("app.syPars", {mrk: noMrk,  menu: true, ids: null });
     		                                    		$scope.ordCancelManagementkg.cancelRow();
     		                                    	}
                                         		}
@@ -684,8 +691,7 @@
             					});
 	                			return defer.promise;
 	                		}
-                			return false;
-	                			
+                			return false;	                			
 	                	});	                
 	                }
                 });                

@@ -50,7 +50,7 @@
 				 */
 				saleSiteDetailVO.initSearch = function () {
 				var param = {
-    					procedureParam  : "MarketManager.USP_IT_04SITEITEM_DETAIL_GET&L_NO_MRKREGITEM@s",
+    					procedureParam  : "USP_IT_04SITEITEM_DETAIL_GET&L_NO_MRKREGITEM@s",
     					L_NO_MRKREGITEM : NO_MRKREGITEM
                     };
     				UtilSvc.getList(param).then(function (res) {

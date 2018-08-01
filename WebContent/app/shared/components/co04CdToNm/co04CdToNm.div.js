@@ -13,15 +13,19 @@
                 	$timeout(function(){
 	                	var nmd = scope.cd,
                             grd = scope.nmBox,
-                            result = '';
-		                    	
-	                	for(var i=0, leng=grd.length; i<leng; i++){
-	                		if(grd[i].CD_DEF === nmd){
-		            			result = grd[i].NM_DEF;
-		                    }
-		                }
+                            result = '',	                	
+                            regNumber = /^[0-9]*$/;
 	                	
-	                	result = (!result) ? '' : result;
+	                	if(regNumber.test(nmd)){
+	                		for(var i=0, leng=grd.length; i<leng; i++){
+		                		if(grd[i].CD_DEF === nmd){
+			            			result = grd[i].NM_DEF;
+			                    }
+			                }		                	
+		                	result = !result ? '' : result;
+	                	}else{
+	                		result = (!nmd || nmd === "undefined") ? '' : nmd;
+	                	}
 	                	
 	                	element.text(result);
                 	},0);

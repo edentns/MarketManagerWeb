@@ -15,32 +15,32 @@
 	            
 	            var menuId = MenuSvc.getNO_M($state.current.name);
 	            
-	            var subCodeSetting = function (subcode1, subcode2, e){
-					var param = {
-    					procedureParam: "MarketManager.USP_SY_10CODE02_GET&lnomngcdhd@s|lcdcls@s",
-    					lnomngcdhd: subcode1,
-    					lcdcls: subcode2
-    				};
-    				UtilSvc.getList(param).then(function (res) {
-						res.data.results[0].unshift({'CD_DEF':'','NM_DEF':'전체'}); //코드 초기값 설정
-						//e.success(res.data.results[0].sort(function(a, b){return parseInt(b.SQ_DEF) - parseInt(a.SQ_DEF)}));
-						e.success(res.data.results[0]);
-					});
-    			};	           	            
+//	            var subCodeSetting = function (subcode1, subcode2, e){
+//					var param = {
+//    					procedureParam: "USP_SY_10CODE02_GET&lnomngcdhd@s|lcdcls@s",
+//    					lnomngcdhd: subcode1,
+//    					lcdcls: subcode2
+//    				};
+//    				UtilSvc.getList(param).then(function (res) {
+//						res.data.results[0].unshift({'CD_DEF':'','NM_DEF':'전체'}); //코드 초기값 설정
+//						//e.success(res.data.results[0].sort(function(a, b){return parseInt(b.SQ_DEF) - parseInt(a.SQ_DEF)}));
+//						e.success(res.data.results[0]);
+//					});
+//    			};	           	            
     			
 	            var mngMrkDateVO = $scope.mngMrkDateVO = {
 	            	boxTitle : "검색",
 	            	datesetting : {
 	        			dateType   : 'market',
 						buttonList : ['current', '1Day', '1Week', '1Month'],
-						selected   : '1Week',
+						selected   : resData.selectDate.selected,
 						period : {
-							start : angular.copy(today),
-							end   : angular.copy(today)
+							start : resData.selectDate.start,
+							end   : resData.selectDate.end
 						}
 	        		},
-                    searchText: {value: "", focus: false},			 //검색어
-             	    methodDataCode : "",			                 //연동방법
+                    searchText: {value: resData.searchText, focus: false},			//검색어
+             	    methodDataCode : resData.selectMethodData,      //연동방법
              	    methodDataSource : resData.methodDataSource,
 	        		cdMrkDftDataSource : resData.cdMrkDftDataSource,
 	        		cdNtDataSource : resData.cdNtDataSource,
@@ -64,20 +64,23 @@
 	            mngMrkDateVO.doInquiry = function () {
 		        	var me  = this;                	
                 	me.param = {
-                    	procedureParam: "MarketManager.USP_MA_03SEARCH01_GET&NO_M@s|MA_NM_MRK@s|MA_CD_ITLWY@s|MA_DT_START@s|MA_DT_END@s",
+                    	procedureParam: "USP_MA_03SEARCH01_GET&NO_M@s|MA_NM_MRK@s|MA_CD_ITLWY@s|MA_DT_START@s|MA_DT_END@s",
                     	NO_M: menuId,
                     	MA_NM_MRK: mngMrkDateVO.searchText.value,
                     	MA_CD_ITLWY: mngMrkDateVO.methodDataCode,
                     	MA_DT_START: new Date(mngMrkDateVO.datesetting.period.start.y, mngMrkDateVO.datesetting.period.start.m-1, mngMrkDateVO.datesetting.period.start.d).dateFormat("Ymd"),
-                    	MA_DT_END: new Date(mngMrkDateVO.datesetting.period.end.y, mngMrkDateVO.datesetting.period.end.m-1, mngMrkDateVO.datesetting.period.end.d).dateFormat("Ymd")
+                    	MA_DT_END: new Date(mngMrkDateVO.datesetting.period.end.y, mngMrkDateVO.datesetting.period.end.m-1, mngMrkDateVO.datesetting.period.end.d).dateFormat("Ymd"),
+                    	MA_CD_ITLWY_SELECT_INDEX: mngMrkDateVO.methodDataSource.allSelectNames,
+                    	PERIOD: UtilSvc.grid.getDateSetting(mngMrkDateVO.datesetting)
                     };  	               	
 
 	            	if(me.methodDataCode === ""){alert("연동방법을 입력해 주세요."); return false;};
                 	if(me.param.MA_DT_START > me.param.MA_DT_END){alert("기간을 올바르게 입력해 주세요."); return false;};
                 	
-                	$scope.gridMngMrkUserVO.dataSource.data([]);
-                	//$scope.gridMngMrkUserVO.dataSource.page(1);
-                	$scope.gridMngMrkUserVO.dataSource.read();
+                	$scope.kg.dataSource.data([]);
+                	$scope.kg.dataSource.page(1);
+                	
+        			UtilSvc.grid.setInquiryParam(me.param);     
                 };
                 
                 //새로 저장시 유효성 검사 (수정 할 땐 비밀번호를 따로 입력할 필요할 없어서 required 하지 않아서 저장시 따로 함수를 만듦 kendo로는  editable true 일때만 됨)
@@ -116,16 +119,13 @@
                 }
                 
                 mngMrkDateVO.isOpen = function (val) {
-	            	if(val) {
-	            		$scope.kg.wrapper.height(657);
-	            		$scope.kg.resize();
-	            		gridMngMrkUserVO.dataSource.pageSize(20);
-	            	}
-	            	else {
-	            		$scope.kg.wrapper.height(798);
-	            		$scope.kg.resize();
-	            		gridMngMrkUserVO.dataSource.pageSize(24);
-	            	}
+                	var searchIdHeight = $("#searchId").height();
+	            	var settingHeight = $(window).height() - searchIdHeight - 90;
+	            	var pageSizeValue = val? 20 : 24;
+	            	
+            		$scope.kg.wrapper.height(settingHeight);
+            		$scope.kg.resize();
+            		gridMngMrkUserVO.dataSource.pageSize(pageSizeValue);
 	            };
 	                                                       
                 //마켓 검색 그리드
@@ -460,6 +460,9 @@
         				$(".k-grid-save-changes").click(stopEvent);
         				$(".k-grid-cancel-changes").click(stopEvent);
         			}
+                	
+                	mngMrkDateVO.doInquiry();
+                	mngMrkDateVO.isOpen(false);
                 });
             }]);
 }());

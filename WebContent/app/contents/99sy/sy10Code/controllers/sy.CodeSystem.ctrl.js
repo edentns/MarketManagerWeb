@@ -9,7 +9,7 @@
     angular.module("sy.Code.controller")
         .controller("sy.CodeSystemCtrl", [ "$scope", function ($scope) {
         	var gridHeaderAttributes = {"class": "table-header-cell", style: "text-align: center; font-size: 12px"};
-        	
+        	var gridHeight = Math.round(($(window).height()-90-114)/2);        	
         	var gridSysCodeVO = $scope.gridSysCodeVO = {
     			NO_MNGCDHD   : "",
                 CD_CLS   : "",
@@ -57,7 +57,7 @@
                     this.cancelRow();
                 },
             	editable: false,
-            	height: 346,
+            	height: gridHeight,
             	
             	initLoad: function() {
             		var self = this;

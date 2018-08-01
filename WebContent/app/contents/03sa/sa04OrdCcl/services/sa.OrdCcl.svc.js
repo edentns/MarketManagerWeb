@@ -106,7 +106,7 @@
 	            	}else if(target === "DTS_RECER"){
 	            		dataItem[target] = kendo.toString(new Date(input.val()), "yyyyMMdd");
 	            	}else if(target === input.attr("name")){
-	            		dataItem[target] = input.val();
+	            		dataItem[target] = input.val().trim();
 	            	}
 	            },
 	            

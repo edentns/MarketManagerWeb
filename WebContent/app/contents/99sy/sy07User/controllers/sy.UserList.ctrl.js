@@ -6,22 +6,17 @@
      * @name sy.User.controller : sy.UserListCtrl
      */
     angular.module("sy.User.controller")
-        .controller("sy.UserListCtrl", ["$state", "$scope", "ngTableParams", "$timeout", "$sce", "$filter", "sy.UserListSvc", "sy.CodeSvc", "APP_CODE", "sy.DeptSvc", "resData", "Page", "UtilSvc",
-            function ($state, $scope, ngTableParams, $timeout, $sce, $filter, UserListSvc, SyCodeSvc, APP_CODE, SyDepartSvc, resData, Page, UtilSvc) {
+        .controller("sy.UserListCtrl", ["$state", "$scope", "ngTableParams", "$timeout", "$sce", "$filter", "APP_CODE", "sy.DeptSvc", "resData", "Page", "UtilSvc",
+            function ($state, $scope, ngTableParams, $timeout, $sce, $filter, APP_CODE, SyDepartSvc, resData, Page, UtilSvc) {
 	            var page  = $scope.page = new Page({ auth: resData.access }),
 		            today = edt.getToday();
 	            
-	            /*$scope.selectedDeptIds = '';
-	            $scope.selectedRankIds = '';
-	            $scope.selectedStatIds = '';
-	            $scope.selectedAtrtIds = '';*/
-
                 // [syUserVO]
                 var vo = $scope.syUserVO = {
-                	selectedDeptIds : '*',
-                	selectedRankIds : '*',
-                	selectedStatIds : '*',
-                	selectedAtrtIds : '*',
+                	selectedDeptIds : resData.selectedDeptIds,
+                	selectedRankIds : resData.selectedRankIds,
+                	selectedStatIds : resData.selectedStatIds,
+                	selectedAtrtIds : resData.selectedAtrtIds,
                     boxTitle : "검색",
                     total: 0,
                     data: [],
@@ -40,11 +35,11 @@
 	        			name: "NM_ATRT",
 	        			maxNames: 3,
 	        		},
-                    departCodeList: [],
-                    rankCodeList  : [],
-                    empStatList   : [],
-                    atrtCodeList  : [],
-                    searchName    : ""
+                    departCodeList: resData.departCodeList,
+                    rankCodeList  : resData.rankCodeList,
+                    empStatList   : resData.empStatList,
+                    atrtCodeList  : resData.atrtCodeList,
+                    searchName    : resData.searchName
                 };
                 vo.tbl = {
                     columns: [
@@ -74,40 +69,15 @@
                     })
                 };
                 vo.init = function () {// 초기로드시 실행된다.
-                	var param = {
-                            procedureParam: "USP_SY_08ATRT01_GET"
-                        };
-                    vo.getDepart({search: "all"});
-                    vo.getSubcodeList( {cd: "SY_000020", search: "all"} );
-                    vo.getSubcodeList( {cd: "SY_000025", search: "all"} );
-                    vo.getSubcodeList( param );
-                    vo.searchName = "";
-	            	
                     $timeout(function() {
 						if(!page.isWriteable()){
 							$("#userkg .k-grid-toolbar").hide();
 						}
         			});
                     
-                    $timeout(function() {
-	                 // 이전에 검색조건을 세션에 저장된 것을 가져옴
-	            		var history = UtilSvc.grid.getInquiryParam();
-		            	if(history){
-		            		vo.selectedDeptIds = history.DEPT_LIST;
-	            			vo.departCodeList.setSelectNames = history.DEPT_LIST_SELECT_INDEX;
-							vo.selectedRankIds = history.RANK_LIST;
-							vo.rankCodeList.setSelectNames = history.RANK_LIST_SELECT_INDEX;
-							vo.selectedStatIds = history.STAT_LIST;
-							vo.empStatList.setSelectNames = history.STAT_LIST_SELECT_INDEX;
-							vo.selectedAtrtIds = history.ATRT_LIST;
-							vo.atrtCodeList.setSelectNames = history.ATRT_LIST_SELECT_INDEX;
-							vo.searchName = history.SEARCH_NAME;
-		            		
-							grdUserVO.dataSource.read();
-		            	}else{
-		            		grdUserVO.dataSource.read();
-		            	}
-                    },1000);
+                    grdUserVO.dataSource.read().then(function(res) {
+                    	vo.isOpen(false);
+                    });
                 };
                 
                 vo.reset = function() {
@@ -118,18 +88,15 @@
                     vo.searchName = "";
 				};
 
-                /*vo.isOpen = function (val) {
-	            	if(val) {
-	            		$scope.userkg.wrapper.height(658);
-	            		$scope.userkg.resize();
-	            		grdUserVO.dataSource.pageSize(20);
-	            	}
-	            	else {
-	            		$scope.userkg.wrapper.height(798);
-	            		$scope.userkg.resize();
-	            		grdUserVO.dataSource.pageSize(24);
-	            	}
-	            };*/
+                vo.isOpen = function (val) {
+					var searchIdHeight = $("#searchId").height();
+	            	var settingHeight = $(window).height() - searchIdHeight - 90;
+	            	var pageSizeValue = val? 20 : 24;
+	            	
+            		$scope.gridUserVO.wrapper.height(settingHeight);
+            		$scope.gridUserVO.resize();
+            		grdUserVO.dataSource.pageSize(pageSizeValue);
+	            };
 				
                 vo.doInquiry = function () {// 검색조건에 해당하는 유저 정보를 가져온다.
             		grdUserVO.dataSource.page(1);
@@ -149,35 +116,6 @@
         			UtilSvc.grid.setInquiryParam(param);
                 };
                 
-                /**
-                 * 직급 코드를 가져온다.
-                 * @param param
-                 */
-                vo.getSubcodeList = function (param) {
-                    var self = this;
-                    SyCodeSvc.getSubcodeList(param).then(function (result) {
-                    	if(param.cd == "SY_000020"){
-                    		self.rankCodeList = result.data;
-                    	}else if(param.cd == "SY_000025"){
-                    		self.empStatList = result.data;
-                    	}else if(param.procedureParam == "USP_SY_08ATRT01_GET"){
-                    		UtilSvc.getList(param).then(function (result) {
-                                self.atrtCodeList = result.data.results[0];
-                            });
-                    	}
-                    });
-                };
-
-                /**
-                 * 부서코드를 가져온다.
-                 */
-                vo.getDepart = function (param) {
-                    var self = this;
-                    UserListSvc.getDepart(param).then(function (result) {
-                            self.departCodeList = result.data;
-                        });
-                };
-
                 vo.moveInsertPage = function () {// 사원등록페이지로 이동한다.
                     $state.go('app.syUser', { kind: 'insert', menu: null, ids: null });
                 };

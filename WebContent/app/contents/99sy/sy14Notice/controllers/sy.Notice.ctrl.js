@@ -13,21 +13,7 @@
 		            today = edt.getToday();
 	            
 	            $scope.userInfo = JSON.parse($window.localStorage.getItem("USER"));
-  		      
-	            //공지사항 구분 드랍 박스 실행	
-	            var connSetting = (function(){
-    				var param = {
-    					procedureParam: "MarketManager.USP_SY_10CODE02_GET&lnomngcdhd@s|lcdcls@s",
-    					lnomngcdhd: "SYCH00014",
-    					lcdcls: "SY_000014"
-    				};
-        			UtilSvc.getList(param).then(function (res) {
-        				if(res.data.results[0].length >= 1){
-        					noticeDataVO.noticeCdVO = res.data.results[0];
-        				}
-        			});		
-	            }());
-	            
+
 	            var noticeDataVO = $scope.noticeDataVO = {
 		            	boxTitle : "검색",
 		            	setting : {
@@ -38,15 +24,15 @@
 		            	datesetting : {
 		        			dateType   : 'market',
 							buttonList : ['current', '1Day', '1Week', '1Month'],
-							selected   : 'current',
+							selected   : resData.selectDate.selected,
 							period : {
-								start : angular.copy(today),
-								end   : angular.copy(today)
+								start : resData.selectDate.start,
+								end   : resData.selectDate.end
 							}
 		        		},
-	                    contentText: { value: "" , focus: false},			//제목/내용
-	                    noticeCdModel : "*",								//공지구분	
-	                    noticeCdVO : [],
+	                    contentText: { value: resData.contentTextValue , focus: false},			//제목/내용
+	                    noticeCdModel : resData.noticeCdModel,								//공지구분	
+	                    noticeCdVO : resData.noticeCdVO,
 	    				dataTotal : 0,
 	             	    resetAtGrd : ""
 		        };
@@ -55,17 +41,10 @@
 	            noticeDataVO.initLoad = function(){
 	            	$timeout(function() {
 	                    // 이전에 검색조건을 세션에 저장된 것을 가져옴
-	            		var history = UtilSvc.grid.getInquiryParam();
-		            	if(history){
-		            		noticeDataVO.contentText.value = history.SEARCH_;
-                        	noticeDataVO.noticeCdModel = history.ARR_CD_NO;
-                        	noticeDataVO.noticeCdVO.setSelectNames = history.ARR_CD_NO_SELECT_INDEX;
-                        	noticeDataVO.datesetting.period.start = history.START_DATE;
-                        	noticeDataVO.datesetting.period.end = history.END_DATE;
-		            		
-                        	$scope.nkg.dataSource.read();
-		            	}
-                    },1000);
+	            		$scope.nkg.dataSource.read();
+
+	                	noticeDataVO.isOpen(false);
+                    },0);
 	            };	  
 	            
 	            //조회
@@ -76,14 +55,13 @@
 	            	$scope.nkg.dataSource.read();
 	            	
 	            	var param = {
-							SEARCH_: noticeDataVO.contentText.value,
-                        	ARR_CD_NO: noticeDataVO.noticeCdModel,
-                        	ARR_CD_NO_SELECT_INDEX : noticeDataVO.noticeCdVO.allSelectNames,
-                        	START_DATE: noticeDataVO.datesetting.period.start,
-                        	END_DATE: noticeDataVO.datesetting.period.end
-		                };
-	        			// 검색조건 세션스토리지에 임시 저장
-	        			UtilSvc.grid.setInquiryParam(param);
+						SEARCH_: noticeDataVO.contentText.value,
+                    	ARR_CD_NO: noticeDataVO.noticeCdModel,
+                    	ARR_CD_NO_SELECT_INDEX : noticeDataVO.noticeCdVO.allSelectNames,
+                    	PERIOD : UtilSvc.grid.getDateSetting(noticeDataVO.datesetting)
+	                };
+        			// 검색조건 세션스토리지에 임시 저장
+        			UtilSvc.grid.setInquiryParam(param);
 	            };	    
 	            
 	            //초기화버튼
@@ -99,13 +77,15 @@
 	            };
 
 	            noticeDataVO.isOpen = function (val) {
+	            	var searchIdHeight = $("#searchId").height();
+	            	var settingHeight = $(window).height() - searchIdHeight - 90;
 	            	if(val) {
-	            		$scope.nkg.wrapper.height(657);
+	            		$scope.nkg.wrapper.height(settingHeight);
 	            		$scope.nkg.resize();
 	            		gridNoticeVO.dataSource.pageSize(20);
 	            	}
 	            	else {
-	            		$scope.nkg.wrapper.height(798);
+	            		$scope.nkg.wrapper.height(settingHeight);
 	            		$scope.nkg.resize();
 	            		gridNoticeVO.dataSource.pageSize(24);
 	            	}
@@ -210,37 +190,37 @@
 								   field: "ROW_NUM",
 								   title: "번호",
 								   width: 40,
-								   headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 10px"}
+								   headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}
                		            },
             		            {
                		        	   field: "CD_NOTICE",
                		        	   title: "공지구분",
                		        	   width: 70,
-               		        	   headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 10px"}
+               		        	   headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}
                		            },
 	            		        {
            		        	       field: "NM_SUBJECT",
            		        	       title: "제목",
            		        	       width: 250,
-           		        	       headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 10px"}
+           		        	       headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}
            		        	    },
             		            {
             		        	   field: "DC_HTMLCONTENT",
             		               title: "공지내용",
-            		               headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 10px"}
+            		               headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}
             		            },
             		            {
             		        	   field: "DTS_INSERT",
             		               title: "공지일시",
             		               width: 150,
-            		               headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 10px"}
+            		               headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"}
             		               //format: "{0: yyyy-MM-dd HH:mm:ss}"
             		            },
             		            {
             		        	   field: "NO_WRITE",
             		               title: "작성자",
             		               width: 100,
-            		               headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 10px"}
+            		               headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
             		            }
                     	],  	
                     	editable: {

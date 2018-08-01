@@ -5,12 +5,12 @@
                 <li><a href="#99sy/syDashboard"><i class="fa fa-home fa-2x"></i></a></li>
                 <li><a href="#03sa/saShpIng"> 주문·배송 / 배송중</a></li>
             </ol>
-        </div> 
+        </div>
     </div>
     
     <div class="row">
         <!-- 검색 -->
-        <div class="content-area-container col-xs-12" style="margin:0px 0px -5px 0px;">
+        <div class="content-area-container col-xs-12" style="margin:0px 0px -5px 0px;" id="searchId">
         	<div data-content-box-layer data-box-title="shippingDataVO.boxTitle" data-is-open="shippingDataVO.isOpen(val)">
                 <form class="search-type1" id="myForm">
                 	<table>
@@ -56,7 +56,7 @@
                             </td>         
                         </tr>
                         <tr>
-                            <th>구매자/수취인</th>
+                            <th>구매자/수취인 </th>
                             <td>                            	              	
                             	<input data-ng-model="shippingDataVO.buyerName.value"
                             			focus="shippingDataVO.buyerName.focus"
@@ -105,30 +105,36 @@
     </div>
 </div>
 
-<!-- 주문 취소 팝업 -->
-<script id="shipping_popup_template" type="text/x-kendo-template">
+<!-- 주문 조회 그리드 툴바 템플릿 -->
+<script id="shipping_toolbar_template" type="text/x-kendo-template">
+	<a class="k-button k-button-icontext k-grid-shpping edit"><span class="k-icon k-i-check"></span>배송정보 수정</a>
+	<a class="k-button k-button-icontext k-grid-shpping request"><span class="k-icon k-i-undo"></span>판매자 직접반품 신청</a>	
+</script>
+
+<!-- 배송정보 수정 팝업 헤더 및 공통 컬럼 -->
+<script id="shipping_popup_common_template" type="text/x-kendo-template">
 <div class="not_pop_title">
-	<h4>배송정보 수정</h4>
+	<h4 ng-bind="shippingDataVO.inputPopupHeaderTitle"></h4>
 </div>
 <table class="table signal" data-uid="#= uid #">
 	<colgroup>
-      <col style="width: 14%;">
-      <col style="width: 30%;">
-      <col style="width: 14%;">
-      <col style="width: 30%;">
+      <col style="width: 16%;">
+      <col style="width: 28%;">
+      <col style="width: 16%;">
+      <col style="width: 28%;">
     </colgroup>
     <tbody>	
 	<tr class="border-bottom-line border-top-line">	
-		<td class="active border-right-line">
-			마켓
+		<td class="active border-right-line ta-l">
+			&emsp;마켓
 		</td>
 		<td class="border-right-line">
 			#if(NM_MRK){ #
 			#: NM_MRK #
 			#}#
 		</td>
-		<td class="active border-right-line">
-			상품주문번호
+		<td class="active border-right-line ta-l">
+			&emsp;상품주문번호
 		</td>
 		<td>
 			#if(NO_MRKITEMORD){ #
@@ -137,8 +143,8 @@
 		</td>
 	</tr>
 	<tr class="border-bottom-line">
-		<td class="active border-right-line">
-			상품코드
+		<td class="active border-right-line ta-l">
+			&emsp;상품코드
 		</td>
 		<td colspan="3">
 			#if(NO_MRKITEM){ #
@@ -147,8 +153,8 @@
 		</td>
 	</tr>
 	<tr class="border-bottom-line">
-		<td class="active border-right-line">
-			상품명
+		<td class="active border-right-line ta-l">
+			&emsp;상품명
 		</td>
 		<td colspan="3">
 			#if(NM_MRKITEM){ #
@@ -157,99 +163,537 @@
 		</td>
 	</tr>
 	<tr class="border-bottom-line">
-		<td class="active border-right-line">
-			구매자
+		<td class="active border-right-line ta-l">
+			&emsp;구매자
 		</td>
 		<td class="border-right-line">
 			#if(NM_PCHR){ #
 			#: NM_PCHR #
 			#}#	
 		</td>
-		<td class="active border-right-line">
-			배송방법
+		<td class="active border-right-line ta-l">
+			&emsp;배송방법 / <br/>
+			&emsp;배송비상태
 		</td>
 		<td>
-			#if(DC_SHPWAY){ #
-			#: DC_SHPWAY #
-			#}#			
+			#if(DC_SHPWAY || DC_SHPCOSTSTAT){ #
+				#if(DC_SHPWAY){#
+				#:DC_SHPWAY # 
+				#}# /
+				#if(DC_SHPCOSTSTAT){# 
+				#:DC_SHPCOSTSTAT#
+				#}#
+			#}#
 		</td>
 	</tr>
 	<tr class="border-bottom-line">
-		<td class="active border-right-line">
-			구매수량
-		</td>
-		<td class="ta-r">
-			#if(QT_ORD){ #
-			#: QT_ORD #
-			#}#
+		#if(Type === '001' || (Type === '002' && NO_MNGMRK !== 'SYMM170901_00001' && NO_MNGMRK !== 'SYMM170101_00005')) {#
+			#var createCommonTemp = kendo.template($("\#shipping_none_tkbk_qty_template").html());#
+        	#=createCommonTemp(data)#
+		#}else if (Type === '002'){#
+			#var createCommonTemp = kendo.template($("\#shipping_tkbk_qty_template").html());#
+        	#=createCommonTemp(data)#
+		#} #
+	</tr>
 
-		<td class="active border-right-line">
-		</td>
-		<td>
-		</td>
-	</tr>	
+	#if(Type === '001') {#
+        #var createTemp = kendo.template($("\#shipping_popup_edit_template").html());#
+        #=createTemp(data)#
+    #}else if (Type === '002') {#
+		#if(NO_MNGMRK === 'SYMM170101_00001' || NO_MNGMRK === 'SYMM170101_00003') {#
+			#var createTemp = kendo.template($("\#shipping_popup_rtn_ga_template").html());#	
+		#}else if (NO_MNGMRK === 'SYMM170101_00002') {#
+			#var createTemp = kendo.template($("\#shipping_popup_rtn_s_template").html());#	
+       	#}else if (NO_MNGMRK === 'SYMM170901_00001') {#
+			#var createTemp = kendo.template($("\#shipping_popup_rtn_c_template").html());#	
+       	#}else if (NO_MNGMRK === 'SYMM170101_00005') {#
+			#var createTemp = kendo.template($("\#shipping_popup_rtn_e_template").html());#	
+       	#}#
+        #=createTemp(data)#
+    #}#
+
+	</tbody>
+</table>
+</script>
+
+<!-- 판매자 반품 반품 수량 없이 -->
+<script id="shipping_none_tkbk_qty_template" type="text/x-kendo-template">
+	<td class="active border-right-line ta-l">
+		&emsp;구매수량
+	</td>
+	<td class="ta-r" colspan="3">
+		#if(QT_ORD){ #
+		#: QT_ORD #
+		#}#
+	</td>
+</script>
+
+<!-- 판매자 반품 반품 수량  -->
+<script id="shipping_tkbk_qty_template" type="text/x-kendo-template">
+	<td class="active border-right-line ta-l">
+		&emsp;구매수량
+	</td>
+	<td class="ta-r border-right-line">
+		#if(QT_ORD){ #
+		#: QT_ORD #
+		#}#
+	</td>
+	<td class="active border-right-line ta-l">
+		&emsp;반품완료 건수
+	</td>
+	<td class="ta-r">	
+		#if(QT_TKBK_OUT){ #
+		#: QT_TKBK_OUT #
+		#}else{#
+			0
+		#}#
+	</td>
+</script>
+
+<!-- 배송정보 수정  팝업 -->
+<script id="shipping_popup_edit_template" type="text/x-kendo-template">
 	<tr class="border-bottom-line">
-		<td class="active border-right-line">
+		<td class="active border-right-line ta-l">
 			<code>*</code>택배사
 		</td>
-		<td>
-			<select kendo-drop-down-list
-				k-options="shippingDataVO.parsCodeOptions"
+		<td colspan="2">
+			<select 
 				name="CD_PARS_INPUT"
 				data-bind="value: CD_PARS_INPUT"
                 style="width: 100%">
 			</select>	
 		</td>
-		<td colspan="2">
+		<td>
 		</td> 
 	</tr>
 	<tr class="border-bottom-line">
-		<td class="active border-right-line">
+		<td class="active border-right-line ta-l">
 			<code>*</code>송장번호
 		</td>
-		<td colspan="3" class="ta-l" 
+		<td colspan="2" class="ta-l" 
 			 menual-shw-wrn="shippingDataVO.menualShwWrn">
           <input 
-			 type="text" 
-             name="NO_INVO" 
+			 type="text"
+             name="NO_INVO"
              data-bind="value: NO_INVO"
-			 autocomplete="off" 
+			 autocomplete="off"
              class="k-textbox"
-             style="width: 50%;" />
+             style="width: 100%;" />
         </td> 
+		<td>
+		</td> 
 	</tr>
-	</tbody>
-</table>
 </script>
 
-<!-- 주문 조회 그리드 툴바 템플릿 -->
-<script id="shipping_toolbar_template" type="text/x-kendo-template">
-	<a class="k-button k-button-icontext k-grid-edit"><span class="k-icon k-i-check"></span>배송정보 수정</a>
+<!-- 지마켓 옥션 판매자 직접반품 신청 팝업 -->
+<script id="shipping_popup_rtn_ga_template" type="text/x-kendo-template">
+	<tr class="border-bottom-line">
+		<td class="active border-right-line ta-l">
+			<code>*</code>반품사유코드
+		</td>
+		<td colspan="2">			
+		    <select kendo-drop-down-list
+					k-data-source="shippingDataVO.tkbkhrnkrsnDsGau"
+					k-options="shippingDataVO.tkbkhrnkrsnOp"
+					name="CD_TKBKHRNKRSN"					
+					data-bind="value: CD_TKBKHRNKRSN"
+					style="width: 100%">
+			</select>
+		</td> 
+		<td>
+		</td>
+	</tr>
+
+	<tr class="border-bottom-line">
+		<td class="active border-right-line ta-l">
+			<code>*</code>상품상태
+		</td>
+		<td colspan="2">			
+		    <select kendo-drop-down-list 					
+					k-options="shippingDataVO.tkbkGoodsStatusOp"
+					name="CD_TKBKGOODSSTATUS"					
+					data-bind="value: CD_TKBKGOODSSTATUS"
+					style="width: 100%">
+			</select>
+		</td> 
+		<td>
+		</td>
+	</tr>
+
+	<tr class="border-bottom-line">
+		<td class="active border-right-line ta-l">			
+			<code>*</code>고객상품<br/>
+			&emsp;발송여부
+		</td>
+		<td>
+			<ul id="receive-group">
+				<li style="float:left; margin-right: 5px;">
+              		<input type="radio" name="RECEIVE_SET" id="receive-y" class="k-radio" required data-bind="checked: RECEIVE_SET" data-type="string" value="003">
+              		<label class="k-radio-label" for="receive-y">예 </label>
+				</li>
+          		<li style="float:left">
+              		<input type="radio" name="RECEIVE_SET" id="receive-n" class="k-radio" required data-bind="checked: RECEIVE_SET" data-type="string" value="001">
+             		<label class="k-radio-label" for="receive-n">아니오</label>
+				</li>
+			</ul>	
+		</td>
+		<td colspan="2">
+		</td>
+	</tr>
+
+	<tr class="border-bottom-line">
+		<td class="active border-right-line ta-l">
+			<code>*</code>반품 택배사명<br/>
+		</td>
+		<td colspan="2">
+			<select  
+				name="CD_PARS_GA"
+				data-bind="value: CD_PARS_INPUT"
+             	style="width: 100%">
+			</select>
+		</td>
+		<td>
+		</td>
+	</tr>
+
+	<tr class="border-bottom-line" data-ng-show="dataItem.RECEIVE_SET === '003'">
+		<td class="active border-right-line ta-l">
+			&emsp;반품 운송장번호
+		</td>
+		<td colspan="3" menual-shw-wrn="shippingDataVO.menualShwWrn" menual-shw-wrn-no-ord="{{dataItem.NO_ORD}}">			
+			<input class="k-textbox" name="NO_INVO_GA" data-bind="value: NO_INVO_INPUT"
+				data-ng-trim="true"
+				placeholder="송장번호는  숫자 또는 숫자와 '-'(특수문자) 조합으로만 가능합니다."
+				autocomplete="off"
+			    style="width:100%;"/>
+		</td>
+	</tr>
+
+	<tr class="border-bottom-line" data-ng-show="dataItem.RECEIVE_SET === '001'">
+		<td class="active border-right-line ta-l">
+			&emsp;반품 발송인<br/>
+			&emsp;(구매자/<br/>
+			&emsp;반품수거지)
+		</td>
+		<td colspan="3">			
+			<textarea class="k-textbox k-state-disabled" name="DC_CONSNEWADDR" 
+									data-bind="value: DC_CONSNEWADDR" ng-disabled="true" 
+									style="width:100%; height:100px; overflow-y: scroll;"></textarea>
+		</td>
+	</tr>
 </script>
 
-<style>
-.k-edit-form-container{
-    width: 600px;
-}
-.k-popup-edit-form .k-edit-label{
-    width: 20%;
-    text-align: left;
-}
-.k-popup-edit-form .k-edit-field{
-    width: 70%;
-}
-.k-popup-edit-form .k-edit-field > .k-textbox,
-.k-popup-edit-form .k-edit-field > .k-widget:not(.k-tooltip){
-    width: 98%;
-}
-.div-rows{
-	border-bottom: solid 1px #bbdceb;	
-}
-.not_pop_title{
-	padding: 10px;
-}
-.signal{    
-    width: 99%;
-    margin: 5px;
-}
-</style>
+<!-- 스토어팜 판매자 직접반품 신청 팝업 -->
+<script id="shipping_popup_rtn_s_template" type="text/x-kendo-template">
+	<tr class="border-bottom-line">
+		<td class="active border-right-line ta-l">
+			<code>*</code>반품사유코드
+		</td>
+		<td colspan="2">			
+		    <select kendo-drop-down-list
+					k-data-source="shippingDataVO.tkbkhrnkrsnDsStr"
+					k-options="shippingDataVO.tkbkhrnkrsnOp"
+					name="CD_TKBKHRNKRSN"					
+					data-bind="value: CD_TKBKHRNKRSN"
+					style="width: 100%">
+			</select>
+		</td> 
+		<td>
+		</td>
+	</tr>
+
+	<tr class="border-bottom-line">
+		<td class="active border-right-line ta-l">
+			<code>*</code>반품상세사유
+		</td>		
+		<td colspan="3">			
+			<textarea class="k-textbox" name="DC_TKBKRSNCTT" data-bind="value: DC_TKBKRSNCTT" 
+					placeholder="반품상세사유를 200자 이내로 입력하세요." style="width:100%; height:100px; overflow-y: scroll;"></textarea>
+		</td> 
+	</tr>
+
+	<tr class="border-bottom-line">
+		<td class="active border-right-line ta-l">
+			<code>*</code>반품수거방법
+		</td>
+		<td colspan="2">			
+		    <select kendo-drop-down-list style="width: 100%">
+				<option>수거요청안함</option>
+			</select>
+		</td> 
+		<td>
+		</td>
+	</tr>
+
+	<tr class="border-bottom-line">
+		<td class="active border-right-line ta-l">
+			<code>*</code>반품 택배사
+		</td>
+		<td colspan="2">
+			<select  
+				name="CD_PARS_STORE"
+				data-bind="value: CD_PARS_INPUT"
+             	style="width: 100%">
+			</select>
+		</td>
+		<td>
+		</td> 
+	</tr>
+	<tr class="border-bottom-line">
+		<td class="active border-right-line ta-l">
+			<code>*</code>반품 송장번호
+		</td>          
+		<td colspan="3" menual-shw-wrn="shippingDataVO.menualShwWrn" menual-shw-wrn-no-ord="{{dataItem.NO_ORD}}">			
+			<input class="k-textbox" name="NO_INVO_STORE" data-bind="value: NO_INVO_INPUT"
+				data-ng-trim="true"
+				placeholder="송장번호는  숫자 또는 숫자와 '-'(특수문자) 조합으로만 가능합니다."
+				autocomplete="off"
+			    style="width:100%;"/>
+		</td>
+	</tr>
+</script>
+
+<!-- 11번가 판매자 직접반품 신청 팝업 -->
+<script id="shipping_popup_rtn_e_template" type="text/x-kendo-template">
+	<tr class="border-bottom-line">
+		<td class="active border-right-line ta-l">
+			<code>*</code>반품사유코드
+		</td>
+		<td colspan="3">				
+		    <select
+					name="CD_TKBKHRNKRSN"					
+					data-bind="value: CD_TKBKHRNKRSN"
+					style="width: 100%">
+			</select>
+		</td> 
+	</tr>
+
+	<tr class="border-bottom-line">
+		<td class="active border-right-line ta-l">
+			<code>*</code>반품상세사유
+		</td>		
+		<td colspan="3">			
+			<textarea class="k-textbox" name="DC_TKBKRSNCTT" data-bind="value: DC_TKBKRSNCTT" 
+					style="width:100%; height:100px; overflow-y: scroll;"></textarea>
+		</td> 
+	</tr>
+
+	<tr class="border-bottom-line">
+		<td class="active border-right-line ta-l">
+			&emsp;반품 택배사
+		</td>
+		<td>
+			<select  
+				name="CD_PARS_E"
+				data-bind="value: CD_PARS_INPUT"
+             	style="width: 100%">
+			</select>
+		</td>
+		<td class="active ta-l">			
+			<code>*</code>수량
+		</td>
+		<td>
+			<select
+					name="QT_TKBK"	
+					data-bind="value: QT_TKBK"		
+					style="width: 100%">
+			</select>
+		</td>	
+	</tr>
+
+	<tr class="border-bottom-line">
+		<td class="active border-right-line ta-l">
+			&emsp;반품 운송장번호
+		</td>    
+		<td colspan="3" menual-shw-wrn="shippingDataVO.menualShwWrn" menual-shw-wrn-no-ord="{{dataItem.NO_ORD}}">			
+			<input class="k-textbox" name="NO_INVO_E" data-bind="value: NO_INVO_INPUT"
+				data-ng-trim="true"
+				placeholder="송장번호는  숫자 또는 숫자와 '-'(특수문자) 조합으로만 가능합니다."
+				autocomplete="off"
+			    style="width:100%;"/>
+		</td>
+	</tr>
+
+	<tr class="border-bottom-line">
+		<td class="active border-right-line ta-l">
+			&emsp;반품 책임
+		</td>
+		<td>
+			{{ dataItem.tkbk_responsibility }}				
+		</td>
+		<td class="active border-right-line ta-l">
+			&emsp;반품 배송비 /<br/>
+			&emsp;추가배송비
+		</td>
+		<td>
+			<span>{{ dataItem.DC_SHPCOSTSTAT_TRANS }}</span>
+			<span ng-show="dataItem.DC_SHPCOSTSTAT_TRANS_ETC"> / {{ dataItem.DC_SHPCOSTSTAT_TRANS_ETC }}</span>
+		</td>
+	</tr>
+
+	<tr class="border-bottom-line" data-ng-show="dataItem.tkbk_responsibility === '구매자'">
+		<td class="active border-right-line ta-l">
+			<code>*</code>반품배송비<br/>&emsp;전달방법
+		</td>
+		<td colspan="3">
+			<select kendo-drop-down-list 
+				k-options="shippingDataVO.tkbkPayRtnMethod"
+				name="transform_pay_reason"
+				data-bind="value: transform_pay_reason"	
+              	style="width: 100%">
+			</select>
+		</td>
+	</tr>
+
+	<tr class="border-bottom-line">
+		<td class="active border-right-line ta-l">
+			&emsp;환불동시<br/>
+			&emsp;진행여부
+		</td>
+		<td class="ta-l" colspan="3">	
+			<input name="NOW_YN" type="checkbox" id="eq2" class="k-checkbox" data-bind="checked: NOW_YN" value="Y"/>
+         	<label class='k-checkbox-label k-no-text' for="eq2"></label>
+		</td>
+	</tr>
+	<!-- <tr>
+		<td class="ta-l" colspan="4">
+			<mark>발송정보를 입력하지 않고 반품신청하시면, 재입력이 불가하오니 주의하시기 바랍니다.</mark>
+		</td>
+	</tr>	 -->
+</script>
+
+<!-- 쿠팡 판매자 직접반품 신청 팝업 -->
+<script id="shipping_popup_rtn_c_template" type="text/x-kendo-template">
+	<tr class="border-bottom-line">
+		<td class="active border-right-line ta-l">
+			<code>*</code>상위<br/>&emsp;반품사유코드
+		</td>
+		<td colspan="2">			
+		    <select  								
+					name="CD_TKBKHRNKRSN"					
+					data-bind="value: CD_TKBKHRNKRSN" 
+					style="width: 120%">
+			</select>
+		</td> 
+		<td>
+		</td>
+	</tr>
+
+	<tr class="border-bottom-line">
+		<td class="active border-right-line ta-l">
+			<code>*</code>하위<br/>&emsp;반품사유코드
+		</td>
+		<td colspan="2">			
+		    <select 					
+					name="CD_TKBKLRKRSN"					
+					data-bind="value: CD_TKBKLRKRSN"	
+					style="width: 120%">
+			</select>
+		</td> 
+		<td>
+		</td>
+	</tr>
+
+	<tr class="border-bottom-line">
+		<td class="active border-right-line ta-l">
+			<code>*</code>반품상세사유
+		</td>		
+		<td colspan="3">			
+			<textarea class="k-textbox" name="DC_TKBKRSNCTT" data-bind="value: DC_TKBKRSNCTT" 
+					placeholder="반품상세사유를 200자 이내로 입력하세요." style="width:100%; height:100px; overflow-y: scroll;"></textarea>
+		</td> 
+	</tr>
+
+	<tr class="border-bottom-line">
+		<td class="active border-right-line ta-l">			
+			<code>*</code>배송비<br/>
+			&emsp;부담주채
+		</td>
+		<td>
+			<ul id="sfee-group">
+				<li style="float:left; margin-right: 5px;">
+              		<input type="radio" name="SFEE_RADIO_SELECTED" id="sfee-c" class="k-radio" required data-bind="checked: SFEE_RADIO_SELECTED" data-type="string" value="001">
+              		<label class="k-radio-label" for="sfee-c">고객</label>
+				</li>
+          		<li style="float:left">
+              		<input type="radio" name="SFEE_RADIO_SELECTED" id="sfee-v" class="k-radio" required data-bind="checked: SFEE_RADIO_SELECTED" data-type="string" value="002">
+             		<label class="k-radio-label" for="sfee-v">업체</label>
+				</li>
+			</ul>
+		</td>
+		<td colspan="2">
+		</td>
+	</tr>
+
+	<tr class="border-bottom-line">
+		<td class="active border-right-line ta-l">			
+			<code>*</code>회수 여부
+		</td>
+		<td>
+			<ul id="receive-group">
+				<li style="float:left; margin-right: 5px;">
+              		<input type="radio" name="RECEIVE_SET" id="receive-y" class="k-radio" required data-bind="checked: RECEIVE_SET" data-type="string" value="Y">
+              		<label class="k-radio-label" for="receive-y">회수 요청 </label>
+				</li>
+          		<li style="float:left">
+              		<input type="radio" name="RECEIVE_SET" id="receive-n" class="k-radio" required data-bind="checked: RECEIVE_SET" data-type="string" value="N">
+             		<label class="k-radio-label" for="receive-n">이미 반품</label>
+				</li>
+			</ul>	
+		</td>
+		<td class="active ta-l">
+			<code>*</code>수량
+		</td>
+		<td>
+			<select 	
+					name="QT_TKBK"	
+					data-bind="value: QT_TKBK"		
+					style="width: 100%">
+			</select>
+		</td>
+	</tr>
+
+	<tr class="border-bottom-line" data-ng-show="dataItem.RECEIVE_SET === 'N'">
+		<td class="active border-right-line ta-l">
+			&emsp;반품 택배사명
+		</td>
+		<td>
+			<select 
+				name="CD_PARS_COU"
+				k-options="shippingDataVO.cdparsOp"
+				data-bind="value: CD_PARS_INPUT"
+             	style="width: 100%">
+			</select>
+		</td>
+		<td colspan="2">
+		</td>
+	</tr>
+
+	<tr class="border-bottom-line" data-ng-show="dataItem.RECEIVE_SET === 'N'">
+		<td class="active border-right-line ta-l">
+			&emsp;반품 운송장번호
+		</td>
+		<td colspan="3" menual-shw-wrn="shippingDataVO.menualShwWrn" menual-shw-wrn-no-ord="{{dataItem.NO_ORD}}">			
+			<input class="k-textbox" 
+				name="NO_INVO_COU" 
+				data-bind="value: NO_INVO_INPUT"
+				data-ng-trim="true"
+				placeholder="송장번호는  숫자 또는 숫자와 '-'(특수문자) 조합으로만 가능합니다."
+				autocomplete="off"
+			    style="width:100%;"/>
+		</td>
+	</tr>
+
+	<tr class="border-bottom-line">
+		<td class="active border-right-line ta-l">
+			&emsp;반품 발송인<br/>
+			&emsp;(구매자/반품<br/>
+			&emsp;수거지)
+		</td>
+		<td colspan="3">
+			<textarea class="k-textbox k-state-disabled" name="DC_CONSNEWADDR" 
+									data-bind="value: DC_CONSNEWADDR" ng-disabled="true"
+									style="width:100%; height:70px; overflow-y: scroll;"></textarea>
+		</td>
+	</tr>
+</script>

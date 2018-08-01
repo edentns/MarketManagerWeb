@@ -43,10 +43,11 @@
                     DT_SND         : { type: APP_SA_MODEL.DT_SND.type         , editable: false, nullable: false },                    
                     DC_PCHRREQCTT  : { type: APP_SA_MODEL.DC_PCHRREQCTT.type  , editable: false, nullable: false },
                     YN_DEL  	   : { type: APP_SA_MODEL.YN_DEL.type  		  , editable: false, nullable: false },
-                    AM_CJM		   : { type: APP_SA_MODEL.AM_CJM.type  		  , editable: false, nullable: false }
+                    AM_CJM		   : { type: APP_SA_MODEL.AM_CJM.type  		  , editable: false, nullable: false },
+                    NM_ORDSTAT	   : { type: APP_SA_MODEL.NM_ORDSTAT.type  	  , editable: false, nullable: false }
                 };
 
-                APP_SA_MODEL.CD_ORDSTAT.fNm  = "ordAllDataVO.ordStatusOp";
+                //APP_SA_MODEL.CD_ORDSTAT.fNm  = "ordAllDataVO.ordStatusOp";
                 
                 var grdCol = [[{field:"hierarchy"}],
                               [APP_SA_MODEL.NO_ORD       ,[APP_SA_MODEL.NO_APVL, APP_SA_MODEL.NO_MRKORD]],
@@ -58,7 +59,7 @@
                               [APP_SA_MODEL.NO_PCHRPHNE  , APP_SA_MODEL.NO_CONSHDPH   ],
                               [APP_SA_MODEL.DC_PCHREMI   , APP_SA_MODEL.DC_CONSNEWADDR],
                               [APP_SA_MODEL.DC_PCHRREQCTT, APP_SA_MODEL.DC_CONSOLDADDR],
-                              [APP_SA_MODEL.CD_ORDSTAT   , APP_SA_MODEL.DC_SHPWAY     ],
+                              [APP_SA_MODEL.NM_ORDSTAT   , APP_SA_MODEL.DC_SHPWAY     ],
                               [APP_SA_MODEL.DTS_ORDDTRM  , APP_SA_MODEL.DTS_ORD       ],
                               [APP_SA_MODEL.NM_PARS      , APP_SA_MODEL.NO_INVO       ],
                               [APP_SA_MODEL.DT_SND       , APP_SA_MODEL.QT_ORD        ]
@@ -83,7 +84,7 @@
 	            	datesetting : {
 	        			dateType   : 'market',
 						buttonList : ['current', '1Day', '1Week', '1Month'],
-						selected   : Util03saSvc.storedDatesettingLoad("ordAllDataVO"),
+						selected   : resData.selected,
 						period : {
 							start : angular.copy(today),
 							end   : angular.copy(today)
@@ -132,8 +133,9 @@
                         me.betweenDateOptionMo = result[2][0].CD_DEF; //처음 로딩 때 초기 인덱스를 위하여
                         
                         $timeout(function(){
-            				Util03saSvc.storedQuerySearchPlay(me, "ordAllDataVO", $scope.ordallkg);
-                        });    
+                        	ordAllDataVO.isOpen(false);
+            				Util03saSvc.storedQuerySearchPlay(me, resData.storage, $scope.ordallkg);
+                        });
                     });
                 };
 
@@ -152,7 +154,9 @@
     					    NM_MRK_SELCT_INDEX : me.ordMrkNameOp.allSelectNames,
     					    NM_ORDSTAT_SELCT_INDEX : me.ordStatusOp.allSelectNames,
     					    DTS_SELECTED : me.datesetting.selected,
-    					    CASH_PARAM : "ordAllDataVO"
+        					DTS_STORAGE_FROM: me.datesetting.period.start,
+        					DTS_STORAGE_TO: me.datesetting.period.end,
+    					    CASH_PARAM : resData.storageKey
                         };
     				if(Util03saSvc.readValidation(me.param)){
     					$scope.ordallkg.dataSource.data([]); // 페이지 인덱스 초기화가 제대로 안되서 일케함	
@@ -184,20 +188,16 @@
 	            };		
 
 	            ordAllDataVO.isOpen = function (val) {
-	            	if(val) {
-	            		$scope.ordallkg.wrapper.height(616);
-	            		$scope.ordallkg.resize();
-	            		if(ordAllDataVO.param !== "") {
-	            			grdOrdAllVO.dataSource.pageSize(9);
-	            		}
-	            	}
-	            	else {
-	            		$scope.ordallkg.wrapper.height(798);
-	            		$scope.ordallkg.resize();
-	            		if(ordAllDataVO.param !== "") {
-	            			grdOrdAllVO.dataSource.pageSize(12);
-	            		}
-	            	}
+	            	var searchIdHeight = $("#searchId").height();
+	            	var settingHeight = $(window).height() - searchIdHeight - 90;
+	            	var pageSizeValue = val? 9 : 12;
+	            	
+	            	$scope.ordallkg.wrapper.height(settingHeight);
+            		$scope.ordallkg.resize();
+            		
+            		if(ordAllDataVO.param !== "") {
+            			grdOrdAllVO.dataSource.pageSize(pageSizeValue);
+            		}
 	            };
 	            	            
 	            //detail Grid
