@@ -176,7 +176,8 @@
                     					CD_JOINYN: 			   {type: "string", editable: false, nullable: true},
                     				    CD_JOINITEM: 		   {type: "string", editable: false, nullable: true},
                     				    DTS_JOIN: 			   {type: "string", editable: false, nullable: true},
-                    				    DTS_JOINREQ: 		   {type: "string", editable: false, nullable: true}, 
+                    				    DTS_JOINREQ: 		   {type: "string", editable: false, nullable: true},
+                    				    DTS_LASTLOGIN: 		   {type: "string", editable: false, nullable: true}, 
                     				    CNT_CMRKREG:		   {type: "string", editable: false, nullable: true},
                     				    CNT_PARSREG: 		   {type: "string", editable: false, nullable: true} 
                     				}
@@ -276,6 +277,12 @@
              		        	   width: 120,
              		        	   headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
             		        	}, 
+        		        	    {
+              		        	   field: "DTS_LASTLOGIN",
+              		        	   title: "최근로그인일시",
+              		        	   width: 120,
+              		        	   headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
+             		        	}, 
         		        	    {
               		        	   field: "CNT_CMRKREG",
               		        	   title: "마켓등록건수",
