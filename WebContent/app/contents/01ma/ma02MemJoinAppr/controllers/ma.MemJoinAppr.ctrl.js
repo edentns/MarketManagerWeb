@@ -266,14 +266,14 @@
 	         		        	   headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
 	        		        	}, 
         		        	    {
-             		        	   field: "DTS_JOIN",
-             		        	   title: "가입일",
+             		        	   field: "DTS_JOINREQ",
+             		        	   title: "가입요청일시",
              		        	   width: 120,
              		        	   headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
             		        	}, 
         		        	    {
-             		        	   field: "DTS_JOINREQ",
-             		        	   title: "가입요청일시",
+             		        	   field: "DTS_JOIN",
+             		        	   title: "가입일",
              		        	   width: 120,
              		        	   headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
             		        	}, 
