@@ -49,6 +49,7 @@
 						$("#loginAvtmSlides").html(kendo.render(scrolltemplate, res.data));
 						
 						$('#loginAvtmSlides').slidesjs({
+							width: res.data[0].VAL_WIDTH,
 					        height: res.data[0].VAL_HEIGHT,
 					        navigation: false,
 					        pagination: false,
@@ -137,6 +138,14 @@
                     });
 				}
 				
+				
+				/**
+				 * 모바일 메뉴 버튼 클릭
+				 */
+				loginVO.openClk = function(){
+					angular.element('#menu,.page_cover,html').toggleClass('open');
+				}
+								
 				loginVO.initLoad();
 			}
 		]);

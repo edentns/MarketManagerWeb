@@ -3,45 +3,46 @@
 /* Noto */
 @import url(https://fonts.googleapis.com/earlyaccess/notosanskr.css);
 
-
 /* default */
-body{font-family:'Noto Sans KR', sans-serif; color:#171717; font-size:14px; font-weight:400; padding:0px; margin:0px; line-height:24px;}
+body{padding:0px; margin:0px; line-height:24px; background:#FFFFFF;}
+html{overflow-y:scroll; }
+html, body{width:100%; }
 
-html{overflow-y:scroll;}
-html, body{width:100%;}
+.wrap{font-family:'Noto Sans KR', sans-serif; color:#171717; font-size:14px; font-weight:400; background:#FFFFFF;}
 
-div, p, ul, li,ol, table, th, td, textarea, input, span, form, h1, h2, h3, h4, h5, h6, dt, dl, dd, em, sup {padding:0px; margin:0px; vertical-align:top; font-weight:400;}
-ul, ol, dl, dd, dt, li {list-style-type:none;}
-form, fieldset{margin:0; padding:0; border:0;}
-table, tbody, tfoot, thead, tr, th, td{border-collapse:collapse; border-spacing:0;} 
+.wrap div, .wrap p, .wrap ul, .wrap li,.wrap ol, .wrap table, .wrap th, 
+.wrap td, .wrap textarea, .wrap input, .wrap span, .wrap form, .wrap h1, 
+.wrap h2, .wrap h4, .wrap h5, .wrap h6, .wrap dt, .wrap dl, .wrap dd, 
+.wrap em, .wrap sup {padding:0px; margin:0px; vertical-align:top; font-weight:400;}
+.wrap ul, .wrap ol, .wrap dl, .wrap dd, .wrap dt, .wrap li {list-style-type:none;}
+.wrap form, .wrap fieldset{margin:0; padding:0; border:0;}
+.wrap table, .wrap tbody, .wrap tfoot, .wrap thead, .wrap tr, .wrap th, .wrap td{border-collapse:collapse; border-spacing:0;} 
 
 /*border:none; separate*/
 /* 6 */* html table, tbody, tfoot, thead, tr, th, td {border-collapse:collapse;}
 /* 7 */* + html table, tbody, tfoot, thead, tr, th, td {border-collapse:collapse;}
 
-legend{display:none; position:absolute; visibility:hidden}
-caption{visibility:hidden; width:0px; height:0px; overflow:hidden; font-size:0px; margin:0px; padding:0px; line-height:0px;}
-img {border:0; vertical-align:middle; outline:none}
-optgroup {font-style:normal; font-size:0px; height:0px; line-height:0px}
-input {vertical-align:middle;}
-select {vertical-align:middle;}
-textarea {font-size:14px; font-weight:400;}
-label {}
-img, fieldset {border:0 none transparent;/*'transparent' for Opera7*/}
-i, em {font-style:normal;}
-span{letter-spacing:normal}
+.wrap legend{display:none; position:absolute; visibility:hidden}
+.wrap caption{visibility:hidden; width:0px; height:0px; overflow:hidden; font-size:0px; margin:0px; padding:0px; line-height:0px;}
+.wrap img {border:0; vertical-align:middle; outline:none}
+.wrap optgroup {font-style:normal; font-size:0px; height:0px; line-height:0px}
+.wrap input {vertical-align:middle;}
+.wrap select {vertical-align:middle;}
+.wrap textarea {font-size:14px; font-weight:400;}
+.wrap label {}
+.wrap img, .wrap fieldset {border:0 none transparent;/*'transparent' for Opera7*/}
+.wrap i, .wrap em {font-style:normal;}
+.wrap span{letter-spacing:normal}
 
 /* html5 ie9 else */
-article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
-   display:block;
-   padding:0;
-   margin:0
+.wrap article, .wrap aside, .wrap details, .wrap figcaption, .wrap figure, .wrap footer, .wrap header, .wrap hgroup, .wrap menu, .wrap nav, .wrap section {
+   display:block;   padding:0;   margin:0
 }
-input[type="radio"]{border:none transparent}
-input[type="text"]{border:1px solid #ddd}
-input[type="password"]{border:1px solid #ddd}
+.wrap input[type="radio"]{border:none transparent; }
+.wrap input[type="text"]{border:1px solid #ddd; }
+.wrap input[type="password"]{border:1px solid #ddd; }
 
 /* a링크 */
-a {text-decoration:none; cursor:pointer;color:#000}
-a:link, a:visited {text-decoration:none;}
-a:hover, a:focus, a:active {text-decoration:none; color:#0066b3}
+.wrap a { text-decoration:none; cursor:pointer;color:#000 }
+.wrap a:link, .wrap a:visited { text-decoration:none; } 
+.wrap a:hover, .wrap a:focus, .wrap a:active { text-decoration:none; color:#0066b3 }

@@ -1,45 +1,63 @@
-<div id="loginAvtmSlides" style="text-align: center;">
-</div>
-<div data-ng-if="!webApp.isLogin" id="login-page" class="col-md-4 col-md-offset-4" data-ng-style="!loginVO.bAvtm && {'margin-top':'15%'}"> 
-	<div class="box">
-		<div class="box-content">
-			<form name="loginForm" style="padding: 10px;">
-				<div class="ta-c">
-					<h3 class="page-header" style="font-size:21px;"><img alt="" src="/assets/img/common/leftLogo.png"/>&nbsp | &nbsp로그인</h3>
-				</div>
-				<div class="form-group" style="height: auto; line-height: normal;">
-					<label class="control-label" style="padding:5px;"><code>*</code>가입자번호</label>
-					<input class="form-control" id="bsCdId" type="text" title="가입자번호입력" placeholder="가입자번호를 입력해주세요." data-ng-model="loginVO.info.bsCd" required>
-				</div>
-				<div class="form-group" style="height: auto; line-height: normal;">
-					<label class="control-label" style="padding:5px; width:90px;"><code>*</code>아이디</label>
-					<input class="form-control" type="text" title="ID입력" placeholder="ID를 입력해주세요." data-ng-model="loginVO.info.user" required>
-				</div>
-				<div class="form-group" style="height: auto; line-height: normal;">
-					<label class="control-label" style="padding:5px; width:90px;"><code>*</code>비밀번호</label>
-					<input class="form-control" id="passWord" type="password" title="PW입력" placeholder="PASSWORD를 입력해주세요." data-ng-model="loginVO.info.password" required>
-				</div>
-				<div class="ta-c">
-					<button type="submit" class="btn btn-primary" style="width:100px;"title="Sign in" data-ng-click="loginVO.doLogin()" data-ng-disabled="loginForm.$invalid">로그인</button>
-				</div>
-				<div class="form-group">
-					<div class="ta-c">
-						<input type="checkbox" id="registerId" title="로그인ID 저장" data-ng-model="loginVO.isRegisterId"> 아이디저장 | 
-						<a data-ng-click="loginVO.modalUserJoin()" style="cursor: pointer;">회원가입</a> | 
-						<a data-ng-click="loginVO.modalRePassword()" style="cursor: pointer;">비밀번호재설정</a>
-					</div>
+<div class="wrap" id="login_wrap">
+	<div class="header" style="position:relative;">
+		<ul class="menu_list">
+			<li><a href="index.html"><img src="/mi/assets/img/main-page/logo-1.jpg"/></a></li>
+			<li>
+				<ul class="menu">
+					<li><a href="index.html#info">소개</a></li>
+					<li><a href="index.html#char">특징</a></li>
+					<li><a href="index.html#function">주요기능</a></li>
+					<li><a href="/mi/assets/download/MembershipJoin(V1.0).pdf" target="_blank">회원가입메뉴얼</a></li>
+				</ul>
+			</li>
+		</ul>
+		<div class="btn" data-ng-click="loginVO.openClk()"><img src="/mi/assets/img/main-page/menu_btn.png"  border="0" alt=""/></div>
+		<div class="clearfix"></div>
+	</div>
+	<div class="login">
+		<div class="login_left">
+			<form name="loginForm" id="loginForm">
+				<h3>로그인</h3>
+				<div class="clearfix"></div>
+				<ul class="input">
+					<li><input type="text" id="bsCdId" title="가입자번호입력" placeholder="가입자번호" data-ng-model="loginVO.info.bsCd" required /></li>
+					<li><input type="text" title="ID입력" placeholder="아이디" data-ng-model="loginVO.info.user" required /></li>
+					<li><input type="password" id="passWord" title="PW입력" placeholder="비밀번호" data-ng-model="loginVO.info.password" required/></li>
+				</ul>
+				<button type="submit" class="login_buttom" style="width:100px;"title="로그인" data-ng-click="loginVO.doLogin()" data-ng-disabled="loginForm.$invalid">로그인</button>
+				<div class="clearfix"></div>
+				<div class="login_bottom">
+					<ul>
+						<li>
+							<label class="container1">
+								아이디 저장
+								<input type="checkbox" id="registerId" title="아이디 저장" data-ng-model="loginVO.isRegisterId" />
+								<span class="checkmark"></span>
+							</label>							
+						</li>
+						<li><a data-ng-click="loginVO.modalUserJoin()" >회원가입</a> | <a data-ng-click="loginVO.modalRePassword()">비밀번호재설정</a></li>
+					</ul>
 				</div>
 			</form>
-		</div>
+		</div>		
+		<div id="loginAvtmSlides" class="login_right"></div>			
+		<span>www.marketmanager.co.kr {{loginVO.version}}</span>	
 	</div>
-	<address id="login-address">
-		<p>서울특별시 영등포구 여의도동 국회대로 62길 14 한국스카우트연맹 4층</p>
-		<p><span>(주)이든티앤에스</span></p>
-		<p>www.marketmanager.co.kr <span>{{loginVO.version}}</span>&nbsp&nbsp&nbsp
-		<span style="display:inline-block;">
-			<a href="mailto:help@marketmanager.co.kr"><img title="문의메일" src="/assets/img/common/email.png"/></a>
-			<a href="/assets/download/MembershipJoin(V1.0).pdf" target="_blank"><img title="회원가입메뉴얼" src="/assets/img/common/download.png"/></a>
-		</span>
-		</p>
-	</address>
 </div>
+	
+<!-- 모바일 메뉴 -->
+<div id="menu" class="wrap">
+	<div class="mobile_close" ><img src="/mi/assets/img/main-page/menu_x.png" data-ng-click="loginVO.openClk()" width="100%"></div>
+	<ul class="menu_footer">
+	  	<li><a href="index.html#info">소개</a></li>
+		<li><a href="index.html#char">특징</a></li>
+		<li><a href="index.html#function">주요기능</a></li>
+		<li><a href="/mi/assets/download/MembershipJoin(V1.0).pdf" target="_blank">회원가입메뉴얼</a></li>
+	</ul>
+</div>
+<!-- 
+<style>
+body{
+	background:#FFFFFF;
+}	
+</style> -->
