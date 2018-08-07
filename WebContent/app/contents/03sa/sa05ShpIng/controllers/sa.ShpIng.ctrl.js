@@ -13,6 +13,7 @@
 		            today = edt.getToday(),
 		            menuId = MenuSvc.getNO_M($state.current.name);	            
 
+	            //컬럼 설정
             var grdField = {
 				ROW_CHK 				: {	type : APP_SA_MODEL.ROW_CHK.type,			editable : true,		nullable : false	},
 				Type					: {	type : "string",							editable : true,		nullable : false	},
@@ -122,7 +123,7 @@
 					nullable : false,
 					validation : {
 						dc_tkbkrsnctt_inputvalidation : function(input) {
-							if (input.is("[name='DC_TKBKRSNCTT']") && !input.val()) {
+							if (input.is("[name='DC_TKBKRSNCTT']") && !input.val().trim()) {
 								input.attr("data-dc_tkbkrsnctt_inputvalidation-msg","반품상세 사유를 입력해 주세요.");
 								return false;
 							}
@@ -158,15 +159,7 @@
 					nullable : false,
 					validation : {
 						sfee_setvalidation : function(input) {
-							if (input.is("[name=SFEE_RADIO_SELECTED]") && input.attr("required")) {
-								/*if ($("#sfee-group").find("[type=radio]").is(":checked")) {
-									Util03saSvc.manualTkbkDataBind($scope.shippingkg, input, "SFEE_RADIO_SELECTED");
-									return true;
-								} else {
-									input.attr("data-sfee_setvalidation-msg","버튼을 선택해 주세요.");
-									return false;
-								}*/
-								
+							if (input.is("[name=SFEE_RADIO_SELECTED]") && input.attr("required")) {	
 								if (!$("#sfee-group").find("[type=radio]").is(":checked")) {
 									input.attr("data-sfee_setvalidation-msg","버튼을 선택해 주세요.");
 									return false;
@@ -189,19 +182,6 @@
 								input.attr("data-cd_pars_inputvalidation-msg","택배사를 선택해 주세요.");
 								return false;
 							}
-							/*else if (input.is("[name='CD_PARS_COU']") && !input.val()) {
-								var getUid = input.parents("table").attr("data-uid"),
-		            		   	   	grid = $scope.shippingkg,
-		            		   	   	viewToRow = $("[data-uid='" + getUid + "']", grid.table),
-		            		   	   	dataItem = grid.dataItem(viewToRow);
-								
-								if(dataItem.RECEIVE_SET === 'Y'){
-									input.attr("data-cd_pars_inputvalidation-msg","택배사를 선택해 주세요.");
-									return false;
-								}else{
-									return true;
-								}
-							};*/
 							return true;
 						}
 					}
@@ -212,27 +192,6 @@
 					nullable : false,
 					validation : {
 						no_invo_inputvalidation : function(input) {
-							/*if (input.is("[name='NO_INVO_STORE']")) {
-								return Util03saSvc.NoINVOValidation(input,'NO_INVO_STORE','no_invo_inputvalidation',0);								
-							}
-							else if (input.is("[name='NO_INVO_E']")) {
-								return Util03saSvc.NoINVOValidation(input,'NO_INVO_E','no_invo_inputvalidation',0);								
-							}
-							else if (input.is("[name='NO_INVO_GA']")) {
-								return Util03saSvc.NoINVOValidation(input,'NO_INVO_GA','no_invo_inputvalidation',0);								
-							}
-							else if (input.is("[name='NO_INVO_COU']")) {
-								*var getUid = input.parents("table").attr("data-uid"),
-		            		   	   	grid = $scope.shippingkg,
-		            		   	   	viewToRow = $("[data-uid='" + getUid + "']", grid.table),
-		            		   	   	dataItem = grid.dataItem(viewToRow);
-								if(dataItem.RECEIVE_SET === 'Y'){
-									return Util03saSvc.NoINVOValidation(input,'NO_INVO_COU','no_invo_inputvalidation');
-								}else{
-									return true;
-								}
-								return Util03saSvc.NoINVOValidation(input,'NO_INVO_COU','no_invo_inputvalidation',0);
-							}*/
 							if(input.is("[name='NO_INVO_STORE']") || input.is("[name='NO_INVO_E']") || input.is("[name='NO_INVO_GA']") || input.is("[name='NO_INVO_COU']")){
 								var getUid = input.parents("table").attr("data-uid"),
 		            		   	   	grid = $scope.shippingkg,
@@ -288,6 +247,7 @@
  				}
 			};
 
+            //그리드에서 코드값으로 나오는 컬럼을들을 한글로 변환할때 쓰는 데이터 
             APP_SA_MODEL.CD_ORDSTAT.fNm = "shippingDataVO.ordStatusOp";
             APP_SA_MODEL.CD_SHPSTAT.fNm = "shippingDataVO.shipStatusOp";
                 
@@ -314,7 +274,8 @@
             grdDetOption       = UtilSvc.gridDetOption(grdCheckOption, grdCol);
             grdRowTemplate     = grdRowTemplate    + grdDetOption.gridContentTemplate;
             grdAltRowTemplate  = grdAltRowTemplate + grdDetOption.gridContentTemplate;
-	            
+	        
+            //이 페이지에서  사용할 변수들 초기화 시킴
 	        var shippingDataVO = $scope.shippingDataVO = {
         		boxTitle : "배송중",
             	setting : {
@@ -362,8 +323,6 @@
         			 dataTextField:"NM_DEF"
                     ,dataValueField:"CD_DEF"
                     ,optionLabel : "반품사유코드를 선택해 주세요. "
-                    /*,enable: false
-                    ,valuePrimitive: true*/
         		},
         		cdparsOp : {
         			 dataTextField:"NM_PARS_TEXT"
@@ -381,7 +340,8 @@
                 	}
         		}
             };
-	            
+	          
+	        //초기화 데이터 바인딩
 	        shippingDataVO.initLoad = function () {
             	var me = this;
             	var ordParam = {
@@ -513,6 +473,7 @@
             $scope.onOrdGrdCkboxClick = function(e){
             	saShpIngSvc.grdChkBoxClk(e, $scope.shippingkg);
             };
+            
             //반응형 그리드
             shippingDataVO.isOpen = function (val) {
             	Util03saSvc.isOpen($scope.shippingkg, shippingDataVO, grdShippngVO, val);
@@ -586,7 +547,6 @@
             				var vo = shippingDataVO;
             				saShpIngSvc.grdUpdate(e.data.models).then(function(res){
      							alert(res.msg);
-            					//Util03saSvc.storedQuerySearchPlay(vo, resData.storage);
      							shippingDataVO.inQuiry();
             				}, function(err){
             					if(err.msg === "not equal"){
@@ -624,8 +584,11 @@
         	};
 	            
 	        UtilSvc.gridtooltipOptions.filter = "td div";
-	        grdShippngVO.tooltipOptions = UtilSvc.gridtooltipOptions;		        
-	            
+	        grdShippngVO.tooltipOptions = UtilSvc.gridtooltipOptions;
+	        
+	        //그리드 에딧에 들어가전에 실행되는 위젯
+            //에딧이 실행된 후 팝업이 열린다.   
+	        //버튼 이벤트
 	        $scope.$on("kendoWidgetCreated", function(event, widget){
 	        	var grd = $scope.shippingkg;
 	        	
@@ -646,7 +609,7 @@
 	            			grd.options.editable.window.width = px;		            			
 	            			grd.editRow(chked.closest("tr"));	         	
 	            		};
-					
+	            		//팝업을 입맛에 맞게 연다.
 	    				if($(this).hasClass("edit") && saShpIngSvc.widgetValidation(1, dataItem)){
 	    					widgetPopupOpen("605px", "001");
 	                    }
@@ -657,6 +620,7 @@
 	            }
 	        });  
 	            
+	        //초기화 실행
 	        shippingDataVO.initLoad();
         }]);    
 }());

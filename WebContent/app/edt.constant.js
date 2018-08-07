@@ -43,7 +43,7 @@
         update  : {confirm: '수정하시겠습니까?', success: '수정되었습니다.', error: '수정에 실패하였습니다.'},
         delete  : {confirm: '삭제하시겠습니까?', success: '삭제되었습니다.', error: '삭제에 실패하였습니다.'},
         save    : {confirm: '저장하시겠습니까?', success: '저장되었습니다.', error: '저장에 실패하였습니다.'},
-        cancel  : '취소하시겠습니까?',
+        cancel  : {confirm: '취소하시겠습니까?', success: '취소되었습니다.', error: '취소에 실패하였습니다.'},
         valid	: {
             name  : {space: '이름을 입력해주세요.',	 pattern: '한글과 영어, 공백 조합만 가능합니다.'},
             dept  : {space: '부서를 입력해주세요.',	 pattern: '한글과 영어, 숫자, 공백 조합만 가능합니다.'},

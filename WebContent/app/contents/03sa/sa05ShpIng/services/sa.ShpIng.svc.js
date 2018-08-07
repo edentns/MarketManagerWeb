@@ -80,7 +80,7 @@
         			return true;
 		        },
 				
-				// 택배사 불러오기
+				//택배사 불러오기
 		        shpList : function (throwData){
 		        	throwData.shpList.$promise.then(function (data) {
 		        		var txtFld = throwData.txtFld;
@@ -165,7 +165,7 @@
 	        		   return (ele.YN_USE === 'Y' && ele.YN_DEL === 'N' && ele.DC_RMK1 === 'SYMM170101_00005') ;
 			 	   });
 	           },
-	           
+	           //반품수량 설정
 	           qtySelector : function(qty, ele, model){
 	        	   var qtyList  = [],
 	        	   	   qtyObj = {},
@@ -194,6 +194,7 @@
 		               			}
 	                		},0);
 					   },
+					   //11번가 반품비 계산 로직
 					   change : function(e){
 	                    	var leng = this.dataSource._data.length,
 	                    		selected = this.selectedIndex; 
@@ -236,6 +237,7 @@
 				   });				
 	           },
 	           
+	           //라디오박스는 툴팀 오류나서 커스텀으로 만들어줌
 	           tkbkPayRtnMethodSelector : function(me){
 	        	   $timeout(function(){
 	        		   if(me.selectedIndex > 0){
@@ -251,6 +253,7 @@
            		   },0);
 	           },
 	           
+	           //팝업 열렷을때 효과
 	           grdEdit : function(model, vo, ele, kg){
 	        	   var mrk = model.NO_MNGMRK,
 	        	   	   noMrk = model.NO_MRK,
@@ -278,7 +281,7 @@
         					this.shpList(shippingList);
 							break;                    				
 						}
-						case 'SYMM170101_00002' : {//s
+						case 'SYMM170101_00002' : {//스토어팜일때
 							//Util03saSvc.ddlSelectedIndex(ele, "CD_TKBKHRNKRSN");
 							
 							shippingList.shpList = Util03saSvc.shppingList().query({shippingType:"002", mrkType:model.NO_MRK});
@@ -293,7 +296,7 @@
         					this.shpList(shippingList);
 							break;
 						}
-						case 'SYMM170901_00001' : {//c
+						case 'SYMM170901_00001' : {//쿠팡잁때
 							var qtyMrk = (model.QT_ORD - model.QT_TKBK_OUT),
 								lowDdl = '';
 														
@@ -343,7 +346,7 @@
 							//Util03saSvc.ddlSelectedIndex(ele, "CD_TKBKHRNKRSN");							
 							break;
 						}
-						case 'SYMM170101_00005' : {//e
+						case 'SYMM170101_00005' : {//11번가 일때
 							var qtyMrk = (model.QT_ORD - model.QT_TKBK_OUT),
 								me = this;
 							
@@ -383,10 +386,8 @@
 			         	        		model.AM_TKBKSHP = 0;
 			                    	}
 			                    }
-		            		});
-														
-							//Util03saSvc.ddlSelectedIndex(ele, "CD_TKBKHRNKRSN");
-							
+		            		});														
+							//Util03saSvc.ddlSelectedIndex(ele, "CD_TKBKHRNKRSN");							
 							shippingList.shpList = Util03saSvc.shppingList().query({shippingType:"002", mrkType:model.NO_MRK});
         					shippingList.mrks = model.NO_MRK;
         					shippingList.selector = ele;
@@ -402,7 +403,7 @@
 						default : {
 							alert('error!');
 							break;
-						}        						
+						}
 	        	   }
 	         },
 	         
@@ -410,17 +411,21 @@
 				var rtnMsg = {
 							msg : "",
 							val : ""
-						};
-
+						};				
+				var param = models.filter(function(ele){
+						if(ele.ROW_CHK === true && (["004","005"].indexOf(ele.CD_ORDSTAT)> -1)){
+							ele.NO_INVO_INPUT = ele.NO_INVO_INPUT ? ele.NO_INVO_INPUT.trim() : null;
+							ele.NO_INVO = ele.NO_INVO ? ele.NO_INVO.trim() : null;
+							ele.DC_TKBKRSNCTT = ele.DC_TKBKRSNCTT ? ele.DC_TKBKRSNCTT.trim() : null;
+							return ele;
+						}
+					});				
+    	 		var defer = $q.defer();	
+    	 		
 	        	 switch(models[0].Type){
 	        	 	// 배송정보 수정
 	        	 	case '001' : {
-	        	 		var defer = $q.defer();	
 	        	 		if(confirm("배송정보를 수정 하시겠습니까?")){
-	     					var param = models.filter(function(ele){
-	     						return (ele.ROW_CHK === true && (["004","005"].indexOf(ele.CD_ORDSTAT) > -1));
-	     					}); 
-	     					
 	     					if(param.length !== 1){
 	     						rtnMsg.msg = "배송정보를 수정할 수 있는 주문상태가 아닙니다.";
      							defer.reject(rtnMsg);
@@ -459,17 +464,12 @@
 	     				else{
 	     					defer.reject("cancel row");
 	 	            	}
-	        	 		return defer.promise;	
+	        	 		return defer.promise;
 	        	 	}
 		        	//판매자 직접반품 신청
 	        	 	case '002' : {
-	        	 		var defer = $q.defer();	
-	        	 		if(confirm("판매자 직접 반품을 신청 하시겠습니까?")){
-	     					var param = models.filter(function(ele){
-	     						return (ele.ROW_CHK === true && (["004","005"].indexOf(ele.CD_ORDSTAT)> -1));
-	     					});
-	     					
-	     					if(param.length !== 1){
+	        	 		if(confirm("판매자 직접 반품을 신청 하시겠습니까?")){  
+	        	 			if(param.length !== 1){
      							rtnMsg.msg = "판매자 직접 반품을 신청 할수 있는 주문상태가 아닙니다.";
      							defer.reject(rtnMsg);
 	     					}

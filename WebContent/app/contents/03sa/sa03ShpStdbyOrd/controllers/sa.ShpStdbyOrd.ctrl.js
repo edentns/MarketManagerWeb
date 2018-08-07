@@ -53,6 +53,7 @@
 	        		chkOrdStatList : ""
 	            };
 	            
+	            //초기값 설정
 	            shpbyordDataVO.initLoad = function(){
 	            	var me = this;
                 	var ordParam = {
@@ -69,24 +70,24 @@
         					lcdcls: "SA_000015",
 	    					customnoc: "00000"
                 		},
-                		externalParam = "app/contents/03sa/sa02Ord/templates/sa.OrdCclPop.tpl.html";
+                		externalParam = "app/contents/03sa/sa02Ord/templates/sa.OrdCclPop.tpl.html";	//주문취소 팝업 다른곳에서 가져옴
                     $q.all([
-	            			UtilSvc.csMrkList().then(function (res) {
-	            				return res.data;
-	            			}),	
-	            			UtilSvc.getCommonCodeList(ordParam).then(function (res) {
-	            				return res.data;
-	            			}),
-	            			UtilSvc.getCommonCodeList(betParam).then(function (res) {
-	            				return res.data;
-	            			}),
-	            			//취소 사유 코드 드랍 박스 실행	
-	            			UtilSvc.getCommonCodeList(cclCodeParam).then(function (res) {
-	            				return res.data;
-	            			}),
-	    	            	Util03saSvc.externalKmodalPopup(externalParam).then(function (res) {
-	    	            		return res.data;
-	    	            	})
+            			UtilSvc.csMrkList().then(function (res) {
+            				return res.data;
+            			}),	
+            			UtilSvc.getCommonCodeList(ordParam).then(function (res) {
+            				return res.data;
+            			}),
+            			UtilSvc.getCommonCodeList(betParam).then(function (res) {
+            				return res.data;
+            			}),
+            			//취소 사유 코드 드랍 박스 실행	
+            			UtilSvc.getCommonCodeList(cclCodeParam).then(function (res) {
+            				return res.data;
+            			}),
+    	            	Util03saSvc.externalKmodalPopup(externalParam).then(function (res) {
+    	            		return res.data;
+    	            	})
                     ]).then(function (result) {
                         me.ordMrkNameOp = result[0];
                         me.ordStatusOp = result[1];
@@ -101,7 +102,7 @@
                         
                         $timeout(function(){
             				Util03saSvc.storedQuerySearchPlay(me, resData.storage);
-                        },0);    
+                        },0);
                     });
                 };
 	            
@@ -151,16 +152,14 @@
                 	me.dataTotal = 0;
                 	me.resetAtGrd = $scope.shpbyordkg;
                 	me.resetAtGrd.dataSource.data([]);
-	            };	               
-	            
-	            shpbyordDataVO.isOpen = function (val) {
-	            	var searchIdHeight = $("#searchId").height();
-	            	var settingHeight = $(window).height() - searchIdHeight - 90;
-	            	
-	            	$scope.shpbyordkg.wrapper.height(settingHeight);
-            		$scope.shpbyordkg.resize();
 	            };
 	            
+	            //반응형 그리드	            
+	            shpbyordDataVO.isOpen = function (val) {
+            		Util03saSvc.isOpen($scope.shpbyordkg, shpbyordDataVO, grdShpbyordVO, val);
+	            };
+	            
+	            //팝업창을 켜도 초기확 되지 않게 설정함
 	            shpbyordDataVO.flagFnc = function(){
 	            	if(shpbyordDataVO.flag){
                     	var grid = $("#divShpbyordGrd").data("kendoGrid"),
@@ -201,7 +200,7 @@
 	         		$state.go("app.saOrd", { kind: null, menu: null, rootMenu : "saShpStdbyOrd", noOrd : getData.NO_ORD, noMrkord: getData.NO_MRKORD });
 	            });
 	            	            	            
-		        //검색 그리드
+		        //검색 그리드 옵션들
 	            var grdShpbyordVO = $scope.grdShpbyordVO = {
 	            	ordCancel: function() {
 	            		var grd = $scope.shpbyordkg,
@@ -229,7 +228,7 @@
 	            	    grid.setOptions(op1);   // 데이터 셋 옵션하면 그리드안에 데이터들이 없어져서 담아놧다가 다시 할당해줌
 	            	    $scope.shpbyordkg.dataSource.data(data);
 	            		/*var selected = grid.dataItem(grid.select()).NO_MRK;*/
-	                    if(chkedLeng === 1){	                    	
+	                    if(chkedLeng === 1){
 	                    	var gridItem = grid.dataItem(chked.closest('tr'));
 	                    	
 	                    	shpbyordDataVO.flag = true;
@@ -244,9 +243,11 @@
 		            		});   
 	                    	
 	                		grd.editRow(chked.closest('tr'));
-	                	}else if(chkedLeng > 1){
+	                	}
+	                    else if(chkedLeng > 1){
 	                		alert("취소할 주문을 1개만 선택해 주세요!");
-	                	}else if(chkedLeng < 1){
+	                	}
+	                    else if(chkedLeng < 1){
 	                		alert("취소할 주문을 선택해 주세요!");
                 	}},
                 	deliveryInfo : function() {
@@ -265,7 +266,7 @@
                 		grd.saveChanges();
 					},
             		autoBind: false,
-                    messages: {                        	
+                    messages: {
                         requestFailed: "주문정보를 가져오는 중 오류가 발생하였습니다.",
                         commands: {
                             update: "저장",
@@ -274,7 +275,7 @@
                         ,noRecords: "검색된 데이터가 없습니다."
                     },
                 	boxTitle : "주문 목록",
-                    noRecords: true,                   
+                    noRecords: true,
                     collapse: function(e) {
                         this.cancelRow();
                     },
@@ -284,7 +285,8 @@
                     		    tx = e.container.find("[name=DC_CCLRSNCTT]"),
             					lfData = "",
             					cdcclrsnData = "";
-                		              		
+                		              	
+                		//하위취소사유코드 셋팅
                     	if(lf.length > 0){
                 			lf.kendoDropDownList({
                 				dataSource : [],
@@ -296,7 +298,7 @@
                 			lfData = lf.data("kendoDropDownList");
                 			lfData.value(0);
                 		};
-                		 
+                		 //취소사유코드 DDL 셋팅
                 		if(cdcclrsn.length > 0){                        	
                     		cdcclrsn.kendoDropDownList({
     	            			dataSource : shpbyordDataVO.cancelCodeSel,
@@ -319,20 +321,18 @@
                     		cdcclrsnData.value(0);
                 		}; 
                 		
-                		if(tx.length){
-                			tx.val("");
-                		};
+                		if(tx.length){	tx.val(""); };
                 	},
             		cancel: function(e){
             			e.preventDefault();	
             			shpbyordDataVO.flagFnc();
-            		},
+            		},            		
             		excelVO: {
             			gridTitle:["배송대기자료","택배사코드"],
             			gridInfo:[],
             			procedureParam:"USP_SA_03SHPSTDBYORD01_GET&NO_MRK@s|NM_MRKITEM@s|CD_ORDSTAT@s|NO_MRKORD@s|NM_PCHR@s|DTS_CHK@s|DTS_FROM@s|DTS_TO@s"
             		}, 
-            		exportExcel: function(e){
+            		exportExcel: function(e){	//엑셀 추출
             			var grid = $("#divShpbyordGrd").data("kendoGrid");
             			if( !grid.dataSource._total || grid.dataSource._total == 0){
             				alert("그리드에 데이터가 없습니다.");
@@ -375,10 +375,13 @@
         						var defer = $q.defer(),
         						 	code = shpbyordDataVO.updateChange;
                 				
-                				if(code === "002"){                						
+                				if(code === "002"){    //배송정보 등록            						
                 					if(confirm("배송정보를 등록 하시겠습니까?\n송장번호 체크로 인하여 처리시간이 다소 소요 될수 있습니다.")){
                 						var param = e.data.models.filter(function(ele){
-        	                		 	    	return ele.ROW_CHK === true;
+	                							if(ele.ROW_CHK === true){
+		                			 	    		ele.NO_INVO = ele.NO_INVO.trim();	                			 	    		
+		                			 	    		return ele;
+		                			 	    	}
         	                		 	    }),
         	                		 	    itfRst = param.filter(function(ele){
         	                		 	    	return ele.ITF_RST !== '1' && ele.ITF_RST !== 1;
@@ -405,12 +408,12 @@
                     						    endTime = new Date(),
                     						    crTime = (endTime - startTime)/1000;
                     						
-                							$log.info("경과시간 = "+crTime+"초");
-                        					
+                							//$log.info("경과시간 = "+crTime+"초");
+                							
                     						alert("총 "+allV.length+"건 중 "+trueV.length+"건 배송정보등록 완료");
                     						//Util03saSvc.storedQuerySearchPlay(shpbyordDataVO, resData.storage);
                     						shpbyordDataVO.inQuiry();
-                    		                shpbyordDataVO.menualShwWrn = falseV;
+                    		                shpbyordDataVO.menualShwWrn = falseV;// 디렉티브를 쓰기 위해서 모델에 값 삽입
                 						                    						
                     		                defer.resolve();
     		                			}, function(err){
@@ -435,12 +438,15 @@
             							defer.resolve(); 
             							return defer.promise;
             						};
-                				}else if(code === "003"){
+                				}else if(code === "003"){	//주문 취소
 	                				if(confirm("주문취소를 하시겠습니까?")){
 	                					var param = e.data.models;
 	                					
 	                			 	    param = e.data.models.filter(function(ele){
-	                			 	    	return ele.ROW_CHK === true;
+	                			 	    	if(ele.ROW_CHK === true){
+	                			 	    		ele.DC_CCLRSNCTT = ele.DC_CCLRSNCTT.trim();	                			 	    		
+	                			 	    		return ele;
+	                			 	    	}
 	                			 	    });     
 	                					
 	                					saOrdSvc.orderCancel(param[0]).then(function (res) {
@@ -472,55 +478,54 @@
                 				}
                 			}
                 		},
-                		saveChanges: function(e) {
+                		//saveChanges: function(e) {
                 			//console.log("1");
-                		},
+                		//},
                 		change: function(e){
                 			if(e.field === "CD_PARS" || e.field === "NO_INVO"){
                 				return false;	
                 			};		
                 			var data = this.data();
-                			shpbyordDataVO.dataTotal = data.length;
-                			
+                			shpbyordDataVO.dataTotal = data.length;                			
                 			angular.element($("#grd_chk_master")).prop("checked",false);
                 		},
                 		batch: true,
                 		schema: {
                 			model: {
                     			id: "NO_ORD",
-                				fields: {						                    
-                					ROW_CHK: 		   { type: "boolean", editable:false, nullable:false },
-								    NO_ORD:	   	   	   { type: "string", editable:false, nullable:false },                    					
-								    NO_APVL:		   { type: "string", editable:false, nullable:false },
-                			        NM_MRK: 	   	   { type: "string", editable:false, nullable:false },
-						    	    NO_MRKORD: 	   	   { type: "string", editable:false, nullable:false },
-						    	    NO_MRK: 	   	   { type: "string", editable:false, nullable:false },						    	    				   
-						    	    NO_MRKITEM: 	   { type: "string", editable:false, nullable:false },
-	    	    				   	NO_MRKREGITEM: 	   { type: "string", editable:false, nullable:false },                    									   
-								    NM_MRKITEM:	   	   { type: "string", editable:false, nullable:false },
-								    NM_MRKOPT:	   	   { type: "string", editable:false, nullable:false },
-				   					AM_ORDSALEPRC: 	   { type: "number", editable:false, nullable:false },
-                					AM_CJM: 	       { type: "number", editable:false, nullable:false },
-                					AM_PCHSPRC: 	   { type: "number", editable:false, nullable:false },
-                					NM_PCHR: 	       { type: "string", editable:false, nullable:false },
-                					NM_CONS: 		   { type: "string", editable:false, nullable:false },
-                					NO_PCHRPHNE: 	   { type: "string", editable:false, nullable:false },	
-                				    NO_CONSHDPH: 	   { type: "string", editable:false, nullable:false },
-                				    DC_PCHREMI: 	   { type: "string", editable:false, nullable:false },	
-                				    NO_CONSPOST:	   { type: "string", editable:false, nullable:false },				   
-                				    DC_CONSNEWADDR:    { type: "string", editable:false, nullable:false },	
-                				    DC_PCHRREQCTT: 	   { type: "string", editable:false, nullable:false },	
-                				    DC_CONSOLDADDR:    { type: "string", editable:false, nullable:false },	
-                				    CD_ORDSTAT: 	   { type: "string", editable:false, nullable:false },
-                				    NM_ORDSTAT: 	   { type: "string", editable:false, nullable:false },	
-                				    DC_SHPWAY: 	   	   { type: "string", editable:false, nullable:false },	
-                				    QT_ORD:			   { type: "number", editable:false, nullable:false },
-                				    DTS_APVL: 	   	   { type: "string", editable:false, nullable:false },	
-                				    DTS_ORD: 	   	   { type: "string", editable:false, nullable:false },
-                				    YN_CONN: 	   	   { type: "string", editable:false, nullable:false },	
-                				    DTS_ORDDTRM: 	   { type: "string", editable:false, nullable:false },      
-							    	NO_MRKITEMORD: 	   { type: "string", editable:false, nullable:false },   
-				                    ITF_RST:		   { type: APP_SA_MODEL.ITF_RST.type        , editable: false, nullable: false },	
+                				fields: {
+                					ROW_CHK: 		   { type: "boolean", 					editable:false, nullable:false },
+								    NO_ORD:	   	   	   { type: "string", 					editable:false, nullable:false },                    					
+								    NO_APVL:		   { type: "string", 					editable:false, nullable:false },
+                			        NM_MRK: 	   	   { type: "string", 					editable:false, nullable:false },
+						    	    NO_MRKORD: 	   	   { type: "string", 					editable:false, nullable:false },
+						    	    NO_MRK: 	   	   { type: "string", 					editable:false, nullable:false },						    	    				   
+						    	    NO_MRKITEM: 	   { type: "string", 					editable:false, nullable:false },
+	    	    				   	NO_MRKREGITEM: 	   { type: "string", 					editable:false, nullable:false },                    									   
+								    NM_MRKITEM:	   	   { type: "string", 					editable:false, nullable:false },
+								    NM_MRKOPT:	   	   { type: "string", 					editable:false, nullable:false },
+				   					AM_ORDSALEPRC: 	   { type: "number", 					editable:false, nullable:false },
+                					AM_CJM: 	       { type: "number", 					editable:false, nullable:false },
+                					AM_PCHSPRC: 	   { type: "number", 					editable:false, nullable:false },
+                					NM_PCHR: 	       { type: "string", 					editable:false, nullable:false },
+                					NM_CONS: 		   { type: "string", 					editable:false, nullable:false },
+                					NO_PCHRPHNE: 	   { type: "string", 					editable:false, nullable:false },	
+                				    NO_CONSHDPH: 	   { type: "string", 					editable:false, nullable:false },
+                				    DC_PCHREMI: 	   { type: "string", 					editable:false, nullable:false },	
+                				    NO_CONSPOST:	   { type: "string", 					editable:false, nullable:false },				   
+                				    DC_CONSNEWADDR:    { type: "string", 					editable:false, nullable:false },	
+                				    DC_PCHRREQCTT: 	   { type: "string", 					editable:false, nullable:false },	
+                				    DC_CONSOLDADDR:    { type: "string", 					editable:false, nullable:false },	
+                				    CD_ORDSTAT: 	   { type: "string", 					editable:false, nullable:false },
+                				    NM_ORDSTAT: 	   { type: "string", 					editable:false, nullable:false },	
+                				    DC_SHPWAY: 	   	   { type: "string", 					editable:false, nullable:false },	
+                				    QT_ORD:			   { type: "number", 					editable:false, nullable:false },
+                				    DTS_APVL: 	   	   { type: "string", 					editable:false, nullable:false },	
+                				    DTS_ORD: 	   	   { type: "string",					editable:false, nullable:false },
+                				    YN_CONN: 	   	   { type: "string", 					editable:false, nullable:false },	
+                				    DTS_ORDDTRM: 	   { type: "string", 					editable:false, nullable:false },      
+							    	NO_MRKITEMORD: 	   { type: "string", 					editable:false,	nullable:false },   
+				                    ITF_RST:		   { type: APP_SA_MODEL.ITF_RST.type, 	editable:false, nullable:false },	
                 				    CD_PARS: 	   	   {
 					                				    	type: "array",
 															editable: true,
@@ -580,7 +585,7 @@
 					                						nullable: false,
 									                    	validation: {
 									                            dc_cclrsncttvalidation: function (input) {
-									                                if (input.is("[name='DC_CCLRSNCTT']") && !input.val()) {
+									                                if (input.is("[name='DC_CCLRSNCTT']") && !input.val().trim()) {
 									                                    input.attr("data-dc_cclrsncttvalidation-msg", "주문취소사유를 입력해 주세요.");
 									                                    return false;
 									                                }
@@ -670,11 +675,11 @@
 		                            		noMrk = options.model.NO_MRK;
 		                            	
 		                            	db = saShpStdbyOrdSvc.filteringShpbox(noMrk, shpbyordDataVO);
-		                            	
+		                            	//택배사를 등록하지 않았으면 택배사가 등록되지 않았다고  라벨을 넣어줌
 		                            	if(!db.length){
 		                            		db = [{NM_PARS_TEXT : "택배사 등록", CD_PARS : ""}];
 		                            	}
-		                            	
+		                            	//택배사 input 박스 생성 
 		                            	$('<input name="' + options.field + '" data-bind="value: CD_PARS"/>').appendTo(container).kendoDropDownList({
 		                                    dataTextField: "NM_PARS_TEXT",
 		                                    dataValueField: "CD_PARS",
@@ -688,11 +693,11 @@
 		                                });		                            	
 		                            	$('<span class="k-invalid-msg" data-for="CD_PARS"></span>').appendTo(container);
 		                            },
-		                            template: function(e){		                            	
-		                            	var nmd = e.CD_PARS,		                            	
+		                            template: function(e){
+		                            	var nmd = e.CD_PARS,
 		                            	  	dbbox = "",
 		                            	  	input = "";
-		                            			                            	
+		                            	//택배사 이름 보여주기
 	                            		if(nmd){
 	                            			if(!nmd.hasOwnProperty("CD_PARS")){
 	                            				input = e.NO_MRK;
@@ -833,7 +838,7 @@
 		                            	return input === '1' ? 'Y' : 'N';		                            	
 		                            }
 		                        }
-                    ]
+		                ]
 	        	};
 
 	            shpbyordDataVO.initLoad();

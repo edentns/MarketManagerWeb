@@ -128,8 +128,8 @@
 							dataItem = gridPop.dataItem($("[data-uid='" + input.closest("tr").parents("table").attr("data-uid") + "']", gridPop.table));
 					            			
             			if((['170104','170102',"170103"].indexOf(mrkCode)>-1 && dataItem.RECEIVE_SET === 'Y' && curCode === "004") ||
-	            		    (["170103"].indexOf(mrkCode)>-1 && curCode === "003") ||     
-	            		    (['170106'].indexOf(mrkCode)>-1 && curCode === "004")){            				
+	            		    (["170103"].indexOf(mrkCode)>-1 && curCode === "003") ||   
+	            		    (['170106'].indexOf(mrkCode)>-1 && curCode === "004")){           				
 	                			if(input.is("[name='CD_PARS']") && !input.val()){
 	                				input.attr("data-cd_parsvalidation-msg", "택배사를 입력해 주세요.");
 	                                return false;

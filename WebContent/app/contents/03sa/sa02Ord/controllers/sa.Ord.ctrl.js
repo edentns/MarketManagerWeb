@@ -55,7 +55,7 @@
 		                    				  nullable: false,
 						                      validation: {
 						                            cd_cclrsnvalidation: function (input) {
-						                            	if (input.is("[name='CD_CCLRSN']") && input.val() === "") {
+						                            	if (input.is("[name='CD_CCLRSN']") && !input.val().trim()) {
 						                                    input.attr("data-cd_cclrsnvalidation-msg", "취소 사유코드를 입력해 주세요.");
 						                                    return false;
 						                                };
@@ -69,7 +69,7 @@
 		                    				  nullable: false,
 						                      validation: {
 						                    	  cd_ccllrkrsnvalidation: function (input) {
-						                            	if (input.is("[name='CD_CCLLRKRSN']") && input.val() === "") {
+						                            	if (input.is("[name='CD_CCLLRKRSN']") && !input.val().trim()) {
 						                                    input.attr("data-cd_ccllrkrsnvalidation-msg", "하위 취소 사유코드를 입력해 주세요.");
 						                                    return false;
 						                                };
@@ -83,7 +83,7 @@
 		                    				  nullable: false,
 						                      validation: {
 						                            dc_cclrsncttvalidation: function (input) {
-						                            	if (input.is("[name='DC_CCLRSNCTT']") && !input.val()) {
+						                            	if (input.is("[name='DC_CCLRSNCTT']") && !input.val().trim()) {
 						                            		input.attr("data-dc_cclrsncttvalidation-msg", "주문취소사유를 입력해 주세요.");
 							                                return false;
 						                                }

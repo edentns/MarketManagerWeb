@@ -80,7 +80,7 @@
 	            		var endTime = new Date(),
 					    	crTime = ((endTime - startTime)/1000);
 	            		
-	            		$log.info("경과시간 = "+crTime+"초");
+	            		//$log.info("경과시간 = "+crTime+"초");
 	            		$scope.shpbyordekg.dataSource.success(resData.data.failList);
 	    				alert("요청하신 총 "+resData.data.totalCnt+"건 중 "+resData.data.successCnt+"건 등록완료");
 	                },function(err){
@@ -230,8 +230,8 @@
 			                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}		                                       		
 	                            },		                        
                                	{
-                                    field: "NO_MRKORD",
-                                    title: "주문번호",
+                                    field: "NO_MRKITEMORD",
+                                    title: "상품주문번호",
                                     width: 100,
 			                        headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
                                 },                   
@@ -325,10 +325,9 @@
 		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
 		                        }, 
 		                        {
-		                        	field: "CD_ORDSTAT",
+		                        	field: "NM_ORDSTAT",
 		                            title: "주문상태",
 		                            width: 100,
-		                            template: "<co04-cd-to-nm cd='#:CD_ORDSTAT#' nm-box='shpbyordDataVO.ordStatusOp'>",
 		                            headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
 		                        },
                                	{

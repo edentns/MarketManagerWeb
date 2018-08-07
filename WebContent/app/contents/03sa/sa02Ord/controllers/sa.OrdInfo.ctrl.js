@@ -11,20 +11,8 @@
             function ($stateParams, $window, $scope, $state, $http, $q, $log, saOrdSvc, APP_CODE, APP_MSG, $timeout, resData, Page, UtilSvc, MenuSvc, ShpStdbyOrdSvc, Util03saSvc) {
 	            //var page  = $scope.page = new Page({ auth: resData.access }),
 		        //    today = edt.getToday();
-        	        		
-	            //주문상태 드랍 박스 실행	
-	            var orderStatus = (function(){
-					var param = {
-						lnomngcdhd: "SYCH00048",
-						lcdcls: "SA_000007"
-					};
-	    			UtilSvc.getCommonCodeList(param).then(function (res) {
-	    				if(res.data){
-	    					ordInfoDataVO.ordStatusOp = res.data;
-	    				}
-	    			});
-            	}());
 	            
+	            //취소사유 마켓에 맞게 드랍다운리스트로 정렬해줌
 	            var ordInfoDdlChgEvt = function(e){
 	            	var cdDef = this.dataItem().CD_DEF,
     					dcRmk1 = this.dataItem().DC_RMK1,
@@ -116,35 +104,33 @@
 	        		resChk : true 
 		        };
 	            	            	            
+	            //초기화시 취소사유코드 설정
 	            ordInfoDataVO.getInitializeOrdInfoProc = function(){
 	            	var	self = this, 
-	            		param = {
-	            			NO_ORD: this.noOrd
-    					};
+	            		param = { NO_ORD: this.noOrd },
+    					cclRsnParam = {
+	    					lnomngcdhd: "SYCH00056",
+	    					lcdcls: "SA_000015",
+	    					customnoc: "00000"
+    	    			};
+	            	
 	            	saOrdSvc.orderInfo(param).then(function (res) {
         				if(res.data.NO_ORD){
         					self.ds = res.data;
         					self.noMrk = self.ds.NO_MRK;
+        					cclRsnParam.mid = self.ds.NO_MNGMRK;
         	            	//취소 사유 코드 드랍 박스 실행	
-        	            	var cancelReasonCode = (function(){
-        	    				var param = {
-        	    					lnomngcdhd: "SYCH00056",
-        	    					lcdcls: "SA_000015",
-        	    					customnoc: "00000",
-        	    					mid: self.ds.NO_MNGMRK
-        	    				};
-        	        			UtilSvc.getCommonCodeList(param).then(function (res) {
-        	        				if(res.data){
-        	        					self.cancelCodeOptions.dataSource = res.data.filter(function(ele){
-        	        						return (!ele.DC_RMK2);
-        	        					});
-        	        					self.cancelCodeSubOptionsArray = res.data.filter(function(ele){
-        	        						return (ele.DC_RMK2);
-        	        					});
-        	        				}
-        	        			});
-        		            }());
-        	            	
+    	        			UtilSvc.getCommonCodeList(cclRsnParam).then(function (res) {
+    	        				if(res.data){
+    	        					self.cancelCodeOptions.dataSource = res.data.filter(function(ele){
+    	        						return (!ele.DC_RMK2);
+    	        					});
+    	        					self.cancelCodeSubOptionsArray = res.data.filter(function(ele){
+    	        						return (ele.DC_RMK2);
+    	        					});
+    	        				}
+    	        			});
+        	        			
         	            	$timeout(function(){
         						var selectDDL = angular.element("#CD_PARS").data("kendoDropDownList");
         						
@@ -158,45 +144,7 @@
         				}
         			});	
 	            };
-	            
-	            //배송정보 등록	
-	            ordInfoDataVO.shpInfoReg = function(){
-	            	var me = this;
-	            	if(!me.valid('003')){
-	            		return false;
-	            	};	            	            	
-	            	if(confirm("배송정보를 등록 하시겠습니까?")){
-	            		var defer = $q.defer(),
-	            			param = [$.extend({ROW_CHK: true}, me.ds)];
-	            		
-	            		alert(APP_MSG.invcChkMsg);
-	            		ordInfoDataVO.resChk = true;
-	            		ShpStdbyOrdSvc.shpInReg(param).then(function (res) {
-	            			var rtnV = res.data,
-	            				allV = rtnV.allNoOrd,
-							    trueV = rtnV.trueNoOrd,
-							    falseV = rtnV.falseNoOrd;
-	            			
-	            			if(trueV.length > 0){
-		            			alert("배송정보등록이 완료 되었습니다.");
-	            				me.getInitializeOrdInfoProc();
-	            				defer.resolve();		            
-	            				//location.reload();            		
-	            			}else if(falseV.length > 0){
-	            				ordInfoDataVO.resChk = false;    
-	            				angular.element("input[name=NO_INVO]").blur();
-	            				defer.resolve();            		
-	            			}else if(!allV){
-	            				alert("배송정보등록이 실패하였습니다.");
-	            				defer.reject();
-	            			}
-            			}, function(err){
-            				defer.reject(err.data);
-    					});
-	        			return defer.promise;
-	            	}
-	            };
-	            
+	            	            
 	            //유효성 검사
 		        ordInfoDataVO.valid = function(stat){
 		        	var me = this;
@@ -219,16 +167,28 @@
 	            	return true;
 		        };
 	            
+		        //초기화 
 	            ordInfoDataVO.getInitializeOrdInfo = function(){
-	            	var me = this;
-	            	var menu = "";
-	            	
+	            	var me = this, 
+	            		menu = "",
+	            		param = {
+							lnomngcdhd: "SYCH00048",
+							lcdcls: "SA_000007"
+						};
+	            		            	
 	            	me.kind = $stateParams.kind;
 	            	me.noOrd = $stateParams.noOrd;
 	            	me.noMrkord = $stateParams.noMrkord;
 	            	//me.noMrk = $stateParams.noMrk;
 	            	me.rootMenu = $stateParams.rootMenu;
 	            	
+	            	//주문상태 드랍 박스 실행	
+	    			UtilSvc.getCommonCodeList(param).then(function (res) {
+	    				if(res.data){
+	    					ordInfoDataVO.ordStatusOp = res.data;
+	    				}
+	    			});
+	    			
 	            	menu = (me.rootMenu === "saOrd") ? "신규주문" : "베송준비";
 	            	
 	            	me.mBoxTitle = "주문·배송 / "+menu+" 상세";
@@ -240,13 +200,15 @@
 	            	};
 		        };		        
 		        
+		        //잘못된 주문정보로 들어왔을때 뒤로가기
 		        ordInfoDataVO.goBack = function(root) {
 		        	if(!root){
 		        		root = this.rootMenu;
 		        	};		        	
 		        	$state.go("app."+root, { kind: null, menu: true, noOrd : null, noMrkord: null});	 
 		        };
-		        		        		        		     
+		        		        		        	
+		        //팝업창 옵션 설정
 		        ordInfoDataVO.ordCancelPopOptions = {
 		        	actions: [ "Minimize", "Maximize", "Close"],
 	            	height : "500",
@@ -258,7 +220,7 @@
 	            	}
 		        };
 		        
-		        //pop up open
+		        //주문 취소시 팝업 오픈 
 		        ordInfoDataVO.ordCancelPopOptionsOpen = function(e){
 		        	var win = $scope.win;
 		        	
@@ -267,8 +229,8 @@
 	            	//ie에서는 택배사와 송장번호 유효성검사가 계속 떠서 아래와 같이 처리함
 	            	ordInfoDataVO.ordCancelPopOptionsOpenChk = true;
 	            };
-	            
-	            //pop up close
+
+	            //팝업창 닫고 변수들 초기화
 	            ordInfoDataVO.ordCancelPopOptionsClose = function(){
 		        	var win = $scope.win;
 		        			        	
@@ -287,33 +249,15 @@
 	            
 	            //주문취소
 	            ordInfoDataVO.doOrdCancel = function(){
-	            	var me = this;
-	            	if(!this.inputs.CD_CCLRSN){
-	            		//alert("주문취소코드를 선택해주세요.");
-	            		return false;
-	            	}
-	            	if(!this.inputs.CD_CCLLRKRSN.CD_DEF && this.inputs.CD_CCLLRKRSN.NM_DEF){
-	            		//alert("하위 주문취소코드를 선택해주세요.");
-	            		return false;
-	            	}
-	            	if(!this.inputs.DC_CCLRSNCTT || this.inputs.DC_CCLRSNCTT.length < 4 || this.inputs.DC_CCLRSNCTT.length > 1000){  
-	            		//alert("주문취소사유를 5자 이상 1000자 이하로 작성해 주세요.");
-	            	    return false;
-	            	}
-	            	if(confirm("현재 주문을 취소 하시겠습니까?")){
-	            		var defer = $q.defer(),
-        			 		param = $.extend(ordInfoDataVO.inputs, ordInfoDataVO.ds);
-	            		    				    
-        				saOrdSvc.orderCancel(param).then(function (res) {    
-                			ordInfoDataVO.ordCancelPopOptionsClose();
-                			//location.reload();
-                			me.getInitializeOrdInfoProc();
-            				defer.resolve();		   
-            			});
-            			return defer.promise;
-	            	};
+	            	var me = this;       	
+	            	saOrdSvc.orderInfoCancel($q.defer(), me).then(function (res){
+            			if(res){
+            				alert(res);
+            			};
+            		});
 	            };
 	            	            
+	            //주문확정
 	            ordInfoDataVO.doOrdConfirm = function(){
 	            	var me = this;
 	            	if(confirm("현재 주문을 확정 하시겠습니까?")){
@@ -325,9 +269,25 @@
 	    				saOrdSvc.orderConfirm(param).then(function (res) {
 	        				//location.reload();
 	    					$state.go("app.saOrd", { kind: null, menu: null, rootMenu : "saShpStdbyOrd", noOrd : param.data[0].NO_ORD, noMrkord: param.data[0].NO_MRKORD });	 
-            				defer.resolve();		   
+            				defer.resolve(APP_MSG.save.success);		   
 	        			});
-	        			return defer.promise;
+	    				alert(defer.promise);
+	            	};
+	            };
+
+	            //배송정보 등록	
+	            ordInfoDataVO.shpInfoReg = function(){
+	            	var me = this, rtnMsg = "";
+	            	
+	            	if(!me.valid('003')){
+	            		return false;
+	            	}
+	            	else if(confirm("배송정보를 등록 하시겠습니까?")){
+	            		saOrdSvc.orderInfoShipInfoReg($q.defer(), me).then(function (res){
+	            			if(res){
+	            				alert(res);
+	            			};
+	            		});
 	            	};
 	            };
 	            
@@ -374,19 +334,19 @@
                     	},
                     	required: function(input) {
                     		if (input.is("[name=NO_INVO]")) {                   	
-                    			return (ordInfoDataVO.ordCancelPopOptionsOpenChk) ? true : input.val();
+                    			return (ordInfoDataVO.ordCancelPopOptionsOpenChk) ? true : input.val().trim();
                     		};
                     		if (input.is("[name=CD_PARS]")) { 	
-                    			return (ordInfoDataVO.ordCancelPopOptionsOpenChk) ? true : input.val();
+                    			return (ordInfoDataVO.ordCancelPopOptionsOpenChk) ? true : input.val().trim();
                     		};
                     		if (input.is("[name=CD_CCLLRKRSN]")) {       	
-                    			return input.val();
+                    			return input.val().trim();
                     		};
                     		if (input.is("[name=CD_CCLRSN]")) {
-                    			return input.val();
+                    			return input.val().trim();
                     		};
                     		if (input.is("[name=DC_CCLRSNCTT]")) {
-                    			return input.val();
+                    			return input.val().trim();
                     		};
                     		return true;
                         },

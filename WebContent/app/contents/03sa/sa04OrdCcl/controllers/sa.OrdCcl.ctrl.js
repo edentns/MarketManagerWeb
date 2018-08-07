@@ -59,100 +59,100 @@
                     NM_ORDSTAT 	  : { type: APP_SA_MODEL.NM_ORDSTAT.type  	 , editable: false, nullable: false },
                     NM_CCLSTAT    : { type: APP_SA_MODEL.NM_CCLSTAT.type  	 , editable: false, nullable: false },
                     cancel_reject_code : {	
-				                    	type: "array"  
-				     				   ,editable: true
-				     				   ,nullable: false
-				     				   ,validation: {
-				     					  cancel_reject_codevalidation: function (input) {
-												if (input.is("[name='cancel_reject_code']") && input.val() === "") {
-													input.attr("data-cancel_reject_codevalidation-msg", "취소거부 구분을 입력해 주세요.");	
-													return false;
-												};
-												return true;
-											}
-										}
-                    				},
-                    DTS_RECER 	  : {
-				                    	type: "string"  
-				     				   ,editable: true
-				     				   ,nullable: false
-				     				   ,validation: {
-											dts_recervalidation: function (input) {
-												if (input.is("[data-role=datepicker]")) {
-													input.attr("data-dts_recervalidation-msg", "발송일을 정확히 입력해 주세요.");
-													saOrdCclSvc.manualDataBind(input, "DTS_RECER", $scope.ordCancelManagementkg);
-												    return input.data("kendoDatePicker").value();
-												};
-												return true;
-											}
-										}
-                    				},
-    				DC_CCLRJTCTT  : {
-				     					type: APP_SA_MODEL.DC_CCLRJTCTT.type  
-				     				   ,editable: true
-				     				   ,nullable: false
-				                       ,validation: {
-				                    	   dc_cclrjtcttvalidation: function (input) {
-										    	if (input.is("[name='DC_CCLRJTCTT']") && !input.val()) {
-				                                	input.attr("data-dc_cclrjtcttvalidation-msg", "취소거부사유를 입력해 주세요.");
-				                                    return false;
-				                                }
-										    	if(input.is("[name='DC_CCLRJTCTT']") && input.val().length > 1000){
-										    		input.attr("data-dc_cclrjtcttvalidation-msg", "취소거부사유룰 1000자 이내로 입력해 주세요.");
-				                                    return false;
-										    	}
-										    	if(input.is("[name='DC_CCLRJTCTT']") && input.val() != ""){										    		
-										    		saOrdCclSvc.manualDataBind(input, "DC_CCLRJTCTT", $scope.ordCancelManagementkg);
-										    	};
-				                            	return true;
-									    	}
-										}
-				     	            },	
-                    CD_PARS	      : {
-				                    	type: "array"  
-					     			   ,editable: true
-					     			   ,nullable: false
-					                   ,validation: {
-					                	   cd_parsvalidation: function (input) {
-										    	if (input.is("[name='CD_PARS']") && !input.val()) {
-				                                	input.attr("data-cd_parsvalidation-msg", "택배사를 입력해 주세요.");
-				                                    return false;
-				                                }
-										    	if(input.is("[name='CD_PARS']") && input.val()){										    		
-										    		saOrdCclSvc.manualDataBind(input, "CD_PARS", $scope.ordCancelManagementkg);
-										    	};
-				                            	return true;
-									    	}
-										}
-                    				},	
-                    NO_INVO:        {
-				                    	type: "string"
-						     		   ,editable: true
-						     		   ,nullable: false
-						               ,validation: {
-						            	   no_invovalidation: function (input) {
-						            		   if (input.is("[name='NO_INVO']") && !input.val()) {
-						            			   input.attr("data-no_invovalidation-msg", "송장번호를 입력해 주세요.");
-						            			   return false;
-				                               }
-						            		   if (input.is("[name='NO_INVO']") && input.val()) {
-						            			   var rslt = Util03saSvc.NoINVOValidation(input, 'NO_INVO', 'no_invovalidation');
-						            			   if(rslt){
-						            				   saOrdCclSvc.manualDataBind(input, "NO_INVO", $scope.ordCancelManagementkg);
-						            			   }							            			   
-						            			   return rslt; 
-				                               }
-						            		   return true;
-									    	}
-						               }
-                    				}
+						                     	type: "array"  
+						     				   ,editable: true
+						     				   ,nullable: false
+						     				   ,validation: {
+						     					  cancel_reject_codevalidation: function (input) {
+														if (input.is("[name='cancel_reject_code']") && !input.val()) {
+															input.attr("data-cancel_reject_codevalidation-msg", "취소거부 구분을 입력해 주세요.");	
+															return false;
+														};
+														return true;
+													}
+												}
+                    					  },
+                    DTS_RECER 	  		: {
+						                    	type: "string"  
+						     				   ,editable: true
+						     				   ,nullable: false
+						     				   ,validation: {
+													dts_recervalidation: function (input) {
+														if (input.is("[data-role=datepicker]")) {
+															input.attr("data-dts_recervalidation-msg", "발송일을 정확히 입력해 주세요.");
+															saOrdCclSvc.manualDataBind(input, "DTS_RECER", $scope.ordCancelManagementkg);
+														    return input.data("kendoDatePicker").value();
+														};
+														return true;
+													}
+												}
+                    					   },
+    				DC_CCLRJTCTT  : 	   {
+						     					type: APP_SA_MODEL.DC_CCLRJTCTT.type  
+						     				   ,editable: true
+						     				   ,nullable: false
+						                       ,validation: {
+						                    	   dc_cclrjtcttvalidation: function (input) {
+												    	if (input.is("[name='DC_CCLRJTCTT']") && !input.val().trim()) {
+						                                	input.attr("data-dc_cclrjtcttvalidation-msg", "취소거부사유를 입력해 주세요.");
+						                                    return false;
+						                                }
+												    	if(input.is("[name='DC_CCLRJTCTT']") && input.val().length > 1000){
+												    		input.attr("data-dc_cclrjtcttvalidation-msg", "취소거부사유룰 1000자 이내로 입력해 주세요.");
+						                                    return false;
+												    	}
+												    	if(input.is("[name='DC_CCLRJTCTT']") && input.val() != ""){										    		
+												    		saOrdCclSvc.manualDataBind(input, "DC_CCLRJTCTT", $scope.ordCancelManagementkg);
+												    	};
+						                            	return true;
+											    	}
+												}
+				     	            		},	
+                    CD_PARS	      : 		{
+							                    	type: "array"  
+								     			   ,editable: true
+								     			   ,nullable: false
+								                   ,validation: {
+								                	   cd_parsvalidation: function (input) {
+													    	if (input.is("[name='CD_PARS']") && !input.val()) {
+							                                	input.attr("data-cd_parsvalidation-msg", "택배사를 입력해 주세요.");
+							                                    return false;
+							                                }
+													    	if(input.is("[name='CD_PARS']") && input.val()){										    		
+													    		saOrdCclSvc.manualDataBind(input, "CD_PARS", $scope.ordCancelManagementkg);
+													    	};
+							                            	return true;
+												    	}
+													}
+                    						},	
+                    NO_INVO:        		{
+							                    	type: "string"
+									     		   ,editable: true
+									     		   ,nullable: false
+									               ,validation: {
+									            	   no_invovalidation: function (input) {
+									            		   if (input.is("[name='NO_INVO']") && !input.val().trim()) {
+									            			   input.attr("data-no_invovalidation-msg", "송장번호를 입력해 주세요.");
+									            			   return false;
+							                               }
+									            		   if (input.is("[name='NO_INVO']") && input.val()) {
+									            			   var rslt = Util03saSvc.NoINVOValidation(input, 'NO_INVO', 'no_invovalidation');
+									            			   if(rslt){
+									            				   saOrdCclSvc.manualDataBind(input, "NO_INVO", $scope.ordCancelManagementkg);
+									            			   }
+									            			   return rslt; 
+							                               }
+									            		   return true;
+												       }
+									               }
+                    						}
                    
                 };	            
-	            
+	            // 템플의 요소 하나하나를 보여줄지 말지는 결정하는 모듈
 	            var ngIfdata = $scope.ngIfdata = function(input){
 	            	return input.indexOf(ordCancelManagementDataVO.cancelRjCd) > -1;
 	            };
-
+	            //그리드에서 코드값으로 나오는 컬럼을들을 한글로 변환할때 쓰는 데이터 
                 APP_SA_MODEL.CD_CCLHRNKRSN.fNm  = "ordCancelManagementDataVO.cancelCodeOp.dataSource";
                 APP_SA_MODEL.CD_ORDSTAT.fNm = "ordCancelManagementDataVO.ordStatusOp";
                 APP_SA_MODEL.CD_CCLSTAT.fNm = "ordCancelManagementDataVO.cancelStatusOp";
@@ -182,6 +182,7 @@
                 grdRowTemplate     = grdRowTemplate    + grdDetOption.gridContentTemplate;
                 grdAltRowTemplate  = grdAltRowTemplate + grdDetOption.gridContentTemplate;
 	            
+                //이 페이지에서  사용할 변수들 초기화 시킴
 	            var ordCancelManagementDataVO = $scope.ordCancelManagementDataVO = {
             		boxTitle : "주문취소관리",
 	            	datesetting : {
@@ -259,6 +260,7 @@
 	        		cancelRjCdEqDate : ['001']*/
 		        };
 	            
+	            //초기화 데이터 바인딩
 	            ordCancelManagementDataVO.initLoad = function () {
 	            	var me = this;
                 	var ordParam = {
@@ -283,7 +285,7 @@
             			cclstsparam = {
         					lnomngcdhd: "SYCH00057",
         					lcdcls: "SA_000016"
-                		};;
+                		};
                     $q.all([
             			UtilSvc.csMrkList().then(function (res) {
             				return res.data;
@@ -380,18 +382,11 @@
                 	me.resetAtGrd = $scope.ordCancelManagementkg;
                 	me.resetAtGrd.dataSource.data([]);	 
                 	me.cancelRjCd = "";                	
-	            };	
-
+	            };
+	            
+	            // 반응형 그리드 셋팅
 	            ordCancelManagementDataVO.isOpen = function (val) {
-	            	var searchIdHeight = $("#searchId").height();
-	            	var settingHeight = $(window).height() - searchIdHeight - 90;
-	            	var pageSizeValue = val? 9 : 12;
-	            	
-	            	$scope.ordCancelManagementkg.wrapper.height(settingHeight);
-            		$scope.ordCancelManagementkg.resize();
-            		if(ordCancelManagementDataVO.param !== "") {
-            			grdOrdCancelManagementVO.dataSource.pageSize(pageSizeValue);
-            		}
+            		Util03saSvc.isOpen($scope.ordCancelManagementkg, ordCancelManagementDataVO, grdOrdCancelManagementVO, val);
 	            };
 	            	            	            
 	            //주문 검색 그리드
@@ -429,7 +424,8 @@
                 						viewName = "",
                 						rejectCode = param.cancel_reject_code.CD_DEF,
                 						choView = ["003","004","005","006"];
-                					
+        							
+        							
         							if(choView.indexOf(rejectCode) > -1){
         								viewName = "ocmRejectNormal";
         							}else if("001".indexOf(rejectCode) > -1){
@@ -442,6 +438,9 @@
                 	            		angular.element($(".k-checkbox:eq(0)")).prop("checked",false);
                 	            		return false;
         							};   
+        							
+        							param.NO_INVO = param.NO_INVO ? param.NO_INVO.trim() : null;
+        							param.DC_CCLRJTCTT = param.DC_CCLRJTCTT ? param.DC_CCLRJTCTT.trim() : null;
                 					 
                                     if(param.CD_PARS){
             							alert("송장번호 체크로 인하여 처리시간이 다소 소요 될수 있습니다.");
@@ -632,10 +631,13 @@
                 	UtilSvc.grdCkboxAllClick(e, $scope.ordCancelManagementkg);
                 };		     
                 
+                //반응형 그리드 창
                 $scope.popupUtil = function(e){
                 	Util03saSvc.popupUtil.mblur(e);
                 };
                 
+                //그리드 에딧에 들어가전에 실행되는 위젯
+                //에딧이 실행된 후 팝업이 열린다.
                 $scope.$on("kendoWidgetCreated", function(event, widget){
                 	var grd = $scope.ordCancelManagementkg;
                 	
@@ -695,7 +697,7 @@
 	                	});	                
 	                }
                 });                
-
+                //초기화 실행
                 ordCancelManagementDataVO.initLoad();
             }]);    
 }());

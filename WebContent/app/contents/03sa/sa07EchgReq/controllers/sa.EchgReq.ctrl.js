@@ -11,7 +11,7 @@
             function ($scope, $state, $http, $q, $log, saEchgReqSvc, APP_CODE, $timeout, resData, Page, UtilSvc, MenuSvc, $window, Util03saSvc, APP_MSG) {
 	            var page  = $scope.page = new Page({ auth: resData.access }),
 		            today = edt.getToday();
-	           
+	            //컬럼 초기값 셋팅
 	            var grdField =  {
                     ROW_CHK       		: { type: "bolean"    , editable: true , nullable: false },
                     NO_ORD        		: { type: "string"    , editable: false, nullable: false },
@@ -101,11 +101,11 @@
 	                    					,validation: {
 												dc_echgrjtcttvalidation: function (input) {
 													if(echgDataVO.rejectShowCode.indexOf(echgDataVO.updateChange) > -1){
-														if (input.is("[name='DC_ECHGRJTCTT']") && input.val() === "") {
+														if (input.is("[name='DC_ECHGRJTCTT']") && !input.val().trim()) {
 															input.attr("data-dc_echgrjtcttvalidation-msg", "교한거부사유를 입력해 주세요.");
 														    return false;
 														};
-														if (input.is("[name='DC_ECHGRJTCTT']") && input.val() !== "" && input.val().length > 200) {
+														if (input.is("[name='DC_ECHGRJTCTT']") && !input.val().trim() && input.val().trim().length > 200) {
 															input.attr("data-dc_echgrjtcttvalidation-msg", "교환거부사유를 200자 이내로 입력해 주세요.");
 														    return false;
 														};
@@ -159,9 +159,11 @@
 						            					   (me.sCode[0] === me.curCode && ["001","003"].indexOf(me.updateChange) > -1) ||
 						            					   (me.sCode[0] === me.curCode && "004" === me.updateChange && dataItem.DC_ECHGSHPCOSTAPVL === '선결제 완료 (교환완료시 교환배송비 정산이 진행됩니다.)' && !me.receiveChk) ||
 						            					   (me.sCode[0] === me.curCode && "004" === me.updateChange && me.receiveChk))){
-						            				   var result = Util03saSvc.NoINVOValidation(input, 'NO_INVO', 'no_invo_inputvalidation');		
+						            				   var result = Util03saSvc.NoINVOValidation(input, 'NO_INVO', 'no_invo_inputvalidation');	
+						            				   //발리데이션 체크
 						            				   if(result){
 						            					   Util03saSvc.manualTkbkDataBind($scope.echgkg, input, "NO_INVO_INPUT");
+						            					   //수동으로 데이터 값을 넣어줌
 						            				   };
 						            				   return result;
 					                               };	
@@ -176,11 +178,11 @@
 						                 	,validation: {
 						                 		dc_tkbkrsncttvalidation: function (input) {
 						                 			if(["004"].indexOf(echgDataVO.updateChange) > -1 && input.is("[name='DC_TKBKRSNCTT']")){
-														if (!input.val()) {
+														if (!input.val().trim()) {
 															input.attr("data-dc_tkbkrsncttvalidation-msg", "반품변경 상세사유를 입력해 주세요.");
 														    return false;
 														};
-														if (input.val() && input.val().length > 200) {
+														if (input.val().trim() && input.val().trim().length > 200) {
 															input.attr("data-dc_tkbkrsncttvalidation-msg", "반품변경 상세사유를 200자 이내로 입력해 주세요.");
 														    return false;
 														};
@@ -260,7 +262,7 @@
 												}
 						     				  }     
 	            						};
-	            
+	           //초기값 셋팅 
 	            var echgDataVO = $scope.echgDataVO = {
             		boxTitle : "교환요청",
 	            	setting : {
@@ -376,7 +378,7 @@
 	        			enable : false
 	        		}
 	            };
-	            
+	            //초기 코드 상태값 바인딩
 	            echgDataVO.initLoad = function (){
 	            	var me = this;
                 	var ordParam = {
@@ -460,7 +462,7 @@
                         },0);    
                     });
                 };	        
-	            
+	            //view 페이지에  마켓에 따라서 show/hide 를 함
 	            echgDataVO.ngIfdata = function(showCode, eqCode, inCode){
 	            	var me = this,
 	            	    shkChk = false,
@@ -526,18 +528,11 @@
                 	me.resetAtGrd.dataSource.data([]);
 	            };	
 	            
+	            //그리드 크기 조절
 	            echgDataVO.isOpen = function (val) {
-	            	var searchIdHeight = $("#searchId").height();
-	            	var settingHeight = $(window).height() - searchIdHeight - 90;
-	            	var pageSizeValue = val? 9 : 12;
-	            	
-	            	$scope.echgkg.wrapper.height(settingHeight);
-            		$scope.echgkg.resize();
-            		if(echgDataVO.param !== "") {
-            			grdEchgVO.dataSource.pageSize(pageSizeValue);
-            		}
+                	Util03saSvc.isOpen($scope.echgkg, echgDataVO, grdEchgVO, val);
 	            };	            
-	            
+	            //상품 수령 체크
 	            echgDataVO.receiveChkClkEvt = function(e){
 	            	var element = $(e.currentTarget),
             			checked = element.val(),
@@ -576,13 +571,12 @@
 	            //kendo grid 체크박스 옵션
                 $scope.onOrdGrdCkboxClick = function(e){
                 	UtilSvc.grdCkboxClick(e, $scope.echgkg);
-                };
-                
+                };                
                 //kendo grid 체크박스 all click
                 $scope.onOrdGrdCkboxAllClick = function(e){
                 	UtilSvc.grdCkboxAllClick(e, $scope.echgkg);
                 };		
-                
+                //송장번호 input 박스 블러시 발리데이션 체크되게 함
                 $scope.popupUtil = function(e){
                 	Util03saSvc.popupUtil.blur(e);
                 };
@@ -751,7 +745,7 @@
 	                	    code = e.model.CODE,
 	                	    Type = dataVo.updateChange,
 	                		selector = e.container;  
-                    	
+                    	//메뉴에 따라서 ddl 데이터 셋팅
                     	var filterDsFunc = function(shipTypeCode){
         					var ds = "";
         					
@@ -828,8 +822,7 @@
     	    	                			},0);
     	    	                		}
     	    	            		});
-                    			}                   			
-                        		
+                    			}                   
                     			filterDsFunc('002');
                     			break;
                     		}
@@ -882,7 +875,7 @@
 	            								alert("마켓 및 주문 상태를 확인해 주세요.");
 	                    						return;
 	            							};
-	            							
+	            							//배송정보가 잇을때만 운송장번호 체크 소요시간이 걸린다는 메세지 뜨게 함
 	            							if(param[0].CD_PARS_INPUT && param[0].NO_INVO_INPUT){
 	            								alert(APP_MSG.invcChkMsg);		            								
 	            							};
@@ -892,7 +885,7 @@
 	                    							allV = rtnV.allNoOrd,
 	    	        							    trueV = rtnV.trueNoOrd,	    	        							    
 	    	        							    falseV = rtnV.falseNoOrd;
-	                    						
+	                    						//스토어팜과 처리 로직이 다름
 	                    						if(storefarmCode === "170103"){
 	                    							if(!rtnV){
 	                        							alert("실패하였습니다.");
@@ -904,8 +897,6 @@
 		    	        	            			if(trueV.length > 0){
 		    	        	            				alert("교환승인 하였습니다.");
 		    	        	            				defer.resolve();		         
-		                    							//Util03saSvc.storedQuerySearchPlay(echgDataVO, "echgDataVO");
-		    	        	            				//Util03saSvc.storedQuerySearchPlay(echgDataVO, resData.storage);
 		    	        	            				echgDataVO.inQuiry();
 		    	        	            			}else if(falseV.length > 0){
 		    	        	            				echgDataVO.menualShwWrn = falseV;
@@ -920,8 +911,6 @@
 	                    							if(rtnV === "success"){
 	                    								alert("교환승인 하였습니다.");
 		    	        	            				defer.resolve();		         
-		                    							//Util03saSvc.storedQuerySearchPlay(echgDataVO, "echgDataVO");
-		    	        	            				//Util03saSvc.storedQuerySearchPlay(echgDataVO, resData.storage);
 		    	        	            				echgDataVO.inQuiry();
 	                    							}else{
 	                    								alert("교환승인을 실패하였습니다.");
@@ -1016,8 +1005,6 @@
 	    	        	            			if(trueV.length > 0){
                         							alert("교환완료 하였습니다.");
 	    	        	            				defer.resolve();		         
-	                    							//Util03saSvc.storedQuerySearchPlay(echgDataVO, "echgDataVO");
-	    	        	            				//Util03saSvc.storedQuerySearchPlay(echgDataVO, resData.storage);
 	    	        	            				echgDataVO.inQuiry();
 	    	        	            			}else if(falseV.length > 0){
 	    	        	            				echgDataVO.menualShwWrn = falseV;
@@ -1064,11 +1051,6 @@
 	            								echgDataVO.ngIfinIt(true);
 	                    						return false;
 	            							};
-	            							/*if(echgDataVO.gCode.indexOf(param[0].CODE) > -1 && echgDataVO.receiveChk === false){
-	                							alert(alertMsg.cltImpo);   	         
-	                							echgDataVO.ngIfinIt(false);
-	                    	            		return false;
-	            							}; 이건 좀 별로다. */
 	            							if(param[0].CD_PARS_INPUT && param[0].NO_INVO_INPUT){
 	            								alert(APP_MSG.invcChkMsg);		            								
 	            							};
@@ -1090,7 +1072,6 @@
 		    	        	            			if(trueV.length > 0 && falseV.length === 0){
 	                        							alert(alertMsg.returnToExchangeOky);
 		    	        	            				defer.resolve();		         
-		    	        	            				//Util03saSvc.storedQuerySearchPlay(echgDataVO, resData.storage);
 		    	        	            				echgDataVO.inQuiry();
 		    	        	            			}else if(falseV.length > 0){
 		    	        	            				echgDataVO.menualShwWrn = falseV;
@@ -1111,7 +1092,6 @@
 	                        						if(res.data === "success"){
 	                        							alert(alertMsg.returnToExchangeOky);
 		    	        	            				defer.resolve();		         
-		    	        	            				//Util03saSvc.storedQuerySearchPlay(echgDataVO, resData.storage);
 		    	        	            				echgDataVO.inQuiry();
 		    	        	            			}else{
 	                        							alert(alertMsg.returnToExchangeFail);

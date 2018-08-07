@@ -66,7 +66,7 @@
             	var iValue = !input.val() ? "" : input.val().trim();
             	var lengthStrt = (leng === 'undefined' || leng === '' || leng === null) ? 3 : leng; //0이 들어갈거라서 !를 안썼음 
  			                	
-			    if (input.is("[name='"+colunm+"']") && !iValue && lengthStrt>0 && valicolunm !== "no_invo_non_blank_validation") {
+			    if (input.is("[name='"+colunm+"']") && !iValue && lengthStrt>0) {
                  	input.attr("data-"+valicolunm+"-msg", "송장번호를 입력해 주세요.");
                     return false;
                 };
@@ -346,6 +346,7 @@
 	           		dataItem[target] = input.val().trim();
 	           	};
 	        };	        
+	        
 	        //grid 동적 크기 변경
 	        this.isOpen = function(kg, vo, grdVo, val){	
 	        	var searchIdHeight = $("#searchId").height();
@@ -358,6 +359,7 @@
         			grdVo.dataSource.pageSize(pageSizeValue);
         		}
 	        };
+	        
 	        //드롭다운 리스트 초기화시 선택
 	        this.ddlSelectedIndex = function(ele, name, idx){
 	        	var choIdx = !idx ? 0 : idx;
