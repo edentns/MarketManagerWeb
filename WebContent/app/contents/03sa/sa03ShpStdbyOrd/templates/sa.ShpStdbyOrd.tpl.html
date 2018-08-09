@@ -88,7 +88,9 @@
                         </tbody>
                     </table>         		     
                     <div class="btn-group1 mt-10">
-                        <kendo-button type="submit" class="k-primary" title="검색" data-ng-click="shpbyordDataVO.inQuiry()" style="width:70px;">검색</kendo-button>
+                        <kendo-button type="submit" class="k-primary" title="검색" data-ng-click="shpbyordDataVO.inQuiry()" 
+                        analytics-on="click" analytics-event="pc/click" analytics-category="배송준비" analytics-label="배송준비 조회"  
+                        style="width:70px;">검색</kendo-button>
                         <kendo-button type="botton" title="초기화" data-ng-click="shpbyordDataVO.inIt()" style="width:70px;">초기화</kendo-button>
                     </div>
                 </form>

@@ -7,8 +7,8 @@
      * 상품분류관리
      */
     angular.module("sa.ShpIng.controller")
-        .controller("sa.ShpIngCtrl", ["$scope", "$state","$http", "$q", "$log", "sa.ShpIngSvc", "APP_CODE", "APP_MSG", "$timeout", "resData", "Page", "UtilSvc", "MenuSvc", "sa.OrdCclSvc", "Util03saSvc", "APP_SA_MODEL", "sa.ShpStdbyOrdSvc", 
-            function ($scope, $state, $http, $q, $log, saShpIngSvc, APP_CODE, APP_MSG, $timeout, resData, Page, UtilSvc, MenuSvc, saOrdCclSvc, Util03saSvc, APP_SA_MODEL, ShpStdbyOrdSvc) {
+        .controller("sa.ShpIngCtrl", ["$scope", "$state","$http", "$q", "$log", "sa.ShpIngSvc", "APP_CODE", "APP_MSG", "$timeout", "resData", "Page", "UtilSvc", "MenuSvc", "sa.OrdCclSvc", "Util03saSvc", "APP_SA_MODEL", "sa.ShpStdbyOrdSvc", "$analytics", 
+            function ($scope, $state, $http, $q, $log, saShpIngSvc, APP_CODE, APP_MSG, $timeout, resData, Page, UtilSvc, MenuSvc, saOrdCclSvc, Util03saSvc, APP_SA_MODEL, ShpStdbyOrdSvc, $analytics) {
 	            var page  = $scope.page = new Page({ auth: resData.access }),
 		            today = edt.getToday(),
 		            menuId = MenuSvc.getNO_M($state.current.name);	            
@@ -417,6 +417,8 @@
         				Util03saSvc.storedQuerySearchPlay(me, resData.storage);
                     },0);
                 });
+
+            	$analytics.pageTrack('/ShpIng');
             };
                 
 	        //조회

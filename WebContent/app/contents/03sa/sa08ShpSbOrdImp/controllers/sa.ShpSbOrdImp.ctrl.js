@@ -7,8 +7,8 @@
      * 
      */
     angular.module("sa.ShpSbOrdImp.controller")
-        .controller("sa.ShpSbOrdImpCtrl", ["$scope", "$window", "$cookieStore", "$http", "$q", "$log", "$state", "sa.ShpSbOrdImpSvc", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "MenuSvc",  "Util03saSvc", "APP_CONFIG",  
-            function ($scope, $window, $cookieStore, $http, $q, $log, $state, saShpSbOrdImpSvc, APP_CODE, $timeout, resData, Page, UtilSvc, MenuSvc, Util03saSvc, APP_CONFIG) {
+        .controller("sa.ShpSbOrdImpCtrl", ["$scope", "$window", "$cookieStore", "$http", "$q", "$log", "$state", "sa.ShpSbOrdImpSvc", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "MenuSvc",  "Util03saSvc", "APP_CONFIG", "$analytics",  
+            function ($scope, $window, $cookieStore, $http, $q, $log, $state, saShpSbOrdImpSvc, APP_CODE, $timeout, resData, Page, UtilSvc, MenuSvc, Util03saSvc, APP_CONFIG, $analytics) {
 	            var page  = $scope.page = new Page({ auth: resData.access }),
 		            today = edt.getToday(),
 		            menuId = MenuSvc.getNO_M($state.current.name);
@@ -31,7 +31,9 @@
         				if(res.data.length >= 1){
         					shpbyordDataVO.ordStatusOp = res.data;
         				}
-        			});		
+        			});		   				
+
+    				$analytics.pageTrack('/ShpSbOrdImp');
 	           }());
 	           
 	            var shpbyordDataVO = $scope.shpbyordDataVO = {

@@ -7,9 +7,10 @@
      * 상품분류관리
      */
     angular.module("sa.OrdShpAll.controller")
-        .controller("sa.OrdShpAllCtrl", ["$scope", "$http", "$q", "$log", "sa.OrdShpAllSvc", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "Util03saSvc", "APP_SA_MODEL", 
-            function ($scope, $http, $q, $log, saOrdShpAllSvc, APP_CODE, $timeout, resData, Page, UtilSvc, Util03saSvc, APP_SA_MODEL) {
-	            var page  = $scope.page = new Page({ auth: resData.access }),
+        .controller("sa.OrdShpAllCtrl", ["$scope", "$http", "$q", "$log", "sa.OrdShpAllSvc", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "Util03saSvc", "APP_SA_MODEL", "$analytics",
+            function ($scope, $http, $q, $log, saOrdShpAllSvc, APP_CODE, $timeout, resData, Page, UtilSvc, Util03saSvc, APP_SA_MODEL, $analytics) {        	
+                
+        		var page  = $scope.page = new Page({ auth: resData.access }),
 		            today = edt.getToday();
 	         
 	            var grdField =  {
@@ -137,6 +138,8 @@
             				Util03saSvc.storedQuerySearchPlay(me, resData.storage, $scope.ordallkg);
                         });
                     });
+                    
+                    $analytics.pageTrack('/OrdShpAll');
                 };
 
 	            //조회

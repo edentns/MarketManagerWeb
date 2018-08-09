@@ -7,8 +7,8 @@
      * 상품분류관리
      */
     angular.module("sa.ShpStdbyOrd.controller")
-        .controller("sa.ShpStdbyOrdCtrl", ["$scope", "$http", "$window", "$q", "$log", "$state", "sa.ShpStdbyOrdSvc", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "MenuSvc",  "Util03saSvc", "APP_SA_MODEL", "sa.OrdSvc", 
-            function ($scope, $http, $window, $q, $log, $state, saShpStdbyOrdSvc, APP_CODE, $timeout, resData, Page, UtilSvc, MenuSvc, Util03saSvc, APP_SA_MODEL, saOrdSvc) {
+        .controller("sa.ShpStdbyOrdCtrl", ["$scope", "$http", "$window", "$q", "$log", "$state", "sa.ShpStdbyOrdSvc", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "MenuSvc",  "Util03saSvc", "APP_SA_MODEL", "sa.OrdSvc", "$analytics", 
+            function ($scope, $http, $window, $q, $log, $state, saShpStdbyOrdSvc, APP_CODE, $timeout, resData, Page, UtilSvc, MenuSvc, Util03saSvc, APP_SA_MODEL, saOrdSvc, $analytics) {
 	            var page  = $scope.page = new Page({ auth: resData.access }),
 		            today = edt.getToday(),
 		            menuId = MenuSvc.getNO_M($state.current.name);
@@ -104,6 +104,8 @@
             				Util03saSvc.storedQuerySearchPlay(me, resData.storage);
                         },0);
                     });
+
+                    $analytics.pageTrack('/ShpStdbyOrd');
                 };
 	            
 	            //조회

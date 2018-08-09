@@ -7,8 +7,8 @@
      * 상품분류관리
      */
     angular.module("sa.TkbkReq.controller")
-        .controller("sa.TkbkReqCtrl", ["$scope", "$state", "$http", "$q", "$log", "$timeout", "$window", "sa.TkbkReqSvc", "resData", "Page", "UtilSvc", "MenuSvc", "Util03saSvc", "APP_CODE", "APP_SA_MODEL", "APP_MSG",
-            function ($scope, $state, $http, $q, $log, $timeout, $window, saTkbkReqSvc, resData, Page, UtilSvc, MenuSvc, Util03saSvc, APP_CODE, APP_SA_MODEL, APP_MSG) {
+        .controller("sa.TkbkReqCtrl", ["$scope", "$state", "$http", "$q", "$log", "$timeout", "$window", "sa.TkbkReqSvc", "resData", "Page", "UtilSvc", "MenuSvc", "Util03saSvc", "APP_CODE", "APP_SA_MODEL", "APP_MSG", "$analytics",
+            function ($scope, $state, $http, $q, $log, $timeout, $window, saTkbkReqSvc, resData, Page, UtilSvc, MenuSvc, Util03saSvc, APP_CODE, APP_SA_MODEL, APP_MSG, $analytics) {
 	            var page  = $scope.page = new Page({ auth: resData.access }),
 		            today = edt.getToday();
 	            // 기초 컬럼 설정
@@ -431,7 +431,9 @@
                         	tkbkDataVO.isOpen(false);
             				Util03saSvc.storedQuerySearchPlay(me, resData.storage);
                         },0);    
-                    });
+                    });               	
+
+                	$analytics.pageTrack('/OrdTkbk');
                 };
                 
                 //그리드에서 코드값으로 나오는 컬럼을들을 한글로 변환할때 쓰는 데이터 	

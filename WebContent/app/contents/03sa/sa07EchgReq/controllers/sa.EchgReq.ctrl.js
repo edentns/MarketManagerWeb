@@ -7,8 +7,8 @@
      * 상품분류관리
      */
     angular.module("sa.EchgReq.controller")
-        .controller("sa.EchgReqCtrl", ["$scope", "$state", "$http", "$q", "$log", "sa.EchgReqSvc", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "MenuSvc", "$window",  "Util03saSvc", "APP_MSG",   
-            function ($scope, $state, $http, $q, $log, saEchgReqSvc, APP_CODE, $timeout, resData, Page, UtilSvc, MenuSvc, $window, Util03saSvc, APP_MSG) {
+        .controller("sa.EchgReqCtrl", ["$scope", "$state", "$http", "$q", "$log", "sa.EchgReqSvc", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "MenuSvc", "$window",  "Util03saSvc", "APP_MSG", "$analytics",   
+            function ($scope, $state, $http, $q, $log, saEchgReqSvc, APP_CODE, $timeout, resData, Page, UtilSvc, MenuSvc, $window, Util03saSvc, APP_MSG, $analytics) {
 	            var page  = $scope.page = new Page({ auth: resData.access }),
 		            today = edt.getToday();
 	            //컬럼 초기값 셋팅
@@ -460,7 +460,9 @@
                         	echgDataVO.isOpen(false);
             				Util03saSvc.storedQuerySearchPlay(me, resData.storage);
                         },0);    
-                    });
+                    });                    
+
+                    $analytics.pageTrack('/OrdEchg');
                 };	        
 	            //view 페이지에  마켓에 따라서 show/hide 를 함
 	            echgDataVO.ngIfdata = function(showCode, eqCode, inCode){

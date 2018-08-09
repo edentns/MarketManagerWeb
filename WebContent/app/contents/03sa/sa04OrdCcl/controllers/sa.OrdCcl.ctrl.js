@@ -7,8 +7,8 @@
      * 상품분류관리
      */
     angular.module("sa.OrdCcl.controller")
-        .controller("sa.OrdCclCtrl", ["$scope", "$state", "$window", "$http", "$q", "$log", "sa.OrdCclSvc", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "MenuSvc", "Util03saSvc", "APP_SA_MODEL",
-            function ($scope, $state, $window, $http, $q, $log, saOrdCclSvc, APP_CODE, $timeout, resData, Page, UtilSvc, MenuSvc, Util03saSvc, APP_SA_MODEL) {
+        .controller("sa.OrdCclCtrl", ["$scope", "$state", "$window", "$http", "$q", "$log", "sa.OrdCclSvc", "APP_CODE", "$timeout", "resData", "Page", "UtilSvc", "MenuSvc", "Util03saSvc", "APP_SA_MODEL", "$analytics",
+            function ($scope, $state, $window, $http, $q, $log, saOrdCclSvc, APP_CODE, $timeout, resData, Page, UtilSvc, MenuSvc, Util03saSvc, APP_SA_MODEL, $analytics) {
 	            var page = $scope.page = new Page({ auth: resData.access }),
 		            today = edt.getToday();		            
 	            	            
@@ -326,7 +326,9 @@
                         	ordCancelManagementDataVO.isOpen(false);
             				Util03saSvc.storedQuerySearchPlay(me, resData.storage);
                         },0);    
-                    });
+                    });                   
+
+                    $analytics.pageTrack('/OrdCcl');
                 };
 	            
 	            //조회
