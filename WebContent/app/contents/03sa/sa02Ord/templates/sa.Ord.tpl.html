@@ -112,8 +112,10 @@
 
 <!-- 주문 조회 그리드 툴바 템플릿 -->
 <script id="ord-toolbar-template" type="text/x-kendo-template">
-	<a class="k-button k-button-icontext k-grid-ord cancel"><span class="k-icon k-i-close"></span>주문 취소</a>        
-	<a class="k-button k-button-icontext k-grid-ord save"><span class="k-icon k-i-check"></span>주문 확정</a>  
+	<a class="k-button k-button-icontext k-grid-ord cancel"			
+        analytics-on="click" analytics-event="pc/click" analytics-category="신규주문" analytics-label="신규주문 주문취소 "><span class="k-icon k-i-close"></span>주문 취소</a>        
+	<a class="k-button k-button-icontext k-grid-ord save"
+        analytics-on="click" analytics-event="pc/click" analytics-category="신규주문" analytics-label="주문확정"><span class="k-icon k-i-check"></span>주문 확정</a>  
 </script>
 
 

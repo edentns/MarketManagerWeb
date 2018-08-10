@@ -261,17 +261,14 @@
 	            ordInfoDataVO.doOrdConfirm = function(){
 	            	var me = this;
 	            	if(confirm("현재 주문을 확정 하시겠습니까?")){
-	            		var defer = $q.defer(),
-    			 			param = {
+	            		var param = {
 	            				data: [$.extend({ROW_CHK: true}, ordInfoDataVO.ds)] 
 	            			};
 	            		
 	    				saOrdSvc.orderConfirm(param).then(function (res) {
 	        				//location.reload();
-	    					$state.go("app.saOrd", { kind: null, menu: null, rootMenu : "saShpStdbyOrd", noOrd : param.data[0].NO_ORD, noMrkord: param.data[0].NO_MRKORD });	 
-            				defer.resolve(APP_MSG.save.success);		   
+	    					$state.go("app.saOrd", { kind: null, menu: null, rootMenu : "saShpStdbyOrd", noOrd : param.data[0].NO_ORD, noMrkord: param.data[0].NO_MRKORD });	    						   
 	        			});
-	    				alert(defer.promise);
 	            	};
 	            };
 

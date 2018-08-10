@@ -449,6 +449,7 @@
 	     	            			}
 	         						else if(falseV.length > 0){ 
 	     	            				rtnMsg.msg = "not equal";   		
+	     	            				rtnMsg.val = falseV;
 	     	            				defer.reject(rtnMsg);
 	     	            			}
 	         						else if(allV.length < 1){ 

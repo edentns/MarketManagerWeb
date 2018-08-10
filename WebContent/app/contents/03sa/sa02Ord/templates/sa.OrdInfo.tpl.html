@@ -253,9 +253,15 @@
     </div>
    	
 	<div class="btn-group1 mt-20 mb-20">						
-		<kendo-button type="submit" title="주문확정" data-ng-click="ordInfoDataVO.doOrdConfirm()" data-ng-if="ordInfoDataVO.buttonHidden('001')" class="k-primary" style="width:80px;"><span class="k-icon k-i-check"></span>주문확정</kendo-button>
-		<kendo-button type="submit" title="배송정보등록" data-ng-click="ordInfoDataVO.shpInfoReg()" data-ng-if="ordInfoDataVO.buttonHidden('002')" style="width:100px;"><span class="k-icon k-i-add"></span>배송정보등록</kendo-button>
-		<kendo-button type="button" title="주문취소" data-ng-click="ordInfoDataVO.ordCancelPopOptionsOpen($event)" data-ng-if="ordInfoDataVO.buttonHidden('003')" style="width:80px;"><span class="k-icon k-i-delete"></span>주문취소</kendo-button>
+		<kendo-button type="submit" title="주문확정" data-ng-click="ordInfoDataVO.doOrdConfirm()" 
+							data-ng-if="ordInfoDataVO.buttonHidden('001')" class="k-primary" style="width:80px;"
+							analytics-on="click" analytics-event="pc/click" analytics-category="신규주문 상세" analytics-label="신규주문 상세 주문확정"><span class="k-icon k-i-check"></span>주문확정</kendo-button>
+		<kendo-button type="submit" title="배송정보등록" data-ng-click="ordInfoDataVO.shpInfoReg()" 
+							data-ng-if="ordInfoDataVO.buttonHidden('002')" style="width:100px;"
+							analytics-on="click" analytics-event="pc/click" analytics-category="신규주문 상세" analytics-label="신규주문 상세 주문취소"><span class="k-icon k-i-add"></span>배송정보등록</kendo-button>
+		<kendo-button type="button" title="주문취소" data-ng-click="ordInfoDataVO.ordCancelPopOptionsOpen($event)" 
+							data-ng-if="ordInfoDataVO.buttonHidden('003')" style="width:80px;"
+							analytics-on="click" analytics-event="pc/click" analytics-category="신규주문 상세" analytics-label="신규주문 상세 배송정보 등록"><span class="k-icon k-i-delete"></span>주문취소</kendo-button>
 		<kendo-button type="button" title="목록" data-ng-click="ordInfoDataVO.goBack()" style="width:80px;"><span class="k-icon k-i-undo"></span>목록</kendo-button>
 	</div>
    

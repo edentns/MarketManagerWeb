@@ -109,8 +109,10 @@
 
 <!-- 주문 조회 그리드 툴바 템플릿 -->
 <script id="shipping_toolbar_template" type="text/x-kendo-template">
-	<a class="k-button k-button-icontext k-grid-shpping edit"><span class="k-icon k-i-check"></span>배송정보 수정</a>
-	<a class="k-button k-button-icontext k-grid-shpping request"><span class="k-icon k-i-undo"></span>판매자 직접반품 신청</a>	
+	<a class="k-button k-button-icontext k-grid-shpping edit"
+			analytics-on="click" analytics-event="pc/click" analytics-category="배송중" analytics-label="배송정보 수정"><span class="k-icon k-i-check"></span>배송정보 수정</a>
+	<a class="k-button k-button-icontext k-grid-shpping request"
+			analytics-on="click" analytics-event="pc/click" analytics-category="배송중" analytics-label="판매자 직접반품 신청"><span class="k-icon k-i-undo"></span>판매자 직접반품 신청</a>	
 </script>
 
 <!-- 배송정보 수정 팝업 헤더 및 공통 컬럼 -->
