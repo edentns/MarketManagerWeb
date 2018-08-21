@@ -70,15 +70,14 @@
 					};
 
 					headerIconVO.helpToggle = function () {
-						var splitterElement = $("#contentMain");
-						
-						UtilSvc.splitter.toggle(splitterElement.children(".k-pane")[1], $(splitterElement.children(".k-pane")[1]).width() <= 0);
+						var setSplitter = $("#contentMain").data("kendoSplitter");
+						setSplitter.toggle(".k-pane:last", $(".k-pane:last").width() <= 0);
 					};
 					
 					headerIconVO.initLoad = function () {
 						headerIconVO.toggleSidebar();
 					};
-
+ 
 					headerIconVO.toggleSidebar = function () {
 						$(".show-sidebar").on("click", function (e) {
 							function MessagesMenuWidth(){

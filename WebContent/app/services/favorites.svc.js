@@ -26,7 +26,7 @@
 
 			self.name      = menu.NM_M;
 			self.state     = menu.ID_CMP;
-			self.path      = self.state +'({ menu: true })';
+			self.path      = self.state ? self.state +'({ menu: true })' : 'app.syDashboard({ menu: true })';
 			self.className = menu.NM_ICON;
 			self.seq       = menu.SQ_M;
 			self.hasMenu   = "hasGroupMenu";

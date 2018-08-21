@@ -43,7 +43,7 @@
                         valuePrimitive: true
                     },
                     customOptions : {
-                    	dataSource: angular.copy(resData.answerStatusBind).splice(0,1),
+                    	dataSource: angular.copy(resData.answerStatusBind),
                         dataTextField: "NM_DEF",
                         dataValueField: "CD_DEF",
                         optionLabel: "선택해 주세요.",

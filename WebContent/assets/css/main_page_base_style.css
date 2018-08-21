@@ -5,7 +5,7 @@
 
 /* default */
 body{padding:0px; margin:0px; line-height:24px; background:#FFFFFF;}
-html{overflow-y:scroll; }
+html{overflow-y:auto;} /* ie에서 splitter 가 안되서  설정함 */
 html, body{width:100%; }
 
 .wrap{font-family:'Noto Sans KR', sans-serif; color:#171717; font-size:14px; font-weight:400; background:#FFFFFF;}

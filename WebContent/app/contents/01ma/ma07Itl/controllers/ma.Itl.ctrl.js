@@ -180,16 +180,19 @@
 	            	var settingHeight = $(window).height() - searchIdHeight - 90 - 370;
 	            	var pageSizeValue = val? 8 : 12;
 	            	var gridObj = [$scope.ordkg, $scope.trankg, $scope.cankg, $scope.cskg, $scope.shikg];
-	            	var gridTabObj = [gridOrdVO, gridTranVO, $scope.gridCanVO, $scope.gridCsVO, $scope.gridShiVO];
+	            	//var gridTabObj = [$scope.gridOrdVO, $scope.gridTranVO, $scope.gridCanVO, $scope.gridCsVO, $scope.gridShiVO];
 
             		gridObj.forEach(function (currentObject, index) {
+            			if(currentObject.dataSource.data().length){
+            				currentObject.dataSource.pageSize(pageSizeValue);
+            			}
 	            		currentObject.wrapper.height(settingHeight);
 	            		currentObject.resize();
 	            	});
             		
-            		gridTabObj.forEach(function (currentObject, index) {
-	            		currentObject.dataSource.pageSize(pageSizeValue);
-	            	});
+            		/*gridTabObj.forEach(function (currentObject, index) {
+            			currentObject.dataSource.pageSize(pageSizeValue);            				            		
+	            	});*/
 	            };	
 	            
 				//각 컬럼에 header 정보 넣어줌, 공통 모듈이 2줄 위주로 작성 되어 있기 떄문에  일부러 일케 했음 
@@ -492,7 +495,7 @@
                 	height: 285                 	
         		};   
                 
-              //검색 그리드
+                //검색 그리드
                 var gridShiVO = $scope.gridShiVO = {
                 	autoBind: false,
                     messages: {                        	

@@ -79,8 +79,8 @@
 
 						// 조회한 조건을 localstorage에 저장함.
 						var inquiryParam = {
-							subject : self.subject,       
-							writer  : self.writer,       
+							subject : self.subject,
+							writer  : self.writer,
 							fbdCheck: self.fbdCheck,
 							period  : UtilSvc.grid.getDateSetting(self.datesetting)
 	                    };
@@ -110,6 +110,7 @@
                 	dataSource: new kendo.data.DataSource({
                 		transport: {
                 			read: function(e) {
+                				e.success([]);
                 			},
                 			parameterMap: function(e, operation) {
                 				if(operation !== "read" && e.models) {
