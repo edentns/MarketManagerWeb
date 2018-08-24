@@ -35,7 +35,10 @@
 								<span class="checkmark"></span>
 							</label>							
 						</li>
-						<li><a data-ng-click="loginVO.modalUserJoin()" >회원가입</a> | <a data-ng-click="loginVO.modalRePassword()">비밀번호재설정</a></li>
+						<li>
+							<a data-ng-click="loginVO.modalUserJoin()" analytics-on="click" analytics-event="pc/click" analytics-category="pc/회원가입" analytics-label="회원가입 버튼 클릭">
+								회원가입
+							</a> | <a data-ng-click="loginVO.modalRePassword()">비밀번호재설정</a></li>
 					</ul>
 				</div>
 			</form>

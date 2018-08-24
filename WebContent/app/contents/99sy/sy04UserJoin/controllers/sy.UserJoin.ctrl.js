@@ -2,8 +2,8 @@
 	"use strict";
 
 	angular.module("sy.UserJoin.controller")
-		.controller("sy.UserJoinCtrl", ["$scope", "$modal", "ngTableParams", "sy.LoginSvc", "$sce", "$filter", "UtilSvc", "$timeout", 
-			function ($scope, $modal, ngTableParams, SyLoginSvc, $sce, $filter, UtilSvc, $timeout) {
+		.controller("sy.UserJoinCtrl", ["$scope", "$modal", "ngTableParams", "sy.LoginSvc", "$sce", "$filter", "UtilSvc", "$timeout", "$analytics",
+			function ($scope, $modal, ngTableParams, SyLoginSvc, $sce, $filter, UtilSvc, $timeout, $analytics) {
 				/**
 				 * ===================================================
 				 * @description 회원가입
@@ -270,8 +270,13 @@
 							
 							SyLoginSvc.saveUserJoin(self.param).then(function (res) {
 								if(res.status === 200) {
-									alert('회원 가입하였습니다.');
+									alert('회원 가입하였습니다.');									
 									window.close();
+									$analytics.eventTrack('pc/ajax', {  category: 'pc/회원가입', label: '회원가입 성공' });
+								}
+								else{
+									alert("회원 가입에 실패하였습니다.");		
+									$analytics.eventTrack('pc/ajax', {  category: 'pc/회원가입', label: '회원가입 실패' });
 								}
 							});
 						}

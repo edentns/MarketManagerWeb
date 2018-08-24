@@ -14,7 +14,7 @@
                     templateUrl	: "app/contents/99sy/sy01Dashboard/templates/sy.Dashboard.tpl.html",
                     controller  : "sy.DashboardCtrl as vm",
                     resolve		: {
-                        resData: ["AuthSvc", "$q", 'UtilSvc', function (AuthSvc, $q, UtilSvc) {
+                        resData: ["AuthSvc", "$q", 'UtilSvc', "$analytics", function (AuthSvc, $q, UtilSvc, $analytics) {
                         	var defer 	= $q.defer(),
                             resData = {};
 
@@ -40,6 +40,8 @@
 	            					resData.sacsCnt = result[2].data.results;
 	            					
                                     defer.resolve( resData );
+                                    
+                                    $analytics.pageTrack('/UserDashBoard');
                                 });
 	                        });
 	
