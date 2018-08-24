@@ -10,7 +10,7 @@
     
     <div class="row">
         <!-- 검색 -->
-        <div class="content-area-container col-xs-12" style="margin:0px 0px -5px 0px;" id="searchId">
+        <div id="searchId" class="content-area-container col-xs-12" style="margin:0px 0px -5px 0px;">
         	<div data-content-box-layer data-box-title="joinerDataVO.boxTitle" data-is-open="joinerDataVO.isOpen(val)">
                 <form class="search-type1" id="myForm">
                 	<table>
@@ -47,7 +47,7 @@
                         <tr>
                             <th>기간 </th>
                             <td colspan="5">
-                            	<div class="betweenDiv">	         
+                            	<div style="width:13%; display:inline-block; margin-right:5px;">	         
         							<select ng-model="joinerDataVO.joinerBetweenDate" 
         								ng-options="option.CD_DEF as option.NM_DEF for option in joinerDataVO.BetweenDateOptionVO"
         								class="form-control" 
@@ -76,8 +76,9 @@
     </div>
 </div>
 
+<!-- 그리드 템플릿 -->
 <script id="template" type="text/x-kendo-template">
-	<tr data-uid="#= uid #">
+	<tr class="k-grid-row" data-uid="#= uid #">
 		<td class="ta-c">        
 			# if(CD_JOINYN === '003'){	#
 					
@@ -145,88 +146,8 @@
 		<td class="ta-r">
             <span class="ells">#= CNT_PARSREG #</span>
         </td> 
+		<td class="ta-c">
+			<a class="k-button k-update-button" ng-click="secessionClick($event)">탈퇴</a>
+        </td>
     </tr>
 </script>
-<script id="altTemplate" type="text/x-kendo-template">
-	<tr class="k-alt" data-uid="#= uid #">
-		<td class="ta-c">        
-			# if(CD_JOINYN === '003'){	#
-					
-			# }else{					#
-				<input class='k-checkbox' data-role='checkbox' type='checkbox' ng-click='onClick($event)' id='#= uid #'>
-				<label class='k-checkbox-label k-no-text' for='#= uid #'></label>
-			# }							#		
-        </td>
-		<td class="ta-r">
-            <span class="seq ells">#= ROW_NUM #</span>
-        </td>
-		<td class="ta-l">
-            <span class="ells">#= NO_C # - #= NM_C #</span>
-        </td>
-		<td class="ta-c">
-            <span class="ells">#= NM_RPSTT #</span>
-        </td>
-		<td class="ta-c">
-            <span class="ells">#= NO_BSNSRGTT #</span>
-        </td>
-		<td class="ta-c">
-            <span class="ells">#= NO_COMMSALEREG #</span>
-        </td>
-		<td class="ta-l">
-            <span class="ells">#= DC_ID #</span>
-        </td>
-		<td class="ta-c">
-            <span class="ells">#= NM_EMP #</span>
-        </td>
-		<td class="ta-c">
-            <span class="ells">#= NO_PHNE #</span>
-        </td>
-		<td class="ta-l">
-            <span class="ells">#= DC_NEWADDR_DC_OLDADDR #</span>
-        </td>
-		<td class="ta-l">
-            <span class="ells">#= DC_REPREMI #</span>
-        </td> 
-		<td class="ta-c">
-            <span class="ells">
-				#if(CD_JOINYN){ #
-				<co04-cd-to-nm cd="#:CD_JOINYN#" nm-box="joinerDataVO.StatusDtOptionVO">
-				#}#
-			</span>
-        </td> 
-		<td class="ta-c">
-            <span class="ells">
-				#if(CD_JOINITEM){ #
-				<co04-cd-to-nm cd="#:CD_JOINITEM#" nm-box="joinerDataVO.ProcNameDtOptionVO">
-				#}#	
-			</span>
-        </td> 
-		<td class="ta-c">
-            <span class="ells">#= DTS_JOINREQ #</span>
-        </td> 
-		<td class="ta-c">
-            <span class="ells">#= DTS_JOIN #</span>
-        </td> 
-		<td class="ta-c">
-            <span class="ells">#= DTS_LASTLOGIN #</span>
-        </td> 
-		<td class="ta-r">
-            <span class="ells">#= CNT_CMRKREG #</span>
-        </td> 
-		<td class="ta-r">
-            <span class="ells">#= CNT_PARSREG #</span>
-        </td> 
-    </tr>
-</script>
-<style>
-.betweenDiv{
-	width:13%;
-	display:inline-block; 
-	margin-right:5px;
-}
-.ells{
-	text-overflow: ellipsis; 
-	white-space: nowrap; 
-	overflow:hidden;
-}
-</style>   
