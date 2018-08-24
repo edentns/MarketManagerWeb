@@ -239,7 +239,9 @@
 	            	});
             		
 	            	$scope.gridTabVO.forEach(function (currentObject, index) {
-	            		currentObject.dataSource.pageSize(pageSizeValue);
+	            		if(currentObject.dataSource.data().length){
+	            			currentObject.dataSource.pageSize(pageSizeValue);
+	            		}	            		
 	            	});
 	            };	
 	            
