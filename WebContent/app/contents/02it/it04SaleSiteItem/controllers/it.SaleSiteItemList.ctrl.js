@@ -12,10 +12,9 @@
 	            var page  = $scope.page = new Page({ auth: resData.access }),
 		            today = edt.getToday();
 
-                $scope.grdDblClickGo = function(NO_MRKREGITEM){
-                	itSaleSiteItemSvc.saleSiteDetail(NO_MRKREGITEM).then(function() {
-	            	}, function() {
-					});
+                $scope.grdDblClickGo = function(CD_MRKREGITEM, NM_MNGMRK){
+                	CD_MRKREGITEM = CD_MRKREGITEM.concat("/"+NM_MNGMRK);
+                	$state.go( "app.itSaleSiteItem", { kind: "detail", menu: null, ids: CD_MRKREGITEM});
                 };
                 
               //kendo grid 체크박스 옵션
@@ -275,7 +274,7 @@
     															editable: true,  
     															nullable: false
                 										   },
-									    NO_MRKREGITEM:	   {	
+                						CD_MRKREGITEM:	   {	
 																type: "string", 
 																editable: false,
 																nullable: false

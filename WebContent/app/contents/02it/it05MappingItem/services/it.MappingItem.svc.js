@@ -10,18 +10,13 @@
         .factory("it.MappingItemSvc", ["APP_CONFIG", "$http", "ModalSvc" , function (APP_CONFIG, $http, ModalSvc) {
             return {
             	
-            	saveCtgr : function ( aParam, CUD ) {
+            	goSave : function ( aParam, CD_ITEM ) {
                     return $http({
                         method   : "POST",
-                        url		 : APP_CONFIG.domain +"/it01saveCtgr/"+CUD,
+                        url		 : APP_CONFIG.domain +"/it05MappingItem/"+CD_ITEM,
                         data     : aParam
                     });
-                },
-            	
-            	modal: function (NO_MNGMRK) {
-    				var modalInstance = ModalSvc.openIt01ItemCfct(NO_MNGMRK);
-    				return modalInstance.result;
-    			}
+                }
             };
         }]);
 }());

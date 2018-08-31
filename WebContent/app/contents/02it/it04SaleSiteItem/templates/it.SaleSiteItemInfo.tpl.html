@@ -3,17 +3,17 @@
         <div id="app-content-header">
             <ol class="breadcrumb">
                 <li><a href="#99sy/syDashboard"><i class="fa fa-home fa-2x"></i></a></li>
-                <li><a href="#02it/it04SaleSiteItem/list">판매Site별상품관리</a></li>
+                <li><a href="#02it/it04SaleSiteItem/list">판매Site별상품관리{{saleItemDataVO.kind}}//{{saleItemDataVO.NM_MRK}}</a></li>
             </ol>
         </div>
     </div>
     
-    <div>
+    <div data-ng-if = "saleItemDataVO.kind == 'insert'">
     	<select class="form-control wid-x5" id="mngMrkList" title="오픈마켓"
                 data-ng-model="saleItemDataVO.NO_MNGMRK" style="width: 150px"
                 data-ng-options="item.NO_MNGMRK as item.NM_MRK for item in saleItemDataVO.mngMrkList"
                 ng-change="saleItemDataVO.mngCmrkChange()">
-            <option value="">오픈마켓선택</option>
+            	<option value="">오픈마켓선택</option>
         </select>
         <select class="form-control wid-x5" id="cmrkList" title="개인몰선택"
                 data-ng-model="saleItemDataVO.param.NO_MRK" style="width: 150px"
@@ -249,13 +249,13 @@
                            <td colspan="3">
                            	<span data-ng-if="page.isWriteable()">
                       				<div data-ng-repeat = "list in saleItemDataVO.prcShpList" style="float: left;">
-                         		<input type="radio" name="prcShpRadio" data-ng-model="saleItemDataVO.CD_PRCSHP" value="{{list.CD_DEF}}">
+                         		<input type="radio" name="prcShpRadio" data-ng-model="saleItemDataVO.CD_SHPPRC" value="{{list.CD_DEF}}">
                          		<label >
                          			{{list.NM_DEF}}
                          		</label>
                          		</div>
                          		<br>
-                         		<table class="form-type1" style="width: 40%;margin: 7px" data-ng-if="saleItemDataVO.CD_PRCSHP=='001'">
+                         		<table class="form-type1" style="width: 40%;margin: 7px" data-ng-if="saleItemDataVO.CD_SHPPRC=='001'">
                          		<colgroup>
 		                            <col style="width: 12%">
 		                            <col style="width: 38%">
@@ -272,7 +272,7 @@
 										</td>
                          			</tr>
                          		</table>
-                         		<table class="form-type1" style="width: 100%;margin: 7px" data-ng-if="saleItemDataVO.CD_PRCSHP=='002'">
+                         		<table class="form-type1" style="width: 100%;margin: 7px" data-ng-if="saleItemDataVO.CD_SHPPRC=='002'">
                          		<colgroup>
 		                            <col style="width: 6%">
 		                            <col style="width: 44%">
@@ -398,7 +398,7 @@
                          		</table>
                             </span>
                             <div data-ng-if="!page.isWriteable()" >
-                            	{{saleItemDataVO.CD_PRCSHP}}
+                            	{{saleItemDataVO.CD_SHPPRC}}
                             </div>
                            </td>
                        </tr>
@@ -609,7 +609,7 @@
                                    </select>
                                 </span>
                                 <span data-ng-if="!page.isWriteable()">
-                                	{{saleItemDataVO.param.CD_SHPWAY}}
+                                	{{saleItemDataVO.param.CD_SHPPARS}}
                                 </span>
                            </td>
                        </tr>
@@ -626,8 +626,8 @@
                                		</td>
                                		<td><input type="text" class="form-control wid-x8" id="AREA_QUISEV" name="AREA_QUISEV" 
                                					data-ng-model="saleItemDataVO.param.AREA_QUISEV" readonly="readonly">
-                               			<kendo-button data-ng-if="page.isWriteable()" ng-click = "saleItemDataVO.quisevModal()">배송지역선택</kendo-button>
-                               			<kendo-button data-ng-if="page.isWriteable()" ng-click = "saleItemDataVO.quisevDelete()">삭제</kendo-button>
+                               			<kendo-button id ="selectShpAreaBtn" data-ng-if="page.isWriteable()" ng-click = "saleItemDataVO.quisevModal()">배송지역선택</kendo-button>
+                               			<kendo-button id ="deleteShpAreaBtn" data-ng-if="page.isWriteable()" ng-click = "saleItemDataVO.quisevDelete()">삭제</kendo-button>
                                		</td>
                                	</tr>
                                	<tr>
@@ -651,7 +651,7 @@
                            <th>반품지정택배</th>
                            <td>
                            	<span data-ng-if="page.isWriteable()">
-                                   <select class="form-control wid-x5" id="gmrkParsList" title="오픈마켓선택"
+                                   <select class="form-control wid-x5" id="gmrkTkbkParsList" title="오픈마켓선택"
                                            data-ng-model="saleItemDataVO.param.CD_TKBKPARS" style="width: 150px"
                                            data-ng-options="item.CD_DEF as item.NM_DEF for item in saleItemDataVO.gmrkTkbkParsList">
                                            <option value="">택배사선택</option>
@@ -672,13 +672,13 @@
                            <td colspan="3">
                            	<span data-ng-if="page.isWriteable()">
                       				<div data-ng-repeat = "list in saleItemDataVO.prcShpList" style="float: left;">
-                         		<input type="radio" name="prcShpRadio" data-ng-model="saleItemDataVO.CD_PRCSHP" value="{{list.CD_DEF}}">
+                         		<input type="radio" name="prcShpRadio" data-ng-model="saleItemDataVO.CD_SHPPRC" value="{{list.CD_DEF}}">
                          		<label >
                          			{{list.NM_DEF}}
                          		</label>
                          		</div>
                          		<br>
-                         		<table class="form-type1" style="width: 40%;margin: 7px" data-ng-if="saleItemDataVO.CD_PRCSHP=='001'">
+                         		<table class="form-type1" style="width: 40%;margin: 7px" data-ng-if="saleItemDataVO.CD_SHPPRC=='001'">
                          		<colgroup>
 		                            <col style="width: 12%">
 		                            <col style="width: 38%">
@@ -695,7 +695,7 @@
 										</td>
                          			</tr>
                          		</table>
-                         		<table class="form-type1" style="width: 100%;margin: 7px" data-ng-if="saleItemDataVO.CD_PRCSHP=='002'">
+                         		<table class="form-type1" style="width: 100%;margin: 7px" data-ng-if="saleItemDataVO.CD_SHPPRC=='002'">
                          		<colgroup>
 		                            <col style="width: 6%">
 		                            <col style="width: 44%">
@@ -881,7 +881,7 @@
                          		</table>
                             </span>
                             <div data-ng-if="!page.isWriteable()" >
-                            	{{saleItemDataVO.CD_PRCSHP}}
+                            	{{saleItemDataVO.CD_SHPPRC}}
                             </div>
                            </td>
                        </tr>

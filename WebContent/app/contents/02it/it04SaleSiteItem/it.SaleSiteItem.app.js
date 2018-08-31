@@ -28,7 +28,18 @@
                             var defer 	= $q.defer(),
                                 resData = {},
                                 today   = edt.getToday(),
-                                CD_ITEM = $stateParams.ids;
+                                CD_ITEM = "",
+                                CD_MRKREGITEM = "",
+                                NM_MNGMRK = "",
+                                str = new Array();
+                            
+                            if($stateParams.kind == "detail"){
+                            	str = ($stateParams.ids).split("/");
+                            	CD_MRKREGITEM = str[0];
+                            	NM_MNGMRK     = str[1];
+                            }else if($stateParams.kind == "insert"){
+                            	CD_ITEM = $stateParams.ids;
+                            }
 
                             AuthSvc.isAccess().then(function (result) {
                                 resData.access = result[0];
@@ -37,7 +48,8 @@
                                 	mngCmrkParam   = {procedureParam: "USP_SY_09MRK01_GET"},
                                     paramCmrk      = {procedureParam: "USP_SY_09MRK03_GET"},
                                     paramCtfc      = {procedureParam: "USP_IT_02BSSITEMCTFCINFOM_GET&L_MNG_AUCT@s|L_MNG_GMRK@s|L_MNG_STORF@s|L_MNG_ST@s|L_MNG_COOP@s",L_MNG_AUCT:"SYMM170101_00003",L_MNG_GMRK:"SYMM170101_00001",L_MNG_STORF:"SYMM170101_00002",L_MNG_ST:"SYMM170101_00005",L_MNG_COOP:"SYMM170901_00001"},
-                                    paramInfo      = {procedureParam: "USP_IT_03SALEITEM_OM_GET&L_CD_ITEM@s",L_CD_ITEM: $stateParams.ids };
+                                    paramInfo      = {procedureParam: "USP_IT_04SITEITEM_OM_GET_INSERT&L_CD_ITEM@s",L_CD_ITEM: CD_ITEM },
+                                    paramInfoDetail= {procedureParam: "USP_IT_04SITEITEM_OM_GET_UPDATE&L_CD_MRKREGITEM@s",L_CD_MRKREGITEM: CD_MRKREGITEM };
                                 $q.all([
                                         SyCodeSvc.getSubcodeList({cd: "SY_000007", search: "all"}).then(function (result) {
                                             return result.data;
@@ -116,6 +128,9 @@
                                         }),
                                         UtilSvc.grid.getInquiryParam().then(function (res) {
                                         	return res.data;
+                                        }),
+                                        UtilSvc.getList(paramInfoDetail).then(function (res) {
+                	    					return res.data.results;
                                         })
                                     ]).then(function (result) {
                                     	resData.CD_ITEM        = CD_ITEM;
@@ -155,6 +170,7 @@
                                         resData.stData         = result[23][3];
                                         resData.coopData       = result[23][4];
                                         resData.optDataList    = result[23][5];
+                                        //몰별 인증정보들
                                         list.push(result[23][6]);
                                         list.push(result[23][7]);
                                         list.push(result[23][8]);
@@ -162,6 +178,7 @@
                                         list.push(result[23][10]);
                                         resData.ctfcData       = list;
                                         resData.optTypeList    = result[24];
+                                        resData.detailData     = result[26][0][0];
                                         
                                         if($stateParams.kind == "list"){
 	                            			var history = result[25];
@@ -183,7 +200,7 @@
 	                        					
 	                        					
 	                		            		if(history.DATE_SELECTED === "current") {
-	                		            			resData.selected = history.DATE_SELECTED
+	                		            			resData.selected = history.DATE_SELECTED;
 	                		            			resData.start    = angular.copy(today);
 	                    		            		resData.end      = angular.copy(today);
 	                		            		}
@@ -207,7 +224,11 @@
 	        				            		resData.selected = 'current';                              				
 	                            			}
 	                            			defer.resolve( resData );
+                                        }else if($stateParams.kind == "detail"){
+                                        	resData.NM_MNGMRK = NM_MNGMRK;
+                                        	resData.optDataList    = result[26][1];
                                         }
+                                        defer.resolve( resData );
                                     });
                             });
                             return defer.promise;

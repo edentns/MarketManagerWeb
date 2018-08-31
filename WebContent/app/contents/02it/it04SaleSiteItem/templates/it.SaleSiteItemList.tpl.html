@@ -107,7 +107,7 @@
 
 <!-- SALESITE 조회 그리드 -->
 <script id="sale_template" type="text/x-kendo-template">
-	<tr data-uid="#= uid #" ng-dblclick="grdDblClickGo('#: NO_MRKREGITEM #')">
+	<tr data-uid="#= uid #" ng-dblclick="grdDblClickGo('#: CD_MRKREGITEM #', '#: NM_MNGMRK #')">
 		<td class="ta-c">
 			<div class="custom-style-checkbox">
         		<input class='k-checkbox' data-role='checkbox' type='checkbox' ng-click="onSaleGrdCkboxClick($event)" id="#= uid #_row">
@@ -198,7 +198,7 @@
 
 <!-- SALESITE 조회 그리드 -->
 <script id="alt_sale_template" type="text/x-kendo-template">
-	<tr class="k-alt" data-uid="#= uid #" ng-dblclick="grdDblClickGo('#: NO_MRKREGITEM #')">
+	<tr class="k-alt" data-uid="#= uid #" ng-dblclick="grdDblClickGo('#: CD_MRKREGITEM #', '#: NM_MNGMRK #')">
 		<td class="ta-c">
 			<div class="custom-style-checkbox">
         		<input class='k-checkbox' data-role='checkbox' type='checkbox' ng-click="onSaleGrdCkboxClick($event)" id="#= uid #_alt">
@@ -290,7 +290,6 @@
 <!-- 그리드 툴바 템플릿 -->
 <script id="sale-toolbar-template" type="text/x-kendo-template">
 	<button class="k-button k-button-icontext k-grid-edit" ng-click="saleItemDataVO.saleItemGet()"><span class="k-icon k-i-edit"></span>등록된상품가져오기</button>
-	<button class="k-button k-button-icontext" ng-click="saleItemDataVO.saleItemInsert()"><span class="k-icon k-i-add"></span>등록</button>
 	<button class="k-button k-button-icontext k-grid-delete" ng-click="saleItemDataVO.saleItemDelete()"><span class="k-icon k-i-delete"></span>삭제</button>
 </script>
 
