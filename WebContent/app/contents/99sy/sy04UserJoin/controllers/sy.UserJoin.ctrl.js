@@ -79,7 +79,8 @@
 		
 						if(res.status !== 200) return;
 						
-						if(res.data === 'null' || (res.data[0].CD_JOINYN === '' && res.data[1].CD_JOINYN === '')) {
+						if(res.data === 'null' || (res.data[0].CD_JOINYN === '' && res.data[1].CD_JOINYN === '') || 
+								(res.data[0].CD_JOINYN === '004' && res.data[1].CD_JOINYN === '004')) { //탈퇴는 재가입 됨
 							self.ynChkDup = true; // 사업자명 변경시 'N'으로 변경해야 함.
 							alert('중복된 사업자명과 이메일이 없습니다.');
 						}

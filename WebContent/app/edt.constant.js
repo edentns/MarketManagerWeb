@@ -157,7 +157,7 @@
         DC_TKBKRJTCTT 		: { field: "DC_TKBKRJTCTT"		 , type: "string" , width: "100px", textAlign: "center"		, title: ""},
         CD_TKBKRJT    		: { field: "CD_TKBKRJT"   		 , type: "string" , width: "100px", textAlign: "center"		, title: ""},
         DTS_TKBKCPLT  		: { field: "DTS_TKBKCPLT"		 , type: "string" , width: "100px", textAlign: "center"		, title: "반납상품 접수일자"},
-        NM_TKBKHRNKRSN		: { field: "NM_TKBKHRNKRSN"      , type: "string" , width: "100px", textAlign: "center" 		, title: "반품사유"},
+        NM_TKBKHRNKRSN		: { field: "NM_TKBKHRNKRSN"      , type: "string" , width: "100px", textAlign: "center" 	, title: "반품사유"},
         
         QT_ECHG       		: { field: "QT_ECHG"      		 , type: "string" , width: "100px", textAlign: "right" 		, title: "교환 요청 수량"},
         NO_CONSPHNE   		: { field: "NO_CONSPHNE"  		 , type: "string" , width: "100px", textAlign: "center"		, title: "수취인 전화번호"},
@@ -181,6 +181,7 @@
         CD_PARS_TKBK  		: { field: "CD_PARS_TKBK"  		 , type: "string" , width: "100px", textAlign: "center"		, title: "반품택배사"},
         NO_INVO_TKBK  		: { field: "NO_INVO_TKBK"  		 , type: "string" , width: "100px", textAlign: "center"		, title: "반품송장번호"},   
         DTS_TKBKCPLT_VIEW   : { field: "DTS_TKBKCPLT_VIEW"	 , type: "string" , width: "100px", textAlign: "center"		, title: "반품완료일시"},
+        DC_TKBKRSNCTT		: { field: "DC_TKBKRSNCTT"	 	 , type: "string" , width: "100px", textAlign: "center"		, title: "반품사유"},
 
         ROW_NUM 	  		: { field: "ROW_NUM" 			 , type: "number" , width: "50px" , textAlign: "right" 		, title: "번호"},
         NO_C          		: { field: "NO_C"       		 , type: "string" , width: "100px", textAlign: "center"		, title: "문의 가입자번호"},
