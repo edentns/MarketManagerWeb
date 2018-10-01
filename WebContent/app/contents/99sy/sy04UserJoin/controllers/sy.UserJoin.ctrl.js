@@ -273,11 +273,9 @@
 								if(res.status === 200) {
 									alert('회원 가입하였습니다.');									
 									window.close();
-									$analytics.eventTrack('pc/ajax', {  category: 'pc/회원가입', label: '회원가입 성공' });
 								}
 								else{
 									alert("회원 가입에 실패하였습니다.");		
-									$analytics.eventTrack('pc/ajax', {  category: 'pc/회원가입', label: '회원가입 실패' });
 								}
 							});
 						}
