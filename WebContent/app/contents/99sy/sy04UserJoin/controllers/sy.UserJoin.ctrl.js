@@ -1,7 +1,7 @@
 (function () {
 	"use strict";
 
-	angular.module("sy.UserJoin.controller")
+	angular.module("sy.UserJoin.controller",['angulartics','angulartics.google.analytics'])
 		.controller("sy.UserJoinCtrl", ["$scope", "$modal", "ngTableParams", "sy.LoginSvc", "$sce", "$filter", "UtilSvc", "$timeout", "$analytics",
 			function ($scope, $modal, ngTableParams, SyLoginSvc, $sce, $filter, UtilSvc, $timeout, $analytics) {
 				/**
@@ -271,10 +271,12 @@
 							
 							SyLoginSvc.saveUserJoin(self.param).then(function (res) {
 								if(res.status === 200) {
-									alert('회원 가입하였습니다.');									
+									$analytics.eventTrack('pc/ajax', {  category: 'pc/회원가입', label: '회원가입 성공(idx)' });
+									alert('회원 가입하였습니다.');
 									window.close();
 								}
 								else{
+									$analytics.eventTrack('pc/ajax', {  category: 'pc/회원가입', label: '회원가입 실패(idx)' });
 									alert("회원 가입에 실패하였습니다.");		
 								}
 							});
@@ -293,6 +295,7 @@
 				// 처음 로드되었을 때 실행된다.
 				(function  () {
 					$timeout(function () {
+						$analytics.eventTrack('pc/ajax', { category: 'pc/회원가입', label: '회원가입 버튼 클릭(idx)' });
 		                edt.id("joinNmC").focus();
 		            }, 500);
 				}());
