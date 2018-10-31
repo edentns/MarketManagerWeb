@@ -1,0 +1,77 @@
+<div id="app-content" class="col-xs-12 col-sm-10">
+    <div class="row">
+        <div id="app-content-header">
+            <ol class="breadcrumb">
+                <li><a href="#99sy/syDashboard"><i class="fa fa-home fa-2x"></i></a></li>
+                <li><a href="#99sy/syCtgr">권한관리</a></li>
+            </ol>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="content-area-container col-xs-12">
+            <div class="app-content-search ">
+                <div class="col-xs-6">
+                </div>
+                <div class="col-xs-6 ta-r">
+                    <button data-ng-if="page.isWriteable()" type="button" class="ae-btn ae-save-btn" title="" data-ng-click="syCtgrVO.save()"><i class="fa fa-floppy-o"></i> 저장</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <!-- 카테고리정보 Layer -->
+        <div class="content-area-container col-xs-5">
+            <div data-content-box-layer data-box-title="syCtgrVO.boxTitle" data-content-height="margin-bottom:-10px;">
+                <div class="box-content-article"> 
+                	<div class="article-header">
+                	
+		                <div class="col-xs-6 article-header-box">
+				        	<select id="no_mrk" kendo-drop-down-list k-options="sy01CtgrOptVO.mngMrkDs" k-ng-model="sy01CtgrOptVO.mngMrkMd" style="width:100px;"></select>	
+					   	
+					   		<button data-ng-if="page.isWriteable()" type="button" class="ae-btn ae-save-btn" title="" data-ng-click="sy01CtgrOptVO.optionChange()"><i class="fa fa-floppy-o"></i> 변경</button>
+					   	
+					   	
+					   	</div>
+		                
+		                <div class="col-xs-6 article-header-box ta-r">
+
+
+		                    <div class="group-search-btn">
+		                        <div class="group-input-box">
+		                            <input data-ae-input-click-focus class="ae-form-control group-input" title="검색어 입력" data-ng-model="syCtgrVO.nm_ctrg_search">
+		                        </div>
+		                        <button type="submit"  class="group-btn group-inquiry-btn" title="카테고리정보 조회" data-ng-click="syCtgrVO.inquiry()">
+		                            <i class="fa fa-search"></i> 조회
+		                        </button>
+		                    </div>
+
+		                	
+		                </div>
+		            </div>
+	                <div class="article-view">
+	                    <div style="display:flex; height:{{syCtgrVO.height}};" data-ui-grid="syCtgrVO.options" ui-grid-auto-resize ui-grid-selection ui-grid-edit ui-grid-cellnav></div>
+	                </div>
+            	</div>
+            </div>
+        </div>
+        <!--/ 권한정보 END -->
+
+        <!-- 메뉴정보 Layer -->
+        <div class="content-area-container col-xs-7" data-ng-controller="sy.CtgrMenuCtrl">
+            <div data-content-box-layer data-box-title="menuVO.boxTitle" data-content-height="margin-bottom:-10px;">
+                <div class="box-content-article">
+                    <div class="article-header">
+                        <div class="col-xs-6 article-header-box ta-r">
+                        </div>
+                    </div>
+                    <div class="article-view">
+                        <div data-edt-tree="menuVO.options"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--/ 메뉴정보 END -->
+    </div>
+</div>

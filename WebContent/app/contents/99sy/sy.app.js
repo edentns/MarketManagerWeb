@@ -18,6 +18,7 @@
         "sy.Pars",
         "sy.Qa",
         "sy.Itl",
-        "sy.Board"
+        "sy.Board",
+        "sy.Ctgr"
     ]);
 }());
