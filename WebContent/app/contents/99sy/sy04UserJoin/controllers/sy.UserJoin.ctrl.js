@@ -1,7 +1,7 @@
 (function () {
 	"use strict";
 
-	angular.module("sy.UserJoin.controller")
+	angular.module("sy.UserJoin.controller",['angulartics','angulartics.google.analytics'])
 		.controller("sy.UserJoinCtrl", ["$scope", "$modal", "ngTableParams", "sy.LoginSvc", "$sce", "$filter", "UtilSvc", "$timeout", "$analytics",
 			function ($scope, $modal, ngTableParams, SyLoginSvc, $sce, $filter, UtilSvc, $timeout, $analytics) {
 				/**
@@ -79,7 +79,8 @@
 		
 						if(res.status !== 200) return;
 						
-						if(res.data === 'null' || (res.data[0].CD_JOINYN === '' && res.data[1].CD_JOINYN === '')) {
+						if(res.data === 'null' || (res.data[0].CD_JOINYN === '' && res.data[1].CD_JOINYN === '') || 
+								(res.data[0].CD_JOINYN === '004' && res.data[1].CD_JOINYN === '004')) { //탈퇴는 재가입 됨
 							self.ynChkDup = true; // 사업자명 변경시 'N'으로 변경해야 함.
 							alert('중복된 사업자명과 이메일이 없습니다.');
 						}
@@ -270,13 +271,13 @@
 							
 							SyLoginSvc.saveUserJoin(self.param).then(function (res) {
 								if(res.status === 200) {
-									alert('회원 가입하였습니다.');									
+									$analytics.eventTrack('pc/ajax', {  category: 'pc/회원가입', label: '회원가입 성공(idx)' });
+									alert('회원 가입하였습니다.');
 									window.close();
-									$analytics.eventTrack('pc/ajax', {  category: 'pc/회원가입', label: '회원가입 성공' });
 								}
 								else{
+									$analytics.eventTrack('pc/ajax', {  category: 'pc/회원가입', label: '회원가입 실패(idx)' });
 									alert("회원 가입에 실패하였습니다.");		
-									$analytics.eventTrack('pc/ajax', {  category: 'pc/회원가입', label: '회원가입 실패' });
 								}
 							});
 						}
@@ -294,6 +295,7 @@
 				// 처음 로드되었을 때 실행된다.
 				(function  () {
 					$timeout(function () {
+						$analytics.eventTrack('pc/ajax', { category: 'pc/회원가입', label: '회원가입 버튼 클릭(idx)' });
 		                edt.id("joinNmC").focus();
 		            }, 500);
 				}());

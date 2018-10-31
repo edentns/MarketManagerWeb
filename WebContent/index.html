@@ -30,8 +30,57 @@
 		// 만들 팝업창 상하 크기의 1/2 만큼 보정값으로 빼주었음
 
 		window.open("/mi/loginUserJoin.html#/99sy/syUserJoin", "a", "width="+width+", height="+height+", status=no, toolbar=no, scrollbars=no, left="+ popupX + ", top="+ popupY + ", screenX="+ popupX + ", screenY= "+ popupY); 
-	}
+	}	
 	
+    /* function srvTime() {
+    	var xmlHttp;
+    	
+        try {
+            //FF, Opera, Safari, Chrome
+            xmlHttp = new XMLHttpRequest();
+        }
+        catch (err1) {
+            //IE
+            try {
+                xmlHttp = new ActiveXObject('Msxml2.XMLHTTP');
+            }
+            catch (err2) {
+                try {
+                    xmlHttp = new ActiveXObject('Microsoft.XMLHTTP');
+                }
+                catch (eerr3) {
+                    //AJAX not supported, use CPU time.
+                    alert("AJAX not supported");
+                }
+            }
+        }
+        xmlHttp.open('HEAD', window.location.href.toString(), false);
+        xmlHttp.setRequestHeader("Content-Type", "text/html");
+        xmlHttp.send('');
+        return xmlHttp.getResponseHeader("Date");
+    }
+    
+    function isShowNoticePopForSrvDwn(){
+    	var options = { year: '2-digit', month: '2-digit', day: '2-digit' , hour: 'numeric', minute : '2-digit', hour12: false };
+	    var st = srvTime(),
+	    	date = new Date(st),
+	    	srvDate = date.toLocaleDateString("ko-kr", options).replace(/[^0-9]/g,'');
+	    	//trDate = "1810021400";
+	    	trDate = "1810070800";
+	    
+	    if(srvDate < trDate){
+	    	var width = 400,
+			    height = 260;
+			var popupX = (window.screen.width / 2) - (width / 2);
+			// 만들 팝업창 좌우 크기의 1/2 만큼 보정값으로 빼주었음
+	
+			var popupY= (window.screen.height /2) - (height / 2);
+			// 만들 팝업창 상하 크기의 1/2 만큼 보정값으로 빼주었음
+
+			window.open("/mi/noticePopup.html", "a", "width="+width+", height="+height+", status=no, toolbar=no, scrollbars=no, left="+ popupX + ", top="+ popupY + ", screenX="+ popupX + ", screenY= "+ popupY);
+	    }
+    } */
+    
 	$(document).ready(function(){
 		$('.btn').click(function () {
 			$('#menu,.page_cover,html').addClass('open');
@@ -42,6 +91,8 @@
 				$('#menu,.page_cover,html').removeClass('open');
 			}
 		};
+		
+		//isShowNoticePopForSrvDwn();
 	});
 </script>
 </head>

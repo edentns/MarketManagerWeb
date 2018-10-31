@@ -49,7 +49,9 @@
         $urlRouterProvider.when('', '/99sy/syLogin');
         $urlRouterProvider.when('', '/99sy/syRePwdReg/:DC_URLCRYTO?:noOwnconf');
         $urlRouterProvider.when('', '/99sy/syUserJoin');
-        $analyticsProvider.virtualPageviews(false);
+        
+        $analyticsProvider.virtualPageviews(false);    
+        //$analyticsProvider.settings.ga.userId = 'UA-85190289-1'; 
         
         $stateProvider
             .state('app', {
@@ -57,5 +59,5 @@
                 abstract: true,
                 templateUrl: 'app/app.tpl.html'
             });
-    }]);
+    }]);    
 }());

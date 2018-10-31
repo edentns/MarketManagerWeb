@@ -452,7 +452,7 @@
                               [APP_SA_MODEL.NO_PCHRPHNE      , APP_SA_MODEL.AM_TKBKSHP    ],
                               [APP_SA_MODEL.CD_PARS_TKBK     , APP_SA_MODEL.NO_INVO_TKBK  ],                              
                               [APP_SA_MODEL.DC_PCHREMI       , APP_SA_MODEL.NM_CONS       ],
-                              [APP_SA_MODEL.NM_TKBKHRNKRSN   , APP_SA_MODEL.DC_CONSNEWADDR],
+                              [APP_SA_MODEL.DC_TKBKRSNCTT    , APP_SA_MODEL.DC_CONSNEWADDR],
                               [APP_SA_MODEL.NM_ORDSTAT       , APP_SA_MODEL.DC_SHPWAY     ],
                               [APP_SA_MODEL.DTS_ORD          , APP_SA_MODEL.DTS_TKBKREQ   ],
                               [APP_SA_MODEL.DTS_TKBKAPPRRJT  , APP_SA_MODEL.NO_TKBKAPPRRJT],

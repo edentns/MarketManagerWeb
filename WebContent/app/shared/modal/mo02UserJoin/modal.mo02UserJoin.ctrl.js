@@ -7,8 +7,8 @@
 	 * modal - 회원가입
 	 */
 	angular.module("edtApp.common.modal")
-		.controller("modal.mo02UserJoinCtrl", ["$scope", "$modal", "$modalInstance", "ngTableParams", "sy.LoginSvc", "$sce", "$filter", "UtilSvc", "$timeout", 
-			function ($scope, $modal, $modalInstance, ngTableParams, SyLoginSvc, $sce, $filter, UtilSvc, $timeout) {
+		.controller("modal.mo02UserJoinCtrl", ["$scope", "$modal", "$modalInstance", "ngTableParams", "sy.LoginSvc", "$sce", "$filter", "UtilSvc", "$timeout", "$analytics", 
+			function ($scope, $modal, $modalInstance, ngTableParams, SyLoginSvc, $sce, $filter, UtilSvc, $timeout, $analytics) {
 
 				var userJoinVO,
 					testUser = true;
@@ -277,12 +277,17 @@
 						if(res.status === 200) {
 							self.param.NO_OWNCONF = res.data.NO_OWNCONF; // 본인확인 여부 데이터
 							
-							SyLoginSvc.saveUserJoin(self.param).then(function (res) {
-								if(res.status === 200) {
+							SyLoginSvc.saveUserJoin(self.param).success(function (data, status, headers, config) {
+								if(status === 200) {
+									$analytics.eventTrack('pc/ajax', {  category: 'pc/회원가입', label: '회원가입 성공' });
+									//console.log("회원 가입하였습니다.");
 									alert('회원 가입하였습니다.');
 									$modalInstance.dismiss( "ok" );
 								}
-							});
+							}).error(function (msg, status, headers, config) {
+								$analytics.eventTrack('pc/ajax', {  category: 'pc/회원가입', label: '회원가입 실패('+msg+')' });
+								//console.log('회원가입 실패('+msg+')');
+							});;
 						}
 					});
 				};
