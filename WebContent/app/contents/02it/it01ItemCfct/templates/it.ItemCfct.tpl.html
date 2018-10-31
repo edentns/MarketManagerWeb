@@ -10,24 +10,33 @@
     
     <div class="row">
    		<div class="content-area-container col-xs-12">
-    		<kendo-button class="k-primary" style="float:right;margin:5px;" data-ng-click = "it01ItemCfctVO.modal()">참고조회</kendo-button>
+   			<kendo-button class="k-primary" style="float:right;margin:5px;" data-ng-click = "it01ItemCfctVO.apply()">적용</kendo-button>
+    		<select class="" id="cmrkList" title="개인몰선택"
+                	data-ng-model="it01ItemCfctVO.selectedNO_MNGMRK" style="float:right;margin-top:8px;width:95px;"
+                	data-ng-options="item.NO_MNGMRK as item.NM_MRK for item in it01ItemCfctVO.mngMrkList">
+                	<option value="">직접입력</option>
+        	</select>
+        	<label style="float:right;margin:9px;">기본카테고리선택</label>
     	</div>
     </div>
     
     <div class="row">
-               
         <!-- 조회 리스트 -->          
 		<div class="content-area-container col-xs-12" style="padding:0px 0px 0px 0px;">
-			<div class="content-area-container col-xs-4">
+			<div class="content-area-container col-xs-3">
                 <kendo-grid options="it01ItemCfctGridVO[0]" id="grid0">
                 </kendo-grid>
 			</div>
-			<div class="content-area-container col-xs-4">
+			<div class="content-area-container col-xs-3">
                 <kendo-grid options="it01ItemCfctGridVO[1]" id="grid1">
                 </kendo-grid>
 			</div>
-			<div class="content-area-container col-xs-4">
+			<div class="content-area-container col-xs-3">
                 <kendo-grid options="it01ItemCfctGridVO[2]" id="grid2">
+                </kendo-grid>
+			</div>
+			<div class="content-area-container col-xs-3">
+                <kendo-grid options="it01ItemCfctGridVO[3]" id="grid3">
                 </kendo-grid>
 			</div>
         </div>

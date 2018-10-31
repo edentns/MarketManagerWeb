@@ -20,15 +20,19 @@
 
                             AuthSvc.isAccess().then(function (result) {
                                 resData.access = result[0];
-                                var param = {
-        		    					procedureParam: "USP_IT_01ITEMCFCT01_GET",
-        		    				};
-        		    				UtilSvc.getList(param).then(function (res) {
-        		    					resData.cfctData = res.data.results[0];
-        		    					defer.resolve(resData);
-        							});
+        		    			var mngMrkParam = {
+                                		procedureParam: "USP_IT_01ITEMCFCT_MNGMRK_GET"
+                                	}
+                                $q.all([
+										UtilSvc.getList(mngMrkParam).then(function (res) {
+											return res.data.results[0];
+										})
+                                    ]).then(function (result) {
+                                        resData.mngMrkList    = result[0];
+                                        
+                                        defer.resolve( resData );
+                                    });
                             });
-
                             return defer.promise;
                         }]
                     }

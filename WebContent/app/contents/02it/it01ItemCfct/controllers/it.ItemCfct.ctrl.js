@@ -47,6 +47,7 @@
 		                }else{
 		                	if(confirm('다른그리드에 수정된 사항이 있습니다.\n저장하시겠습니까?')){
 	            				grid.sync();
+	            				it01ItemCfctVO.doInquiry();
 	            				return true;
 	            			}else{
 	            				return false;
@@ -62,6 +63,9 @@
             		gridNum : "999",
 	            	boxTitle: "검색",
 	            	ctgrId: [""],
+	            	mngMrkList : resData.mngMrkList,
+	            	selectedNO_MNGMRK : "",
+	            	
 	            	initLoad: function(bLoading) {
 	            		var self = this;
 	            		//self.ctgrId                   = resData.cfctData[0].ID_CTGR;
@@ -85,6 +89,7 @@
 	            		self.doInquiry();
 	            	},
 	            	
+	            	/* 1~2차때 참고조회 부분
 	            	modal: function() {   // 팝업 버튼
 	            		 var NO_MNGMRK,
 	            		     param = {
@@ -94,7 +99,7 @@
 	    					 NO_MNGMRK = res.data.results[0][0].NO_MNGMRK;
 		            		 itItemCfctSvc.modal(NO_MNGMRK);
 						 });
-					},
+					},*/
 					
 					add : function(e) {   // 추가 버튼
 						var self = this;
@@ -152,6 +157,17 @@
 				        		);*/
 	                	    }
                 		}
+					},
+					
+					apply: function(e) {   // 적용 버튼
+						var self = this;
+						if(self.selectedNO_MNGMRK != ""){
+							if (confirm('기존 존재하던 데이터가 모두 삭제됩니다.\n적용 하시겠습니까?')){
+								itItemCfctSvc.applyCtgr(self.selectedNO_MNGMRK).success(function () {
+									it01ItemCfctVO.doInquiry();
+                                });
+	                        }
+						}
 					}
 	            };
 
@@ -175,6 +191,10 @@
 		            {
 		            	boxTitle: "소분류",
 	                    selectable: "multipleSmall"
+		            },
+		            {
+		            	boxTitle: "세분류",
+	                    selectable: "multipleXSmall"
 		            }
 		        ];
 				
@@ -287,7 +307,7 @@
 	            			{
 	              			field: "NM_CTGR",
 	              			title: localSelf.boxTitle, 
-	              			width: 250,
+	              			width: 200,
 	              			maxwidth: 400, 
 							cellClass: "ta-c",
 							headerAttributes: {"class": "table-header-cell" ,style: "text-align: center; font-size: 12px"},

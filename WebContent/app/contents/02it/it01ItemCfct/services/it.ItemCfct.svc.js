@@ -18,10 +18,18 @@
                     });
                 },
             	
-            	modal: function (NO_MNGMRK) {
+            	modal: function ( NO_MNGMRK ) {
     				var modalInstance = ModalSvc.openIt01ItemCfct(NO_MNGMRK);
     				return modalInstance.result;
-    			}
+    			},
+    			
+    			applyCtgr : function ( NO_MNGMRK ) {
+                    return $http({
+                        method   : "POST",
+                        url		 : APP_CONFIG.domain +"/it01applyCtgr/"+NO_MNGMRK,
+                        data     : ""
+                    });
+                }
             };
         }]);
 }());
