@@ -26,7 +26,7 @@
 	                        }
 	                    });
 	            		
-	            		if(checkItem.length > 1){alert("한 개의 판매상품을 선택해주세요.");return;}
+	            		if(checkItem.length < 1){alert("한 개의 판매상품을 선택해주세요.");return;}
 	            		
 	            		$state.go('app.itSaleSiteItem', { kind: "insert", menu: null, ids: checkItem[0] });
 	            	}

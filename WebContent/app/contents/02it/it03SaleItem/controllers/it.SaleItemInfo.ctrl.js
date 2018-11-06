@@ -37,6 +37,8 @@
 	        		selectedCtgr2 : {ID_CTGR : "", NM_CTGR: ""},
 	        		itemCtgrList3 : [],
 	        		selectedCtgr3 : {ID_CTGR : "", NM_CTGR: ""},
+	        		itemCtgrList4 : [],
+	        		selectedCtgr4 : {ID_CTGR : "", NM_CTGR: ""},
 	        		itemCooList1  : [],
 	        		selectedCoo1  : {CD_COO : "", NM_COO: ""},
 	        		itemCooList2  : [],
@@ -129,7 +131,7 @@
 	                YN_QICK       : "N",
 	        		param :{
 	        			// 상품정보
-	        			CD_SIGNITEM   : "",
+	        			CD_CUSTCMPITEM_NW   : "",
 	        			NM_ITEM       : "",
 	        			DC_ITEMABBR   : "",
 	        			NM_BRD        : "",
@@ -1561,7 +1563,7 @@
     					saleInfoDataVO.oriOPTTP = resData.detailData.CD_OPTTP;
     					var detailData = {
     	        			// 상품정보
-    	        			CD_SIGNITEM   : resData.detailData.CD_SIGNITEM,
+    	        			CD_CUSTCMPITEM_NW   : resData.detailData.CD_CUSTCMPITEM_NW,
     	        			NM_ITEM       : resData.detailData.NM_ITEM,
     	        			DC_ITEMABBR   : resData.detailData.DC_ITEMABBR,
     	        			NM_BRD        : resData.detailData.NM_BRD,
@@ -2018,17 +2020,22 @@
 	            				self.itemCtgrList1 = res.data.results[0];
                             });
 		            	}else{
-		            		self.itemCtgrList2 = "";self.itemCtgrList3 = "";
+		            		self.itemCtgrList2 = "";self.itemCtgrList3 = "";self.itemCtgrList4 = "";
+		            		self.selectedCtgr2 = {ID_CTGR : "", NM_CTGR: ""};
+		            		self.selectedCtgr3 = {ID_CTGR : "", NM_CTGR: ""};
+		            		self.selectedCtgr4 = {ID_CTGR : "", NM_CTGR: ""};
 		            	}
-	            	}
-	            	if(flag == 1){
+	            	}else if(flag == 1){
 	            		if(self.selectedCtgr1){
 	            			param.IT_ID_CTGR = self.selectedCtgr1.ID_CTGR;
 	            			UtilSvc.getList(param).then(function (res) {
 	            				self.itemCtgrList2 = res.data.results[0];
                             });
 		            	}else{
-		            		self.itemCtgrList2 = "";self.itemCtgrList3 = "";
+		            		self.itemCtgrList2 = "";self.itemCtgrList3 = "";self.itemCtgrList4 = "";
+		            		self.selectedCtgr2 = {ID_CTGR : "", NM_CTGR: ""};
+		            		self.selectedCtgr3 = {ID_CTGR : "", NM_CTGR: ""};
+		            		self.selectedCtgr4 = {ID_CTGR : "", NM_CTGR: ""};
 		            	}
 	            	}else if(flag == 2){
 	            		if(self.selectedCtgr2){
@@ -2037,7 +2044,19 @@
 	            				self.itemCtgrList3 = res.data.results[0];
                             });
 		            	}else{
-		            		self.itemCtgrList3 = "";
+		            		self.itemCtgrList3 = "";self.itemCtgrList4 = "";
+		            		self.selectedCtgr3 = {ID_CTGR : "", NM_CTGR: ""};
+		            		self.selectedCtgr4 = {ID_CTGR : "", NM_CTGR: ""};
+		            	}
+	            	}else if(flag == 3){
+	            		if(self.selectedCtgr3){
+	            			param.IT_ID_CTGR = self.selectedCtgr3.ID_CTGR;
+	            			UtilSvc.getList(param).then(function (res) {
+	            				self.itemCtgrList4 = res.data.results[0];
+                            });
+		            	}else{
+		            		self.itemCtgrList4 = "";
+		            		self.selectedCtgr4 = {ID_CTGR : "", NM_CTGR: ""};
 		            	}
 	            	}
 	            };
@@ -2132,11 +2151,11 @@
 	            saleInfoDataVO.duplCheck = function(){
 	            	var self = this;
 	            	
-            		if (!(self.param.CD_SIGNITEM).trim()) {
-	                    return edt.invalidFocus("CD_SIGNITEM", "상품코드를 입력해주세요.");
+            		if (!(self.param.CD_CUSTCMPITEM_NW).trim()) {
+	                    return edt.invalidFocus("CD_CUSTCMPITEM_NW", "상품코드를 입력해주세요.");
                     }
 	            	
-	            	itBssItemSvc.duplCheck(self.param.CD_SIGNITEM).success(function (res) {
+	            	itBssItemSvc.duplCheck(self.param.CD_CUSTCMPITEM_NW).success(function (res) {
 	            		self.duplFlag = true;
 	            		if(res == "사용하실수 없습니다."){
 	            			self.duplFlag = false;
@@ -2154,7 +2173,7 @@
 	    				};	            	
 	        			UtilSvc.getList(param).then(function (res) {
 	        				if(res.data.results[0].length >= 1){
-	        					saleInfoDataVO.param.CD_SIGNITEM = res.data.results[0][0].CD_SIGNITEM;
+	        					saleInfoDataVO.param.CD_CUSTCMPITEM_NW = res.data.results[0][0].CD_CUSTCMPITEM_NW;
 	        					saleInfoDataVO.param.DC_ITEMABBR = res.data.results[0][0].DC_ITEMABBR;
 	        					saleInfoDataVO.param.NM_ITEM     = res.data.results[0][0].NM_ITEM;
 	        					saleInfoDataVO.param.YN_BCD      = res.data.results[0][0].YN_BCD;
@@ -2199,7 +2218,8 @@
 		            		var addData = $("#gridAddVO").data("kendoGrid").dataSource._data;
 		            		var itemData = saleInfoDataVO.param;
 		            		itemData.CD_LIOG = itemData.CD_LIOG.CD_LIOG;
-		            		itemData.ID_CTGR = saleInfoDataVO.selectedCtgr3.ID_CTGR;
+		            		if(saleInfoDataVO.selectedCtgr4.ID_CTGR == "")itemData.ID_CTGR = saleInfoDataVO.selectedCtgr3.ID_CTGR;
+		            		else saleInfoDataVO.selectedCtgr4.ID_CTGR;
 		            		if($("#gridCtfcStorf").data("kendoGrid").dataSource._data.length!=0){itemData.STORF.CTFCINFO = saleInfoDataVO.ctfcParamSort($("#gridCtfcStorf").data("kendoGrid")._data)};
 		            		if($("#gridCtfcSt").data("kendoGrid").dataSource._data.length!=0){itemData.ST.CTFCINFO = saleInfoDataVO.ctfcParamSort($("#gridCtfcSt").data("kendoGrid")._data)};
 		            		if($("#gridCtfcCoop").data("kendoGrid").dataSource._data.length!=0){itemData.COOP.CTFCINFO = saleInfoDataVO.ctfcParamSort($("#gridCtfcCoop").data("kendoGrid")._data)};
@@ -2209,7 +2229,7 @@
 		            				ADDITEM : addData };
 		            		itBssItemSvc.saveItem(param, SU).success(function () {
 	                        	saleInfoDataVO.fileSave();
-	                        	alert("기본상품 등록이 완료되었습니다.");
+	                        	alert("판매상품 등록이 완료되었습니다.");
 	                        	saleInfoDataVO.goBack();
 	                        });
 		            		
@@ -2929,8 +2949,8 @@
                     }
 
                     // 상품코드
-                    if (!(data.CD_SIGNITEM).trim()) {
-	                    return edt.invalidFocus("CD_SIGNITEM", "[필수] 상품코드를 입력해주세요.");
+                    if (!(data.CD_CUSTCMPITEM_NW).trim()) {
+	                    return edt.invalidFocus("CD_CUSTCMPITEM_NW", "[필수] 상품코드를 입력해주세요.");
                     }
 	            
                     // 상품명
