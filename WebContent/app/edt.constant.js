@@ -7,7 +7,7 @@
         bsCd    : '00000',
  		domain  : '/MarketManagerServer_Mi', // 운영
         version : 'V 0.2.0',
-        encrypt : false 
+        encrypt : true 
     });
 
     edtApp.constant('APP_CODE', {

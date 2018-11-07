@@ -34,6 +34,7 @@
 .wrap .title dl img{width:100%;}
 .wrap .title dt{float:left;width:117px;}
 .wrap .title dd{float:left; padding:0 !important;margin:8px; margin-bottom:3px; margin-top:9px;}
+.wrap .title dd div {float:left; width:50%;}
 
 
 /*마켓 매니저 소개*/
