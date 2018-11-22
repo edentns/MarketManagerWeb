@@ -105,14 +105,18 @@ a.show-sidebar:hover {
   transition: 0.2s;
 }
 .full-content {
-  overflow: hidden;
-  padding: 0;
-  margin: 0;
+  	overflow: hidden;
+  	padding: 0;
+  	margin: 0;
 }
 
 .navttt.main-menutt {
-  min-width:130px;
-  margin:0 -15px;
+  	min-width:130px;
+  	margin:0 -15px;
+  	border:none;
+}
+.navttt.main-menutt:active {
+	
 }
 .nav.main-menu, .nav.msg-menu {
   margin:-11px; -15px;

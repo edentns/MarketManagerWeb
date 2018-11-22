@@ -522,8 +522,17 @@ form[name="businessForm"]:after {content: ''; display: block; clear: both;}
 				border-radius  : 1px;
 }
 
-.nav.main-menu {font-size: 11px;}
-
+.nav.main-menu {
+	font-size: 11px;
+	width: 162px;
+}
+.li-menu-name{
+	height : 34px;	
+}
+.ul-menu{
+	height: 100% !important; 
+	margin: 0 .286em 0 .286em;
+}
 .breadcrumb i {vertical-align: -2px;}
 
 .left-panel {

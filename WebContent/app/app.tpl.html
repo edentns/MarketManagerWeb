@@ -2,15 +2,20 @@
 	<header id="app-header" data-header-div></header>
 
 	<div id="app-main" class="container-fluid">
-		<div class="row" style="display:flex;">
-			<div id="menuMain" class="col-xs-2-fix" style="overflow:visible;">
-				<div id="menuView" style="padding:0 10px; width:100%; overflow:visible;">
-					<menu-navigation menu-config="menu" menu-height="100vh;"></menu-navigation>
-				</div>
-				<div id="leftAvtmSlides" style="border-width: 0px;border-style: double;margin: 0px;padding-left: 10px; background-color:white;">
-				</div>
+		<div class="row app-main-row">
+			<div id="menuMain" class="col-xs-2-fix">
+				<div class="flexible" style="height:200px;">
+					<div id="menuView">
+						<menu-navigation menu-config="menu"></menu-navigation>
+						
+						<!-- 
+						<div id="leftAvtmSlides" style="border-width: 0px;border-style: double;margin: 0px;padding-left: 10px; background-color:white;">
+						</div>	 
+						-->	
+					</div>	
+				</div>	
 			</div>
-			<div id="contentMain" class="col-xs-12 col-sm-12" style="margin:0; padding:0;">
+			<div id="contentMain" class="col-xs-12 col-sm-12">
 				<div id="conView">
 					<div data-ui-view="contentView"></div>
 				</div>
@@ -29,5 +34,32 @@
 }
 table.small-editor {
 	height: calc(100vh - 50px);
+}
+.flexible{
+	overflow:hidden;
+	width:400px !important; 
+	height:calc(100vh - 50px) !important;
+	background-color: #fff;
+}
+#menuView{
+	padding:0 10px; 
+	width:400px;
+	height:100%; 
+	overflow-y:scroll; 
+	overflow-x:hidden;
+}
+#leftAvtmSlides{
+	border-width: 0px;
+	border-style: double;
+	margin: 0px;
+	padding-left: 10px; 
+	background-color:white;
+}
+.app-main-row{
+	display:flex;
+}
+#contentMain{
+	margin:0;
+	padding:0;
 }
 </style>

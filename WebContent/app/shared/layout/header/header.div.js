@@ -43,7 +43,7 @@
 						}
 					});
 					
-					SyLoginSvc.selectAvtm("SYAC180305_00002").then(function (res) {
+					/*SyLoginSvc.selectAvtm("SYAC180305_00002").then(function (res) {
 						if(res.data.length > 0) {
 							var scrolltemplate = kendo.template($("#scrolltemplate").html());
 						
@@ -62,7 +62,7 @@
 						        }
 							});
 						}
-					});
+					});*/
 					
 					headerIconVO.toggleDropdown = function ( $event ) {
 						$event.stopPropagation();

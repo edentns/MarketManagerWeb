@@ -1,60 +1,63 @@
-	<div id="main_menu" class="navttt main-menutt" kendo-tab-strip k-content-urls="[null,null]">
-		<ul style="height: 35px;">
-			<li style="height: 34px" ng-click="onFavorites()">즐겨찾기</li>
-			<li class="k-state-active" style="height: 34px;" ng-click="onMenu()">메&nbsp뉴</li>
+<div id="main_menu" class="navttt main-menutt" kendo-tab-strip k-content-urls="[null,null]">		  
+	<ul style="height: 35px;">
+		<li class="li-menu-name" ng-click="onFavorites()">즐겨찾기</li>
+		<li class="k-state-active li-menu-name" ng-click="onMenu()">메&nbsp뉴</li>
+	</ul>
+	<div class="row-xs-12 row-sm-12 ul-menu" style="margin: 0 .286em 0 .286em; border-style:none;">
+		<ul class="nav main-menu">
+			<li ng-repeat="menu in favoritesList" ng-class="{'dropdown': menu._children.length > 0, opened: menu.active}">
+				<a ng-if="menu._children.length == 0" 
+				   ui-sref="{{menu.path}}" 
+				   title="{{menu.name}}" 
+				   ng-class="{'active-parent active': menu.active}" 
+				   ng-style="{'padding-left': menu.depth * 5 + 'px'}">
+				    <div class="{{menu.hasMenu}}" id="{{menu.entity.NO_M}}" p-id="{{menu.entity.ID_M_P}}">
+						<i class="fa fa-pencil-square-o"></i>&nbsp;<span>{{menu.name}}</span>
+					</div>
+				</a>
+				<a ng-if="menu._children.length > 0" 
+				   class="dropdown-toggle" 
+				   href="#" 
+				   title="{{menu.name}}" 
+				   ng-class="{'active-parent active': menu.active}" 
+				   ng-style="{'padding-left': menu.depth * 5 + 'px'}">
+				    <div class="{{menu.hasMenu}}" id="{{menu.entity.NO_M}}" p-id="{{menu.entity.ID_M_P}}">
+						<i class="fa fa-pencil-square-o"></i>&nbsp;<span>{{menu.name}}</span>
+					</div>
+				</a>
+				<ul ng-if="menu._children.length > 0" menu-node="menu._children" class="dropdown-menu"></ul>
+			</li>
 		</ul>
-		<div class="row-xs-12 row-sm-12" style="padding: 1em; overflow:visible; height:100vh;">
-			<ul class="nav main-menu">
-				<li ng-repeat="menu in favoritesList" ng-class="{'dropdown': menu._children.length > 0, opened: menu.active}">
-					<a ng-if="menu._children.length == 0" 
-					   ui-sref="{{menu.path}}" 
-					   title="{{menu.name}}" 
-					   ng-class="{'active-parent active': menu.active}" 
-					   ng-style="{'padding-left': menu.depth * 5 + 'px'}">
-					    <div class="{{menu.hasMenu}}" id="{{menu.entity.NO_M}}" p-id="{{menu.entity.ID_M_P}}">
-							<i class="fa fa-pencil-square-o"></i>&nbsp;<span>{{menu.name}}</span>
-						</div>
-					</a>
-					<a ng-if="menu._children.length > 0" 
-					   class="dropdown-toggle" 
-					   href="#" 
-					   title="{{menu.name}}" 
-					   ng-class="{'active-parent active': menu.active}" 
-					   ng-style="{'padding-left': menu.depth * 5 + 'px'}">
-					    <div class="{{menu.hasMenu}}" id="{{menu.entity.NO_M}}" p-id="{{menu.entity.ID_M_P}}">
-							<i class="fa fa-pencil-square-o"></i>&nbsp;<span>{{menu.name}}</span>
-						</div>
-					</a>
-					<ul ng-if="menu._children.length > 0" menu-node="menu._children" class="dropdown-menu"></ul>
-				</li>
-			</ul>
-		</div>
-		<div class="row-xs-12 row-sm-12" style="padding: 1em; overflow:visible; height:100vh;">
-			<ul class="nav main-menu">
-				<li ng-repeat="menu in menuList" ng-class="{'dropdown': menu._children.length > 0, opened: menu.active}">
-					<!-- <div class="{{menu.hasMenu}}" id="{{menu.entity.NO_M}}"> -->
-					<a ng-if="menu._children.length == 0" 
-					   ui-sref="{{menu.path}}" 
-					   title="{{menu.name}}" 
-					   ng-class="{'active-parent active': menu.active}" 
-					   ng-style="{'padding-left': menu.depth * 5 + 'px'}">
-					    <div class="{{menu.hasMenu}}" id="{{menu.entity.NO_M}}">
-							<i class="fa {{menu.className}}"></i>&nbsp;<span>{{menu.name}}</span>
-						</div>
-					</a>
-					<a ng-if="menu._children.length > 0" 
-					   class="dropdown-toggle" 
-					   href="#" 
-					   title="{{menu.name}}" 
-					   ng-class="{'active-parent active': menu.active}" 
-					   ng-style="{'padding-left': menu.depth * 5 + 'px'}">
-						<i class="fa {{menu.className}}"></i>&nbsp;<span>{{menu.name}}</span>
-					</a>
-					<ul ng-if="menu._children.length > 0" menu-node="menu._children" class="dropdown-menu"></ul>
-				</li>
-			</ul>
-		</div>
 	</div>
+	<div class="row-xs-12 row-sm-12 ul-menu" style="margin: 0 .286em 0 .286em; border-style:none;">
+		<ul class="nav main-menu">
+			<li ng-repeat="menu in menuList" ng-class="{'dropdown': menu._children.length > 0, opened: menu.active}">
+				<!-- <div class="{{menu.hasMenu}}" id="{{menu.entity.NO_M}}"> -->
+				<a ng-if="menu._children.length == 0" 
+				   ui-sref="{{menu.path}}" 
+				   title="{{menu.name}}" 
+				   ng-class="{'active-parent active': menu.active}" 
+				   ng-style="{'padding-left': menu.depth * 5 + 'px'}">
+				    <div class="{{menu.hasMenu}}" id="{{menu.entity.NO_M}}">
+						<i class="fa {{menu.className}}"></i>&nbsp;<span>{{menu.name}}</span>
+					</div>
+				</a>
+				<a ng-if="menu._children.length > 0" 
+				   class="dropdown-toggle" 
+				   href="#" 
+				   title="{{menu.name}}" 
+				   ng-class="{'active-parent active': menu.active}" 
+				   ng-style="{'padding-left': menu.depth * 5 + 'px'}">
+					<i class="fa {{menu.className}}"></i>&nbsp;<span>{{menu.name}}</span>
+				</a>
+				<ul ng-if="menu._children.length > 0" menu-node="menu._children" class="dropdown-menu"></ul>
+			</li>
+		</ul>
+	</div>
+	<div id="leftAvtmSlides">
+	</div>
+</div>
+		
 
 <ul kendo-context-menu 
 	k-filter="'.hasGroupMenu'" 
