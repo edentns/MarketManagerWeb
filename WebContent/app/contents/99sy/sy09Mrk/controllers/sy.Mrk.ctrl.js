@@ -349,22 +349,37 @@
           		           		 }
           		           		 return returnPWDMsg;
         		           	 },
-    	   					headerAttributes: gridHeaderAttributes, attributes:{class:"ta-l", style:"background-color:"+bgColor+";"}},
-    	   				   {field: "NM_SHOP",      title: "샵명칭",    width: 100,
-           	   					headerAttributes: gridHeaderAttributes, attributes:{class:"ta-l", style:"background-color:"+bgColor+";"}},
-        		           {field: "NEW_API_KEY",     title: "API_KEY",  width: 100
-        		           		,editor: function (container, options) {
-	          		                 $('<input type="password" class="k-textbox" name="' + options.field + '"/>').appendTo(container);
-	          	                 }
-	          		           	 ,template: function(e){  
-	          		           		 var returnAPIMsg = "";
-	          		           		 if(e.NEW_API_KEY == "" || e.NEW_API_KEY == null && e.API_KEY != ""){
-	          		           		     if(e.API_KEY_LEN != null) returnAPIMsg = Array(e.API_KEY_LEN + 1).join("*");
-	          		           		 }else if(e.NEW_API_KEY != "" && e.NEW_API_KEY != null){
-	          		           			 returnAPIMsg = Array(e.NEW_API_KEY.length + 1).join("*");
-	          		           		 }
-	          		           		 return returnAPIMsg;
-	          		           	 },
+    	   					headerAttributes: gridHeaderAttributes, attributes:{
+    	   							class:"ta-l", 
+    	   							style:"background-color:"+bgColor+";"
+    	   							}},
+    	   				   {
+	    	   					field: "NM_SHOP",      
+	    	   					title: "샵명칭",    
+	    	   					width: 100,
+	           	   				headerAttributes: gridHeaderAttributes, 
+	           	   				attributes:{
+	           	   					class:"ta-l nm-shop", 
+	           	   					style:"background-color:"+bgColor+";"
+	           	   				}
+    	   				   },
+        		           {		
+       	   						field: "NEW_API_KEY",     
+       	   						title: "API_KEY",  
+       	   						width: 100,
+       	   						editor: function (container, options) {
+       	   							$('<input type="password" class="k-textbox" name="' + options.field + '"/>').appendTo(container);
+       	   						},
+           	   						template: function(e){  
+           	   							var returnAPIMsg = "";
+           	   								if(e.NEW_API_KEY == "" || e.NEW_API_KEY == null && e.API_KEY != ""){
+           	   									if(e.API_KEY_LEN != null) returnAPIMsg = Array(e.API_KEY_LEN + 1).join("*");
+           	   								}
+           	   								else if(e.NEW_API_KEY != "" && e.NEW_API_KEY != null){
+           	   									returnAPIMsg = Array(e.NEW_API_KEY.length + 1).join("*");
+           	   								}
+           	   							return returnAPIMsg;
+           	   						},
 	    	   				headerAttributes: gridHeaderAttributes, attributes:{class:"ta-l", style:"background-color:"+bgColor+";"}},
         		           {field: "DC_SALEMNGURL", title: "판매관리URL", width: 250,
 	   	   					headerAttributes: gridHeaderAttributes,
@@ -399,6 +414,14 @@
                     },
                 	height: 657
                 };
+                
+                gridMrkVO.tooltipOptions = {
+            		filter: "td:nth-child(9)",
+            		position: "right",
+            		content: "샵명칭은 오픈마켓과 동일하게 입력하셔야 연동성공이 이루어집니다.",
+            	    width: 330,
+            	    height: 30
+        	     };
                 
                 gridMrkVO.dropDownEditor = function(container, options, objDataSource, arrField) {
 		       		$('<input required name='+ options.field +' data-bind="value:' + options.field + '" />')
@@ -453,7 +476,7 @@
                 	e.preventDefault();
                 	e.stopPropagation();
                 }
-                
+                                
                 setTimeout(function () {
                 	if(!page.isWriteable()) {
         				$(".k-grid-add").addClass("k-state-disabled");

@@ -53,9 +53,10 @@
                 </form>
             </div>
         </div>
-        <div class="content-area-container col-xs-12" style="padding:0px 0px 0px 0px; margin-top:-5px;">
-            <div id="mrkKg" kendo-grid="mrkKg" options="gridMrkVO">
-		    </div>
+        <div class="content-area-container col-xs-12" style="padding:0px 0px 0px 0px; margin-top:-5px;">	    	
+	    	<kendo-tooltip options="gridMrkVO.tooltipOptions">				        	   
+		        <div id="mrkKg" kendo-grid="mrkKg" options="gridMrkVO"></div>         
+		    </kendo-tooltip>
 	    </div>    
     </div>
 </div>
