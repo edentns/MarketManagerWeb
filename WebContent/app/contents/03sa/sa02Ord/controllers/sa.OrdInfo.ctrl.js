@@ -173,7 +173,8 @@
 	            		menu = "",
 	            		param = {
 							lnomngcdhd: "SYCH00048",
-							lcdcls: "SA_000007"
+							lcdcls: "SA_000007",
+    	    				customnoc: "00000"
 						};
 	            		            	
 	            	me.kind = $stateParams.kind;

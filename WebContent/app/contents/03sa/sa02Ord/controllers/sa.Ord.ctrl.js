@@ -165,6 +165,7 @@
                 	var ordParam = {
                 			lnomngcdhd: "SYCH00048",
         					lcdcls: "SA_000007",
+	    					customnoc: "00000",
         					mid: menuId
         				},
         				betParam = {

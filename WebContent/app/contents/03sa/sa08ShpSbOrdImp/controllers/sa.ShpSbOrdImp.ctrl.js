@@ -25,7 +25,8 @@
     				var param = {
     					lnomngcdhd: "SYCH00048",
     					lcdcls: "SA_000007",
-    					mid: menuId
+	    				customnoc: "00000",
+	    				mid: menuId
     				};
     				UtilSvc.getCommonCodeList(param).then(function (res) {
         				if(res.data.length >= 1){
