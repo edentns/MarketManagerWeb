@@ -419,7 +419,7 @@
             		filter: "td:nth-child(9)",
             		position: "right",
             		content: "샵명칭은 오픈마켓과 동일하게 입력하셔야 연동성공이 이루어집니다.",
-            	    width: 330,
+            	    width: 400,
             	    height: 30
         	     };
                 
@@ -443,7 +443,7 @@
 		       				nmd = grdData[i][arrField[1]];
 		       				break;
 		       			}
-		       		}	
+		       		}
                 	return nmd;
                 };
                 
