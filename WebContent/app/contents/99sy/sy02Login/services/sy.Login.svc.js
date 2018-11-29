@@ -156,6 +156,19 @@
 						url		: APP_CONFIG.domain +"/ut09Avtm?NO_AVTMCLFT="+NO_AVTMCLFT,
 						headers	: { "Content-Type": "application/x-www-form-urlencoded; text/plain; */*; charset=utf-8" }
 					});
+				},				
+				
+				/**
+				 * 간편회원가입
+				 * @param {{}} data
+				 * @returns {*}
+				 */
+				highPassSaveUserJoin : function (userJoinVO) {
+					return $http({
+						method	: "POST",
+						url		: APP_CONFIG.domain +"/highPassSaveUserJoin",
+						data    : userJoinVO
+					});
 				}
 			};
 		}]);

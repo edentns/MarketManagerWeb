@@ -273,7 +273,8 @@
 						return;
 					}
 					
-					SyLoginSvc.doChkMe(self.param.DC_EMIADDR).then(function (res) {
+					/*
+					 * SyLoginSvc.doChkMe(self.param.DC_EMIADDR).then(function (res) {
 						if(res.status === 200) {
 							self.param.NO_OWNCONF = res.data.NO_OWNCONF; // 본인확인 여부 데이터
 							
@@ -289,6 +290,23 @@
 								//console.log('회원가입 실패('+msg+')');
 							});;
 						}
+					});*/
+					
+					SyLoginSvc.highPassSaveUserJoin(self.param).success(function (data, status, headers, config) {
+						if(status === 200) {
+							$analytics.eventTrack('pc/ajax', {  category: 'pc/회원가입', label: '회원가입 성공' });
+							//console.log("회원 가입하였습니다.");
+							alert('회원 가입하였습니다.');
+							$modalInstance.dismiss( "ok" );
+						}
+						else{
+							$analytics.eventTrack('pc/ajax', {  category: 'pc/회원가입', label: '회원가입 실패('+data+')' });
+							alert('회원 가입에 실패 하였습니다.');
+						}
+					}).error(function (msg, status, headers, config) {
+						$analytics.eventTrack('pc/ajax', {  category: 'pc/회원가입', label: '회원가입 실패('+msg+')' });
+						alert('회원 가입에 실패 하였습니다.');
+						//console.log('회원가입 실패('+msg+')');
 					});
 				};
 
@@ -298,6 +316,36 @@
 				userJoinVO.doClose = function () {
 					$modalInstance.dismiss( "cancel" );
 				};
+				
+				
+				/**
+				 * 회원가입완료 메세지
+				 **/
+				/*userJoinVO.joinIsComplete = function(){
+					var self = this,
+						modalInstance = $modal.open({
+							options: {
+								modal: true,
+								resizable: true,
+								width: 300,
+								visible: false
+							},
+							template : " <div class='modal'>" +
+									   "  <div class='modal-body'> " + 
+									   "      <h1>회원가입이 완료 되었습니다!</h1> " +
+									   "      <p>" + 
+								       "         님의 가입자번호는 입니다. " + 
+								       "     </p> " +
+								       "  <button ng-click=''>Close</button>" + 
+								       "  </div>" +
+								       "</div> " +
+								       "<div class='modal-background'></div>", 
+			                size     : "md"
+						});
+					
+					modalInstance.result.then(function ( result ) {
+		            });
+				}	*/			
 
 				// 처음 로드되었을 때 실행된다.
 				(function  () {

@@ -118,7 +118,7 @@
 
 
 				/**
-				 * 비밀번호재설정 팝업창 띄우기
+				 * 회원가입 팝업창 띄우기
 				 */
 				loginVO.modalUserJoin = function () {
 					var self = this,

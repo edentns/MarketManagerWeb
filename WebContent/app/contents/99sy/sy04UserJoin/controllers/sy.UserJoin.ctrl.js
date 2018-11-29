@@ -265,7 +265,7 @@
 						return;
 					}
 					
-					SyLoginSvc.doChkMe(self.param.DC_EMIADDR).then(function (res) {
+/*					SyLoginSvc.doChkMe(self.param.DC_EMIADDR).then(function (res) {
 						if(res.status === 200) {
 							self.param.NO_OWNCONF = res.data.NO_OWNCONF; // 본인확인 여부 데이터
 							
@@ -281,6 +281,23 @@
 								}
 							});
 						}
+					});*/		
+					
+					SyLoginSvc.highPassSaveUserJoin(self.param).success(function (data, status, headers, config) {
+						if(status === 200) {
+							$analytics.eventTrack('pc/ajax', {  category: 'pc/회원가입', label: '회원가입 성공(idx)' });
+							//console.log("회원 가입하였습니다.");
+							alert('회원 가입하였습니다.');
+							$modalInstance.dismiss( "ok" );
+						}
+						else{
+							$analytics.eventTrack('pc/ajax', {  category: 'pc/회원가입', label: '회원가입 실패(idx)' });
+							alert('회원 가입에 실패하였습니다.');
+						}
+					}).error(function (msg, status, headers, config) {
+						$analytics.eventTrack('pc/ajax', {  category: 'pc/회원가입', label: '회원가입 실패(idx)' });
+						alert('회원 가입에 실패하였습니다.');
+						//console.log('회원가입 실패('+msg+')');
 					});
 				};
 		
