@@ -80,7 +80,7 @@
 <script id="template" type="text/x-kendo-template">
 	<tr class="k-grid-row" data-uid="#= uid #">
 		<td class="ta-c">        
-			# if(CD_JOINYN === '003'){	#
+			# if(CD_JOINYN === '003' || CD_JOINYN === '004'){	#
 					
 			# }else{					#
 				<input class='k-checkbox' data-role='checkbox' type='checkbox' ng-click='onClick($event)' id='#= uid #'>

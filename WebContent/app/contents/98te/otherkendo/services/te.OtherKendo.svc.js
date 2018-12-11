@@ -101,6 +101,20 @@
                         url    : APP_CONFIG.domain +"/shpingapikeytest",
                         data   : oParam
                     });
+                },
+                
+                /**
+                 * aes256 변환
+                 * @param oParam
+                 * @returns {*}
+                 */
+                
+                aes256transfer : function (oParam) {
+                    return $http({
+                        method : "POST",
+                        url    : APP_CONFIG.domain +"/aes256transfer",
+                        data   : oParam
+                    });
                 }
             };
         };

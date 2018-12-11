@@ -13,8 +13,12 @@
 	            today = edt.getToday();
 
 	        	var otherKendoVO1 = $scope.otherKendoVO1 = {
-	        			pars : "04",
-	        			invoice : "615327242550",
+	        		aes256before : "",
+	        		deAes256before : "",
+	        		aes256after : "",
+					deAes256after : "",
+	        		pars : "04",
+	        		invoice : "615327242550",
 	        		boxTitle : "검색",
 	        		mcb01Data : [],
 	        		mcb01Model : "",
@@ -178,6 +182,25 @@
 						alert(res.data[1]);
 					});
 	        	};
+	        	
+	        	otherKendoVO1.aes256transfer = function(type) {
+	        		var self = this;
+	        			        		
+					var param = {
+						code : type === 'a' ? self.aes256before : self.deAes256before,
+						type : type
+					};
+					
+					TeOtherKendoSvc.aes256transfer(param).then(function (res) {
+						if(type === 'a'){
+							self.aes256after = res.data.code;     		
+						}
+						else{
+							self.deAes256after = res.data.code;
+						}
+					});
+	        	};
+        	
         	
 	        	otherKendoVO1.initLoad = function() {
 	        		var self = this;

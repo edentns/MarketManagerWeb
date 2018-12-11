@@ -100,10 +100,24 @@
 	        						송장번호 <input data-ng-model="otherKendoVO1.invoice" name="invoice"/><br/>
 	        						<button type="button" class="btn btn-primary" title="체크" data-ng-click="otherKendoVO1.chkKey()">체크</button><br/>	     
 	        						</td>
-	        						<th></th>
-	        						<td>	     </td>
-	        						<th>		 </th>
-	        						<td>		 </td>
+	        						<th>
+	        							aes256 암호화
+	        						</th>
+	        						<td>
+	        							 변환전 값<input data-ng-model="otherKendoVO1.aes256before" name="invoice"/><br/>
+	        								<button type="button" class="btn btn-primary" title="변환" data-ng-click="otherKendoVO1.aes256transfer('a')">변환</button><br/>
+	        							변환후 값<br/>
+	        							<span data-ng-bind="otherKendoVO1.aes256after"></span><br/>
+	        						</td>
+	        						<th>
+	        							aes256 복호화
+	        						</th>
+	        						<td>
+	        							 변환전 값<input data-ng-model="otherKendoVO1.deAes256before" name="invoice"/><br/>
+	        								<button type="button" class="btn btn-primary" title="변환" data-ng-click="otherKendoVO1.aes256transfer('b')">변환</button><br/>
+	        							변환후 값<br/>
+	        							<span data-ng-bind="otherKendoVO1.deAes256after"></span><br/>
+	        						</td>
 	        					</tr
 	        				</tbody>
 	        			</table>
