@@ -33,6 +33,7 @@
                     DC_CONSNEWADDR : { type: APP_SA_MODEL.DC_CONSNEWADDR.type , editable: false, nullable: false },
                     DC_CONSOLDADDR : { type: APP_SA_MODEL.DC_CONSOLDADDR.type , editable: false, nullable: false },
                     CD_ORDSTAT     : { type: APP_SA_MODEL.CD_ORDSTAT.type     , editable: false, nullable: false },
+                    CD_CCLSTAT     : { type: APP_SA_MODEL.CD_CCLSTAT.type     , editable: false, nullable: false },
                     DC_SHPWAY      : { type: APP_SA_MODEL.DC_SHPWAY.type      , editable: false, nullable: false },
                     DTS_ORD        : { type: APP_SA_MODEL.DTS_ORD.type        , editable: false, nullable: false },
                     DTS_ECHGAPPRRJT: { type: APP_SA_MODEL.DTS_ECHGAPPRRJT.type, editable: false, nullable: false },
@@ -60,7 +61,7 @@
                               [APP_SA_MODEL.NO_PCHRPHNE  , APP_SA_MODEL.NO_CONSHDPH   ],
                               [APP_SA_MODEL.DC_PCHREMI   , APP_SA_MODEL.DC_CONSNEWADDR],
                               [APP_SA_MODEL.DC_PCHRREQCTT, APP_SA_MODEL.DC_CONSOLDADDR],
-                              [APP_SA_MODEL.NM_ORDSTAT   , APP_SA_MODEL.DC_SHPWAY     ],
+                              [[APP_SA_MODEL.NM_ORDSTAT, APP_SA_MODEL.CD_CCLSTAT]   , APP_SA_MODEL.DC_SHPWAY     ],
                               [APP_SA_MODEL.DTS_ORDDTRM  , APP_SA_MODEL.DTS_ORD       ],
                               [APP_SA_MODEL.NM_PARS      , APP_SA_MODEL.NO_INVO       ],
                               [APP_SA_MODEL.DT_SND       , APP_SA_MODEL.QT_ORD        ]
