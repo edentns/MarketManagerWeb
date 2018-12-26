@@ -134,13 +134,59 @@
     </div>
     
     <div class="row">
+    	<div class="content-area-container col-xs-12">    		
+    		<textarea data-ng-model="otherKendoVO1.ordInfoListTmp" style="text-align:left;height:300px;" />    			
+    	</div>
     	<div class="content-area-container col-xs-12">
-    		<textarea kendo-editor id="k-edi" name="DC_HTMLCONTENT" k-options="otherKendoVO1.kEditor" style="text-align:left; height:1000px;"></textarea>
+    		<table>
+    			<thead>
+    				<tr>
+    					<th class="text-center">
+							NO
+						</th>
+						<th class="text-center">
+							(주문번호)mallItemOrderNo
+						</th>
+						<th class="text-center">
+							(배송번호)mallItemNo 
+						</th>
+						<th class="text-center">
+							(상품명)mallItemName 
+						</th>
+						<th class="text-center">
+							수취인 
+						</th>
+						<th class="text-center">
+							수량 
+						</th>
+						<th class="text-center">
+							(순번)ordSeq 
+						</th>	
+					</tr>
+    			</thead>
+    			<tbody>
+    				<tr data-ng-repeat="param in otherKendoVO1.ordInfoList track by $index">
+    					<td>{{$index + 1 }}</td>
+    					<td>{{param.mallItemOrderNo}}</td>
+    					<td>{{param.mallItemNo}}</td>    					
+    					<td>{{param.mallItemName}}</td>
+    					<td>{{param.recipientName}}</td>
+    					<td>{{param.orderCnt}}</td>    					
+    					<td>{{param.ordSeq}}</td>
+    				</tr>
+    			</tbody>    			    			
+    		</table>
+    	</div>
+    </div>
+    
+    <div class="row">
+    	<div class="content-area-container col-xs-12">
+    		<textarea kendo-editor id="k-edi" name="DC_HTMLCONTENT" k-options="otherKendoVO1.kEditor" style="text-align:left; height:200px;"></textarea>
     	</div>
     </div>
     <div class="row">
     	<div class="content-area-container col-xs-12">
-    		<textarea kendo-editor id="k-edi_test" name="DC_HTMLCONTENT_TEST" k-options="otherKendoVO1.kEditor_test" style="text-align:left; height:1000px;"></textarea>
+    		<textarea kendo-editor id="k-edi_test" name="DC_HTMLCONTENT_TEST" k-options="otherKendoVO1.kEditor_test" style="text-align:left; height:100px;"></textarea>
     	</div>
     </div>
     

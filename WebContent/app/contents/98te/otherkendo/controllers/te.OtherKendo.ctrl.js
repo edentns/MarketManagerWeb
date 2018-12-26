@@ -13,6 +13,8 @@
 	            today = edt.getToday();
 
 	        	var otherKendoVO1 = $scope.otherKendoVO1 = {
+	        		ordInfoListTmp : "",
+	        		ordInfoList : "",	
 	        		aes256before : "",
 	        		deAes256before : "",
 	        		aes256after : "",
@@ -362,6 +364,20 @@
                         }
                     });
 	        	}
+	        	
+	        	$scope.$watch("otherKendoVO1.ordInfoListTmp", function() {
+	        		try{
+	        			var tmp = JSON.parse(otherKendoVO1.ordInfoListTmp);
+		        		if(angular.isArray(tmp)){
+			        		otherKendoVO1.ordInfoList = tmp.sort(function(a, b) { // 오름차순
+			        		    return a.mallItemOrderNo < b.mallItemOrderNo ? -1 : a.mallItemOrderNo > b.mallItemOrderNo ? 1 : 0;
+			        		});;
+		        		}
+	        		}catch(e){
+	        			
+	        		}	        		
+	        		//console.log(otherKendoVO1.ordInfoList);
+	            });
 	        	
 	        	otherKendoVO1.initLoad();
         	}
