@@ -103,7 +103,7 @@
         			// 검색조건 세션스토리지에 임시 저장
         			UtilSvc.grid.setInquiryParam(param);
                 };
-		        
+                		        
                 //새로 저장시 유효성 검사 (수정 할 땐 비밀번호를 따로 입력할 필요할 없어서 required 하지 않아서 저장시 따로 함수를 만듦 kendo로는  editable true 일때만 됨)
                 var isValid = function(inputs){
                 	var checkReturn = true;
@@ -170,14 +170,18 @@
                                 	data: e.data.models
                                 };
 	                			
-	                			if(!isValid(param)) { return false; };
+	                			if(!isValid(param)) {
+	                				e.error([]);
+	                				return false; 
+	                			};
+	                			
 	                			syMrkSvc.saveUserMrk(e.data.models, "I").success(function () {
 	                				defer.resolve();
 	                				gridMrkVO.dataSource.read();
 	                            }).error(function() {
                                 	defer.resolve();
-                                	e.error();
-								});;
+	                				e.error([]);
+								});
 	                			
 	                			return defer.promise;
 	            			},
@@ -187,13 +191,16 @@
                                 	data: e.data.models
                                 };
 	                			
-	                			if(!isValid(param)) { return false; };
+	                			if(!isValid(param)) { 
+            						e.error([]);
+	                				return false; 
+	                			};
 	                			syMrkSvc.saveUserMrk(e.data.models, "U").success(function () {
 	                				defer.resolve();
 	                				gridMrkVO.dataSource.read();
 	                            }).error(function() {
                                 	defer.resolve();
-                                	e.error();
+	                				e.error([]);
 								});;
 	                			
 	                			return defer.promise;
@@ -205,7 +212,7 @@
             						gridMrkVO.dataSource.read();
                                 }).error(function() {
                                 	defer.resolve();
-                                	e.error();
+	                				e.error([]);
 								});
                     			return defer.promise;
                 			},
@@ -221,16 +228,35 @@
                 			model: {
                     			id: "NO_MNGMRK",
                 				fields: {
-                					ROW_NUM:     { type: "number", editable: false },
-                					NO_MNGMRK:   { type: "string", 
-                						validation: { 
-                							required: {message: "관리마켓을 입력하여 주세요."}
-                						}
+                					ROW_NUM:     { 
+                						type: "number"
+                					   ,editable: false 
                 					},
-                					NM_MRK:      { type: "string", 
-                						validation: {
-                							required: {message: "마켓명을 입력하여 주세요."}
-                						}  
+                					NO_MNGMRK:   { 
+                						 type: "string" 
+	                					,editable: true
+	    								,validation: {
+	    									no_mngmrkvalidation: function (input) {
+							    	    	     if (input.is("[name='NO_MNGMRK']") && !input.val()) {
+                                                	 input.attr("data-no_mngmrkvalidation-msg", "관리마켓을 설정해 주세요.");
+                                                	 return false;
+	                                             }
+	                                             return true;
+								    	    }
+							             }
+                					},
+                					NM_MRK:      { 
+                						 type: "string"
+	                					,editable: true
+	    								,validation: {
+	    									nm_mrkvalidation: function (input) {
+							    	    	     if (input.is("[name='NM_MRK']") && !input.val()) {
+	                                            	 input.attr("data-nm_mrkvalidation-msg", "마켓명을 입력하여 주세요.");
+	                                            	 return false;
+	                                             }
+	                                             return true;
+								    	    }
+							             }
 									},
                 					NM_MRKDFT:   { type: "string", editable: false },
                 					DT_ITLSTART: { type: "string", editable: false },
@@ -238,54 +264,60 @@
                 					DC_MRKID:    { type: "string", editable: true, validation: { required: {message: "마켓ID를 입력하여 주세요."} } },
                 					DC_PWD:      { type: "string" },
                 					NEW_DC_PWD:  {
-                						type: "string"
-										,validation: {
-										    new_dc_pwdvalidation: function (input) {
-												if (input.is("[name='NEW_DC_PWD']") && input.val() != "") {
-													var regex = /\s/g;
-													input.attr("data-new_dc_pwdvalidation-msg", "비밀번호를 50자 이하로 설정하거나, 공백을 제거하고 설정해 주세요.");
-													return regex.test(input.val()) === true || input.val().length > 50 ? false : true;
-												}
-												return true;
-											}
-										}
-										,editable: true
-										,nullable: false
+			                						type: "string"
+												   ,validation: {
+													    new_dc_pwdvalidation: function (input) {													    	
+															if (input.is("[name='NEW_DC_PWD']") && input.val()){
+																var regex = /\s/g;
+																input.attr("data-new_dc_pwdvalidation-msg", "비밀번호를 50자 이하로 설정하거나, 공백을 제거하고 설정해 주세요.");
+																return regex.test(input.val()) === true || input.val().length > 50 ? false : true;
+															}
+															return true;
+														}
+													}
+													,editable: true
+													,nullable: false
         							},
-                					NM_SHOP   : {type: "string", editable: true, nullable: true, 
-                						         validation: {
-										    	     nm_shopvalidation: function (input) {
-									    	    	     if (input.is("[name='NM_SHOP']") && input.val() != "") {
-									    	    	    	 var row = input.closest("tr");
-									    	    	         var grid = row.closest("[data-role=grid]").data("kendoGrid");
-									    	    	         var dataItem = grid.dataItem(row);
-									    	    	         
-	                                                    	 if(dataItem.NO_MNGMRK != "SYMM170101_00002") {
-	                                                        	 input.attr("data-nm_shopvalidation-msg", "샵명칭은 스토어팜일경우만 입력가능합니다.");
-		                                                    	 return false;
-	                                                    	 }
-	                                                    	 return true;
-	                                                     }
-	                                                     return true;
-										    	     }
-									             }},
-                					API_KEY:     { type: "string" },
+                					NM_SHOP   : {
+	                								 type: "string"
+	                								,editable: true
+	                								,nullable: true
+	                								,validation: {
+											    	     nm_shopvalidation: function (input) {
+										    	    	     if (input.is("[name='NM_SHOP']") && input.val() != "") {
+										    	    	    	 var row = input.closest("tr");
+										    	    	         var grid = row.closest("[data-role=grid]").data("kendoGrid");
+										    	    	         var dataItem = grid.dataItem(row);
+										    	    	         
+		                                                    	 if(dataItem.NO_MNGMRK != "SYMM170101_00002") {
+		                                                        	 input.attr("data-nm_shopvalidation-msg", "샵명칭은 스토어팜일경우만 입력가능합니다.");
+			                                                    	 return false;
+		                                                    	 }
+		                                                    	 return true;
+		                                                     }
+		                                                     return true;
+											    	     }
+										             }
+        							},
+                					API_KEY:     { 
+                									type: "string" 
+                								 },
                 					NEW_API_KEY: {
-     				    			   type: "string"
-     				    			  ,defaultValue: ""
-                 				      ,validation: {
-									    	  new_api_keydvalidation: function (input) {
-                                               if (input.is("[name='NEW_API_KEY']") && input.val() != "") {
-                                             	   var regex = /\s/g;
-                                             	   input.attr("data-new_api_keydvalidation-msg", "API KEY를 50자 이하로 설정하거나, 공백을 제거하고 설정해 주세요.");			                                                	  
-                                                   return regex.test(input.val()) === true || input.val().length > 50 ? false : true;
-                                               }			                                                  
-                                              return true;
-									    	  }
-									       }
-       							  	  ,editable: true
-       							  	  ,nullable: true
-                					},
+     				    			   				type: "string"
+     				    			   			   ,defaultValue: ""
+     				    			   			   ,validation: {
+     				    			   				   new_api_keydvalidation: function (input) {
+     				    			   					   if (input.is("[name='NEW_API_KEY']") && input.val() != "") {
+     				    			   						   var regex = /\s/g;
+     				    			   						   input.attr("data-new_api_keydvalidation-msg", "API KEY를 50자 이하로 설정하거나, 공백을 제거하고 설정해 주세요.");			                                                	  
+     				    			   						   return regex.test(input.val()) === true || input.val().length > 50 ? false : true;
+     				    			   					   	}			                                                  
+     				    			   					   return true;
+     				    			   				   }
+     				    			   			   }
+			       							  	  ,editable: true
+			       							  	  ,nullable: true
+                								  },
                 					DC_SALEMNGURL: {type: "string", editable: false},
                 					YN_USE:     {type: "string" },
                 					NM_NT:      {type: "string", editable: false},
@@ -302,75 +334,128 @@
                 	toolbar: 
                 		["create", "save", "cancel"],
                 	columns: [
-           		           {field: "ROW_NUM",     title: "No",    width: 50, template: "<span class='row-number'></span>",
-   							headerAttributes: gridHeaderAttributes},
-        		           {field: "NO_MNGMRK",   title: "<span class='form-required'>* </span>관리마켓",  width: 100,
-   	   						headerAttributes: gridHeaderAttributes, attributes:{style:"background-color:"+bgColor+";"}, 
-           		        	editor: function(container, options) {
-           		        		gridMrkVO.dropDownEditor(container, options, dateVO.MrkCodeList, ["NM_MRK","NO_MNGMRK"]);
-           		        	},
-          		       	   	template:  function(e){
-          		       		    var nmd = (!e.NM_MRK.hasOwnProperty("NO_MNGMRK")) ?  e.NM_MRK : "";
-          		       		    var grdData = dateVO.MrkCodeList;	
-								for(var i = 0, leng=grdData.length; i<leng; i++){
-									if(grdData[i].NO_MNGMRK === e.NO_MNGMRK){
-										nmd = grdData[i].NM_MRK;
-										if(e.DC_SALEMNGURL === '') e.DC_SALEMNGURL = grdData[i].DC_SALEMNGURL;
-										if(e.NM_MRKDFT === '') e.NM_MRKDFT = grdData[i].NM_MRKDFT;
-										if(e.NM_NT === '') e.NM_NT = grdData[i].NM_NT;
+								{
+									field : "ROW_NUM",
+									title : "No",
+									width : 50,
+									template : "<span class='row-number'></span>",
+									headerAttributes : gridHeaderAttributes
+								},
+								{
+									field : "NO_MNGMRK",
+									title : "<span class='form-required'>* </span>관리마켓",
+									width : 100,
+									headerAttributes : gridHeaderAttributes,
+									attributes : {
+										style : "background-color:"+ bgColor + ";"
+									},
+									editor : function(container, options) {
+										gridMrkVO.dropDownEditor(container,options,dateVO.MrkCodeList,[ "NM_MRK",	"NO_MNGMRK" ]);
+									},
+									template : function(e) {
+										var nmd = (!e.NM_MRK.hasOwnProperty("NO_MNGMRK")) ? e.NM_MRK : "";
+										var grdData = dateVO.MrkCodeList;
+										
+										for (var i = 0, leng = grdData.length; i < leng; i++) {
+											if (grdData[i].NO_MNGMRK === e.NO_MNGMRK) {
+												nmd = grdData[i].NM_MRK;
+												if (e.DC_SALEMNGURL === '')
+													e.DC_SALEMNGURL = grdData[i].DC_SALEMNGURL;
+												if (e.NM_MRKDFT === '')
+													e.NM_MRKDFT = grdData[i].NM_MRKDFT;
+												if (e.NM_NT === '')
+													e.NM_NT = grdData[i].NM_NT;
+											}
+										}
+										return nmd;
 									}
-								}
-	            		        return nmd;
-          		       	  	}},
-        		           {field: "NM_MRK",      title: "<span class='form-required'>* </span>마켓명",    width: 100,
-       	   					headerAttributes: gridHeaderAttributes, attributes:{style:"background-color:"+bgColor+";"}},
-        		           {field: "NM_MRKDFT",   title: "마켓구분", width: 100,  headerAttributes: gridHeaderAttributes},
-        		           {field: "DT_ITLSTART", title: "연동시작일자", width: 90, headerAttributes: gridHeaderAttributes},
-        		           {field: "CD_ITLSTAT",  title: "연동상태",    width: 80,
-          		       	  	editor: function(container, options) {
-          		       	  		gridMrkVO.dropDownEditor(container, options, dateVO.ItlStatCodeList, ["NM_DEF","CD_DEF"]);
-           		        	},   
-	   	   				    template: function(e){
-          		       	   		return gridMrkVO.fTemplate(e, dateVO.ItlStatCodeList, ["CD_DEF", "NM_DEF", "CD_ITLSTAT"]);
-          		       	  	},
-		   	   				headerAttributes: gridHeaderAttributes},
-        		           {field: "DC_MRKID", title: "<span class='form-required'>* </span>마켓ID", width: 100, headerAttributes: gridHeaderAttributes, 
-		   	   					attributes:{class:"ta-l", style:"background-color:"+bgColor+";"}},
-        		           {field: "NEW_DC_PWD",  title: "<span class='form-required'>* </span>비밀번호",   width: 140,
-        		        	editor: function (container, options) {
-          		                 $('<input type="password" class="k-textbox" required="required" data-required-msg="비밀번호를 입력하여 주세요." name="' + options.field + '"/>').appendTo(container);
-          	                 },
-          	                 template: function(e){
-        		           		 var returnPWDMsg = "";
-        		           		 if(e.NEW_DC_PWD == "" || e.NEW_DC_PWD == null && e.DC_PWD != ""){
-        		           			 if(e.DC_PWD_LEN != null) returnPWDMsg = Array(e.DC_PWD_LEN + 1).join("*");
-          		           		 }else if(e.NEW_DC_PWD != "" && e.NEW_DC_PWD  != null){
-          		           			 returnPWDMsg = Array(e.NEW_DC_PWD.length + 1).join("*");
-          		           		 }
-          		           		 return returnPWDMsg;
-        		           	 },
-    	   					headerAttributes: gridHeaderAttributes, attributes:{
-    	   							class:"ta-l", 
-    	   							style:"background-color:"+bgColor+";"
-    	   							}},
-    	   				   {
-	    	   					field: "NM_SHOP",      
-	    	   					title: "샵명칭",    
-	    	   					width: 100,
-	           	   				headerAttributes: gridHeaderAttributes, 
-	           	   				attributes:{
-	           	   					class:"ta-l nm-shop", 
-	           	   					style:"background-color:"+bgColor+";"
-	           	   				}
-    	   				   },
-        		           {		
-       	   						field: "NEW_API_KEY",     
-       	   						title: "API_KEY",  
-       	   						width: 100,
-       	   						editor: function (container, options) {
-       	   							$('<input type="password" class="k-textbox" name="' + options.field + '"/>').appendTo(container);
-       	   						},
-           	   						template: function(e){  
+								},
+								{
+									field : "NM_MRK",
+									title : "<span class='form-required'>* </span>마켓명",
+									width : 100,
+									headerAttributes : gridHeaderAttributes,
+									attributes : {
+										style : "background-color:"+ bgColor + ";"
+									}
+								},
+								{
+									field : "NM_MRKDFT",
+									title : "마켓구분",
+									width : 100,
+									headerAttributes : gridHeaderAttributes
+								},
+								{
+									field : "DT_ITLSTART",
+									title : "연동시작일자",
+									width : 90,
+									headerAttributes : gridHeaderAttributes
+								},
+								{
+									field : "CD_ITLSTAT",
+									title : "연동상태",
+									width : 80,
+									editor : function(container,options) {
+										gridMrkVO.dropDownEditor(container, options, dateVO.ItlStatCodeList,[ "NM_DEF","CD_DEF" ]);
+									},
+									template : function(e) {
+										return gridMrkVO.fTemplate(e, dateVO.ItlStatCodeList,["CD_DEF", "NM_DEF","CD_ITLSTAT" ]);
+									},
+									headerAttributes : gridHeaderAttributes
+								},
+								{
+									field : "DC_MRKID",
+									title : "<span class='form-required'>* </span>마켓ID",
+									width : 100,
+									headerAttributes : gridHeaderAttributes,
+									attributes : {
+										class : "ta-l",
+										style : "background-color:"+ bgColor + ";"
+									}
+								},
+								{
+									field : "NEW_DC_PWD",
+									title : "<span class='form-required'>* </span>비밀번호",
+									width : 140, 
+									editor : function(container, options) {
+										$('<input type="password" class="k-textbox"' + 
+													' is-caps-lock ' +													
+														'required="required" data-required-msg="비밀번호를 입력하여 주세요." name="'+ options.field+ '"/>').appendTo(container);										
+									},
+									template : function(e) {
+										var returnPWDMsg = "";
+										if (e.NEW_DC_PWD == ""|| e.NEW_DC_PWD == null&& e.DC_PWD != "") {
+											if (e.DC_PWD_LEN != null)returnPWDMsg = Array(e.DC_PWD_LEN + 1).join("*");
+										} 
+										else if (e.NEW_DC_PWD != "" && e.NEW_DC_PWD != null) {
+											returnPWDMsg = Array(e.NEW_DC_PWD.length + 1).join("*");
+										}
+										return returnPWDMsg;
+									},
+									headerAttributes : gridHeaderAttributes,
+									attributes : {
+										class : "ta-l",
+										style : "background-color:"+ bgColor + ";"
+									}
+								},
+							    {
+		    	   					field: "NM_SHOP",      
+		    	   					title: "샵명칭",    
+		    	   					width: 100,
+		           	   				headerAttributes: gridHeaderAttributes, 
+		           	   				attributes:{
+		           	   					class:"ta-l nm-shop", 
+		           	   					style:"background-color:"+bgColor+";"
+		           	   				}
+	    	   				    },
+	        		            {		
+	       	   						field: "NEW_API_KEY",     
+	       	   						title: "API_KEY",  
+	       	   						width: 100,
+	       	   						editor: function (container, options) {
+	       	   							$('<input type="password" class="k-textbox" name="' + options.field + '"/>').appendTo(container);
+	       	   						},
+           	   						template: function(e){
            	   							var returnAPIMsg = "";
            	   								if(e.NEW_API_KEY == "" || e.NEW_API_KEY == null && e.API_KEY != ""){
            	   									if(e.API_KEY_LEN != null) returnAPIMsg = Array(e.API_KEY_LEN + 1).join("*");
@@ -380,24 +465,35 @@
            	   								}
            	   							return returnAPIMsg;
            	   						},
-	    	   				headerAttributes: gridHeaderAttributes, attributes:{class:"ta-l", style:"background-color:"+bgColor+";"}},
-        		           {field: "DC_SALEMNGURL", title: "판매관리URL", width: 250,
-	   	   					headerAttributes: gridHeaderAttributes,
-	   	   				    attributes: {class:"ta-l", style:"text-overflow:ellipsis; white-space:nowrap; overflow:hidden;"},
-	   	   				    template: "<a href='#: DC_SALEMNGURL #' target='_blank'>#: DC_SALEMNGURL #</a>"},
-        		           {field: "YN_USE",      title: "사용여부",    width: 80,
-          		       	  	editor: function(container, options) {
-          		       	  		gridMrkVO.dropDownEditor(container, options, dateVO.ynUseDataSource, ["NM_DEF","CD_DEF"]);
-           		        	},   
-	   	   				    template: function(e){
-          		       	   		return gridMrkVO.fTemplate(e, dateVO.ynUseDataSource, ["CD_DEF", "NM_DEF", "YN_USE"]);
-          		       	  	},
-	       	   				headerAttributes: gridHeaderAttributes, attributes:{style:"background-color:"+bgColor+";"}},
-	       	   			    {field: "NM_NT",      title: "국가",   width: 80, headerAttributes: gridHeaderAttributes},
-       	   	   				//{field: "DTS_INSERT", title: "등록일자", width: 80, headerAttributes: gridHeaderAttributes},
-       	   	   				//{field: "DTS_UPDATE", title: "수정일자", width: 80, headerAttributes: gridHeaderAttributes},
-       	   	   				//{field: "NM_UPDATE",  title: "수정자" , width: 80, headerAttributes: gridHeaderAttributes},
-        		            {command: [{text:"연동체크", click: checkCon }, "destroy"], width: 160, attributes:{class:"ta-l"}},
+           	   						headerAttributes: gridHeaderAttributes, attributes:{class:"ta-l", style:"background-color:"+bgColor+";"}
+           	   					},
+           	   					{
+           	   						field: "DC_SALEMNGURL", 
+           	   						title: "판매관리URL", 
+           	   						width: 250,
+           	   						headerAttributes: gridHeaderAttributes,
+           	   						attributes: {class:"ta-l", style:"text-overflow:ellipsis; white-space:nowrap; overflow:hidden;"},
+           	   						template: "<a href='#: DC_SALEMNGURL #' target='_blank'>#: DC_SALEMNGURL #</a>"
+           	   					},
+           	   					{
+           	   						field: "YN_USE",      
+           	   						title: "사용여부",    
+           	   						width: 80,
+		          		       	  	editor: function(container, options) {
+		          		       	  		gridMrkVO.dropDownEditor(container, options, dateVO.ynUseDataSource, ["NM_DEF","CD_DEF"]);
+		           		        	},   
+			   	   				    template: function(e){
+		          		       	   		return gridMrkVO.fTemplate(e, dateVO.ynUseDataSource, ["CD_DEF", "NM_DEF", "YN_USE"]);
+		          		       	  	},
+		          		       	  	headerAttributes: gridHeaderAttributes, attributes:{style:"background-color:"+bgColor+";"}
+		          		       	 },
+		          		       	 {
+		          		       		 field: "NM_NT",      
+		          		       		 title: "국가",   
+		          		       		 width: 80, 
+		          		       		 headerAttributes: gridHeaderAttributes
+		          		       	 },
+	        		            {command: [{text:"연동체크", click: checkCon }, "destroy"], width: 160, attributes:{class:"ta-l"}},
                 	],
                     collapse: function(e) {
                         // console.log(e.sender);
@@ -421,7 +517,7 @@
             		content: "샵명칭은 오픈마켓과 동일하게 입력하셔야 연동성공이 이루어집니다.",
             	    width: 400,
             	    height: 30
-        	     };
+        	    };
                 
                 gridMrkVO.dropDownEditor = function(container, options, objDataSource, arrField) {
 		       		$('<input required name='+ options.field +' data-bind="value:' + options.field + '" />')
@@ -451,8 +547,7 @@
                 	e.preventDefault();
                 	var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
                 	
-                	if(dataItem.NO_MRK == undefined ||
-                	   dataItem.NO_MRK == '') {
+                	if(dataItem.NO_MRK == undefined || dataItem.NO_MRK == '') {
                 		alert('저장 후에 연동 버튼을 클릭하여 주세요.');
                 		return;
                 	}
