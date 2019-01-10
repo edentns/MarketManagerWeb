@@ -33,6 +33,16 @@
 					}).error(function (data, status, headers, config) {
 						e.error();
 					});
+				},
+        	
+	        	/**
+				 * 브라우저 확인
+				 */
+				is_ie : function() {
+					if(navigator.userAgent.toLowerCase().indexOf("chrome") != -1) return false;
+					if(navigator.userAgent.toLowerCase().indexOf("msie") != -1) return true;
+					if(navigator.userAgent.toLowerCase().indexOf("windows nt") != -1) return true;
+					return false;
 				}
             };
         }]);

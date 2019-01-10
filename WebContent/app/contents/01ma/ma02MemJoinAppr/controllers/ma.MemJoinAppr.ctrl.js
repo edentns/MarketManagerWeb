@@ -305,13 +305,19 @@
        		        	   title: "탈퇴처리",
        		        	   width: 90,
        		        	   headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
-      		        	}
+      		        	}, 
+		        	    {
+    		        	   field: "",
+    		        	   title: "복사",
+    		        	   width: 90,
+    		        	   headerAttributes: {"class": "table-header-cell", style: "text-align: center; font-size: 12px"}
+       		        	}
                 	],                       
                     collapse: function(e) {
                         this.cancelRow();
                     },
                 	editable: {
-                	    confirmation: "선택된 회원을 승인하시겠습니까?",
+                	    confirmation: "선택된 회원을 승인하시겠습니까?"
                 	},
                 	resizable: true,
                 	rowTemplate: kendo.template($.trim($("#template").html())),
@@ -355,17 +361,39 @@
                 };
                 
                 //회원탈퇴 클릭
-                $scope.secessionClick = function(e) {
+                $scope.clickToSecession = function(e) {
                 	var dataItem = $scope.kg.dataItem($(e.currentTarget).closest("tr"));
                 	
                 	if(dataItem.CD_JOINYN === "004") {
                 		alert("이미 탈퇴된 회원입니다.");
                 		return false;
-                	} 
+                	}
                 	
                 	if(confirm("해당 회원을 탈퇴 처리 하시겠습니까?")){
-                		
+                		var inputString = prompt('탈퇴를 입력하주세요', '');
+                		if(inputString === "탈퇴"){
+                			
+                		}
+                		else{
+                			alert("잘못 입력하셨습니다.");
+                			return;
+                		}
                 	}
+                };
+                
+                //클립보드 복사 클릭
+                $scope.clickToClipboardCopy = function(e) {
+                	var dt = $scope.kg.dataItem($(e.currentTarget).closest("tr")),
+                	 	cpStr = dt.NO_C + ' ' + dt.NM_C + ' ' + dt.NM_EMP + ' ' + dt.NO_BSNSRGTT + ' ' +
+                	 	dt.NO_COMMSALEREG + ' ' + dt.DC_ID + ' ' + dt.DC_REPREMI + ' ' + dt.CD_JOINYN + ' ' +
+                	 	dt.CD_JOINITEM + ' ' + dt.DTS_JOINREQ + ' ' + dt.DTS_JOIN + ' ' + dt.DTS_LASTLOGIN;
+                	                		 
+	    		    if(MaMemJoinApprSvc.is_ie()){
+		    		    window.clipboardData.setData("Text", cpStr);
+		    		    alert("복사 되었습니다.");
+		    		    return;
+	    		    }
+	    		    prompt("Ctrl+C를 눌러 복사하세요.", cpStr);
                 };
                 
                 //가입 승인시 체크박스에 체크된 데이터만 전송
