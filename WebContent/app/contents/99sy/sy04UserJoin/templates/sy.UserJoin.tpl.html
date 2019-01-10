@@ -89,7 +89,7 @@
                     <button type="button" class="btn btn-primary" style="width:100px" title="약관보기" data-ng-click="userJoinVO.popCla()">약관보기</button>
                 </div>
                 <div class="btn-group1 mt-1">
-                    <button type="button" class="btn btn-primary" style="width:30%" title="회원가입 신청" data-ng-click="userJoinVO.doUserJoin()">회원가입 신청</button>
+                    <button type="button" class="btn btn-primary" style="width:30%" title="회원가입 신청" data-ng-click="userJoinVO.doUserJoin()" data-ng-disabled="userJoinVO.ynChkJoinDup">회원가입 신청</button>
                 </div>
                 <div class="btn-group1 mt-1">
                     <button type="button" class="btn btn-danger" style="width:30%" title="닫기" data-ng-click="userJoinVO.doClose()">닫기</button>

@@ -23,25 +23,9 @@
 						NO_OWNCONF: ''
 					},
 					ynChkDup: false,
-					ynCla: false
+					ynCla: false,
+					ynChkJoinDup : false
 				};
-				
-//				userJoinVO = $scope.userJoinVO = {
-//					param: {
-//						NM_C: 'test1234',
-//						CD_BSNSCLFT: '001',
-//						NO_BSNSRGTT: '',
-//						YN_COMMSALEREG: 'Y',
-//						NO_COMMSALEREG: '',
-//						DC_ID: 'test123',
-//						DC_EMIADDR: 'program_jhgf@daum.net',
-//						DC_PWD: '12341234',
-//						DC_REPWD: '12341234',
-//						NO_OWNCONF: ''
-//					},
-//					ynChkDup: false,
-//					ynCla: true
-//				};
 				
 				/**
 				 * 사업자명 중복체크
@@ -261,10 +245,16 @@
 						return;
 					}
 					
-					if(!userJoinVO.isValid()) {
+					if(self.ynChkJoinDup) {
+						alert("회원가입 버튼은 한 번만 눌러 주세요.");
 						return;
 					}
 					
+					if(!userJoinVO.isValid()) {
+						return;
+					}
+
+					self.ynChkJoinDup = true;
 /*					SyLoginSvc.doChkMe(self.param.DC_EMIADDR).then(function (res) {
 						if(res.status === 200) {
 							self.param.NO_OWNCONF = res.data.NO_OWNCONF; // 본인확인 여부 데이터
