@@ -8,35 +8,16 @@
             		 restrict: 'A',
             		 link: function(scope, el, attrs) {			 
 	            	  	 var hideOrShow = function(e) {
-	            	  		 var charCode = false;
-	            	  	     var shifton = false;
 	            	  	     var isTrue = false;
 	            	  		 var enAbleRegex = /[0-9a-zA-Z~!@#$%^&*()_+|<>?:{}]/g;	            	  		 	 
 	            	  		 var disAbleRegex = /[ㄱ-ㅎ가-힣]/g;    	 
 	            	  		 var cpslockMsg = "Caps Lock 버튼이 활성화 되어 있습니다.";
-	            	  		 var hgMsg = "한글로 입력되어 있습니다.";
-	            	  		 var str = String.fromCharCode(e.which);
-	            	  	     
-	            	  	     if (e.which) {
-	            	  	        charCode = e.which;
-	            	  	     }
-	            	  	     else if (e.keyCode) {
-	            	  	        charCode = e.keyCode;
-	            	  	     }
+	            	  		 var hgMsg = "한글로 입력되어 있습니다.";     
+	            	  		 var s = String.fromCharCode(e.keyCode);
 	            	  	    
-	            	  	     if (e.shiftKey) {
-	            	  	        shifton = e.shiftKey;
-	            	  	     } else if (e.modifiers) {
-	            	  	        shifton = !!(e.modifiers & 4);
-	            	  	     }
-
-	            	  	     if (charCode >= 97 && charCode <= 122 && shifton) {
-	            	  	    	isTrue =  true;
-	            	  	     }
-
-	            	  	     if (charCode >= 65 && charCode <= 90 && !shifton) {
-	            	  	    	isTrue =  true;
-	            	  	     }	            	  	       	            	  	     	            	  	   
+		            	  	 if (s.toUpperCase() === s && s.toLowerCase() !== s && !e.shiftKey) {
+		            	  	 	isTrue =  true;
+		            	  	 }
     	                	
     	                	 if(isTrue){
     	                		 if(el.siblings(".cssCpLck").length){
@@ -67,10 +48,10 @@
 	            	  		 hideOrShow(e);
 	            	  	 });
 	            	  	 
-	            	  	 el.keydown(function(e) {
+	            	  	/* el.keydown(function(e) {
 	            	  	 	 //$log.log("Keyup");
 	            	  		 hideOrShow(e);
-	            	  	 });
+	            	  	 });*/
 	            	  	 
 	            	/*  	 el.on("focus", function(e) {
 	            	  		 //$log.log("Focus");
