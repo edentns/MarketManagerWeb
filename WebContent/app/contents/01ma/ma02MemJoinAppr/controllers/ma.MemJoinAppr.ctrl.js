@@ -372,7 +372,18 @@
                 	if(confirm("해당 회원을 탈퇴 처리 하시겠습니까?")){
                 		var inputString = prompt('탈퇴를 입력하주세요', '');
                 		if(inputString === "탈퇴"){
-                			
+                			var defer = $q.defer();
+                			MaMemJoinApprSvc.secession(dataItem).then(function(res) {
+                				defer.resolve();
+                				if(res.status === 200){
+                					alert(res.data);
+                					$scope.kg.dataSource.read();
+                				}
+                			},function(res){
+                				alert(res.data, res.status);
+                				console.log(res);
+                			});
+                			return defer.promise;
                 		}
                 		else{
                 			alert("잘못 입력하셨습니다.");

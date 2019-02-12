@@ -34,7 +34,18 @@
 						e.error();
 					});
 				},
-        	
+				
+				/**
+				 * 탈퇴 처리
+				 */
+				secession : function (param, e) {
+					return $http({
+						method	: "POST",
+						url		: APP_CONFIG.domain +"/memJoinAppr/secession",
+						data	: param
+					});
+				},
+				
 	        	/**
 				 * 브라우저 확인
 				 */
