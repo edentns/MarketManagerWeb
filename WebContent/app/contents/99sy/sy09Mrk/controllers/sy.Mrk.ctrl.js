@@ -551,10 +551,10 @@
                 		alert('저장 후에 연동 버튼을 클릭하여 주세요.');
                 		return;
                 	}
-                	if(dataItem.CD_ITLSTAT == '003' && dataItem.YN_IDPWDCHG == 'N') {
+                	/*if(dataItem.CD_ITLSTAT == '003' && dataItem.YN_IDPWDCHG == 'N') {
                 		alert('오픈마켓 비밀번호를 수정하신 후 연동체크를 해주세요.');
                 		return;
-                	}
+                	}*/
                 	
                 	var param = {
                     	NO_MNGMRK: dataItem.NO_MNGMRK,
@@ -565,6 +565,8 @@
                 	syMrkSvc.conMrk(param, e).then(function(res) {
         				//defer.resolve();
         				alert( res.data );
+        				gridMrkVO.dataSource.read();
+        			},function(res){
         				gridMrkVO.dataSource.read();
         			});
                 };

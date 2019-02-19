@@ -24,10 +24,7 @@
 	                    url		 : APP_CONFIG.domain +"/sy09MrkCons",
 						headers	: { "Content-Type": "application/x-www-form-urlencoded; text/plain; */*; charset=utf-8" },
 	                    data     : $.param(aParam)
-	                }).success(function (data, status, headers, config) { 
-					}).error(function (data, status, headers, config) {
-						e.error();
-					});
+	                });
 	            }
             };
         }]);
