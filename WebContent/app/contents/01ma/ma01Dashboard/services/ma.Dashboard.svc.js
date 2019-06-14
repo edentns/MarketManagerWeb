@@ -42,7 +42,15 @@
 						headers	: { "Content-Type": "application/x-www-form-urlencoded; text/plain; */*; charset=utf-8" },
 						data    : $.param({NO_MNGMRK:noMngMrk, CD_ITLSTAT:cdItlStat})
 					});
-				}
+				},
+				
+				chkKey : function (oParam) {
+                    return $http({
+                        method : "POST",
+                        url    : APP_CONFIG.domain +"/shpingapikeytest",
+                        data   : oParam
+                    });
+                },
             };
         }]);
 }());

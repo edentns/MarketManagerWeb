@@ -34,6 +34,13 @@
 		                	name        : 'ma.JoinItemCtrl',
 		                	displayName : '가입상품',
 		                	templateURL : 'app/contents/01ma/ma01Dashboard/templates/ma.JoinItem.tpl.html'
+		                },
+		                {
+		                	visible     : true,
+		                	order       : 3,
+		                	name        : 'ma.SearchSweetTracker',
+		                	displayName : '택배사 잘 되는지 확인',
+		                	templateURL : 'app/contents/01ma/ma01Dashboard/templates/ma.SearchSweetTracker.tpl.html'
 		                }
 		            ];
 
