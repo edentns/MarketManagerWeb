@@ -387,7 +387,13 @@
 								},
 								{
 									field : "DT_ITLSTART",
-									title : "연동시작일자",
+									title : "최초연동일자",
+									width : 90,
+									headerAttributes : gridHeaderAttributes
+								},
+								{
+									field : "DT_ITLSTART_RE",
+									title : "재연동일자",
 									width : 90,
 									headerAttributes : gridHeaderAttributes
 								},
