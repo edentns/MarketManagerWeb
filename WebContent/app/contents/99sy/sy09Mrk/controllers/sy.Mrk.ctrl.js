@@ -228,102 +228,103 @@
                 			model: {
                     			id: "NO_MNGMRK",
                 				fields: {
-                					ROW_NUM:     { 
-                						type: "number"
-                					   ,editable: false 
+                					ROW_NUM:     	{ 
+				                						type: "number"
+				                					   ,editable: false 
                 					},
-                					NO_MNGMRK:   { 
-                						 type: "string" 
-	                					,editable: true
-	    								,validation: {
-	    									no_mngmrkvalidation: function (input) {
-							    	    	     if (input.is("[name='NO_MNGMRK']") && !input.val()) {
-                                                	 input.attr("data-no_mngmrkvalidation-msg", "관리마켓을 설정해 주세요.");
-                                                	 return false;
-	                                             }
-	                                             return true;
-								    	    }
-							             }
+                					NO_MNGMRK:   	{ 
+				                						 type: "string" 
+					                					,editable: true
+					    								,validation: {
+					    									no_mngmrkvalidation: function (input) {
+											    	    	     if (input.is("[name='NO_MNGMRK']") && !input.val()) {
+				                                                	 input.attr("data-no_mngmrkvalidation-msg", "관리마켓을 설정해 주세요.");
+				                                                	 return false;
+					                                             }
+					                                             return true;
+												    	    }
+											             }
                 					},
-                					NM_MRK:      { 
-                						 type: "string"
-	                					,editable: true
-	    								,validation: {
-	    									nm_mrkvalidation: function (input) {
-							    	    	     if (input.is("[name='NM_MRK']") && !input.val()) {
-	                                            	 input.attr("data-nm_mrkvalidation-msg", "마켓명을 입력하여 주세요.");
-	                                            	 return false;
-	                                             }
-	                                             return true;
-								    	    }
-							             }
+                					NM_MRK:      	{ 
+				                						 type: "string"
+					                					,editable: true
+					    								,validation: {
+					    									nm_mrkvalidation: function (input) {
+											    	    	     if (input.is("[name='NM_MRK']") && !input.val()) {
+					                                            	 input.attr("data-nm_mrkvalidation-msg", "마켓명을 입력하여 주세요.");
+					                                            	 return false;
+					                                             }
+					                                             return true;
+												    	    }
+											             }
 									},
-                					NM_MRKDFT:   { type: "string", editable: false },
-                					DT_ITLSTART: { type: "string", editable: false },
-                					CD_ITLSTAT:  { type: "string", editable: false },
-                					DC_MRKID:    { type: "string", editable: true, validation: { required: {message: "마켓ID를 입력하여 주세요."} } },
-                					DC_PWD:      { type: "string" },
-                					NEW_DC_PWD:  {
-			                						type: "string"
-												   ,validation: {
-													    new_dc_pwdvalidation: function (input) {													    	
-															if (input.is("[name='NEW_DC_PWD']") && input.val()){
-																var regex = /\s/g;
-																input.attr("data-new_dc_pwdvalidation-msg", "비밀번호를 50자 이하로 설정하거나, 공백을 제거하고 설정해 주세요.");
-																return regex.test(input.val()) === true || input.val().length > 50 ? false : true;
+                					NM_MRKDFT:   	{ type: "string", editable: false },
+                					DT_ITLSTART: 	{ type: "string", editable: false },
+                					DT_ITLSTART_RE: { type: "string", editable: false },
+                					CD_ITLSTAT:  	{ type: "string", editable: false },
+                					DC_MRKID:    	{ type: "string", editable: true, validation: { required: {message: "마켓ID를 입력하여 주세요."} } },
+                					DC_PWD:      	{ type: "string" },
+                					NEW_DC_PWD:  	{
+				                						type: "string"
+													   ,validation: {
+														    new_dc_pwdvalidation: function (input) {													    	
+																if (input.is("[name='NEW_DC_PWD']") && input.val()){
+																	var regex = /\s/g;
+																	input.attr("data-new_dc_pwdvalidation-msg", "비밀번호를 50자 이하로 설정하거나, 공백을 제거하고 설정해 주세요.");
+																	return regex.test(input.val()) === true || input.val().length > 50 ? false : true;
+																}
+																return true;
 															}
-															return true;
 														}
-													}
-													,editable: true
-													,nullable: false
+														,editable: true
+														,nullable: false
         							},
-                					NM_SHOP   : {
-	                								 type: "string"
-	                								,editable: true
-	                								,nullable: true
-	                								,validation: {
-											    	     nm_shopvalidation: function (input) {
-										    	    	     if (input.is("[name='NM_SHOP']") && input.val() != "") {
-										    	    	    	 var row = input.closest("tr");
-										    	    	         var grid = row.closest("[data-role=grid]").data("kendoGrid");
-										    	    	         var dataItem = grid.dataItem(row);
-										    	    	         
-		                                                    	 if(dataItem.NO_MNGMRK != "SYMM170101_00002") {
-		                                                        	 input.attr("data-nm_shopvalidation-msg", "샵명칭은 스토어팜일경우만 입력가능합니다.");
-			                                                    	 return false;
-		                                                    	 }
-		                                                    	 return true;
-		                                                     }
-		                                                     return true;
-											    	     }
-										             }
+                					NM_SHOP   : 	{
+		                								 type: "string"
+		                								,editable: true
+		                								,nullable: true
+		                								,validation: {
+												    	     nm_shopvalidation: function (input) {
+											    	    	     if (input.is("[name='NM_SHOP']") && input.val() != "") {
+											    	    	    	 var row = input.closest("tr");
+											    	    	         var grid = row.closest("[data-role=grid]").data("kendoGrid");
+											    	    	         var dataItem = grid.dataItem(row);
+											    	    	         
+			                                                    	 if(dataItem.NO_MNGMRK != "SYMM170101_00002") {
+			                                                        	 input.attr("data-nm_shopvalidation-msg", "샵명칭은 스토어팜일경우만 입력가능합니다.");
+				                                                    	 return false;
+			                                                    	 }
+			                                                    	 return true;
+			                                                     }
+			                                                     return true;
+												    	     }
+											             }
         							},
-                					API_KEY:     { 
-                									type: "string" 
-                								 },
-                					NEW_API_KEY: {
-     				    			   				type: "string"
-     				    			   			   ,defaultValue: ""
-     				    			   			   ,validation: {
-     				    			   				   new_api_keydvalidation: function (input) {
-     				    			   					   if (input.is("[name='NEW_API_KEY']") && input.val() != "") {
-     				    			   						   var regex = /\s/g;
-     				    			   						   input.attr("data-new_api_keydvalidation-msg", "API KEY를 50자 이하로 설정하거나, 공백을 제거하고 설정해 주세요.");			                                                	  
-     				    			   						   return regex.test(input.val()) === true || input.val().length > 50 ? false : true;
-     				    			   					   	}			                                                  
-     				    			   					   return true;
-     				    			   				   }
-     				    			   			   }
-			       							  	  ,editable: true
-			       							  	  ,nullable: true
-                								  },
-                					DC_SALEMNGURL: {type: "string", editable: false},
-                					YN_USE:     {type: "string" },
-                					NM_NT:      {type: "string", editable: false},
-                					DTS_INSERT: {type: "string", editable: false},
-                					DTS_UPDATE: {type: "string", editable: false},
-                					NM_UPDATE : {type: "string", editable: false}
+                					API_KEY:     	{ 
+                										type: "string" 
+                								 	},
+                					NEW_API_KEY: 	{
+	     				    			   				type: "string"
+	     				    			   			   ,defaultValue: ""
+	     				    			   			   ,validation: {
+	     				    			   				   new_api_keydvalidation: function (input) {
+	     				    			   					   if (input.is("[name='NEW_API_KEY']") && input.val() != "") {
+	     				    			   						   var regex = /\s/g;
+	     				    			   						   input.attr("data-new_api_keydvalidation-msg", "API KEY를 50자 이하로 설정하거나, 공백을 제거하고 설정해 주세요.");			                                                	  
+	     				    			   						   return regex.test(input.val()) === true || input.val().length > 50 ? false : true;
+	     				    			   					   	}			                                                  
+	     				    			   					   return true;
+	     				    			   				   }
+	     				    			   			   	}
+				       							  	  ,editable: true
+				       							  	  ,nullable: true
+                								  	},
+                					DC_SALEMNGURL: 	{type: "string", editable: false},
+                					YN_USE:     	{type: "string" },
+                					NM_NT:      	{type: "string", editable: false},
+                					DTS_INSERT: 	{type: "string", editable: false},
+                					DTS_UPDATE: 	{type: "string", editable: false},
+                					NM_UPDATE : 	{type: "string", editable: false}
                 				}
                 			}
                 		}
