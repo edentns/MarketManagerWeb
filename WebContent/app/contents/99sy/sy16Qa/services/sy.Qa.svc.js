@@ -10,7 +10,7 @@
         .factory("sy.QaSvc", ["APP_CONFIG", "$http", function (APP_CONFIG, $http) {
             return {
             	
-            	qaSave : function (param, CUD) {					
+            	qaSave : function (param, CUD) {
 					return $http({
 						method	: "POST",
 						url		: APP_CONFIG.domain +"/sy/qaInsert/"+CUD,
@@ -18,7 +18,7 @@
 					});
 				},
 				
-				qaDelete : function (deleteItem) {					
+				qaDelete : function (deleteItem) {
 					return $http({
 						method	: "POST",
 						url		: APP_CONFIG.domain +"/sy/qaDelete",

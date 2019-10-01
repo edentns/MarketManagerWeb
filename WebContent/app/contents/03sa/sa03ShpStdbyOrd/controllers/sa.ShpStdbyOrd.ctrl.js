@@ -343,6 +343,7 @@
             				Util03saSvc.localStorage.getItem(resData.storageKey).then(function (res) {
             					var getParam = res.data,
             					    colVo = angular.copy($scope.grdShpbyordVO.columns);
+            					
                 				colVo.splice(0,1);
                 				getParam.gridInfo       = [colVo,[{field:"NM_MRK",title:"마켓명"},{field:"CD_DEF",title:"택배사코드"},{field:"NM_DEF",title:"택배사명"},{field:"NM_SHPCLFT",title:"택배사구분"}]];
                 				getParam.procedureParam = $scope.grdShpbyordVO.excelVO.procedureParam;
@@ -388,8 +389,8 @@
         	                		 	    }),
         	                		 	    itfRst = param.filter(function(ele){
         	                		 	    	return ele.ITF_RST !== '1' && ele.ITF_RST !== 1;
-        	                		 	    }),
-        	                		 	    startTime = new Date();                        			
+        	                		 	    });/*,
+        	                		 	    startTime = new Date();*/                        			
                         				
                         				if(!saShpStdbyOrdSvc.updateValidation(param, shpbyordDataVO.updateChange)){
                         					e.success();
@@ -407,17 +408,15 @@
                     						var rtnV = res.data,
                     						    falseV = rtnV.falseNoOrd,
                     						    trueV = rtnV.trueNoOrd,
-                    						    allV = rtnV.allNoOrd,
+                    						    allV = rtnV.allNoOrd;/*,
                     						    endTime = new Date(),
-                    						    crTime = (endTime - startTime)/1000;
+                    						    crTime = (endTime - startTime)/1000;  */               
                     						
-                							//$log.info("경과시간 = "+crTime+"초");
-                							
+                							//$log.info("경과시간 = "+crTime+"초");                							
                     						alert("총 "+allV.length+"건 중 "+trueV.length+"건 배송정보등록 완료");
                     						//Util03saSvc.storedQuerySearchPlay(shpbyordDataVO, resData.storage);
                     						shpbyordDataVO.inQuiry();
                     		                shpbyordDataVO.menualShwWrn = falseV;// 디렉티브를 쓰기 위해서 모델에 값 삽입
-                						                    						
                     		                defer.resolve();
     		                			}, function(err){
     		                				if(err.status !== 412){
